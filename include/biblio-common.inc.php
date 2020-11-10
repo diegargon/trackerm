@@ -105,7 +105,8 @@ function identify_media($type, $media) {
     }
 
     if (!empty($titles)) {
-        $table = '<form method="post">';
+        $table = '<h2>' . $LNG['L_IDENT_' . strtoupper($type) . ''] . '</h2>';
+        $table .= '<form method="post">';
         $table .= '<table>';
         $table .= $titles;
         $table .= '</table>';

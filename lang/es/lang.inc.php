@@ -22,4 +22,6 @@ $LNG = [
     'L_NOID' => 'Sin identificar',
     'L_SEARCHTORRENTS' => 'Torrentes',
     'L_SEARCHTORRENTS_DESC' => 'Meta Buscador de Torrentes',
+    'L_IDENT_MOVIES' => 'Identificación de peliculas',
+    'L_IDENT_SHOWS' => 'Identificación de series',
 ];
