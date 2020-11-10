@@ -1,5 +1,7 @@
 <?php
 
+function index_page() {    
+}
 function page_biblio() {
     global $LNG;
 
@@ -59,8 +61,8 @@ function page_tmdb() {
     }
 
     if (!empty($_POST['search_shows'])) {
-        $movies = db_search_shows(trim($_POST['search_shows']));
-        $page .= buildTable('L_DB', $movies);
+        $shows = db_search_shows(trim($_POST['search_shows']));
+        $page .= buildTable('L_DB', $shows);
     }
 
     return $page;

@@ -18,9 +18,9 @@ function db_search_movies($search) {
 
     $img_path = 'https://image.tmdb.org/t/p/w500';
 
-
     if (isset($data['results'])) {
         foreach ($data['results'] as $item) {
+            $link = 'https://www.themoviedb.org/movie/' . $item['id'];
             $id = $item['id'];
             $movies[$id]['id'] = $id;
             $movies[$id]['themoviedb_id'] = $item['id'];
@@ -28,6 +28,7 @@ function db_search_movies($search) {
             $movies[$id]['original_title'] = $item['original_title'];
             $movies[$id]['rating'] = $item['vote_average'];
             $movies[$id]['popularity'] = $item['popularity'];
+            $movies[$id]['elink'] = $link;
             if (!empty($item['poster_path'])) {
                 $movies[$id]['poster'] = $img_path . $item['poster_path'];
             }
@@ -61,9 +62,9 @@ function db_search_shows($search) {
 
     $img_path = 'https://image.tmdb.org/t/p/w500';
 
-
     if (isset($data['results'])) {
         foreach ($data['results'] as $item) {
+            $link = 'https://www.themoviedb.org/movie/' . $item['id'];
             $id = $item['id'];
             $shows[$id]['id'] = $id;
             $shows[$id]['themoviedb_id'] = $item['id'];
@@ -71,6 +72,7 @@ function db_search_shows($search) {
             $shows[$id]['original_title'] = $item['original_name'];
             $shows[$id]['rating'] = $item['vote_average'];
             $shows[$id]['popularity'] = $item['popularity'];
+            $shows[$id]['elink'] = $link;
             if (!empty($item['poster_path'])) {
                 $shows[$id]['poster'] = $img_path . $item['poster_path'];
             }
