@@ -1,0 +1,118 @@
+body {
+    font-size: 14px;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 14px;
+    line-height: 1.4;
+    height:100%;
+}
+.main_menu {
+    border:1px solid red;
+    background-color: activeborder;
+
+}
+button {
+    padding:10px;
+}
+
+.videocontent {
+    max-width: 300px;
+    padding:10px;
+    border:1px solid red;    
+}
+
+.wrapper {
+    width: 200px;
+    padding:10px;
+    border:1px solid blue;
+}
+
+.center_box {
+    border:1px solid black;
+    padding: 5px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.profile_box {
+    border:1px solid yellowgreen;
+    float: right;
+    width: 150px;
+    height: 150px;
+    margin: 5px;
+    text-align: center;
+    top: 50%;
+}
+
+.divTable{
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
+}
+.divTableRow {
+    display: table-row;
+}
+.divTableHeading {
+    background-color: #EEE;
+    display: table-header-group;
+}
+.divTableCell, .divTableHead {
+    border: 1px solid #999999;
+    display: table-cell;
+    padding: 4px;
+    max-width: 0vh;
+    /* vertical-align:top; */
+}
+.divTableHeading {
+    background-color: #EEE;
+    display: table-header-group;
+    font-weight: bold;
+}
+.divTableFoot {
+    background-color: #EEE;
+    display: table-footer-group;
+    font-weight: bold;
+}
+.divTableBody {
+    display: table-row-group;
+}
+
+.display {
+    display: grid;
+    border:1px solid red;
+    text-align:center;
+    object-fit: cover;
+}
+.poster_preview{
+    display: inline-block;
+    text-align: center; 
+}
+.img_poster_preview {
+    height: auto;
+    width: 100%;
+    max-width:400px;
+}
+.item_details {
+    border:1px solid blue;
+}
+.menu_element {
+    border:1px solid blue;
+    display:inline-block;
+    padding: 20px;
+    margin: 5px;
+    background: darkcyan;
+    font-size:1.8em;
+    font-weight:bold;
+}
+.menu_element href {
+    text-decoration: none;
+
+}
+
+.tor_source_link {
+    background-color: aquamarine;
+}
+.info_size {
+    background-color: aquamarine;
+}

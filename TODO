@@ -1,0 +1,16 @@
+TODO
+
+** HIGH
+* Cuando tenemos varios trackers el sistema buca peliculas y series en ambos, si el tracker no soporta tira un error con texto raro
+    Se deberia de comprobar las capabiliades de cada tracker y no preguntar por series en un tracker que no acepta series.
+*
+*
+
+** MED
+* codigo seguro
+* reorganizar codigo/funciones
+* 
+
+** LOW
+* usuarios
+* fechas normalizar a formato comun
