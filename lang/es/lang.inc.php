@@ -10,13 +10,17 @@
 global $LNG;
 
 $LNG = [
-    "L_CATEGORY" => 'Categorias',
-    "L_MOVIES" => 'Peliculas',
-    "L_SHOWS" => 'Series',
-    "L_SEARCH" => 'Buscar',
-    "L_REBUILD_MOVIES" => 'Rebuild Peliculas',
-    "L_REBUILD_SHOWS" => 'Rebuild Series',
+    'L_HOME' => 'Home',
+    'L_LIBRARY' => 'Biblioteca',
+    'L_RELEASE' => 'Estrenos',
+    'L_CATEGORY' => 'Categorias',
+    'L_MOVIES' => 'Peliculas',
+    'L_SHOWS' => 'Series',
+    'L_SEARCH' => 'Buscar',
+    'L_REBUILD_MOVIES' => 'Rebuild Peliculas',
+    'L_REBUILD_SHOWS' => 'Rebuild Series',
     'L_TORRENT' => 'Torrent',
+    'L_TORRENTS' => 'Torrents',
     'L_DB' => mb_strtoupper($cfg['search_db']),
     'L_IDENTIFY' => 'Identificar',
     'L_NOID' => 'Sin identificar',

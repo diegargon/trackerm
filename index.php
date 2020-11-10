@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * 
+ *  @author diego@envigo.net
+ *  @package 
+ *  @subpackage 
+ *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
+ */
 include "include/common.inc.php";
 include "include/html.common.php";
 require __DIR__ . '/vendor/autoload.php';

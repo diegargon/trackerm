@@ -1,14 +1,23 @@
 <?php
 
-function index_page() {    
+/**
+ * 
+ *  @author diego@envigo.net
+ *  @package 
+ *  @subpackage 
+ *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
+ */
+function index_page() {
+    
 }
+
 function page_biblio() {
     global $LNG;
 
     $page = '';
     $page .= '<form method="post">';
-    $page .= '<p><input type="submit" name="rebuild_movies" value="' . $LNG['L_REBUILD_MOVIES'] . '"/>';
-    $page .= '<input type="submit" name="rebuild_shows" value="' . $LNG['L_REBUILD_SHOWS'] . '"/></p>';
+    $page .= '<p><input class="submit_btn" type="submit" name="rebuild_movies" value="' . $LNG['L_REBUILD_MOVIES'] . '"/>';
+    $page .= '<input class="submit_btn" type="submit" name="rebuild_shows" value="' . $LNG['L_REBUILD_SHOWS'] . '"/></p>';
     //$page .= '<p>Buscador:<input type="text" name="search_text"><input type="submit" name="search" value="' . $LNG['L_SEARCH'] . ' "></p>';
     $page .= '</form>';
 

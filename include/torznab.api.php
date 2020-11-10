@@ -7,13 +7,13 @@
  *  @subpackage 
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  * 
- * http://192.168.2.10:9117/api/v2.0/indexers/newpct/results/torznab/api?t=tvsearch&cat=5030,5040&extended=1&apikey=k1ryk9av87gxjk9e9sj7kpka5mommaxc&offset=0&limit=100
+ * http://192.168.:9117/api/v2.0/indexers/newpct/results/torznab/api?t=tvsearch&cat=5030,5040&extended=1&apikey=&offset=0&limit=100
  * 
  * rsss feed:
- * 192.168.2.10:9117/api/v2.0/indexers/newpct/results/torznab/api?apikey=k1ryk9av87gxjk9e9sj7kpka5mommaxc&t=search&cat=&q=
+ * 192.168.:9117/api/v2.0/indexers/newpct/results/torznab/api?apikey=k&t=search&cat=&q=
  * 
  * get capat
- * http://192.168.2.10:9117/api/v2.0/indexers/newpct/results/torznab/api?apikey=k1ryk9av87gxjk9e9sj7kpka5mommaxc&t=caps
+ * http://192.168.:9117/api/v2.0/indexers/newpct/results/torznab/api?apikey=c&t=caps
  */
 function torznab_get($indexer, $limit = null) {
     global $cfg;
@@ -76,7 +76,7 @@ function torznab_prep_movies($movies_results) {
 
             isset($movie['coverurl']) ? $poster = $movie['coverurl'] : $poster = '';
             !empty($movie['description']) ? $description = $movie['description'] : $description = '';
-            
+
             $movies[] = [
                 'id' => $movie['guid'],
                 'title' => $movie['title'],
