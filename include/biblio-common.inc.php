@@ -61,9 +61,7 @@ function identify_media($type, $media) {
     global $LNG, $cfg;
 
     $titles = '';
-
     $i = 0;
-
     $uniq_shows = [];
 
     foreach ($media as $item) {
@@ -88,7 +86,7 @@ function identify_media($type, $media) {
                     $year = substr($db_item['release'], 0, 4);
                     $results_opt .= '<option value="' . $db_item['id'] . '">' . $db_item['title'] . ' (' . $year . ')</option>';
                 }
-                $results_opt .= '<option value="">' . $LNG['L_NOID'] . '</option>';
+                $results_opt .= '<option selected="selected" value="">' . $LNG['L_NOID'] . '</option>';
             }
             $titles .= '<tr><td>' . $item['predictible_title'] . '</td><td>';
             if ($type == 'movies') {
