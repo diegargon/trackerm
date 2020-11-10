@@ -41,14 +41,12 @@ function rebuild($media_type, $path) {
             $items[$i]['path'] = $file;
             $items[$i]['tags'] = getFileTags($file_name);
             $items[$i]['ext'] = substr($file_name, -3);
-
+            $items[$i]['added'] = time();
             $chapter = getFileChapter($file_name);
             if (!empty($chapter)) {
                 $items[$i]['season'] = $chapter['season'];
                 $items[$i]['chapter'] = $chapter['chapter'];
             }
-
-            //$mov[$i]['poster'] = '/poster.jpg';
 
             $i++;
         }
@@ -148,10 +146,8 @@ function getFileTitle($file) {
     $regex .= '(?!.avi)'; //.avi
     $regex .= '(?!.mp4)'; //.mp4
 
-
     /* REGEX TERMINATION */
     $regex .= '.)*/i';
-
 
     preg_match($regex, $file, $matches);
     $_title = mb_strtolower($matches[0]);
