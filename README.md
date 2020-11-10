@@ -1,6 +1,8 @@
-Description: trying a Sonarr/Radar Alternative
+Description: 
+Probando a realizar una alternativa Sonarr+Radar sobre servidor web
 
-Warning: Codigo a correr, sin seguridad
+Warning: Codigo/esbozo a correr, sin seguridad, sin comprobaciones, con fallos, faltas y todo eso... probablemente no deberias instalarlo
+si no quieres teclear codigo.
 
 1º Copiar los archivos de src a la carpeta destino (AKA: dest)
 2º Instalar composer si no lo teneis, hay guias pero basicamente 
@@ -17,8 +19,3 @@ Otros:
   NOTA 2: Hay alguna version con un bug que obvia las ips rpc, si aparece un mensaje de error de whitelist prueba a desactivar el la rpc whitelist (a cuenta y riesgo)
   NOTA 3: Utilizo una libreria externa para el dialogo con transmission, esta "envuelta/wrapped" por si cambio de libreria, si fuera el caso espero acordarme de editar
         esto con las nuevas dependedncias de composer, si no...
-
-
-Quizas:
-* php con mongodb:  https://www.php.net/manual/en/mongodb.installation.pecl.php
-
