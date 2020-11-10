@@ -70,7 +70,10 @@ function curl_get_jackett($url) {
     curl_close($ch);
 
     //FIXME tornzb:attr lost by simplexml/json_encode this is a temporary/fast fix
+
     $response = preg_replace('/:attr/', '', $response);
+    //clean empty description
+    $response = preg_replace('/<description \/>/', '', $response);
 
     $xml = @simplexml_load_string($response);
 
@@ -78,8 +81,6 @@ function curl_get_jackett($url) {
         return false;
     }
     $json = json_encode($xml);
-
-
 
     $array = json_decode($json, TRUE);
 

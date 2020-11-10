@@ -75,14 +75,15 @@ function torznab_prep_movies($movies_results) {
             }
 
             isset($movie['coverurl']) ? $poster = $movie['coverurl'] : $poster = '';
-
+            !empty($movie['description']) ? $description = $movie['description'] : $description = '';
+            
             $movies[] = [
                 'id' => $movie['guid'],
                 'title' => $movie['title'],
                 'lang' => '',
                 'release' => '',
                 'size' => $movie['size'],
-                'plot' => $movie['description'],
+                'plot' => $description,
                 'files' => $files,
                 'download' => $movie['link'],
                 'category' => $movie['category'],
@@ -97,14 +98,15 @@ function torznab_prep_movies($movies_results) {
                 foreach ($torznab as $attr) {
                     $movie[$attr['@attributes']['name']] = $attr['@attributes']['value'];
                 }
-                isset($movie['coverurl']) ? $poster = $movie['coverurl'] : $poster = '';
+                !empty($movie['coverurl']) ? $poster = $movie['coverurl'] : $poster = '';
+                !empty($movie['description']) ? $description = $movie['description'] : $description = '';
                 $movies[] = [
                     'id' => $movie['guid'],
                     'title' => $movie['title'],
                     'lang' => '',
                     'release' => '',
                     'size' => $movie['size'],
-                    'plot' => $movie['description'],
+                    'plot' => $description,
                     'files' => $files,
                     'download' => $movie['link'],
                     'category' => $movie['category'],
@@ -131,14 +133,16 @@ function torznab_prep_shows($shows_results) {
             foreach ($torznab as $attr) {
                 $show[$attr['@attributes']['name']] = $attr['@attributes']['value'];
             }
-            isset($show['coverurl']) ? $poster = $show['coverurl'] : $poster = '';
+            !empty($show['coverurl']) ? $poster = $show['coverurl'] : $poster = '';
+            !empty($show['description']) ? $description = $show['description'] : $description = '';
+
             $shows[] = [
                 'id' => $show['guid'],
                 'title' => $show['title'],
                 'lang' => $show['language'],
-                'release' => '',
+                'release' => $show['pubDate'],
                 'size' => $show['size'],
-                'plot' => $show['description'],
+                'plot' => $description,
                 'files' => $files,
                 'download' => $show['link'],
                 'category' => $show['category'],
@@ -153,15 +157,15 @@ function torznab_prep_shows($shows_results) {
                 foreach ($torznab as $attr) {
                     $show[$attr['@attributes']['name']] = $attr['@attributes']['value'];
                 }
-                isset($show['coverurl']) ? $poster = $show['coverurl'] : $poster = '';
-
+                !empty($show['coverurl']) ? $poster = $show['coverurl'] : $poster = '';
+                !empty($show['description']) ? $description = $show['description'] : $description = '';
                 $shows[] = [
                     'id' => $show['guid'],
                     'title' => $show['title'],
                     'lang' => '',
                     'release' => '',
                     'size' => $show['size'],
-                    'plot' => $show['description'],
+                    'plot' => $description,
                     'files' => $files,
                     'download' => $show['link'],
                     'category' => $show['category'],

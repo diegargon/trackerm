@@ -26,7 +26,7 @@ function search_movie_torrents($words, $head = null) {
 }
 
 function search_shows_torrents($words, $head = null) {
-    global $cfg, $LNG;
+    global $cfg;
 
     $result = [];
 

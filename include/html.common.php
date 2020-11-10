@@ -1,9 +1,5 @@
 <?php
 
-function index_page() {
-    
-}
-
 function getMenu() {
     global $cfg, $LNG;
     ob_start();
@@ -67,7 +63,7 @@ function build_item($item) {
     $page = '';
 
     if ($details == 0) {
-        $page .= $item['title'];
+        $page .= '<a href="">' . $item['title'] . '</a>';
     } else if ($details == 1) {
         if (empty($item['poster'])) {
             $item['poster'] = $cfg['img_url'] . '/not_available.jpg';
