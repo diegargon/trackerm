@@ -117,6 +117,7 @@ function jackett_prep_movies($movies_results) {
 
             $movies[] = [
                 'id' => '',
+                'ilink' => 'torrent',
                 'guid' => $movie['guid'],
                 'title' => $movie['title'],
                 'lang' => '',
@@ -142,6 +143,7 @@ function jackett_prep_movies($movies_results) {
                 !empty($movie['description']) ? $description = $movie['description'] : $description = '';
                 $movies[] = [
                     'id' => '',
+                    'ilink' => 'torrent',
                     'guid' => $movie['guid'],
                     'title' => $movie['title'],
                     'lang' => '',
@@ -187,6 +189,7 @@ function jackett_prep_shows($shows_results) {
 
             $shows[] = [
                 'id' => '',
+                'ilink' => 'torrent',
                 'guid' => $show['guid'],
                 'title' => $show['title'],
                 'lang' => $show['language'],
@@ -212,6 +215,7 @@ function jackett_prep_shows($shows_results) {
                 !empty($show['description']) ? $description = $show['description'] : $description = '';
                 $shows[] = [
                     'id' => '',
+                    'ilink' => 'torrent',
                     'guid' => $show['guid'],
                     'title' => $show['title'],
                     'lang' => '',

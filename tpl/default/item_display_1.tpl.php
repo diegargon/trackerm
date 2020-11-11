@@ -10,7 +10,7 @@
 
 <div class="display display_1">
     <div class="poster_preview">
-        <a href="?page=view&id=<?= $tdata['id'] ?>">
+        <a href="?page=view&id=<?= $tdata['id'] ?>&type=<?= $tdata['ilink'] ?> ">
             <img class="img_poster_preview"  alt="" src="<?= $tdata['poster'] ?>"/>
         </a>
     </div>

@@ -42,10 +42,10 @@ function save_to_file_json($file, $path, $data) {
         file_put_contents($file, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
         return true;
     }
-    return false;    
+    return false;
 }
 
-function load_from_file_json($file) {    
+function load_from_file_json($file) {
     if (file_exists($file)) {
         return json_decode(file_get_contents($file), true);
     }

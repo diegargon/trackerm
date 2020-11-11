@@ -23,6 +23,7 @@ function db_search_movies($search) {
             $link = 'https://www.themoviedb.org/movie/' . $item['id'];
             $id = $item['id'];
             $movies[$id]['id'] = $id;
+            $movies[$id]['ilink'] = 'mediadb';
             $movies[$id]['themoviedb_id'] = $item['id'];
             $movies[$id]['title'] = $item['title'];
             $movies[$id]['original_title'] = $item['original_title'];
@@ -67,6 +68,7 @@ function db_search_shows($search) {
             $link = 'https://www.themoviedb.org/movie/' . $item['id'];
             $id = $item['id'];
             $shows[$id]['id'] = $id;
+            $shows[$id]['ilink'] = 'mediadb';
             $shows[$id]['themoviedb_id'] = $item['id'];
             $shows[$id]['title'] = $item['name'];
             $shows[$id]['original_title'] = $item['original_name'];

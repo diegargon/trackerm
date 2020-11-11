@@ -28,6 +28,7 @@ function rebuild($media_type, $path) {
         ) {
 
             $items[$i]['id'] = $i;
+            $items[$i]['ilink'] = 'library';
             /* File */
             $items[$i]['file_name'] = $file_name = trim(basename($file));
             $items[$i]['size'] = filesize($file);
