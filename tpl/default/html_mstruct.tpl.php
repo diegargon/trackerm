@@ -17,10 +17,12 @@
     </head>
 
     <body>
-        <?= $tdata['body'] ?> 
-        <footer>
-            <?= $tdata['footer'] ?>
-        </footer>        
+        <div class="page">
+            <?= $tdata['body'] ?> 
+            <footer>
+                <?= $tdata['footer'] ?>
+            </footer>
+        </div>
     </body>
 
 </html>

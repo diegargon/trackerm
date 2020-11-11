@@ -16,8 +16,10 @@ function rebuild($media_type, $path) {
 
     if ($media_type == 'movies') {
         $db_file = 'biblio-movies';
+        $ilink = 'movies_library';
     } else if ($media_type == 'shows') {
         $db_file = 'biblio-shows';
+        $ilink = 'shows_library';
     }
 
     $media = $db->getTableData($db_file);
@@ -28,7 +30,7 @@ function rebuild($media_type, $path) {
         ) {
 
             $items[$i]['id'] = $i;
-            $items[$i]['ilink'] = 'library';
+            $items[$i]['ilink'] = $ilink;
             /* File */
             $items[$i]['file_name'] = $file_name = trim(basename($file));
             $items[$i]['size'] = filesize($file);

@@ -63,6 +63,11 @@ class DB {
         }
     }
 
+    function getItemByID($table, $id) {
+        !isset($this->tables[$table]) ? $this->loadTable($table) : null;
+        return $this->tables[$table]['data'][$id];
+    }
+
     function getIdbyField($table, $field, $field_value) {
         !isset($this->tables[$table]) ? $this->loadTable($table) : null;
         foreach ($this->tables[$table]['data'] as $item) {

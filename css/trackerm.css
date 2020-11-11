@@ -5,6 +5,10 @@ body {
     line-height: 1.4;
     height:100%;
 }
+.page { 
+    border:0px solid black;    
+}
+
 .main_menu {
     border:1px solid red;
     background-color: activeborder;
@@ -138,7 +142,13 @@ button {
 }
 .footer {
     border:0px solid black;
-    width: 100%;
     padding: 4px;
     text-align: right;
+}
+
+/* VIEW PAGE */
+.view_page {
+    overflow: auto;    
+    border:1px solid red;
+    padding:4px;    
 }

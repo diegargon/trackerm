@@ -23,7 +23,7 @@ function db_search_movies($search) {
             $link = 'https://www.themoviedb.org/movie/' . $item['id'];
             $id = $item['id'];
             $movies[$id]['id'] = $id;
-            $movies[$id]['ilink'] = 'mediadb';
+            $movies[$id]['ilink'] = 'movies_db';
             $movies[$id]['themoviedb_id'] = $item['id'];
             $movies[$id]['title'] = $item['title'];
             $movies[$id]['original_title'] = $item['original_title'];
@@ -43,12 +43,15 @@ function db_search_movies($search) {
             } else {
                 $movies[$id]['release'] = '';
             }
-            $db->addUniqElements('tmdb_search', $movies, 'id');
+            $db->addUniqElements('tmdb_search', $movies, 'themoviedb_id');
         }
     }
-
-
-
+    if (!empty($movies)) {
+        foreach ($movies as $key => $movie) {
+            $id = $db->getIdbyField('tmdb_search', 'themoviedb_id', $movie['themoviedb_id']);
+            $movies[$key]['id'] = $id;
+        }
+    }
     return isset($movies) ? $movies : null;
 }
 
@@ -68,7 +71,7 @@ function db_search_shows($search) {
             $link = 'https://www.themoviedb.org/movie/' . $item['id'];
             $id = $item['id'];
             $shows[$id]['id'] = $id;
-            $shows[$id]['ilink'] = 'mediadb';
+            $shows[$id]['ilink'] = 'shows_db';
             $shows[$id]['themoviedb_id'] = $item['id'];
             $shows[$id]['title'] = $item['name'];
             $shows[$id]['original_title'] = $item['original_name'];
@@ -88,10 +91,15 @@ function db_search_shows($search) {
             } else {
                 $shows[$id]['release'] = '';
             }
-            $db->addUniqElements('tmdb_search', $shows, 'id');
+            $db->addUniqElements('tmdb_search', $shows, 'themoviedb_id');
         }
     }
-
+    if (!empty($shows)) {
+        foreach ($shows as $key => $show) {
+            $id = $db->getIdbyField('tmdb_search', 'themoviedb_id', $show['themoviedb_id']);
+            $shows[$key]['id'] = $id;
+        }
+    }
 
     return isset($shows) ? $shows : null;
 }

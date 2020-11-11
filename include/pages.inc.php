@@ -11,6 +11,10 @@ function index_page() {
     
 }
 
+function page_view() {
+    return view();
+}
+
 function page_biblio() {
     global $LNG;
 
@@ -43,11 +47,17 @@ function page_news() {
 
     /* BUILD PAGE */
 
-    $page_news_movies = buildTable('L_MOVIES', $res_movies_db);
-    $page_news_shows = buildTable('L_SHOWS', $res_shows_db);
+    $page_news = '';
 
+    if (!empty($res_movies_db)) {
+        $page_news_movies = buildTable('L_MOVIES', $res_movies_db);
+        $page_news .= $page_news_movies;
+    }
 
-    $page_news = $page_news_movies . $page_news_shows;
+    if (!empty($res_shows_db)) {
+        $page_news_shows = buildTable('L_SHOWS', $res_shows_db);
+        $page_news .= $page_news_shows;
+    }
 
     return $page_news;
 }
@@ -65,12 +75,12 @@ function page_tmdb() {
 
     if (!empty($_POST['search_movie'])) {
         $movies = db_search_movies(trim($_POST['search_movie']));
-        $page .= buildTable('L_DB', $movies);
+        !empty($movies) ? $page .= buildTable('L_DB', $movies) : null;
     }
 
     if (!empty($_POST['search_shows'])) {
         $shows = db_search_shows(trim($_POST['search_shows']));
-        $page .= buildTable('L_DB', $shows);
+        !empty($shows) ? $page .= buildTable('L_DB', $shows) : null;
     }
 
     return $page;
