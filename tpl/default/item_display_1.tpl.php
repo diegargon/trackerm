@@ -11,11 +11,7 @@
 <div class="display display_<?= $tdata['details'] ?>">
 
     <div class="poster_preview">
-        <?php if (!empty($tdata['elink'])) { ?>
-            <a href="<?= $tdata['elink'] ?>" target=_blank>
-        <?php } else { ?>
-            <a href="<?= $tdata['link'] ?> ">
-        <?php } ?>
+        <a href="?page=view&id=<?= $tdata['id'] ?>">
             <img class="img_poster_preview"  alt="" src="<?= $tdata['poster'] ?>"/>
         </a>
     </div>

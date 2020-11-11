@@ -18,11 +18,9 @@ class DB {
     }
 
     public function addElements($table, $elements) {
-        if (!isset($this->tables[$table]['info']['last_id'])) {
-            $lastid = 0;
-        } else {
-            $lastid = $this->tables[$table]['info']['last_id'];
-        }
+        !isset($this->tables[$table]) ? $this->loadTable($table) : null;
+        !isset($this->tables[$table]['info']['last_id']) ? $lastid = 0 : $lastid = $this->tables[$table]['info']['last_id'];
+
         if (!is_array($elements)) {
             return false;
         }
@@ -39,16 +37,9 @@ class DB {
 
     public function addUniqElements($table, $elements, $uniq_key) {
         //array_search($file, array_column($movies, 'path')
-        if (!isset($this->tables[$table])) {
-            $this->loadTable($table);
-        }
-        //var_dump($this->tables[$table]);
+        !isset($this->tables[$table]) ? $this->loadTable($table) : null;
+        !isset($this->tables[$table]['info']['last_id']) ? $lastid = 0 : $lastid = $this->tables[$table]['info']['last_id'];
 
-        if (!isset($this->tables[$table]['info']['last_id'])) {
-            $lastid = 0;
-        } else {
-            $lastid = $this->tables[$table]['info']['last_id'];
-        }
         if (!is_array($elements)) {
             return false;
         }
@@ -130,23 +121,24 @@ class DB {
     }
 
     /* A partir de un id y el campo key/valor de este actualiza otros registros que tengas ese key/valor */
+
     public function updateRecordsBySameField($table, $id, $field, $update_fields) {
         $this->getTableData($table);
-        
+
         foreach ($update_fields as $key => $val) {
             // Cogemos el valor del campo $field del id del registro proporcionado para buscar iguales 
             $compare_value = $this->tables[$table]['data'][$id][$field];
-            
+
             // Buscamos los registros para $field con el valor $compare_value, si coincidencia aplicamos val_array
             foreach ($this->tables[$table]['data'] as $db_id => $db_item) {
-                    if ($db_item[$field] == $compare_value ) {
-                        $this->tables[$table]['data'][$db_id][$key] = $val;
-                    }
+                if ($db_item[$field] == $compare_value) {
+                    $this->tables[$table]['data'][$db_id][$key] = $val;
+                }
             }
-        }        
-        $this->saveTable($table);     
-        
+        }
+        $this->saveTable($table);
     }
+
     private function loadTable($table) {
         $db_file = $this->dbpath . '/' . $table . '.db';
 

@@ -32,6 +32,8 @@ if (!isset($req_page) || $req_page == '') {
     $body .= page_tmdb();
 } else if ($req_page == 'torrents') {
     $body .= page_torrents();
+} else if ($req_page == 'view') {
+    $bodu .= page_view();
 }
 
 $page = getTpl('html_mstruct', $tdata = ['body' => $body, 'footer' => $footer]);

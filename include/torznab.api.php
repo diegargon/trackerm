@@ -62,6 +62,7 @@ function torznab_search_shows($words, $indexer, $limit = null) {
 }
 
 function torznab_prep_movies($movies_results) {
+    global $db;
 
     foreach ($movies_results as $indexer) {
 
@@ -79,6 +80,7 @@ function torznab_prep_movies($movies_results) {
 
             $movies[] = [
                 'id' => $movie['guid'],
+                'guid' => $movie['guid'],
                 'title' => $movie['title'],
                 'lang' => '',
                 'release' => '',
@@ -89,6 +91,7 @@ function torznab_prep_movies($movies_results) {
                 'category' => $movie['category'],
                 'source' => $movie['jackettindexer'],
                 'poster' => $poster,
+                'added' => time(),
             ];
         } else if (isset($indexer['channel']['item'])) {
             foreach ($indexer['channel']['item'] as $movie) {
@@ -102,6 +105,7 @@ function torznab_prep_movies($movies_results) {
                 !empty($movie['description']) ? $description = $movie['description'] : $description = '';
                 $movies[] = [
                     'id' => $movie['guid'],
+                    'guid' => $movie['guid'],
                     'title' => $movie['title'],
                     'lang' => '',
                     'release' => '',
@@ -112,15 +116,18 @@ function torznab_prep_movies($movies_results) {
                     'category' => $movie['category'],
                     'source' => $movie['jackettindexer'],
                     'poster' => $poster,
+                    'added' => time(),
                 ];
             }
         }
     }
+    isset($movies) ? $db->addElements('jackett_movies', $movies) : null;
 
     return $movies;
 }
 
 function torznab_prep_shows($shows_results) {
+    global $db;
 
     $shows = [];
     foreach ($shows_results as $indexer) {
@@ -138,6 +145,7 @@ function torznab_prep_shows($shows_results) {
 
             $shows[] = [
                 'id' => $show['guid'],
+                'guid' => $show['guid'],
                 'title' => $show['title'],
                 'lang' => $show['language'],
                 'release' => $show['pubDate'],
@@ -148,6 +156,7 @@ function torznab_prep_shows($shows_results) {
                 'category' => $show['category'],
                 'source' => $show['jackettindexer'],
                 'poster' => $poster,
+                'added' => time(),
             ];
         } else if (isset($indexer['channel']['item'])) {
             foreach ($indexer['channel']['item'] as $show) {
@@ -161,6 +170,7 @@ function torznab_prep_shows($shows_results) {
                 !empty($show['description']) ? $description = $show['description'] : $description = '';
                 $shows[] = [
                     'id' => $show['guid'],
+                    'guid' => $show['guid'],
                     'title' => $show['title'],
                     'lang' => '',
                     'release' => '',
@@ -171,10 +181,11 @@ function torznab_prep_shows($shows_results) {
                     'category' => $show['category'],
                     'source' => $show['jackettindexer'],
                     'poster' => $poster,
+                    'added' => time(),
                 ];
             }
         }
     }
-
+    isset($shows) ? $db->addElements('jackett_shows', $shows) : null;
     return $shows;
 }

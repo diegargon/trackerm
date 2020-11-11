@@ -18,7 +18,7 @@ function page_biblio() {
     $page .= '<form method="post">';
     $page .= '<p><input class="submit_btn" type="submit" name="rebuild_movies" value="' . $LNG['L_REBUILD_MOVIES'] . '"/>';
     $page .= '<input class="submit_btn" type="submit" name="rebuild_shows" value="' . $LNG['L_REBUILD_SHOWS'] . '"/></p>';
-    //$page .= '<p>Buscador:<input type="text" name="search_text"><input type="submit" name="search" value="' . $LNG['L_SEARCH'] . ' "></p>';
+    //$page .= '<p>Buscador:<input type="text" name=""><input type="submit" name="search" value="' . $LNG['L_SEARCH'] . ' "></p>';
     $page .= '</form>';
 
     $page .= show_my_movies();

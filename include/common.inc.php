@@ -19,6 +19,7 @@ require('include/torznab.api.php');
 require('include/biblio-movies.inc.php');
 require('include/biblio-shows.inc.php');
 require('include/biblio-common.inc.php');
+require('include/view.inc.php');
 require('include/checks.inc.php');
 require('include/' . $cfg['search_db'] . '.inc.php');
 require('include/jackett.inc.php');
