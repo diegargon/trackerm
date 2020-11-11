@@ -45,16 +45,14 @@ class DB {
         }
 
         $id = $lastid;
-
+        //var_dump($elements);
         foreach ($elements as $element) {
-            if (!isset($this->tables[$table]['data']) ||
-                    array_search($element['id'], array_column($this->tables[$table]['data'], $uniq_key)) === false
+            if (
+                    !isset($this->tables[$table]['data']) ||
+                    array_search($element[$uniq_key], array_column($this->tables[$table]['data'], $uniq_key)) === false
             ) {
-                //echo "<br>" . $element['id'] . ':' . $this->tables[$table]['data'] .':'. $uniq_key;
                 $this->tables[$table]['data'][$id] = $element;
-                if (empty($this->tables[$table]['data'][$id]['id'])) {
-                    $this->tables[$table]['data'][$id]['id'] = $id;
-                }
+                $this->tables[$table]['data'][$id]['id'] = $id;
                 $id++;
             }
         }
@@ -63,6 +61,16 @@ class DB {
             $this->tables[$table]['info']['last_update'] = time();
             $this->saveTable($table);
         }
+    }
+
+    function getIdbyField($table, $field, $field_value) {
+        !isset($this->tables[$table]) ? $this->loadTable($table) : null;
+        foreach ($this->tables[$table]['data'] as $item) {
+            if ($item[$field] == $field_value) {
+                return $item['id'];
+            }
+        }
+        return false;
     }
 
     public function getLastID($table) {

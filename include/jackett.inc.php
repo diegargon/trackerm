@@ -19,7 +19,6 @@ function search_movie_torrents($words, $head = null) {
     }
 
     $movies_db = torznab_prep_movies($result);
-
     $page .= buildTable($head, $movies_db);
 
     return $page;
@@ -38,7 +37,6 @@ function search_shows_torrents($words, $head = null) {
     }
 
     $shows_db = torznab_prep_shows($result);
-
     $page .= buildTable($head, $shows_db);
 
     return $page;

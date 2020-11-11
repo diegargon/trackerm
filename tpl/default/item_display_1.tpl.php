@@ -8,8 +8,7 @@
  */
 ?>
 
-<div class="display display_<?= $tdata['details'] ?>">
-
+<div class="display display_1">
     <div class="poster_preview">
         <a href="?page=view&id=<?= $tdata['id'] ?>">
             <img class="img_poster_preview"  alt="" src="<?= $tdata['poster'] ?>"/>

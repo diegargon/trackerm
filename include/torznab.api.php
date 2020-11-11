@@ -123,6 +123,11 @@ function torznab_prep_movies($movies_results) {
     }
     isset($movies) ? $db->addUniqElements('jackett_movies', $movies, 'guid') : null;
 
+    //add ID's
+    foreach ($movies as $key => $movie) {
+        $id = $db->getIdbyField('jackett_movies', 'guid', $movie['guid']);
+        $movies[$key]['id'] = $id;
+    }
     return $movies;
 }
 
@@ -187,5 +192,11 @@ function torznab_prep_shows($shows_results) {
         }
     }
     isset($shows) ? $db->addUniqElements('jackett_shows', $shows, 'guid') : null;
+
+    //add ID's
+    foreach ($shows as $key => $show) {
+        $id = $db->getIdbyField('jackett_shows', 'guid', $show['guid']);
+        $shows[$key]['id'] = $id;
+    }
     return $shows;
 }

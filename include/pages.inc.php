@@ -28,7 +28,7 @@ function page_biblio() {
 }
 
 function page_news() {
-    global $cfg, $LNG;
+    global $cfg;
 
     foreach ($cfg['jackett_indexers'] as $indexer) {
         $results = torznab_search_movies('', $indexer);
@@ -40,7 +40,6 @@ function page_news() {
 
     $res_movies_db = torznab_prep_movies($movies_res);
     $res_shows_db = torznab_prep_shows($shows_res);
-
 
     /* BUILD PAGE */
 
@@ -57,7 +56,7 @@ function page_tmdb() {
     global $LNG;
 
     $page = '<h2>TheMovieDb.org</h2>';
-    $page .= '<a href="themoviedb.org">The Movie Database</a>';
+    $page .= '<a href="https://themoviedb.org" target=_blank>The Movie Database</a>';
     $page .= '<form method="post">';
     $page .= '<p>Buscar Pelicula:<input type="text" name="search_movie">';
     $page .= '<p>Buscar Serie:<input type="text" name="search_shows"></p>';
