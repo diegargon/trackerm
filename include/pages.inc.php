@@ -31,15 +31,15 @@ function page_news() {
     global $cfg;
 
     foreach ($cfg['jackett_indexers'] as $indexer) {
-        $results = torznab_search_movies('', $indexer);
+        $results = jackett_search_movies('', $indexer);
         ($results) ? $movies_res[$indexer] = $results : null;
         $results = null;
-        $results = torznab_search_shows('', $indexer);
+        $results = jackett_search_shows('', $indexer);
         $results ? $shows_res[$indexer] = $results : null;
     }
 
-    $res_movies_db = torznab_prep_movies($movies_res);
-    $res_shows_db = torznab_prep_shows($shows_res);
+    $res_movies_db = jackett_prep_movies($movies_res);
+    $res_shows_db = jackett_prep_shows($shows_res);
 
     /* BUILD PAGE */
 

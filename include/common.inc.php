@@ -15,7 +15,6 @@ require('include/curl.inc.php');
 require('include/file.utils.php');
 require('include/db.inc.php');
 require('include/transmission.wrap.php');
-require('include/torznab.api.php');
 require('include/biblio-movies.inc.php');
 require('include/biblio-shows.inc.php');
 require('include/biblio-common.inc.php');
