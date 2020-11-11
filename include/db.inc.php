@@ -52,6 +52,9 @@ class DB {
             ) {
                 //echo "<br>" . $element['id'] . ':' . $this->tables[$table]['data'] .':'. $uniq_key;
                 $this->tables[$table]['data'][$id] = $element;
+                if (empty($this->tables[$table]['data'][$id]['id'])) {
+                    $this->tables[$table]['data'][$id]['id'] = $id;
+                }
                 $id++;
             }
         }

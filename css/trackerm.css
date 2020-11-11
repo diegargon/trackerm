@@ -136,3 +136,9 @@ button {
     color: #000000;
     background-color: #FFFFFF;
 }
+.footer {
+    border:0px solid black;
+    width: 100%;
+    padding: 4px;
+    text-align: right;
+}

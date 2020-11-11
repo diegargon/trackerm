@@ -14,7 +14,7 @@ require __DIR__ . '/vendor/autoload.php';
 isset($_GET['page']) ? $req_page = $_GET['page'] : $req_page = '';
 
 $body = getMenu();
-$footer = '';
+$footer = getFooter();
 
 if (!is_writable($cfg['cache'])) {
     echo "<p><b>WARNING: Your cache directory must be writable:" . $cfg['cache'] . '</p></b>';

@@ -79,11 +79,11 @@ function torznab_prep_movies($movies_results) {
             !empty($movie['description']) ? $description = $movie['description'] : $description = '';
 
             $movies[] = [
-                'id' => $movie['guid'],
+                'id' => '',
                 'guid' => $movie['guid'],
                 'title' => $movie['title'],
                 'lang' => '',
-                'release' => '',
+                'release' => $movie['pubDate'],
                 'size' => $movie['size'],
                 'plot' => $description,
                 'files' => $files,
@@ -104,11 +104,11 @@ function torznab_prep_movies($movies_results) {
                 !empty($movie['coverurl']) ? $poster = $movie['coverurl'] : $poster = '';
                 !empty($movie['description']) ? $description = $movie['description'] : $description = '';
                 $movies[] = [
-                    'id' => $movie['guid'],
+                    'id' => '',
                     'guid' => $movie['guid'],
                     'title' => $movie['title'],
                     'lang' => '',
-                    'release' => '',
+                    'release' => $movie['pubDate'],
                     'size' => $movie['size'],
                     'plot' => $description,
                     'files' => $files,
@@ -121,7 +121,7 @@ function torznab_prep_movies($movies_results) {
             }
         }
     }
-    isset($movies) ? $db->addElements('jackett_movies', $movies) : null;
+    isset($movies) ? $db->addUniqElements('jackett_movies', $movies, 'guid') : null;
 
     return $movies;
 }
@@ -144,7 +144,7 @@ function torznab_prep_shows($shows_results) {
             !empty($show['description']) ? $description = $show['description'] : $description = '';
 
             $shows[] = [
-                'id' => $show['guid'],
+                'id' => '',
                 'guid' => $show['guid'],
                 'title' => $show['title'],
                 'lang' => $show['language'],
@@ -169,11 +169,11 @@ function torznab_prep_shows($shows_results) {
                 !empty($show['coverurl']) ? $poster = $show['coverurl'] : $poster = '';
                 !empty($show['description']) ? $description = $show['description'] : $description = '';
                 $shows[] = [
-                    'id' => $show['guid'],
+                    'id' => '',
                     'guid' => $show['guid'],
                     'title' => $show['title'],
                     'lang' => '',
-                    'release' => '',
+                    'release' => $show['pubDate'],
                     'size' => $show['size'],
                     'plot' => $description,
                     'files' => $files,
@@ -186,6 +186,6 @@ function torznab_prep_shows($shows_results) {
             }
         }
     }
-    isset($shows) ? $db->addElements('jackett_shows', $shows) : null;
+    isset($shows) ? $db->addUniqElements('jackett_shows', $shows, 'guid') : null;
     return $shows;
 }

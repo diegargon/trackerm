@@ -18,7 +18,7 @@
     <div class="item_details">
         <span class="tor_title"><?= $tdata['title'] ?></span>
         <?php if (!empty($tdata['source'])) { ?>
-            <span class="tor_source_link">[<a href="<?= $tdata['id'] ?>" target=_blank ><?= $tdata['source'] ?></a>]</span>
+            <span class="tor_source_link">[<a href="<?= $tdata['guid'] ?>" target=_blank ><?= $tdata['source'] ?></a>]</span>
         <?php } ?>
         <span class="info_size"><?= isset($tdata['hsize']) ? $tdata['hsize'] : null ?></span>
     </div>

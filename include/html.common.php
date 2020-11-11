@@ -13,6 +13,12 @@ function getMenu() {
     return getTpl('menu', array_merge($cfg, $LNG));
 }
 
+function getFooter() {
+    global $cfg, $LNG;
+
+    return getTpl('footer', array_merge($cfg, $LNG));
+}
+
 function getTpl($tpl, $tdata) {
     global $cfg;
     ob_start();
