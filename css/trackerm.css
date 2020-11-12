@@ -183,3 +183,6 @@ button {
     border:1px solid black;
     width:100%;
 }
+.library_options {
+    border:1px solid blueviolet;
+}

@@ -16,14 +16,18 @@ function page_view() {
 }
 
 function page_biblio() {
-    global $LNG;
+    global $LNG, $cfg;
 
-    $page = '';
-    $page .= '<form method="post">';
-    $page .= '<p><input class="submit_btn" type="submit" name="rebuild_movies" value="' . $LNG['L_REBUILD_MOVIES'] . '"/>';
-    $page .= '<input class="submit_btn" type="submit" name="rebuild_shows" value="' . $LNG['L_REBUILD_SHOWS'] . '"/></p>';
-    //$page .= '<p>Buscador:<input type="text" name=""><input type="submit" name="search" value="' . $LNG['L_SEARCH'] . ' "></p>';
-    $page .= '</form>';
+    isset($_POST['num_id_show']) ? $cfg['max_identify_items'] = $_POST['num_id_show'] : null;
+    ($cfg['max_identify_items'] == 10) ? $max_id_sel_10 = 'selected' : $max_id_sel_10 = '';
+    ($cfg['max_identify_items'] == 20) ? $max_id_sel_20 = 'selected' : $max_id_sel_20 = '';
+    ($cfg['max_identify_items'] == 50) ? $max_id_sel_50 = 'selected' : $max_id_sel_50 = '';
+
+    $tdata['max_id_sel_10'] = $max_id_sel_10;
+    $tdata['max_id_sel_20'] = $max_id_sel_20;
+    $tdata['max_id_sel_50'] = $max_id_sel_50;
+
+    $page = getTpl('library_options', array_merge($tdata, $LNG));
 
     $page .= show_my_movies();
     $page .= show_my_shows();
@@ -65,13 +69,7 @@ function page_news() {
 function page_tmdb() {
     global $LNG;
 
-    $page = '<h2>TheMovieDb.org</h2>';
-    $page .= '<a href="https://themoviedb.org" target=_blank>The Movie Database</a>';
-    $page .= '<form method="post">';
-    $page .= '<p>Buscar Pelicula:<input type="text" name="search_movie">';
-    $page .= '<p>Buscar Serie:<input type="text" name="search_shows"></p>';
-    $page .= '<input type="submit" name="search" value="' . $LNG['L_SEARCH'] . ' "></p>';
-    $page .= '</form>';
+    $page = getTpl('page_tmdb', $LNG);
 
     if (!empty($_POST['search_movie'])) {
         $movies = db_search_movies(trim($_POST['search_movie']));
@@ -89,14 +87,7 @@ function page_tmdb() {
 function page_torrents() {
     global $LNG;
 
-    $page = '<h2>' . $LNG['L_SEARCHTORRENTS'] . '</h2>';
-    $page .= '<p>' . $LNG['L_SEARCHTORRENTS_DESC'] . '</p>';
-    $page .= '<form method="post">';
-    $page .= '<p>Buscar Serie:<input type="text" name="search_shows_torrents"></p>';
-    $page .= '<p>Buscar Pelicula:<input type="text" name="search_movie_torrents"></p>';
-    $page .= '<input type="submit" name="search" value="' . $LNG['L_SEARCH'] . ' "></p>';
-    $page .= '</form>';
-
+    $page = getTpl('page_torrents', $LNG);
 
     if (!empty($_POST['search_shows_torrents'])) {
         $page .= search_shows_torrents(trim($_POST['search_shows_torrents']), 'L_TORRENT');

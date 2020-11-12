@@ -29,4 +29,5 @@ $LNG = [
     'L_IDENT_MOVIES' => 'Identificación de peliculas',
     'L_IDENT_SHOWS' => 'Identificación de series',
     'L_SHOW_TORS' => 'Mostrar torrentes',
+    'L_ID_DISPLAY' => 'Mostrar para identificar',
 ];

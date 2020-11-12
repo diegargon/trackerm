@@ -101,20 +101,18 @@ function identify_media($type, $media) {
 
             $i++;
             // Maximo 5 peliculas a identidfiar de cada vez, FIXME: configurable y de mejor forma que un break
-            if ($i > $cfg['max_identify_item']) {
+            if ($i > $cfg['max_identify_items']) {
                 break;
             }
         }
     }
 
     if (!empty($titles)) {
-        $table = '<h2>' . $LNG['L_IDENT_' . strtoupper($type) . ''] . '</h2>';
-        $table .= '<form method="post">';
-        $table .= '<table>';
-        $table .= $titles;
-        $table .= '</table>';
-        $table .= '<input type="submit" value="' . $LNG['L_IDENTIFY'] . '"/>';
-        $table .= '</form>';
+        $tdata['titles'] = $titles;
+        $tdata['type'] = $type;
+        $tdata['head'] = $LNG['L_IDENT_' . strtoupper($type) . ''];
+
+        $table = getTpl('identify', array_merge($LNG, $tdata));
 
         return $table;
     }

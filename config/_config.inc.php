@@ -1,7 +1,13 @@
 <?php
 
+/**
+ * 
+ *  @author diego@envigo.net
+ *  @package 
+ *  @subpackage 
+ *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
+ */
 global $cfg;
-
 
 $cfg['db_api_token'] = 'X';
 $cfg['search_db'] = 'themoviedb';
@@ -10,7 +16,7 @@ $cfg['cache'] = '/cache';
 $cfg['REL_PATH'] = '/trackerm';
 $cfg['MOVIES_PATH'] = '/home/compartido/biblioteca/Peliculas';
 $cfg['SHOWS_PATH'] = '/home/compartido/biblioteca/Series';
-$cfg['max_identify_item'] = 10;
+$cfg['max_identify_items'] = 10;
 $cfg['LANG'] = 'es';
 $cfg['jackett_key'] = 'X';
 $cfg['jackett_srv'] = 'http://192.168.X.X:9117';
@@ -29,6 +35,7 @@ $cfg['trans_port'] = '9091';
 $cfg['trans_username'] = '';
 $cfg['trans_passwd'] = '';
 $cfg['tresults_columns'] = 8;
+$cfg['tresults_rows'] = 8;
 $cfg['tresults_details'] = 1;
 $cfg['tpl_dir'] = 'default';
 
