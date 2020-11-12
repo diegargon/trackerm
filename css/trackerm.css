@@ -95,7 +95,7 @@ button {
 .img_poster_preview {
     height: auto;
     width: 100%;
-    max-width:400px;
+    max-width:200px;
 }
 .item_details {
     border:1px solid blue;
@@ -148,7 +148,38 @@ button {
 
 /* VIEW PAGE */
 .view_page {
-    overflow: auto;    
     border:1px solid red;
     padding:4px;    
+}
+.view_content {
+    display:flex;
+    flex-wrap: nowrap;
+}
+.view_poster {
+    height: auto;
+    border:0px solid yellow;
+    width:100%;
+
+}
+.view_poster_container {
+    border:1px solid blue;
+    padding-left:5%;
+}
+.view_description_container img {
+    width: 100%;
+
+}
+.view_description_container {  
+    border:1px solid aqua;
+    width: 100%;
+    padding: 10px;
+    padding-right: 10%;
+}
+.view_plot {
+    border:1px solid blueviolet;
+    width: 100%;
+}
+.view_extra {
+    border:1px solid black;
+    width:100%;
 }

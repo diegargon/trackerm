@@ -62,10 +62,10 @@ function buildTable($head, $db_ary, $topt = null) {
     return $page;
 }
 
-function build_item($item) {
+function build_item($item, $detail = null) {
     global $cfg;
 
-    $details = $cfg['tresults_details'];
+    !isset($detail) ? $details = $cfg['tresults_details'] : $details = $detail;
     $page = '';
 
     if ($details == 0) {

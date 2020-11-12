@@ -14,24 +14,58 @@ function view() {
 
     $page = '';
 
-    if ($type == 'movie_library') {
-        $type = 'biblio-movies';
+    if ($type == 'movies_library') {
+        $t_type = 'biblio-movies';
     } else if ($type == 'shows_library') {
-        $type = 'biblio-shows';
+        $t_type = 'biblio-shows';
     } else if ($type == 'movies_torrent') {
-        $type = 'jackett_movies';
+        $t_type = 'jackett_movies';
     } else if ($type == 'shows_torrent') {
-        $type = 'jackett_shows';
+        $t_type = 'jackett_shows';
     } else if ($type == 'movies_db') {
-        $type = 'tmdb_search';
+        $t_type = 'tmdb_search';
     } else if ($type == 'shows_db') {
-        $type = 'tmdb_search';
+        $t_type = 'tmdb_search';
     } else {
         return false;
     }
 
-    //$items = $db->getItemByID($type, $id);
+    $item = $db->getItemByID($t_type, $id);
 
-    $page = getTpl('view', array_merge($cfg, $LNG));
+    $other['extra'] = '';
+
+    if ($type == 'movies_library') {
+        $other['extra'] = view_extra_movies($item);
+    }
+    if ($type == 'movies_db') {
+        $other['extra'] = view_extra_movies($item);
+    }
+    if ($type == 'shows_library') {
+        $other['extra'] = view_extra_shows($item);
+    }
+    if ($type == 'shows_db') {
+        $other['extra'] = view_extra_shows($item);
+    }
+
+    if ($type == 'movies_torrent') {
+
+    }
+    if ($type == 'shows_torrent') {
+        
+    }
+    $page = getTpl('view', array_merge($cfg, $LNG, $item, $other));
+    
     return $page;
+}
+
+function view_extra_movies($item) {
+    $extra = search_movie_torrents($item['title']);
+
+    return $extra;
+}
+
+function view_extra_shows($item) {
+    $extra = search_shows_torrents($item['title']);
+
+    return $extra;
 }
