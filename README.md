@@ -1,9 +1,10 @@
 Description: 
 Probando a realizar una alternativa Sonarr+Radar sobre servidor web
 
-Warning: Codigo/esbozo a correr (el grueso fue realizado  en 3 intensos dias), no solo hay que pulirlo si no esta sin seguridad, sin comprobaciones, con fallos, faltas y todo eso... 
-probablemente de momento no deberias instalarlo
+Warning: Codigo/esbozo realizado a correr (el grueso fue programado  en 3 intensos dias), no solo hay que pulirlo si no que esta sin seguridad, 
+sin comprobaciones, con fallos, faltas. y todo eso... 
 
+Probablemente de momento no deberias instalarlo.
 
 1º Copiar los archivos de src a la carpeta destino (AKA: dest)
 

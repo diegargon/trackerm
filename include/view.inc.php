@@ -48,24 +48,31 @@ function view() {
     }
 
     if ($type == 'movies_torrent') {
-
+        //TODO
     }
     if ($type == 'shows_torrent') {
-        
+        //TODO
     }
     $page = getTpl('view', array_merge($cfg, $LNG, $item, $other));
-    
+
     return $page;
 }
 
 function view_extra_movies($item) {
-    $extra = search_movie_torrents($item['title']);
+    global $LNG;
+    $extra = '<form method="post"><input class="submit_btn" type="submit" name="more_torrents" value="' . $LNG['L_SHOW_TORS'] . '" ></form>';
+    if (isset($_POST['more_torrents'])) {
+        $extra .= search_movie_torrents($item['title']);
+    }
 
     return $extra;
 }
 
 function view_extra_shows($item) {
-    $extra = search_shows_torrents($item['title']);
-
+    global $LNG;
+    $extra = '<form method="post"><input class="submit_btn" type="submit" name="more_torrents" value="' . $LNG['L_SHOW_TORS'] . '" ></form>';
+    if (isset($_POST['more_torrents'])) {
+        $extra .= search_shows_torrents($item['title']);
+    }
     return $extra;
 }
