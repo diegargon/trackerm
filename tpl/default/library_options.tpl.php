@@ -19,5 +19,14 @@
             <option <?= $tdata['max_id_sel_20'] ?> id="20">20</option>
             <option <?= $tdata['max_id_sel_50'] ?> id="50">50</option>
         </select>
+        <?= $tdata['L_ROWS'] ?>:
+        <select name="num_results" onchange="this.form.submit()">
+            <option <?= $tdata['max_results_sel_none'] ?> id="default"><?= $tdata['L_DEFAULT'] ?></option>
+            <option <?= $tdata['max_results_sel_2'] ?> id="2">2</option>
+            <option <?= $tdata['max_results_sel_4'] ?> id="4">4</option>
+            <option <?= $tdata['max_results_sel_8'] ?> id="8">8</option>
+            <option <?= $tdata['max_results_sel_10'] ?> id="10">10</option>
+        </select>
+
     </form>
 </div>

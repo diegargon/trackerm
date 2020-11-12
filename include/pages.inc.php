@@ -27,6 +27,22 @@ function page_biblio() {
     $tdata['max_id_sel_20'] = $max_id_sel_20;
     $tdata['max_id_sel_50'] = $max_id_sel_50;
 
+    $max_results_sel_none = '';
+
+    if (isset($_POST['num_results'])) {
+        if ($_POST['num_results'] == $LNG['L_DEFAULT']) {
+            $max_results_sel_none = 'selected';
+        } else {
+            $cfg['tresults_rows'] = $_POST['num_results'];
+        }
+    }
+
+    ($cfg['tresults_rows'] == 2) ? $tdata['max_results_sel_2'] = 'selected' : $tdata['max_results_sel_2'] = '';
+    ($cfg['tresults_rows'] == 4) ? $tdata['max_results_sel_4'] = 'selected' : $tdata['max_results_sel_4'] = '';
+    ($cfg['tresults_rows'] == 8) ? $tdata['max_results_sel_8'] = 'selected' : $tdata['max_results_sel_8'] = '';
+    ($cfg['tresults_rows'] == 10) ? $tdata['max_results_sel_10'] = 'selected' : $tdata['max_results_sel_10'] = '';
+    $tdata['max_results_sel_none'] = $max_results_sel_none;
+
     $page = getTpl('library_options', array_merge($tdata, $LNG));
 
     $page .= show_my_movies();

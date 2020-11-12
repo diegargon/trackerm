@@ -30,4 +30,8 @@ $LNG = [
     'L_IDENT_SHOWS' => 'Identificación de series',
     'L_SHOW_TORS' => 'Mostrar torrentes',
     'L_ID_DISPLAY' => 'Mostrar para identificar',
+    'L_RESULTS' => 'Resultados',
+    'L_ROWS' => 'Filas', 
+    'L_ALL' => 'Todos',
+    'L_DEFAULT' => 'Defecto',
 ];
