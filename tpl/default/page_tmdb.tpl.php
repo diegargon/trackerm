@@ -11,7 +11,9 @@
 <h2>TheMovieDb.org</h2>
 <a href="https://themoviedb.org" target=_blank>The Movie Database</a>
 <form method="post">
-    <p><?= $tdata['L_SEARCH'] . $tdata['L_MOVIES'] ?>:<input type="text" name="search_movie"></p>
-    <p><?= $tdata['L_SEARCH'] . $tdata['L_SHOWS'] ?>:<input type="text" name="search_shows"></p>
-    <input class="submit_btn" type="submit" name="search" value="<?= $tdata['L_SEARCH'] ?> ">
+    <div class="moviedb_container">
+        <div class="search_tag"><?= $tdata['L_MOVIE'] ?>:</div><div class="search_box"><input type="text" name="search_movie"></div>
+        <div class="search_tag"><?= $tdata['L_SHOW'] ?>:</div><div class="search_box"><input type="text" name="search_shows"></div>
+        <div class="search_btn"><input class="submit_btn" type="submit" name="search" value="<?= $tdata['L_SEARCH'] ?> "></div>
+    </div>
 </form>

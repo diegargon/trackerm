@@ -69,6 +69,10 @@ function identify_media($type, $media) {
 
     foreach ($media as $item) {
         if (empty($item['title'])) {
+            // Maximo 5 peliculas a identidfiar de cada vez, FIXME: break
+            if ($i >= $cfg['max_identify_items']) {
+                break;
+            }
             if ($type == 'movies') {
                 $db_media = db_search_movies($item['predictible_title']);
             } else if ($type == 'shows') {
@@ -100,10 +104,6 @@ function identify_media($type, $media) {
             $titles .= '</td></tr>';
 
             $i++;
-            // Maximo 5 peliculas a identidfiar de cada vez, FIXME: configurable y de mejor forma que un break
-            if ($i > $cfg['max_identify_items']) {
-                break;
-            }
         }
     }
 

@@ -10,7 +10,7 @@ body {
 }
 
 .main_menu {
-    border:1px solid red;
+    border:0px solid red;
     background-color: activeborder;
 
 }
@@ -101,7 +101,7 @@ button {
     border:1px solid blue;
 }
 .menu_element {
-    border:1px solid blue;
+    border:0px solid blue;
     display:inline-block;
     padding: 20px;
     margin: 5px;
@@ -123,7 +123,7 @@ button {
 
 .submit_btn {
     display: inline-block;
-    padding: 0.35em 1.2em;
+    padding: 1.2em 1.5em;
     border: 0.1em solid #FFFFFF;
     margin: 0 0.3em 0.3em 0;
     border-radius: 0.12em;
@@ -185,4 +185,29 @@ button {
 }
 .library_options {
     border:1px solid blueviolet;
+    padding: 4px;
+    padding-top: 10px;
+}
+.search_container {    
+    width: 100%;
+}
+.search_tag {
+    display: inline;
+    padding: 4px;
+    width: 125px;
+    text-align: right;
+    border:0px solid blue;
+}
+.search_box {
+    display: inline;
+    padding: 4px;
+    width: 150px;
+    border:0px solid red;
+}
+.search_box input {
+    width: 250px;
+}
+.search_btn {
+    border:0px solid blue;
+    padding: 4px;
 }

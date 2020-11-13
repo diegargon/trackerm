@@ -63,6 +63,22 @@ class DB {
         }
     }
 
+    public function addUniqKey($table, $elements) {
+        !isset($this->tables[$table]) ? $this->loadTable($table) : null;
+
+        foreach ($elements as $key => $element) {
+            $this->tables[$table]['data'][$key] = $element;
+        }
+        $this->tables[$table]['info']['last_update'] = time();
+        $this->saveTable($table);
+    }
+
+    public function getUniqKey($table, $item) {
+        !isset($this->tables[$table]) ? $this->loadTable($table) : null;
+
+        return $this->tables[$table]['data'][$item];
+    }
+
     function getItemByID($table, $id) {
         !isset($this->tables[$table]) ? $this->loadTable($table) : null;
         return $this->tables[$table]['data'][$id];
@@ -92,7 +108,7 @@ class DB {
     public function getTableData($table, $force = false) {
         if (!isset($this->tables[$table]['data']) || $force === true) {
 
-            if ($this->loadTable($table) && $this->tables[$table]['data']) {
+            if ($this->loadTable($table) && !empty($this->tables[$table]['data'])) {
                 return $table_data = $this->tables[$table]['data'];
             } else {
                 return false;

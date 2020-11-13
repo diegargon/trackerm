@@ -15,17 +15,31 @@
         <input class="submit_btn"  type="submit" name="search_biblio" value="<?= $tdata['L_SEARCH'] ?> "/>
         <?= $tdata['L_ID_DISPLAY'] ?>:
         <select name="num_id_show" onchange="this.form.submit()">
+            <option <?= $tdata['max_id_sel_0'] ?> id="0">0</option>
+            <option <?= $tdata['max_id_sel_5'] ?> id="5">5</option>
             <option <?= $tdata['max_id_sel_10'] ?> id="10">10</option>
             <option <?= $tdata['max_id_sel_20'] ?> id="20">20</option>
             <option <?= $tdata['max_id_sel_50'] ?> id="50">50</option>
         </select>
+        <?= $tdata['L_COLUMNS'] ?>:
+        <select name="num_columns_results" onchange="this.form.submit()">
+            <option <?= $tdata['max_columns_sel_none'] ?> id="default"><?= $tdata['L_DEFAULT'] ?></option>
+            <option <?= $tdata['max_columns_sel_1'] ?> id="1">1</option>
+            <option <?= $tdata['max_columns_sel_2'] ?> id="2">2</option>
+            <option <?= $tdata['max_columns_sel_4'] ?> id="4">4</option>
+            <option <?= $tdata['max_columns_sel_6'] ?> id="6">6</option>
+            <option <?= $tdata['max_columns_sel_8'] ?> id="8">8</option>
+            <option <?= $tdata['max_columns_sel_10'] ?> id="10">10</option>
+        </select>
         <?= $tdata['L_ROWS'] ?>:
-        <select name="num_results" onchange="this.form.submit()">
-            <option <?= $tdata['max_results_sel_none'] ?> id="default"><?= $tdata['L_DEFAULT'] ?></option>
-            <option <?= $tdata['max_results_sel_2'] ?> id="2">2</option>
-            <option <?= $tdata['max_results_sel_4'] ?> id="4">4</option>
-            <option <?= $tdata['max_results_sel_8'] ?> id="8">8</option>
-            <option <?= $tdata['max_results_sel_10'] ?> id="10">10</option>
+        <select name="num_rows_results" onchange="this.form.submit()">
+            <option <?= $tdata['max_rows_sel_none'] ?> id="default"><?= $tdata['L_DEFAULT'] ?></option>
+            <option <?= $tdata['max_rows_sel_1'] ?> id="1">1</option>
+            <option <?= $tdata['max_rows_sel_2'] ?> id="2">2</option>
+            <option <?= $tdata['max_rows_sel_4'] ?> id="4">4</option>
+            <option <?= $tdata['max_rows_sel_6'] ?> id="6">6</option>
+            <option <?= $tdata['max_rows_sel_8'] ?> id="8">8</option>
+            <option <?= $tdata['max_rows_sel_10'] ?> id="10">10</option>
         </select>
 
     </form>
