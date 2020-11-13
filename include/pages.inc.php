@@ -123,13 +123,13 @@ function page_tmdb() {
 
     $page = getTpl('page_tmdb', $LNG);
 
-    if (!empty($_POST['search_movie'])) {
-        $movies = db_search_movies(trim($_POST['search_movie']));
+    if (!empty($_GET['search_movie'])) {
+        $movies = db_search_movies(trim($_GET['search_movie']));
         !empty($movies) ? $page .= buildTable('L_DB', $movies) : null;
     }
 
-    if (!empty($_POST['search_shows'])) {
-        $shows = db_search_shows(trim($_POST['search_shows']));
+    if (!empty($_GET['search_shows'])) {
+        $shows = db_search_shows(trim($_GET['search_shows']));
         !empty($shows) ? $page .= buildTable('L_DB', $shows) : null;
     }
 
@@ -141,11 +141,11 @@ function page_torrents() {
 
     $page = getTpl('page_torrents', $LNG);
 
-    if (!empty($_POST['search_shows_torrents'])) {
-        $page .= search_shows_torrents(trim($_POST['search_shows_torrents']), 'L_TORRENT');
+    if (!empty($_GET['search_shows_torrents'])) {
+        $page .= search_shows_torrents(trim($_GET['search_shows_torrents']), 'L_TORRENT');
     }
-    if (!empty($_POST['search_movie_torrents'])) {
-        $page .= search_movie_torrents(trim($_POST['search_movie_torrents']), 'L_TORRENT');
+    if (!empty($_GET['search_movie_torrents'])) {
+        $page .= search_movie_torrents(trim($_GET['search_movie_torrents']), 'L_TORRENT');
     }
 
     return $page;

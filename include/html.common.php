@@ -65,7 +65,7 @@ function buildTable($head, $db_ary, $topt = null) {
     $total_items = count($db_ary);
     $num_pages = $total_items / $items_per_page;
     for ($i = 1; $i <= ceil($num_pages); $i++) {
-        $pages .= '<a class="num_pages_link" href="' . basename($_SERVER['REQUEST_URI']) . '&npage='. $i .'">' . $i . '</a>';
+        $pages .= '<a class="num_pages_link" href="' . basename($_SERVER['REQUEST_URI']) . '&npage=' . $i . '">' . $i . '</a>';
     }
     $page .= "<p>" . $pages . '</p>';
 
