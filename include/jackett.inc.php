@@ -14,8 +14,12 @@ function search_movie_torrents($words, $head = null) {
     $page = '';
 
     $words = str_replace(' ', '%20', $words);
+
     foreach ($cfg['jackett_indexers'] as $indexer) {
-        $result[$indexer] = jackett_search_movies($words, $indexer);
+        $caps = jackett_get_caps($indexer);
+        if ($caps['searching']['movie-search']['@attributes']['available'] == "yes") {
+            $result[$indexer] = jackett_search_movies($words, $indexer);
+        }
     }
 
     $movies_db = jackett_prep_movies($result);
@@ -33,7 +37,10 @@ function search_shows_torrents($words, $head = null) {
 
     $words = str_replace(' ', '%20', $words);
     foreach ($cfg['jackett_indexers'] as $indexer) {
-        $result[$indexer] = jackett_search_shows($words, $indexer);
+        $caps = jackett_get_caps($indexer);
+        if ($caps['searching']['tv-search']['@attributes']['available'] == "yes") {
+            $result[$indexer] = jackett_search_shows($words, $indexer);
+        }
     }
 
     $shows_db = jackett_prep_shows($result);

@@ -9,7 +9,8 @@ TODO
 ** MED
 * codigo seguro
 * reorganizar codigo/funciones
-* 
+* cunado pasamos pagina se realiza otra query remota, evitarlo. Guardar el query en una db y si se pasa pagina leer de la db 
+en vez de hacer otra query remota.
 
 ** VERY LOW
 * usuarios
