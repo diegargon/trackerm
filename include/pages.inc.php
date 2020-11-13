@@ -106,12 +106,14 @@ function page_news() {
     $page_news = '';
 
     if (!empty($res_movies_db)) {
-        $page_news_movies = buildTable('L_MOVIES', $res_movies_db);
+        $topt['type'] = 'movies';
+        $page_news_movies = buildTable('L_MOVIES', $res_movies_db, $topt);
         $page_news .= $page_news_movies;
     }
 
     if (!empty($res_shows_db)) {
-        $page_news_shows = buildTable('L_SHOWS', $res_shows_db);
+        $topt['type'] = 'shows';
+        $page_news_shows = buildTable('L_SHOWS', $res_shows_db, $topt);
         $page_news .= $page_news_shows;
     }
 

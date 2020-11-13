@@ -237,7 +237,8 @@ button {
     border:0px solid blue;
     padding: 4px;
 }
-.num_pages_link {
+
+.num_pages_link, .num_pages_link_selected {
     font-weight: 900;
     border:1px solid black;
     background-color: gray;
@@ -245,4 +246,8 @@ button {
     text-decoration: none;
     font-size: 1.5em;
     /* margin-left: 10px; */
+}
+
+.num_pages_link_selected {
+    background-color: aqua;
 }

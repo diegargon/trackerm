@@ -15,3 +15,4 @@ TODO
 * usuarios
 * fechas normalizar a formato comun
 * En el select de identificar estaria bien mostrar las caractulas al pone encima
+* recargar con jquery solo las partes necesarias en vez de recargar toda la pagina

@@ -31,7 +31,7 @@ function buildTable($head, $db_ary, $topt = null) {
     global $cfg, $LNG;
 
     empty($topt['columns']) ? $columns = $cfg['tresults_columns'] : $columns = $topt['columns'];
-    empty($topt['max_rows']) ? $max_rows = $cfg['tresults_rows'] * $columns : $max_rows = $topt['max_rows'];
+    empty($topt['max_items']) ? $max_items = $cfg['tresults_rows'] * $columns : $max_items = $topt['max_items'];
     $page = '';
 
     !empty($head) ? $page .= '<h2>' . $LNG[$head] . '</h2>' : null;
@@ -39,8 +39,20 @@ function buildTable($head, $db_ary, $topt = null) {
     $page .= '<div class="divTable">';
     $num_col_items = 0;
     $num_items = 0;
-    foreach ($db_ary as $item) {
-        if ($num_items >= $max_rows) {
+
+    if (
+            (!empty($_GET['npage']) && !isset($_GET['type']) ) ||
+            ( (isset($topt['type']) && isset($_GET['type'])) && $topt['type'] == $_GET['type'])
+    ) {
+        $npage = $_GET['npage'];
+        $npage_jump = ($max_items * $npage) - $max_items;
+        $db_ary_slice = array_slice($db_ary, $npage_jump);
+    } else {
+        $db_ary_slice = $db_ary;
+    }
+
+    foreach ($db_ary_slice as $item) {
+        if ($num_items >= $max_items) {
             break;
         }
 
@@ -64,9 +76,30 @@ function buildTable($head, $db_ary, $topt = null) {
     $items_per_page = $cfg['tresults_columns'] * $cfg['tresults_rows'];
     $total_items = count($db_ary);
     $num_pages = $total_items / $items_per_page;
+
     for ($i = 1; $i <= ceil($num_pages); $i++) {
-        $pages .= '<a class="num_pages_link" href="' . basename($_SERVER['REQUEST_URI']) . '&npage=' . $i . '">' . $i . '</a>';
+        $iurl = basename($_SERVER['REQUEST_URI']);
+        $link_npage_class = "num_pages_link";
+
+        if (isset($topt['type'])) {
+            if ($topt['type'] == 'movies') {
+                $extra = '&type=movies';
+            } else if ($topt['type'] == 'shows') {
+                $extra = '&type=shows';
+            }
+        } else {
+            $extra = '';
+        }
+
+        if (
+                (isset($_GET['npage']) && $_GET['npage'] == $i) &&
+                isset($_GET['type']) &&
+                ($_GET['type'] == $topt['type'])) {
+            $link_npage_class .= '_selected';
+        }
+        $pages .= '<a class="' . $link_npage_class . '" href="' . $iurl . '&npage=' . $i . $extra . '">' . $i . '</a>';
     }
+
     $page .= "<p>" . $pages . '</p>';
 
     /* FIN PAGES */
