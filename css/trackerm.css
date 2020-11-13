@@ -237,3 +237,12 @@ button {
     border:0px solid blue;
     padding: 4px;
 }
+.num_pages_link {
+    font-weight: 900;
+    border:1px solid black;
+    background-color: gray;
+    padding: 10px 20px 10px 20px;
+    text-decoration: none;
+    font-size: 1.5em;
+    /* margin-left: 10px; */
+}

@@ -94,6 +94,12 @@ class DB {
         return false;
     }
 
+    public function getNumElements($table) {
+        !isset($this->tables[$table]) ? $this->loadTable($table) : null;
+
+        return count($this->tables[$table]['data']);
+    }
+
     public function getLastID($table) {
         if (!isLoaded($table)) {
             return false;
