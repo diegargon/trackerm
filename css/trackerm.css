@@ -5,6 +5,7 @@ body {
     line-height: 1.4;
     height:100%;
 }
+
 .page { 
     border:0px solid black;    
 }
@@ -14,6 +15,7 @@ body {
     background-color: activeborder;
 
 }
+
 button {
     padding:10px;
 }
@@ -54,13 +56,16 @@ button {
     width: 100%;
     border-collapse: collapse;
 }
+
 .divTableRow {
     display: table-row;
 }
+
 .divTableHeading {
     background-color: #EEE;
     display: table-header-group;
 }
+
 .divTableCell, .divTableHead {
     border: 1px solid #999999;
     display: table-cell;
@@ -68,16 +73,19 @@ button {
     max-width: 0vh;
     /* vertical-align:top; */
 }
+
 .divTableHeading {
     background-color: #EEE;
     display: table-header-group;
     font-weight: bold;
 }
+
 .divTableFoot {
     background-color: #EEE;
     display: table-footer-group;
     font-weight: bold;
 }
+
 .divTableBody {
     display: table-row-group;
 }
@@ -88,18 +96,22 @@ button {
     text-align:center;
     object-fit: cover;
 }
+
 .poster_preview{
     display: inline-block;
     text-align: center; 
 }
+
 .img_poster_preview {
     height: auto;
     width: 100%;
     max-width:200px;
 }
+
 .item_details {
     border:1px solid blue;
 }
+
 .menu_element {
     border:0px solid blue;
     display:inline-block;
@@ -109,6 +121,7 @@ button {
     font-size:1.8em;
     font-weight:bold;
 }
+
 .menu_element href {
     text-decoration: none;
 
@@ -117,6 +130,7 @@ button {
 .tor_source_link {
     background-color: aquamarine;
 }
+
 .info_size {
     background-color: aquamarine;
 }
@@ -151,46 +165,55 @@ button {
     border:1px solid red;
     padding:4px;    
 }
+
 .view_content {
     display:flex;
     flex-wrap: nowrap;
 }
+
 .view_poster {
     height: auto;
     border:0px solid yellow;
-    width:100%;
-
+    width: 350px;
 }
+
 .view_poster_container {
     border:1px solid blue;
     padding-left:5%;
 }
+
 .view_description_container img {
     width: 100%;
 
 }
+
 .view_description_container {  
     border:1px solid aqua;
     width: 100%;
     padding: 10px;
     padding-right: 10%;
 }
+
 .view_plot {
     border:1px solid blueviolet;
     width: 100%;
 }
+
 .view_extra {
     border:1px solid black;
     width:100%;
 }
+
 .library_options {
     border:1px solid blueviolet;
     padding: 4px;
     padding-top: 10px;
 }
+
 .search_container {    
     width: 100%;
 }
+
 .search_tag {
     display: inline;
     padding: 4px;
@@ -198,15 +221,18 @@ button {
     text-align: right;
     border:0px solid blue;
 }
+
 .search_box {
     display: inline;
     padding: 4px;
     width: 150px;
     border:0px solid red;
 }
+
 .search_box input {
     width: 250px;
 }
+
 .search_btn {
     border:0px solid blue;
     padding: 4px;

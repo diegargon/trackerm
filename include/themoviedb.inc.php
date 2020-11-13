@@ -8,7 +8,7 @@
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  */
 function db_search_movies($search) {
-    global $cfg, $LNG, $db;
+    global $cfg;
 
     $search = trim($search);
     $query = str_replace(' ', '+', $search);
@@ -16,47 +16,13 @@ function db_search_movies($search) {
 
     $data = curl_get_json($url);
 
-    $img_path = 'https://image.tmdb.org/t/p/w500';
+    (isset($data['results'])) ? $movies = db_prep('movies', $data['results']) : null;
 
-    if (isset($data['results'])) {
-        foreach ($data['results'] as $item) {
-            $link = 'https://www.themoviedb.org/movie/' . $item['id'];
-            $id = $item['id'];
-            $movies[$id]['id'] = $id;
-            $movies[$id]['ilink'] = 'movies_db';
-            $movies[$id]['themoviedb_id'] = $item['id'];
-            $movies[$id]['title'] = $item['title'];
-            $movies[$id]['original_title'] = $item['original_title'];
-            $movies[$id]['rating'] = $item['vote_average'];
-            $movies[$id]['popularity'] = $item['popularity'];
-            $movies[$id]['elink'] = $link;
-            if (!empty($item['poster_path'])) {
-                $movies[$id]['poster'] = $img_path . $item['poster_path'];
-            }
-            if (!empty($item['backdrop_path'])) {
-                $movies[$id]['scene'] = $img_path . $item['backdrop_path'];
-            }
-            $movies[$id]['lang'] = $item['original_language'];
-            $movies[$id]['plot'] = $item['overview'];
-            if (isset($item['release_date'])) {
-                $movies[$id]['release'] = $item['release_date'];
-            } else {
-                $movies[$id]['release'] = '';
-            }
-            $db->addUniqElements('tmdb_search', $movies, 'themoviedb_id');
-        }
-    }
-    if (!empty($movies)) {
-        foreach ($movies as $key => $movie) {
-            $id = $db->getIdbyField('tmdb_search', 'themoviedb_id', $movie['themoviedb_id']);
-            $movies[$key]['id'] = $id;
-        }
-    }
     return isset($movies) ? $movies : null;
 }
 
 function db_search_shows($search) {
-    global $cfg, $LNG, $db;
+    global $cfg;
 
     $search = trim($search);
     $query = str_replace(' ', '+', $search);
@@ -64,44 +30,69 @@ function db_search_shows($search) {
 
     $data = curl_get_json($url);
 
-    $img_path = 'https://image.tmdb.org/t/p/w500';
-
-    if (isset($data['results'])) {
-        foreach ($data['results'] as $item) {
-            $link = 'https://www.themoviedb.org/movie/' . $item['id'];
-            $id = $item['id'];
-            $shows[$id]['id'] = $id;
-            $shows[$id]['ilink'] = 'shows_db';
-            $shows[$id]['themoviedb_id'] = $item['id'];
-            $shows[$id]['title'] = $item['name'];
-            $shows[$id]['original_title'] = $item['original_name'];
-            $shows[$id]['rating'] = $item['vote_average'];
-            $shows[$id]['popularity'] = $item['popularity'];
-            $shows[$id]['elink'] = $link;
-            if (!empty($item['poster_path'])) {
-                $shows[$id]['poster'] = $img_path . $item['poster_path'];
-            }
-            if (!empty($item['backdrop_path'])) {
-                $shows[$id]['scene'] = $img_path . $item['backdrop_path'];
-            }
-            $shows[$id]['lang'] = $item['original_language'];
-            $shows[$id]['plot'] = $item['overview'];
-            if (isset($item['first_air_date'])) {
-                $shows[$id]['release'] = $item['first_air_date'];
-            } else {
-                $shows[$id]['release'] = '';
-            }
-            $db->addUniqElements('tmdb_search', $shows, 'themoviedb_id');
-        }
-    }
-    if (!empty($shows)) {
-        foreach ($shows as $key => $show) {
-            $id = $db->getIdbyField('tmdb_search', 'themoviedb_id', $show['themoviedb_id']);
-            $shows[$key]['id'] = $id;
-        }
-    }
+    (isset($data['results'])) ? $shows = db_prep('shows', $data['results']) : null;
 
     return isset($shows) ? $shows : null;
+}
+
+function db_prep($type, $items) {
+    global $db;
+
+    $img_path = 'https://image.tmdb.org/t/p/w500';
+
+    if ($type == 'movies') {
+        $tmdb_link = 'https://www.themoviedb.org/movie/';
+    } else if ($type == 'shows') {
+        $tmdb_link = 'https://www.themoviedb.org/tv/';
+    } else {
+        return false;
+    }
+
+    $fitems = [];
+
+    foreach ($items as $item) {
+        if ($type == 'movies') {
+            $title = $item['title'];
+            $original_title = $item['original_title'];
+        } else if ($type == 'shows') {
+            $title = $item['name'];
+            $original_title = $item['original_name'];
+        }
+
+        $link = $tmdb_link . $item['id'];
+        $id = $item['id'];
+        $fitems[$id]['id'] = $id;
+        $fitems[$id]['ilink'] = 'movies_db';
+        $fitems[$id]['themoviedb_id'] = $item['id'];
+        $fitems[$id]['title'] = $title;
+        $fitems[$id]['original_title'] = $original_title;
+        $fitems[$id]['rating'] = $item['vote_average'];
+        $fitems[$id]['popularity'] = $item['popularity'];
+        $fitems[$id]['elink'] = $link;
+        if (!empty($item['poster_path'])) {
+            $fitems[$id]['poster'] = $img_path . $item['poster_path'];
+        }
+        if (!empty($item['backdrop_path'])) {
+            $fitems[$id]['scene'] = $img_path . $item['backdrop_path'];
+        }
+        $fitems[$id]['lang'] = $item['original_language'];
+        $fitems[$id]['plot'] = $item['overview'];
+        if (isset($item['release_date'])) {
+            $fitems[$id]['release'] = $item['release_date'];
+        } else {
+            $fitems[$id]['release'] = '';
+        }
+        $db->addUniqElements('tmdb_search', $fitems, 'themoviedb_id');
+    }
+
+    if (!empty($fitems)) {
+        foreach ($fitems as $key => $fitem) {
+            $id = $db->getIdbyField('tmdb_search', 'themoviedb_id', $fitem['themoviedb_id']);
+            $fitems[$key]['id'] = $id;
+        }
+    }
+
+    return isset($fitems) ? $fitems : false;
 }
 
 function db_get_byid($id, $table) {
@@ -114,4 +105,11 @@ function db_get_byid($id, $table) {
             return $item;
         }
     }
+}
+
+function db_get_popular() {
+    /*
+      https://api.themoviedb.org/3/movie/popular?api_key=<<api_key>>&language=en-US&page=1
+      https://api.themoviedb.org/3/tv/popular?api_key=<<api_key>>&language=en-US&page=1
+     */
 }
