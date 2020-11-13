@@ -2,7 +2,7 @@ Description:
 Probando a realizar una alternativa Sonarr+Radar sobre servidor web
 
 Warning: Codigo/esbozo realizado a correr (el grueso fue programado  en 3 intensos dias), no solo hay que pulirlo si no que esta sin seguridad, 
-sin comprobaciones, con fallos, faltas. y todo eso... 
+sin comprobaciones, con fallos, errores y todo eso... 
 
 Probablemente de momento no deberias instalarlo.
 
@@ -19,7 +19,7 @@ Probablemente de momento no deberias instalarlo.
     composer require irazasyed/php-transmission-sdk  php-http/httplug-pack  php-http/guzzle6-adapter
 
 
-4º Para buscar, caratulas y demas necesitais una clave api de un proveedor de actualmente solo soporta de themoviedb.com (el api key va en config.inc.php)
+4º Para buscar, caratulas y demas necesitais una clave api de un proveedor, actualmente solo soporta themoviedb.com (el api key va en config.inc.php)
 Otros:
 
 * Necesitas transmission-daemon instalado y configurado y permitiendo las conexiones RPC a la ip del servidor
