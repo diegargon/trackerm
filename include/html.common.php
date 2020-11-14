@@ -114,10 +114,17 @@ function build_item($item, $detail = null) {
     $page = '';
 
     if ($details == 0) {
-        $page .= '<a href="">' . $item['title'] . '</a>';
+        $page .= '<a href="?page=view&id=' . $item['id'] . '&type=' . $item['ilink'] . '">' . $item['title'] . '</a>';
     } else if ($details == 1) {
         if (empty($item['poster'])) {
             $item['poster'] = $cfg['img_url'] . '/not_available.jpg';
+        } else {
+            if ($cfg['CACHE_IMAGES']) {
+                $cache_img_response = get_and_cache_img($item['poster']);
+                if ($cache_img_response !== false) {
+                    $item['poster'] = $cache_img_response;
+                }
+            }
         }
         if (!empty($item['size'])) {
             $item['hsize'] = human_filesize($item['size']);
@@ -126,4 +133,23 @@ function build_item($item, $detail = null) {
     }
 
     return $page;
+}
+
+function get_and_cache_img($img_url) {
+    global $cfg;
+
+    if (!is_writeable($_SERVER['DOCUMENT_ROOT'] . $cfg['REL_PATH'] . $cfg['CACHE_IMAGES_PATH'])) {
+        return false;
+    }
+
+    $file_name = basename($img_url);
+    $img_path = $_SERVER['DOCUMENT_ROOT'] . $cfg['REL_PATH'] . $cfg['CACHE_IMAGES_PATH'] . '/' . $file_name;
+
+    if (
+            file_exists($img_path) ||
+            file_put_contents($img_path, file_get_contents($img_url)) !== false
+    ) {
+        return $cfg['REL_PATH'] . $cfg['CACHE_IMAGES_PATH'] . '/' . $file_name;
+    }
+    return false;
 }

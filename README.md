@@ -20,6 +20,7 @@ Probablemente de momento no deberias instalarlo.
 
 
 4º Para buscar, caratulas y demas necesitais una clave api de un proveedor, actualmente solo soporta themoviedb.com (el api key va en config.inc.php)
+
 Otros:
 
 * Necesitas transmission-daemon instalado y configurado y permitiendo las conexiones RPC a la ip del servidor
@@ -30,3 +31,7 @@ Otros:
 
   NOTA 3: Utilizo una libreria externa para el dialogo con transmission, esta "envuelta/wrapped" por si cambio de libreria, si fuera el caso espero acordarme de editar
         esto con las nuevas dependedncias de composer, si no...
+
+  NOTA 4: Para el cache de las imagenes/posters se necesita allow_url_fopen en php.ini
+
+  NOTA 5: Se necesitan permisos de lectura/escritura en cache y cache/images 775 si cambiamos el propietario al del servidor web o 777 (inseguro)

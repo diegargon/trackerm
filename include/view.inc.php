@@ -32,6 +32,12 @@ function view() {
 
     $item = $db->getItemByID($t_type, $id);
 
+    if (!empty($item['poster']) && $cfg['CACHE_IMAGES']) {
+        $cache_img_response = get_and_cache_img($item['poster']);
+        if ($cache_img_response !== false) {
+            $item['poster'] = $cache_img_response;
+        }
+    }
     $other['extra'] = '';
 
     if ($type == 'movies_library') {
