@@ -61,7 +61,7 @@ function db_prep($type, $items) {
         $link = $tmdb_link . $item['id'];
         $id = $item['id'];
         $fitems[$id]['id'] = $id;
-        $fitems[$id]['ilink'] = 'movies_db';
+        $fitems[$id]['ilink'] = $type . '_db';
         $fitems[$id]['themoviedb_id'] = $item['id'];
         $fitems[$id]['title'] = $title;
         $fitems[$id]['original_title'] = $original_title;

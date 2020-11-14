@@ -143,6 +143,7 @@ function getFileTitle($file) {
     $regex .= '(?!4k-hdr)'; // 4k-hdr
     $regex .= '(?!spanish)'; // spanish (dara probleams)
     $regex .= '(?!multi\senglish)'; // multi english
+    $regex .= '(?!S\d{2}E\d{2})'; // SXXEXX
     $regex .= '(?!.mkv)'; //.mkv
     $regex .= '(?!.avi)'; //.avi
     $regex .= '(?!.mp4)'; //.mp4

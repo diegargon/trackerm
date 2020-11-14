@@ -40,47 +40,87 @@ function view() {
     }
     $other['extra'] = '';
 
-    if ($type == 'movies_library') {
-        $other['extra'] = view_extra_movies($item);
-    }
-    if ($type == 'movies_db') {
-        $other['extra'] = view_extra_movies($item);
-    }
-    if ($type == 'shows_library') {
-        $other['extra'] = view_extra_shows($item);
-    }
-    if ($type == 'shows_db') {
-        $other['extra'] = view_extra_shows($item);
-    }
+    $opt['auto_show_torrents'] = 0;
+    $opt['auto_show_db'] = 0;
 
-    if ($type == 'movies_torrent') {
-        $other['extra'] = view_extra_movies($item);
-    }
-    if ($type == 'shows_torrent') {
-        $other['extra'] = view_extra_shows($item);
-    }
+  
+    ($type == 'movies_db' || $type == 'shows_db') ? $opt['auto_show_torrents'] = 1 : null;
+    ($type == 'movies_torrent' || $type == 'shows_torrent') ? $opt['auto_show_db'] = 1 : null;
+
+    
+    if ($type == 'movies_torrent' || $type == 'movies_db' || $type == 'movies_library') {
+        $other['extra'] .= view_extra_movies($item, $opt);
+    } 
+    
+    if ($type == 'shows_torrent' || $type == 'shows_db' || $type == 'shows_library') {
+        $other['extra'] .= view_extra_shows($item, $opt);
+    } 
+    
     $page = getTpl('view', array_merge($cfg, $LNG, $item, $other));
 
     return $page;
 }
 
-function view_extra_movies($item) {
+function view_extra_movies($item, $opt = null) {
     global $LNG;
-    $extra = '<form method="post"><input class="submit_btn" type="submit" name="more_torrents" value="' . $LNG['L_SHOW_TORS'] . '" ></form>';
-    if (isset($_POST['more_torrents'])) {
-        $title = getFileTitle($item['title']);
-        $extra .= search_movie_torrents($title);
+    $extra = '';
+
+    $extra .= '<form method="post">';
+    $extra .= '<input class="submit_btn" type="submit" name="more_movies" value="' . $LNG['L_SEARCH_MOVIES'] . '" >';
+    $extra .= '<input class="submit_btn" type="submit" name="more_torrents" value="' . $LNG['L_SHOW_TORRENTS'] . '" >';
+
+    $title = getFileTitle(trim($item['title']));
+
+
+    if (!empty($_POST['search_movie_db'])) {
+        $stitle = trim($_POST['search_movie_db']);
+    } else {
+        $stitle = $title;
+    }
+    $extra .= '<input type="text" name="search_movie_db" value="' . $stitle . '">';
+
+    if (isset($_POST['more_movies']) || !empty($opt['auto_show_db'])) {
+        $movies = db_search_movies($stitle);
+        !empty($movies) ? $extra .= buildTable('L_DB', $movies) : null;
+    }
+    $extra .= '</form>';
+
+
+    if (isset($_POST['more_torrents']) || !empty($opt['auto_show_torrents'])) {
+        $extra .= search_movie_torrents($stitle);
     }
 
     return $extra;
 }
 
-function view_extra_shows($item) {
+function view_extra_shows($item, $opt) {
     global $LNG;
-    $extra = '<form method="post"><input class="submit_btn" type="submit" name="more_torrents" value="' . $LNG['L_SHOW_TORS'] . '" ></form>';
-    if (isset($_POST['more_torrents'])) {
+
+    $extra = '';
+
+    $extra .= '<form method="post">';
+    $extra .= '<input class="submit_btn" type="submit" name="more_shows" value="' . $LNG['L_SEARCH_SHOWS'] . '" >';
+    $extra .= '<input class="submit_btn" type="submit" name="more_torrents" value="' . $LNG['L_SHOW_TORRENTS'] . '" >';
+    $title = getFileTitle(trim($item['title']));
+
+    if (!empty($_POST['search_shows_db'])) {
+        $stitle = trim($_POST['search_shows_db']);
+    } else {
+        $stitle = $title;
+    }
+
+    $extra .= '<input type="text" name="search_shows_db" value="' . $stitle . '">';
+
+    if (isset($_POST['more_shows']) || !empty($opt['auto_show_db'])) {        
+        $shows = db_search_shows($stitle);
+        !empty($shows) ? $extra .= buildTable('L_DB', $shows) : null;
+    }
+
+    if (isset($_POST['more_torrents']) || !empty($opt['auto_show_torrents']) ) {
         $title = getFileTitle($item['title']);
         $extra .= search_shows_torrents($title);
     }
+    $extra .= '</form>';
+
     return $extra;
 }
