@@ -13,7 +13,7 @@ require('lang/' . $cfg['LANG'] . '/lang.inc.php');
 require('include/pages.inc.php');
 require('include/curl.inc.php');
 require('include/file.utils.php');
-require('include/transmission.wrap.php');
+require('include/transmission.inc.php');
 require('include/biblio-movies.inc.php');
 require('include/biblio-shows.inc.php');
 require('include/biblio-common.inc.php');

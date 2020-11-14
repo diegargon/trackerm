@@ -22,6 +22,12 @@ if (!is_writable($cfg['cache'])) {
 $trans = new TorrentServer($cfg);
 $transfers = $trans->getAll();
 
+if (!empty($_GET['download'])) {
+    $d_link = $_GET['download'];
+    $trans->addUrl(rawurldecode($d_link));
+    //respuesta {"hashString":"32a182e2304472cd3bd9ef0ccc8837e40fddf144","id":7,"name":"El Legado De Las Mentiras (2020) [BluRay Rip][AC3 5.1 Castellano][www.PctMix.com]","duplicate":true} 
+}
+
 if (!isset($req_page) || $req_page == '') {
     $body .= index_page();
 } else if ($req_page == 'biblio') {

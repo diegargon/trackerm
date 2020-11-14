@@ -20,5 +20,8 @@
             <span class="tor_source_link">[<a href="<?= $tdata['guid'] ?>" target=_blank ><?= $tdata['source'] ?></a>]</span>
         <?php } ?>
         <span class="info_size"><?= isset($tdata['hsize']) ? $tdata['hsize'] : null ?></span>
+        <?php if (!empty($tdata['download'])) { ?>
+            <span class="download_link"><a href="<?= basename($_SERVER['REQUEST_URI']) . '&download=' . rawurlencode($tdata['download']) ?>">[D]</a></span>
+        <?php } ?>
     </div>
 </div>
