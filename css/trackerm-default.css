@@ -191,10 +191,11 @@ button {
     height: auto;
     border:0px solid yellow;
     width: 300px;
+    margin-right: 4px;
 }
 
 .view_poster_container {
-    border:1px solid blue;
+    border:0px solid blue;
     padding-left:2%;
 }
 
@@ -204,7 +205,7 @@ button {
 }
 
 .view_description_container {  
-    border:1px solid aqua;
+    border:5px solid black;
     width: 100%;
     padding: 10px;
     padding-right: 2%;
@@ -216,7 +217,7 @@ button {
 }
 
 .view_extra {
-    border:1px solid black;
+    border:0px solid black;
     width:100%;
 }
 
