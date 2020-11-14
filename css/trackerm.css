@@ -2,7 +2,7 @@ body {
     font-size: 14px;
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
     font-size: 14px;
-    line-height: 1.4;
+    line-height: 1.0;
     height:100%;
 }
 
@@ -247,7 +247,10 @@ button {
     font-size: 1.5em;
     /* margin-left: 10px; */
 }
-
+.submit_link {
+    display:block;
+    width: max-content;
+}
 .num_pages_link_selected {
     background-color: aqua;
 }

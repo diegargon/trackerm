@@ -11,6 +11,7 @@ series que se marquen para monitorear.
 * reorganizar codigo/funciones
 * cuando pasamos pagina se realiza otra query remota, evitarlo. Guardar el query en una db y si se pasa pagina leer de la db 
 en vez de hacer otra query remota.
+* user profiles
 
 ** VERY LOW
 * usuarios
