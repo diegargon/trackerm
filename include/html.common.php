@@ -22,7 +22,7 @@ function getFooter() {
 function getTpl($tpl, $tdata) {
     global $cfg;
     ob_start();
-    include('tpl/' . $cfg['tpl_dir'] . '/' . $tpl . '.tpl.php');
+    include('tpl/' . $cfg['theme'] . '/' . $tpl . '.tpl.php');
 
     return ob_get_clean();
 }

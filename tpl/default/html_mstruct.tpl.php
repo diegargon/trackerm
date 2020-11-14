@@ -11,7 +11,7 @@
 <html lang="es">
     <head>
         <meta charset="utf-8">
-        <link rel="stylesheet" href="css/trackerm.css">
+        <link rel="stylesheet" href="css/trackerm-<?= $cfg['theme'] ?>.css?nocache=<?= time() ?>">
         <meta name="referrer" content="never">
         <title>trackerm</title>
     </head>

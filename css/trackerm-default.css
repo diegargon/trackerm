@@ -4,16 +4,28 @@ body {
     font-size: 14px;
     line-height: 1.0;
     height:100%;
+    background: #1a1a1a;
+    color: #ff5b5b;;
 }
 
+input {
+    color: #ff5b5b;
+    background: #000;
+    font-size: 2em;
+    padding: 4px;
+    padding: 0.2em 0.5em;
+    border-radius: 0.12em;
+    font-family: 'Roboto', sans-serif;
+    margin: 0 0.3em 0.3em 0;    
+}
 .page { 
     border:0px solid black;    
 }
 
 .main_menu {
     border:0px solid red;
-    background-color: activeborder;
-
+    /* background-color: activeborder;*/
+    margin-bottom: 1%;
 }
 
 button {
@@ -33,7 +45,7 @@ button {
 }
 
 .center_box {
-    border:1px solid black;
+    border:0px solid black;
     padding: 5px;
     position: fixed;
     top: 50%;
@@ -42,7 +54,7 @@ button {
 }
 
 .profile_box {
-    border:1px solid yellowgreen;
+    border:0px solid yellowgreen;
     float: right;
     width: 150px;
     height: 150px;
@@ -67,9 +79,9 @@ button {
 }
 
 .divTableCell, .divTableHead {
-    border: 1px solid #999999;
+    border: 1px solid red;
     display: table-cell;
-    padding: 4px;
+    padding: 1%;
     max-width: 0vh;
     /* vertical-align:top; */
 }
@@ -92,7 +104,7 @@ button {
 
 .display {
     display: grid;
-    border:1px solid red;
+    border:0px solid red;
     text-align:center;
     object-fit: cover;
 }
@@ -109,7 +121,7 @@ button {
 }
 
 .item_details {
-    border:1px solid blue;
+    border:0px solid blue;
 }
 
 .menu_element {
@@ -137,14 +149,9 @@ button {
 
 .submit_btn {
     display: inline-block;
-    padding: 1.2em 1.5em;
     border: 0.1em solid #FFFFFF;
-    margin: 0 0.3em 0.3em 0;
-    border-radius: 0.12em;
     box-sizing: border-box;
     text-decoration: none;
-    font-family: 'Roboto', sans-serif;
-    font-weight: 300;
     color: blue;
     text-align: center;
     transition: all 0.2s;
@@ -195,7 +202,7 @@ button {
 }
 
 .view_plot {
-    border:1px solid blueviolet;
+    border:0px solid blueviolet;
     width: 100%;
 }
 
@@ -205,7 +212,7 @@ button {
 }
 
 .library_options {
-    border:1px solid blueviolet;
+    border:0px solid blueviolet;
     padding: 4px;
     padding-top: 10px;
 }
@@ -241,7 +248,7 @@ button {
 .num_pages_link, .submit_link, .num_pages_link_selected {
     font-weight: 900;
     border:1px solid black;
-    background-color: gray;
+    background-color: #937c00;
     padding: 10px 20px 10px 20px;
     text-decoration: none;
     font-size: 1.5em;

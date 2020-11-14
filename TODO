@@ -19,3 +19,5 @@ en vez de hacer otra query remota.
 * fechas normalizar a formato comun
 * En el select de identificar estaria bien mostrar las caractulas al pone encima
 * recargar con jquery solo las partes necesarias en vez de recargar toda la pagina
+* Stats en home
+* menu rows/columns y otras configuraciones generales en todas las paginas.

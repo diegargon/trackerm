@@ -37,7 +37,7 @@ $cfg['trans_passwd'] = '';
 $cfg['tresults_columns'] = 8;
 $cfg['tresults_rows'] = 8;
 $cfg['tresults_details'] = 1;
-$cfg['tpl_dir'] = 'default';
+$cfg['theme'] = 'default';
 
 /* NOT NEED EDIT */
 
