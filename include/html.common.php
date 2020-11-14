@@ -108,7 +108,7 @@ function buildTable($head, $db_ary, $topt = null) {
 }
 
 function build_item($item, $detail = null) {
-    global $cfg;
+    global $cfg, $LNG;
 
     !isset($detail) ? $details = $cfg['tresults_details'] : $details = $detail;
     $page = '';
@@ -129,7 +129,7 @@ function build_item($item, $detail = null) {
         if (!empty($item['size'])) {
             $item['hsize'] = human_filesize($item['size']);
         }
-        $page .= getTpl('item_display_1', $item);
+        $page .= getTpl('item_display_1', array_merge($item, $LNG));
     }
 
     return $page;

@@ -9,7 +9,7 @@ body {
 }
 
 input {
-    color: #ff5b5b;
+    color:green;
     background: #000;
     font-size: 2em;
     padding: 4px;
@@ -18,6 +18,11 @@ input {
     font-family: 'Roboto', sans-serif;
     margin: 0 0.3em 0.3em 0;    
 }
+
+a:link {
+    color: green;
+}
+
 .page { 
     border:0px solid black;    
 }
@@ -124,6 +129,19 @@ button {
     border:0px solid blue;
 }
 
+.item_title {
+    margin: 4px;
+}
+
+.item_desc {}
+
+.item_source_link, .item_size, .item_download_link, .item_rating {
+    background-color: #06001c;
+}
+.item_download_link {}
+
+.item_size {}
+
 .menu_element {
     border:0px solid blue;
     display:inline-block;
@@ -139,20 +157,11 @@ button {
 
 }
 
-.tor_source_link {
-    background-color: aquamarine;
-}
-
-.info_size {
-    background-color: aquamarine;
-}
-
 .submit_btn {
     display: inline-block;
     border: 0.1em solid #FFFFFF;
     box-sizing: border-box;
     text-decoration: none;
-    color: blue;
     text-align: center;
     transition: all 0.2s;
 }
@@ -181,12 +190,12 @@ button {
 .view_poster {
     height: auto;
     border:0px solid yellow;
-    width: 350px;
+    width: 300px;
 }
 
 .view_poster_container {
     border:1px solid blue;
-    padding-left:5%;
+    padding-left:2%;
 }
 
 .view_description_container img {
@@ -198,7 +207,7 @@ button {
     border:1px solid aqua;
     width: 100%;
     padding: 10px;
-    padding-right: 10%;
+    padding-right: 2%;
 }
 
 .view_plot {
