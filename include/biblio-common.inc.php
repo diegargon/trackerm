@@ -132,6 +132,7 @@ function getFileTitle($file) {
     $regex .= '(?!\s\d+x)'; //space y 1x 
     $regex .= '(?!_-\d+)';  // los char _- y digitos
     $regex .= '(?!_\d+_)';  // los char _digitos_
+    $regex .= '(?!\d{4})'; // 4 digitos por fecha igual da problemas
     $regex .= '(?!M1080)'; // M1080
     $regex .= '(?!BD1080)'; // BD1080
     $regex .= '(?!HD4K)'; //HD4K        

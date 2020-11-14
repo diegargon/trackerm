@@ -54,10 +54,10 @@ function view() {
     }
 
     if ($type == 'movies_torrent') {
-        //TODO
+        $other['extra'] = view_extra_movies($item);
     }
     if ($type == 'shows_torrent') {
-        //TODO
+        $other['extra'] = view_extra_shows($item);
     }
     $page = getTpl('view', array_merge($cfg, $LNG, $item, $other));
 
@@ -68,7 +68,8 @@ function view_extra_movies($item) {
     global $LNG;
     $extra = '<form method="post"><input class="submit_btn" type="submit" name="more_torrents" value="' . $LNG['L_SHOW_TORS'] . '" ></form>';
     if (isset($_POST['more_torrents'])) {
-        $extra .= search_movie_torrents($item['title']);
+        $title = getFileTitle($item['title']);
+        $extra .= search_movie_torrents($title);
     }
 
     return $extra;
@@ -78,7 +79,8 @@ function view_extra_shows($item) {
     global $LNG;
     $extra = '<form method="post"><input class="submit_btn" type="submit" name="more_torrents" value="' . $LNG['L_SHOW_TORS'] . '" ></form>';
     if (isset($_POST['more_torrents'])) {
-        $extra .= search_shows_torrents($item['title']);
+        $title = getFileTitle($item['title']);
+        $extra .= search_shows_torrents($title);
     }
     return $extra;
 }

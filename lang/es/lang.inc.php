@@ -37,4 +37,10 @@ $LNG = [
     'L_COLUMNS' => 'Columnas',
     'L_ALL' => 'Todos',
     'L_DEFAULT' => 'Defecto',
+    'L_DOWNLOAD' => 'Descargar',
+    'L_ADDED' => 'Añadido',
+    'L_RELEASE' => 'Publicado',
+    'L_SIZE' => 'Tamaño',
+    'L_RATING' => 'Puntuación',
+    'L_POPULARITY' => 'Popularidad',
 ];
