@@ -152,11 +152,23 @@ function page_torrents() {
     $page = getTpl('page_torrents', array_merge($tdata, $LNG));
 
     if (!empty($_GET['search_shows_torrents'])) {
-        $page .= search_shows_torrents(trim($_GET['search_shows_torrents']), 'L_TORRENT');
+        $torrent_results = search_shows_torrents(trim($_GET['search_shows_torrents']), 'L_TORRENT');
+
+        if ($torrent_results !== false) {
+            $page .= $torrent_results;
+        } else {
+            $error_msg['title'] = $LNG['L_ERROR'] . ':' . $LNG['L_TORRENT'];
+            $error_msg['body'] = $LNG['L_NOTHING_FOUND'];
+            $page .= error_box($error_msg);
+        }
     }
     if (!empty($_GET['search_movies_torrents'])) {
         $page .= search_movie_torrents(trim($_GET['search_movies_torrents']), 'L_TORRENT');
     }
 
     return $page;
+}
+
+function page_wanted() {
+    isset($_GET['wanted']) ? $wanted = $_GET['wanted'] : null;
 }

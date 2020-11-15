@@ -40,6 +40,8 @@ if (!isset($req_page) || $req_page == '') {
     $body .= page_torrents();
 } else if ($req_page == 'view') {
     $body .= page_view();
+} else if ($req_page == 'wanted') {
+    $body .= page_wanted();
 }
 
 $page = getTpl('html_mstruct', $tdata = ['body' => $body, 'footer' => $footer]);

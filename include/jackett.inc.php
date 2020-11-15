@@ -12,15 +12,20 @@ function search_movie_torrents($words, $head = null) {
 
     $result = [];
     $page = '';
-
     $words = str_replace(' ', '%20', $words);
+    $results_count = 0;
 
     foreach ($cfg['jackett_indexers'] as $indexer) {
         $caps = jackett_get_caps($indexer);
         if ($caps['searching']['movie-search']['@attributes']['available'] == "yes") {
             $result[$indexer] = jackett_search_movies($words, $indexer);
         }
+        isset($result[$indexer]['channel']['item']) ? $results_count = count($result[$indexer]['channel']['item']) + $results_count : null;
     }
+    if ($results_count <= 0) {
+        return false;
+    }
+
     $topt['search_type'] = 'movies';
     $movies_db = jackett_prep_movies($result);
     $page .= buildTable($head, $movies_db, $topt);
@@ -32,15 +37,20 @@ function search_shows_torrents($words, $head = null) {
     global $cfg;
 
     $result = [];
-
     $page = '';
-
     $words = str_replace(' ', '%20', $words);
+    $results_count = 0;
+
     foreach ($cfg['jackett_indexers'] as $indexer) {
         $caps = jackett_get_caps($indexer);
         if ($caps['searching']['tv-search']['@attributes']['available'] == "yes") {
             $result[$indexer] = jackett_search_shows($words, $indexer);
         }
+        isset($result[$indexer]['channel']['item']) ? $results_count = count($result[$indexer]['channel']['item']) + $results_count : null;
+    }
+
+    if ($results_count <= 0) {
+        return false;
     }
 
     $topt['search_type'] = 'shows';

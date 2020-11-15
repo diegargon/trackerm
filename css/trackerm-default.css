@@ -304,9 +304,27 @@ button {
     width: 100%;
     padding-right: 4%;
 }
+
 .type_head {
     display:inline-flex;
 }
+
 .type_pages_numbers {
     display:inline-flex;
+}
+
+.error_container {
+    margin: 5% 15% 5% 15%;    
+    border: 1px solid blue;
+    text-align: center;
+    padding: 20% 0% 20% 0%;
+}
+
+.error_title {
+    font-weight: bold;
+    font-size: 1.4em;
+}
+
+.error_body {
+    font-size: 1.2em;
 }

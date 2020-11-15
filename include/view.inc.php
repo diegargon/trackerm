@@ -82,13 +82,24 @@ function view_extra_movies($item, $opt = null) {
     $extra .= '<input type="text" name="search_movie_db" value="' . $stitle . '">';
     $extra .= '</form>';
 
-    if (isset($_GET['more_movies']) || !empty($opt['auto_show_db'])) {
+    if (
+            isset($_GET['more_movies']) || (!empty($opt['auto_show_db']) && !isset($_GET['more_torrents']))
+    ) {
         $movies = db_search_movies($stitle);
         !empty($movies) ? $extra .= buildTable('L_DB', $movies, $opt) : null;
     }
 
-    if (isset($_GET['more_torrents']) || !empty($opt['auto_show_torrents'])) {
-        $extra .= search_movie_torrents($stitle);
+    if (
+            isset($_GET['more_torrents']) || (!empty($opt['auto_show_torrents']) && !isset($_GET['more_movies']))
+    ) {
+        $torrent_results = search_movie_torrents($stitle);
+        if ($torrent_results !== false) {
+            $extra .= $torrent_results;
+        } else {
+            $error_msg['title'] = $LNG['L_ERROR'] . ':' . $LNG['L_TORRENT'];
+            $error_msg['body'] = $LNG['L_NOTHING_FOUND'];
+            $extra .= error_box($error_msg);
+        }
     }
 
     return $extra;
@@ -117,13 +128,16 @@ function view_extra_shows($item, $opt) {
     $extra .= '<input type="text" name="search_shows_db" value="' . $stitle . '">';
     $extra .= '</form>';
 
-
-    if (isset($_GET['more_shows']) || !empty($opt['auto_show_db'])) {
+    if (
+            isset($_GET['more_shows']) || (!empty($opt['auto_show_db']) && !isset($_GET['more_torrents']))
+    ) {
         $shows = db_search_shows($stitle);
         !empty($shows) ? $extra .= buildTable('L_DB', $shows, $opt) : null;
     }
 
-    if (isset($_GET['more_torrents']) || !empty($opt['auto_show_torrents'])) {
+    if (
+            isset($_GET['more_torrents']) || (!empty($opt['auto_show_torrents']) && !isseT($_GET['more_shows']))
+    ) {
         $extra .= search_shows_torrents($stitle);
     }
 

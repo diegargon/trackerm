@@ -51,7 +51,7 @@ function buildTable($head, $db_ary, $topt = null) {
         $iurl = preg_replace('/&search_type=shows/', '', $iurl);
         $iurl = preg_replace('/&search_type=movies/', '', $iurl);
         for ($i = 1; $i <= ceil($num_pages); $i++) {
-
+            $extra = '';
             $link_npage_class = "num_pages_link";
 
             if (!empty($topt['search_type'])) {
@@ -159,4 +159,10 @@ function get_and_cache_img($img_url) {
         return $cfg['REL_PATH'] . $cfg['CACHE_IMAGES_PATH'] . '/' . $file_name;
     }
     return false;
+}
+
+function error_box($msg) {
+    global $LNG;
+
+    return getTpl('errorbox', array_merge($LNG, $msg));
 }
