@@ -227,9 +227,13 @@ button {
     padding-right: 2%;
 }
 
+.view_description_container h2 {
+    font-size: 2em;
+}
 .view_plot {
     border:0px solid blueviolet;
     width: 100%;
+    font-size:1.2em;
 }
 
 .view_extra {

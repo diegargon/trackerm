@@ -12,12 +12,15 @@ series que se marquen para monitorear.
 * reorganizar codigo/funciones
 * cuando pasamos pagina se realiza otra query remota, evitarlo. Guardar el query en una db y si se pasa pagina leer de la db 
 en vez de hacer otra query remota.
-* user profiles
 
 ** VERY LOW
-* usuarios
+* user profiles
 * fechas normalizar a formato comun
 * En el select de identificar estaria bien mostrar las caractulas al pone encima
 * recargar con jquery solo las partes necesarias en vez de recargar toda la pagina
 * Stats en home
 * menu rows/columns y otras configuraciones generales en todas las paginas.
+* Publicado/novedades torrent muestra las 10 (ejemplo) ultimas novedades publicadaas y despues las 10 de otro, lo ideal es obtener 
+"la novedad 1" de cada indexer seguido de la "novedad 2" etc para no tener que pasar paginas para ver las novedades más recientes de otro 
+indexer.
+* rebuild pager/paginacion, se enredo mucho el codigo.

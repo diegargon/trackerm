@@ -44,11 +44,13 @@ function buildTable($head, $db_ary, $topt = null) {
     $total_items = count($db_ary);
     $num_pages = $total_items / $items_per_page;
 
+    $iurl = basename($_SERVER['REQUEST_URI']);
+    $iurl = preg_replace('/&npage=\d{1,4}/', '', $iurl);
     for ($i = 1; $i <= ceil($num_pages); $i++) {
-        $iurl = basename($_SERVER['REQUEST_URI']);
+
         $link_npage_class = "num_pages_link";
 
-        if (isset($topt['type'])) {
+        if (!isset($_GET['type']) && isset($topt['type'])) {
             if ($topt['type'] == 'movies') {
                 $extra = '&type=movies';
             } else if ($topt['type'] == 'shows') {
@@ -59,9 +61,10 @@ function buildTable($head, $db_ary, $topt = null) {
         }
 
         if (
-                (isset($_GET['npage']) && $_GET['npage'] == $i) &&
-                isset($_GET['type']) &&
-                ($_GET['type'] == $topt['type'])) {
+                (isset($_GET['npage']) && ($_GET['npage'] == $i)) &&
+                ((isset($_GET['type'])) && ( $_GET['type'] == 'movies_torrent' || $_GET['type'] == 'shows_torrent') ||
+                (isset($_GET['type']) && ($_GET['type'] == $topt['type'])))
+        ) {
             $link_npage_class .= '_selected';
         }
         $pages .= '<a class="' . $link_npage_class . '" href="' . $iurl . '&npage=' . $i . $extra . '">' . $i . '</a>';
@@ -78,7 +81,8 @@ function buildTable($head, $db_ary, $topt = null) {
 
     if (
             (!empty($_GET['npage']) && !isset($_GET['type']) ) ||
-            ( (isset($topt['type']) && isset($_GET['type'])) && $topt['type'] == $_GET['type'])
+            ((isset($_GET['type'])) && ( $_GET['type'] == 'movies_torrent' || $_GET['type'] == 'shows_torrent') ||
+            ( (isset($topt['type']) && isset($_GET['type'])) && $topt['type'] == $_GET['type']))
     ) {
         $npage = $_GET['npage'];
         $npage_jump = ($max_items * $npage) - $max_items;

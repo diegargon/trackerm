@@ -43,19 +43,19 @@ function view() {
     $opt['auto_show_torrents'] = 0;
     $opt['auto_show_db'] = 0;
 
-  
+
     ($type == 'movies_db' || $type == 'shows_db') ? $opt['auto_show_torrents'] = 1 : null;
     ($type == 'movies_torrent' || $type == 'shows_torrent') ? $opt['auto_show_db'] = 1 : null;
 
-    
+
     if ($type == 'movies_torrent' || $type == 'movies_db' || $type == 'movies_library') {
         $other['extra'] .= view_extra_movies($item, $opt);
-    } 
-    
+    }
+
     if ($type == 'shows_torrent' || $type == 'shows_db' || $type == 'shows_library') {
         $other['extra'] .= view_extra_shows($item, $opt);
-    } 
-    
+    }
+
     $page = getTpl('view', array_merge($cfg, $LNG, $item, $other));
 
     return $page;
@@ -81,7 +81,7 @@ function view_extra_movies($item, $opt = null) {
 
     if (isset($_POST['more_movies']) || !empty($opt['auto_show_db'])) {
         $movies = db_search_movies($stitle);
-        !empty($movies) ? $extra .= buildTable('L_DB', $movies) : null;
+        !empty($movies) ? $extra .= buildTable('L_DB', $movies, $opt) : null;
     }
     $extra .= '</form>';
 
@@ -111,12 +111,12 @@ function view_extra_shows($item, $opt) {
 
     $extra .= '<input type="text" name="search_shows_db" value="' . $stitle . '">';
 
-    if (isset($_POST['more_shows']) || !empty($opt['auto_show_db'])) {        
+    if (isset($_POST['more_shows']) || !empty($opt['auto_show_db'])) {
         $shows = db_search_shows($stitle);
-        !empty($shows) ? $extra .= buildTable('L_DB', $shows) : null;
+        !empty($shows) ? $extra .= buildTable('L_DB', $shows, $opt) : null;
     }
 
-    if (isset($_POST['more_torrents']) || !empty($opt['auto_show_torrents']) ) {
+    if (isset($_POST['more_torrents']) || !empty($opt['auto_show_torrents'])) {
         $title = getFileTitle($item['title']);
         $extra .= search_shows_torrents($title);
     }
