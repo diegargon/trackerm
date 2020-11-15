@@ -8,10 +8,13 @@
  */
 ?>
 <div class="library_options">
+    <form method="GET" action="">
+        <input type="text" name="search_text" value="TODO" />
+        <input type="hidden" name="page" value="<?= $_GET['page'] ?>">
+        <input class="submit_btn"  type="submit" value="<?= $tdata['L_SEARCH'] ?>"/>
+    </form>
     <form method="post">
-        <input class="submit_btn" type="submit" name="rebuild_movies" value="<?= $tdata['L_REBUILD_MOVIES'] ?>"/>
-        <input class="submit_btn" type="submit" name="rebuild_shows" value="<?= $tdata['L_REBUILD_SHOWS'] ?>"/>
-        <?= $tdata['L_ID_DISPLAY'] ?>:
+        <?= $tdata['L_IDENTIFY'] ?>:
         <select name="num_id_show" onchange="this.form.submit()">
             <option <?= $tdata['max_id_sel_0'] ?> id="0">0</option>
             <option <?= $tdata['max_id_sel_5'] ?> id="5">5</option>
@@ -39,12 +42,7 @@
             <option <?= $tdata['max_rows_sel_8'] ?> id="8">8</option>
             <option <?= $tdata['max_rows_sel_10'] ?> id="10">10</option>
         </select>
-    </form>
-</div>
-<div class="library_options">
-    <form method="GET" action="">
-        <input type="text" name="search_text" value="TODO" />
-        <input type="hidden" name="page" value="<?= $_GET['page'] ?>">
-        <input class="submit_btn"  type="submit" value="<?= $tdata['L_SEARCH'] ?>"/>
+        <input class="submit_btn" type="submit" name="rebuild_movies" value="<?= $tdata['L_REBUILD_MOVIES'] ?>"/>
+        <input class="submit_btn" type="submit" name="rebuild_shows" value="<?= $tdata['L_REBUILD_SHOWS'] ?>"/>
     </form>
 </div>

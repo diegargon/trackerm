@@ -21,7 +21,6 @@ $LNG = [
     'L_HOME' => 'Home',
     'L_IDENT_MOVIES' => 'Identificación de peliculas',
     'L_IDENT_SHOWS' => 'Identificación de series',
-    'L_ID_DISPLAY' => 'Mostrar para identificar',
     'L_IDENTIFY' => 'Identificar',
     'L_LIBRARY' => 'Biblioteca',
     'L_MOVIES' => 'Peliculas',

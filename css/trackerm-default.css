@@ -11,7 +11,7 @@ body {
 input {
     color:green;
     background: #000;
-    font-size: 2em;
+    font-size: 1.2em;
     padding: 4px;
     padding: 0.2em 0.5em;
     border-radius: 0.12em;
@@ -21,6 +21,22 @@ input {
 
 a:link {
     color: green;
+}
+
+.debug_border1 {
+    border:1px solid red;
+}
+
+.debug_border2 {
+    border:1px solid blue;
+}
+
+.debug_border3 {
+    border:1px solid green;
+}
+
+.debug_border4 {
+    border:1px solid yellow;
 }
 
 .page { 
@@ -145,10 +161,10 @@ button {
 .menu_element {
     border:0px solid blue;
     display:inline-block;
-    padding: 20px;
+    padding: 10px;
     margin: 5px;
     background: darkcyan;
-    font-size:1.8em;
+    font-size:1.5em;
     font-weight:bold;
 }
 
@@ -259,10 +275,10 @@ button {
     font-weight: 900;
     border:1px solid black;
     background-color: #937c00;
-    padding: 10px 20px 10px 20px;
+    padding: 7px 20px 7px 20px;
     text-decoration: none;
     font-size: 1.5em;
-    /* margin-left: 10px; */
+    margin-left: 4px;
 }
 .submit_link {
     display:block;
@@ -274,4 +290,19 @@ button {
 
 .view_download {
     margin-top: 15px;
+}
+
+.library_options form {
+    display:inline;
+}
+
+.type_head_container{
+    width: 100%;
+    padding-right: 4%;
+}
+.type_head {
+    display:inline-flex;
+}
+.type_pages_numbers {
+    display:inline-flex;
 }
