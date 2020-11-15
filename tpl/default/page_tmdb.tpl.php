@@ -12,8 +12,8 @@
 <div class="moviedb_container">
     <div class="search_container">
         <form method="GET" action="">
-            <div class="search_tag"><?= $tdata['L_MOVIE'] ?>:</div><div class="search_box"><input type="text" name="search_movie"></div>
-            <div class="search_tag"><?= $tdata['L_SHOW'] ?>:</div><div class="search_box"><input type="text" name="search_shows"></div>
+            <div class="search_tag"><?= $tdata['L_MOVIE'] ?>:</div><div class="search_box"><input type="text" name="search_movies" value="<?= $tdata['search_movies_word'] ?>"></div>
+            <div class="search_tag"><?= $tdata['L_SHOW'] ?>:</div><div class="search_box"><input type="text" name="search_shows" value="<?= $tdata['search_shows_word'] ?>" ></div>
             <input type="hidden" name="page" value="<?= $_GET['page'] ?>">
             <div class="search_btn"><input class="submit_btn" type="submit"  value="<?= $tdata['L_SEARCH'] ?>"></div>
         </form>

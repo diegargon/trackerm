@@ -106,13 +106,13 @@ function page_news() {
     $page_news = '';
 
     if (!empty($res_movies_db)) {
-        $topt['type'] = 'movies';
+        $topt['search_type'] = 'movies';
         $page_news_movies = buildTable('L_MOVIES', $res_movies_db, $topt);
         $page_news .= $page_news_movies;
     }
 
     if (!empty($res_shows_db)) {
-        $topt['type'] = 'shows';
+        $topt['search_type'] = 'shows';
         $page_news_shows = buildTable('L_SHOWS', $res_shows_db, $topt);
         $page_news .= $page_news_shows;
     }
@@ -123,16 +123,21 @@ function page_news() {
 function page_tmdb() {
     global $LNG;
 
-    $page = getTpl('page_tmdb', $LNG);
+    (!empty($_GET['search_movies'])) ? $tdata['search_movies_word'] = $_GET['search_movies'] : $tdata['search_movies_word'] = '';
+    (!empty($_GET['search_shows'])) ? $tdata['search_shows_word'] = $_GET['search_shows'] : $tdata['search_shows_word'] = '';
 
-    if (!empty($_GET['search_movie'])) {
-        $movies = db_search_movies(trim($_GET['search_movie']));
-        !empty($movies) ? $page .= buildTable('L_DB', $movies) : null;
+    $page = getTpl('page_tmdb', array_merge($LNG, $tdata));
+
+    if (!empty($_GET['search_movies'])) {
+        $movies = db_search_movies(trim($_GET['search_movies']));
+        $topt['search_type'] = 'movies';
+        !empty($movies) ? $page .= buildTable('L_DB', $movies, $topt) : null;
     }
 
     if (!empty($_GET['search_shows'])) {
         $shows = db_search_shows(trim($_GET['search_shows']));
-        !empty($shows) ? $page .= buildTable('L_DB', $shows) : null;
+        $topt['search_type'] = 'shows';
+        !empty($shows) ? $page .= buildTable('L_DB', $shows, $topt) : null;
     }
 
     return $page;
@@ -141,13 +146,16 @@ function page_tmdb() {
 function page_torrents() {
     global $LNG;
 
-    $page = getTpl('page_torrents', $LNG);
+    (!empty($_GET['search_movies_torrents'])) ? $tdata['search_movies_word'] = $_GET['search_movies_torrents'] : $tdata['search_movies_word'] = '';
+    (!empty($_GET['search_shows_torrents'])) ? $tdata['search_shows_word'] = $_GET['search_shows_torrents'] : $tdata['search_shows_word'] = '';
+
+    $page = getTpl('page_torrents', array_merge($tdata, $LNG));
 
     if (!empty($_GET['search_shows_torrents'])) {
         $page .= search_shows_torrents(trim($_GET['search_shows_torrents']), 'L_TORRENT');
     }
-    if (!empty($_GET['search_movie_torrents'])) {
-        $page .= search_movie_torrents(trim($_GET['search_movie_torrents']), 'L_TORRENT');
+    if (!empty($_GET['search_movies_torrents'])) {
+        $page .= search_movie_torrents(trim($_GET['search_movies_torrents']), 'L_TORRENT');
     }
 
     return $page;

@@ -10,7 +10,7 @@ series que se marquen para monitorear.
 * Filter tags en torrentes: posibilidad de filtrar por tags conocidos 720p 1080...
 * codigo seguro
 * reorganizar codigo/funciones
-* cuando pasamos pagina se realiza otra query remota, evitarlo. Guardar el query en una db y si se pasa pagina leer de la db 
+* cache search query: cuando pasamos pagina se realiza otra query remota, evitarlo. Guardar el query en una db y si se pasa pagina leer de la db 
 en vez de hacer otra query remota.
 
 ** VERY LOW

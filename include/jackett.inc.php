@@ -21,9 +21,9 @@ function search_movie_torrents($words, $head = null) {
             $result[$indexer] = jackett_search_movies($words, $indexer);
         }
     }
-
+    $topt['search_type'] = 'movies';
     $movies_db = jackett_prep_movies($result);
-    $page .= buildTable($head, $movies_db);
+    $page .= buildTable($head, $movies_db, $topt);
 
     return $page;
 }
@@ -43,8 +43,9 @@ function search_shows_torrents($words, $head = null) {
         }
     }
 
+    $topt['search_type'] = 'shows';
     $shows_db = jackett_prep_shows($result);
-    $page .= buildTable($head, $shows_db);
+    $page .= buildTable($head, $shows_db, $topt);
 
     return $page;
 }

@@ -31,7 +31,7 @@ function show_my_movies() {
                 $movies_identifyed[$key] = $movie;
             }
         }
-        $topt['type'] = 'movies';
+        $topt['search_type'] = 'movies';
         $page .= buildTable('L_MOVIES', $movies_identifyed, $topt);
     }
     return $page;

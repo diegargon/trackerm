@@ -51,7 +51,7 @@ function show_my_shows() {
 
             $exists === false ? $uniq_shows[] = $show : null;
         }
-        $topt['type'] = 'shows';
+        $topt['search_type'] = 'shows';
         $page .= buildTable('L_SHOWS', $uniq_shows, $topt);
     }
     return $page;

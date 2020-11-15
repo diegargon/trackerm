@@ -44,35 +44,35 @@ function buildTable($head, $db_ary, $topt = null) {
     $total_items = count($db_ary);
     $num_pages = $total_items / $items_per_page;
 
-    $iurl = basename($_SERVER['REQUEST_URI']);
-    $iurl = preg_replace('/&npage=\d{1,4}/', '', $iurl);
-    for ($i = 1; $i <= ceil($num_pages); $i++) {
+    if ($num_pages > 1) {
+        $iurl = basename($_SERVER['REQUEST_URI']);
+        //Avoid duplicate 
+        $iurl = preg_replace('/&npage=\d{1,4}/', '', $iurl);
+        $iurl = preg_replace('/&search_type=shows/', '', $iurl);
+        $iurl = preg_replace('/&search_type=movies/', '', $iurl);
+        for ($i = 1; $i <= ceil($num_pages); $i++) {
 
-        $link_npage_class = "num_pages_link";
+            $link_npage_class = "num_pages_link";
 
-        if (!isset($_GET['type']) && isset($topt['type'])) {
-            if ($topt['type'] == 'movies') {
-                $extra = '&type=movies';
-            } else if ($topt['type'] == 'shows') {
-                $extra = '&type=shows';
+            if (!empty($topt['search_type'])) {
+                $extra = '&search_type=' . $topt['search_type'];
             }
-        } else {
-            $extra = '';
+
+            if (isset($_GET['npage']) && ($_GET['npage'] == $i)) {
+                if (isset($topt['search_type']) && ($_GET['search_type'] != $topt['search_type'])) {
+                    
+                } else {
+                    $link_npage_class .= '_selected';
+                }
+            }
+            $pages .= '<a class="' . $link_npage_class . '" href="' . $iurl . '&npage=' . $i . $extra . '">' . $i . '</a>';
         }
 
-        if (
-                (isset($_GET['npage']) && ($_GET['npage'] == $i)) &&
-                ((isset($_GET['type'])) && ( $_GET['type'] == 'movies_torrent' || $_GET['type'] == 'shows_torrent') ||
-                (isset($_GET['type']) && ($_GET['type'] == $topt['type'])))
-        ) {
-            $link_npage_class .= '_selected';
-        }
-        $pages .= '<a class="' . $link_npage_class . '" href="' . $iurl . '&npage=' . $i . $extra . '">' . $i . '</a>';
+        $page .= '<div class="type_pages_numbers">' . $pages . '</div>';
     }
 
-    $page .= '<div class="type_pages_numbers">' . $pages . '</div>';
-
     /* FIN PAGES */
+
     $page .= '</div>';
 
     $page .= '<div class="divTable">';
@@ -80,15 +80,15 @@ function buildTable($head, $db_ary, $topt = null) {
     $num_items = 0;
 
     if (
-            (!empty($_GET['npage']) && !isset($_GET['type']) ) ||
-            ((isset($_GET['type'])) && ( $_GET['type'] == 'movies_torrent' || $_GET['type'] == 'shows_torrent') ||
-            ( (isset($topt['type']) && isset($_GET['type'])) && $topt['type'] == $_GET['type']))
+            empty($_GET['npage']) ||
+            (isset($topt['search_type']) && ($_GET['search_type'] != $topt['search_type']))
     ) {
+
+        $db_ary_slice = $db_ary;
+    } else {
         $npage = $_GET['npage'];
         $npage_jump = ($max_items * $npage) - $max_items;
         $db_ary_slice = array_slice($db_ary, $npage_jump);
-    } else {
-        $db_ary_slice = $db_ary;
     }
 
     foreach ($db_ary_slice as $item) {

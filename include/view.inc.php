@@ -65,28 +65,29 @@ function view_extra_movies($item, $opt = null) {
     global $LNG;
     $extra = '';
 
-    $extra .= '<form method="post">';
+    $extra .= '<form method="GET" action="">';
+    $extra .= '<input type="hidden" name="page" value="' . $_GET['page'] . '"/>';
+    $extra .= '<input type="hidden" name="id" value="' . $_GET['id'] . '"/>';
+    $extra .= '<input type="hidden" name="type" value="' . $_GET['type'] . '"/>';
     $extra .= '<input class="submit_btn" type="submit" name="more_movies" value="' . $LNG['L_SEARCH_MOVIES'] . '" >';
     $extra .= '<input class="submit_btn" type="submit" name="more_torrents" value="' . $LNG['L_SHOW_TORRENTS'] . '" >';
 
     $title = getFileTitle(trim($item['title']));
 
-
-    if (!empty($_POST['search_movie_db'])) {
-        $stitle = trim($_POST['search_movie_db']);
+    if (!empty($_GET['search_movie_db'])) {
+        $stitle = trim($_GET['search_movie_db']);
     } else {
         $stitle = $title;
     }
     $extra .= '<input type="text" name="search_movie_db" value="' . $stitle . '">';
+    $extra .= '</form>';
 
-    if (isset($_POST['more_movies']) || !empty($opt['auto_show_db'])) {
+    if (isset($_GET['more_movies']) || !empty($opt['auto_show_db'])) {
         $movies = db_search_movies($stitle);
         !empty($movies) ? $extra .= buildTable('L_DB', $movies, $opt) : null;
     }
-    $extra .= '</form>';
 
-
-    if (isset($_POST['more_torrents']) || !empty($opt['auto_show_torrents'])) {
+    if (isset($_GET['more_torrents']) || !empty($opt['auto_show_torrents'])) {
         $extra .= search_movie_torrents($stitle);
     }
 
@@ -98,29 +99,33 @@ function view_extra_shows($item, $opt) {
 
     $extra = '';
 
-    $extra .= '<form method="post">';
+    $extra .= '<form method="GET">';
+    $extra .= '<input type="hidden" name="page" value="' . $_GET['page'] . '"/>';
+    $extra .= '<input type="hidden" name="id" value="' . $_GET['id'] . '"/>';
+    $extra .= '<input type="hidden" name="type" value="' . $_GET['type'] . '"/>';
     $extra .= '<input class="submit_btn" type="submit" name="more_shows" value="' . $LNG['L_SEARCH_SHOWS'] . '" >';
     $extra .= '<input class="submit_btn" type="submit" name="more_torrents" value="' . $LNG['L_SHOW_TORRENTS'] . '" >';
+
     $title = getFileTitle(trim($item['title']));
 
-    if (!empty($_POST['search_shows_db'])) {
-        $stitle = trim($_POST['search_shows_db']);
+    if (!empty($_GET['search_shows_db'])) {
+        $stitle = trim($_GET['search_shows_db']);
     } else {
         $stitle = $title;
     }
 
     $extra .= '<input type="text" name="search_shows_db" value="' . $stitle . '">';
+    $extra .= '</form>';
 
-    if (isset($_POST['more_shows']) || !empty($opt['auto_show_db'])) {
+
+    if (isset($_GET['more_shows']) || !empty($opt['auto_show_db'])) {
         $shows = db_search_shows($stitle);
         !empty($shows) ? $extra .= buildTable('L_DB', $shows, $opt) : null;
     }
 
-    if (isset($_POST['more_torrents']) || !empty($opt['auto_show_torrents'])) {
-        $title = getFileTitle($item['title']);
-        $extra .= search_shows_torrents($title);
+    if (isset($_GET['more_torrents']) || !empty($opt['auto_show_torrents'])) {
+        $extra .= search_shows_torrents($stitle);
     }
-    $extra .= '</form>';
 
     return $extra;
 }
