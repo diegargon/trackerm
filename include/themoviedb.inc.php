@@ -12,6 +12,7 @@ function db_search_movies($search) {
 
     $search = preg_replace('/\d{4}/', '', $search); //moviedb no encuentra con año si va en el titulo lo quitamos
     $query = str_replace(' ', '+', trim($search));
+
     $url = 'https://api.themoviedb.org/3/search/movie?api_key=' . $cfg['db_api_token'] . '&query=' . $query . '&language=' . $cfg['LANG'];
 
     $data = curl_get_json($url);
@@ -24,7 +25,9 @@ function db_search_movies($search) {
 function db_search_shows($search) {
     global $cfg;
 
+    $search = preg_replace('/\d{4}/', '', $search); //moviedb no encuentra con año si va en el titulo lo quitamos
     $query = str_replace(' ', '+', trim($search));
+
     $url = 'https://api.themoviedb.org/3/search/tv?api_key=' . $cfg['db_api_token'] . '&query=' . $query . '&language=' . $cfg['LANG'];
 
     $data = curl_get_json($url);

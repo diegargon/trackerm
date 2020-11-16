@@ -5,8 +5,12 @@ if (1) {
     error_reporting(E_ALL);
     ini_set("display_errors", 1);
 }
+
 require('config/config.inc.php');
+
+setlocale(LC_ALL, $cfg['LOCALE']);
 $cfg['cache'] = $_SERVER['DOCUMENT_ROOT'] . $cfg['REL_PATH'] . $cfg['cache'];
+
 require('include/db.inc.php');
 
 require('lang/' . $cfg['LANG'] . '/lang.inc.php');

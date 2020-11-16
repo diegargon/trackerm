@@ -13,6 +13,7 @@ function search_movie_torrents($words, $head = null) {
     $result = [];
     $page = '';
     $words = str_replace(' ', '%20', $words);
+    $words = iconv($cfg['CHARSET'], 'ASCII//TRANSLIT', $words); //replace accents
     $results_count = 0;
 
     foreach ($cfg['jackett_indexers'] as $indexer) {
@@ -39,6 +40,7 @@ function search_shows_torrents($words, $head = null) {
     $result = [];
     $page = '';
     $words = str_replace(' ', '%20', $words);
+    $words = iconv($cfg['CHARSET'], 'ASCII//TRANSLIT', $words); //replace accents
     $results_count = 0;
 
     foreach ($cfg['jackett_indexers'] as $indexer) {
