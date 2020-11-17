@@ -170,5 +170,66 @@ function page_torrents() {
 }
 
 function page_wanted() {
-    isset($_GET['wanted']) ? $wanted = $_GET['wanted'] : null;
+    global $LNG, $cfg, $db;
+
+    $want = [];
+    $want['SELECTED_MOVIES'] = '';
+    $want['SELECTED_SHOWS'] = '';
+    $want['page'] = $_GET['page'];
+    $item = [];
+
+
+    isset($_GET['id']) ? $wanted_id = $_GET['id'] : $wanted_id = false;
+    isset($_GET['type']) ? $wanted_type = $_GET['type'] : $wanted_type = false;
+
+    if ($wanted_id !== false) {
+        $item = db_get_by_db_id($wanted_id, 'tmdb_search');
+        $item['tags_quality'] = '';
+        $item['tags_ignore'] = '';
+        $item['tag_type'] = '<span class="tag_type">' . $wanted_type . '</span>';
+        foreach ($cfg['TORRENT_QUALITYS_PREFS'] as $quality) {
+            $item['tags_quality'] .= '<span class="tag_quality">' . $quality . '</span>';
+        }
+        foreach ($cfg['TORRENT_IGNORES_PREFS'] as $ignores) {
+            $item['tags_ignore'] .= '<span class="tag_ignore">' . $ignores . '</span>';
+        }
+    }
+
+    if (isset($_POST['submit_wanted'])) {
+        $id = $db->getLastID('wanted');
+        $wanted_item[$id]['id'] = $id;
+        $wanted_item[$id]['themoviedb_id'] = $item['themoviedb_id'];
+        $wanted_item[$id]['title'] = $item['title'];
+        $wanted_item[$id]['qualitys'] = $cfg['TORRENT_QUALITYS_PREFS'];
+        $wanted_item[$id]['ignores'] = $cfg['TORRENT_IGNORES_PREFS'];
+        $wanted_item[$id]['added'] = time();
+        $wanted_item[$id]['day_check'] = $_POST['check_day'];
+        $wanted_item[$id]['type'] = $wanted_type;
+        $db->addUniqElements('wanted', $wanted_item, 'themoviedb_id');
+    }
+
+    $wanted_list = $db->getTableData('wanted');
+    if (!empty($wanted_list)) {
+        $wanted_list_data = '<h2>' . $LNG['L_WANTED'] . '</h2>';
+        $wanted_list_data .= '<div class="wanted_list_container">';
+        foreach ($wanted_list as $wanted_item) {
+            $wanted_list_data .= '<div class="wanted_list_row">';
+            $wanted_list_data .= '<span class="tag_id">' . $wanted_item['id'] . '</span>';
+            $wanted_list_data .= '<span class="tag_title">' . $wanted_item['title'] . '</span>';
+            $wanted_list_data .= '<span class="tag_type">' . $wanted_item['type'] . '</span>';
+            $wanted_list_data .= '<span class="tag_day">' . $LNG[$wanted_item['day_check']] . '</span>';
+            foreach ($cfg['TORRENT_QUALITYS_PREFS'] as $quality) {
+                $wanted_list_data .= '<span class="tag_quality">' . $quality . '</span>';
+            }
+            foreach ($cfg['TORRENT_IGNORES_PREFS'] as $ignores) {
+                $wanted_list_data .= '<span class="tag_ignore">' . $ignores . '</span>';
+            }
+            $wanted_list_data .= '<span class="tag_added">' . $LNG['L_ADDED'] . ':' . date('d-m-y', $wanted_item['added']) . '</span>';
+            $wanted_list_data .= '<span class="tag_id">TMDB:' . $wanted_item['themoviedb_id'] . '</span>';
+            $wanted_list_data .= '</div>';
+        }
+        $wanted_list_data .= '</div>';
+        $want['wanted_list'] = $wanted_list_data;
+    }
+    return getTpl('wanted', array_merge($item, $want, $LNG, $cfg));
 }

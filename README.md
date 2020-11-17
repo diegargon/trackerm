@@ -1,3 +1,5 @@
+# tracketm
+
 Description: 
 Probando a realizar una alternativa Sonarr+Radar sobre servidor web
 
@@ -6,32 +8,47 @@ sin comprobaciones, con fallos, errores y todo eso...
 
 Probablemente de momento no deberias instalarlo.
 
-1º Copiar los archivos de src a la carpeta destino (AKA: dest)
+# Lenguaje
+    Php+Javascript (Más adelante probablemente Jquery)
 
-2º Instalar composer si no lo teneis, hay guias pero basicamente 
+# Resumen requisitivos:
+Apache+Php (o similar), Jacket, Transmission, Composer, cuenta+api key themoviedb.org, CRON
 
-    $ curl -sS https://getcomposer.org/installer -o composer-setup.php
+# Instalación
+    * Copiar los archivos de src a la carpeta destino (AKA: dest)
 
-    $ php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+    * Instalar composer si no lo teneis, hay guias pero basicamente 
 
-3º  Ir a la carpeta dest y teclear
+        $ curl -sS https://getcomposer.org/installer -o composer-setup.php
 
-    composer require irazasyed/php-transmission-sdk  php-http/httplug-pack  php-http/guzzle6-adapter
+        $ php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 
+    *  Ir a la carpeta dest y teclear
 
-4º Para buscar, caratulas y demas necesitais una clave api de un proveedor, actualmente solo soporta themoviedb.com (el api key va en config.inc.php)
+        $ composer require irazasyed/php-transmission-sdk  php-http/httplug-pack  php-http/guzzle6-adapter
 
-Otros:
+# Requisitos: Detalles:
 
-* Necesitas transmission-daemon instalado y configurado y permitiendo las conexiones RPC a la ip del servidor
+* Apache (o similar)
+    Instalado y configurado, con soport php, curl
 
-  NOTA 1: Aunque depende de la distro el archivo es settings.json en /etc/transmission y hay que parar el daemon primero antes de editar
+    * Para el cache de las imagenes/posters se necesita allow_url_fopen en php.ini
+    * Se necesitan permisos de lectura/escritura en cache y cache/images 775 si cambiamos el propietario al del servidor web o 777 (inseguro)
 
-  NOTA 2: Hay alguna version con un bug que obvia las ips rpc, si aparece un mensaje de error de whitelist prueba a desactivar el la rpc whitelist (a cuenta y riesgo)
+* Jackett
+    Instalado y configurado añadiendo algunos indexers de peliculas/series.
+    Necesitas la clave api para conectarse al servidor jackett, esta ira en config.inc.php
 
-  NOTA 3: Utilizo una libreria externa para el dialogo con transmission, esta "envuelta/wrapped" por si cambio de libreria, si fuera el caso espero acordarme de editar
-        esto con las nuevas dependedncias de composer, si no...
+* Transmission-daemon
+    Instalado/configurado y permitiendo las conexiones RPC a la ip del servidor
 
-  NOTA 4: Para el cache de las imagenes/posters se necesita allow_url_fopen en php.ini
+    * Aunque depende de la distro el archivo es settings.json en /etc/transmission y hay que parar el daemon primero antes de editar si no al parar/reiniciar sobreesribiran los cambios
 
-  NOTA 5: Se necesitan permisos de lectura/escritura en cache y cache/images 775 si cambiamos el propietario al del servidor web o 777 (inseguro)
+    * Hay alguna version con un bug que obvia las ips rpc, si aparece un mensaje de error de whitelist prueba a desactivar el la rpc whitelist (a cuenta y riesgo)
+
+    * Utilizo una libreria externa para el dialogo con transmission que hay que instalar via composer (ver instalación) 
+
+* TheMovieDB.ORG    
+    Es importante para el correcto funcionamiento crearse una cuenta en dicha pagina, se utilizar para buscar peliculas/series, caratulas, identificar y demas.
+    Necesitais una clave api de un proveedor, actualmente solo soporta themoviedb.org (el api key va en config.inc.php)
+    Quizas en el futuro se añadan otras alternativas pero de momento solo hay esta.

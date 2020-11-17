@@ -101,13 +101,12 @@ class DB {
     }
 
     public function getLastID($table) {
-        if (!isLoaded($table)) {
-            return false;
-        }
+        $this->loadTable($table);
+
         if (!empty($this->tables[$table]['info']['lastid'])) {
             return $this->tables[$table]['info']['lastid'];
         } else {
-            return false;
+            return 0;
         }
     }
 

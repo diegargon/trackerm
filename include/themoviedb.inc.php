@@ -107,6 +107,20 @@ function db_get_byid($id, $table) {
             return $item;
         }
     }
+    return false;
+}
+
+function db_get_by_db_id($id, $table) {
+    global $db;
+
+    $search_db = $db->getTableData($table);
+
+    foreach ($search_db as $item) {
+        if ($item['themoviedb_id'] == $id) {
+            return $item;
+        }
+    }
+    return false;
 }
 
 function db_get_popular() {

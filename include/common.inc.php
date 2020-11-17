@@ -26,6 +26,7 @@ require('include/checks.inc.php');
 require('include/' . $cfg['search_db'] . '.inc.php');
 require('include/jackett.inc.php');
 require('include/prefs.inc.php');
+require('include/wanted.inc.php');
 
 global $db;
 $db = new DB($cfg['cache']);

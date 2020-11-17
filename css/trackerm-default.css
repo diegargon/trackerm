@@ -328,3 +328,44 @@ button {
 .error_body {
     font-size: 1.2em;
 }
+
+.wanted_page {
+    width: 100%;
+}
+
+.wanted_title {
+    font-weight: bold;
+}
+.wanted_list_container {
+
+}
+.wanted_list_row {
+    padding: 10px 1px 10px 1px;
+    border:1px solid red;    
+    margin: 0px 0px 6px 0px;
+}
+.wanted_add_container {
+
+}
+.wanted_details {
+    margin: 4px;
+    padding: 5px;
+}
+
+.tag_quality, .tag_type, .tag_day, .tag_id, .tag_added {
+    border: 1px solid green;
+}
+.tag_title {
+    border: 1px solid black;
+    background: black;
+    width: 5%;
+}
+
+.tag_ignore {
+    border: 1px solid red;
+}
+
+.tag_quality, .tag_ignore, .tag_type, .tag_day, .tag_id, .tag_added, .tag_title {
+    margin: 1px 2px 1px 2px;
+    padding: 6px 10px 6px 10px;
+}

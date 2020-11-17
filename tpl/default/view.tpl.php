@@ -46,7 +46,10 @@
                     <span><?= $tdata['L_POPULARITY'] ?>:</span>
                     <span class="view_popularity"><?= $tdata['popularity'] ?></span>
                 <?php } ?>
-                <hr/>
+                <?php if (!empty($tdata['wanted'])) { ?>
+                    <div><a href="?page=wanted&id=<?= $tdata['themoviedb_id'] ?>&type=<?= $tdata['type'] ?>">[<?= $tdata['L_WANTED'] ?>]</a></div>
+                <?php } ?>
+                <hr/>                
                 <?php if (!empty($tdata['download'])) { ?>
                     <div class="view_download">
                         <a class="submit_link" href="<?= basename($_SERVER['REQUEST_URI']) . '&download=' . rawurlencode($tdata['download']) ?>"><?= $tdata['L_DOWNLOAD'] ?></a>

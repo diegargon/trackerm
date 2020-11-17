@@ -11,7 +11,7 @@ function view() {
     global $cfg, $LNG, $db;
     $type = $_GET['type'];
     $id = $_GET['id'];
-
+    $other = [];
     $page = '';
 
     if ($type == 'movies_library') {
@@ -23,8 +23,10 @@ function view() {
     } else if ($type == 'shows_torrent') {
         $t_type = 'jackett_shows';
     } else if ($type == 'movies_db') {
+        $other['wanted'] = 1;
         $t_type = 'tmdb_search';
     } else if ($type == 'shows_db') {
+        $other['wanted'] = 1;
         $t_type = 'tmdb_search';
     } else {
         return false;
@@ -43,16 +45,16 @@ function view() {
     $opt['auto_show_torrents'] = 0;
     $opt['auto_show_db'] = 0;
 
-
     ($type == 'movies_db' || $type == 'shows_db') ? $opt['auto_show_torrents'] = 1 : null;
     ($type == 'movies_torrent' || $type == 'shows_torrent') ? $opt['auto_show_db'] = 1 : null;
 
-
     if ($type == 'movies_torrent' || $type == 'movies_db' || $type == 'movies_library') {
+        $item['type'] = 'movies';
         $other['extra'] .= view_extra_movies($item, $opt);
     }
 
     if ($type == 'shows_torrent' || $type == 'shows_db' || $type == 'shows_library') {
+        $item['type'] = 'shows';
         $other['extra'] .= view_extra_shows($item, $opt);
     }
 
