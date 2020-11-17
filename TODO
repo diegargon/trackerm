@@ -24,3 +24,6 @@ en vez de hacer otra query remota.
 "la novedad 1" de cada indexer seguido de la "novedad 2" etc para no tener que pasar paginas para ver las novedades más recientes de otro 
 indexer.
 * rebuild pager/paginacion, se enredo mucho el codigo.
+* En el menu de moviedb advertir si tenemos la pelicula en la biblioteca. añadir enlace a moviedb
+* Opcion Filtrar torrent 720/1080
+*

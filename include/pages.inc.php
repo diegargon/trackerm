@@ -178,34 +178,17 @@ function page_wanted() {
     $want['page'] = $_GET['page'];
     $item = [];
 
-
+    
     isset($_GET['id']) ? $wanted_id = $_GET['id'] : $wanted_id = false;
     isset($_GET['type']) ? $wanted_type = $_GET['type'] : $wanted_type = false;
 
-    if ($wanted_id !== false) {
-        $item = db_get_by_db_id($wanted_id, 'tmdb_search');
-        $item['tags_quality'] = '';
-        $item['tags_ignore'] = '';
-        $item['tag_type'] = '<span class="tag_type">' . $wanted_type . '</span>';
-        foreach ($cfg['TORRENT_QUALITYS_PREFS'] as $quality) {
-            $item['tags_quality'] .= '<span class="tag_quality">' . $quality . '</span>';
-        }
-        foreach ($cfg['TORRENT_IGNORES_PREFS'] as $ignores) {
-            $item['tags_ignore'] .= '<span class="tag_ignore">' . $ignores . '</span>';
-        }
-    }
-
-    if (isset($_POST['submit_wanted'])) {
-        $id = $db->getLastID('wanted');
-        $wanted_item[$id]['id'] = $id;
-        $wanted_item[$id]['themoviedb_id'] = $item['themoviedb_id'];
-        $wanted_item[$id]['title'] = $item['title'];
-        $wanted_item[$id]['qualitys'] = $cfg['TORRENT_QUALITYS_PREFS'];
-        $wanted_item[$id]['ignores'] = $cfg['TORRENT_IGNORES_PREFS'];
-        $wanted_item[$id]['added'] = time();
-        $wanted_item[$id]['day_check'] = $_POST['check_day'];
-        $wanted_item[$id]['type'] = $wanted_type;
-        $db->addUniqElements('wanted', $wanted_item, 'themoviedb_id');
+    
+    if($wanted_id !== false && $wanted_type !== false) {
+        if($wanted_type == 'movies') {
+            $item = wanted_movies($wanted_id);
+        } else if ($wanted_type == 'shows' ) {
+            $item = wanted_shows($wanted_id);
+        }     
     }
 
     $wanted_list = $db->getTableData('wanted');
