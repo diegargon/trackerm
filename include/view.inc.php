@@ -153,6 +153,7 @@ function view_seasons($id) {
     global $db, $LNG;
 
     $seasons_data = '';
+    $episode_data = '';
 
     $item = $db->getItemByField('shows_details', 'themoviedb_id', $id);
     if (

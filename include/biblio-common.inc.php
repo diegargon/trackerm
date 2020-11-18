@@ -10,7 +10,7 @@
 function rebuild($media_type, $path) {
     global $cfg, $db;
 
-    $i = 0;
+
     $items = [];
     $files = findfiles($path, $cfg['media_ext']);
 
@@ -23,38 +23,39 @@ function rebuild($media_type, $path) {
     }
 
     $media = $db->getTableData($db_file);
+    $last_id = $db->getLastID($db_file);
 
     foreach ($files as $file) {
         if ($media === false ||
                 array_search($file, array_column($media, 'path')) === false
         ) {
 
-            $items[$i]['id'] = $i;
-            $items[$i]['ilink'] = $ilink;
+            $items[$last_id]['id'] = $last_id;
+            $items[$last_id]['ilink'] = $ilink;
             /* File */
-            $items[$i]['file_name'] = $file_name = trim(basename($file));
-            $items[$i]['size'] = filesize($file);
+            $items[$last_id]['file_name'] = $file_name = trim(basename($file));
+            $items[$last_id]['size'] = filesize($file);
 
             /* TITLE  */
             $predictible_title = getFileTitle($file_name);
-            $items[$i]['predictible_title'] = ucwords($predictible_title);
-            $items[$i]['title'] = '';
+            $items[$last_id]['predictible_title'] = ucwords($predictible_title);
+            $items[$last_id]['title'] = '';
             $year = getFileYear($file_name);
-            !empty($year) ? $items[$i]['year'] = $year : null;
-            $items[$i]['path'] = $file;
-            $items[$i]['tags'] = getFileTags($file_name);
-            $items[$i]['ext'] = substr($file_name, -3);
-            $items[$i]['added'] = time();
+            !empty($year) ? $items[$last_id]['year'] = $year : null;
+            $items[$last_id]['path'] = $file;
+            $items[$last_id]['tags'] = getFileTags($file_name);
+            $items[$last_id]['ext'] = substr($file_name, -3);
+            $items[$last_id]['added'] = time();
             $chapter = getFileChapter($file_name);
             if (!empty($chapter)) {
-                $items[$i]['season'] = intval($chapter['season']);
-                $items[$i]['chapter'] = intval($chapter['chapter']);
+                $items[$last_id]['season'] = intval($chapter['season']);
+                $items[$last_id]['chapter'] = intval($chapter['chapter']);
             }
 
-            $i++;
+            $last_id++;
         }
     }
-
+    //var_dump($items);
     isset($items) ? $db->addElements($db_file, $items) : null;
 
     return true;

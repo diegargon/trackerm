@@ -116,8 +116,8 @@ class DB {
     public function getLastID($table) {
         $this->loadTable($table);
 
-        if (!empty($this->tables[$table]['info']['lastid'])) {
-            return $this->tables[$table]['info']['lastid'];
+        if (!empty($this->tables[$table]['info']['last_id'])) {
+            return $this->tables[$table]['info']['last_id'];
         } else {
             return 0;
         }
