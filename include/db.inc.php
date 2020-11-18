@@ -107,6 +107,12 @@ class DB {
         return false;
     }
 
+    function deleteById($table, $id) {
+        !isset($this->tables[$table]) ? $this->loadTable($table) : null;
+        unset($this->tables[$table]['data'][$id]);
+        $this->saveTable($table);
+    }
+
     public function getNumElements($table) {
         !isset($this->tables[$table]) ? $this->loadTable($table) : null;
 

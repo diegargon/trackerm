@@ -27,6 +27,7 @@ $LNG = [
     'L_DAY_FRI' => 'Viernes',
     'L_DAY_SAT' => 'Sabado',
     'L_DAY_SUN' => 'Domingo',
+    'L_DELETE' => 'Borrar',
     'L_ERROR' => 'Error',
     'L_EPISODES' => 'Episodios',
     'L_EPISODE' => 'Episodio',

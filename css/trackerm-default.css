@@ -182,7 +182,6 @@ button {
 
 .menu_element href {
     text-decoration: none;
-
 }
 
 .submit_btn {
@@ -192,6 +191,7 @@ button {
     text-decoration: none;
     text-align: center;
     transition: all 0.2s;
+    padding: 5px;
 }
 
 .submit_btn:hover{

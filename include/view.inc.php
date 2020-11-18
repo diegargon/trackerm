@@ -26,7 +26,6 @@ function view() {
         $other['wanted'] = 1;
         $t_type = 'tmdb_search';
     } else if ($type == 'shows_db') {
-        $other['wanted'] = 1;
         $t_type = 'tmdb_search';
     } else {
         return false;

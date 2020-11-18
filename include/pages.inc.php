@@ -178,17 +178,20 @@ function page_wanted() {
     $want['page'] = $_GET['page'];
     $item = [];
 
-    
+
     isset($_GET['id']) ? $wanted_id = $_GET['id'] : $wanted_id = false;
     isset($_GET['type']) ? $wanted_type = $_GET['type'] : $wanted_type = false;
 
-    
-    if($wanted_id !== false && $wanted_type !== false) {
-        if($wanted_type == 'movies') {
+    $iurl = preg_replace('/&delete=\d{1,4}/', '', basename($_SERVER['REQUEST_URI']));
+
+    isset($_GET['delete']) ? $db->deleteById('wanted', $_GET['delete']) : null;
+
+    if ($wanted_id !== false && $wanted_type !== false) {
+        if ($wanted_type == 'movies') {
             $item = wanted_movies($wanted_id);
-        } else if ($wanted_type == 'shows' ) {
+        } else if ($wanted_type == 'shows') {
             $item = wanted_shows($wanted_id);
-        }     
+        }
     }
 
     $wanted_list = $db->getTableData('wanted');
@@ -197,6 +200,7 @@ function page_wanted() {
         $wanted_list_data .= '<div class="wanted_list_container">';
         foreach ($wanted_list as $wanted_item) {
             $wanted_list_data .= '<div class="wanted_list_row">';
+            $wanted_list_data .= '<a href="' . $iurl . '&delete=' . $wanted_item['id'] . '" class="submit_btn">' . $LNG['L_DELETE'] . '</a>';
             $wanted_list_data .= '<span class="tag_id">' . $wanted_item['id'] . '</span>';
             $wanted_list_data .= '<span class="tag_title">' . $wanted_item['title'] . '</span>';
             $wanted_list_data .= '<span class="tag_type">' . $wanted_item['type'] . '</span>';

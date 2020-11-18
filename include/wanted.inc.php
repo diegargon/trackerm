@@ -34,8 +34,6 @@ function wanted_movies($wanted_id) {
         $db->addUniqElements('wanted', $wanted_item, 'themoviedb_id');
     }
 
-
-
     $item['tags_quality'] = '';
     $item['tags_ignore'] = '';
     $item['tag_type'] = '<span class="tag_type">' . $wanted_type . '</span>';
@@ -45,13 +43,6 @@ function wanted_movies($wanted_id) {
     foreach ($cfg['TORRENT_IGNORES_PREFS'] as $ignores) {
         $item['tags_ignore'] .= '<span class="tag_ignore">' . $ignores . '</span>';
     }
-
-    return $item;
-}
-
-function wanted_shows($wanted_id) {
-
-    $item = [];
 
     return $item;
 }
