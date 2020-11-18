@@ -30,6 +30,8 @@ function rebuild($media_type, $path) {
                 array_search($file, array_column($media, 'path')) === false
         ) {
 
+
+
             $items[$last_id]['id'] = $last_id;
             $items[$last_id]['ilink'] = $ilink;
             /* File */
@@ -52,10 +54,27 @@ function rebuild($media_type, $path) {
                 $items[$last_id]['chapter'] = intval($chapter['chapter']);
             }
 
+            /* auto identify */
+            foreach ($media as $id_item) {
+                if ($id_item['predictible_title'] === ucwords($predictible_title) &&
+                        !empty($id_item['themoviedb_id'])
+                ) {
+                    $items[$last_id]['themoviedb_id'] = $id_item['themoviedb_id'];
+                    $items[$last_id]['title'] = $id_item['title'];
+                    $items[$last_id]['poster'] = $id_item['poster'];
+                    $items[$last_id]['rating'] = $id_item['rating'];
+                    $items[$last_id]['popularity'] = $id_item['popularity'];
+                    $items[$last_id]['scene'] = $id_item['scene'];
+                    $items[$last_id]['lang'] = $id_item['lang'];
+                    $items[$last_id]['plot'] = $id_item['plot'];
+                    $items[$last_id]['original_title'] = $id_item['original_title'];
+                }
+            }
+
             $last_id++;
         }
     }
-    //var_dump($items);
+
     isset($items) ? $db->addElements($db_file, $items) : null;
 
     return true;
@@ -70,7 +89,7 @@ function identify_media($type, $media) {
 
     foreach ($media as $item) {
         if (empty($item['title'])) {
-            // Maximo 5 peliculas a identidfiar de cada vez, FIXME: break
+            // Maximo 5 peliculas a identificar de cada vez
             if ($i >= $cfg['max_identify_items']) {
                 break;
             }
