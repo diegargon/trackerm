@@ -97,6 +97,59 @@ function db_prep($type, $items) {
     return isset($fitems) ? $fitems : false;
 }
 
+function db_get_seasons($id) {
+    global $cfg;
+
+    $seasons_url = 'https://api.themoviedb.org/3/tv/' . $id . '?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['LANG'];
+
+    $seasons_data = curl_get_json($seasons_url);
+
+    if (isset($seasons_data['number_of_seasons'])) {
+        $nseasons = $seasons_data['number_of_seasons'];
+        $episodes_data = [];
+
+        for ($i = 1; $i <= $nseasons; $i++) {
+            $seasons_url = 'https://api.themoviedb.org/3/tv/' . $id . '/season/' . $i . '?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['LANG'];
+            $episodes_data[$i] = curl_get_json($seasons_url);
+        }
+        return db_shows_details_prep($id, $seasons_data, $episodes_data);
+    }
+
+    return false;
+}
+
+function db_shows_details_prep($id, $seasons_data, $episodes_data) {
+    global $db;
+
+    $item = [];
+
+    $lastid = $db->getLastID('shows_details');
+
+    $item[$lastid]['id'] = $id;
+    $item[$lastid]['themoviedb_id'] = $id;
+    $item[$lastid]['n_seasons'] = $seasons_data['number_of_seasons'];
+    $item[$lastid]['n_episodes'] = $seasons_data['number_of_episodes'];
+
+    for ($i = 1; $i <= $seasons_data['number_of_seasons']; $i++) {
+        $episodes = $episodes_data[$i]['episodes'];
+
+        $item[$lastid]['seasons'][$i]['n_episodes'] = count($episodes);
+
+        foreach ($episodes as $episode) {
+            if (isset($episode['name'])) {
+                $n_episode = $episode['episode_number'];
+                $item[$lastid]['seasons'][$i]['episodes'][$n_episode]['title'] = $episode['name'];
+                $item[$lastid]['seasons'][$i]['episodes'][$n_episode]['plot'] = $episode['overview'];
+            }
+        }
+    }
+
+    $db->addUniqElements('shows_details', $item, 'themoviedb_id');
+    $db->reloadTable('shows_details');
+
+    return $db->getItemByField('shows_details', 'themoviedb_id', $id);
+}
+
 function db_get_byid($id, $table) {
     global $db;
 

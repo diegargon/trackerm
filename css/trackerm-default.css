@@ -123,6 +123,18 @@ button {
     display: table-row-group;
 }
 
+.divTableCellEpisodes {
+    border:0px solid red;
+    display: table-cell;
+    padding-left: 10px;
+}
+
+.divTableCellEpisodes:first-of-type {
+    width:0px;
+    text-align: right;
+    padding:0px;
+}
+
 .display {
     display: grid;
     border:0px solid red;
@@ -368,4 +380,24 @@ button {
 .tag_quality, .tag_ignore, .tag_type, .tag_day, .tag_id, .tag_added, .tag_title {
     margin: 1px 2px 1px 2px;
     padding: 6px 10px 6px 10px;
+}
+
+.season_link {
+    display: inline-flex;
+    padding: 10px;
+    border: 1px solid black;
+    background: aliceblue;
+    margin: 5px 5px 5px 1px;
+    font-weight: bold;
+    text-decoration: none;
+    color: black;
+}
+
+.episode_link {
+    display: inline-flex;
+    border: 2px solid white;
+    text-decoration: none;
+    color: white;
+    padding: 5px;
+    margin: 3px;
 }

@@ -94,6 +94,19 @@ class DB {
         return false;
     }
 
+    function getItembyField($table, $field, $field_value) {
+        !isset($this->tables[$table]) ? $this->loadTable($table) : null;
+        if (!empty($this->tables[$table]['data'])) {
+            foreach ($this->tables[$table]['data'] as $item) {
+                if ($item[$field] == $field_value) {
+                    return $item;
+                }
+            }
+        }
+
+        return false;
+    }
+
     public function getNumElements($table) {
         !isset($this->tables[$table]) ? $this->loadTable($table) : null;
 
@@ -108,6 +121,11 @@ class DB {
         } else {
             return 0;
         }
+    }
+
+    public function reloadTable($table) {
+
+        return $this->loadTable($table);
     }
 
     public function getTableData($table, $force = false) {

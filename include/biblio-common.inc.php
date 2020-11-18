@@ -10,9 +10,9 @@
 function rebuild($media_type, $path) {
     global $cfg, $db;
 
-    $files = findfiles($path, $cfg['media_ext']);
-
     $i = 0;
+    $items = [];
+    $files = findfiles($path, $cfg['media_ext']);
 
     if ($media_type == 'movies') {
         $db_file = 'biblio-movies';
@@ -47,8 +47,8 @@ function rebuild($media_type, $path) {
             $items[$i]['added'] = time();
             $chapter = getFileChapter($file_name);
             if (!empty($chapter)) {
-                $items[$i]['season'] = $chapter['season'];
-                $items[$i]['chapter'] = $chapter['chapter'];
+                $items[$i]['season'] = intval($chapter['season']);
+                $items[$i]['chapter'] = intval($chapter['chapter']);
             }
 
             $i++;
@@ -151,6 +151,7 @@ function getFileTitle($file) {
     /* REGEX TERMINATION */
     $regex .= '.)*/i';
 
+    $matches = [];
     preg_match($regex, $file, $matches);
     $_title = mb_strtolower($matches[0]);
 
@@ -163,6 +164,7 @@ function getFileTitle($file) {
 function getFileChapter($file_name) {
 
     /* FORMAT Cap.101 */
+    $match = [];
     if (preg_match('/\[Cap.(.*?)\]/i', $file_name, $match) == 1) {
         $capitulo_noformat = $match[1];
         if (strlen($capitulo_noformat) == 3) {
@@ -190,6 +192,7 @@ function getFileChapter($file_name) {
 
 function getFileYear($file_name) {
     $year = '';
+    $match = [];
 
     if (preg_match('/\([1-9]{4}\)/', $file_name, $match)) {
         isset($match[0]) ? $year = str_replace('(', '', str_replace(')', '', $match[0])) : null;
@@ -236,7 +239,7 @@ function submit_ident($type, $items) {
 
             !empty($db_item['title']) ? $update_fields['title'] = $db_item['title'] : null;
             !empty($db_item['name']) ? $update_fields['title'] = $db_item['name'] : null;
-            $update_fields['themoviedb'] = $db_item['id'];
+            $update_fields['themoviedb_id'] = $db_item['themoviedb_id'];
             !empty($db_item['poster']) ? $update_fields['poster'] = $db_item['poster'] : null;
             !empty($db_item['chapter']) ? $update_fields['chapter'] = $db_item['chapter'] : null;
             !empty($db_item['season']) ? $update_fields['season'] = $db_item['season'] : null;

@@ -22,30 +22,35 @@
                 </div>
             <?php } ?>
             <div class="">
+                <span>IDs :</span><span><?= $tdata['id'] . '/' . $tdata['themoviedb_id'] ?></span><br/>
                 <?php if (!empty($tdata['added'])) { ?>
-                    <span><?= $tdata['L_ADDED'] ?>:</span>
+                    <span><?= $tdata['L_ADDED'] ?> :</span>
                     <span class="view_added"><?= date("d-m-y", $tdata['added']) ?></span>
                     <br/>
                 <?php } ?>
                 <?php if (!empty($tdata['release'])) { ?>
-                    <span><?= $tdata['L_RELEASE'] ?>:</span>
+                    <span><?= $tdata['L_RELEASE'] ?> :</span>
                     <span class="view_release"><?= $tdata['release'] ?></span>
                     <br/>
                 <?php } ?>
                 <?php if (!empty($tdata['size'])) { ?>
-                    <span><?= $tdata['L_SIZE'] ?>:</span>
+                    <span><?= $tdata['L_SIZE'] ?> :</span>
                     <span class="view_size"><?= human_filesize($tdata['size']) ?></span>
                     <br/>
                 <?php } ?>
                 <?php if (!empty($tdata['rating'])) { ?>
-                    <span><?= $tdata['L_RATING'] ?>:</span>
+                    <span><?= $tdata['L_RATING'] ?> :</span>
                     <span class="view_rating"><?= $tdata['rating'] ?></span>
                     <br/>
                 <?php } ?>
                 <?php if (!empty($tdata['popularity'])) { ?>
-                    <span><?= $tdata['L_POPULARITY'] ?>:</span>
+                    <span><?= $tdata['L_POPULARITY'] ?> :</span>
                     <span class="view_popularity"><?= $tdata['popularity'] ?></span>
+                    <br/>
                 <?php } ?>
+                <?php if (!empty($tdata['seasons_data'])) { ?>
+                    <?= $tdata['seasons_data'] ?>
+                <?php } ?>                    
                 <?php if (!empty($tdata['wanted'])) { ?>
                     <div><a href="?page=wanted&id=<?= $tdata['themoviedb_id'] ?>&type=<?= $tdata['type'] ?>">[<?= $tdata['L_WANTED'] ?>]</a></div>
                 <?php } ?>
