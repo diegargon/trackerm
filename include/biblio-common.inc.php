@@ -110,8 +110,11 @@ function identify_media($type, $media) {
             if (!empty($db_media)) {
 
                 foreach ($db_media as $db_item) {
-                    $year = substr($db_item['release'], 0, 4);
-                    $results_opt .= '<option value="' . $db_item['id'] . '">' . $db_item['title'] . ' (' . $year . ')</option>';
+                    $year = trim(substr($db_item['release'], 0, 4));
+                    $results_opt .= '<option value="' . $db_item['id'] . '">';
+                    $results_opt .= $db_item['title'];
+                    !empty($year) ? $results_opt .= ' (' . $year . ')' : null;
+                    $results_opt .= '</option>';
                 }
                 $results_opt .= '<option value="">' . $LNG['L_NOID'] . '</option>';
             }
@@ -241,6 +244,15 @@ function getFileTags($file_name) {
     }
     if (stripos($file_name, 'BD1080') !== false) {
         $tags .= "[BD1080]";
+    }
+    if (stripos($file_name, 'HDTV') !== false) {
+        $tags .= "[HDTV]";
+    }
+    if (stripos($file_name, 'X264') !== false) {
+        $tags .= "[X254]";
+    }
+    if (stripos($file_name, 'BueRay') !== false) {
+        $tags .= "[BluRay]";
     }
     $year = getFileYear($file_name);
     if (!empty($year)) {

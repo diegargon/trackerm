@@ -136,10 +136,10 @@ function db_shows_details_prep($id, $seasons_data, $episodes_data) {
         $item[$lastid]['seasons'][$i]['n_episodes'] = count($episodes);
 
         foreach ($episodes as $episode) {
-            if (isset($episode['name'])) {
+            if (isset($episode['episode_number'])) {
                 $n_episode = $episode['episode_number'];
-                $item[$lastid]['seasons'][$i]['episodes'][$n_episode]['title'] = $episode['name'];
-                $item[$lastid]['seasons'][$i]['episodes'][$n_episode]['plot'] = $episode['overview'];
+                isset($item[$lastid]['seasons'][$i]['episodes'][$n_episode]['title']) ? $item[$lastid]['seasons'][$i]['episodes'][$n_episode]['title'] = $episode['name'] : $item[$lastid]['seasons'][$i]['episodes'][$n_episode]['title'] = $episode['episode_number'];
+                isset($item[$lastid]['seasons'][$i]['episodes'][$n_episode]['plot']) ? $item[$lastid]['seasons'][$i]['episodes'][$n_episode]['plot'] = $episode['overview'] : $item[$lastid]['seasons'][$i]['episodes'][$n_episode]['plot'] = $episode['episode_number'];
             }
         }
     }
