@@ -182,9 +182,22 @@ function view_seasons($id) {
 
         if (isset($_GET['season']) && $_GET['season'] == $i) {
             $episode_data = '<div class="divTable">';
+            $episode_data .= '<div class="divTableRow">';
+            $episode_data .= '<div class="divTableCellEpisodes"></div>';
+            $episode_data .= '<div class="divTableCellEpisodes"></div>';
+            $episode_data .= '<div class="divTableCellEpisodes">';
+            $episode_list = '1';
+            $n_episodes = $seasons[$i]['n_episodes'];
+            for ($a = 2; $a <= $n_episodes; $a++) {
+                $episode_list .= ',' . $a;
+            }
+            $episode_data .= '<a class="episode_link" href="' . $iurl . '&wanted=1&season=' . $i . '&episode=' . $episode_list . '">' . $LNG['L_WANT_ALL'] . '</a>';
+            $episode_data .= '</div>';
+            $episode_data .= '</div>';
 
             foreach ($seasons[$i]['episodes'] as $num => $episode) {
                 $episode_data .= '<div class="divTableRow">';
+
                 $have = check_if_have_show($id, $i, $num);
                 $episode_data .= '<div class="divTableCellEpisodes">' . $num . '</div>';
                 if ($have !== false) {
@@ -227,7 +240,7 @@ function check_if_have_show($id, $season, $episode) {
     return false;
 }
 
-function wanted_episode($id, $season, $episode) {
+function wanted_episode($id, $season, $episodes) {
     global $db, $cfg;
 
     $wanted_item = [];
@@ -235,24 +248,29 @@ function wanted_episode($id, $season, $episode) {
     if (strlen($season) == 1) {
         $season = "0" . $season;
     }
-    if (strlen($episode) == 1) {
-        $episode = "0" . $episode;
+    $episodes = explode(',', $episodes);
+
+    foreach ($episodes as $episode) {
+
+        if (strlen($episode) == 1) {
+            $episode = "0" . $episode;
+        }
+
+        $item = $db->getItembyField('tmdb_search', 'themoviedb_id', $id);
+        $title_search = $item['title'] . ' S' . $season . 'E' . $episode;
+
+
+        $wanted_item[$id]['id'] = $db->getLastID('wanted');
+        $wanted_item[$id]['themoviedb_id'] = $item['themoviedb_id'];
+        $wanted_item[$id]['title'] = $title_search;
+        $wanted_item[$id]['qualitys'] = $cfg['TORRENT_QUALITYS_PREFS'];
+        $wanted_item[$id]['ignores'] = $cfg['TORRENT_IGNORES_PREFS'];
+        $wanted_item[$id]['added'] = time();
+        $wanted_item[$id]['day_check'] = 'L_DAY_ALL';
+        $wanted_item[$id]['type'] = 'shows';
+        $wanted_item[$id]['season'] = $season;
+        $wanted_item[$id]['episode'] = $episode;
+
+        $db->addUniqElements('wanted', $wanted_item, 'title');
     }
-
-    $item = $db->getItembyField('tmdb_search', 'themoviedb_id', $id);
-    $title_search = $item['title'] . ' S' . $season . 'E' . $episode;
-
-
-    $wanted_item[$id]['id'] = $db->getLastID('wanted');
-    $wanted_item[$id]['themoviedb_id'] = $item['themoviedb_id'];
-    $wanted_item[$id]['title'] = $title_search;
-    $wanted_item[$id]['qualitys'] = $cfg['TORRENT_QUALITYS_PREFS'];
-    $wanted_item[$id]['ignores'] = $cfg['TORRENT_IGNORES_PREFS'];
-    $wanted_item[$id]['added'] = time();
-    $wanted_item[$id]['day_check'] = 'L_DAY_ALL';
-    $wanted_item[$id]['type'] = 'shows';
-    $wanted_item[$id]['season'] = $season;
-    $wanted_item[$id]['episode'] = $episode;
-
-    $db->addUniqElements('wanted', $wanted_item, 'themoviedb_id');
 }

@@ -64,4 +64,5 @@ $LNG = [
     'L_TORRENTS' => 'Torrents',
     'L_WANTED' => 'Seguimiento',
     'L_WANTED_ADD' => 'Añadir al seguimiento',
+    'L_WANT_ALL' => 'Añadir Todos',
 ];
