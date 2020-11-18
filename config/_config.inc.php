@@ -25,7 +25,7 @@ $cfg['jackett_indexers'] = [
     0 => 'newpct',
 //    1 => 'divxtotal',
     2 => 'mejortorrent',
-    3 => 'moviesdvdr',
+   3 => 'moviesdvdr',
 //     5 => 'rarbg',
 ];
 

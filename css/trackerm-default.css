@@ -23,6 +23,10 @@ a:link {
     color: green;
 }
 
+hr {
+    color: #ff5b5b;
+}
+
 .debug_border1 {
     border:1px solid red;
 }
@@ -44,7 +48,7 @@ a:link {
 }
 
 .main_menu {
-    border:0px solid red;
+    border:0px solid #ff5b5b;
     /* background-color: activeborder;*/
     margin-bottom: 1%;
 }
@@ -56,7 +60,7 @@ button {
 .videocontent {
     max-width: 300px;
     padding:10px;
-    border:1px solid red;    
+    border:1px solid #ff5b5b;    
 }
 
 .wrapper {
@@ -100,7 +104,7 @@ button {
 }
 
 .divTableCell, .divTableHead {
-    border: 1px solid red;
+    border: 1px solid #ff5b5b;
     display: table-cell;
     padding: 1%;
     max-width: 0vh;
@@ -124,7 +128,7 @@ button {
 }
 
 .divTableCellEpisodes {
-    border:0px solid red;
+    border:0px solid #ff5b5b;
     display: table-cell;
     padding-left: 10px;
 }
@@ -137,7 +141,7 @@ button {
 
 .display {
     display: grid;
-    border:0px solid red;
+    border:0px solid #ff5b5b;
     text-align:center;
     object-fit: cover;
 }
@@ -206,7 +210,7 @@ button {
 
 /* VIEW PAGE */
 .view_page {
-    border:1px solid red;
+    border:1px solid #ff5b5b;
     padding:4px;    
 }
 
@@ -275,7 +279,7 @@ button {
     display: inline;
     padding: 4px;
     width: 150px;
-    border:0px solid red;
+    border:0px solid #ff5b5b;
 }
 
 .search_box input {
@@ -353,7 +357,7 @@ button {
 }
 .wanted_list_row {
     padding: 10px 1px 10px 1px;
-    border:1px solid red;    
+    border:1px solid #ff5b5b;    
     margin: 0px 0px 6px 0px;
 }
 .wanted_add_container {
@@ -374,7 +378,7 @@ button {
 }
 
 .tag_ignore {
-    border: 1px solid red;
+    border: 1px solid #ff5b5b;
 }
 
 .tag_quality, .tag_ignore, .tag_type, .tag_day, .tag_id, .tag_added, .tag_title {
