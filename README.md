@@ -12,6 +12,9 @@ Puedes ver sceenshots del aspecto actual en /screenshots aunque cambiara que el 
 
 # How WILL works. (EXCUSE MY ENGLISH)
 
+This proyect it in very very early stage, will change alot between commits and files and database will not be backwards compatible, if you want use
+now and update tomorrow you must probably remove all database entrys in cache and begin identified applications again if errors appears (and going to appear).
+
 Select the path (config file only atm) where your movies/shows reside, click on rebuild buttons and identify your movies/shows.
 
 In "Themoviedb" tab you can search for movies/shows and  automatically will show you the torrents, if there is none you can choose 'wanted' and (FEATURE UPCOMMING) 
