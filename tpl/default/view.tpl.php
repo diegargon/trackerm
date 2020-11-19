@@ -1,9 +1,9 @@
 <?php
 /**
- * 
+ *
  *  @author diego@envigo.net
- *  @package 
- *  @subpackage 
+ *  @package
+ *  @subpackage
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  */
 ?>
@@ -22,7 +22,14 @@
                 </div>
             <?php } ?>
             <div class="">
-                <span>IDs :</span><span><?= $tdata['id'] . '/' . $tdata['themoviedb_id'] ?></span><br/>
+                <span>IDs :</span><span>
+                    <?= $tdata['id'] ?>
+                    <?php
+                    if (isset($tdata['themoviedb_id'])) {
+                        echo ' / ' . $tdata['themoviedb_id'];
+                    }
+                    ?>
+                </span><br/>
                 <?php if (!empty($tdata['added'])) { ?>
                     <span><?= $tdata['L_ADDED'] ?> :</span>
                     <span class="view_added"><?= date("d-m-y", $tdata['added']) ?></span>
@@ -50,11 +57,11 @@
                 <?php } ?>
                 <?php if (!empty($tdata['seasons_data'])) { ?>
                     <?= $tdata['seasons_data'] ?>
-                <?php } ?>                    
+                <?php } ?>
                 <?php if (!empty($tdata['wanted'])) { ?>
                     <div><a href="?page=wanted&id=<?= $tdata['themoviedb_id'] ?>&type=<?= $tdata['type'] ?>">[<?= $tdata['L_WANTED'] ?>]</a></div>
                 <?php } ?>
-                <hr/>                
+                <hr/>
                 <?php if (!empty($tdata['download'])) { ?>
                     <div class="view_download">
                         <a class="submit_link" href="<?= basename($_SERVER['REQUEST_URI']) . '&download=' . rawurlencode($tdata['download']) ?>"><?= $tdata['L_DOWNLOAD'] ?></a>
