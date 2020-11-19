@@ -27,6 +27,8 @@ Apache+Php (o similar), Jacket, Transmission, Composer, cuenta+api key themovied
 
         $ composer require irazasyed/php-transmission-sdk  php-http/httplug-pack  php-http/guzzle6-adapter
 
+    * Renombrar _config.inc.php a config.inc.php y configurarlo
+        Importante añadir, themoviedb api key, jacket server ip y key, los indexers  que queremos utilizar (previamente activados en jackett)
 # Requisitos: Detalles:
 
 * Apache (o similar)

@@ -1,10 +1,10 @@
 <?php
 
 /**
- * 
+ *
  *  @author diego@envigo.net
- *  @package 
- *  @subpackage 
+ *  @package
+ *  @subpackage
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  */
 function rebuild($media_type, $path) {
@@ -152,17 +152,18 @@ function getFileTitle($file) {
     $regex .= '(?!\()'; // (
     $regex .= '(?!\()'; // (
     $regex .= '(?!-\d+x)'; // -1x
-    $regex .= '(?!\s\d+x)'; //space y 1x 
+    $regex .= '(?!\s\d+x)'; //space y 1x
     $regex .= '(?!_-\d+)';  // los char _- y digitos
     $regex .= '(?!_\d+_)';  // los char _digitos_
     $regex .= '(?!\d{4})'; // 4 digitos por fecha igual da problemas
     $regex .= '(?!M1080)'; // M1080
     $regex .= '(?!BD1080)'; // BD1080
-    $regex .= '(?!HD4K)'; //HD4K        
+    $regex .= '(?!HD4K)'; //HD4K
     $regex .= '(?!Xvid)'; //XviD
     $regex .= '(?!DVD)'; //DVD
-    $regex .= '(?!DVDRip)'; //DVDRip        
+    $regex .= '(?!DVDRip)'; //DVDRip
     $regex .= '(?!HDRip)'; //HDRip
+    $regex .= '(?!WEBRip)'; //WebRip
     $regex .= '(?!4k-hdr)'; // 4k-hdr
     $regex .= '(?!spanish)'; // spanish (dara probleams)
     $regex .= '(?!multi\senglish)'; // multi english
