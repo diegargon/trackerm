@@ -15,6 +15,14 @@ function show_my_movies() {
     if (isset($_POST['mult_movies_select']) && !empty($_POST['mult_movies_select'])) {
         submit_ident('movies', $_POST['mult_movies_select']);
     }
+    if (!empty($_GET['ident_delete']) && !empty($_GET['media_type'])) {
+        if ($_GET['media_type'] === 'movies') {
+            $db->deleteByID('biblio-movies', $_GET['ident_delete']);
+        }
+        if ($_GET['media_type'] === 'shows') {
+            $db->deleteByID('biblio-shows', $_GET['ident_delete']);
+        }
+    }
 
     $movies = $db->getTableData('biblio-movies');
     if ($movies == false || isset($_POST['rebuild_movies'])) {

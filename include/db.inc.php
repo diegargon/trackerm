@@ -1,12 +1,12 @@
 <?php
 
 /**
- * 
+ *
  *  @author diego@envigo.net
- *  @package 
- *  @subpackage 
+ *  @package
+ *  @subpackage
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
- * 
+ *
  */
 class DB {
 
@@ -19,7 +19,7 @@ class DB {
 
     public function addElements($table, $elements) {
         !isset($this->tables[$table]) ? $this->loadTable($table) : null;
-        !isset($this->tables[$table]['info']['last_id']) ? $lastid = 0 : $lastid = $this->tables[$table]['info']['last_id'];
+        !isset($this->tables[$table]['info']['last_id']) ? $lastid = 1 : $lastid = $this->tables[$table]['info']['last_id'];
 
         if (!is_array($elements)) {
             return false;
@@ -38,7 +38,7 @@ class DB {
     public function addUniqElements($table, $elements, $uniq_key) {
         //array_search($file, array_column($movies, 'path')
         !isset($this->tables[$table]) ? $this->loadTable($table) : null;
-        !isset($this->tables[$table]['info']['last_id']) ? $lastid = 0 : $lastid = $this->tables[$table]['info']['last_id'];
+        !isset($this->tables[$table]['info']['last_id']) ? $lastid = 1 : $lastid = $this->tables[$table]['info']['last_id'];
 
         if (!is_array($elements)) {
             return false;
@@ -125,7 +125,7 @@ class DB {
         if (!empty($this->tables[$table]['info']['last_id'])) {
             return $this->tables[$table]['info']['last_id'];
         } else {
-            return 0;
+            return 1;
         }
     }
 
@@ -187,7 +187,7 @@ class DB {
         $this->getTableData($table);
 
         foreach ($update_fields as $key => $val) {
-            // Cogemos el valor del campo $field del id del registro proporcionado para buscar iguales 
+            // Cogemos el valor del campo $field del id del registro proporcionado para buscar iguales
             $compare_value = $this->tables[$table]['data'][$id][$field];
 
             // Buscamos los registros para $field con el valor $compare_value, si coincidencia aplicamos val_array

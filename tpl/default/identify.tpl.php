@@ -1,18 +1,18 @@
 <?php
 /**
- * 
+ *
  *  @author diego@envigo.net
- *  @package 
- *  @subpackage 
+ *  @package
+ *  @subpackage
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  */
 ?>
 
 <h2><?= $tdata['head'] ?></h2>
 <form method="post">
-    <table>
+    <div class="divTableID">
         <?= $tdata['titles'] ?>
-    </table>
+    </div>
     <input class="submit_btn" type="submit" value="<?= $tdata['L_IDENTIFY'] ?>"/>
 </form>
 

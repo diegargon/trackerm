@@ -8,6 +8,8 @@ sin comprobaciones, con fallos, errores y todo eso...
 
 Probablemente de momento no deberias instalarlo.
 
+Puedes ver sceenshots del aspecto actual en /screenshots aunque cambiara que el proyecto esta en fase muy muy temprana.
+
 # How WILL works. (EXCUSE MY ENGLISH)
 
 Select the path (config file only atm) where your movies/shows reside, click on rebuild buttons and identify your movies/shows.

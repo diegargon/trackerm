@@ -29,9 +29,6 @@ function rebuild($media_type, $path) {
         if ($media === false ||
                 array_search($file, array_column($media, 'path')) === false
         ) {
-
-
-
             $items[$last_id]['id'] = $last_id;
             $items[$last_id]['ilink'] = $ilink;
             /* File */
@@ -54,23 +51,25 @@ function rebuild($media_type, $path) {
                 $items[$last_id]['chapter'] = intval($chapter['chapter']);
             }
 
-            /* auto identify */
-            foreach ($media as $id_item) {
-                if ($id_item['predictible_title'] === ucwords($predictible_title) &&
-                        !empty($id_item['themoviedb_id'])
-                ) {
-                    $items[$last_id]['themoviedb_id'] = $id_item['themoviedb_id'];
-                    $items[$last_id]['title'] = $id_item['title'];
-                    $items[$last_id]['poster'] = $id_item['poster'];
-                    $items[$last_id]['rating'] = $id_item['rating'];
-                    $items[$last_id]['popularity'] = $id_item['popularity'];
-                    $items[$last_id]['scene'] = $id_item['scene'];
-                    $items[$last_id]['lang'] = $id_item['lang'];
-                    $items[$last_id]['plot'] = $id_item['plot'];
-                    $items[$last_id]['original_title'] = $id_item['original_title'];
+            /* auto identify episodes already identified */
+            if ($media_type == 'shows') {
+                foreach ($media as $id_item) {
+
+                    if ($id_item['predictible_title'] === ucwords($predictible_title) &&
+                            !empty($id_item['themoviedb_id'])
+                    ) {
+                        $items[$last_id]['themoviedb_id'] = $id_item['themoviedb_id'];
+                        $items[$last_id]['title'] = $id_item['title'];
+                        $items[$last_id]['poster'] = $id_item['poster'];
+                        $items[$last_id]['rating'] = $id_item['rating'];
+                        $items[$last_id]['popularity'] = $id_item['popularity'];
+                        $items[$last_id]['scene'] = $id_item['scene'];
+                        $items[$last_id]['lang'] = $id_item['lang'];
+                        $items[$last_id]['plot'] = $id_item['plot'];
+                        $items[$last_id]['original_title'] = $id_item['original_title'];
+                    }
                 }
             }
-
             $last_id++;
         }
     }
@@ -87,9 +86,13 @@ function identify_media($type, $media) {
     $i = 0;
     $uniq_shows = [];
 
+    $iurl = basename($_SERVER['REQUEST_URI']);
+    $iurl = preg_replace('/&media_type=shows/', '', $iurl);
+    $iurl = preg_replace('/&media_type=movies/', '', $iurl);
+    $iurl = preg_replace('/&ident_delete=\d{1,4}/', '', $iurl);
+
     foreach ($media as $item) {
         if (empty($item['title'])) {
-            // Maximo 5 peliculas a identificar de cada vez
             if ($i >= $cfg['max_identify_items']) {
                 break;
             }
@@ -116,15 +119,20 @@ function identify_media($type, $media) {
                     !empty($year) ? $results_opt .= ' (' . $year . ')' : null;
                     $results_opt .= '</option>';
                 }
-                $results_opt .= '<option value="">' . $LNG['L_NOID'] . '</option>';
             }
-            $titles .= '<tr><td>' . $item['predictible_title'] . '</td><td>';
+            $results_opt .= '<option value="">' . $LNG['L_NOID'] . '</option>';
+            $titles .= '<div class="divTableRow"><div class="divTableCellID">' . $item['predictible_title'] . '</div>';
+            $titles .= '<div class="divTableCellID">';
             if ($type == 'movies') {
                 $titles .= '<select class="ident_select" name="mult_movies_select[' . $item['id'] . ']">' . $results_opt . '</select>';
             } else if ($type == 'shows') {
                 $titles .= '<select class="ident_select" name="mult_shows_select[' . $item['id'] . ']">' . $results_opt . '</select>';
             }
-            $titles .= '</td></tr>';
+            $titles .= '</div>';
+            $titles .= '<div class="divTableCellID">';
+            $titles .= '<span><a href="' . $iurl . '&media_type=' . $type . '&ident_delete=' . $item['id'] . '">' . $LNG['L_DELETE'] . '</a></span>';
+            $titles .= '</div>';
+            $titles .= '</div>';
 
             $i++;
         }

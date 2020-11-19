@@ -139,6 +139,20 @@ button {
     padding:0px;
 }
 
+.divTableID {
+    display: table;  
+    border-collapse: collapse;
+}
+
+.divTableCellID {
+    display: table-cell;
+    border: 0px solid #ff5b5b;    
+}
+
+.divTableCellID:last-of-type {
+    
+}
+
 .display {
     display: grid;
     border:0px solid #ff5b5b;
@@ -406,8 +420,6 @@ button {
     margin: 3px;
 }
 
-.ident_select {
-    min-width: 100px;
-    width:25%;
-  
+.ident_select {    
+    width:300px;  
 }
