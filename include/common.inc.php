@@ -14,6 +14,7 @@ $cfg['cache'] = $_SERVER['DOCUMENT_ROOT'] . $cfg['REL_PATH'] . $cfg['cache'];
 require('include/db.inc.php');
 
 require('lang/' . $cfg['LANG'] . '/lang.inc.php');
+require('include/checks.inc.php');
 require('include/pages.inc.php');
 require('include/curl.inc.php');
 require('include/file.utils.php');

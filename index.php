@@ -1,31 +1,31 @@
 <?php
 
 /**
- * 
+ *
  *  @author diego@envigo.net
- *  @package 
- *  @subpackage 
+ *  @package
+ *  @subpackage
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  */
 include "include/common.inc.php";
 include "include/html.common.php";
 require __DIR__ . '/vendor/autoload.php';
 
+do_checks();
+
 isset($_GET['page']) ? $req_page = $_GET['page'] : $req_page = '';
+
 
 $body = getMenu();
 $footer = getFooter();
 
-if (!is_writable($cfg['cache'])) {
-    echo "<p><b>WARNING: Your cache directory must be writable:" . $cfg['cache'] . '</p></b>';
-}
 $trans = new TorrentServer($cfg);
 $transfers = $trans->getAll();
 
 if (!empty($_GET['download'])) {
     $d_link = $_GET['download'];
     $trans->addUrl(rawurldecode($d_link));
-    //respuesta {"hashString":"32a182e2304472cd3bd9ef0ccc8837e40fddf144","id":7,"name":"El Legado De Las Mentiras (2020) [BluRay Rip][AC3 5.1 Castellano][www.PctMix.com]","duplicate":true} 
+    //respuesta {"hashString":"32a182e2304472cd3bd9ef0ccc8837e40fddf144","id":7,"name":"El Legado De Las Mentiras (2020) [BluRay Rip][AC3 5.1 Castellano][www.PctMix.com]","duplicate":true}
 }
 
 if (!isset($req_page) || $req_page == '') {
