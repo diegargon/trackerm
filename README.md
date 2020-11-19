@@ -8,6 +8,24 @@ sin comprobaciones, con fallos, errores y todo eso...
 
 Probablemente de momento no deberias instalarlo.
 
+# How WILL works. (EXCUSE MY ENGLISH)
+
+Select the path (config file only atm) where your movies/shows reside, click on rebuild buttons and identify your movies/shows.
+
+In "Themoviedb" tab you can search for movies/shows and  automatically will show you the torrents, if there is none you can choose 'wanted' and (FEATURE UPCOMMING) 
+trackm will check released torrents and automatically download when a match appears. 
+
+In Torrents tab you can search movies/shows torrents and clicking in download will automatically send to Transmission-daemon
+
+In Wanted/Seguimiento you can see what movies/shows trackm are tracking for download (feature not yet avaible)
+
+In Released/Publicado you can see the latest torrent releases
+
+In Library/Biblioteca you can see your movies/shows, identify, show seasons and check missing episodes.
+
+In the future trackm will track your transmission movie/shows downloads and automatically move to your library path. (not yet available)
+
+
 # Lenguaje
     Php+Javascript (Más adelante probablemente Jquery)
 
@@ -36,7 +54,7 @@ Apache+Php (o similar), Jacket, Transmission, Composer, cuenta+api key themovied
 
     * Para el cache de las imagenes/posters se necesita allow_url_fopen en php.ini
     * Se necesitan permisos de lectura/escritura en cache y cache/images 775 si cambiamos el propietario al del servidor web o 777 (inseguro)
-
+      Database files and images will be stored in cache dir, must be writable.
 * Jackett
     Instalado y configurado añadiendo algunos indexers de peliculas/series.
     Necesitas la clave api para conectarse al servidor jackett, esta ira en config.inc.php
@@ -54,3 +72,7 @@ Apache+Php (o similar), Jacket, Transmission, Composer, cuenta+api key themovied
     Es importante para el correcto funcionamiento crearse una cuenta en dicha pagina, se utilizar para buscar peliculas/series, caratulas, identificar y demas.
     Necesitais una clave api de un proveedor, actualmente solo soporta themoviedb.org (el api key va en config.inc.php)
     Quizas en el futuro se añadan otras alternativas pero de momento solo hay esta.
+
+## Latest Changes
+
+    

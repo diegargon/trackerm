@@ -156,6 +156,8 @@ function getFileTitle($file) {
     $regex .= '(?!_-\d+)';  // los char _- y digitos
     $regex .= '(?!_\d+_)';  // los char _digitos_
     $regex .= '(?!\d{4})'; // 4 digitos por fecha igual da problemas
+    $regex .= '(?!720p)'; // 720p
+    $regex .= '(?!1080p)'; // M1080p
     $regex .= '(?!M1080)'; // M1080
     $regex .= '(?!BD1080)'; // BD1080
     $regex .= '(?!HD4K)'; //HD4K
@@ -168,6 +170,8 @@ function getFileTitle($file) {
     $regex .= '(?!spanish)'; // spanish (dara probleams)
     $regex .= '(?!multi\senglish)'; // multi english
     $regex .= '(?!S\d{2}E\d{2})'; // SXXEXX
+    $regex .= '(?!3D)'; // 3D
+    $regex .= '(?!BRRip)'; // BRRIP
     $regex .= '(?!.mkv)'; //.mkv
     $regex .= '(?!.avi)'; //.avi
     $regex .= '(?!.mp4)'; //.mp4

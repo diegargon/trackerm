@@ -1,10 +1,10 @@
 <?php
 
 /**
- * 
+ *
  *  @author diego@envigo.net
- *  @package 
- *  @subpackage 
+ *  @package
+ *  @subpackage
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  */
 global $LNG;
@@ -17,7 +17,7 @@ $LNG = [
     'L_CATEGORY' => 'Categorias',
     'L_DEFAULT' => 'Defecto',
     'L_DOWNLOAD' => 'Descargar',
-    'L_DOWNLOAD_MIN' => 'D',
+    'L_DOWNLOAD_MIN' => 'Descargar',
     'L_DB' => $cfg['search_db'],
     'L_DAY_ALL' => 'Cada dia',
     'L_DAY_MON' => 'Lunes',

@@ -1,10 +1,10 @@
 <?php
 
 /**
- * 
+ *
  *  @author diego@envigo.net
- *  @package 
- *  @subpackage 
+ *  @package
+ *  @subpackage
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  */
 function view() {
@@ -67,7 +67,7 @@ function view() {
 
 function view_extra_movies($item, $opt = null) {
     global $LNG;
-    
+
     $extra = '';
 
     $extra .= '<form method="GET" action="">';
@@ -77,7 +77,7 @@ function view_extra_movies($item, $opt = null) {
     $extra .= '<input class="submit_btn" type="submit" name="more_movies" value="' . $LNG['L_SEARCH_MOVIES'] . '" >';
     $extra .= '<input class="submit_btn" type="submit" name="more_torrents" value="' . $LNG['L_SHOW_TORRENTS'] . '" >';
 
-    $title = getFileTitle(trim($item['title']));
+    $title = getFileTitle($item['title']);
 
     if (!empty($_GET['search_movie_db'])) {
         $stitle = trim($_GET['search_movie_db']);
@@ -122,7 +122,7 @@ function view_extra_shows($item, $opt) {
     $extra .= '<input class="submit_btn" type="submit" name="more_shows" value="' . $LNG['L_SEARCH_SHOWS'] . '" >';
     $extra .= '<input class="submit_btn" type="submit" name="more_torrents" value="' . $LNG['L_SHOW_TORRENTS'] . '" >';
 
-    $title = getFileTitle(trim($item['title']));
+    $title = getFileTitle($item['title']);
 
     if (!empty($_GET['search_shows_db'])) {
         $stitle = trim($_GET['search_shows_db']);
