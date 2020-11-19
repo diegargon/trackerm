@@ -120,9 +120,9 @@ function identify_media($type, $media) {
             }
             $titles .= '<tr><td>' . $item['predictible_title'] . '</td><td>';
             if ($type == 'movies') {
-                $titles .= '<select name="mult_movies_select[' . $item['id'] . ']">' . $results_opt . '</select>';
+                $titles .= '<select class="ident_select" name="mult_movies_select[' . $item['id'] . ']">' . $results_opt . '</select>';
             } else if ($type == 'shows') {
-                $titles .= '<select name="mult_shows_select[' . $item['id'] . ']">' . $results_opt . '</select>';
+                $titles .= '<select class="ident_select" name="mult_shows_select[' . $item['id'] . ']">' . $results_opt . '</select>';
             }
             $titles .= '</td></tr>';
 
