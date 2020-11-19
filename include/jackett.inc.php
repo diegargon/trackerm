@@ -75,15 +75,12 @@ function search_shows_torrents($words, $head = null) {
 function jackett_get($indexer, $limit = null) {
     global $cfg;
 
-    if (empty($limit)) {
-        $limit = $cfg['jacket_results'];
-    }
+    (empty($limit)) ? $limit = $cfg['jacket_results'] : null;
 
-    //$jackett_url = $cfg['jackett_srv'] . $cfg['jackett_api'] .'/indexers/'. $indexer . '/results/torznab/api?apikey=' . $cfg['jackett_key'] . '&t=search&cat=2000&extended=1&q=';
-    //$jackett_url = $cfg['jackett_srv'] . $cfg['jackett_api'] .'/indexers/'. $indexer . '/results/torznab/api?apikey=' . $cfg['jackett_key'] . '&t=tvsearch&extended=1&q=&limit=5';
-    //$jackett_url = $cfg['jackett_srv'] . $cfg['jackett_api'] .'/indexers/'. $indexer . '/results/torznab/api?apikey=' . $cfg['jackett_key'] . '&t=movie&cat=2000&q=';
+    //api?apikey=' . $cfg['jackett_key'] . '&t=search&cat=2000&extended=1&q=';
+    //api?apikey=' . $cfg['jackett_key'] . '&t=tvsearch&extended=1&q=&limit=5';
+    //api?apikey=' . $cfg['jackett_key'] . '&t=movie&cat=2000&q=';
     $jackett_url = $cfg['jackett_srv'] . $cfg['jackett_api'] . '/indexers/' . $indexer . '/results/torznab/api?t=search&extended=1&apikey=' . $cfg['jackett_key'] . '&limit=' . $limit;
-    //echo $jackett_url . "</br>";
 
     return curl_get_jackett($jackett_url);
 }
@@ -98,9 +95,8 @@ function jackett_get_caps($indexer) {
 function jackett_search_movies($words, $indexer, $limit = null) {
     global $cfg;
 
-    if (empty($limit)) {
-        $limit = $cfg['jacket_results'];
-    }
+    empty($limit) ? $limit = $cfg['jacket_results'] : null;
+
 
     $jackett_url = $cfg['jackett_srv'] . $cfg['jackett_api'] . '/indexers/' . $indexer . '/results/torznab/api?apikey=' . $cfg['jackett_key'] . '&t=search&extended=1&cat=2000&q=' . $words . '&limit=' . $limit;
 
@@ -110,9 +106,8 @@ function jackett_search_movies($words, $indexer, $limit = null) {
 function jackett_search_shows($words, $indexer, $limit = null) {
     global $cfg;
 
-    if (empty($limit)) {
-        $limit = $cfg['jacket_results'];
-    }
+    empty($limit) ? $limit = $cfg['jacket_results'] : null;
+    
     $jackett_url = $cfg['jackett_srv'] . $cfg['jackett_api'] . '/indexers/' . $indexer . '/results/torznab/api?apikey=' . $cfg['jackett_key'] . '&t=search&extended=1&cat=5000&q=' . $words . '&limit=' . $limit;
 
     return curl_get_jackett($jackett_url);
@@ -141,7 +136,6 @@ function jackett_prep_movies($movies_results) {
                 'ilink' => 'movies_torrent',
                 'guid' => $movie['guid'],
                 'title' => $movie['title'],
-                'lang' => '',
                 'release' => $movie['pubDate'],
                 'size' => $movie['size'],
                 'plot' => $description,
@@ -167,7 +161,6 @@ function jackett_prep_movies($movies_results) {
                     'ilink' => 'movies_torrent',
                     'guid' => $movie['guid'],
                     'title' => $movie['title'],
-                    'lang' => '',
                     'release' => $movie['pubDate'],
                     'size' => $movie['size'],
                     'plot' => $description,
@@ -217,7 +210,6 @@ function jackett_prep_shows($shows_results) {
                 'ilink' => 'shows_torrent',
                 'guid' => $show['guid'],
                 'title' => $show['title'],
-                'lang' => $show['language'],
                 'release' => $show['pubDate'],
                 'size' => $show['size'],
                 'plot' => $description,
@@ -238,12 +230,12 @@ function jackett_prep_shows($shows_results) {
                 }
                 !empty($show['coverurl']) ? $poster = $show['coverurl'] : $poster = '';
                 !empty($show['description']) ? $description = $show['description'] : $description = '';
+
                 $shows[] = [
                     'id' => '',
                     'ilink' => 'shows_torrent',
                     'guid' => $show['guid'],
                     'title' => $show['title'],
-                    'lang' => '',
                     'release' => $show['pubDate'],
                     'size' => $show['size'],
                     'plot' => $description,

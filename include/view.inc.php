@@ -67,6 +67,7 @@ function view() {
 
 function view_extra_movies($item, $opt = null) {
     global $LNG;
+    
     $extra = '';
 
     $extra .= '<form method="GET" action="">';
@@ -181,25 +182,14 @@ function view_seasons($id) {
 
         if (isset($_GET['season']) && $_GET['season'] == $i) {
             $episode_data = '<div class="divTable">';
-            $episode_data .= '<div class="divTableRow">';
-            $episode_data .= '<div class="divTableCellEpisodes"></div>';
-            $episode_data .= '<div class="divTableCellEpisodes"></div>';
-            $episode_data .= '<div class="divTableCellEpisodes">';
-            $episode_list = '1';
-            $n_episodes = $seasons[$i]['n_episodes'];
-            for ($a = 2; $a <= $n_episodes; $a++) {
-                $episode_list .= ',' . $a;
-            }
-            $episode_data .= '<a class="episode_link" href="' . $iurl . '&wanted=1&season=' . $i . '&episode=' . $episode_list . '">' . $LNG['L_WANT_ALL'] . '</a>';
-            $episode_data .= '</div>';
-            $episode_data .= '</div>';
-
+            $have_episodes = [];
             foreach ($seasons[$i]['episodes'] as $num => $episode) {
                 $episode_data .= '<div class="divTableRow">';
 
                 $have = check_if_have_show($id, $i, $num);
                 $episode_data .= '<div class="divTableCellEpisodes">' . $num . '</div>';
                 if ($have !== false) {
+                    $have_episodes[] = $num;
                     $episode_data .= '<div class="divTableCellEpisodes" style="color:yellow;">' . $episode['title'] . '</div>';
                 } else {
                     $episode_data .= '<div class="divTableCellEpisodes">' . $episode['title'] . '</div>';
@@ -212,7 +202,23 @@ function view_seasons($id) {
                 $episode_data .= '</div>';
             }
 
-            $episode_data .= '</div>';
+            $episode_data .= '<div class="divTableRow">';
+            $episode_data .= '<div class="divTableCellEpisodes"></div>';
+            $episode_data .= '<div class="divTableCellEpisodes"></div>';
+            $episode_data .= '<div class="divTableCellEpisodes">';
+            $episode_list = '';
+            $n_episodes = $seasons[$i]['n_episodes'];
+            for ($a = 1; $a <= $n_episodes; $a++) {
+                if (!in_array($a, $have_episodes)) {
+                    if ($a == $n_episodes) {
+                        $episode_list .= $a;
+                    } else {
+                        $episode_list .= $a . ',';
+                    }
+                }
+            }
+            $episode_data .= '<a class="episode_link" href="' . $iurl . '&wanted=1&season=' . $i . '&episode=' . $episode_list . '">' . $LNG['L_WANT_ALL'] . '</a>';
+            $episode_data .= '</div></div></div>';
         }
     }
     $seasons_data .= '<br/>' . $episode_data;
@@ -250,7 +256,7 @@ function wanted_episode($id, $season, $episodes) {
     $episodes = explode(',', $episodes);
 
     foreach ($episodes as $episode) {
-
+        $episode = trim($episode);
         if (strlen($episode) == 1) {
             $episode = "0" . $episode;
         }
