@@ -27,6 +27,12 @@ hr {
     color: #ff5b5b;
 }
 
+select {
+    height: 28px;
+    font-size: 1.1em;
+    margin: 4px;
+}
+
 .debug_border1 {
     border:1px solid red;
 }
@@ -422,4 +428,13 @@ button {
 
 .ident_select {    
     width:300px;  
+}
+
+.action_link {
+    background: #ff5b5b;
+    padding: 5px;
+    text-decoration: none;
+    color: black;
+    border-radius: 0.12em;
+    margin:3px;
 }
