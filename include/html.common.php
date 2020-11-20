@@ -1,10 +1,10 @@
 <?php
 
 /**
- * 
+ *
  *  @author diego@envigo.net
- *  @package 
- *  @subpackage 
+ *  @package
+ *  @subpackage
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  */
 function getMenu() {
@@ -46,7 +46,7 @@ function buildTable($head, $db_ary, $topt = null) {
 
     if ($num_pages > 1) {
         $iurl = basename($_SERVER['REQUEST_URI']);
-        //Avoid duplicate 
+        //Avoid duplicate
         $iurl = preg_replace('/&npage=\d{1,4}/', '', $iurl);
         $iurl = preg_replace('/&search_type=shows/', '', $iurl);
         $iurl = preg_replace('/&search_type=movies/', '', $iurl);
@@ -60,7 +60,7 @@ function buildTable($head, $db_ary, $topt = null) {
 
             if (isset($_GET['npage']) && ($_GET['npage'] == $i)) {
                 if (isset($topt['search_type']) && ($_GET['search_type'] != $topt['search_type'])) {
-                    
+
                 } else {
                     $link_npage_class .= '_selected';
                 }
@@ -127,7 +127,7 @@ function build_item($item, $detail = null) {
             $item['poster'] = $cfg['img_url'] . '/not_available.jpg';
         } else {
             if ($cfg['CACHE_IMAGES']) {
-                $cache_img_response = get_and_cache_img($item['poster']);
+                $cache_img_response = cacheImg($item['poster']);
                 if ($cache_img_response !== false) {
                     $item['poster'] = $cache_img_response;
                 }
@@ -140,25 +140,6 @@ function build_item($item, $detail = null) {
     }
 
     return $page;
-}
-
-function get_and_cache_img($img_url) {
-    global $cfg;
-
-    if (!is_writeable($_SERVER['DOCUMENT_ROOT'] . $cfg['REL_PATH'] . $cfg['CACHE_IMAGES_PATH'])) {
-        return false;
-    }
-
-    $file_name = basename($img_url);
-    $img_path = $_SERVER['DOCUMENT_ROOT'] . $cfg['REL_PATH'] . $cfg['CACHE_IMAGES_PATH'] . '/' . $file_name;
-
-    if (
-            file_exists($img_path) ||
-            file_put_contents($img_path, file_get_contents($img_url)) !== false
-    ) {
-        return $cfg['REL_PATH'] . $cfg['CACHE_IMAGES_PATH'] . '/' . $file_name;
-    }
-    return false;
 }
 
 function msg_box($msg) {

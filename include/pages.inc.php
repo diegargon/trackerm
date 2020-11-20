@@ -129,13 +129,13 @@ function page_tmdb() {
     $page = getTpl('page_tmdb', array_merge($LNG, $tdata));
 
     if (!empty($_GET['search_movies'])) {
-        $movies = db_search_movies(trim($_GET['search_movies']));
+        $movies = mediadb_searchMovies(trim($_GET['search_movies']));
         $topt['search_type'] = 'movies';
         !empty($movies) ? $page .= buildTable('L_DB', $movies, $topt) : null;
     }
 
     if (!empty($_GET['search_shows'])) {
-        $shows = db_search_shows(trim($_GET['search_shows']));
+        $shows = mediadb_searchShows(trim($_GET['search_shows']));
         $topt['search_type'] = 'shows';
         !empty($shows) ? $page .= buildTable('L_DB', $shows, $topt) : null;
     }
@@ -253,9 +253,9 @@ function page_identify() {
 
     if (!empty($_POST['submit_title'])) {
         if ($media_type == 'movies') {
-            $db_media = db_search_movies($_POST['submit_title']);
+            $db_media = mediadb_searchMovies($_POST['submit_title']);
         } else {
-            $db_media = db_search_shows($_POST['submit_title']);
+            $db_media = mediadb_searchShows($_POST['submit_title']);
         }
         $results_opt = '';
         if (!empty($db_media)) {

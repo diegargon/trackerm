@@ -181,7 +181,7 @@ function jackett_prep_movies($movies_results) {
 
         //add ID's
         foreach ($movies as $key => $movie) {
-            $id = $db->getIdbyField('jackett_movies', 'guid', $movie['guid']);
+            $id = $db->getIdByField('jackett_movies', 'guid', $movie['guid']);
             $movies[$key]['id'] = $id;
         }
     }
@@ -255,7 +255,7 @@ function jackett_prep_shows($shows_results) {
 
         //add ID's
         foreach ($shows as $key => $show) {
-            $id = $db->getIdbyField('jackett_shows', 'guid', $show['guid']);
+            $id = $db->getIdByField('jackett_shows', 'guid', $show['guid']);
             $shows[$key]['id'] = $id;
         }
     }

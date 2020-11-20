@@ -1,13 +1,13 @@
 <?php
 
 /**
- * 
+ *
  *  @author diego@envigo.net
- *  @package 
- *  @subpackage 
+ *  @package
+ *  @subpackage
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  */
-function db_search_movies($search) {
+function themoviedb_searchMovies($search) {
     global $cfg;
 
     $search = preg_replace('/\d{4}/', '', $search); //moviedb no encuentra con año si va en el titulo lo quitamos
@@ -17,12 +17,12 @@ function db_search_movies($search) {
 
     $data = curl_get_json($url);
 
-    (isset($data['results'])) ? $movies = db_prep('movies', $data['results']) : null;
+    (isset($data['results'])) ? $movies = themoviedb_prep('movies', $data['results']) : null;
 
     return isset($movies) ? $movies : null;
 }
 
-function db_search_shows($search) {
+function themoviedb_searchShows($search) {
     global $cfg;
 
     $search = preg_replace('/\d{4}/', '', $search); //moviedb no encuentra con año si va en el titulo lo quitamos
@@ -32,12 +32,12 @@ function db_search_shows($search) {
 
     $data = curl_get_json($url);
 
-    (isset($data['results'])) ? $shows = db_prep('shows', $data['results']) : null;
+    (isset($data['results'])) ? $shows = themoviedb_prep('shows', $data['results']) : null;
 
     return isset($shows) ? $shows : null;
 }
 
-function db_prep($type, $items) {
+function themoviedb_prep($type, $items) {
     global $db;
 
     $img_path = 'https://image.tmdb.org/t/p/w500';
@@ -89,15 +89,14 @@ function db_prep($type, $items) {
 
     if (!empty($fitems)) {
         foreach ($fitems as $key => $fitem) {
-            $id = $db->getIdbyField('tmdb_search', 'themoviedb_id', $fitem['themoviedb_id']);
+            $id = $db->getIdByField('tmdb_search', 'themoviedb_id', $fitem['themoviedb_id']);
             $fitems[$key]['id'] = $id;
         }
     }
-
     return isset($fitems) ? $fitems : false;
 }
 
-function db_get_seasons($id) {
+function themoviedb_getSeasons($id) {
     global $cfg;
 
     $seasons_url = 'https://api.themoviedb.org/3/tv/' . $id . '?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['LANG'];
@@ -112,18 +111,18 @@ function db_get_seasons($id) {
             $seasons_url = 'https://api.themoviedb.org/3/tv/' . $id . '/season/' . $i . '?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['LANG'];
             $episodes_data[$i] = curl_get_json($seasons_url);
         }
-        return db_shows_details_prep($id, $seasons_data, $episodes_data);
+        return themoviedb_showsDetails_prep($id, $seasons_data, $episodes_data);
     }
 
     return false;
 }
 
-function db_shows_details_prep($id, $seasons_data, $episodes_data) {
+function themoviedb_showsDetailsPrep($id, $seasons_data, $episodes_data) {
     global $db;
 
     $item = [];
 
-    $lastid = $db->getLastID('shows_details');
+    $lastid = $db->getLastId('shows_details');
 
     $item[$lastid]['id'] = $id;
     $item[$lastid]['themoviedb_id'] = $id;
@@ -150,7 +149,7 @@ function db_shows_details_prep($id, $seasons_data, $episodes_data) {
     return $db->getItemByField('shows_details', 'themoviedb_id', $id);
 }
 
-function db_get_byid($id, $table) {
+function themoviedb_getById($id, $table) {
     global $db;
 
     $search_db = $db->getTableData($table);
@@ -163,7 +162,7 @@ function db_get_byid($id, $table) {
     return false;
 }
 
-function db_get_by_db_id($id, $table) {
+function themoviedb_getByDbId($id, $table) {
     global $db;
 
     $search_db = $db->getTableData($table);
@@ -176,7 +175,7 @@ function db_get_by_db_id($id, $table) {
     return false;
 }
 
-function db_get_popular() {
+function themoviedb_getPopular() {
     /*
       https://api.themoviedb.org/3/movie/popular?api_key=<<api_key>>&language=en-US&page=1
       https://api.themoviedb.org/3/tv/popular?api_key=<<api_key>>&language=en-US&page=1

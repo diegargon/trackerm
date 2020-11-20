@@ -84,7 +84,7 @@ class DB {
         return $this->tables[$table]['data'][$id];
     }
 
-    function getIdbyField($table, $field, $field_value) {
+    function getIdByField($table, $field, $field_value) {
         !isset($this->tables[$table]) ? $this->loadTable($table) : null;
         foreach ($this->tables[$table]['data'] as $item) {
             if ($item[$field] == $field_value) {
@@ -94,7 +94,7 @@ class DB {
         return false;
     }
 
-    function getItembyField($table, $field, $field_value) {
+    function getItemByField($table, $field, $field_value) {
         !isset($this->tables[$table]) ? $this->loadTable($table) : null;
         if (!empty($this->tables[$table]['data'])) {
             foreach ($this->tables[$table]['data'] as $item) {
@@ -119,7 +119,7 @@ class DB {
         return count($this->tables[$table]['data']);
     }
 
-    public function getLastID($table) {
+    public function getLastId($table) {
         $this->loadTable($table);
 
         if (!empty($this->tables[$table]['info']['last_id'])) {
@@ -155,7 +155,7 @@ class DB {
         return $this->saveTable($table);
     }
 
-    public function updateRecordByID($table, $id, $val_ary) {
+    public function updateRecordById($table, $id, $val_ary) {
         $this->getTableData($table);
 
         foreach ($val_ary as $key => $val) {

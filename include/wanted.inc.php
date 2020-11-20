@@ -1,10 +1,10 @@
 <?php
 
 /**
- * 
+ *
  *  @author diego@envigo.net
- *  @package 
- *  @subpackage 
+ *  @package
+ *  @subpackage
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  */
 function wanted_movies($wanted_id) {
@@ -15,14 +15,14 @@ function wanted_movies($wanted_id) {
 
     $wanted_type = 'movies';
 
-    $item = db_get_by_db_id($wanted_id, 'tmdb_search');
+    $item = mediadb_getByDbId($wanted_id, 'tmdb_search');
 
     if ($item === false) {
         return false;
     }
 
     if (isset($_POST['submit_wanted'])) {
-        $id = $db->getLastID('wanted');
+        $id = $db->getLastId('wanted');
         $wanted_item[$id]['id'] = $id;
         $wanted_item[$id]['themoviedb_id'] = $item['themoviedb_id'];
         $wanted_item[$id]['title'] = $item['title'];
@@ -45,4 +45,38 @@ function wanted_movies($wanted_id) {
     }
 
     return $item;
+}
+
+function wanted_episode($id, $season, $episodes) {
+    global $db, $cfg;
+
+    $wanted_item = [];
+    //echo $id .':'. $season .':'. $episode .'<br>';
+    if (strlen($season) == 1) {
+        $season = "0" . $season;
+    }
+    $episodes = explode(',', $episodes);
+
+    foreach ($episodes as $episode) {
+        $episode = trim($episode);
+        if (strlen($episode) == 1) {
+            $episode = "0" . $episode;
+        }
+
+        $item = $db->getItemByField('tmdb_search', 'themoviedb_id', $id);
+        $title_search = $item['title'] . ' S' . $season . 'E' . $episode;
+
+        $wanted_item[$id]['id'] = $db->getLastId('wanted');
+        $wanted_item[$id]['themoviedb_id'] = $item['themoviedb_id'];
+        $wanted_item[$id]['title'] = $title_search;
+        $wanted_item[$id]['qualitys'] = $cfg['TORRENT_QUALITYS_PREFS'];
+        $wanted_item[$id]['ignores'] = $cfg['TORRENT_IGNORES_PREFS'];
+        $wanted_item[$id]['added'] = time();
+        $wanted_item[$id]['day_check'] = 'L_DAY_ALL';
+        $wanted_item[$id]['type'] = 'shows';
+        $wanted_item[$id]['season'] = $season;
+        $wanted_item[$id]['episode'] = $episode;
+
+        $db->addUniqElements('wanted', $wanted_item, 'title');
+    }
 }

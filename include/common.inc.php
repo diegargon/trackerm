@@ -19,14 +19,15 @@ require('include/pages.inc.php');
 require('include/curl.inc.php');
 require('include/file.utils.php');
 require('include/transmission.inc.php');
-require('include/biblio-movies.inc.php');
-require('include/biblio-shows.inc.php');
+require('include/biblio.inc.php');
 require('include/biblio-common.inc.php');
 require('include/view.inc.php');
 require('include/' . $cfg['search_db'] . '.inc.php');
+require('include/mediadb.inc.php');
 require('include/jackett.inc.php');
 require('include/prefs.inc.php');
 require('include/wanted.inc.php');
+
 
 global $db;
 $db = new DB($cfg['cache']);

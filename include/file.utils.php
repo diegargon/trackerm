@@ -1,10 +1,10 @@
 <?php
 
 /**
- * 
+ *
  *  @author diego@envigo.net
- *  @package 
- *  @subpackage 
+ *  @package
+ *  @subpackage
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  */
 // https://www.php.net/manual/en/function.glob.php#111217
@@ -29,7 +29,7 @@ function findFiles($directory, $extensions = array()) {
     return $files;
 }
 
-# 
+#
 
 function human_filesize($bytes, $decimals = 2) {
     $sz = 'BKMGTP';
@@ -50,5 +50,24 @@ function load_from_file_json($file) {
         return json_decode(file_get_contents($file), true);
     }
 
+    return false;
+}
+
+function cacheImg($img_url) {
+    global $cfg;
+
+    if (!is_writeable($_SERVER['DOCUMENT_ROOT'] . $cfg['REL_PATH'] . $cfg['CACHE_IMAGES_PATH'])) {
+        return false;
+    }
+
+    $file_name = basename($img_url);
+    $img_path = $_SERVER['DOCUMENT_ROOT'] . $cfg['REL_PATH'] . $cfg['CACHE_IMAGES_PATH'] . '/' . $file_name;
+
+    if (
+            file_exists($img_path) ||
+            file_put_contents($img_path, file_get_contents($img_url)) !== false
+    ) {
+        return $cfg['REL_PATH'] . $cfg['CACHE_IMAGES_PATH'] . '/' . $file_name;
+    }
     return false;
 }

@@ -23,7 +23,7 @@ function rebuild($media_type, $path) {
     }
 
     $media = $db->getTableData($db_file);
-    $last_id = $db->getLastID($db_file);
+    $last_id = $db->getLastId($db_file);
 
     foreach ($files as $file) {
         if ($media === false ||
@@ -77,78 +77,6 @@ function rebuild($media_type, $path) {
     isset($items) ? $db->addElements($db_file, $items) : null;
 
     return true;
-}
-
-function identify_media($type, $media) {
-    global $LNG, $cfg;
-
-    $titles = '';
-    $i = 0;
-    $uniq_shows = [];
-
-    $iurl = basename($_SERVER['REQUEST_URI']);
-    $iurl = preg_replace('/&media_type=shows/', '', $iurl);
-    $iurl = preg_replace('/&media_type=movies/', '', $iurl);
-    $iurl = preg_replace('/&ident_delete=\d{1,4}/', '', $iurl);
-
-    foreach ($media as $item) {
-        if (empty($item['title'])) {
-            if ($i >= $cfg['max_identify_items']) {
-                break;
-            }
-            if ($type == 'movies') {
-                $db_media = db_search_movies($item['predictible_title']);
-            } else if ($type == 'shows') {
-                //var_dump($item);
-                if ((array_search($item['predictible_title'], $uniq_shows)) === false) {
-                    $db_media = db_search_shows($item['predictible_title']);
-                    $uniq_shows[] = $item['predictible_title'];
-                } else {
-                    continue;
-                }
-            } else {
-                return false;
-            }
-            $results_opt = '';
-            if (!empty($db_media)) {
-
-                foreach ($db_media as $db_item) {
-                    $year = trim(substr($db_item['release'], 0, 4));
-                    $results_opt .= '<option value="' . $db_item['id'] . '">';
-                    $results_opt .= $db_item['title'];
-                    !empty($year) ? $results_opt .= ' (' . $year . ')' : null;
-                    $results_opt .= '</option>';
-                }
-            }
-            $results_opt .= '<option value="">' . $LNG['L_NOID'] . '</option>';
-            $titles .= '<div class="divTableRow"><div class="divTableCellID">' . $item['predictible_title'] . '</div>';
-            $titles .= '<div class="divTableCellID">';
-            if ($type == 'movies') {
-                $titles .= '<select class="ident_select" name="mult_movies_select[' . $item['id'] . ']">' . $results_opt . '</select>';
-            } else if ($type == 'shows') {
-                $titles .= '<select class="ident_select" name="mult_shows_select[' . $item['id'] . ']">' . $results_opt . '</select>';
-            }
-            $titles .= '</div>';
-            $titles .= '<div class="divTableCellID">';
-            $titles .= '<span><a class="action_link" href="' . $iurl . '&media_type=' . $type . '&ident_delete=' . $item['id'] . '">' . $LNG['L_DELETE'] . '</a></span>';
-            $titles .= '<span><a class="action_link" href="?page=identify&media_type=' . $type . '&identify=' . $item['id'] . '">' . $LNG['L_MORE'] . '</a></span>';
-            $titles .= '</div>';
-            $titles .= '</div>';
-
-            $i++;
-        }
-    }
-
-    if (!empty($titles)) {
-        $tdata['titles'] = $titles;
-        $tdata['type'] = $type;
-        $tdata['head'] = $LNG['L_IDENT_' . strtoupper($type) . ''];
-
-        $table = getTpl('identify', array_merge($LNG, $tdata));
-
-        return $table;
-    }
-    return false;
 }
 
 function getFileTitle($file) {
@@ -331,12 +259,84 @@ function getFileTags($file_name) {
     return $tags;
 }
 
+function identify_media($type, $media) {
+    global $LNG, $cfg;
+
+    $titles = '';
+    $i = 0;
+    $uniq_shows = [];
+
+    $iurl = basename($_SERVER['REQUEST_URI']);
+    $iurl = preg_replace('/&media_type=shows/', '', $iurl);
+    $iurl = preg_replace('/&media_type=movies/', '', $iurl);
+    $iurl = preg_replace('/&ident_delete=\d{1,4}/', '', $iurl);
+
+    foreach ($media as $item) {
+        if (empty($item['title'])) {
+            if ($i >= $cfg['max_identify_items']) {
+                break;
+            }
+            if ($type == 'movies') {
+                $db_media = mediadb_searchMovies($item['predictible_title']);
+            } else if ($type == 'shows') {
+                //var_dump($item);
+                if ((array_search($item['predictible_title'], $uniq_shows)) === false) {
+                    $db_media = mediadb_searchShows($item['predictible_title']);
+                    $uniq_shows[] = $item['predictible_title'];
+                } else {
+                    continue;
+                }
+            } else {
+                return false;
+            }
+            $results_opt = '';
+            if (!empty($db_media)) {
+
+                foreach ($db_media as $db_item) {
+                    $year = trim(substr($db_item['release'], 0, 4));
+                    $results_opt .= '<option value="' . $db_item['id'] . '">';
+                    $results_opt .= $db_item['title'];
+                    !empty($year) ? $results_opt .= ' (' . $year . ')' : null;
+                    $results_opt .= '</option>';
+                }
+            }
+            $results_opt .= '<option value="">' . $LNG['L_NOID'] . '</option>';
+            $titles .= '<div class="divTableRow"><div class="divTableCellID">' . $item['predictible_title'] . '</div>';
+            $titles .= '<div class="divTableCellID">';
+            if ($type == 'movies') {
+                $titles .= '<select class="ident_select" name="mult_movies_select[' . $item['id'] . ']">' . $results_opt . '</select>';
+            } else if ($type == 'shows') {
+                $titles .= '<select class="ident_select" name="mult_shows_select[' . $item['id'] . ']">' . $results_opt . '</select>';
+            }
+            $titles .= '</div>';
+            $titles .= '<div class="divTableCellID">';
+            $titles .= '<span><a class="action_link" href="' . $iurl . '&media_type=' . $type . '&ident_delete=' . $item['id'] . '">' . $LNG['L_DELETE'] . '</a></span>';
+            $titles .= '<span><a class="action_link" href="?page=identify&media_type=' . $type . '&identify=' . $item['id'] . '">' . $LNG['L_MORE'] . '</a></span>';
+            $titles .= '</div>';
+            $titles .= '</div>';
+
+            $i++;
+        }
+    }
+
+    if (!empty($titles)) {
+        $tdata['titles'] = $titles;
+        $tdata['type'] = $type;
+        $tdata['head'] = $LNG['L_IDENT_' . strtoupper($type) . ''];
+
+        $table = getTpl('identify', array_merge($LNG, $tdata));
+
+        return $table;
+    }
+    return false;
+}
+
 function submit_ident($type, $items) {
     global $db;
 
     foreach ($items as $my_id => $db_id) {
         if (!empty($db_id)) {
-            $db_item = db_get_byid($db_id, 'tmdb_search');
+            $db_item = mediadb_getById($db_id, 'tmdb_search');
 
             !empty($db_item['title']) ? $update_fields['title'] = $db_item['title'] : null;
             !empty($db_item['name']) ? $update_fields['title'] = $db_item['name'] : null;
@@ -352,7 +352,7 @@ function submit_ident($type, $items) {
             !empty($db_item['plot']) ? $update_fields['plot'] = $db_item['plot'] : null;
             !empty($db_item['release']) ? $update_fields['release'] = $db_item['release'] : null;
             if ($type == 'movies') {
-                $db->updateRecordByID('biblio-movies', $my_id, $update_fields);
+                $db->updateRecordById('biblio-movies', $my_id, $update_fields);
             } else if ($type == 'shows') {
                 $db->updateRecordsBySameField('biblio-shows', $my_id, 'predictible_title', $update_fields);
             }

@@ -39,7 +39,7 @@ function view() {
         $other['seasons_data'] = view_seasons($item['themoviedb_id']);
     }
     if (!empty($item['poster']) && $cfg['CACHE_IMAGES']) {
-        $cache_img_response = get_and_cache_img($item['poster']);
+        $cache_img_response = cacheImg($item['poster']);
         if ($cache_img_response !== false) {
             $item['poster'] = $cache_img_response;
         }
@@ -92,7 +92,7 @@ function view_extra_movies($item, $opt = null) {
     if (
             isset($_GET['more_movies']) || (!empty($opt['auto_show_db']) && !isset($_GET['more_torrents']))
     ) {
-        $movies = db_search_movies($stitle);
+        $movies = mediadb_searchMovies($stitle);
         !empty($movies) ? $extra .= buildTable('L_DB', $movies, $opt) : null;
     }
 
@@ -138,7 +138,7 @@ function view_extra_shows($item, $opt) {
     if (
             isset($_GET['more_shows']) || (!empty($opt['auto_show_db']) && !isset($_GET['more_torrents']))
     ) {
-        $shows = db_search_shows($stitle);
+        $shows = mediadb_searchShows($stitle);
         !empty($shows) ? $extra .= buildTable('L_DB', $shows, $opt) : null;
     }
 
@@ -160,7 +160,7 @@ function view_seasons($id) {
     $item = $db->getItemByField('shows_details', 'themoviedb_id', $id);
     if (
             ($item === false) &&
-            ( ($item = db_get_seasons($id)) === false )
+            ( ($item = mediadb_getSeasons($id)) === false )
     ) {
         return false;
     }
@@ -247,39 +247,4 @@ function check_if_have_show($id, $season, $episode) {
     }
 
     return false;
-}
-
-function wanted_episode($id, $season, $episodes) {
-    global $db, $cfg;
-
-    $wanted_item = [];
-    //echo $id .':'. $season .':'. $episode .'<br>';
-    if (strlen($season) == 1) {
-        $season = "0" . $season;
-    }
-    $episodes = explode(',', $episodes);
-
-    foreach ($episodes as $episode) {
-        $episode = trim($episode);
-        if (strlen($episode) == 1) {
-            $episode = "0" . $episode;
-        }
-
-        $item = $db->getItembyField('tmdb_search', 'themoviedb_id', $id);
-        $title_search = $item['title'] . ' S' . $season . 'E' . $episode;
-
-
-        $wanted_item[$id]['id'] = $db->getLastID('wanted');
-        $wanted_item[$id]['themoviedb_id'] = $item['themoviedb_id'];
-        $wanted_item[$id]['title'] = $title_search;
-        $wanted_item[$id]['qualitys'] = $cfg['TORRENT_QUALITYS_PREFS'];
-        $wanted_item[$id]['ignores'] = $cfg['TORRENT_IGNORES_PREFS'];
-        $wanted_item[$id]['added'] = time();
-        $wanted_item[$id]['day_check'] = 'L_DAY_ALL';
-        $wanted_item[$id]['type'] = 'shows';
-        $wanted_item[$id]['season'] = $season;
-        $wanted_item[$id]['episode'] = $episode;
-
-        $db->addUniqElements('wanted', $wanted_item, 'title');
-    }
 }
