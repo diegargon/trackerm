@@ -84,6 +84,18 @@ function themoviedb_prep($type, $items) {
         } else {
             $fitems[$id]['release'] = '';
         }
+
+        if ($type == 'movies') {
+            $library_item = $db->getItemByField('biblio-movies', 'themoviedb_id', $item['id']);
+            if ($library_item !== false) {
+                $fitems[$id]['in_library'] = $library_item['id'];
+            }
+        } else if ($type == 'shows') {
+            $library_item = $db->getItemByField('biblio-shows', 'themoviedb_id', $item['id']);
+            if ($library_item !== false) {
+                $fitems[$id]['in_library'] = $library_item['id'];
+            }
+        }
         $db->addUniqElements('tmdb_search', $fitems, 'themoviedb_id');
     }
 

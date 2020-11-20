@@ -59,7 +59,18 @@
                     <?= $tdata['seasons_data'] ?>
                 <?php } ?>
                 <div class="view_actions">
-                    <?php if (!empty($tdata['wanted'])) { ?>
+                    <?php
+                    if (!empty($tdata['in_library'])) {
+                        ?>
+                        <span class="action_link">
+                            <?php if ($tdata['ilink'] == 'movies_db') { ?>
+                                <a href="?page=view&id=<?= $tdata['in_library'] ?>&type=movies_library"><?= $tdata['L_HAVEIT'] ?></a>
+                            <?php } else if ($tdata['ilink'] == 'shows_db') { ?>
+                                <a href="?page=view&id=<?= $tdata['in_library'] ?>&type=shows_library"><?= $tdata['L_HAVEIT'] ?></a>
+                            <?php } ?>
+                        </span>
+                    <?php } ?>
+                    <?php if (!empty($tdata['wanted']) && empty($tdata['in_library'])) { ?>
                         <a class="action_link" href="?page=wanted&id=<?= $tdata['themoviedb_id'] ?>&type=<?= $tdata['type'] ?>"><?= $tdata['L_WANTED'] ?></a>
                     <?php } ?>
                     <?php if (!empty($tdata['reidentify'])) { ?>

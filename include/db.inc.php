@@ -76,16 +76,29 @@ class DB {
     public function getUniqKey($table, $item) {
         !isset($this->tables[$table]) ? $this->loadTable($table) : null;
 
+        if (!isset($this->tables[$table]['data'][$item])) {
+            return false;
+        }
+
         return $this->tables[$table]['data'][$item];
     }
 
     function getItemByID($table, $id) {
         !isset($this->tables[$table]) ? $this->loadTable($table) : null;
+
+        if (!isset($this->tables[$table]['data'][$id])) {
+            return false;
+        }
         return $this->tables[$table]['data'][$id];
     }
 
     function getIdByField($table, $field, $field_value) {
         !isset($this->tables[$table]) ? $this->loadTable($table) : null;
+
+        if (!isset($this->tables[$table]['data'])) {
+            return false;
+        }
+
         foreach ($this->tables[$table]['data'] as $item) {
             if ($item[$field] == $field_value) {
                 return $item['id'];
@@ -96,6 +109,7 @@ class DB {
 
     function getItemByField($table, $field, $field_value) {
         !isset($this->tables[$table]) ? $this->loadTable($table) : null;
+
         if (!empty($this->tables[$table]['data'])) {
             foreach ($this->tables[$table]['data'] as $item) {
                 if ($item[$field] == $field_value) {
@@ -109,6 +123,11 @@ class DB {
 
     function deleteById($table, $id) {
         !isset($this->tables[$table]) ? $this->loadTable($table) : null;
+
+        if (!isset($this->tables[$table]['data'][$id])) {
+            return false;
+        }
+
         unset($this->tables[$table]['data'][$id]);
         $this->saveTable($table);
     }
@@ -129,6 +148,10 @@ class DB {
 
     public function getNumElements($table) {
         !isset($this->tables[$table]) ? $this->loadTable($table) : null;
+
+        if (!isset($this->tables[$table]['data'])) {
+            return false;
+        }
 
         return count($this->tables[$table]['data']);
     }
@@ -166,6 +189,7 @@ class DB {
 
     public function setTableData($table, $data) {
         $this->table['data'] = $data;
+
         return $this->saveTable($table);
     }
 

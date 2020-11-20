@@ -1,9 +1,9 @@
 <?php
 /**
- * 
+ *
  *  @author diego@envigo.net
- *  @package 
- *  @subpackage 
+ *  @package
+ *  @subpackage
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  */
 ?>
@@ -32,11 +32,22 @@
                 <span class="item_rating">[<?= $tdata['L_RATING_MIN'] . $tdata['rating'] ?>]</span>
                 <?php
             }
+            if (!empty($tdata['in_library'])) {
+                ?>
+                <span class="action_link">
+                    <?php if ($tdata['ilink'] == 'movies_db') { ?>
+                        <a href="?page=view&id=<?= $tdata['in_library'] ?>&type=movies_library"><?= $tdata['L_HAVEIT'] ?></a>
+                    <?php } else if ($tdata['ilink'] == 'shows_db') { ?>
+                        <a href="?page=view&id=<?= $tdata['in_library'] ?>&type=shows_library"><?= $tdata['L_HAVEIT'] ?></a>
+                    <?php } ?>
+                </span>
+                <?php
+            }
             if (!empty($tdata['download'])) {
                 ?>
                 <span class="item_download_link"><a href="<?= basename($_SERVER['REQUEST_URI']) . '&download=' . rawurlencode($tdata['download']) ?>">[<?= $tdata['L_DOWNLOAD_MIN'] ?>]</a></span>
             <?php } ?>
-        </div>  
+        </div>
 
     </div>
 </div>

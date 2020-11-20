@@ -38,6 +38,18 @@ function view() {
 
     $item = $db->getItemByID($t_type, $id);
 
+    if ($type == 'movies_db') {
+        $library_item = $db->getItemByField('biblio-movies', 'themoviedb_id', $item['themoviedb_id']);
+        if ($library_item !== false) {
+            $item['in_library'] = $library_item['id'];
+        }
+    } else if ($type == 'shows_db') {
+        $library_item = $db->getItemByField('biblio-shows', 'themoviedb_id', $item['themoviedb_id']);
+        if ($library_item !== false) {
+            $item['in_library'] = $library_item['id'];
+        }
+    }
+
     if ($type == 'shows_library' || $type == 'shows_db') {
         $other['seasons_data'] = view_seasons($item['themoviedb_id']);
     }
