@@ -169,6 +169,8 @@ function getFileTitle($file) {
     $regex .= '(?!1080p)'; // M1080p
     $regex .= '(?!M1080)'; // M1080
     $regex .= '(?!BD1080)'; // BD1080
+    $regex .= '(?!2160p)'; // 2160p
+    $regex .= '(?!UHD)'; // UHD
     $regex .= '(?!HD4K)'; //HD4K
     $regex .= '(?!Xvid)'; //XviD
     $regex .= '(?!DVD)'; //DVD
@@ -257,10 +259,24 @@ function getFileTags($file_name) {
     if (stripos($file_name, '1080p') !== false) {
         $tags .= "[1080p]";
     }
+    if (stripos($file_name, '480p') !== false) {
+        $tags .= "[480p]";
+    }
     if (stripos($file_name, 'AC3 5.1') !== false) {
         $tags .= "[AC3 5.1]";
     } else if (stripos($file_name, 'AC3') !== false) {
         $tags .= "[AC3]";
+    }
+    if (stripos($file_name, 'DVDRip') !== false) {
+        $tags .= "[DVDRip]";
+    } else if (stripos($file_name, 'DVD') !== false) {
+        $tags .= "[DVD]";
+    }
+    if (stripos($file_name, 'DDP5.1') !== false) {
+        $tags .= "[DDP5.1]";
+    }
+    if (stripos($file_name, 'Xvid') !== false) {
+        $tags .= "[XVID]";
     }
     if (stripos($file_name, 'M1080') !== false) {
         $tags .= "[M1080]";
@@ -274,8 +290,38 @@ function getFileTags($file_name) {
     if (stripos($file_name, 'X264') !== false) {
         $tags .= "[X254]";
     }
+    if (stripos($file_name, 'X265') !== false) {
+        $tags .= "[X265]";
+    }
+    if (stripos($file_name, 'HEVC') !== false) {
+        $tags .= "[HEVC]";
+    }
+    if (stripos($file_name, 'HDR') !== false) {
+        $tags .= "[HDR]";
+    }
+    if (stripos($file_name, 'HD4K') !== false) {
+        $tags .= "[HD4K]";
+    }
     if (stripos($file_name, 'BueRay') !== false) {
         $tags .= "[BluRay]";
+    }
+    if (stripos($file_name, '60fps') !== false) {
+        $tags .= "[60FPS]";
+    }
+    if (stripos($file_name, 'WebRip') !== false) {
+        $tags .= "[WebRip]";
+    }
+    if (stripos($file_name, '3D') !== false) {
+        $tags .= "[3D]";
+    }
+    if (stripos($file_name, 'SCREENER') !== false) {
+        $tags .= "[SCREENER]";
+    }
+    if (stripos($file_name, '2160p') !== false) {
+        $tags .= "[2160p]";
+    }
+    if (stripos($file_name, 'UHD') !== false) {
+        $tags .= "[UHD]";
     }
     $year = getFileYear($file_name);
     if (!empty($year)) {

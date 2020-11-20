@@ -1,4 +1,4 @@
-# tracketm
+# trackerm
 
 Description: 
 Probando a realizar una alternativa Sonarr+Radar sobre servidor web
