@@ -8,7 +8,16 @@
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  */
 function index_page() {
-    return "<p>Nothing here yet</p>";
+    global $cfg, $LNG;
+
+    $home = '<div class="profiles_container">';
+    $home .= '<div class="profile_title">' . $LNG['L_PROFILES'] . '</div>';
+    $home .= '<div class="profiles">';
+    foreach ($cfg['profiles'] as $pid => $profile) {
+        $home .= '<a class="action_link" href="?profile=' . $pid . '">' . strtoupper($profile) . '</a>';
+    }
+    $home .= '</div></div>';
+    return $home;
 }
 
 function page_view() {

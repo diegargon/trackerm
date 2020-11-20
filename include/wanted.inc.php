@@ -32,6 +32,7 @@ function wanted_movies($wanted_id) {
         $wanted_item[$id]['day_check'] = $_POST['check_day'];
         $wanted_item[$id]['last_check'] = '';
         $wanted_item[$id]['type'] = $wanted_type;
+        $wanted_item[$id]['profile'] = $cfg['profile'];
         $db->addUniqElements('wanted', $wanted_item, 'themoviedb_id');
     }
 
@@ -78,6 +79,7 @@ function wanted_episode($id, $season, $episodes) {
         $wanted_item[$id]['type'] = 'shows';
         $wanted_item[$id]['season'] = $season;
         $wanted_item[$id]['episode'] = $episode;
+        $wanted_item[$id]['profile'] = $cfg['profile'];
 
         $db->addUniqElements('wanted', $wanted_item, 'title');
     }

@@ -15,6 +15,9 @@ Puedes ver sceenshots del aspecto actual en /screenshots aunque cambiara que el 
 This proyect it in very very early stage, will change alot between commits and files and database will not be backwards compatible, if you want use
 now and update tomorrow you must probably remove all database entrys in cache and begin identified applications again if errors appears (and going to appear).
 
+Rule: if i update the VERSION  number something important probably change that not be backwards compatible or need edit config or something else important, and  at this point 
+of development it will probably change in the most of the commits.
+
 Select the path (config file only atm) where your movies/shows reside, click on rebuild buttons and identify your movies/shows.
 
 In "Themoviedb" tab you can search for movies/shows and  automatically will show you the torrents, if there is none you can choose 'wanted' and (FEATURE UPCOMMING) 

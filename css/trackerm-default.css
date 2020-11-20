@@ -443,3 +443,22 @@ button {
     border-radius: 0.12em;
     margin:3px;
 }
+
+.profiles_container {
+    border:1px solid #937c00;
+    padding: 10px;    
+    width: min-content;
+}
+
+.profiles {
+    display: inline-flex;
+}
+
+.profiles a {
+    font-size: 1.5em;
+}
+
+.profile_title {
+    margin-bottom: 15px;
+    
+}

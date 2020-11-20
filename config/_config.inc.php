@@ -28,11 +28,9 @@ $cfg['jackett_indexers'] = [
     3 => 'moviesdvdr',
 //     5 => 'rarbg',
 ];
-$cfg['profiles'] = [//TODO
-    1 => 'diego',
-    2 => 'marta',
-    3 => 'xoel',
-    4 => 'invitado'
+$cfg['profile'] = 0;
+$cfg['profiles'] = [
+    0 => 'default',
 ];
 $cfg['max_identify_items'] = 5;
 $cfg['tresults_rows'] = 2;
