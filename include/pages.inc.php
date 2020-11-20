@@ -1,14 +1,14 @@
 <?php
 
 /**
- * 
+ *
  *  @author diego@envigo.net
- *  @package 
- *  @subpackage 
+ *  @package
+ *  @subpackage
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  */
 function index_page() {
-    
+    return "<p>Nothing here yet</p>";
 }
 
 function page_view() {
@@ -157,9 +157,9 @@ function page_torrents() {
         if ($torrent_results !== false) {
             $page .= $torrent_results;
         } else {
-            $error_msg['title'] = $LNG['L_ERROR'] . ':' . $LNG['L_TORRENT'];
-            $error_msg['body'] = $LNG['L_NOTHING_FOUND'];
-            $page .= error_box($error_msg);
+            $box_msg['title'] = $LNG['L_ERROR'] . ':' . $LNG['L_TORRENT'];
+            $box_msg['body'] = $LNG['L_NOTHING_FOUND'];
+            $page .= msg_box($box_msg);
         }
     }
     if (!empty($_GET['search_movies_torrents'])) {
@@ -200,7 +200,7 @@ function page_wanted() {
         $wanted_list_data .= '<div class="wanted_list_container">';
         foreach ($wanted_list as $wanted_item) {
             $wanted_list_data .= '<div class="wanted_list_row">';
-            $wanted_list_data .= '<a href="' . $iurl . '&delete=' . $wanted_item['id'] . '" class="submit_btn">' . $LNG['L_DELETE'] . '</a>';
+            $wanted_list_data .= '<a href="' . $iurl . '&delete=' . $wanted_item['id'] . '" class="action_link">' . $LNG['L_DELETE'] . '</a>';
             $wanted_list_data .= '<span class="tag_id">' . $wanted_item['id'] . '</span>';
             $wanted_list_data .= '<span class="tag_title">' . $wanted_item['title'] . '</span>';
             $wanted_list_data .= '<span class="tag_type">' . $wanted_item['type'] . '</span>';
@@ -219,4 +219,81 @@ function page_wanted() {
         $want['wanted_list'] = $wanted_list_data;
     }
     return getTpl('wanted', array_merge($item, $want, $LNG, $cfg));
+}
+
+function page_identify() {
+    global $LNG, $db;
+
+    $media_type = isset($_GET['media_type']) ? $media_type = $_GET['media_type'] : $media_type = false;
+    $id = isset($_GET['identify']) ? $id = $_GET['identify'] : $id = false;
+
+    if ($media_type === false || $id === false) {
+        $box_msg['title'] = $LNG['L_ERROR'];
+        $box_msg['body'] = $LNG['L_UNKNOWN'];
+        return msg_box($box_msg);
+    }
+
+    $tdata['head'] = '';
+
+    if ($media_type == 'movies') {
+        $item = $db->getItemByID('biblio-movies', $id);
+    } else {
+        $item = $db->getItemByID('biblio-shows', $id);
+    }
+
+    if (isset($_POST['identify']) && isset($_POST['selected'])) {
+
+        submit_ident($media_type, $_POST['selected']);
+
+        return msg_box($msg = ['title' => $LNG['L_SUCCESS'], 'body' => $LNG['L_ADDED_SUCCESSFUL']]);
+    }
+    !empty($_POST['submit_title']) ? $tdata['search_title'] = $_POST['submit_title'] : $tdata['search_title'] = $item['predictible_title'];
+
+    $item_selected = [];
+
+    if (!empty($_POST['submit_title'])) {
+        if ($media_type == 'movies') {
+            $db_media = db_search_movies($_POST['submit_title']);
+        } else {
+            $db_media = db_search_shows($_POST['submit_title']);
+        }
+        $results_opt = '';
+        if (!empty($db_media)) {
+            $select = '';
+
+            foreach ($db_media as $db_item) {
+                //var_dump($db_item);
+                if (!empty($_POST['selected']) && ($db_item['id'] == current($_POST['selected']))) {
+                    $selected = 'selected';
+                    $item_selected = $db_item;
+                } else {
+                    $selected = '';
+                }
+                $year = trim(substr($db_item['release'], 0, 4));
+                $results_opt .= '<option ' . $selected . ' value="' . $db_item['id'] . '">';
+                $results_opt .= $db_item['title'];
+                !empty($year) ? $results_opt .= ' (' . $year . ')' : null;
+                $results_opt .= '</option>';
+            }
+
+            if ($media_type == 'movies') {
+                $select .= '<select onchange="this.form.submit()" class="ident_select" name="selected[' . $id . ']">' . $results_opt . '</select>';
+            } else if ($media_type == 'shows') {
+                $select .= '<select onchange="this.form.submit()" class="ident_select" name="selected[' . $id . ']">' . $results_opt . '</select>';
+            }
+            $tdata['select'] = $select;
+        }
+    }
+
+    if (count($item_selected) > 1) {
+        isset($item_selected['poster']) ? $tdata['selected_poster'] = $item_selected['poster'] : null;
+        isset($item_selected['plot']) ? $tdata['selected_plot'] = $item_selected['plot'] : null;
+    } else {
+        if (isset($db_media) && count($db_media) > 1) {
+            $first_item = current($db_media);
+            isset($first_item['poster']) ? $tdata['selected_poster'] = $first_item['poster'] : null;
+            isset($first_item['plot']) ? $tdata['selected_plot'] = $first_item['plot'] : null;
+        }
+    }
+    return getTpl('identify_adv', array_merge($LNG, $item, $tdata));
 }

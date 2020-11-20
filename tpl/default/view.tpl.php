@@ -11,7 +11,7 @@
 <div class="view_page">
     <div class="view_content">
         <div class="view_poster_container">
-            <img class="view_poster" src="<?= $tdata['poster'] ?>" alt=""/>
+            <img class="view_poster" src="<?= isset($tdata['poster']) ? $tdata['poster'] : null ?>" alt=""/>
         </div>
 
         <div class="view_description_container">
@@ -59,7 +59,10 @@
                     <?= $tdata['seasons_data'] ?>
                 <?php } ?>
                 <?php if (!empty($tdata['wanted'])) { ?>
-                    <div><a href="?page=wanted&id=<?= $tdata['themoviedb_id'] ?>&type=<?= $tdata['type'] ?>">[<?= $tdata['L_WANTED'] ?>]</a></div>
+                    <div><a class="action_link" href="?page=wanted&id=<?= $tdata['themoviedb_id'] ?>&type=<?= $tdata['type'] ?>"><?= $tdata['L_WANTED'] ?></a></div>
+                <?php } ?>
+                <?php if (!empty($tdata['reidentify'])) { ?>
+                    <div><a class="action_link" href="?page=identify&identify=<?= $tdata['id'] ?>&media_type=<?= $tdata['type'] ?>"><?= $tdata['L_IDENTIFY'] ?></a></div>
                 <?php } ?>
                 <hr/>
                 <?php if (!empty($tdata['download'])) { ?>

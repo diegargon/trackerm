@@ -131,6 +131,7 @@ function identify_media($type, $media) {
             $titles .= '</div>';
             $titles .= '<div class="divTableCellID">';
             $titles .= '<span><a class="action_link" href="' . $iurl . '&media_type=' . $type . '&ident_delete=' . $item['id'] . '">' . $LNG['L_DELETE'] . '</a></span>';
+            $titles .= '<span><a class="action_link" href="?page=identify&media_type=' . $type . '&identify=' . $item['id'] . '">' . $LNG['L_MORE'] . '</a></span>';
             $titles .= '</div>';
             $titles .= '</div>';
 

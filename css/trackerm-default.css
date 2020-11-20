@@ -20,7 +20,11 @@ input {
 }
 
 a:link {
-    color: green;
+    color: white;
+}
+
+a:visited {
+    color: #020860;
 }
 
 hr {
@@ -410,7 +414,7 @@ button {
     display: inline-flex;
     padding: 10px;
     border: 1px solid black;
-    background: aliceblue;
+    background: #3ea5ff;
     margin: 5px 5px 5px 1px;
     font-weight: bold;
     text-decoration: none;
@@ -431,6 +435,7 @@ button {
 }
 
 .action_link {
+    display: inline-block;
     background: #ff5b5b;
     padding: 5px;
     text-decoration: none;

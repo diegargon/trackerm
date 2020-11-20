@@ -6,6 +6,8 @@
  *  @package
  *  @subpackage
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
+ *
+ *  en-EN
  */
 global $LNG;
 
@@ -13,6 +15,7 @@ $LNG = [
     'L_ALL' => 'All',
     'L_ADDED' => 'Added',
     'L_ADD' => 'Add',
+    'L_ADDED_SUCCESSFUL' => 'Added Successful',
     'L_COLUMNS' => 'Columnss',
     'L_CATEGORY' => 'Categories',
     'L_DEFAULT' => 'Default',
@@ -31,6 +34,8 @@ $LNG = [
     'L_ERROR' => 'Error',
     'L_EPISODES' => 'Episodes',
     'L_EPISODE' => 'Episode',
+    'L_ERR_BADWAY' => 'Internal error or you doing something inadecuate',
+    'L_FILENAME' => 'File name',
     'L_HOME' => 'Home',
     'L_IDENT_MOVIES' => 'Identify movies',
     'L_IDENT_SHOWS' => 'Identify shows',
@@ -38,8 +43,12 @@ $LNG = [
     'L_LIBRARY' => 'Library',
     'L_MOVIES' => 'Movies',
     'L_MOVIE' => 'Movie',
+    'L_MORE' => 'Más',
     'L_NOID' => 'Unidentifiedr',
     'L_NOTHING_FOUND' => 'Without results',
+    'L_NOEXISTS' => 'No exists',
+    'L_PAGE_NOEXISTS' => 'The page required not exists',
+    'L_PATH' => 'Path',
     'L_POPULARITY' => 'Popularity',
     'L_REBUILD_MOVIES' => 'Rebuild Movies',
     'L_REBUILD_SHOWS' => 'Rebuild Shows',
@@ -60,6 +69,8 @@ $LNG = [
     'L_SEASON' => 'Season',
     'L_SEASONS' => 'Seasons',
     'L_SUBMIT' => 'Submit',
+    'L_SUCCESS' => 'Success',
+    'L_TITLE' => 'Title',
     'L_TORRENT' => 'Torrent',
     'L_TORRENTS' => 'Torrents',
     'L_WANTED' => 'Wanted',

@@ -42,6 +42,12 @@ if (!isset($req_page) || $req_page == '') {
     $body .= page_view();
 } else if ($req_page == 'wanted') {
     $body .= page_wanted();
+} else if ($req_page == 'identify') {
+    $body .= page_identify();
+} else {
+    $box_msg['title'] = $LNG['L_ERROR'] . ' : ' . $LNG['L_NOEXISTS'];
+    $box_msg['body'] = $LNG['L_PAGE_NOEXISTS'];
+    $body .= msg_box($box_msg);
 }
 
 $page = getTpl('html_mstruct', $tdata = ['body' => $body, 'footer' => $footer]);

@@ -161,8 +161,8 @@ function get_and_cache_img($img_url) {
     return false;
 }
 
-function error_box($msg) {
+function msg_box($msg) {
     global $LNG;
 
-    return getTpl('errorbox', array_merge($LNG, $msg));
+    return getTpl('msgbox', array_merge($LNG, $msg));
 }

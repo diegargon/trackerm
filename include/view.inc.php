@@ -16,8 +16,10 @@ function view() {
 
     if ($type == 'movies_library') {
         $t_type = 'biblio-movies';
+        $other['reidentify'] = 1;
     } else if ($type == 'shows_library') {
         $t_type = 'biblio-shows';
+        $other['reidentify'] = 1;
     } else if ($type == 'movies_torrent') {
         $t_type = 'jackett_movies';
     } else if ($type == 'shows_torrent') {
@@ -101,9 +103,9 @@ function view_extra_movies($item, $opt = null) {
         if ($torrent_results !== false) {
             $extra .= $torrent_results;
         } else {
-            $error_msg['title'] = $LNG['L_ERROR'] . ':' . $LNG['L_TORRENT'];
-            $error_msg['body'] = $LNG['L_NOTHING_FOUND'];
-            $extra .= error_box($error_msg);
+            $box_msg['title'] = $LNG['L_ERROR'] . ':' . $LNG['L_TORRENT'];
+            $box_msg['body'] = $LNG['L_NOTHING_FOUND'];
+            $extra .= msg_box($box_msg);
         }
     }
 

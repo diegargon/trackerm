@@ -30,11 +30,12 @@ In Library/Biblioteca you can see your movies/shows, identify, show seasons and 
 
 In the future trackm will track your transmission movie/shows downloads and automatically move to your library path. (not yet available)
 
+WARNING: At this momment i not using any database, just save in json files the data, that will change in the future and break backwards compatibility.
 
 # Lenguaje
     Php+Javascript (Más adelante probablemente Jquery)
 
-# Resumen requisitivos:
+# Resumen requisitos:
 Apache+Php (o similar), Jacket, Transmission, Composer, cuenta+api key themoviedb.org, CRON
 
 # Instalación
@@ -79,5 +80,4 @@ Apache+Php (o similar), Jacket, Transmission, Composer, cuenta+api key themovied
     Quizas en el futuro se añadan otras alternativas pero de momento solo hay esta.
 
 ## Latest Changes
-
     

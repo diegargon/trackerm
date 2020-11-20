@@ -6,6 +6,8 @@
  *  @package
  *  @subpackage
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
+ *
+ *  es-ES
  */
 global $LNG;
 
@@ -13,6 +15,7 @@ $LNG = [
     'L_ALL' => 'Todos',
     'L_ADDED' => 'Añadido',
     'L_ADD' => 'Añadir',
+    'L_ADDED_SUCCESSFUL' => 'Añadido con exito',
     'L_COLUMNS' => 'Columnas',
     'L_CATEGORY' => 'Categorias',
     'L_DEFAULT' => 'Defecto',
@@ -31,6 +34,8 @@ $LNG = [
     'L_ERROR' => 'Error',
     'L_EPISODES' => 'Episodios',
     'L_EPISODE' => 'Episodio',
+    'L_ERR_BADWAY' => 'Error interno o has intentado acceder de forma inadecuada',
+    'L_FILENAME' => 'Nombre del archivo',
     'L_HOME' => 'Home',
     'L_IDENT_MOVIES' => 'Identificación de peliculas',
     'L_IDENT_SHOWS' => 'Identificación de series',
@@ -38,17 +43,20 @@ $LNG = [
     'L_LIBRARY' => 'Biblioteca',
     'L_MOVIES' => 'Peliculas',
     'L_MOVIE' => 'Pelicula',
+    'L_MORE' => 'Más',
     'L_NOID' => 'Sin identificar',
     'L_NOTHING_FOUND' => 'No se han encontrado resultados',
+    'L_NOEXISTS' => 'No existe',
+    'L_PAGE_NOEXISTS' => 'La pagina solicitada no existe',
+    'L_PATH' => 'Ruta',
     'L_POPULARITY' => 'Popularidad',
     'L_REBUILD_MOVIES' => 'Rebuild Peliculas',
     'L_REBUILD_SHOWS' => 'Rebuild Series',
-    'L_RELEASE' => 'Estrenos',
+    'L_RELEASE' => 'Publicado',
     'L_RATING' => 'Puntuación',
     'L_RATING_MIN' => 'R',
     'L_RESULTS' => 'Resultados',
     'L_ROWS' => 'Filas',
-    'L_RELEASE' => 'Publicado',
     'L_SHOWS' => 'Series',
     'L_SHOW' => 'Serie',
     'L_SIZE' => 'Tamaño',
@@ -61,6 +69,8 @@ $LNG = [
     'L_SEASON' => 'Temporada',
     'L_SEASONS' => 'Temporadas',
     'L_SUBMIT' => 'Enviar',
+    'L_SUCCESS' => 'Exito',
+    'L_TITLE' => 'Titulo',
     'L_TORRENT' => 'Torrent',
     'L_TORRENTS' => 'Torrents',
     'L_WANTED' => 'Seguimiento',
