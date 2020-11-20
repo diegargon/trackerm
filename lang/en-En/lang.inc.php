@@ -39,6 +39,7 @@ $LNG = [
     'L_ERR_BADWAY' => 'Internal error or you doing something inadecuate',
     'L_FILENAME' => 'File name',
     'L_HOME' => 'Home',
+    'L_HARDDISK' => 'Hard Disk',
     'L_IDENT_MOVIES' => 'Identify movies',
     'L_IDENT_SHOWS' => 'Identify shows',
     'L_IDENTIFY' => 'Identify',

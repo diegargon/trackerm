@@ -443,22 +443,24 @@ button {
     border-radius: 0.12em;
     margin:3px;
 }
-
-.profiles_container {
-    border:1px solid #937c00;
-    padding: 10px;    
-    width: min-content;
+.info_container {
+    width: 30%;
+}
+.profiles_container, .harddisk_container {
+    border:1px solid #ff5b5b;
+    padding: 10px;
+    border-collapse: collapse;
+    /* width: min-content; */
 }
 
 .profiles {
     display: inline-flex;
 }
 
-.profiles a {
+.profiles, .harddisk  a {
     font-size: 1.5em;
 }
 
-.profile_title {
+.profile_title, .harddisk {
     margin-bottom: 15px;
-    
 }

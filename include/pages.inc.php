@@ -9,14 +9,25 @@
  */
 function index_page() {
     global $cfg, $LNG;
+    $home = '<div class="info_container">';
 
-    $home = '<div class="profiles_container">';
-    $home .= '<div class="profile_title">' . $LNG['L_PROFILES'] . '</div>';
+    $home .= '<div class="profiles_container">';
+    $home .= '<div class="profile_title"><h2>' . $LNG['L_PROFILES'] . '</h2></div>';
     $home .= '<div class="profiles">';
     foreach ($cfg['profiles'] as $pid => $profile) {
         $home .= '<a class="action_link" href="?profile=' . $pid . '">' . strtoupper($profile) . '</a>';
     }
     $home .= '</div></div>';
+
+    $home .= '<div class="harddisk_container">';
+    $home .= '<div class="harddisk_title"><h2>' . $LNG['L_HARDDISK'] . '</h2></div>';
+    $home .= '<div class="harddisk">';
+    $home .= '<span>' . $LNG['L_MOVIES'] . ' : ' . human_filesize(disk_free_space($cfg['MOVIES_PATH'])) . '/' . human_filesize(disk_total_space($cfg['MOVIES_PATH'])) . '</span><br/>';
+    $home .= '<span>' . $LNG['L_SHOWS'] . ' : ' . human_filesize(disk_free_space($cfg['SHOWS_PATH'])) . '/' . human_filesize(disk_total_space($cfg['SHOWS_PATH'])) . '</span>';
+    $home .= '</div></div>';
+
+    $home .= '</div>';
+
     return $home;
 }
 

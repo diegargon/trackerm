@@ -39,6 +39,7 @@ $LNG = [
     'L_ERR_BADWAY' => 'Error interno o has intentado acceder de forma inadecuada',
     'L_FILENAME' => 'Nombre del archivo',
     'L_HOME' => 'Home',
+    'L_HARDDISK' => 'Disco Duro',
     'L_HAVEIT' => 'La tengo!',
     'L_IDENT_MOVIES' => 'Identificación de peliculas',
     'L_IDENT_SHOWS' => 'Identificación de series',
