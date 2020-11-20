@@ -1,10 +1,10 @@
 <?php
 
 /**
- * 
+ *
  *  @author diego@envigo.net
- *  @package 
- *  @subpackage 
+ *  @package
+ *  @subpackage
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  */
 global $cfg;
@@ -13,7 +13,7 @@ $cfg['db_api_token'] = '';
 $cfg['search_db'] = 'themoviedb';
 $cfg['LANG'] = 'es-ES';
 $cfg['CHARSET'] = 'UTF8';
-$cfg['LOCALE'] = str_replace('-', '_', $cfg['LANG'] .'.'. $cfg['CHARSET']);
+$cfg['LOCALE'] = str_replace('-', '_', $cfg['LANG'] . '.' . $cfg['CHARSET']);
 $cfg['cache'] = '/cache';
 $cfg['REL_PATH'] = '/trackerm';
 $cfg['MOVIES_PATH'] = '/home/compartido/biblioteca/Peliculas';
@@ -25,10 +25,15 @@ $cfg['jackett_indexers'] = [
     0 => 'newpct',
 //    1 => 'divxtotal',
     2 => 'mejortorrent',
-   3 => 'moviesdvdr',
+    3 => 'moviesdvdr',
 //     5 => 'rarbg',
 ];
-
+$cfg['profiles'] = [//TODO
+    1 => 'diego',
+    2 => 'marta',
+    3 => 'xoel',
+    4 => 'invitado'
+];
 $cfg['max_identify_items'] = 5;
 $cfg['tresults_rows'] = 2;
 $cfg['tresults_columns'] = 8;
