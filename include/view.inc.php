@@ -17,9 +17,11 @@ function view() {
     if ($type == 'movies_library') {
         $t_type = 'biblio-movies';
         $other['reidentify'] = 1;
+        $other['deletereg'] = 1;
     } else if ($type == 'shows_library') {
         $t_type = 'biblio-shows';
         $other['reidentify'] = 1;
+        $other['deletereg'] = 1;
     } else if ($type == 'movies_torrent') {
         $t_type = 'jackett_movies';
     } else if ($type == 'shows_torrent') {
@@ -32,6 +34,7 @@ function view() {
     } else {
         return false;
     }
+    $other['page_type'] = $type;
 
     $item = $db->getItemByID($t_type, $id);
 

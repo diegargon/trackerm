@@ -58,12 +58,17 @@
                 <?php if (!empty($tdata['seasons_data'])) { ?>
                     <?= $tdata['seasons_data'] ?>
                 <?php } ?>
-                <?php if (!empty($tdata['wanted'])) { ?>
-                    <div><a class="action_link" href="?page=wanted&id=<?= $tdata['themoviedb_id'] ?>&type=<?= $tdata['type'] ?>"><?= $tdata['L_WANTED'] ?></a></div>
-                <?php } ?>
-                <?php if (!empty($tdata['reidentify'])) { ?>
-                    <div><a class="action_link" href="?page=identify&identify=<?= $tdata['id'] ?>&media_type=<?= $tdata['type'] ?>"><?= $tdata['L_IDENTIFY'] ?></a></div>
-                <?php } ?>
+                <div class="view_actions">
+                    <?php if (!empty($tdata['wanted'])) { ?>
+                        <a class="action_link" href="?page=wanted&id=<?= $tdata['themoviedb_id'] ?>&type=<?= $tdata['type'] ?>"><?= $tdata['L_WANTED'] ?></a>
+                    <?php } ?>
+                    <?php if (!empty($tdata['reidentify'])) { ?>
+                        <a class="action_link" href="?page=identify&identify=<?= $tdata['id'] ?>&media_type=<?= $tdata['type'] ?>"><?= $tdata['L_IDENTIFY'] ?></a>
+                    <?php } ?>
+                    <?php if (!empty($tdata['deletereg'])) { ?>
+                        <a class="action_link" href="?page=view&id=<?= $tdata['id'] ?>&type=<?= $tdata['page_type'] ?>&deletereg=1" onclick="return confirm('Are you sure?')" ><?= $tdata['L_DELETE_REGISTER'] ?></a>
+                    <?php } ?>
+                </div>
                 <hr/>
                 <?php if (!empty($tdata['download'])) { ?>
                     <div class="view_download">

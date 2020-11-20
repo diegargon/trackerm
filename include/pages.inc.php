@@ -12,6 +12,19 @@ function index_page() {
 }
 
 function page_view() {
+    global $db, $LNG;
+    if (!empty($_GET['deletereg']) && !empty($_GET['id']) && !empty($_GET['type'])) {
+        if ($_GET['type'] == 'movies_library') {
+            $db->deleteById('biblio-movies', $_GET['id']);
+        }
+        if ($_GET['type'] == 'shows_library') {
+            $delete_item = $db->getItemById('biblio-shows', $_GET['id']);
+            $media_db_id = $delete_item['themoviedb_id'];
+            $db->deleteByFieldMatch('biblio-shows', 'themoviedb_id', $media_db_id);
+        }
+        return msg_box($msg = ['title' => $LNG['L_SUCCESS'], 'body' => $LNG['L_DELETE_SUCCESSFUL']]);
+    }
+
     return view();
 }
 

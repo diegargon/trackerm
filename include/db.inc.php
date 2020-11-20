@@ -113,6 +113,20 @@ class DB {
         $this->saveTable($table);
     }
 
+    function deleteByFieldMatch($table, $field, $field_value) {
+        !isset($this->tables[$table]) ? $this->loadTable($table) : null;
+
+        if (!empty($this->tables[$table]['data'])) {
+            foreach ($this->tables[$table]['data'] as $item) {
+                if ($item[$field] == $field_value) {
+                    $this->deleteById($table, $item['id']);
+                }
+            }
+        }
+
+        return true;
+    }
+
     public function getNumElements($table) {
         !isset($this->tables[$table]) ? $this->loadTable($table) : null;
 
