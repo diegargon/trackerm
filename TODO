@@ -1,5 +1,10 @@
 TODO
 
+** Next 
+    Perfiles muy basicos por conservar prefs
+    no mostrar toda la paginacion
+
+
 ** HIGH
 *  Supervisor de series y peliculas, a descargar encargado de bajar las series y peliculas que se piden
 asi como moitorear por si se solicita una pelicula/serie que no existe ningun torrent o los capitulos de las
@@ -12,6 +17,9 @@ series que se marquen para monitorear.
 * reorganizar codigo/funciones
 * cache search query: cuando pasamos pagina se realiza otra query remota, evitarlo. Guardar el query en una db y si se pasa pagina leer de la db 
 en vez de hacer otra query remota.
+* Home: espacio disco duro, stats de numero de peliculas/series
+* Biblio: buscador o deribar a una pagina buscador más facil.
+* Solapa: config y  mover la configuración de identificar columnas filas quizas meter rebuild en home
 
 ** VERY LOW
 * user profiles
@@ -27,3 +35,5 @@ indexer.
 * En el menu de moviedb advertir si tenemos la pelicula en la biblioteca. añadir enlace a moviedb
 * Opcion Filtrar torrent 720/1080
 * ver forma de unrar y archivos con contraseña
+* Home: Informacion de torrents en transmission y su estado
+* opcional: otros ratigns, filmaffinity, imdb

@@ -30,6 +30,11 @@ function getTpl($tpl, $tdata) {
 function buildTable($head, $db_ary, $topt = null) {
     global $cfg, $LNG;
 
+    if (isset($_GET['search_type']) && isset($topt['search_type']) && ($_GET['search_type'] == $topt['search_type'])) {
+        isset($_GET['npage']) ? $npage = $_GET['npage'] : $npage = 1;
+    } else {
+        $npage = 1;
+    }
     empty($topt['columns']) ? $columns = $cfg['tresults_columns'] : $columns = $topt['columns'];
     empty($topt['max_items']) ? $max_items = $cfg['tresults_rows'] * $columns : $max_items = $topt['max_items'];
     $page = '';
@@ -51,21 +56,27 @@ function buildTable($head, $db_ary, $topt = null) {
         $iurl = preg_replace('/&search_type=shows/', '', $iurl);
         $iurl = preg_replace('/&search_type=movies/', '', $iurl);
         for ($i = 1; $i <= ceil($num_pages); $i++) {
-            $extra = '';
-            $link_npage_class = "num_pages_link";
+            if (
+                    (($i <= ($npage + 3)) && $i >= ($npage - 1) ||
+                    ($i >= (ceil($num_pages) - 3 )) ||
+                    ($i == 1) || ($i == ceil($num_pages) ))
+            ) {
+                $extra = '';
+                $link_npage_class = "num_pages_link";
 
-            if (!empty($topt['search_type'])) {
-                $extra = '&search_type=' . $topt['search_type'];
-            }
-
-            if (isset($_GET['npage']) && ($_GET['npage'] == $i)) {
-                if (isset($topt['search_type']) && ($_GET['search_type'] != $topt['search_type'])) {
-
-                } else {
-                    $link_npage_class .= '_selected';
+                if (!empty($topt['search_type'])) {
+                    $extra = '&search_type=' . $topt['search_type'];
                 }
+
+                if (isset($_GET['npage']) && ($_GET['npage'] == $i)) {
+                    if (isset($topt['search_type']) && ($_GET['search_type'] != $topt['search_type'])) {
+
+                    } else {
+                        $link_npage_class .= '_selected';
+                    }
+                }
+                $pages .= '<a class="' . $link_npage_class . '" href="' . $iurl . '&npage=' . $i . $extra . '">' . $i . '</a>';
             }
-            $pages .= '<a class="' . $link_npage_class . '" href="' . $iurl . '&npage=' . $i . $extra . '">' . $i . '</a>';
         }
 
         $page .= '<div class="type_pages_numbers">' . $pages . '</div>';
