@@ -236,6 +236,8 @@ function check_if_have_show($id, $season, $episode) {
     foreach ($shows as $show) {
         if (
                 isset($show['themoviedb_id']) &&
+                isset($show['season']) &&
+                isset($show['chapter']) &&
                 $show['themoviedb_id'] == $id &&
                 $show['season'] == $season &&
                 $show['chapter'] == $episode
