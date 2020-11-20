@@ -224,6 +224,15 @@ function getFileChapter($file_name) {
         $chapter['season'] = substr($_chapter, 0, stripos($_chapter, 'x'));
         $chapter['chapter'] = substr($_chapter, stripos($_chapter, 'x') + 1);
     }
+
+    /* FORMAT S01E01 */
+
+    if (preg_match('/S\d{2}E\d{2}/i', $file_name, $match) == 1) {
+        $matched = $match[0];
+        $chapter['season'] = substr($matched, 1, stripos($matched, 'E'));
+        $chapter['chapter'] = substr($matched, stripos($matched, 'E') + 1);
+    }
+
     return isset($chapter) ? $chapter : false;
 }
 
