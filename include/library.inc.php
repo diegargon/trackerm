@@ -34,6 +34,12 @@ function show_my_movies() {
                 $movies_identifyed[$key] = $movie;
             }
         }
+
+        usort($movies_identifyed, function ($a, $b) {
+            return strcmp($a["added"], $b["added"]);
+        });
+        $movies_identifyed = array_reverse($movies_identifyed);
+
         $topt['search_type'] = 'movies';
         $page .= buildTable('L_MOVIES', $movies_identifyed, $topt);
     }
@@ -70,6 +76,11 @@ function show_my_shows() {
                 $shows_identifyed[$key] = $movie;
             }
         }
+
+        usort($shows_identifyed, function ($a, $b) {
+            return strcmp($a["added"], $b["added"]);
+        });
+        $shows_identifyed = array_reverse($shows_identifyed);
 
         $uniq_shows = [];
 

@@ -91,11 +91,7 @@ function buildTable($head, $db_ary, $topt = null) {
         $db_ary_slice = array_slice($db_ary, $npage_jump);
     }
 
-    usort($db_ary_slice, function ($a, $b) {
-        return strcmp($a["added"], $b["added"]);
-    });
-
-    foreach (array_reverse($db_ary_slice) as $item) {
+    foreach ($db_ary_slice as $item) {
         if ($num_items >= $max_items) {
             break;
         }
