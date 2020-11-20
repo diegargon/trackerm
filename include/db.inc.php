@@ -112,7 +112,7 @@ class DB {
 
         if (!empty($this->tables[$table]['data'])) {
             foreach ($this->tables[$table]['data'] as $item) {
-                if ($item[$field] == $field_value) {
+                if (isset($item[$field]) && ($item[$field] == $field_value)) {
                     return $item;
                 }
             }

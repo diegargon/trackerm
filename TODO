@@ -1,14 +1,14 @@
 TODO
 
 ** Next 
-    Poder cambiar en seguimiento cada cuanto comprobamos.
-    Eblaces externos TMDB ID
+    Poder cambiar en seguimiento cada cuanto comprobamos si existe el torrent.
+    Enlaces externos TMDB ID
 
 ** HIGH
 *  Supervisor de series y peliculas, a descargar encargado de bajar las series y peliculas que se piden
 asi como moitorear por si se solicita una pelicula/serie que no existe ningun torrent o los capitulos de las
 series que se marquen para monitorear.
-*
+* la base de datos de shows con capitulos tiene que ser actualizar, añadir forzar en la vista del show y hacer algo automatico
 
 ** MED
 * Filter tags en torrentes: posibilidad de filtrar por tags conocidos 720p 1080...
@@ -16,23 +16,21 @@ series que se marquen para monitorear.
 * reorganizar codigo/funciones
 * cache search query: cuando pasamos pagina se realiza otra query remota, evitarlo. Guardar el query en una db y si se pasa pagina leer de la db 
 en vez de hacer otra query remota.
-* Home: espacio disco duro, stats de numero de peliculas/series
+* Home: stats de numero de peliculas/series
 * Biblio: buscador o deribar a una pagina buscador más facil.
 * Solapa: config y  mover la configuración de identificar columnas filas quizas meter rebuild en home
+* Mostrar numeros de capitulos en series build item
 
 ** VERY LOW
-* user profiles
 * fechas normalizar a formato comun
 * En el select de identificar estaria bien mostrar las caractulas al pone encima
 * recargar con jquery solo las partes necesarias en vez de recargar toda la pagina
-* Stats en home
 * menu rows/columns y otras configuraciones generales en todas las paginas.
 * Publicado/novedades torrent muestra las 10 (ejemplo) ultimas novedades publicadaas y despues las 10 de otro, lo ideal es obtener 
 "la novedad 1" de cada indexer seguido de la "novedad 2" etc para no tener que pasar paginas para ver las novedades más recientes de otro 
 indexer.
 * rebuild pager/paginacion, se enredo mucho el codigo.
-* En el menu de moviedb advertir si tenemos la pelicula en la biblioteca. añadir enlace a moviedb
 * Opcion Filtrar torrent 720/1080
 * ver forma de unrar y archivos con contraseña
 * Home: Informacion de torrents en transmission y su estado
-* opcional: otros ratigns, filmaffinity, imdb
+* opcional: mostrar otros ratigns, filmaffinity, imdb
