@@ -16,8 +16,7 @@ series que se marquen para monitorear.
 * reorganizar codigo/funciones
 * cache search query: cuando pasamos pagina se realiza otra query remota, evitarlo. Guardar el query en una db y si se pasa pagina leer de la db 
 en vez de hacer otra query remota.
-* Home: stats de numero de peliculas/series
-* Biblio: buscador o deribar a una pagina buscador más facil.
+* Biblio: buscador o derivar a una pagina buscador más facil.
 * Solapa: config y  mover la configuración de identificar columnas filas quizas meter rebuild en home
 * Mostrar numeros de capitulos en series build item
 

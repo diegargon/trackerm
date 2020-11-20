@@ -18,6 +18,7 @@ $LNG = [
     'L_ADDED_SUCCESSFUL' => 'Añadido con exito',
     'L_COLUMNS' => 'Columnas',
     'L_CATEGORY' => 'Categorias',
+    'L_DATABASE' => 'Database',
     'L_DEFAULT' => 'Defecto',
     'L_DOWNLOAD' => 'Descargar',
     'L_DOWNLOAD_MIN' => 'Descargar',

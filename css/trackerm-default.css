@@ -376,17 +376,21 @@ button {
 .wanted_title {
     font-weight: bold;
 }
+
 .wanted_list_container {
 
 }
+
 .wanted_list_row {
     padding: 10px 1px 10px 1px;
     border:1px solid #ff5b5b;    
     margin: 0px 0px 6px 0px;
 }
+
 .wanted_add_container {
 
 }
+
 .wanted_details {
     margin: 4px;
     padding: 5px;
@@ -395,6 +399,7 @@ button {
 .tag_quality, .tag_type, .tag_day, .tag_id, .tag_added {
     border: 1px solid green;
 }
+
 .tag_title {
     border: 1px solid black;
     background: black;
@@ -446,7 +451,7 @@ button {
 .info_container {
     width: 30%;
 }
-.profiles_container, .harddisk_container {
+.profiles_container, .harddisk_container, .database_container {
     border:1px solid #ff5b5b;
     padding: 10px;
     border-collapse: collapse;
@@ -457,10 +462,12 @@ button {
     display: inline-flex;
 }
 
-.profiles, .harddisk  a {
+.profiles  a {
     font-size: 1.5em;
 }
 
-.profile_title, .harddisk {
+.harddisk, .database {}
+
+.profile_title, .harddisk_title, .database_title {
     margin-bottom: 15px;
 }

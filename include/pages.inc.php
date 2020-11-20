@@ -8,7 +8,7 @@
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  */
 function index_page() {
-    global $cfg, $LNG;
+    global $cfg, $LNG, $db;
     $home = '<div class="info_container">';
 
     $home .= '<div class="profiles_container">';
@@ -24,6 +24,13 @@ function index_page() {
     $home .= '<div class="harddisk">';
     $home .= '<span>' . $LNG['L_MOVIES'] . ' : ' . human_filesize(disk_free_space($cfg['MOVIES_PATH'])) . '/' . human_filesize(disk_total_space($cfg['MOVIES_PATH'])) . '</span><br/>';
     $home .= '<span>' . $LNG['L_SHOWS'] . ' : ' . human_filesize(disk_free_space($cfg['SHOWS_PATH'])) . '/' . human_filesize(disk_total_space($cfg['SHOWS_PATH'])) . '</span>';
+    $home .= '</div></div>';
+
+    $home .= '<div class="database_container">';
+    $home .= '<div class="database_title"><h2>' . $LNG['L_DATABASE'] . '</h2></div>';
+    $home .= '<div class="database">';
+    $home .= '<span>' . $LNG['L_MOVIES'] . ' : ' . $db->getNumElements('biblio-movies') . '</span><br/>';
+    $home .= '<span>' . $LNG['L_EPISODES'] . ' : ' . $db->getNumElements('biblio-shows') . '</span>';
     $home .= '</div></div>';
 
     $home .= '</div>';
