@@ -35,6 +35,8 @@ class DB {
         $this->saveTable($table);
     }
 
+    /* Add element if not exist another uniq_key value : return false */
+
     public function addUniqElements($table, $elements, $uniq_key) {
         //array_search($file, array_column($movies, 'path')
         !isset($this->tables[$table]) ? $this->loadTable($table) : null;
@@ -60,7 +62,10 @@ class DB {
         if ($id > $lastid) {
             $this->tables[$table]['info']['last_update'] = time();
             $this->saveTable($table);
+        } else {
+            return false;
         }
+        return true;
     }
 
     public function addUniqKey($table, $elements) {
