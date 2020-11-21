@@ -51,8 +51,13 @@ function view() {
     }
 
     if ($type == 'shows_library' || $type == 'shows_db') {
-        $other['seasons_data'] = view_seasons($item['themoviedb_id']);
+        if (isset($_GET['update'])) {
+            $other['seasons_data'] = view_seasons($item['themoviedb_id'], true);
+        } else {
+            $other['seasons_data'] = view_seasons($item['themoviedb_id']);
+        }
     }
+
     if (!empty($item['poster']) && $cfg['CACHE_IMAGES']) {
         $cache_img_response = cacheImg($item['poster']);
         if ($cache_img_response !== false) {
@@ -166,7 +171,7 @@ function view_extra_shows($item, $opt) {
     return $extra;
 }
 
-function view_seasons($id) {
+function view_seasons($id, $update = false) {
     global $db, $LNG;
 
     $seasons_data = '';
@@ -175,9 +180,13 @@ function view_seasons($id) {
     $item = $db->getItemByField('shows_details', 'themoviedb_id', $id);
     if (
             ($item === false) &&
-            ( ($item = mediadb_getSeasons($id)) === false )
+            ( ($item = mediadb_getSeasons($id, $update)) === false )
     ) {
         return false;
+    }
+
+    if ($item !== false && $update !== false) {
+        $item = mediadb_getSeasons($id, $update);
     }
 
     if (!empty($_GET['wanted']) && !empty($_GET['season']) && !empty($_GET['episode'])) {

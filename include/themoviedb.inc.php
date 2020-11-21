@@ -108,7 +108,7 @@ function themoviedb_MediaPrep($type, $items) {
     return isset($fitems) ? $fitems : false;
 }
 
-function themoviedb_getSeasons($id) {
+function themoviedb_getSeasons($id, $update = false) {
     global $cfg, $db;
 
     $seasons_url = 'https://api.themoviedb.org/3/tv/' . $id . '?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['LANG'];
@@ -125,7 +125,12 @@ function themoviedb_getSeasons($id) {
         }
 
         $item = themoviedb_showsDetailsPrep($id, $seasons_data, $episodes_data);
-        $db->addUniqElements('shows_details', $item, 'themoviedb_id');
+        if ($update !== false) {
+            $shows_details_id = $db->getIdByField('shows_details', 'themoviedb_id', $id);
+            $db->updateElementById('shows_details', $shows_details_id, $item);
+        } else {
+            $db->addUniqElements('shows_details', $item, 'themoviedb_id');
+        }
         $db->reloadTable('shows_details');
 
         return $db->getItemByField('shows_details', 'themoviedb_id', $id);
@@ -141,10 +146,11 @@ function themoviedb_showsDetailsPrep($id, $seasons_data, $episodes_data) {
 
     $lastid = $db->getLastId('shows_details');
 
-    $item[$lastid]['id'] = $id;
+    $item[$lastid]['id'] = $lastid;
     $item[$lastid]['themoviedb_id'] = $id;
     $item[$lastid]['n_seasons'] = $seasons_data['number_of_seasons'];
     $item[$lastid]['n_episodes'] = $seasons_data['number_of_episodes'];
+    $item[$lastid]['last_update'] = time();
     isset($item[$lastid]['first_air_date']) ? $item[$lastid]['release'] = $seasons_data['first_air_date'] : null;
     isset($item[$lastid]['homepage']) ? $item[$lastid]['homepage'] = $seasons_data['homepage'] : null;
     isset($item[$lastid]['in_production']) ? $item[$lastid]['in_production'] = $seasons_data['in_production'] : null;

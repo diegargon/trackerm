@@ -15,9 +15,6 @@ Puedes ver sceenshots del aspecto actual en /screenshots aunque cambiara que el 
 This proyect it in very very early stage, will change alot between commits and files and database will not be backwards compatible, if you want use
 now and update tomorrow you must probably remove all database entrys in cache and begin identified applications again if errors appears (and going to appear).
 
-Rule: if i update the VERSION  number something important probably change that not be backwards compatible or need edit config or something else important, and  at this point 
-of development it will probably change in the most of the commits.
-
 Select the path (config file only atm) where your movies/shows reside, click on rebuild buttons and identify your movies/shows.
 
 In "Themoviedb" tab you can search for movies/shows and  automatically will show you the torrents, if there is none you can choose 'wanted' and (FEATURE UPCOMMING) 
@@ -34,6 +31,11 @@ In Library/Biblioteca you can see your movies/shows, identify, show seasons and 
 In the future trackm will track your transmission movie/shows downloads and automatically move to your library path. (not yet available)
 
 WARNING: At this momment i not using any database, just save in json files the data, that will change in the future and break backwards compatibility.
+
+## VERSION
+    WARNING: You can check the version on VERSION file. While in alpha 0.0.X and until 0.1 on every version update probably you going to need 
+    recreate all DB files (delete old) and check config.inc.php agains _config.inc.php values for new/modify ones, and this will be change very very often.
+    No backwards compatible yet.
 
 # Lenguaje
     Php+Javascript (Más adelante probablemente Jquery)

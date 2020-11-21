@@ -19,8 +19,8 @@ function mediadb_Prep($type, $items) {
     return themoviedb_MediaPrep($type, $items);
 }
 
-function mediadb_getSeasons($id) {
-    return themoviedb_getSeasons($id);
+function mediadb_getSeasons($id, $update = false) {
+    return themoviedb_getSeasons($id, $update);
 }
 
 function mediadb_showsDetailsPrep($id, $seasons_data, $episodes_data) {

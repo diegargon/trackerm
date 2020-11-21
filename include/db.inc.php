@@ -47,7 +47,7 @@ class DB {
         }
 
         $id = $lastid;
-        //var_dump($elements);
+
         foreach ($elements as $element) {
             if (
                     !isset($this->tables[$table]['data']) ||
@@ -58,8 +58,9 @@ class DB {
                 $id++;
             }
         }
-        $this->tables[$table]['info']['last_id'] = $id;
+
         if ($id > $lastid) {
+            $this->tables[$table]['info']['last_id'] = $id;
             $this->tables[$table]['info']['last_update'] = time();
             $this->saveTable($table);
         } else {
@@ -206,6 +207,21 @@ class DB {
         }
 
         $this->saveTable($table);
+    }
+
+    public function updateElementById($table, $id, $element) {
+        !isset($this->tables[$table]) ? $this->loadTable($table) : null;
+
+        if (isset($this->tables[$table]['data'][$id])) {
+            $element = current($element);
+            $this->tables[$table]['data'][$id] = $element;
+            $this->tables[$table]['info']['last_update'] = time();
+            $this->saveTable($table);
+
+            return true;
+        }
+
+        return false;
     }
 
     /* NOT TESTED */

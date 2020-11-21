@@ -1,14 +1,15 @@
 TODO
 
 ** Next 
+* Local Download link;
 
 ** HIGH
 *  Supervisor de series y peliculas, a descargar encargado de bajar las series y peliculas que se piden
 asi como moitorear por si se solicita una pelicula/serie que no existe ningun torrent o los capitulos de las
 series que se marquen para monitorear.
-* la base de datos de shows con capitulos tiene que ser actualizar, añadir forzar en la vista del show y hacer algo automatico
 
 ** MED
+* la base de datos de shows con capitulos tiene que ser actualizar, aparte de manualmente  hacer algo automatico
 * Filter tags en torrentes: posibilidad de filtrar por tags conocidos 720p 1080...
 * codigo seguro
 * reorganizar codigo/funciones

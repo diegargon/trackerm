@@ -79,6 +79,9 @@
                     <?php if (!empty($tdata['deletereg'])) { ?>
                         <a class="action_link" href="?page=view&id=<?= $tdata['id'] ?>&type=<?= $tdata['page_type'] ?>&deletereg=1" onclick="return confirm('Are you sure?')" ><?= $tdata['L_DELETE_REGISTER'] ?></a>
                     <?php } ?>
+                    <?php if ($tdata['ilink'] == 'shows_library') { ?>
+                        <a class="action_link" href="?page=view&id=<?= $tdata['id'] ?>&type=shows_library&update=1"><?= $tdata['L_UPDATE_EPISODES'] ?></a>
+                    <?php } ?>
                 </div>
                 <hr/>
                 <?php if (!empty($tdata['download'])) { ?>
