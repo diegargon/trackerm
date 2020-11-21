@@ -218,6 +218,13 @@ function page_wanted() {
     $want['page'] = $_GET['page'];
     $item = [];
 
+    if (isset($_POST['check_day']) && !isset($_POST['submit_wanted'])) {
+        $wanted_mfy = $_POST['check_day'];
+        foreach ($wanted_mfy as $w_mfy_id => $w_mfy_value) {
+            $day_check['day_check'] = $w_mfy_value;
+            $db->updateRecordById('wanted', $w_mfy_id, $day_check);
+        }
+    }
 
     isset($_GET['id']) ? $wanted_id = $_GET['id'] : $wanted_id = false;
     isset($_GET['type']) ? $wanted_type = $_GET['type'] : $wanted_type = false;
@@ -244,7 +251,8 @@ function page_wanted() {
             $wanted_list_data .= '<span class="tag_id">' . $wanted_item['id'] . '</span>';
             $wanted_list_data .= '<span class="tag_title">' . $wanted_item['title'] . '</span>';
             $wanted_list_data .= '<span class="tag_type">' . $wanted_item['type'] . '</span>';
-            $wanted_list_data .= '<span class="tag_day">' . $LNG[$wanted_item['day_check']] . '</span>';
+            $day_check = day_check($wanted_item['id'], $wanted_item['day_check']);
+            $wanted_list_data .= '<span class="tag_day">' . $day_check . '</span>';
             foreach ($cfg['TORRENT_QUALITYS_PREFS'] as $quality) {
                 $wanted_list_data .= '<span class="tag_quality">' . $quality . '</span>';
             }

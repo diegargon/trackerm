@@ -471,3 +471,7 @@ button {
 .profile_title, .harddisk_title, .database_title {
     margin-bottom: 15px;
 }
+
+.form_inline {
+    display: inline;
+}
