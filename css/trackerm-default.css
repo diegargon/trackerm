@@ -453,7 +453,7 @@ button {
     margin:3px;
 }
 .info_container {
-    width: 30%;
+    width: 400px;
 }
 .home_item_container {
     border:1px solid #ff5b5b;
@@ -478,4 +478,17 @@ button {
 
 .form_inline {
     display: inline;
+}
+
+.tor_name {
+    border:0px solid #ff5b5b;
+    background: black;
+    padding: 3px;
+}
+
+.tor_tag {
+    border: 1px solid blue;
+    display: inline-flex;
+    padding: 4px;
+    margin: 4px;
 }

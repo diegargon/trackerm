@@ -9,18 +9,11 @@
  */
 include "include/common.inc.php";
 include "include/html.common.php";
-require __DIR__ . '/vendor/autoload.php';
-
-do_checks();
 
 isset($_GET['page']) ? $req_page = $_GET['page'] : $req_page = '';
 
-
 $body = getMenu();
 $footer = getFooter();
-
-$trans = new TorrentServer($cfg);
-$transfers = $trans->getAll();
 
 if (!empty($_GET['download'])) {
     $d_link = $_GET['download'];
@@ -46,6 +39,8 @@ if (!isset($req_page) || $req_page == '') {
     $body .= page_identify();
 } else if ($req_page == 'download') {
     page_download();
+} else if ($req_page == 'transmission') {
+    $body .= page_transmission();
 } else {
     $box_msg['title'] = $LNG['L_ERROR'] . ' : ' . $LNG['L_NOEXISTS'];
     $box_msg['body'] = $LNG['L_PAGE_NOEXISTS'];

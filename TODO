@@ -6,24 +6,21 @@ TODO
 *  Supervisor de series y peliculas, a descargar encargado de bajar las series y peliculas que se piden
 asi como moitorear por si se solicita una pelicula/serie que no existe ningun torrent o los capitulos de las
 series que se marquen para monitorear.
-* Las series muestran tamaño de un capitulo, calcular tamaño total y mostrar numero de capitulos si eso.
 
 ** MED
-* la base de datos de shows con capitulos tiene que ser actualizar, aparte de manualmente  hacer algo automatico
+* actualizacion automatica de titulos de episodios
 * Filter tags en torrentes: posibilidad de filtrar por tags conocidos 720p 1080...
 * codigo seguro
 * reorganizar codigo/funciones
-* cache search query: cuando pasamos pagina se realiza otra query remota, evitarlo. Guardar el query en una db y si se pasa pagina leer de la db 
+* jackett search cache query: cuando pasamos pagina se realiza otra query remota, evitarlo. Guardar el query en una db y si se pasa pagina leer de la db 
 en vez de hacer otra query remota.
 * Biblio: buscador o derivar a una pagina buscador más facil.
-* Solapa: config y  mover la configuración de identificar columnas filas quizas meter rebuild en home
-* Mostrar numeros de capitulos en series build item
 
 ** VERY LOW
 * fechas normalizar a formato comun
 * En el select de identificar estaria bien mostrar las caractulas al pone encima
 * recargar con jquery solo las partes necesarias en vez de recargar toda la pagina
-* menu rows/columns y otras configuraciones generales en todas las paginas.
+* menu rows/columns y otras configuraciones generales en todas las paginas o pagina config.
 * Publicado/novedades torrent muestra las 10 (ejemplo) ultimas novedades publicadaas y despues las 10 de otro, lo ideal es obtener 
 "la novedad 1" de cada indexer seguido de la "novedad 2" etc para no tener que pasar paginas para ver las novedades más recientes de otro 
 indexer.

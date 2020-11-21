@@ -19,6 +19,7 @@ require('include/checks.inc.php');
 require('include/pages.inc.php');
 require('include/curl.inc.php');
 require('include/file.utils.php');
+require('include/transmission.class.php');
 require('include/transmission.inc.php');
 require('include/library.inc.php');
 require('include/library-common.inc.php');
@@ -28,9 +29,15 @@ require('include/mediadb.inc.php');
 require('include/jackett.inc.php');
 require('include/prefs.inc.php');
 require('include/wanted.inc.php');
-
+require __DIR__ . './../vendor/autoload.php';
 
 global $db;
 $db = new DB($cfg['cache']);
 
 loadPrefs();
+do_checks();
+
+global $trans;
+$trans = new TorrentServer($cfg);
+
+

@@ -16,4 +16,5 @@
     <a href="?page=wanted"><div class="menu_element"><?= $tdata['L_WANTED'] ?></div></a>
     <a href="?page=torrents"><div class="menu_element"><?= $tdata['L_TORRENTS'] ?></div></a>
     <a href="?page=tmdb"><div class="menu_element"><?= strtoupper($tdata['search_db']) ?></div></a>
+    <a href="?page=transmission"><div class="menu_element"><?= strtoupper('transmission') ?></div></a>
 </div>
