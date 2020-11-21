@@ -11,7 +11,7 @@ Probablemente de momento no deberias instalarlo.
 Puedes ver sceenshots del aspecto actual en /screenshots aunque cambiara que el proyecto esta en fase muy muy temprana.
 
 ## WARNING
-    No security check in the code yet use on your own risk. The code are totatally insecure. If you expose this code to internet you have a very high
+    There is no security check in the code yet use on your own risk. The code are totatally insecure. If you expose this code to internet you have a very high
     security problem.
 
     No hay ningun mecanismo deseguridad en el codigo todavia. El codigo es totalmente inseguro. Si expones este codigo a internet tendras un grave problema

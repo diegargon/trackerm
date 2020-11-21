@@ -349,3 +349,24 @@ function page_identify() {
     }
     return getTpl('identify_adv', array_merge($LNG, $item, $tdata));
 }
+
+function page_download() {
+    global $db;
+
+    if (!isset($_GET['id']) || !isset($_GET['type'])) {
+        exit();
+    }
+
+    $id = $_GET['id'];
+    if ($_GET['type'] == 'movies_library') {
+        $item = $db->getItemById('biblio-movies', $id);
+    } else if ($_GET['type'] == 'shows_library') {
+        $item = $db->getItemById('biblio-shows', $id);
+    } else {
+        exit();
+    }
+    if (!empty($item) && file_exists($item['path'])) {
+        send_file($item['path']);
+    }
+    exit();
+}

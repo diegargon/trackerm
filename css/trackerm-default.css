@@ -20,7 +20,7 @@ input {
 }
 
 a:link {
-    color: white;
+    color: #b8bcff;
 }
 
 a:visited {
@@ -324,10 +324,12 @@ button {
     font-size: 1.5em;
     margin-left: 4px;
 }
+
 .submit_link {
     display:block;
     width: max-content;
 }
+
 .num_pages_link_selected {
     background-color: aqua;
 }

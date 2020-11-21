@@ -44,6 +44,8 @@ if (!isset($req_page) || $req_page == '') {
     $body .= page_wanted();
 } else if ($req_page == 'identify') {
     $body .= page_identify();
+} else if ($req_page == 'download') {
+    page_download();
 } else {
     $box_msg['title'] = $LNG['L_ERROR'] . ' : ' . $LNG['L_NOEXISTS'];
     $box_msg['body'] = $LNG['L_PAGE_NOEXISTS'];

@@ -71,3 +71,29 @@ function cacheImg($img_url) {
     }
     return false;
 }
+
+function send_file($path) {
+    $public_name = basename($path);
+    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+    $mime_type = finfo_file($finfo, $path);
+
+    header("Content-Disposition: attachment; filename=$public_name;");
+    header("Content-Type: $mime_type");
+    header("Pragma: ");
+    header('Content-Length: ' . filesize($path));
+    header("Connection: close");
+
+    $fd = fopen($path, 'rb');
+    session_write_close();
+    ob_flush();
+    flush();
+
+    while (!feof($fd)) {
+
+        $buffer = fread($fd, 2048);
+        print $buffer;
+    }
+
+    fclose($fd);
+    exit;
+}

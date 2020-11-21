@@ -217,6 +217,10 @@ function view_seasons($id, $update = false) {
                 if ($have !== false) {
                     $have_episodes[] = $num;
                     $episode_data .= '<div class="divTableCellEpisodes" style="color:yellow;">' . $episode['title'] . '</div>';
+                    $episode_data .= '<div class="divTableCellEpisodes">';
+                    $episode_data .= '<a class="episode_link" href="?page=download&type=shows_library&id=' . $have['id'] . '">';
+                    $episode_data .= $LNG['L_DOWNLOAD'];
+                    $episode_data .= '</a></div>';
                 } else {
                     $episode_data .= '<div class="divTableCellEpisodes">' . $episode['title'] . '</div>';
                     $episode_data .= '<div class="divTableCellEpisodes">';
