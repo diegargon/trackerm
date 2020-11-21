@@ -50,6 +50,7 @@ function show_my_shows() {
     global $db, $cfg;
 
     $page = '';
+    $topt = [];
 
     if (isset($_POST['mult_shows_select']) && !empty($_POST['mult_shows_select'])) {
         submit_ident('shows', $_POST['mult_shows_select']);
@@ -84,9 +85,18 @@ function show_my_shows() {
 
         $uniq_shows = [];
 
+        $sizes = [];
+        $have_episodes = [];
+
         foreach ($shows_identifyed as $show) {
             $exists = false;
-
+            if (isset($sizes[$show['themoviedb_id']])) {
+                $sizes[$show['themoviedb_id']] = $show['size'] + $sizes[$show['themoviedb_id']];
+                $have_episodes[$show['themoviedb_id']] = 1 + $have_episodes[$show['themoviedb_id']];
+            } else {
+                $sizes[$show['themoviedb_id']] = $show['size'];
+                $have_episodes[$show['themoviedb_id']] = 1;
+            }
             foreach ($uniq_shows as $item) {
                 if ($item['title'] == $show['title']) {
                     $exists = true;
@@ -98,6 +108,9 @@ function show_my_shows() {
 
             $exists === false ? $uniq_shows[] = $show : null;
         }
+        count($sizes) > 1 ? $topt['sizes'] = $sizes : null;
+        count($have_episodes) > 1 ? $topt['have_episodes'] = $have_episodes : null;
+
         $topt['search_type'] = 'shows';
         $page .= buildTable('L_SHOWS', $uniq_shows, $topt);
     }

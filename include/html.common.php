@@ -68,6 +68,17 @@ function buildTable($head, $db_ary, $topt = null) {
             break;
         }
 
+        if (empty($topt['sizes']) && !empty($item['size'])) {
+            $item['size'] = human_filesize($item['size']);
+        } else if (!empty($topt['sizes'])) {
+            $item['size'] = human_filesize($topt['sizes'][$item['themoviedb_id']]);
+        }
+
+        if (!empty($item['themoviedb_id']) && !empty($topt['have_episodes'][$item['themoviedb_id']])) {
+
+            $item['have_episodes'] = $topt['have_episodes'][$item['themoviedb_id']];
+        }
+
         $num_col_items == 0 ? $page .= '<div class="divTableRow">' : null;
         $page .= '<div class="divTableCell">';
         $page .= build_item($item);
@@ -104,9 +115,6 @@ function build_item($item, $detail = null) {
                     $item['poster'] = $cache_img_response;
                 }
             }
-        }
-        if (!empty($item['size'])) {
-            $item['hsize'] = human_filesize($item['size']);
         }
         $page .= getTpl('item_display_1', array_merge($item, $LNG));
     }

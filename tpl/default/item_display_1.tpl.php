@@ -24,9 +24,14 @@
                 <span class="item_download"><a class="action_link" href="<?= basename($_SERVER['REQUEST_URI']) . '&download=' . rawurlencode($tdata['download']) ?>"><?= $tdata['L_DOWNLOAD_MIN'] ?></a></span>
                 <?php
             }
-            if (!empty($tdata['hsize'])) {
+            if (!empty($tdata['have_episodes'])) {
                 ?>
-                <span class="item_size">[<?= $tdata['hsize'] ?>]</span>
+                <span class="item_have_episodes">[<?= $tdata['L_EPISODE_MIN'] . $tdata['have_episodes'] ?>]</span>
+                <?php
+            }
+            if (!empty($tdata['size'])) {
+                ?>
+                <span class="item_size">[<?= $tdata['size'] ?>]</span>
                 <?php
             }
             if (!empty($tdata['rating'])) {

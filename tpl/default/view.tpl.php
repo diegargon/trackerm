@@ -40,9 +40,14 @@
                     <span class="view_release"><?= $tdata['release'] ?></span>
                     <br/>
                 <?php } ?>
+                <?php if (!empty($tdata['have_episodes'])) { ?>
+                    <span>Nº<?= $tdata['L_EPISODES'] ?> :</span>
+                    <span class="view_have_episodes"><?= $tdata['have_episodes'] ?></span>
+                    <br/>
+                <?php } ?>
                 <?php if (!empty($tdata['size'])) { ?>
                     <span><?= $tdata['L_SIZE'] ?> :</span>
-                    <span class="view_size"><?= human_filesize($tdata['size']) ?></span>
+                    <span class="view_size"><?= $tdata['size'] ?></span>
                     <br/>
                 <?php } ?>
                 <?php if (!empty($tdata['rating'])) { ?>

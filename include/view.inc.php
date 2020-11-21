@@ -58,6 +58,26 @@ function view() {
         }
     }
 
+    if ($type == 'movies_library') {
+        $item['size'] = human_filesize($item['size']);
+    }
+
+    if ($type == 'shows_library') {
+        $shows_library = $db->getTableData('biblio-shows');
+
+        $i = 0;
+        $tsize = 0;
+
+        foreach ($shows_library as $show_library) {
+            if ($show_library['themoviedb_id'] == $item['themoviedb_id']) {
+                $tsize = $show_library['size'] + $tsize;
+                $i++;
+            }
+        }
+        $item['have_episodes'] = $i;
+        $item['size'] = human_filesize($tsize);
+    }
+
     if (!empty($item['poster']) && $cfg['CACHE_IMAGES']) {
         $cache_img_response = cacheImg($item['poster']);
         if ($cache_img_response !== false) {
@@ -192,8 +212,8 @@ function view_seasons($id, $update = false) {
     if (!empty($_GET['wanted']) && !empty($_GET['season']) && !empty($_GET['episode'])) {
         wanted_episode($id, $_GET['season'], $_GET['episode']);
     }
-    $seasons_data .= '<span>Nº' . $LNG['L_SEASONS'] . ': ' . $item['n_seasons'] . '</span><br/>';
-    $seasons_data .= '<span>Nº' . $LNG['L_EPISODES'] . ': ' . $item['n_episodes'] . '</span><br/>';
+    $seasons_data .= '<span>Tº' . $LNG['L_SEASONS'] . ': ' . $item['n_seasons'] . '</span><br/>';
+    $seasons_data .= '<span>Tº' . $LNG['L_EPISODES'] . ': ' . $item['n_episodes'] . '</span><br/>';
     $seasons = $item['seasons'];
     $iurl = basename($_SERVER['REQUEST_URI']);
     $iurl = preg_replace('/&season=\d{1,4}/', '', $iurl);
