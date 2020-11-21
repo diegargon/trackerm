@@ -11,7 +11,7 @@ global $cfg;
 
 $cfg['db_api_token'] = '';
 $cfg['search_db'] = 'themoviedb';
-$cfg['LANG'] = 'es-ES';
+$cfg['LANG'] = 'es-ES'; //es-ES or en-EN
 $cfg['CHARSET'] = 'UTF8';
 $cfg['LOCALE'] = str_replace('-', '_', $cfg['LANG'] . '.' . $cfg['CHARSET']);
 $cfg['cache'] = '/cache';

@@ -6,6 +6,7 @@ TODO
 *  Supervisor de series y peliculas, a descargar encargado de bajar las series y peliculas que se piden
 asi como moitorear por si se solicita una pelicula/serie que no existe ningun torrent o los capitulos de las
 series que se marquen para monitorear.
+* Las series muestran tamaño de un capitulo, calcular tamaño total y mostrar numero de capitulos si eso.
 
 ** MED
 * la base de datos de shows con capitulos tiene que ser actualizar, aparte de manualmente  hacer algo automatico

@@ -1,9 +1,9 @@
 <?php
 /**
- * 
+ *
  *  @author diego@envigo.net
- *  @package 
- *  @subpackage 
+ *  @package
+ *  @subpackage
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  */
 ?>
@@ -42,7 +42,7 @@
             <option <?= $tdata['max_rows_sel_8'] ?> value="8">8</option>
             <option <?= $tdata['max_rows_sel_10'] ?> value="10">10</option>
         </select>
-        <input class="submit_btn" type="submit" name="rebuild_movies" value="<?= $tdata['L_REBUILD_MOVIES'] ?>"/>
-        <input class="submit_btn" type="submit" name="rebuild_shows" value="<?= $tdata['L_REBUILD_SHOWS'] ?>"/>
+        <input class="submit_btn" type="submit" name="rebuild_movies" value="<?= $tdata['L_RESCAN_MOVIES'] ?>"/>
+        <input class="submit_btn" type="submit" name="rebuild_shows" value="<?= $tdata['L_RESCAN_SHOWS'] ?>"/>
     </form>
 </div>
