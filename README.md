@@ -2,20 +2,23 @@
 
 Description: 
 Probando a realizar una alternativa Sonarr+Radar sobre servidor web
+Trying a Sonarr & Radarr alternative over a web server.
 
 Warning: Codigo/esbozo realizado a correr (el grueso fue programado  en 3 intensos dias), no solo hay que pulirlo si no que esta sin seguridad, 
-sin comprobaciones, con fallos, errores y todo eso... 
+Warning: Outline code, "fast coding" (the bulk was done in 3 days) have to polish a lot and it is without security.
 
 Probablemente de momento no deberias instalarlo.
+Probably shouldn't install it at the moment.
 
 Puedes ver sceenshots del aspecto actual en /screenshots aunque cambiara que el proyecto esta en fase muy muy temprana.
+You can see screenshots of the current appearance in /screenshots although it going to change since this proyect is in a very very early stage.
 
 ## WARNING
     There is no security check in the code yet use on your own risk. The code are totatally insecure. If you expose this code to internet you have a very high
-    security problem.
+    security problem. why? want this app "now", have too much time in few days. Security and better code will comming more slowly
 
     No hay ningun mecanismo deseguridad en el codigo todavia. El codigo es totalmente inseguro. Si expones este codigo a internet tendras un grave problema
-    de seguridad.
+    de seguridad. ¿por que? queria esta aplicación "ya", tenia mucho tiempo pero pocos dias. Seguridad y mejor cidog vendra mucho mas despacio.
 
 # How WILL works. (EXCUSE MY ENGLISH)
 
