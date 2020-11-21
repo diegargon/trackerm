@@ -11,23 +11,31 @@ function index_page() {
     global $cfg, $LNG, $db;
     $home = '<div class="info_container">';
 
-    $home .= '<div class="profiles_container">';
-    $home .= '<div class="profile_title"><h2>' . $LNG['L_PROFILES'] . '</h2></div>';
+    if ($cfg['search_db']) {
+        $home .= '<div class="home_item_container">';
+        $home .= '<div class="home_item_title"><h2>' . $LNG['L_PROFILES'] . '</h2></div>';
+        $home .= '<div class="home_item">';
+        $home .= $LNG['L_SEARCH_ENGINE'] . ': ' . '<a href="https://themoviedb.org" target=_blank>themoviedb.org</a>';
+        $home .= '</div></div>';
+    }
+
+    $home .= '<div class="home_item_container">';
+    $home .= '<div class="home_item_title"><h2>' . $LNG['L_PROFILES'] . '</h2></div>';
     $home .= '<div class="profiles">';
     foreach ($cfg['profiles'] as $pid => $profile) {
         $home .= '<a class="action_link" href="?profile=' . $pid . '">' . strtoupper($profile) . '</a>';
     }
     $home .= '</div></div>';
 
-    $home .= '<div class="harddisk_container">';
-    $home .= '<div class="harddisk_title"><h2>' . $LNG['L_HARDDISK'] . '</h2></div>';
+    $home .= '<div class="home_item_container">';
+    $home .= '<div class="home_item_title"><h2>' . $LNG['L_HARDDISK'] . '</h2></div>';
     $home .= '<div class="harddisk">';
     $home .= '<span>' . $LNG['L_MOVIES'] . ' : ' . human_filesize(disk_free_space($cfg['MOVIES_PATH'])) . '/' . human_filesize(disk_total_space($cfg['MOVIES_PATH'])) . '</span><br/>';
     $home .= '<span>' . $LNG['L_SHOWS'] . ' : ' . human_filesize(disk_free_space($cfg['SHOWS_PATH'])) . '/' . human_filesize(disk_total_space($cfg['SHOWS_PATH'])) . '</span>';
     $home .= '</div></div>';
 
-    $home .= '<div class="database_container">';
-    $home .= '<div class="database_title"><h2>' . $LNG['L_DATABASE'] . '</h2></div>';
+    $home .= '<div class="home_item_container">';
+    $home .= '<div class="home_item_title"><h2>' . $LNG['L_DATABASE'] . '</h2></div>';
     $home .= '<div class="database">';
     $home .= '<span>' . $LNG['L_MOVIES'] . ' : ' . $db->getNumElements('biblio-movies') . '</span><br/>';
     $home .= '<span>' . $LNG['L_EPISODES'] . ' : ' . $db->getNumElements('biblio-shows') . '</span>';

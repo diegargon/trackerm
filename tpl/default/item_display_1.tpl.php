@@ -18,8 +18,10 @@
         <div class="item_title"><?= $tdata['title'] ?></div>
         <hr/>
         <div class="item_desc">
-            <?php if (!empty($tdata['source'])) { ?>
-                <span class="item_source_link">[<a href="<?= $tdata['guid'] ?>" target=_blank ><?= $tdata['source'] ?></a>]</span>
+            <?php
+            if (!empty($tdata['download'])) {
+                ?>
+                <span class="item_download"><a class="action_link" href="<?= basename($_SERVER['REQUEST_URI']) . '&download=' . rawurlencode($tdata['download']) ?>"><?= $tdata['L_DOWNLOAD_MIN'] ?></a></span>
                 <?php
             }
             if (!empty($tdata['hsize'])) {
@@ -43,10 +45,12 @@
                 </span>
                 <?php
             }
-            if (!empty($tdata['download'])) {
+            if (!empty($tdata['source'])) {
                 ?>
-                <span class="item_download_link"><a href="<?= basename($_SERVER['REQUEST_URI']) . '&download=' . rawurlencode($tdata['download']) ?>">[<?= $tdata['L_DOWNLOAD_MIN'] ?>]</a></span>
-            <?php } ?>
+                <span class="item_source"><a class="action_link" href="<?= $tdata['guid'] ?>" target=_blank ><?= $tdata['source'] ?></a></span>
+                    <?php
+                }
+                ?>
         </div>
 
     </div>

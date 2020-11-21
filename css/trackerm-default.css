@@ -20,11 +20,11 @@ input {
 }
 
 a:link {
-    color: #b8bcff;
+    color: white;
 }
 
 a:visited {
-    color: #020860;
+    color: #b8bcff;
 }
 
 hr {
@@ -160,7 +160,7 @@ button {
 }
 
 .divTableCellID:last-of-type {
-    
+
 }
 
 .display {
@@ -191,13 +191,15 @@ button {
 
 .item_desc {}
 
-.item_source_link, .item_size, .item_download_link, .item_rating {
+.item_source, .item_size, .item_download, .item_rating {
     background-color: #06001c;
 }
-.item_download_link {}
 
 .item_size {}
 
+.item_links {
+
+}
 .menu_element {
     border:0px solid blue;
     display:inline-block;
@@ -453,11 +455,15 @@ button {
 .info_container {
     width: 30%;
 }
-.profiles_container, .harddisk_container, .database_container {
+.home_item_container {
     border:1px solid #ff5b5b;
     padding: 10px;
     border-collapse: collapse;
     /* width: min-content; */
+}
+
+.home_item_title {
+    margin-bottom: 15px;
 }
 
 .profiles {
@@ -469,10 +475,6 @@ button {
 }
 
 .harddisk, .database {}
-
-.profile_title, .harddisk_title, .database_title {
-    margin-bottom: 15px;
-}
 
 .form_inline {
     display: inline;

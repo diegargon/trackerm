@@ -68,6 +68,7 @@ $LNG = [
     'L_SIZE' => 'Size',
     'L_SHOW_TORRENTS' => 'Show Torrents',
     'L_SEARCH' => 'Search',
+    'L_SEARCH_ENGINE' => 'Search engine',
     'L_SEARCH_MOVIES' => 'Search Movies',
     'L_SEARCH_SHOWS' => 'Search Shows',
     'L_SEARCHTORRENTS' => 'Torrents',
