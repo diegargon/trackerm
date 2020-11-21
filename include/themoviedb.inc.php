@@ -17,7 +17,7 @@ function themoviedb_searchMovies($search) {
 
     $data = curl_get_json($url);
 
-    (isset($data['results'])) ? $movies = themoviedb_prep('movies', $data['results']) : null;
+    (isset($data['results'])) ? $movies = themoviedb_MediaPrep('movies', $data['results']) : null;
 
     return isset($movies) ? $movies : null;
 }
@@ -32,12 +32,12 @@ function themoviedb_searchShows($search) {
 
     $data = curl_get_json($url);
 
-    (isset($data['results'])) ? $shows = themoviedb_prep('shows', $data['results']) : null;
+    (isset($data['results'])) ? $shows = themoviedb_MediaPrep('shows', $data['results']) : null;
 
     return isset($shows) ? $shows : null;
 }
 
-function themoviedb_prep($type, $items) {
+function themoviedb_MediaPrep($type, $items) {
     global $db;
 
     $img_path = 'https://image.tmdb.org/t/p/w500';
@@ -109,7 +109,7 @@ function themoviedb_prep($type, $items) {
 }
 
 function themoviedb_getSeasons($id) {
-    global $cfg;
+    global $cfg, $db;
 
     $seasons_url = 'https://api.themoviedb.org/3/tv/' . $id . '?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['LANG'];
 
@@ -123,7 +123,12 @@ function themoviedb_getSeasons($id) {
             $seasons_url = 'https://api.themoviedb.org/3/tv/' . $id . '/season/' . $i . '?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['LANG'];
             $episodes_data[$i] = curl_get_json($seasons_url);
         }
-        return themoviedb_showsDetails_prep($id, $seasons_data, $episodes_data);
+
+        $item = themoviedb_showsDetailsPrep($id, $seasons_data, $episodes_data);
+        $db->addUniqElements('shows_details', $item, 'themoviedb_id');
+        $db->reloadTable('shows_details');
+
+        return $db->getItemByField('shows_details', 'themoviedb_id', $id);
     }
 
     return false;
@@ -140,6 +145,11 @@ function themoviedb_showsDetailsPrep($id, $seasons_data, $episodes_data) {
     $item[$lastid]['themoviedb_id'] = $id;
     $item[$lastid]['n_seasons'] = $seasons_data['number_of_seasons'];
     $item[$lastid]['n_episodes'] = $seasons_data['number_of_episodes'];
+    isset($item[$lastid]['first_air_date']) ? $item[$lastid]['release'] = $seasons_data['first_air_date'] : null;
+    isset($item[$lastid]['homepage']) ? $item[$lastid]['homepage'] = $seasons_data['homepage'] : null;
+    isset($item[$lastid]['in_production']) ? $item[$lastid]['in_production'] = $seasons_data['in_production'] : null;
+    isset($item[$lastid]['overview']) ? $item[$lastid]['plot'] = $seasons_data['overview'] : null;
+    isset($item[$lastid]['status']) ? $item[$lastid]['status'] = $seasons_data['status'] : null;
 
     for ($i = 1; $i <= $seasons_data['number_of_seasons']; $i++) {
         $episodes = $episodes_data[$i]['episodes'];
@@ -149,16 +159,14 @@ function themoviedb_showsDetailsPrep($id, $seasons_data, $episodes_data) {
         foreach ($episodes as $episode) {
             if (isset($episode['episode_number'])) {
                 $n_episode = $episode['episode_number'];
-                isset($item[$lastid]['seasons'][$i]['episodes'][$n_episode]['title']) ? $item[$lastid]['seasons'][$i]['episodes'][$n_episode]['title'] = $episode['name'] : $item[$lastid]['seasons'][$i]['episodes'][$n_episode]['title'] = $episode['episode_number'];
-                isset($item[$lastid]['seasons'][$i]['episodes'][$n_episode]['plot']) ? $item[$lastid]['seasons'][$i]['episodes'][$n_episode]['plot'] = $episode['overview'] : $item[$lastid]['seasons'][$i]['episodes'][$n_episode]['plot'] = $episode['episode_number'];
+                isset($episode['name']) ? $item[$lastid]['seasons'][$i]['episodes'][$n_episode]['title'] = $episode['name'] : $item[$lastid]['seasons'][$i]['episodes'][$n_episode]['title'] = $episode['episode_number'];
+                isset($episode['overview']) ? $item[$lastid]['seasons'][$i]['episodes'][$n_episode]['plot'] = $episode['overview'] : $item[$lastid]['seasons'][$i]['episodes'][$n_episode]['plot'] = '';
+                isset($episode['air_date']) ? $item[$lastid]['seasons'][$i]['episodes'][$n_episode]['release'] = $episode['air_date'] : $item[$lastid]['seasons'][$i]['episodes'][$n_episode]['release'] = '';
             }
         }
     }
 
-    $db->addUniqElements('shows_details', $item, 'themoviedb_id');
-    $db->reloadTable('shows_details');
-
-    return $db->getItemByField('shows_details', 'themoviedb_id', $id);
+    return $item;
 }
 
 function themoviedb_getById($id, $table) {

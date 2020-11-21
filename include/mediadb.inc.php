@@ -15,16 +15,16 @@ function mediadb_searchShows($search) {
     return themoviedb_searchShows($search);
 }
 
-function mediadb_prep($type, $items) {
-    return themoviedb_prep($type, $items);
+function mediadb_Prep($type, $items) {
+    return themoviedb_MediaPrep($type, $items);
 }
 
 function mediadb_getSeasons($id) {
     return themoviedb_getSeasons($id);
 }
 
-function mediadb_showsDetails_prep($id, $seasons_data, $episodes_data) {
-    return themoviedb_showsDetails_prep($id, $seasons_data, $episodes_data);
+function mediadb_showsDetailsPrep($id, $seasons_data, $episodes_data) {
+    return themoviedb_showsDetailPrep($id, $seasons_data, $episodes_data);
 }
 
 function mediadb_getById($id, $table) {

@@ -252,7 +252,11 @@ function page_wanted() {
                 $wanted_list_data .= '<span class="tag_ignore">' . $ignores . '</span>';
             }
             $wanted_list_data .= '<span class="tag_added">' . $LNG['L_ADDED'] . ':' . date('d-m-y', $wanted_item['added']) . '</span>';
-            $wanted_list_data .= '<span class="tag_id">TMDB:' . $wanted_item['themoviedb_id'] . '</span>';
+
+            $mediadb_item = $db->getItemByField('tmdb_search', 'themoviedb_id', $wanted_item['themoviedb_id']);
+            $elink = $mediadb_item['elink'];
+
+            $wanted_list_data .= '<span class="tag_id">TMDB:<a href="' . $elink . '" target=_blank>' . $wanted_item['themoviedb_id'] . '</a></span>';
             $wanted_list_data .= '</div>';
         }
         $wanted_list_data .= '</div>';
