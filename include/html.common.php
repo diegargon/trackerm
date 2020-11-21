@@ -43,46 +43,7 @@ function buildTable($head, $db_ary, $topt = null) {
 
     !empty($head) ? $page .= '<div class="type_head"><h2>' . $LNG[$head] . '</h2></div>' : null;
 
-    /* PAGES */
-    $pages = '';
-    $items_per_page = $cfg['tresults_columns'] * $cfg['tresults_rows'];
-    $total_items = count($db_ary);
-    $num_pages = $total_items / $items_per_page;
-
-    if ($num_pages > 1) {
-        $iurl = basename($_SERVER['REQUEST_URI']);
-        //Avoid duplicate
-        $iurl = preg_replace('/&npage=\d{1,4}/', '', $iurl);
-        $iurl = preg_replace('/&search_type=shows/', '', $iurl);
-        $iurl = preg_replace('/&search_type=movies/', '', $iurl);
-        for ($i = 1; $i <= ceil($num_pages); $i++) {
-            if (
-                    (($i <= ($npage + 3)) && $i >= ($npage - 1) ||
-                    ($i >= (ceil($num_pages) - 3 )) ||
-                    ($i == 1) || ($i == ceil($num_pages) ))
-            ) {
-                $extra = '';
-                $link_npage_class = "num_pages_link";
-
-                if (!empty($topt['search_type'])) {
-                    $extra = '&search_type=' . $topt['search_type'];
-                }
-
-                if (isset($_GET['npage']) && ($_GET['npage'] == $i)) {
-                    if (isset($topt['search_type']) && ($_GET['search_type'] != $topt['search_type'])) {
-
-                    } else {
-                        $link_npage_class .= '_selected';
-                    }
-                }
-                $pages .= '<a class="' . $link_npage_class . '" href="' . $iurl . '&npage=' . $i . $extra . '">' . $i . '</a>';
-            }
-        }
-
-        $page .= '<div class="type_pages_numbers">' . $pages . '</div>';
-    }
-
-    /* FIN PAGES */
+    $page .= pager($npage, count($db_ary), $topt);
 
     $page .= '</div>';
 
@@ -157,4 +118,47 @@ function msg_box($msg) {
     global $LNG;
 
     return getTpl('msgbox', array_merge($LNG, $msg));
+}
+
+function pager($npage, $nitems, &$topt) {
+    global $cfg;
+
+    /* PAGES */
+    $pages = '';
+    $items_per_page = $cfg['tresults_columns'] * $cfg['tresults_rows'];
+
+    $num_pages = $nitems / $items_per_page;
+
+    if ($num_pages > 1) {
+        $iurl = basename($_SERVER['REQUEST_URI']);
+        //Avoid duplicate
+        $iurl = preg_replace('/&npage=\d{1,4}/', '', $iurl);
+        $iurl = preg_replace('/&search_type=shows/', '', $iurl);
+        $iurl = preg_replace('/&search_type=movies/', '', $iurl);
+        for ($i = 1; $i <= ceil($num_pages); $i++) {
+            if (
+                    (($i <= ($npage + 3)) && $i >= ($npage - 1) ||
+                    ($i >= (ceil($num_pages) - 3 )) ||
+                    ($i == 1) || ($i == ceil($num_pages) ))
+            ) {
+                $extra = '';
+                $link_npage_class = "num_pages_link";
+
+                if (!empty($topt['search_type'])) {
+                    $extra = '&search_type=' . $topt['search_type'];
+                }
+
+                if (isset($_GET['npage']) && ($_GET['npage'] == $i)) {
+                    if (isset($topt['search_type']) && ($_GET['search_type'] != $topt['search_type'])) {
+
+                    } else {
+                        $link_npage_class .= '_selected';
+                    }
+                }
+                $pages .= '<a class="' . $link_npage_class . '" href="' . $iurl . '&npage=' . $i . $extra . '">' . $i . '</a>';
+            }
+        }
+    }
+
+    return '<div class="type_pages_numbers">' . $pages . '</div>';
 }
