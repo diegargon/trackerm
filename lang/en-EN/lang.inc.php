@@ -49,6 +49,7 @@ $LNG = [
     'L_IDENT_MOVIES' => 'Identify movies',
     'L_IDENT_SHOWS' => 'Identify shows',
     'L_IDENTIFY' => 'Identify',
+    'L_IDENTIFIED' => 'Identified',
     'L_LIBRARY' => 'Library',
     'L_MOVIES' => 'Movies',
     'L_MOVIE' => 'Movie',

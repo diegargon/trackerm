@@ -13,7 +13,7 @@ function index_page() {
 
     if ($cfg['search_db']) {
         $home .= '<div class="home_item_container">';
-        $home .= '<div class="home_item_title"><h2>' . $LNG['L_PROFILES'] . '</h2></div>';
+        $home .= '<div class="home_item">' . $LNG['L_IDENTIFIED'] . ': ' . strtoupper($cfg['profiles'][$cfg['profile']]) . '</div>';
         $home .= '<div class="home_item">';
         $home .= $LNG['L_SEARCH_ENGINE'] . ': ' . '<a href="https://themoviedb.org" target=_blank>themoviedb.org</a>';
         $home .= '</div></div>';

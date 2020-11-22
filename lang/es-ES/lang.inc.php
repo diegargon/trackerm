@@ -50,6 +50,7 @@ $LNG = [
     'L_IDENT_MOVIES' => 'Identificación de peliculas',
     'L_IDENT_SHOWS' => 'Identificación de series',
     'L_IDENTIFY' => 'Identificar',
+    'L_IDENTIFIED' => 'Identificado',
     'L_LIBRARY' => 'Biblioteca',
     'L_MOVIES' => 'Peliculas',
     'L_MOVIE' => 'Pelicula',
