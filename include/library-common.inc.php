@@ -45,7 +45,7 @@ function rebuild($media_type, $path) {
             $items[$last_id]['tags'] = getFileTags($file_name);
             $items[$last_id]['ext'] = substr($file_name, -3);
             $items[$last_id]['added'] = time();
-            $chapter = getFileChapter($file_name);
+            $chapter = getFileEpisode($file_name);
             if (!empty($chapter)) {
                 $items[$last_id]['season'] = intval($chapter['season']);
                 $items[$last_id]['chapter'] = intval($chapter['chapter']);
@@ -93,6 +93,8 @@ function getFileTitle($file) {
     $regex .= '(?!\s\d+x)'; //space y 1x
     $regex .= '(?!_-\d+)';  // los char _- y digitos
     $regex .= '(?!_\d+_)';  // los char _digitos_
+    $regex .= '(?!-\s+Temporada)';  // - Temporada
+    $regex .= '(?!-\s+Season)';  // - Season
     $regex .= '(?!\d{4})'; // 4 digitos por fecha igual da problemas
     $regex .= '(?!720p)'; // 720p
     $regex .= '(?!1080p)'; // M1080p
@@ -129,7 +131,8 @@ function getFileTitle($file) {
     return trim($_title);
 }
 
-function getFileChapter($file_name) {
+function getFileEpisode($file_name) {
+    //TODO change chapter -> episode in all code
 
     /* FORMAT Cap.101 */
     $match = [];
@@ -138,15 +141,13 @@ function getFileChapter($file_name) {
         if (strlen($capitulo_noformat) == 3) {
             $temp = substr($capitulo_noformat, 0, 1);
             $cap = substr($capitulo_noformat, 1, 2);
-            $cap = "-" . $temp . "x" . $cap;
         }
         if (strlen($capitulo_noformat) == 4) {
             $temp = substr($capitulo_noformat, 0, 2);
             $cap = substr($capitulo_noformat, 2, 3);
-            $cap = "-" . $temp . "x" . $cap;
         }
         $chapter['season'] = $temp;
-        $chapter['cap'] = $cap;
+        $chapter['chapter'] = $cap;
     }
 
     /* FORMAT 1x01 */
@@ -178,6 +179,28 @@ function getFileYear($file_name) {
     }
 
     return $year;
+}
+
+function getMediaType($file_name) {
+    // S01E01
+    if (preg_match('/S\d{2}E\d{2}/i', $file_name)) {
+        return 'shows';
+    }
+    // 1x1 01x01
+    if (preg_match('/[0-9]{1,2}(x|X)[0-9]{2,2}/i', $file_name)) {
+        return 'shows';
+    }
+    // Cap.*
+    if (preg_match('/\[Cap.(.*?)\]/i', $file_name)) {
+        return 'shows';
+    }
+    /*
+      if (preg_match('',$file_name)) {
+      return 'shows';
+      }
+
+     */
+    return 'movies';
 }
 
 function getFileTags($file_name) {
