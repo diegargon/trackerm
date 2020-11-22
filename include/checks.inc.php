@@ -30,7 +30,7 @@ function do_checks() {
     if (empty($cfg['SHOWS_PATH']) || !is_dir($cfg['MOVIES_PATH'])) {
         echo '<p><b>WARNING: You must set in /config/config.inc.php SHOWS_PATH where your shows reside </b></p>';
     }
-    if (empty($cfg['RE_PATH'])) {
+    if (empty($cfg['REL_PATH'])) {
         echo '<p><b>WARNING: You must set in /config/config.inc.php REL_PATH </b></p>';
     }
 
