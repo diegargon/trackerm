@@ -40,7 +40,7 @@ function page_transmission() {
         //empty($transfer['isFinished']) ? $isFinished = 0 : $isFinished = $transfer['isFinished'];
         //$page .= '<div class="tor_tag"><span>isFinish: ' . $isFinished . '</div>';
         $transfer['percentDone'] == 1 ? $percentDone = '100' : $percentDone = (float) $transfer['percentDone'];
-        $page .= '<div class="tor_tag"><span>' . $LNG['L_PERCENT'] . ': ' . $percentDone . '%</div>';
+        $page .= '<div class="tor_tag"><span>' . $LNG['L_COMPLETATE'] . ': ' . $percentDone . '%</div>';
         $page .= '<div class="tor_tag"><span>' . $LNG['L_STATUS'] . ': ' . $status[$transfer['status']] . '</div>';
         $page .= '<div class="tor_tag">' . $LNG['L_DESTINATION'] . ': ' . $transfer['downloadDir'] . '</div>';
         $page .= '</div>'; //tor tags
