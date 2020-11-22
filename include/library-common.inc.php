@@ -88,7 +88,8 @@ function getFileTitle($file) {
     $regex .= '(?!\[)'; // [
     $regex .= '(?!\()'; // (
     $regex .= '(?!\()'; // (
-    $regex .= '(?!-\d+x)'; // -1x
+    $regex .= '(?!-\s+\d+x)'; // '- 1x'
+    $regex .= '(?!-\d+x)'; // '-1x'
     $regex .= '(?!\s\d+x)'; //space y 1x
     $regex .= '(?!_-\d+)';  // los char _- y digitos
     $regex .= '(?!_\d+_)';  // los char _digitos_
