@@ -1,16 +1,15 @@
 # trackerm
 
-Description: 
+## Description: 
+
 Probando a realizar una alternativa Sonarr+Radar sobre servidor web
-Trying a Sonarr & Radarr alternative over a web server.
-
 Warning: Codigo/esbozo realizado a correr (el grueso fue programado  en 3 intensos dias), no solo hay que pulirlo si no que esta sin seguridad, 
-Warning: Outline code, "fast coding" (the bulk was done in 3 days) have to polish a lot and it is without security.
-
 Probablemente de momento no deberias instalarlo.
-Probably shouldn't install it at the moment.
-
 Puedes ver sceenshots del aspecto actual en /screenshots aunque cambiara que el proyecto esta en fase muy muy temprana.
+
+Trying a Sonarr & Radarr alternative over a web server.
+Warning: Outline code, "fast coding" (the bulk was done in 3 days) have to polish a lot and it is without security.
+Probably shouldn't install it at the moment.
 You can see screenshots of the current appearance in /screenshots although it going to change since this proyect is in a very very early stage.
 
 ## WARNING
@@ -20,7 +19,7 @@ You can see screenshots of the current appearance in /screenshots although it go
     No hay ningun mecanismo deseguridad en el codigo todavia. El codigo es totalmente inseguro. Si expones este codigo a internet tendras un grave problema
     de seguridad. ¿por que? queria esta aplicación "ya", tenia mucho tiempo pero pocos dias. Seguridad y mejor cidog vendra mucho mas despacio.
 
-# How WILL works. (EXCUSE MY ENGLISH)
+## How WILL works. (EXCUSE MY ENGLISH)
 
 This proyect it in very very early stage, will change alot between commits and files and database will not be backwards compatible, if you want use
 now and update tomorrow you must probably remove all database entrys in cache and begin identified applications again if errors appears (and going to appear).
@@ -47,13 +46,13 @@ WARNING: At this momment i not using any database, just save in json files the d
     recreate all DB files (delete old) and check config.inc.php agains _config.inc.php values for new/modify ones, and this will be change very very often.
     No backwards compatible yet.
 
-# Lenguaje
+## Lenguaje
     Php+Javascript (Más adelante probablemente Jquery)
 
-# Resumen requisitos:
+## Resumen requisitos:
 Apache+Php (o similar), Jacket, Transmission, Composer, cuenta+api key themoviedb.org, CRON
 
-# Instalación
+## Instalación
     * Copiar los archivos de src a la carpeta destino (AKA: dest)
 
     * Instalar composer si no lo teneis, hay guias pero basicamente 
@@ -68,7 +67,7 @@ Apache+Php (o similar), Jacket, Transmission, Composer, cuenta+api key themovied
 
     * Renombrar _config.inc.php a config.inc.php y configurarlo
         Importante añadir, themoviedb api key, jacket server ip y key, los indexers  que queremos utilizar (previamente activados en jackett)
-# Requisitos: Detalles:
+## Requisitos: Detalles:
 
 * Apache (o similar)
     Instalado y configurado, con soport php, curl
