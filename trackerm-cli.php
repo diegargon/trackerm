@@ -13,7 +13,11 @@ define('CLI', true);
 $ROOT_PATH = '';
 
 if (empty($ROOT_PATH)) {
-    exit();
+    if (file_exists('root_path')) {
+        $ROOT_PATH = trim(file_get_contents('root_path'));
+    } else {
+        exit();
+    }
 }
 
 chdir($ROOT_PATH);
