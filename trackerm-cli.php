@@ -10,7 +10,7 @@
 define('CLI', true);
 
 
-$ROOT_PATH = '';
+$ROOT_PATH = '/var/www/envigo.net/trackerm';
 
 if (empty($ROOT_PATH)) {
     exit();
