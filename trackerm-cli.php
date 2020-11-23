@@ -13,8 +13,8 @@ define('CLI', true);
 $ROOT_PATH = '';
 
 if (empty($ROOT_PATH)) {
-    if (file_exists('root_path')) {
-        $ROOT_PATH = trim(file_get_contents('root_path'));
+    if (file_exists('/etc/trackerm_root_path')) {
+        $ROOT_PATH = trim(file_get_contents('/etc/trackerm_root_path'));
     } else {
         leave('No root path');
     }
