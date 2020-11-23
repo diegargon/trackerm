@@ -97,3 +97,20 @@ function send_file($path) {
     fclose($fd);
     exit;
 }
+
+function scandir_r($dir) {
+    $root = scandir($dir);
+    foreach ($root as $value) {
+        if ($value === '.' || $value === '..') {
+            continue;
+        }
+        if (is_file("$dir/$value")) {
+            $result[] = "$dir/$value";
+            continue;
+        }
+        foreach (scandir_r("$dir/$value") as $value) {
+            $result[] = $value;
+        }
+    }
+    return $result;
+}

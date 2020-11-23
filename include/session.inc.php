@@ -7,6 +7,7 @@
  *  @subpackage
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  */
+require('include/prefs.inc.php');
 session_start();
 
 if (isset($_GET['profile']) && array_key_exists($_GET['profile'], $cfg['profiles'])) {
@@ -27,3 +28,4 @@ if (isset($_SESSION['profile']) && array_key_exists($_SESSION['profile'], $cfg['
     $cfg['profile'] = 0;
 }
 
+loadPrefs();

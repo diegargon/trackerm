@@ -6,6 +6,7 @@ TODO
 *  Supervisor de series y peliculas, a descargar encargado de bajar las series y peliculas que se piden
 asi como moitorear por si se solicita una pelicula/serie que no existe ningun torrent o los capitulos de las
 series que se marquen para monitorear.
+* Al borrar un registro de identificacion de series borrar todos los registros de capitulos.
 
 ** MED
 * actualizacion automatica de titulos de episodios
@@ -26,6 +27,5 @@ en vez de hacer otra query remota.
 indexer.
 * rebuild pager/paginacion, se enredo mucho el codigo.
 * Opcion Filtrar torrent 720/1080
-* ver forma de unrar y archivos con contraseña
 * Home: Informacion de torrents en transmission y su estado
 * opcional: mostrar otros ratigns, filmaffinity, imdb

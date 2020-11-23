@@ -1,0 +1,92 @@
+
+## How WILL works. (EXCUSE MY ENGLISH)
+
+This proyect it in very very early stage, will change alot between commits and files and database will not be backwards compatible, if you want use
+now and update tomorrow you must probably remove all database entrys in cache and begin identified applications again if errors appears (and going to appear).
+
+Select the path (config file only atm) where your movies/shows reside, click on rebuild buttons and identify your movies/shows.
+
+In "Themoviedb" tab you can search for movies/shows and  automatically will show you the torrents, if there is none you can choose 'wanted' and (FEATURE UPCOMMING) 
+trackm will check released torrents and automatically download when a match appears. 
+
+In Torrents tab you can search movies/shows torrents and clicking in download will automatically send to Transmission-daemon
+
+In Wanted/Seguimiento you can see what movies/shows trackm are tracking for download (feature not yet avaible)
+
+In Released/Publicado you can see the latest torrent releases
+
+In Library/Biblioteca you can see your movies/shows, identify, show seasons and check missing episodes.
+
+In the future trackm will track your transmission movie/shows downloads and automatically move to your library path. (not yet available)
+
+WARNING: At this momment i not using any database, just save in json files the data, that will change in the future and break backwards compatibility.
+
+## DIRECTORY PERMISSIONS
+    Your www server must have this permissions:
+    * ( R/W )to cache : save db files and images
+    * ( R ) to MOVIES_PATH : Where your movies library reside
+    * ( R ) to SHOWS_PATH : Where your shows library reside
+    * ( R ) to Transmission: Where transmission drop your files
+
+    All automatic jobs are doing with trackerm-cli.php you must configure your contrab to execute it
+    * ( RW ) to MOVIES_PATH : Where your movies library reside
+    * ( RW ) to SHOWS_PATH : Where your shows library reside
+    * ( RW ) to Transmission: Where transmission drop your files    
+
+## CONFIGURE
+    All configuration options going in config/config.inc.php except for the "automatic tool" you need change in trackerm-cli.php the variable 
+    ROOT_PATH . ex: $ROOT_PATH = '/var/www/trackerm' 
+
+## Automatic search for wanted media and "automatic moving file"  mechanism.
+    At this moment all auto mechanism are in develop, i do not recommend using it.
+    trackerm-cli.php must be added to your cron.
+
+    How will works (not yet):
+    * Will looking for wanted items the days configured and automatic download if found any coincidence.
+    * Will move all media in the transmission-daemon "completed" directory to your library directory (you can configure if move all or only the media download
+    with this software.
+  
+## VERSION
+    WARNING: You can check the version on VERSION file. While in alpha 0.0.X and until 0.1 on every version update probably you going to need 
+    recreate all DB files (delete old) and check config.inc.php agains _config.inc.php values for new/modify ones, and this will be change very very often.
+    No backwards compatible yet.
+
+## Programming Language
+    Php+Javascript (Jquery in the futer probably)
+
+## Requisites:
+Apache+Php (or similar), Jacket, Transmission, Composer, account+api key themoviedb.org, CRON
+
+## Installation
+    * Copy files from to a destination directory (AKA: dest)
+
+    * Installl composer.
+
+        $ curl -sS https://getcomposer.org/installer -o composer-setup.php
+
+        $ php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+
+    *  Go dest y type
+
+        $ composer require irazasyed/php-transmission-sdk  php-http/httplug-pack  php-http/guzzle6-adapter
+
+    * Rename _config.inc.php to config.inc.php and configure
+
+## Requisitess: Details:
+
+* Web server (tested on apache)
+    * With php and curl support
+    * For caching the images you need allow_url_fopen in your php.ini
+    * R/W in cache and cache/images. Database files and images will be stored in cache dir, must be writable.
+* Jackett
+    * Configured with indexers (add the indexers you want use to config.inc.php and the api
+
+* Transmission-daemon
+    * Configure to accept RPC connections (add details to config.inc.php)
+    * Beware the settings.json will we rewrite after stop the daemon. Stop the daemon before configure.
+
+* TheMovieDB.ORG    
+    * You need a acount for the api key
+
+## Latest Changes
+

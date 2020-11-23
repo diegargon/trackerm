@@ -32,4 +32,8 @@ class TorrentServer {
         return $this->trans_conn->addUrl($url);
     }
 
+    public function deleteIds($ids) {
+        return $this->trans_conn->remove($ids, true);
+    }
+
 }

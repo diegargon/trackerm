@@ -8,7 +8,10 @@
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  */
 include "include/common.inc.php";
+require('include/session.inc.php');
+require('include/pages.inc.php');
 include "include/html.common.php";
+require('include/library.inc.php');
 
 isset($_GET['page']) ? $req_page = $_GET['page'] : $req_page = '';
 
@@ -17,8 +20,14 @@ $footer = getFooter();
 
 if (!empty($_GET['download'])) {
     $d_link = $_GET['download'];
-    $trans->addUrl(rawurldecode($d_link));
-    //respuesta {"hashString":"32a182e2304472cd3bd9ef0ccc8837e40fddf144","id":7,"name":"El Legado De Las Mentiras (2020) [BluRay Rip][AC3 5.1 Castellano][www.PctMix.com]","duplicate":true}
+    $trans_response = $trans->addUrl(rawurldecode($d_link));
+    foreach ($trans_response as $rkey => $rval) {
+        $trans_db[0][$rkey] = $rval;
+    }
+    $trans_db[0]['tid'] = $trans_db[0]['id'];
+    $trans_db[0]['status'] = -1;
+    $trans_db[0]['profile'] = (int) $cfg['profile'];
+    $db->addUniqElements('transmission', $trans_db, 'tid');
 }
 
 if (!isset($req_page) || $req_page == '') {
