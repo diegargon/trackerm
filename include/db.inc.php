@@ -178,8 +178,8 @@ class DB {
     }
 
     public function getTableData($table, $force = false) {
-        if (!isset($this->tables[$table]['data']) || $force === true) {
 
+        if (!isset($this->tables[$table]['data']) || $force === true) {
             if ($this->loadTable($table) && !empty($this->tables[$table]['data'])) {
                 return $table_data = $this->tables[$table]['data'];
             } else {
@@ -202,11 +202,15 @@ class DB {
     public function updateRecordById($table, $id, $val_ary) {
         $this->getTableData($table);
 
+        if (!isset($this->tables[$table]['data'][$id])) {
+            return false;
+        }
         foreach ($val_ary as $key => $val) {
             $this->tables[$table]['data'][$id][$key] = $val;
         }
 
         $this->saveTable($table);
+        return true;
     }
 
     public function updateElementById($table, $id, $element) {
@@ -229,6 +233,10 @@ class DB {
     public function updateRecordsByField($table, $field, $value, $update_fields) {
         $this->getTableData($table);
 
+        if (!isset($this->tables[$table]['data'][$id])) {
+            return false;
+        }
+
         foreach ($update_fields as $key => $val) {
             foreach ($this->tables[$table]['data'] as $id => $item) {
                 if ($item[$field] == $value) {
@@ -238,12 +246,18 @@ class DB {
         }
 
         $this->saveTable($table);
+
+        return true;
     }
 
     /* A partir de un id y el campo key/valor de este actualiza otros registros que tengas ese key/valor */
 
     public function updateRecordsBySameField($table, $id, $field, $update_fields) {
         $this->getTableData($table);
+
+        if (!isset($this->tables[$table]['data'][$id])) {
+            return false;
+        }
 
         foreach ($update_fields as $key => $val) {
             // Cogemos el valor del campo $field del id del registro proporcionado para buscar iguales
@@ -257,6 +271,8 @@ class DB {
             }
         }
         $this->saveTable($table);
+
+        return true;
     }
 
     private function loadTable($table) {
