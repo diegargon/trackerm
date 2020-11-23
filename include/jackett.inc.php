@@ -1,13 +1,13 @@
 <?php
 
 /**
- * 
+ *
  *  @author diego@envigo.net
- *  @package 
- *  @subpackage 
+ *  @package
+ *  @subpackage
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  */
-function search_movie_torrents($words, $head = null) {
+function search_movie_torrents($words, $head = null, $nohtml = false) {
     global $cfg;
 
     $result = [];
@@ -29,12 +29,15 @@ function search_movie_torrents($words, $head = null) {
 
     $topt['search_type'] = 'movies';
     $movies_db = jackett_prep_movies($result);
+    if ($nohtml) {
+        return $movies_db;
+    }
     $page .= buildTable($head, $movies_db, $topt);
 
     return $page;
 }
 
-function search_shows_torrents($words, $head = null) {
+function search_shows_torrents($words, $head = null, $nohtml = false) {
     global $cfg;
 
     $result = [];
@@ -57,6 +60,9 @@ function search_shows_torrents($words, $head = null) {
 
     $topt['search_type'] = 'shows';
     $shows_db = jackett_prep_shows($result);
+    if ($nohtml) {
+        return $shows_db;
+    }
     $page .= buildTable($head, $shows_db, $topt);
 
     return $page;
@@ -64,10 +70,10 @@ function search_shows_torrents($words, $head = null) {
 
 /*
  * http://192.168.:9117/api/v2.0/indexers/newpct/results/torznab/api?t=tvsearch&cat=5030,5040&extended=1&apikey=&offset=0&limit=100
- * 
+ *
  * rsss feed:
  * 192.168.:9117/api/v2.0/indexers/newpct/results/torznab/api?apikey=k&t=search&cat=&q=
- * 
+ *
  * get capat
  * http://192.168.:9117/api/v2.0/indexers/newpct/results/torznab/api?apikey=c&t=caps
  */
@@ -77,9 +83,6 @@ function jackett_get($indexer, $limit = null) {
 
     (empty($limit)) ? $limit = $cfg['jacket_results'] : null;
 
-    //api?apikey=' . $cfg['jackett_key'] . '&t=search&cat=2000&extended=1&q=';
-    //api?apikey=' . $cfg['jackett_key'] . '&t=tvsearch&extended=1&q=&limit=5';
-    //api?apikey=' . $cfg['jackett_key'] . '&t=movie&cat=2000&q=';
     $jackett_url = $cfg['jackett_srv'] . $cfg['jackett_api'] . '/indexers/' . $indexer . '/results/torznab/api?t=search&extended=1&apikey=' . $cfg['jackett_key'] . '&limit=' . $limit;
 
     return curl_get_jackett($jackett_url);
@@ -107,7 +110,7 @@ function jackett_search_shows($words, $indexer, $limit = null) {
     global $cfg;
 
     empty($limit) ? $limit = $cfg['jacket_results'] : null;
-    
+
     $jackett_url = $cfg['jackett_srv'] . $cfg['jackett_api'] . '/indexers/' . $indexer . '/results/torznab/api?apikey=' . $cfg['jackett_key'] . '&t=search&extended=1&cat=5000&q=' . $words . '&limit=' . $limit;
 
     return curl_get_jackett($jackett_url);

@@ -112,5 +112,5 @@ function scandir_r($dir) {
             $result[] = $value;
         }
     }
-    return $result;
+    return isset($result) ? $result : false;
 }

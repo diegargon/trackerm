@@ -257,8 +257,20 @@ function page_wanted() {
             $wanted_list_data .= '<div class="wanted_list_row">';
             $wanted_list_data .= '<a href="' . $iurl . '&delete=' . $wanted_item['id'] . '" class="action_link">' . $LNG['L_DELETE'] . '</a>';
             $wanted_list_data .= '<span class="tag_id">' . $wanted_item['id'] . '</span>';
+            $wanted_state = $LNG['L_WAITING'];
+            if (!empty($wanted_item['wanted_state'])) {
+                if ($wanted_item['wanted_state'] == 1) {
+                    $wanted_state = $LNG['L_DOWNLOADING'];
+                } else if ($wanted_item['wanted_state'] == 2) {
+                    $wanted_state = $LNG['L_SEEDING'];
+                } else if ($wanted_item['wanted_state'] == 3) {
+                    $wanted_state = $LNG['L_STOPPED'];
+                }
+            }
+
+            $wanted_list_data .= '<span class="tag_state">' . $wanted_state . '</span>';
             $wanted_list_data .= '<span class="tag_title">' . $wanted_item['title'] . '</span>';
-            $wanted_list_data .= '<span class="tag_type">' . $wanted_item['type'] . '</span>';
+            $wanted_list_data .= '<span class="tag_type">' . $wanted_item['media_type'] . '</span>';
             $day_check = day_check($wanted_item['id'], $wanted_item['day_check']);
             $wanted_list_data .= '<span class="tag_day">' . $day_check . '</span>';
             foreach ($cfg['TORRENT_QUALITYS_PREFS'] as $quality) {

@@ -16,7 +16,7 @@ if (empty($ROOT_PATH)) {
     if (file_exists('root_path')) {
         $ROOT_PATH = trim(file_get_contents('root_path'));
     } else {
-        exit();
+        leave('No root path');
     }
 }
 
@@ -24,11 +24,8 @@ chdir($ROOT_PATH);
 require('include/common.inc.php');
 require('include/trackerm-cli.inc.php');
 
-inAppMedia();
-
-if ($cfg['MOVE_ONLY_INAPP']) {
-    outAppTorrents();
-}
-
+transmission_scan();
 
 wanted_work();
+
+echo "\n";

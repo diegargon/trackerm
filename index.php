@@ -20,10 +20,12 @@ $footer = getFooter();
 
 if (!empty($_GET['download'])) {
     $d_link = $_GET['download'];
+
     $trans_response = $trans->addUrl(rawurldecode($d_link));
     foreach ($trans_response as $rkey => $rval) {
         $trans_db[0][$rkey] = $rval;
     }
+    !empty($_GET['themoviedb_id']) ? $trans_db[0]['themoviedb_id'] = $_GET['themoviedb_id'] : null;
     $trans_db[0]['tid'] = $trans_db[0]['id'];
     $trans_db[0]['status'] = -1;
     $trans_db[0]['profile'] = (int) $cfg['profile'];

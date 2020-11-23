@@ -32,23 +32,33 @@ cualquier compatibilidad hacia atras.
     * ( RW ) to SHOWS_PATH : Where your shows library reside
     * ( RW ) to Transmission: Where transmission drop your files    
 
-## CONFIGURE
-    All configuration options going in config/config.inc.php except for the "automatic tool" you need change in trackerm-cli.php the variable 
-    ROOT_PATH . ex: $ROOT_PATH = '/var/www/trackerm' 
+## CONFIGURACION
+    Toda las opcines de configuración  va en config/config.inc.php excepto para la parte de la "utilidad automatica" que hay que cambiar la
+    variable ROOT_PATH a donde reside la web. ex: $ROOT_PATH = '/var/www/trackerm
 
-## Automatic search for wanted media and "automatic moving file"  mechanism.
-    At this moment all auto mechanism are in develop, i do not recommend using it.
-    trackerm-cli.php must be added to your cron.
+## Tareas automaticas: Seguimiento y mover a la libreria.
+    En estos momentos todos los mecanismos automaticos estan en desarrollo y no funciona o funcionan parcialmente
+    No recomiendo su uso.
+    Para su actual o futuro hay que añadir trackerm-cli.php a CRON, seria recomendable moverlo fuera del ROOT_PATH.
 
-    How will works (not yet):
-    * Will looking for wanted items the days configured and automatic download if found any coincidence.
-    * Will move all media in the transmission-daemon "completed" directory to your library directory (you can configure if move all or only the media download
-    with this software.
-  
+    Como funcionara (no lo hace todavía) :
+    * Automaticamente buscara torrentes en "seguimiento" los dias que configuraras, si encuentra coincidencia que satisfaga los filtros lo descargara.
+    * Automaticamente movera todos los archivos descargados por transmission a tu libreria siempre que se pulsara el descargar desde trackrm, opcionalmente tambien podra
+        mover todos los archivos mientras sean multimedia si así se configura
+    * Automaticamente y activalando buscara y movera archivos huerfanos en el directorio de descargas de transmission. Los archivos huerfanos son aquellos
+     que no constan en transmission ya sea por que los hemos borrado manualmente en vez de pararlos/pausarlos u otro motivo
+    * Automaticamente y activandolo podra mover todos los archivos multimedia de determinas carpetas que configuremos.
+    * Automaticamente descomprime archivos rar, no soporta contraseñas hasta que Jackett las soporte.
+    El funcionamiento para que automaticamente se muevan los archivos bajados por transmission es el siguiente:
+        Primero busca los archivos que indicamos en trackrm descargar, si los encuentra mira si esta parado/pausa o sirviendo(seeding) si es así en el primer caso
+        parado, lo movera y borrar el torrent, en el segundo caso (aun no programado), creara un enlace simbolico para poder acceder al archivo desde tu libreria
+        hasta que sea parado o pare de "servirse" el archivo, en cuyo caso se movera.
+        Actualmente solo mueve los archivos parados/pausa.
+
 ## VERSION
-    WARNING: You can check the version on VERSION file. While in alpha 0.0.X and until 0.1 on every version update probably you going to need 
-    recreate all DB files (delete old) and check config.inc.php agains _config.inc.php values for new/modify ones, and this will be change very very often.
-    No backwards compatible yet.
+    Advertencia: Puedes comprobar la version en el archivo VERSION. Mientras este en alpha (0.0.X) hasta la versión 0.1, toda version es factible de romper
+    la compatibilidad hacia atras, y lo hara. Si actualizas y hay errores posiblemente tengas que borrar los archivos de la base de datos cache/*.db y comprobar
+    el archivo config.inc contra _config.inc si hay nuevas variables.
 
 ## Lenguaje
     Php+Javascript (Más adelante probablemente Jquery)

@@ -391,16 +391,14 @@ button {
     margin: 0px 0px 6px 0px;
 }
 
-.wanted_add_container {
-
-}
+.wanted_add_container {}
 
 .wanted_details {
     margin: 4px;
     padding: 5px;
 }
 
-.tag_quality, .tag_type, .tag_day, .tag_id, .tag_added {
+.tag_quality, .tag_type, .tag_day, .tag_id, .tag_added, .tag_state {
     border: 1px solid green;
 }
 
@@ -414,7 +412,7 @@ button {
     border: 1px solid #ff5b5b;
 }
 
-.tag_quality, .tag_ignore, .tag_type, .tag_day, .tag_id, .tag_added, .tag_title {
+.tag_quality, .tag_ignore, .tag_type, .tag_day, .tag_id, .tag_added, .tag_title, .tag_state {
     margin: 1px 2px 1px 2px;
     padding: 6px 10px 6px 10px;
 }

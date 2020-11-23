@@ -29,3 +29,7 @@ Si expones este codigo a internet tendras un grave problema de seguridad. ¿por 
 de seguridad.
 Seguridad y mejor codigo vendra mucho mas despacio.
     
+## Latest (Important)
+
+* Add partially and no enought tested support for wanted items
+* Add partialy and not enought tested code for move files automatically (support unrar, create the direcotrys and rename)

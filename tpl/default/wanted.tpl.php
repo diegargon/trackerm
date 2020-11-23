@@ -1,9 +1,9 @@
 <?php
 /**
- * 
+ *
  *  @author diego@envigo.net
- *  @package 
- *  @subpackage 
+ *  @package
+ *  @subpackage
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  */
 ?>
@@ -18,13 +18,13 @@
                 <?= $tdata['tag_type'] . $tdata['tags_quality'] . $tdata['tags_ignore'] ?>
                 <select name="check_day">
                     <option value="L_DAY_ALL"><?= $tdata['L_DAY_ALL'] ?></option>
-                    <option value="L_DAY_MON"><?= $tdata['L_DAY_MON'] ?></option>
-                    <option value="L_DAY_TUE"><?= $tdata['L_DAY_TUE'] ?></option>
-                    <option value="L_DAY_WED"><?= $tdata['L_DAY_WED'] ?></option>
-                    <option value="L_DAY_THU"><?= $tdata['L_DAY_THU'] ?></option>
-                    <option value="L_DAY_FRI"><?= $tdata['L_DAY_FRI'] ?></option>
-                    <option value="L_DAY_SAT"><?= $tdata['L_DAY_SAT'] ?></option>
-                    <option value="L_DAY_SUN"><?= $tdata['L_DAY_SUN'] ?></option>
+                    <option value="L_DAY_MON"><?= $tdata['L_DAY_MON']['name'] ?></option>
+                    <option value="L_DAY_TUE"><?= $tdata['L_DAY_TUE']['name'] ?></option>
+                    <option value="L_DAY_WED"><?= $tdata['L_DAY_WED']['name'] ?></option>
+                    <option value="L_DAY_THU"><?= $tdata['L_DAY_THU']['name'] ?></option>
+                    <option value="L_DAY_FRI"><?= $tdata['L_DAY_FRI']['name'] ?></option>
+                    <option value="L_DAY_SAT"><?= $tdata['L_DAY_SAT']['name'] ?></option>
+                    <option value="L_DAY_SUN"><?= $tdata['L_DAY_SUN']['name'] ?></option>
                 </select>
                 <input type="submit" name="submit_wanted" value="<?= $tdata['L_ADD'] ?>" />
             </form>
