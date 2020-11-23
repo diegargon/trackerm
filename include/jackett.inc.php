@@ -13,6 +13,7 @@ function search_movie_torrents($words, $head = null, $nohtml = false) {
     $result = [];
     $page = '';
     $words = str_replace(' ', '%20', $words);
+    //FIXME jackett give error with accents
     $words = iconv($cfg['CHARSET'], 'ASCII//TRANSLIT', $words); //replace accents
     $results_count = 0;
 

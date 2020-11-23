@@ -24,8 +24,10 @@ chdir($ROOT_PATH);
 require('include/common.inc.php');
 require('include/trackerm-cli.inc.php');
 
+echo "\nMoving work...";
 transmission_scan();
 
+echo "\nWanted work...";
 wanted_work();
 
 echo "\n";

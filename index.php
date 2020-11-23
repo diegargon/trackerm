@@ -7,10 +7,10 @@
  *  @subpackage
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  */
-include "include/common.inc.php";
+require('include/common.inc.php');
 require('include/session.inc.php');
 require('include/pages.inc.php');
-include "include/html.common.php";
+require('include/html.common.php');
 require('include/library.inc.php');
 
 isset($_GET['page']) ? $req_page = $_GET['page'] : $req_page = '';
@@ -25,7 +25,7 @@ if (!empty($_GET['download'])) {
     foreach ($trans_response as $rkey => $rval) {
         $trans_db[0][$rkey] = $rval;
     }
-    !empty($_GET['themoviedb_id']) ? $trans_db[0]['themoviedb_id'] = $_GET['themoviedb_id'] : null;
+    !empty($_GET['themoviedb_id']) ? $trans_db[0]['themoviedb_id'] = $_GET['themoviedb_id'] : null; //TODO enviar para autoidentificar
     $trans_db[0]['tid'] = $trans_db[0]['id'];
     $trans_db[0]['status'] = -1;
     $trans_db[0]['profile'] = (int) $cfg['profile'];
