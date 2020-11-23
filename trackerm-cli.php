@@ -9,7 +9,8 @@
  */
 define('CLI', true);
 
-$ROOT_PATH = '';
+
+$ROOT_PATH = '/var/www/envigo.net/trackerm';
 
 if (empty($ROOT_PATH)) {
     exit();
@@ -24,11 +25,16 @@ $torrents_db = $db->getTableData('transmission');
 $transfers = $trans->getAll();
 
 
+if ($cfg['MOVE_ONLY_INAPP'] && !empty($torrents_db)) {
+    echo "\n INAPPI:1 No Torrents Finished Found ";
+    leave();
+}
+
 $tors = getRightTorrents($transfers, $torrents_db);
 
 if ($tors == false) {
     echo "\n No valid torrents found";
-    exit();
+    leave();
 }
 
 //var_dump($tors);
@@ -52,8 +58,17 @@ foreach ($tors as $tor) {
     //echo "\n" . $item['tid'] . ':' . $item['status'] . ':' . $item['title'] . ':' . $item['media_type'] . ':S' . $item['season'] . 'E' . $item['episode'] . "\n";
 
     if ($item['media_type'] == 'movies') {
+        echo "\n Movie detected begin moving" . $item['title'];
         moveMovie($item, $trans);
     } else if ($item['media_type'] == 'shows') {
+        echo "\n Show detected begin moving" . $item['title'] . ' S' . $item['season'] . 'E' . $item['episode'];
         moveShow($item, $trans);
     }
+}
+
+function leave($msg = false) {
+    echo "\n Exit Called";
+    !empty($msg) ? print $msg . "\n" : print "\n";
+
+    exit();
 }

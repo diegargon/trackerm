@@ -55,6 +55,7 @@ function moveMovie($item, $trans) {
         $ext_check = substr($file, -3);
         if ($ext_check == 'rar' || $ext_check == 'RAR') {
             $unrar = 'unrar x -y "' . $file . '" "' . dirname($file) . '"';
+            echo "\nNeed unrar $file";
             exec($unrar);
             //echo $unrar;
             break;
@@ -79,7 +80,7 @@ function moveMovie($item, $trans) {
             if (!file_exists($dest_path)) {
                 umask(0);
                 if (!mkdir($dest_path, 0774, true)) {
-                    die('Failed to create folders...');
+                    leave('Failed to create folders... ' . $dest_path);
                 }
                 (!empty($cfg['FILES_USERGROUP'])) ? chgrp($dest_path, $cfg['FILES_USERGROUP']) : null;
             }
@@ -105,7 +106,7 @@ function moveMovie($item, $trans) {
             }
         }
     } else {
-        echo "\nNo valid files found on torrent with id:" . $item['tid'];
+        leave("\nNo valid files found on torrent with transmission id:" . $item['tid']);
     }
 }
 
@@ -120,7 +121,8 @@ function moveShow($item, $trans) {
         $ext_check = substr($file, -3);
         if ($ext_check == 'rar' || $ext_check == 'RAR') {
             $unrar = 'unrar x -y "' . $file . '" "' . dirname($file) . '"';
-            //exec($unrar);
+            echo "\nNeed unrar $file";
+            exec($unrar);
             //echo "\n" . $unrar;
             break;
         }
@@ -149,7 +151,7 @@ function moveShow($item, $trans) {
         if (!file_exists($dest_path)) {
             umask(0);
             if (!mkdir($dest_path, 0774, true)) {
-                die('Failed to create folders...');
+                leave('Failed to create folders... ' . $dest_path);
             }
             if (!empty($cfg['FILES_USERGROUP'])) {
                 chgrp($dest_path, $cfg['FILES_USERGROUP']);
@@ -191,6 +193,6 @@ function moveShow($item, $trans) {
             }
         }
     } else {
-        echo "\nNo valid files found on torrent with id:" . $item['tid'];
+        leave("\nNo valid files found on torrent with id:" . $item['tid']);
     }
 }
