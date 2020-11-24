@@ -32,8 +32,8 @@ Seguridad y mejor codigo vendra mucho mas despacio.
 
 
 ## INSTALL
-
-    Latest info: in INSTALL.es , no update and bad english in INSTALL.en
+Latest info: 
+in INSTALL.es , in bad english and not update in INSTALL.en
 
 ## Latest (Important)
 
