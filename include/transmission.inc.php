@@ -11,6 +11,13 @@
 function page_transmission() {
     global $trans, $LNG;
 
+    isset($_POST['start_all']) ? $trans->startAll() : null;
+    isset($_POST['stop_all']) ? $trans->stopAll() : null;
+
+    isset($_POST['start']) && !empty(($_POST['tid'])) ? $trans->start($_POST['tid']) . sleep(1) : null;
+    isset($_POST['stop']) && !empty(($_POST['tid'])) ? $trans->stop($_POST['tid']) . sleep(1) : null;
+    isset($_POST['delete']) && !empty($_POST['tid']) ? $trans->delete($_POST['tid']) . sleep(1) : null;
+
     $status = [
         0 => $LNG['L_STOPPED'],
         1 => $LNG['L_QUEUENING_CHECKING'],
@@ -25,36 +32,13 @@ function page_transmission() {
     $transfers = $trans->getAll();
 
     $page = '';
+    $tdata['body'] = '';
 
-    $page .= '<div class="tor_container">';
     foreach ($transfers as $transfer) {
-        $page .= '<br/>';
-        $page .= '<div class="tor_download">';
-        $page .= '<div class="tor_name">' . $transfer['name'] . '</div>';
-
-        $page .= '</div>'; //tor_download
-
-
-        $page .= '<div class="tor_tags">';
-        $page .= '<div class="tor_tag"><span>id: ' . $transfer['id'] . '</div>';
-        //empty($transfer['isFinished']) ? $isFinished = 0 : $isFinished = $transfer['isFinished'];
-        //$page .= '<div class="tor_tag"><span>isFinish: ' . $isFinished . '</div>';
-        $transfer['percentDone'] == 1 ? $percentDone = '100' : $percentDone = (float) $transfer['percentDone'];
-        $page .= '<div class="tor_tag"><span>' . $LNG['L_COMPLETED'] . ': ' . $percentDone . '%</div>';
-        $page .= '<div class="tor_tag"><span>' . $LNG['L_STATUS'] . ': ' . $status[$transfer['status']] . '</div>';
-        $page .= '<div class="tor_tag">' . $LNG['L_DESTINATION'] . ': ' . $transfer['downloadDir'] . '</div>';
-        $page .= '</div>'; //tor tags
-
-        /*
-          $page .= '<div class="tor_files">';
-          foreach ($transfer['files'] as $file) {
-          $page .= '<div class="tor_file">' . $file['name'] . '</div>';
-          }
-          $page .= '</div>'; //tor_files
-         */
+        $tdata['body'] .= getTpl('transmission-row', array_merge($transfer, $LNG, $status));
     }
 
-    $page .= '</div>'; //tor_container
+    $page .= getTpl('transmission-body', array_merge($tdata, $LNG));
 
     return $page;
 }

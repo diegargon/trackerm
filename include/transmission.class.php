@@ -32,8 +32,34 @@ class TorrentServer {
         return $this->trans_conn->addUrl($url);
     }
 
-    public function deleteIds($ids) {
+    public function delete($ids) {
+        global $db;
+
+        $trans_db = $db->getTableData('transmission');
+        foreach ($ids as $id) {
+            foreach ($trans_db as $trans) {
+                if ($trans['tid'] == $id) {
+                    $db->deleteByFieldMatch('transmission', 'tid', $trans['tid']);
+                }
+            }
+        }
         return $this->trans_conn->remove($ids, true);
+    }
+
+    public function stopAll() {
+        return $this->trans_conn->stopAll();
+    }
+
+    public function stop($ids) {
+        return $this->trans_conn->stop($ids);
+    }
+
+    public function startAll() {
+        return $this->trans_conn->startAll();
+    }
+
+    public function start($ids) {
+        return $this->trans_conn->startNow($ids);
     }
 
 }

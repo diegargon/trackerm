@@ -490,3 +490,7 @@ button {
     padding: 4px;
     margin: 4px;
 }
+
+.tor_general_options , .tor_action {
+    display:inline-flex;
+}

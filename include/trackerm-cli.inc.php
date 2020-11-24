@@ -186,11 +186,11 @@ function moveMovie($item, $trans) {
             $dest_path = $dest_path . '/' . $new_file_name;
             $i++;
             if (rename($valid_file, $dest_path)) {
-                $db->deleteByFieldMatch('transmission', 'tid', $item['tid']);
+                // Added to trans/delete need check if works $db->deleteByFieldMatch('transmission', 'tid', $item['tid']);
                 (!empty($cfg['FILES_USERGROUP'])) ? chgrp($dest_path, $cfg['FILES_USERGROUP']) : null;
                 (!empty($cfg['FILES_PERMS'])) ? chmod($dest_path, $cfg['FILES_PERMS']) : null;
                 $ids[] = $item['tid'];
-                $trans->deleteIds($ids);
+                $trans->delete($ids);
                 if (isset($item['wanted_id'])) {
                     $wanted_item = $db->getItemById('wanted', $item['wanted_id']);
                     if ($wanted_item != false) {
@@ -280,11 +280,11 @@ function moveShow($item, $trans) {
             $i++;
 
             if (rename($valid_file, $dest_path)) {
-                $db->deleteByFieldMatch('transmission', 'tid', $item['tid']);
+                // Added to trans/delete need check if works  $db->deleteByFieldMatch('transmission', 'tid', $item['tid']);
                 (!empty($cfg['FILES_USERGROUP'])) ? chgrp($dest_path, $cfg['FILES_USERGROUP']) : null;
                 (!empty($cfg['FILES_PERMS'])) ? chmod($dest_path, $cfg['FILES_PERMS']) : null;
                 $ids[] = $item['tid'];
-                $trans->deleteIds($ids);
+                $trans->delete($ids);
                 if (isset($item['wanted_id'])) {
                     $wanted_item = $db->getItemById('wanted', $item['wanted_id']);
                     if ($wanted_item != false) {
