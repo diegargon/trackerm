@@ -269,7 +269,9 @@ function view_seasons($id, $update = false) {
                     }
                 }
             }
-            $episode_data .= '<a class="episode_link" href="' . $iurl . '&wanted=1&season=' . $i . '&episode=' . $episode_list . '">' . $LNG['L_WANT_ALL'] . '</a>';
+            if (!empty($episode_list)) {
+                $episode_data .= '<a class="episode_link" href="' . $iurl . '&wanted=1&season=' . $i . '&episode=' . $episode_list . '">' . $LNG['L_WANT_ALL'] . '</a>';
+            }
             $episode_data .= '</div></div></div>';
         }
     }

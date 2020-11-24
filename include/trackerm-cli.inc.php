@@ -54,21 +54,11 @@ function transmission_scan() {
         $item['media_type'] = getMediaType($item['dirname']);
         isset($tor['wanted_id']) ? $item['wanted_id'] = $tor['wanted_id'] : null;
 
-        if ($item['media_type'] == 'shows') {
-            $SE = getFileEpisode($item['dirname']);
-            (strlen($SE['season']) == 1) ? $item['season'] = 0 . $SE['season'] : $item['season'] = $SE['season'];
-            (strlen($SE['chapter']) == 1) ? $item['episode'] = 0 . $SE['chapter'] : $item['episode'] = $SE['chapter'];
-        } else {
-            $item['season'] = '';
-            $item['episode'] = '';
-        }
-        //echo "\n" . $item['tid'] . ':' . $item['status'] . ':' . $item['title'] . ':' . $item['media_type'] . ':S' . $item['season'] . 'E' . $item['episode'] . "\n";
-
         if ($item['media_type'] == 'movies') {
             echo "\n Movie detected begin moving.. " . $item['title'];
             moveMovie($item, $trans);
         } else if ($item['media_type'] == 'shows') {
-            echo "\n Show detected begin moving... " . $item['title'] . ' S' . $item['season'] . 'E' . $item['episode'];
+            echo "\n Show detected begin moving... " . $item['title'];
             moveShow($item, $trans);
         }
     }
@@ -128,7 +118,6 @@ function getRightTorrents($transfers, $transmission_db) {
             $tors = $finished_list;
         }
     }
-
 
     return (count($tors) > 0) ? $tors : false;
 }
@@ -198,8 +187,12 @@ function moveMovie($item, $trans) {
                         $db->updateRecordById('wanted', $item['wanted_id'], $update_ary);
                     }
                 }
+                echo "\n Rename sucessful: $valid_file : $dest_path";
+            } else {
+                echo "\n Rename failed: $valid_file : $dest_path";
             }
         }
+        rebuild('movies', $cfg['MOVIES_PATH']);
     } else {
         leave("\nNo valid files found on torrent with transmission id: " . $item['tid']);
     }
@@ -234,50 +227,58 @@ function moveShow($item, $trans) {
     }
 
     if (count($valid_files) >= 1) {
-        $i = 0;
-
-        if ($cfg['CREATE_SHOWS_SEASON_FOLDER'] && !empty($item['season'])) {
-            $dest_path = $cfg['SHOWS_PATH'] . '/' . ucwords($item['title'] . '/' . $LNG['L_SEASON'] . ' ' . (int) $item['season']);
-            $dest_path_father = $cfg['SHOWS_PATH'] . '/' . ucwords($item['title']);
-        } else {
-            $dest_path = $cfg['SHOWS_PATH'] . '/' . ucwords($item['title']);
-        }
-
-        if (!file_exists($dest_path)) {
-            umask(0);
-            if (!mkdir($dest_path, 0774, true)) {
-                leave('Failed to create folders... ' . $dest_path);
-            }
-            if (!empty($cfg['FILES_USERGROUP'])) {
-                chgrp($dest_path, $cfg['FILES_USERGROUP']);
-                isset($dest_path_father) ? chgrp($dest_path_father, $cfg['FILES_USERGROUP']) : null;
-            }
-        }
 
         foreach ($valid_files as $valid_file) {
+            $i = 0;
+
             $many = '';
             $file_tags = getFileTags($valid_file);
             $ext = substr($valid_file, -4);
-            if ($i > 0) {
-                $many = '[' . $i . ']';
+
+            // EPISODE NAME STYLE SxxExx
+            $SE = getFileEpisode($valid_file);
+            if (!empty($SE['season'] && !empty($SE['chapter']))) {
+                (strlen($SE['season']) == 1) ? $_season = 0 . $SE['season'] : $_season = $SE['season'];
+                (strlen($SE['chapter']) == 1) ? $_episode = 0 . $SE['chapter'] : $_episode = $SE['chapter'];
+            } else {
+                $_season = 'xx';
+                $_episode = 'xx';
             }
+
             $episode = '';
-
-            if (isset($item['season'])) {
-                $episode .= 'S' . $item['season'];
+            $episode .= 'S' . $_season;
+            $episode .= 'E' . $_episode;
+            //END EPISODE NAME
+            //CREATE PATHS
+            if ($cfg['CREATE_SHOWS_SEASON_FOLDER'] && !empty($_season)) {
+                ($_season != "xx") ? $_season = (int) $_season : null; // 01 to 1 for directory
+                $dest_path = $cfg['SHOWS_PATH'] . '/' . ucwords($item['title'] . '/' . $LNG['L_SEASON'] . ' ' . $_season);
+                $dest_path_father = $cfg['SHOWS_PATH'] . '/' . ucwords($item['title']);
             } else {
-                $episode .= 'Sx';
+                $dest_path = $cfg['SHOWS_PATH'] . '/' . ucwords($item['title']);
             }
-
-            if (isset($item['episode'])) {
-                $episode .= 'E' . $item['episode'];
-            } else {
-                $episode .= 'Ex';
+            //END CREATE PATHS
+            //CREATE FOLDERS
+            if (!file_exists($dest_path)) {
+                umask(0);
+                if (!mkdir($dest_path, 0774, true)) {
+                    leave('Failed to create folders... ' . $dest_path);
+                }
+                if (!empty($cfg['FILES_USERGROUP'])) {
+                    chgrp($dest_path, $cfg['FILES_USERGROUP']);
+                    isset($dest_path_father) ? chgrp($dest_path_father, $cfg['FILES_USERGROUP']) : null;
+                }
             }
+            //END CREATE FOLDERS
 
-            $new_file_name = ucwords($item['title']) . ' ' . $episode . ' ' . $file_tags . $many . $ext;
+            $new_file_name = ucwords($item['title']) . ' ' . $episode . ' ' . $file_tags . $ext;
             $dest_path = $dest_path . '/' . $new_file_name;
-            $i++;
+
+            if (($i > 0) && file_exists($dest_path)) {
+                $many = '[' . $i . ']';
+                $new_file_name = ucwords($item['title']) . ' ' . $episode . ' ' . $file_tags . $many . $ext;
+                $dest_path = $dest_path . '/' . $new_file_name;
+            }
 
             if (rename($valid_file, $dest_path)) {
                 // Added to trans/delete need check if works  $db->deleteByFieldMatch('transmission', 'tid', $item['tid']);
@@ -292,8 +293,12 @@ function moveShow($item, $trans) {
                         $db->updateRecordById('wanted', $item['wanted_id'], $update_ary);
                     }
                 }
+                echo "\n Rename sucessful: $valid_file : $dest_path";
+            } else {
+                echo "\n Rename failed: $valid_file : $dest_path";
             }
         }
+        rebuild('shows', $cfg['SHOWS_PATH']);
     } else {
         echo "\nNo valid files found on torrent with id: " . $item['tid'];
     }
@@ -301,7 +306,6 @@ function moveShow($item, $trans) {
 
 function wanted_work() {
     global $db, $cfg, $LNG;
-
 
     $day_of_week = date("w");
 
@@ -381,7 +385,6 @@ function wanted_work() {
 
 function wanted_check_flags($results) {
     global $cfg;
-
     $noignore = [];
 
     if (count($cfg['TORRENT_IGNORES_PREFS']) > 0) {
