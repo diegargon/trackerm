@@ -12,9 +12,11 @@ function search_movie_torrents($words, $head = null, $nohtml = false) {
 
     $result = [];
     $page = '';
-    $words = str_replace(' ', '%20', $words);
+    //$words = str_replace(' ', '%20', $words);
     //FIXME jackett give error with accents
-    $words = iconv($cfg['CHARSET'], 'ASCII//TRANSLIT', $words); //replace accents
+    //$words = iconv($cfg['CHARSET'], 'ASCII//TRANSLIT', $words); //replace accents
+
+
     $results_count = 0;
 
     foreach ($cfg['jackett_indexers'] as $indexer) {
@@ -43,8 +45,8 @@ function search_shows_torrents($words, $head = null, $nohtml = false) {
 
     $result = [];
     $page = '';
-    $words = str_replace(' ', '%20', $words);
-    $words = iconv($cfg['CHARSET'], 'ASCII//TRANSLIT', $words); //replace accents
+    //$words = str_replace(' ', '%20', $words);
+    //$words = iconv($cfg['CHARSET'], 'ASCII//TRANSLIT', $words); //replace accents
     $results_count = 0;
 
     foreach ($cfg['jackett_indexers'] as $indexer) {
@@ -84,16 +86,21 @@ function jackett_get($indexer, $limit = null) {
 
     (empty($limit)) ? $limit = $cfg['jacket_results'] : null;
 
-    $jackett_url = $cfg['jackett_srv'] . $cfg['jackett_api'] . '/indexers/' . $indexer . '/results/torznab/api?t=search&extended=1&apikey=' . $cfg['jackett_key'] . '&limit=' . $limit;
+    $jackett_url = $cfg['jackett_srv'] . $cfg['jackett_api'] . '/indexers/' . $indexer . '/results/torznab/';
+    $params = 'api?t=search&extended=1&apikey=' . $cfg['jackett_key'] . '&limit=' . $limit;
 
-    return curl_get_jackett($jackett_url);
+    return curl_get_jackett($jackett_url, $params);
 }
 
 function jackett_get_caps($indexer) {
     global $cfg;
+    $params = '';
 
-    $jackett_url = $cfg['jackett_srv'] . $cfg['jackett_api'] . '/indexers/' . $indexer . '/results/torznab/api?apikey=' . $cfg['jackett_key'] . '&t=caps';
-    return curl_get_jackett($jackett_url);
+    //$jackett_url = $cfg['jackett_srv'] . $cfg['jackett_api'] . '/indexers/' . $indexer . '/results/torznab/api?apikey=' . $cfg['jackett_key'] . '&t=caps';
+    //return curl_get_jackett($jackett_url, $params);
+    $jackett_url = $cfg['jackett_srv'] . $cfg['jackett_api'] . '/indexers/' . $indexer . '/results/torznab/';
+    $params = 'api?apikey=' . $cfg['jackett_key'] . '&t=caps';
+    return curl_get_jackett($jackett_url, $params);
 }
 
 function jackett_search_movies($words, $indexer, $limit = null) {
@@ -101,10 +108,22 @@ function jackett_search_movies($words, $indexer, $limit = null) {
 
     empty($limit) ? $limit = $cfg['jacket_results'] : null;
 
+    $jackett_url = $cfg['jackett_srv'] . $cfg['jackett_api'] . '/indexers/' . $indexer . '/results/torznab/';
+    $words = rawurlencode($words);
 
-    $jackett_url = $cfg['jackett_srv'] . $cfg['jackett_api'] . '/indexers/' . $indexer . '/results/torznab/api?apikey=' . $cfg['jackett_key'] . '&t=search&extended=1&cat=2000&q=' . $words . '&limit=' . $limit;
+    $cats = '';
+    $end_cat = end($cfg['movies_categories']);
+    foreach ($cfg['movies_categories'] as $cat_id => $cat) {
+        if ($cat == $end_cat) {
+            $cats .= $cat_id;
+        } else {
+            $cats .= $cat_id . ',';
+        }
+    }
 
-    return curl_get_jackett($jackett_url);
+    $params = 'api?apikey=' . $cfg['jackett_key'] . '&t=search&extended=1&cat=' . $cats . '&q=' . $words . '&limit=' . $limit;
+
+    return curl_get_jackett($jackett_url, $params);
 }
 
 function jackett_search_shows($words, $indexer, $limit = null) {
@@ -112,9 +131,23 @@ function jackett_search_shows($words, $indexer, $limit = null) {
 
     empty($limit) ? $limit = $cfg['jacket_results'] : null;
 
-    $jackett_url = $cfg['jackett_srv'] . $cfg['jackett_api'] . '/indexers/' . $indexer . '/results/torznab/api?apikey=' . $cfg['jackett_key'] . '&t=search&extended=1&cat=5000&q=' . $words . '&limit=' . $limit;
+    //$jackett_url = $cfg['jackett_srv'] . $cfg['jackett_api'] . '/indexers/' . $indexer . '/results/torznab/api?apikey=' . $cfg['jackett_key'] . '&t=search&extended=1&cat=5000&q=' . $words . '&limit=' . $limit;
 
-    return curl_get_jackett($jackett_url);
+    $jackett_url = $cfg['jackett_srv'] . $cfg['jackett_api'] . '/indexers/' . $indexer . '/results/torznab/';
+    $words = rawurlencode($words);
+
+    $cats = '';
+    $end_cat = end($cfg['shows_categories']);
+    foreach ($cfg['shows_categories'] as $cat_id => $cat) {
+        if ($cat == $end_cat) {
+            $cats .= $cat_id;
+        } else {
+            $cats .= $cat_id . ',';
+        }
+    }
+    $params = 'api?apikey=' . $cfg['jackett_key'] . '&t=search&extended=1&cat=' . $cats . '&q=' . $words . '&limit=' . $limit;
+
+    return curl_get_jackett($jackett_url, $params);
 }
 
 function jackett_prep_movies($movies_results) {

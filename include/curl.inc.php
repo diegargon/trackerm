@@ -19,9 +19,13 @@ function get_latest() {
 function curl_get($url) {
     global $cfg;
 
+    $headers = [
+        'Accept-Encoding: gzip, deflate',
+    ];
+
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    // curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     $response = curl_exec($ch);
     curl_close($ch);
@@ -33,13 +37,18 @@ function curl_get($url) {
     return $array;
 }
 
-function curl_get_jackett($url) {
-    global $cfg;
+function curl_get_jackett($url, $params) {
 
+    $headers = [
+        'Accept-Encoding: gzip, deflate',
+    ];
+
+    //echo "<br>" . $url . $params;
+    //$url = $url . $params;
     $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_URL, trim($url . $params));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    //curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     $response = curl_exec($ch);
     curl_close($ch);
@@ -65,9 +74,15 @@ function curl_get_jackett($url) {
 function curl_get_json($url) {
     global $cfg;
 
+    $headers = [
+        'Accept: text/html,application/xhtml+xml,application/xml,application/json;q=0.9,*/*;q=0.8',
+        'Accept-Charset: utf-8;q=0.7,*;q=0.3',
+        'Accept-Language:' . $cfg['LANG'] . ';q=0.6,es;q=0.4'
+    ];
+
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    //curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     $response = curl_exec($ch);
 

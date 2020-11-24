@@ -127,7 +127,7 @@ $cfg['movies_categories'] = [
     2060 => 'Movies/3D',
 ];
 
-$cfg['tv_categories'] = [
+$cfg['shows_categories'] = [
     5000 => 'TV',
     5020 => 'TV/Foreign',
     5030 => 'TV/SD',
@@ -148,4 +148,4 @@ $cfg['media_ext'] = [
     "MP4",
 ];
 
-$cfg['categories'] = $cfg['movies_categories'] + $cfg['tv_categories'];
+$cfg['categories'] = $cfg['movies_categories'] + $cfg['shows_categories'];
