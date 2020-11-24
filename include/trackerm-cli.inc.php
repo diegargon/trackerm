@@ -142,7 +142,7 @@ function moveMovie($item, $trans) {
     foreach ($files_dir as $file) {
         $ext_check = substr($file, -3);
         if ($ext_check == 'rar' || $ext_check == 'RAR') {
-            $unrar = 'unrar x -y "' . $file . '" "' . dirname($file) . '"';
+            $unrar = 'unrar x -p- -y "' . $file . '" "' . dirname($file) . '"';
             echo "\nNeed unrar $file";
             exec($unrar);
             //echo $unrar;
