@@ -316,8 +316,12 @@ function wanted_work() {
     }
 
     foreach ($wanted_list as $wanted) {
+        if (!empty($wanted['ignore'])) {
+            echo "\n Jumping wanted {$wanted['title']} check by ignore state ";
+            continue;
+        }
         if (isset($wanted['wanted_state']) && $wanted['wanted_state'] > 0) {
-            echo "\n Jumping wanted check by state ";
+            echo "\n Jumping wanted {$wanted['title']} check by state ";
             ($wanted['wanted_state'] == 1) ? print $LNG['L_DOWNLOADING'] : null;
             ($wanted['wanted_state'] == 2) ? print $LNG['L_SEEDING'] : null;
             ($wanted['wanted_state'] == 3) ? print $LNG['L_STOPPED'] : null;
@@ -325,9 +329,10 @@ function wanted_work() {
             ($wanted['wanted_state'] == 9) ? print $LNG['L_MOVED'] : null;
             continue;
         }
+
         if ($wanted['day_check'] != 'L_DAY_ALL') {
             if ($LNG[$wanted['day_check']]['n'] != $day_of_week) {
-                echo "\n Jumping wanted check by date check, today is not {$LNG[$wanted['day_check']]['name']}";
+                echo "\n Jumping wanted {$wanted['title']} check by date, today is not {$LNG[$wanted['day_check']]['name']}";
                 continue;
             }
         }
@@ -338,7 +343,7 @@ function wanted_work() {
             $next_check = $last_check + $cfg['WANTED_DAY_DELAY'];
             if ($next_check > time()) {
                 $next_check = $next_check - time();
-                echo "\n Jumping wanted check by delay, next check in $next_check seconds";
+                echo "\n Jumping wanted {$wanted['title']} check by delay, next check in $next_check seconds";
                 continue;
             }
         }

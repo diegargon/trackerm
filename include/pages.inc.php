@@ -241,6 +241,17 @@ function page_wanted() {
 
     isset($_GET['delete']) ? $db->deleteById('wanted', $_GET['delete']) : null;
 
+    if (isset($_GET['ignore'])) {
+        $ignore_id = $_GET['ignore'];
+        $wanted_ignore_item = $db->getItemById('wanted', $ignore_id);
+        if (empty($wanted_ignore_item['ignore'])) {
+            $update['ignore'] = 1;
+        } else {
+            $update['ignore'] = 0;
+        }
+        $db->updateRecordById('wanted', $ignore_id, $update);
+    }
+
     if ($wanted_id !== false && $wanted_type !== false) {
         if ($wanted_type == 'movies') {
             $item = wanted_movies($wanted_id);
@@ -256,6 +267,8 @@ function page_wanted() {
         foreach ($wanted_list as $wanted_item) {
             $wanted_list_data .= '<div class="wanted_list_row">';
             $wanted_list_data .= '<a href="' . $iurl . '&delete=' . $wanted_item['id'] . '" class="action_link">' . $LNG['L_DELETE'] . '</a>';
+            !empty($wanted_item['ignore']) ? $ignore_link = $LNG['L_UNIGNORE'] : $ignore_link = $LNG['L_IGNORE'];
+            $wanted_list_data .= '<a href="' . $iurl . '&ignore=' . $wanted_item['id'] . '" class="action_link">' . $ignore_link . '</a>';
             $wanted_list_data .= '<span class="tag_id">' . $wanted_item['id'] . '</span>';
             $wanted_state = $LNG['L_WAITING'];
             if (!empty($wanted_item['wanted_state'])) {
