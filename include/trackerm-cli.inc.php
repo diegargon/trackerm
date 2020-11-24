@@ -38,7 +38,7 @@ function transmission_scan() {
     $tors = getRightTorrents($transfers, $transmission_db);
 
     if ($tors == false) {
-        echo "\n No valid torrents downloads found";
+        echo "\n No torrents in valid state for move found";
         return false;
     }
 
@@ -86,7 +86,7 @@ function getRightTorrents($transfers, $transmission_db) {
             $wanted_id = '';
             //aprovechamos para actualizar wanted
             foreach ($transmission_db as $item) {
-                if (isset($item['id']) == $transfer['id']) {
+                if (isset($item['id']) && isset($item['wanted_id']) && isset($item['id']) == $transfer['id']) {
                     $wanted_id = $item['wanted_id'];
                     $wanted_item = $db->getItemById('wanted', $item['wanted_id']);
                     if ($wanted_item['wanted_state'] != 9 && $wanted_item['wanted_state'] != 3) {
@@ -100,7 +100,7 @@ function getRightTorrents($transfers, $transmission_db) {
         } else if ($transfer['status'] == 6 && $transfer['percentDone'] == 1) {
             $wanted_id = '';
             foreach ($transmission_db as $item) {
-                if (isset($item['id']) == $transfer['id']) {
+                if (isset($item['id']) && isset($item['wanted_id']) && isset($item['id']) == $transfer['id']) {
                     $wanted_id = $item['wanted_id'];
                     $update_ary['wanted_state'] = 2;
                     $db->updateRecordById('wanted', $item['wanted_id'], $update_ary);
@@ -313,7 +313,12 @@ function wanted_work() {
 
     foreach ($wanted_list as $wanted) {
         if (isset($wanted['wanted_state']) && $wanted['wanted_state'] > 0) {
-            echo "\n Jumping wanted check by state {$wanted['wanted_state']}";
+            echo "\n Jumping wanted check by state ";
+            ($wanted['wanted_state'] == 1) ? print $LNG['L_DOWNLOADING'] : null;
+            ($wanted['wanted_state'] == 2) ? print $LNG['L_SEEDING'] : null;
+            ($wanted['wanted_state'] == 3) ? print $LNG['L_STOPPED'] : null;
+            ($wanted['wanted_state'] == 4) ? print $LNG['L_COMPLETED'] : null;
+            ($wanted['wanted_state'] == 9) ? print $LNG['L_MOVED'] : null;
             continue;
         }
         if ($wanted['day_check'] != 'L_DAY_ALL') {
@@ -398,7 +403,21 @@ function wanted_check_flags($results) {
     }
 
     if (count($cfg['TORRENT_QUALITYS_PREFS']) > 0) {
+
+        $_order = 0;
         foreach ($cfg['TORRENT_QUALITYS_PREFS'] as $quality) {
+            if ($quality == 'ANY') {
+                $TORRENT_QUALITYS_PREFS_PROPER[$_order] = 'PROPER';
+                $TORRENT_QUALITYS_PREFS_PROPER[$_order + 1] = $quality;
+                $_order = $_order + 2;
+            } else {
+                $TORRENT_QUALITYS_PREFS_PROPER[$_order] = $quality . ' PROPER';
+                $TORRENT_QUALITYS_PREFS_PROPER[$_order + 1] = $quality;
+                $_order = $_order + 2;
+            }
+        }
+
+        foreach ($TORRENT_QUALITYS_PREFS_PROPER as $quality) {
             $desire_quality = 0;
 
             foreach ($noignore as $noignore_result) {
@@ -407,6 +426,8 @@ function wanted_check_flags($results) {
                     echo "\n Wanted: Quality coincidence for item " . $noignore_result['title'] . " by quality key " . $quality;
                     $desire_quality = 1;
                     break;
+                } else {
+                    echo "\n Wanted: NOTFOUND $quality on {$noignore_result['title']}";
                 }
             }
 

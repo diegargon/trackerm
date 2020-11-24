@@ -8,7 +8,6 @@ TODO
     si no coincide moverlo.
 * Al borrar un registro de identificacion de series borrar todos los registros de capitulos.
 * Los rar con password congelan el cli pidiendo el password.
-* Añadir soporte para buscar antes PROPER
 * Cuando se escanea eliminar torrents que se pudieron eliminar manualmente, quizas mantener en wanted pero "CANCELADO"
 * Poder cancelar wanted, sin eliminar por si se quire activar otra vez.
 * FIX: Busqueda con acentos no funciona Jackett da un error creo que por UTF8: jacket.inc.php

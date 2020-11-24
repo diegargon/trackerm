@@ -37,6 +37,7 @@ in INSTALL.es , in bad english and not update in INSTALL.en
 
 ## Latest (Important)
 
+* Add to Search wanted PROPER first
 * Improve Transmission page Add/delete buttons
 * Add partially and no enought tested support for wanted items
 * Add partialy and not enought tested code for move files automatically (support unrar, create the direcotrys and rename)
