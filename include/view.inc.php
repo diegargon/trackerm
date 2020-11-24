@@ -69,7 +69,9 @@ function view() {
         $tsize = 0;
 
         foreach ($shows_library as $show_library) {
-            if ($show_library['themoviedb_id'] == $item['themoviedb_id']) {
+            if (isset($show_library['themoviedb_id']) && $item['themoviedb_id'] &&
+                    ($show_library['themoviedb_id'] == $item['themoviedb_id'])
+            ) {
                 $tsize = $show_library['size'] + $tsize;
                 $i++;
             }
