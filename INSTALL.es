@@ -16,9 +16,10 @@ En biblioteca podras ver tus peliculas/series, identificar y ver episodios y cua
 
 En el futuro trackerm podra seguir tus series, descargarlas automaticamente así como mover los archivos automatica a tu libreria.
 
+Es más que recomendable si tienes que borrar un archivo torrent de transmission añadido con trackm hacerlo desde trackm 
+
 Atencion: En estos momentos no estoy utilizando ninguna base de datos , solo guardando los datos en archivos, esto cambiar en el futuro y rompera
-cualquier compatibilidad hacia atras.
- 
+cualquier compatibilidad hacia atras. Y actualmente es facil corrompible, sobre todo en entornos multiusuario.
 
 ## Permisos de directorio
     Your www server must have this permissions:
@@ -34,12 +35,13 @@ cualquier compatibilidad hacia atras.
 
 ## CONFIGURACION
     Toda las opcines de configuración  va en config/config.inc.php excepto para la parte de la "utilidad automatica" que hay que cambiar la
-    variable ROOT_PATH a donde reside la web. ex: $ROOT_PATH = '/var/www/trackerm
+    variable ROOT_PATH a donde reside la web. ex: $ROOT_PATH = '/var/www/trackerm' o por las actualizaciones, creando un archivo 
+    /etc/trackerm_root_path que incluya una simple linea con el  ROOT_PATH, ex: /var/www/trackerm
 
 ## Tareas automaticas: Seguimiento y mover a la libreria.
     En estos momentos todos los mecanismos automaticos estan en desarrollo y no funciona o funcionan parcialmente
     No recomiendo su uso.
-    Para su actual o futuro hay que añadir trackerm-cli.php a CRON, seria recomendable moverlo fuera del ROOT_PATH.
+    Para su actual o uso futuro hay que añadir trackerm-cli.php a CRON, seria recomendable moverlo fuera del ROOT_PATH.
 
     Como funcionara (no lo hace todavía) :
     * Automaticamente buscara torrentes en "seguimiento" los dias que configuraras, si encuentra coincidencia que satisfaga los filtros lo descargara.
@@ -48,7 +50,7 @@ cualquier compatibilidad hacia atras.
     * Automaticamente y activalando buscara y movera archivos huerfanos en el directorio de descargas de transmission. Los archivos huerfanos son aquellos
      que no constan en transmission ya sea por que los hemos borrado manualmente en vez de pararlos/pausarlos u otro motivo
     * Automaticamente y activandolo podra mover todos los archivos multimedia de determinas carpetas que configuremos.
-    * Automaticamente descomprime archivos rar, no soporta contraseñas hasta que Jackett las soporte.
+    * Automaticamente descomprime archivos rar, no soporta contraseñas hasta que Jackett las soporte. (el cli actualmente se bloquea si encuentra uno)
     El funcionamiento para que automaticamente se muevan los archivos bajados por transmission es el siguiente:
         Primero busca los archivos que indicamos en trackrm descargar, si los encuentra mira si esta parado/pausa o sirviendo(seeding) si es así en el primer caso
         parado, lo movera y borrar el torrent, en el segundo caso (aun no programado), creara un enlace simbolico para poder acceder al archivo desde tu libreria

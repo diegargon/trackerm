@@ -15,6 +15,7 @@ will remain like this until i have a working code with basic features.
 Probably you shouldn't install it at this moment.
 You can see screenshots of the current appearance in /screenshots although it going to change since this proyect is in a very very early stage.
 
+
 ## WARNING
 
 There is no security check in no line of code yet use on your own risk. The code is totatally insecure. 
@@ -28,8 +29,14 @@ Si expones este codigo a internet tendras un grave problema de seguridad. ¿por 
 "ya" y tenia mucho tiempo pero pocos dias, la solución fue teclear codigo rapido y sin pararme en detalles 
 de seguridad.
 Seguridad y mejor codigo vendra mucho mas despacio.
-    
+
+
+## INSTALL
+
+    Latest info: in INSTALL.es , no update and bad english in INSTALL.en
+
 ## Latest (Important)
 
+* Improve Transmission page Add/delete buttons
 * Add partially and no enought tested support for wanted items
 * Add partialy and not enought tested code for move files automatically (support unrar, create the direcotrys and rename)
