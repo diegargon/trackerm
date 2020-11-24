@@ -265,6 +265,10 @@ function page_wanted() {
                     $wanted_state = $LNG['L_SEEDING'];
                 } else if ($wanted_item['wanted_state'] == 3) {
                     $wanted_state = $LNG['L_STOPPED'];
+                } else if ($wanted_item['wanted_state'] == 4) {
+                    $wanted_state = $LNG['L_COMPLETED'];
+                } else if ($wanted_item['wanted_state'] == 9) {
+                    $wanted_state = $LNG['L_MOVED'];
                 }
             }
 

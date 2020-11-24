@@ -3,12 +3,18 @@ TODO
 ** Next 
 
 ** HIGH
-*  Supervisor de series y peliculas, a descargar encargado de bajar las series y peliculas que se piden
-asi como moitorear por si se solicita una pelicula/serie que no existe ningun torrent o los capitulos de las
-series que se marquen para monitorear.
+* Si se borra manualmente un torrente bajado quedara el bd huerfanos. OPCION ORPHAN. 
+    Buscar archivos multimedia en el TORRENT DIR y buscar la forma de determina si coincide con alguno en la base de datos
+    si no coincide moverlo.
 * Al borrar un registro de identificacion de series borrar todos los registros de capitulos.
+* Los rar con password congelan el cli pidiendo el password.
+* Añadir soporte para buscar antes PROPER
+* Poder pausar/parar el torrent
+* Cuando se escanea eliminar torrents que se pudieron eliminar manualmente, quizas mantener en wanted pero "CANCELADO"
+* Poder cancelar wanted, sin eliminar por si se quire activar otra vez.
 
 ** MED
+* Escaneo de directorios a más para avi sin ser torrents. $cfg['SCAN_MEDIA_DIR'] = 1;
 * actualizacion automatica de titulos de episodios
 * Filter tags en torrentes: posibilidad de filtrar por tags conocidos 720p 1080...
 * codigo seguro
@@ -16,6 +22,7 @@ series que se marquen para monitorear.
 * jackett search cache query: cuando pasamos pagina se realiza otra query remota, evitarlo. Guardar el query en una db y si se pasa pagina leer de la db 
 en vez de hacer otra query remota.
 * Biblio: buscador o derivar a una pagina buscador más facil.
+*  Soporte para "Temp. 6 Capitulo 16 al 20"
 
 ** VERY LOW
 * fechas normalizar a formato comun

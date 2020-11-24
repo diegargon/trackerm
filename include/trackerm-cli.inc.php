@@ -52,6 +52,8 @@ function transmission_scan() {
         $item['title'] = getFileTitle($item['dirname']);
         $item['status'] = $tor['status'];
         $item['media_type'] = getMediaType($item['dirname']);
+        isset($tor['wanted_id']) ? $item['wanted_id'] = $tor['wanted_id'] : null;
+
         if ($item['media_type'] == 'shows') {
             $SE = getFileEpisode($item['dirname']);
             (strlen($SE['season']) == 1) ? $item['season'] = 0 . $SE['season'] : $item['season'] = $SE['season'];
@@ -63,10 +65,10 @@ function transmission_scan() {
         //echo "\n" . $item['tid'] . ':' . $item['status'] . ':' . $item['title'] . ':' . $item['media_type'] . ':S' . $item['season'] . 'E' . $item['episode'] . "\n";
 
         if ($item['media_type'] == 'movies') {
-            echo "\n Movie detected begin moving" . $item['title'];
+            echo "\n Movie detected begin moving.. " . $item['title'];
             moveMovie($item, $trans);
         } else if ($item['media_type'] == 'shows') {
-            echo "\n Show detected begin moving" . $item['title'] . ' S' . $item['season'] . 'E' . $item['episode'];
+            echo "\n Show detected begin moving... " . $item['title'] . ' S' . $item['season'] . 'E' . $item['episode'];
             moveShow($item, $trans);
         }
     }
@@ -81,25 +83,30 @@ function getRightTorrents($transfers, $transmission_db) {
 
     foreach ($transfers as $transfer) {
         if ($transfer['status'] == 0 && $transfer['percentDone'] == 1) {
-            $finished_list[] = array_merge($finished_list, $transfer);
+            $wanted_id = '';
             //aprovechamos para actualizar wanted
             foreach ($transmission_db as $item) {
                 if (isset($item['id']) == $transfer['id']) {
-
-                    $update_ary['wanted_state'] = 3;
-                    $db->updateRecordById('wanted', $item['wanted_id'], $update_ary);
+                    $wanted_id = $item['wanted_id'];
+                    $wanted_item = $db->getItemById('wanted', $item['wanted_id']);
+                    if ($wanted_item['wanted_state'] != 9 && $wanted_item['wanted_state'] != 3) {
+                        $update_ary['wanted_state'] = 3;
+                        $db->updateRecordById('wanted', $item['wanted_id'], $update_ary);
+                    }
                 }
             }
+            !empty($wanted_id) ? $transfer['wanted_id'] = $wanted_id : null;
+            $finished_list[] = array_merge($finished_list, $transfer);
         } else if ($transfer['status'] == 6 && $transfer['percentDone'] == 1) {
-            $seeding_list[] = $transfer;
-
+            $wanted_id = '';
             foreach ($transmission_db as $item) {
                 if (isset($item['id']) == $transfer['id']) {
-
+                    $wanted_id = $item['wanted_id'];
                     $update_ary['wanted_state'] = 2;
                     $db->updateRecordById('wanted', $item['wanted_id'], $update_ary);
                 }
             }
+            $seeding_list[] = $transfer;
         }
     }
 
@@ -184,6 +191,13 @@ function moveMovie($item, $trans) {
                 (!empty($cfg['FILES_PERMS'])) ? chmod($dest_path, $cfg['FILES_PERMS']) : null;
                 $ids[] = $item['tid'];
                 $trans->deleteIds($ids);
+                if (isset($item['wanted_id'])) {
+                    $wanted_item = $db->getItemById('wanted', $item['wanted_id']);
+                    if ($wanted_item != false) {
+                        $update_ary['wanted_state'] = 9;
+                        $db->updateRecordById('wanted', $item['wanted_id'], $update_ary);
+                    }
+                }
             }
         }
     } else {
@@ -271,6 +285,13 @@ function moveShow($item, $trans) {
                 (!empty($cfg['FILES_PERMS'])) ? chmod($dest_path, $cfg['FILES_PERMS']) : null;
                 $ids[] = $item['tid'];
                 $trans->deleteIds($ids);
+                if (isset($item['wanted_id'])) {
+                    $wanted_item = $db->getItemById('wanted', $item['wanted_id']);
+                    if ($wanted_item != false) {
+                        $update_ary['wanted_state'] = 9;
+                        $db->updateRecordById('wanted', $item['wanted_id'], $update_ary);
+                    }
+                }
             }
         }
     } else {
@@ -283,9 +304,12 @@ function wanted_work() {
 
 
     $day_of_week = date("w");
-    echo $day_of_week;
 
     $wanted_list = $db->getTableData('wanted');
+    if (empty($wanted_list) || $wanted_list < 1) {
+        echo "\n Wanted list empty";
+        return false;
+    }
 
     foreach ($wanted_list as $wanted) {
         if (isset($wanted['wanted_state']) && $wanted['wanted_state'] > 0) {
@@ -300,13 +324,15 @@ function wanted_work() {
         }
 
         $last_check = $wanted['last_check'];
-        $next_check = $last_check + $cfg['WANTED_DAY_DELAY'];
-        if ($next_check > time()) {
-            $next_check = $next_check - time();
-            echo "\n Jumping wanted check by delay, next check in $next_check seconds";
-            continue;
-        }
 
+        if (!empty($last_check)) {
+            $next_check = $last_check + $cfg['WANTED_DAY_DELAY'];
+            if ($next_check > time()) {
+                $next_check = $next_check - time();
+                echo "\n Jumping wanted check by delay, next check in $next_check seconds";
+                continue;
+            }
+        }
         $wanted_id = $wanted['id'];
         $themoviedb_id = $wanted['themoviedb_id'];
         $title = $wanted['title'];
