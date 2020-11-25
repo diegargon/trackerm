@@ -194,7 +194,7 @@ function getMediaType($file_name) {
     if (preg_match('/\[Cap.(.*?)\]/i', $file_name)) {
         return 'shows';
     }
-    if (preg_match('Temp\.\s+\d{1,2}\s+Capitulo\s+\d{1,2}/i', $file_name)) {
+    if (preg_match('/Temp\.\s+\d{1,2}\s+Capitulo\s+\d{1,2}/i', $file_name)) {
         return 'shows';
     }
     /*
@@ -210,6 +210,11 @@ function getFileTags($file_name) {
     global $cfg;
     $tags = '';
 
+    //Would tag wrong in media where year is part of title and not a tag
+    $year = getFileYear($file_name);
+    if (!empty($year)) {
+        $tags .= '[' . $year . ']';
+    }
     if (isset($cfg['MEDIA_LANGUAGE_TAG']) && count($cfg['MEDIA_LANGUAGE_TAG']) > 0) {
         foreach ($cfg['MEDIA_LANGUAGE_TAG'] as $lang_tag) {
             if (stripos($file_name, $lang_tag) !== false) {
@@ -217,19 +222,9 @@ function getFileTags($file_name) {
             }
         }
     }
-
-    if (isset($cfg['EXTRA_TAG']) && count($cfg['EXTRA_TAG']) > 0) {
-        foreach ($cfg['EXTRA_TAG'] as $extra_tag) {
-            if (stripos($file_name, $extra_tag) !== false) {
-                $tags .= '[' . $extra_tag . ']';
-            }
-        }
-    }
-
     if (stripos($file_name, 'vose') !== false) {
         $tags .= "[VOSE]";
     }
-
     if (
             stripos($file_name, 'dual') !== false
     ) {
@@ -315,9 +310,12 @@ function getFileTags($file_name) {
         }
         $tags .= "UHD]";
     }
-    $year = getFileYear($file_name);
-    if (!empty($year)) {
-        $tags .= '[' . $year . ']';
+    if (isset($cfg['EXTRA_TAG']) && count($cfg['EXTRA_TAG']) > 0) {
+        foreach ($cfg['EXTRA_TAG'] as $extra_tag) {
+            if (stripos($file_name, $extra_tag) !== false) {
+                $tags .= '[' . $extra_tag . ']';
+            }
+        }
     }
 
     return $tags;

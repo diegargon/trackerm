@@ -4,7 +4,11 @@
 Este proyecto esta muy muy verde todavia, cambiara bastante entre commits y no puede y no tendra compatibilidad entre versiones anteriores de momento.
 Si lo instalas y utilizas probablemente tendras que recrear (borrar y volver a crear) las base de datos y estar al tanto de los cambios en el config.inc.php.
 
-Para usarlo edite/configure en configure.inc.php, y pulse rescanear los directorios y identifique sus peliculas/shows.
+De todos modos el trabajo a realizar para tener todo OK otra vez no es mucho (salvo que tenga miles de archivos multimedia), y seria "pinchar en los botones 
+de rescan" y volver a identificar los archivos multimedia.
+
+Para usarlo renombre el archivo _configure.inc.php a configure.inc.php,  edite/configure el configure.inc.php, y pulse rescanear los directorios y 
+identifique sus peliculas/shows.
 
 En el tab de torrentes puedes buscar peliculas/shows y ponerlos a descargarlos en transmission pulsando download
 
@@ -17,6 +21,13 @@ En biblioteca podras ver tus peliculas/series, identificar y ver episodios y cua
 En el futuro trackerm podra seguir tus series, descargarlas automaticamente así como mover los archivos automatica a tu libreria.
 
 Es más que recomendable si tienes que borrar un archivo torrent de transmission añadido con trackm hacerlo desde trackm 
+
+El sistema de seguimiento automatico (aun muy alpha) aunque funciona parcialmente con los torrents al menos en español (otras variantes no probadas)
+se activa metiendo el tracker-cli.php en el cron y poner que se ejecute cada poco tiempo (hay otros mecanismos en el archivo de config que evitan
+sobrecargar el sistema si lo pones cada poco, 15 minutos, 30 minutos o o 1 hora estan bien si quieres que esten  todas las tareas bien actualizadas, 
+O Dias si tampoco tienes prisa. Hay que cambiar el ROOT_PATH en ese archivo tracker-cli.php.
+Para evitar tenerlo que hacerlo dedspues de cada  actualizacion cree el archivo /etc/trackerm_root_path y añada y una simple linea con la localización 
+de su instalación de trackrm, ejemplo: /var/www/trackerm (Ver Tareas automaticas)
 
 Atencion: En estos momentos no estoy utilizando ninguna base de datos , solo guardando los datos en archivos, esto cambiar en el futuro y rompera
 cualquier compatibilidad hacia atras. Y actualmente es facil corrompible, sobre todo en entornos multiusuario.
@@ -40,7 +51,7 @@ cualquier compatibilidad hacia atras. Y actualmente es facil corrompible, sobre 
 
 ## Tareas automaticas: Seguimiento y mover a la libreria.
     En estos momentos todos los mecanismos automaticos estan en desarrollo y no funciona o funcionan parcialmente
-    No recomiendo su uso.
+    No recomiendo su uso salvo para colaborar, en cuyo caso es mejor ejecutarlo a mano y ver la salida. Actualmente no hay logeo a syslog
     Para su actual o uso futuro hay que añadir trackerm-cli.php a CRON, seria recomendable moverlo fuera del ROOT_PATH.
 
     Como funcionara (no lo hace todavía) :

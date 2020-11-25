@@ -113,6 +113,10 @@ $cfg['WANTED_DAY_DELAY'] = 3600;
 // Theme (actually only default)
 $cfg['theme'] = 'default';
 
+//Logging Level (NOT WORK YET)
+//0 EMERG; 1 ALERT; 2 CRIT; 3 ERR; 4 WARNING; 5 NOTICE ; 6 INFO; 7 debug
+$cfg['SYSLOG_LEVEL'] = 'DEBUG';
+
 /* * ********************************** */
 /* PROBABLY NOT NEED EDIT BELOW HERE */
 /* * ********************************** */
