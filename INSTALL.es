@@ -89,6 +89,10 @@ Apache+Php (o similar), Jacket, Transmission, Composer, cuenta+api key themovied
         hasta que sea parado o pare de "servirse" el archivo, en cuyo caso se movera.
         Actualmente solo mueve los archivos parados/pausa.
 
+    La linea basica para ejecutar las tareas automaticas  (ejemplo cada 15 minutos) es la siguiente (/etc/crontab)
+    */15 *   * * *   root    /usr/bin/php  /path/to/trackerm-cli.php
+    Puedes poner trackerm en el directorio que quieras y cambiar de usuario si este tiene los permisos necesarios.
+
 ## VERSION
     Advertencia: Puedes comprobar la version en el archivo VERSION. Mientras este en alpha (0.0.X) hasta la versión 0.1, toda version es factible de romper
     la compatibilidad hacia atras, y lo hara. Si actualizas y hay errores posiblemente tengas que borrar los archivos de la base de datos cache/*.db y quizas

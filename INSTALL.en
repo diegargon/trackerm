@@ -23,15 +23,15 @@ WARNING: At this momment i not using any database, just save in json files the d
 
 ## DIRECTORY PERMISSIONS
     Your www server must have this permissions:
-    * ( R/W )to cache : save db files and images
+    * ( R/W )to cache : save db files and images (directory 775)
     * ( R ) to MOVIES_PATH : Where your movies library reside
     * ( R ) to SHOWS_PATH : Where your shows library reside
-    * ( R ) to Transmission: Where transmission drop your files
+    * ( R ) to TORRENT_FINISH_PATH : Where transmission drop your completed files
 
     All automatic jobs are doing with trackerm-cli.php you must configure your contrab to execute it
     * ( RW ) to MOVIES_PATH : Where your movies library reside
     * ( RW ) to SHOWS_PATH : Where your shows library reside
-    * ( RW ) to Transmission: Where transmission drop your files    
+    * ( RW ) to TORRENT_FINISH_PATH: Where transmission drop your files    
 
 ## CONFIGURE
     All configuration options going in /etc/trackerm.conf , you need copy the file config/config.min.php to /etc and rename as trackerm.conf and then configure.
@@ -43,9 +43,15 @@ WARNING: At this momment i not using any database, just save in json files the d
 
     How will works (not yet):
     * Will looking for wanted items the days configured and automatic download if found any coincidence.
-    * Will move all media in the transmission-daemon "completed" directory to your library directory (you can configure if move all or only the media download
-    with this software.
+    * Will move all media in the transmission-daemon from "completed" directory to your library directory (you can configure if move all or only the media download
+    throught this software.
   
+    The "automatic move tool" only move finished AND stopped torrents , and will (not yet) create a symbolic link to your library when seeding. When stop it will move
+    and remove the torrent and all related content.
+    Basic line for /etc/crontab: 
+        */15 *   * * *   root    /usr/bin/php  /path/to/trackerm-cli.php
+    You can put trackerm-cli where you want and change user if the right permissions is set.
+
 ## VERSION
     WARNING: You can check the version on VERSION file. While in alpha 0.0.X and until 0.1 on every version update probably you going to need 
     recreate all DB files (delete old) and check config.inc.php agains _config.inc.php values for new/modify ones, and this will be change very very often.
