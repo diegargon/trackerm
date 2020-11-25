@@ -62,9 +62,13 @@ Apache+Php (o similar), Jacket, Transmission, Composer, cuenta+api key themovied
         $ composer require irazasyed/php-transmission-sdk  php-http/httplug-pack  php-http/guzzle6-adapter
 
 ## CONFIGURACION
-    Toda las opcines de configuración  va en /etc/trackerm.conf copie el archivo de la carpeta config/config.inc.php a /etc y renombrelo como trackerm.conf,
-luego configura segun sus necesidades
+    Toda las opcines personalizables de configuración van en /etc/trackerm.conf copie el archivo de la carpeta /config/config.min.php 
+    a /etc y renombrelo como trackerm.conf y configurelo.
+
+    La variables de configuración completas estan en config/config.inc.php , no edite ninguno de esos  archivo se sobreescribiran.
+
     Importante añadir, themoviedb api key, jacket server ip y key, los indexers  que queremos utilizar (previamente activados en jackett)
+    y basicamente rellenar todo de config.min.php en /etc/trackerm.conf
 
 ## Tareas automaticas: Seguimiento y mover a la libreria.
     En estos momentos todos los mecanismos automaticos estan en desarrollo y no funciona o funcionan parcialmente

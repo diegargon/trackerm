@@ -7,6 +7,10 @@
  *  @subpackage
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  */
+/* * ******************************************************************************* */
+/* THIS FILE DOES NOTHING  THIS IS ONLY A EXAMPLE  MINAMAL REQUIRED CONFIGURATION */
+/* copy and rename it to /etc/trackerm.conf and edit                              */
+/* * ******************************************************************************* */
 global $cfg;
 
 // themoviedb.org api */
@@ -39,9 +43,8 @@ $cfg['MOVE_TRANSMISSION_ORPHAN'] = 1; //NOT AVAILABLE YET
 // (1) trackrm will scan apart from check transmission server  for media files in the OTHER_MEDIA_DIR directorys array
 // In this case trackrm will move all matches but not delete the directorys related.
 // NOT AVAILABLE YET
-$cfg['SCAN_MEDIA_DIR'] = 1;
-$cfg['OTHER_MEDIA_DIR'] = [
-];
+//$cfg['SCAN_MEDIA_DIR'] = 1;
+//$cfg['OTHER_MEDIA_DIR'] = [];
 // (1) Must create a folder for each movie or  (0) drop all in the MOVIES_PATH
 $cfg['CREATE_MOVIE_FOLDERS'] = 1;
 
@@ -85,7 +88,7 @@ $cfg['profiles'] = [
 ];
 
 // Transmission connection details
-$cfg['trans_hostname'] = '';
+$cfg['trans_hostname'] = '192.168.1.1';
 $cfg['trans_port'] = '9091';
 $cfg['trans_username'] = '';
 $cfg['trans_passwd'] = '';
