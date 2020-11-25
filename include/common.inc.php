@@ -7,6 +7,7 @@ if (1) {
 }
 
 require('config/config.inc.php');
+require('config/config.priv.php');
 
 if (file_exists('/etc/trackerm.conf')) {
     require('/etc/trackerm.conf');

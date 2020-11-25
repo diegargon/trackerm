@@ -67,7 +67,7 @@ $cfg['MEDIA_LANGUAGE_TAG'] = [
     1 => 'ENGLISH'
 ];
 
-//Want trackerm search for any extr tag add here
+//If you want trackerm search for any extr tag in titles add the key here
 $cfg['EXTRA_TAG'] = [];
 
 // What Jacket indexer will use, check in "Actions" links the name ex:  http://192.168.X.XX:9117/api/v2.0/indexers/NAME/results/
@@ -110,7 +110,8 @@ $cfg['TORRENT_IGNORES_PREFS'] = [
     1 => 'SCREENER',
 ];
 
-// The space time in seconds for search the wanted elements the day we choose
+// The space time in seconds for search the wanted elements the day we choose for seach
+// default 3600 seconds. Will try search each hour (if cron is configure for less)
 $cfg['WANTED_DAY_DELAY'] = 3600;
 // Theme (actually only default)
 $cfg['theme'] = 'default';
@@ -118,42 +119,12 @@ $cfg['theme'] = 'default';
 $cfg['SYSLOG_LEVEL'] = 'LOG_DEBUG';
 
 /* * ********************************** */
-/* PROBABLY NOT NEED EDIT BELOW HERE */
+/* PROBABLY NOT NEED CONFIG BELOW HERE */
 /* * ********************************** */
 
-$cfg['app_name'] = 'trackerm';
-$cfg['tresults_details'] = 1;
-$cfg['max_identify_items'] = 5;
-$cfg['tresults_rows'] = 2;
-$cfg['tresults_columns'] = 8;
-$cfg['profile'] = 0;
 $cfg['TORRENT_MEDIA_REGEX'] = '/(\.avi|\.mp4|\.mkv)/i';
 $cfg['CHARSET'] = 'UTF-8';
 $cfg['LOCALE'] = str_replace('-', '_', $cfg['LANG']) . '.' . $cfg['CHARSET'];
-$cfg['jackett_api'] = '/api/v2.0';
-$cfg['img_url'] = $cfg['REL_PATH'] . '/img';
-$cfg['movies_categories'] = [
-    2000 => 'Movies',
-    2010 => 'Movies/Foreign',
-    2020 => 'Movies/Other',
-    2030 => 'Movies/SD',
-    2040 => 'Movies/HD',
-    2045 => 'Movies/UHD',
-    2050 => 'Movies/BluRay',
-    2060 => 'Movies/3D',
-];
-
-$cfg['shows_categories'] = [
-    5000 => 'TV',
-    5020 => 'TV/Foreign',
-    5030 => 'TV/SD',
-    5040 => 'TV/HD',
-    5045 => 'TV/UHD',
-    5050 => 'TV/Other',
-    5060 => 'TV/Sport',
-    5070 => 'TV/Anime',
-    5080 => 'TV/Documentary'
-];
 
 $cfg['media_ext'] = [
     "mkv",
@@ -163,6 +134,3 @@ $cfg['media_ext'] = [
     "mp4",
     "MP4",
 ];
-
-$cfg['categories'] = $cfg['movies_categories'] + $cfg['shows_categories'];
-$cfg['VERSION'] = 'A72';
