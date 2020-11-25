@@ -207,11 +207,40 @@ function getMediaType($file_name) {
 }
 
 function getFileTags($file_name) {
+    global $cfg;
     $tags = '';
+
+    if (isset($cfg['MEDIA_LANGUAGE_TAG']) && count($cfg['MEDIA_LANGUAGE_TAG']) > 0) {
+        foreach ($cfg['MEDIA_LANGUAGE_TAG'] as $lang_tag) {
+            if (stripos($file_name, $lang_tag) !== false) {
+                $tags .= '[' . $lang_tag . ']';
+            }
+        }
+    }
+
+    if (isset($cfg['EXTRA_TAG']) && count($cfg['EXTRA_TAG']) > 0) {
+        foreach ($cfg['EXTRA_TAG'] as $extra_tag) {
+            if (stripos($file_name, $extra_tag) !== false) {
+                $tags .= '[' . $extra_tag . ']';
+            }
+        }
+    }
+
+    if (stripos($file_name, 'vose') !== false) {
+        $tags .= "[VOSE]";
+    }
+
+    if (
+            stripos($file_name, 'dual') !== false
+    ) {
+        $tags .= "[DUAL]";
+    }
     if (stripos($file_name, '720p') !== false) {
         $tags .= "[720p]";
     }
-    if (stripos($file_name, '1080p') !== false) {
+    if (
+            stripos($file_name, '1080p') !== false
+    ) {
         $tags .= "[1080p]";
     }
     if (stripos($file_name, '480p') !== false) {
@@ -243,21 +272,15 @@ function getFileTags($file_name) {
         $tags .= "[HDTV]";
     }
     if (stripos($file_name, 'X264') !== false) {
-        $tags .= "[X254]";
+        $tags .= "[x254]";
     }
-    if (stripos($file_name, 'X265') !== false) {
-        $tags .= "[X265]";
-    }
-    if (stripos($file_name, 'HEVC') !== false) {
-        $tags .= "[HEVC]";
+    if ((stripos($file_name, 'X265') !== false) || stripos($file_name, 'HEVC') !== false) {
+        $tags .= "[x265]";
     }
     if (stripos($file_name, 'HDR') !== false) {
         $tags .= "[HDR]";
     }
-    if (stripos($file_name, 'HD4K') !== false) {
-        $tags .= "[HD4K]";
-    }
-    if (stripos($file_name, 'BueRay') !== false) {
+    if (stripos($file_name, 'BluRay') !== false) {
         $tags .= "[BluRay]";
     }
     if (stripos($file_name, '60fps') !== false) {
@@ -266,17 +289,31 @@ function getFileTags($file_name) {
     if (stripos($file_name, 'WebRip') !== false) {
         $tags .= "[WebRip]";
     }
-    if (stripos($file_name, '3D') !== false) {
+    if (stripos($file_name, '[3D]') !== false) {
         $tags .= "[3D]";
     }
-    if (stripos($file_name, 'SCREENER') !== false) {
+    if (stripos($file_name, '[REMUX]') !== false) {
+        $tags .= "[REMUX]";
+    }
+    if (stripos($file_name, '[subs]') !== false) {
+        $tags .= "[SUBS]";
+    }
+    if (
+            (stripos($file_name, 'SCREENER') !== false) ||
+            (stripos($file_name, 'hd-tc') !== false)
+    ) {
         $tags .= "[SCREENER]";
     }
-    if (stripos($file_name, '2160p') !== false) {
-        $tags .= "[2160p]";
-    }
-    if (stripos($file_name, 'UHD') !== false) {
-        $tags .= "[UHD]";
+    if (
+            (stripos($file_name, 'UHD') !== false) ||
+            (stripos($file_name, '4K') !== false) ||
+            (stripos($file_name, '2160p') !== false)
+    ) {
+        $tags .= '[';
+        if (stripos($file_name, '4K') !== false) {
+            $tags .= "4K ";
+        }
+        $tags .= "UHD]";
     }
     $year = getFileYear($file_name);
     if (!empty($year)) {

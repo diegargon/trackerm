@@ -57,6 +57,17 @@ $cfg['jackett_srv'] = 'http://192.168.X.X:9117';
 $cfg['jackett_key'] = '';
 $cfg['jacket_results'] = 25;
 
+// To avoid search for every language in titles for tags, give here what languages want tag.
+// Leave blank for avoid languages tag in files
+
+$cfg['MEDIA_LANGUAGE_TAG'] = [
+    0 => 'SPANISH',
+    1 => 'ENGLISH'
+];
+
+//Want trackerm search for any extr tag add here
+$cfg['EXTRA_TAG'] = [];
+
 // What Jacket indexer will use, check in "Actions" links the name ex:  http://192.168.X.XX:9117/api/v2.0/indexers/NAME/results/
 $cfg['jackett_indexers'] = [
     0 => 'newpct',
