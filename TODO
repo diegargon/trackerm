@@ -8,8 +8,8 @@ TODO
     [IMPROVE] Crear enlaces simbolicos para los seeding
     [IMPROVE] Al añadir un movie wanted pide confirmación para cambiar cada cuanto, meterlo directamente y si se quiere ya se cambia en la lista.
     [IMPROVE] El archivo cli mandar mensajes a syslog en vez de a la pantalla.
+    [IMPROVE] Get and rewrite Config values from /etc/trackerm y cambiar el ROOT_PATH the cli a  /etc/config
 [MED]
-    
     [NEW] Escaneo de directorios a más para avi sin ser torrents. $cfg['SCAN_MEDIA_DIR'] = 1;
     [NEW/IMPROVE] actualizacion automatica de titulos de episodios (via click cada cierto tiempo u otra forma)
     [FIX] codigo seguro
@@ -36,3 +36,4 @@ TODO
     [NEW] opcional: mostrar otros ratigns, filmaffinity, imdb
     [NEW] Menu/general_prefs.db para cambiar preferencias generales de config.inc.php
     [NEW/IMPROVE] Filter tags en torrentes: posibilidad de filtrar por tags conocidos 720p 1080...
+    [CHANGE] Actual Transmission rpc api to something basic, since is enough and the actual have alot of deps 

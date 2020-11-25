@@ -9,18 +9,16 @@
  */
 define('CLI', true);
 
-
-$ROOT_PATH = '';
-
-if (empty($ROOT_PATH)) {
-    if (file_exists('/etc/trackerm_root_path')) {
-        $ROOT_PATH = trim(file_get_contents('/etc/trackerm_root_path'));
-    } else {
-        leave('No root path');
-    }
+//NEED FOR ROOT_PATH and load common and config files FIX with better way
+if (file_exists('/etc/trackerm.conf')) {
+    require('/etc/trackerm.conf');
+} else {
+    echo "\n" . 'The config file /etc/trackerm.conf is missed, please copy the default file in config.inc.php directory to /etc  and rename it as trackerm.conf and configure the settings' . "\n";
+    exit();
 }
 
-chdir($ROOT_PATH);
+chdir($cfg['ROOT_PATH']);
+
 require('include/common.inc.php');
 require('include/trackerm-cli.inc.php');
 

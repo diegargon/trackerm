@@ -8,6 +8,13 @@ if (1) {
 
 require('config/config.inc.php');
 
+if (file_exists('/etc/trackerm.conf')) {
+    require('/etc/trackerm.conf');
+} else {
+    echo '<br> The config file /etc/trackerm.conf is missed, please copy the default file in config.inc.php directory to /etc  and rename it as trackerm.conf and configure the settings';
+    exit();
+}
+
 setlocale(LC_ALL, $cfg['LOCALE']);
 
 require('include/db.inc.php');

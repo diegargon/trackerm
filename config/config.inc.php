@@ -22,11 +22,11 @@ $cfg['ROOT_PATH'] = '';
 $cfg['REL_PATH'] = '/trackerm';
 
 // Your Movies and Shows  paths
-$cfg['MOVIES_PATH'] = '/home/compartido/biblioteca/Peliculas';
-$cfg['SHOWS_PATH'] = '/home/compartido/biblioteca/Series';
+$cfg['MOVIES_PATH'] = '';
+$cfg['SHOWS_PATH'] = '';
 
 // Where transmission put download files (you must separete from temporal file directory
-$cfg['TORRENT_FINISH_PATH'] = '/home/compartido/Ultimo';
+$cfg['TORRENT_FINISH_PATH'] = '';
 
 // (1) will move only media download with trackerm,(0) will scan and move all media download with transmission
 $cfg['MOVE_ONLY_INAPP'] = 0;
@@ -71,7 +71,7 @@ $cfg['EXTRA_TAG'] = [];
 // What Jacket indexer will use, check in "Actions" links the name ex:  http://192.168.X.XX:9117/api/v2.0/indexers/NAME/results/
 $cfg['jackett_indexers'] = [
     0 => 'newpct',
-//    1 => 'divxtotal',
+    1 => 'divxtotal',
     2 => 'mejortorrent',
 //    3 => 'moviesdvdr',
 //     5 => 'rarbg',
@@ -83,7 +83,7 @@ $cfg['profiles'] = [
 ];
 
 // Transmission connection details
-$cfg['trans_hostname'] = '192.168.X.X';
+$cfg['trans_hostname'] = '';
 $cfg['trans_port'] = '9091';
 $cfg['trans_username'] = '';
 $cfg['trans_passwd'] = '';
@@ -113,8 +113,6 @@ $cfg['WANTED_DAY_DELAY'] = 3600;
 // Theme (actually only default)
 $cfg['theme'] = 'default';
 
-//Logging Level (NOT WORK YET)
-//0 EMERG; 1 ALERT; 2 CRIT; 3 ERR; 4 WARNING; 5 NOTICE ; 6 INFO; 7 debug
 $cfg['SYSLOG_LEVEL'] = 'DEBUG';
 
 /* * ********************************** */
@@ -127,8 +125,8 @@ $cfg['tresults_rows'] = 2;
 $cfg['tresults_columns'] = 8;
 $cfg['profile'] = 0;
 $cfg['TORRENT_MEDIA_REGEX'] = '/(\.avi|\.mp4|\.mkv)/i';
-$cfg['CHARSET'] = 'UTF8';
-$cfg['LOCALE'] = str_replace('-', '_', $cfg['LANG'] . '.' . $cfg['CHARSET']);
+$cfg['CHARSET'] = 'UTF-8';
+$cfg['LOCALE'] = str_replace('-', '_', $cfg['LANG']) . '.' . $cfg['CHARSET'];
 $cfg['jackett_api'] = '/api/v2.0';
 $cfg['img_url'] = $cfg['REL_PATH'] . '/img';
 $cfg['movies_categories'] = [

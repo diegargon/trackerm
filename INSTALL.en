@@ -34,8 +34,11 @@ WARNING: At this momment i not using any database, just save in json files the d
     * ( RW ) to Transmission: Where transmission drop your files    
 
 ## CONFIGURE
-    All configuration options going in config/config.inc.php except for the "automatic tool" you need change in trackerm-cli.php the variable 
-    ROOT_PATH . ex: $ROOT_PATH = '/var/www/trackerm' 
+    Toda las opcines de configuración  va en /etc/trackerm.conf copie el archivo de la carpeta config/config.inc.php a /etc y renombrelo como trackerm.conf,
+luego configura segun sus necesidades
+    Importante añadir, themoviedb api key, jacket server ip y key, los indexers  que queremos utilizar (previamente activados en jackett)
+
+    All configuration options going in /etc/trackerm.conf , you need copy the file config/config.inc.php to /etc and rename as trackerm.conf
 
 ## Automatic search for wanted media and "automatic moving file"  mechanism.
     At this moment all auto mechanism are in develop, i do not recommend using it.
@@ -70,7 +73,7 @@ Apache+Php (or similar), Jacket, Transmission, Composer, account+api key themovi
 
         $ composer require irazasyed/php-transmission-sdk  php-http/httplug-pack  php-http/guzzle6-adapter
 
-    * Rename _config.inc.php to config.inc.php and configure
+
 
 ## Requisitess: Details:
 

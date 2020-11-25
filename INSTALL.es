@@ -44,10 +44,27 @@ cualquier compatibilidad hacia atras. Y actualmente es facil corrompible, sobre 
     * ( RW ) to SHOWS_PATH : Where your shows library reside
     * ( RW ) to Transmission: Where transmission drop your files    
 
+
+## Resumen requisitos:
+Apache+Php (o similar), Jacket, Transmission, Composer, cuenta+api key themoviedb.org, CRON
+
+## Instalación
+    * Copiar los archivos de src a la carpeta destino (AKA: dest)
+
+    * Instalar composer si no lo teneis, hay guias pero basicamente 
+
+        $ curl -sS https://getcomposer.org/installer -o composer-setup.php
+
+        $ php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+
+    *  Ir a la carpeta dest y teclear
+
+        $ composer require irazasyed/php-transmission-sdk  php-http/httplug-pack  php-http/guzzle6-adapter
+
 ## CONFIGURACION
-    Toda las opcines de configuración  va en config/config.inc.php excepto para la parte de la "utilidad automatica" que hay que cambiar la
-    variable ROOT_PATH a donde reside la web. ex: $ROOT_PATH = '/var/www/trackerm' o por las actualizaciones, creando un archivo 
-    /etc/trackerm_root_path que incluya una simple linea con el  ROOT_PATH, ex: /var/www/trackerm
+    Toda las opcines de configuración  va en /etc/trackerm.conf copie el archivo de la carpeta config/config.inc.php a /etc y renombrelo como trackerm.conf,
+luego configura segun sus necesidades
+    Importante añadir, themoviedb api key, jacket server ip y key, los indexers  que queremos utilizar (previamente activados en jackett)
 
 ## Tareas automaticas: Seguimiento y mover a la libreria.
     En estos momentos todos los mecanismos automaticos estan en desarrollo y no funciona o funcionan parcialmente
@@ -70,30 +87,12 @@ cualquier compatibilidad hacia atras. Y actualmente es facil corrompible, sobre 
 
 ## VERSION
     Advertencia: Puedes comprobar la version en el archivo VERSION. Mientras este en alpha (0.0.X) hasta la versión 0.1, toda version es factible de romper
-    la compatibilidad hacia atras, y lo hara. Si actualizas y hay errores posiblemente tengas que borrar los archivos de la base de datos cache/*.db y comprobar
-    el archivo config.inc contra _config.inc si hay nuevas variables.
+    la compatibilidad hacia atras, y lo hara. Si actualizas y hay errores posiblemente tengas que borrar los archivos de la base de datos cache/*.db y quizas
+    puedas tener algun problema con las variables nuevas del archivo de configuración, si algo falla despues de una instalación revisalo.
 
 ## Lenguaje
     Php+Javascript (Más adelante probablemente Jquery)
 
-## Resumen requisitos:
-Apache+Php (o similar), Jacket, Transmission, Composer, cuenta+api key themoviedb.org, CRON
-
-## Instalación
-    * Copiar los archivos de src a la carpeta destino (AKA: dest)
-
-    * Instalar composer si no lo teneis, hay guias pero basicamente 
-
-        $ curl -sS https://getcomposer.org/installer -o composer-setup.php
-
-        $ php composer-setup.php --install-dir=/usr/local/bin --filename=composer
-
-    *  Ir a la carpeta dest y teclear
-
-        $ composer require irazasyed/php-transmission-sdk  php-http/httplug-pack  php-http/guzzle6-adapter
-
-    * Renombrar _config.inc.php a config.inc.php y configurarlo
-        Importante añadir, themoviedb api key, jacket server ip y key, los indexers  que queremos utilizar (previamente activados en jackett)
 ## Requisitos: Detalles:
 
 * Apache (o similar)
@@ -119,6 +118,3 @@ Apache+Php (o similar), Jacket, Transmission, Composer, cuenta+api key themovied
     Es importante para el correcto funcionamiento crearse una cuenta en dicha pagina, se utilizar para buscar peliculas/series, caratulas, identificar y demas.
     Necesitais una clave api de un proveedor, actualmente solo soporta themoviedb.org (el api key va en config.inc.php)
     Quizas en el futuro se añadan otras alternativas pero de momento solo hay esta.
-
-## Latest Changes
-
