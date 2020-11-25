@@ -48,10 +48,12 @@ $cfg['CREATE_MOVIE_FOLDERS'] = 1;
 // (1) Must create a folder for each season or  (0) drop all in the show directority
 $cfg['CREATE_SHOWS_SEASON_FOLDER'] = 1;
 
-// Default group is your transmission group, set a group here if you want change the group after move the files to your library.
-$cfg['FILES_USERGROUP'] = 'shares';
-$cfg['FILES_PERMS'] = 0664;
+// Default group is your transmission group, set a group here if you want change the group after move the files or create direcotrys to your library.
+$cfg['FILES_USERGROUP'] = '';
 
+//Files and directorys permssions
+$cfg['FILES_PERMS'] = 0664;
+$cfg['DIR_PERMS'] = 0775;
 // Where your Jackett server reside, his API key, and how many result get per indexer
 $cfg['jackett_srv'] = 'http://192.168.X.X:9117';
 $cfg['jackett_key'] = '';

@@ -155,7 +155,7 @@ function moveMovie($item, $trans) {
             $dest_path = $cfg['MOVIES_PATH'] . '/' . ucwords($item['title']);
             if (!file_exists($dest_path)) {
                 umask(0);
-                if (!mkdir($dest_path, 0774, true)) {
+                if (!mkdir($dest_path, $cfg['DIR_PERMS'], true)) {
                     leave('Failed to create folders... ' . $dest_path);
                 }
                 (!empty($cfg['FILES_USERGROUP'])) ? chgrp($dest_path, $cfg['FILES_USERGROUP']) : null;
@@ -260,7 +260,7 @@ function moveShow($item, $trans) {
             //CREATE FOLDERS
             if (!file_exists($dest_path)) {
                 umask(0);
-                if (!mkdir($dest_path, 0774, true)) {
+                if (!mkdir($dest_path, $cfg['DIR_PERMS'], true)) {
                     leave('Failed to create folders... ' . $dest_path);
                 }
                 if (!empty($cfg['FILES_USERGROUP'])) {
