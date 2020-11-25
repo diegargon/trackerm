@@ -21,15 +21,15 @@ chdir($cfg['ROOT_PATH']);
 
 require('include/common.inc.php');
 require('include/trackerm-cli.inc.php');
-
-echo "\nMoving work...";
+log_info("Starting trackerm automatic service...");
+log_debug("Moving work...");
 transmission_scan();
 
-echo "\nWanted work...";
+log_debug("Wanted work...");
 wanted_work();
 
 //FIXME: Error glob_recursive file_search
 //rebuild('movies', $cfg['MOVIES_PATH']);
 //rebuild('shows', $cfg['SHOWS_PATH']);
 
-echo "\n";
+log_info("Stopping trackerm automatic service...");

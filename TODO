@@ -7,8 +7,7 @@ TODO
     [IMPROVE] Cuando se escanea eliminar torrents que se pudieron eliminar manualmente, quizas mantener en wanted pero "CANCELADO"
     [IMPROVE] Crear enlaces simbolicos para los seeding
     [IMPROVE] Al añadir un movie wanted pide confirmación para cambiar cada cuanto, meterlo directamente y si se quiere ya se cambia en la lista.
-    [IMPROVE] El archivo cli mandar mensajes a syslog en vez de a la pantalla.
-    [IMPROVE] Get and rewrite Config values from /etc/trackerm y cambiar el ROOT_PATH the cli a  /etc/config
+    [FIX] Actualmente pedimos todas las categorias pedir segun CAPS
 [MED]
     [NEW] Escaneo de directorios a más para avi sin ser torrents. $cfg['SCAN_MEDIA_DIR'] = 1;
     [NEW/IMPROVE] actualizacion automatica de titulos de episodios (via click cada cierto tiempo u otra forma)

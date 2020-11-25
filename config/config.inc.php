@@ -165,3 +165,4 @@ $cfg['media_ext'] = [
 ];
 
 $cfg['categories'] = $cfg['movies_categories'] + $cfg['shows_categories'];
+$cfg['VERSION'] = 'A72';
