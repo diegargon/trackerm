@@ -113,12 +113,13 @@ $cfg['WANTED_DAY_DELAY'] = 3600;
 // Theme (actually only default)
 $cfg['theme'] = 'default';
 
-$cfg['SYSLOG_LEVEL'] = 'DEBUG';
+$cfg['SYSLOG_LEVEL'] = 'LOG_DEBUG';
 
 /* * ********************************** */
 /* PROBABLY NOT NEED EDIT BELOW HERE */
 /* * ********************************** */
 
+$cfg['app_name'] = 'trackerm';
 $cfg['tresults_details'] = 1;
 $cfg['max_identify_items'] = 5;
 $cfg['tresults_rows'] = 2;
