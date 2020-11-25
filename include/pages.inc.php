@@ -299,10 +299,15 @@ function page_wanted() {
             $wanted_list_data .= '<span class="tag_added">' . $LNG['L_ADDED'] . ':' . date('d-m-y', $wanted_item['added']) . '</span>';
 
             $mediadb_item = $db->getItemByField('tmdb_search', 'themoviedb_id', $wanted_item['themoviedb_id']);
-            $elink = $mediadb_item['elink'];
+            !empty($mediadb_item) ? $elink = $mediadb_item['elink'] : null;
 
-            $wanted_list_data .= '<span class="tag_id">TMDB:<a href="' . $elink . '" target=_blank>' . $wanted_item['themoviedb_id'] . '</a></span>';
-            $wanted_list_data .= '</div>';
+            $wanted_list_data .= '<span class="tag_id">TMDB:';
+            if (!empty($elink)) {
+                $wanted_list_data .= '<a href="' . $elink . '" target=_blank>' . $wanted_item['themoviedb_id'] . '</a>';
+            } else {
+                $wanted_list_data .= $wanted_item['themoviedb_id'];
+            }
+            $wanted_list_data .= '</span></div>';
         }
         $wanted_list_data .= '</div>';
         $want['wanted_list'] = $wanted_list_data;
