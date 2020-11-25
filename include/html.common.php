@@ -139,11 +139,18 @@ function pager($npage, $nitems, &$topt) {
     $num_pages = $nitems / $items_per_page;
 
     if ($num_pages > 1) {
-        $iurl = basename($_SERVER['REQUEST_URI']);
-        //Avoid duplicate
-        $iurl = preg_replace('/&npage=\d{1,4}/', '', $iurl);
-        $iurl = preg_replace('/&search_type=shows/', '', $iurl);
-        $iurl = preg_replace('/&search_type=movies/', '', $iurl);
+        $iurl = '?page=' . $_GET['page'];
+
+        (!empty($_GET['type'])) ? $iurl .= '&type=' . $_GET['type'] : null;
+        (!empty($_GET['id'])) ? $iurl .= '&id=' . $_GET['id'] : null;
+        (!empty($_GET['search_shows_torrents'])) ? $iurl .= '&search_shows_torrents=' . $_GET['search_shows_torrents'] : null;
+        (!empty($_GET['search_movies_torrents'])) ? $iurl .= '&search_movies_torrents=' . $_GET['search_movies_torrents'] : null;
+        (!empty($_GET['more_movies'])) ? $iurl .= '&more_movies=' . $_GET['more_movies'] : null;
+        (!empty($_GET['more_torrents'])) ? $iurl .= '&more_torrents=' . $_GET['more_torrents'] : null;
+        (!empty($_GET['search_movie_db'])) ? $iurl .= '&search_movie_db=' . $_GET['search_movie_db'] : null;
+        (!empty($_GET['search_movies'])) ? $iurl .= '&search_movies=' . $_GET['search_movies'] : null;
+        (!empty($_GET['search_shows'])) ? $iurl .= '&search_shows=' . $_GET['search_shows'] : null;
+
         for ($i = 1; $i <= ceil($num_pages); $i++) {
             if (
                     (($i <= ($npage + 3)) && $i >= ($npage - 1) ||

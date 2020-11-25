@@ -6,8 +6,6 @@ TODO
 * Si se borra manualmente un torrente bajado quedara el bd huerfanos. OPCION ORPHAN. 
     Buscar archivos multimedia en el TORRENT DIR y buscar la forma de determina si coincide con alguno en la base de datos
     si no coincide moverlo.
-* La forma que añadimos url en el pager hace que si lleva un peticion GET por ejemplo ident_delete la acarre, hay que cambiar el modo
-y construir la url
 * Cuando se escanea eliminar torrents que se pudieron eliminar manualmente, quizas mantener en wanted pero "CANCELADO"
 * Crear enlaces simbolicos para los seeding
 
