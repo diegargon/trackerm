@@ -31,9 +31,9 @@ $cfg['jacket_results'] = 25;
 
 // What Jacket indexer will use, check in "Actions" links the name ex:  http://192.168.X.XX:9117/api/v2.0/indexers/NAME/results/
 $cfg['jackett_indexers'] = [
-    0 => 'newpct',
-    1 => 'divxtotal',
-    2 => 'mejortorrent',
+//    0 => 'newpct',
+//    1 => 'divxtotal',
+//    2 => 'mejortorrent',
 //    3 => 'moviesdvdr',
 //     5 => 'rarbg',
 ];
