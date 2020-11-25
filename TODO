@@ -7,7 +7,6 @@ TODO
     Buscar archivos multimedia en el TORRENT DIR y buscar la forma de determina si coincide con alguno en la base de datos
     si no coincide moverlo.
 * Al borrar un registro de identificacion de series borrar todos los registros de capitulos.
-* Los rar con password congelan el cli pidiendo el password.
 * Cuando se escanea eliminar torrents que se pudieron eliminar manualmente, quizas mantener en wanted pero "CANCELADO"
 
 ** MED
@@ -19,7 +18,7 @@ TODO
 * jackett search cache query: cuando pasamos pagina se realiza otra query remota, evitarlo. Guardar el query en una db y si se pasa pagina leer de la db 
 en vez de hacer otra query remota.
 * Biblio: buscador o derivar a una pagina buscador más facil.
-*  Soporte para "Temp. 6 Capitulo 16 al 20"
+
 
 ** VERY LOW
 * fechas normalizar a formato comun

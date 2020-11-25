@@ -194,6 +194,9 @@ function getMediaType($file_name) {
     if (preg_match('/\[Cap.(.*?)\]/i', $file_name)) {
         return 'shows';
     }
+    if (preg_match('Temp\.\s+\d{1,2}\s+Capitulo\s+\d{1,2}/i', $file_name)) {
+        return 'shows';
+    }
     /*
       if (preg_match('',$file_name)) {
       return 'shows';
