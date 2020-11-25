@@ -8,6 +8,7 @@ TODO
     si no coincide moverlo.
 * Al borrar un registro de identificacion de series borrar todos los registros de capitulos.
 * Cuando se escanea eliminar torrents que se pudieron eliminar manualmente, quizas mantener en wanted pero "CANCELADO"
+* Crear enlaces simbolicos para los seeding
 
 ** MED
 * Escaneo de directorios a más para avi sin ser torrents. $cfg['SCAN_MEDIA_DIR'] = 1;

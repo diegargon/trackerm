@@ -101,12 +101,11 @@ function getRightTorrents($transfers, $transmission_db) {
     }
 
 //var_dump($transfers);
-//var_dump($finished_list);
 
     $tors = [];
 
     if (count($finished_list) >= 1) {
-        if (!$cfg['MOVE_ONLY_INAPP']) {
+        if ($cfg['MOVE_ONLY_INAPP']) {
             foreach ($finished_list as $finished) {
                 foreach ($transmission_db as $torrent_db) {
                     if ($torrent_db['tid'] == $finished['id']) {
@@ -192,7 +191,7 @@ function moveMovie($item, $trans) {
                 echo "\n Rename failed: $valid_file : $dest_path";
             }
         }
-        rebuild('movies', $cfg['MOVIES_PATH']);
+        //rebuild('movies', $cfg['MOVIES_PATH']); FIXME:RECURSIVE ERROR
     } else {
         leave("\nNo valid files found on torrent with transmission id: " . $item['tid']);
     }
@@ -298,7 +297,7 @@ function moveShow($item, $trans) {
                 echo "\n Rename failed: $valid_file : $dest_path";
             }
         }
-        rebuild('shows', $cfg['SHOWS_PATH']);
+        //rebuild('shows', $cfg['SHOWS_PATH']); FIXME:RECURSIVE ERROR
     } else {
         echo "\nNo valid files found on torrent with id: " . $item['tid'];
     }
