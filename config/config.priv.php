@@ -8,7 +8,7 @@
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  */
 /* * ********************************** */
-/* PROBABLY NOT NEED CONFIG NOTHING HERE */
+/* PROBABLY NOT NEED CONFIG ANYTHING HERE */
 /* * ********************************** */
 
 $cfg['app_name'] = 'trackerm';
