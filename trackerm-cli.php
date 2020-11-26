@@ -20,16 +20,20 @@ if (file_exists('/etc/trackerm.conf')) {
 chdir($cfg['ROOT_PATH']);
 
 require('include/common.inc.php');
+
+isset($argv[1]) && $argv[1] == '-console' ? $log->setConsole(true) : null;
+
 require('include/trackerm-cli.inc.php');
-log_info("Starting trackerm automatic service...");
-log_debug("Moving work...");
+$log->info("Starting trackerm automatic service...");
+$log->debug("Moving work...");
 transmission_scan();
 
-log_debug("Wanted work...");
+$log->debug("Wanted work...");
 wanted_work();
 
 //FIXME: Error glob_recursive file_search
 //rebuild('movies', $cfg['MOVIES_PATH']);
 //rebuild('shows', $cfg['SHOWS_PATH']);
 
-log_info("Stopping trackerm automatic service...");
+$log->info("Stopping trackerm automatic service...");
+

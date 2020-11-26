@@ -11,7 +11,7 @@ function scanAppMedia() {
     /*
       global $db, $cfg;
 
-      log_debug(" [out] Cheking media files in " . $cfg['TORRENT_FINISH_PATH'];
+      $log->debug(" [out] Cheking media files in " . $cfg['TORRENT_FINISH_PATH'];
       $files = [];
       $files = scandir_r($cfg['TORRENT_FINISH_PATH']);
 
@@ -23,7 +23,7 @@ function scanAppMedia() {
 }
 
 function transmission_scan() {
-    global $db, $trans, $cfg;
+    global $db, $trans, $cfg, $log;
 
 
     $transfers = $trans->getAll();
@@ -31,14 +31,14 @@ function transmission_scan() {
     $transmission_db = $db->getTableData('transmission');
 
     if ($cfg['MOVE_ONLY_INAPP'] && empty($transmission_db)) {
-        log_debug(" No Torrents (INAPP set)");
+        $log->debug(" No Torrents (INAPP set)");
         return false;
     }
 
     $tors = getRightTorrents($transfers, $transmission_db);
 
     if ($tors == false) {
-        log_debug(" No torrents in valid state for move found");
+        $log->debug(" No torrents in valid state for move found");
         return false;
     }
 
@@ -55,10 +55,10 @@ function transmission_scan() {
         isset($tor['wanted_id']) ? $item['wanted_id'] = $tor['wanted_id'] : null;
 
         if ($item['media_type'] == 'movies') {
-            log_debug(" Movie detected begin moving.. " . $item['title']);
+            $log->debug(" Movie detected begin moving.. " . $item['title']);
             moveMovie($item, $trans);
         } else if ($item['media_type'] == 'shows') {
-            log_debug(" Show detected begin moving... " . $item['title']);
+            $log->debug(" Show detected begin moving... " . $item['title']);
             moveShow($item, $trans);
         }
     }
@@ -100,8 +100,6 @@ function getRightTorrents($transfers, $transmission_db) {
         }
     }
 
-//var_dump($transfers);
-
     $tors = [];
 
     if (count($finished_list) >= 1) {
@@ -122,7 +120,7 @@ function getRightTorrents($transfers, $transmission_db) {
 }
 
 function moveMovie($item, $trans) {
-    global $cfg, $db;
+    global $cfg, $db, $log;
 
     $orig_path = $cfg['TORRENT_FINISH_PATH'] . '/' . $item['dirname'];
     $files_dir = scandir_r($orig_path);
@@ -131,7 +129,7 @@ function moveMovie($item, $trans) {
         $ext_check = substr($file, -3);
         if ($ext_check == 'rar' || $ext_check == 'RAR') {
             $unrar = 'unrar x -p- -y "' . $file . '" "' . dirname($file) . '"';
-            log_info("Need unrar $file");
+            $log->info("Need unrar $file");
             exec($unrar);
             //echo $unrar;
             break;
@@ -186,19 +184,19 @@ function moveMovie($item, $trans) {
                         $db->updateRecordById('wanted', $item['wanted_id'], $update_ary);
                     }
                 }
-                log_info(" Rename sucessful: $valid_file : $dest_path");
+                $log->info(" Rename sucessful: $valid_file : $dest_path");
             } else {
-                log_err(" Rename failed: $valid_file : $dest_path");
+                $log->err(" Rename failed: $valid_file : $dest_path");
             }
         }
         //rebuild('movies', $cfg['MOVIES_PATH']); FIXME:RECURSIVE ERROR
     } else {
-        log_info("\nNo valid files found on torrent with transmission id: " . $item['tid']);
+        $log->info("\nNo valid files found on torrent with transmission id: " . $item['tid']);
     }
 }
 
 function moveShow($item, $trans) {
-    global $cfg, $db, $LNG;
+    global $cfg, $db, $LNG, $log;
 
     $orig_path = $cfg['TORRENT_FINISH_PATH'] . '/' . $item['dirname'];
 
@@ -208,9 +206,9 @@ function moveShow($item, $trans) {
         $ext_check = substr($file, -3);
         if ($ext_check == 'rar' || $ext_check == 'RAR') {
             $unrar = 'unrar x -y "' . $file . '" "' . dirname($file) . '"';
-            log_info("Need unrar $file");
+            $log->info("Need unrar $file");
             exec($unrar);
-            //log_debug("" . $unrar;
+            //$log->debug("" . $unrar;
             break;
         }
     }
@@ -292,46 +290,46 @@ function moveShow($item, $trans) {
                         $db->updateRecordById('wanted', $item['wanted_id'], $update_ary);
                     }
                 }
-                log_info(" Rename sucessful: $valid_file : $dest_path");
+                $log->info(" Rename sucessful: $valid_file : $dest_path");
             } else {
-                log_err(" Rename failed: $valid_file : $dest_path");
+                $log->err(" Rename failed: $valid_file : $dest_path");
             }
         }
         //rebuild('shows', $cfg['SHOWS_PATH']); FIXME:RECURSIVE ERROR
     } else {
-        log_info("No valid files found on torrent with id: " . $item['tid']);
+        $log->info("No valid files found on torrent with id: " . $item['tid']);
     }
 }
 
 function wanted_work() {
-    global $db, $cfg, $LNG;
+    global $db, $cfg, $LNG, $log;
 
     $day_of_week = date("w");
 
     $wanted_list = $db->getTableData('wanted');
     if (empty($wanted_list) || $wanted_list < 1) {
-        log_debug(" Wanted list empty");
+        $log->debug(" Wanted list empty");
         return false;
     }
 
     foreach ($wanted_list as $wanted) {
         if (!empty($wanted['ignore'])) {
-            log_debug(" Jumping wanted {$wanted['title']} check by ignore state ");
+            $log->debug(" Jumping wanted {$wanted['title']} check by ignore state ");
             continue;
         }
         if (isset($wanted['wanted_state']) && $wanted['wanted_state'] > 0) {
-            log_debug(" Jumping wanted {$wanted['title']} check by state ");
-            ($wanted['wanted_state'] == 1) ? print $LNG['L_DOWNLOADING'] : null;
-            ($wanted['wanted_state'] == 2) ? print $LNG['L_SEEDING'] : null;
-            ($wanted['wanted_state'] == 3) ? print $LNG['L_STOPPED'] : null;
-            ($wanted['wanted_state'] == 4) ? print $LNG['L_COMPLETED'] : null;
-            ($wanted['wanted_state'] == 9) ? print $LNG['L_MOVED'] : null;
+            $log->debug(" Jumping wanted {$wanted['title']} check by state ");
+            ($wanted['wanted_state'] == 1) ? $log->info($LNG['L_DOWNLOADING']) : null;
+            ($wanted['wanted_state'] == 2) ? $log->info($LNG['L_SEEDING']) : null;
+            ($wanted['wanted_state'] == 3) ? $log->info($LNG['L_STOPPED']) : null;
+            ($wanted['wanted_state'] == 4) ? $log->info($LNG['L_COMPLETED']) : null;
+            ($wanted['wanted_state'] == 9) ? $log->info($LNG['L_MOVED']) : null;
             continue;
         }
 
         if ($wanted['day_check'] != 'L_DAY_ALL') {
             if ($LNG[$wanted['day_check']]['n'] != $day_of_week) {
-                log_debug(" Jumping wanted {$wanted['title']} check by date, today is not {$LNG[$wanted['day_check']]['name']}");
+                $log->debug(" Jumping wanted {$wanted['title']} check by date, today is not {$LNG[$wanted['day_check']]['name']}");
                 continue;
             }
         }
@@ -342,7 +340,7 @@ function wanted_work() {
             $next_check = $last_check + $cfg['WANTED_DAY_DELAY'];
             if ($next_check > time()) {
                 $next_check = $next_check - time();
-                log_debug(" Jumping wanted {$wanted['title']} check by delay, next check in $next_check seconds");
+                $log->debug(" Jumping wanted {$wanted['title']} check by delay, next check in $next_check seconds");
                 continue;
             }
         }
@@ -350,13 +348,13 @@ function wanted_work() {
         $themoviedb_id = $wanted['themoviedb_id'];
         $title = $wanted['title'];
         $media_type = $wanted['media_type'];
-        log_debug(" Search for : " . $title . '[' . $media_type . ']');
+        $log->debug(" Search for : " . $title . '[' . $media_type . ']');
         if ($media_type == 'movies') {
             $results = search_movie_torrents($title, null, true);
             if (!empty($results) && count($results) > 0) {
                 $valid_results = wanted_check_flags($results);
             } else {
-                log_debug(" No results founds for " . $title);
+                $log->debug(" No results founds for " . $title);
             }
         } else {
             //$episode = 'S' . $wanted['season'] . 'E' . $wanted['episode'];
@@ -364,7 +362,7 @@ function wanted_work() {
             if (!empty($results) && count($results) > 0) {
                 $valid_results = wanted_check_flags($results);
             } else {
-                log_debug(" No results founds for " . $title);
+                $log->debug(" No results founds for " . $title);
             }
         }
 
@@ -383,12 +381,12 @@ function wanted_work() {
 
         $db->updateRecordById('wanted', $wanted_id, $update_ary);
 
-        log_debug("********************************************************************************************************");
+        $log->debug("********************************************************************************************************");
     }
 }
 
 function wanted_check_flags($results) {
-    global $cfg;
+    global $cfg, $log;
     $noignore = [];
 
     if (count($cfg['TORRENT_IGNORES_PREFS']) > 0) {
@@ -398,7 +396,7 @@ function wanted_check_flags($results) {
             foreach ($cfg['TORRENT_IGNORES_PREFS'] as $ignore) {
                 if (stripos($result['title'], $ignore)) {
                     $ignore_flag = 1;
-                    log_debug(" Wanted: Ignored coincidence for item " . $result['title'] . " by ignore key " . $ignore);
+                    $log->debug(" Wanted: Ignored coincidence for item " . $result['title'] . " by ignore key " . $ignore);
                 }
             }
             if ($ignore_flag != 1) {
@@ -430,7 +428,7 @@ function wanted_check_flags($results) {
             foreach ($noignore as $noignore_result) {
 
                 if (stripos($noignore_result['title'], $quality) || $quality == 'ANY') {
-                    log_debug(" Wanted: Quality coincidence for item " . $noignore_result['title'] . " by quality key " . $quality);
+                    $log->debug(" Wanted: Quality coincidence for item " . $noignore_result['title'] . " by quality key " . $quality);
                     $desire_quality = 1;
                     break;
                 }
@@ -457,7 +455,8 @@ function send_transmission($results) {
         $trans_db = [];
 
         $d_link = $result['download'];
-        $trans_response = $trans->addUrl(rawurldecode($d_link));
+
+        $trans_response = $trans->addUrl($d_link);
         foreach ($trans_response as $rkey => $rval) {
             $trans_db[0][$rkey] = $rval;
         }
@@ -481,7 +480,9 @@ function send_transmission($results) {
 }
 
 function leave($msg = false) {
-    log_debug(" Exit Called");
+    global $log;
+
+    $log->debug(" Exit Called");
     !empty($msg) ? print $msg . "\n" : print "\n";
 
     exit();

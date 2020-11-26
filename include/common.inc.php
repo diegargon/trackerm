@@ -18,7 +18,10 @@ if (file_exists('/etc/trackerm.conf')) {
 
 setlocale(LC_ALL, $cfg['LOCALE']);
 
-require('include/logging.inc.php');
+require('include/logging.class.php');
+global $log;
+$log = new Log($cfg);
+
 require('include/db.inc.php');
 require('lang/' . $cfg['LANG'] . '/lang.inc.php');
 require('include/checks.inc.php');

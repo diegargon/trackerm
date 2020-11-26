@@ -11,19 +11,18 @@ TODO
 
 [MED]
     [NEW] Escaneo de directorios a más para avi sin ser torrents. $cfg['SCAN_MEDIA_DIR'] = 1;
-    [NEW/IMPROVE] actualizacion automatica de titulos de episodios (via click cada cierto tiempo u otra forma)
+    [NEW/IMPROVE] actualizacion automatica de titulos de episodios
     [FIX] codigo seguro
     [IMPROVE] reorganizar codigo/funciones
     [NEW] Biblio: buscador o derivar a una pagina buscador más facil.
     [IMPROVE] Publicado/novedades torrent muestra las 10 (ejemplo) ultimas novedades publicadaas y despues las 10 de otro, lo ideal es obtener 
         "la novedad 1" de cada indexer seguido de la "novedad 2" etc para no tener que pasar paginas para ver las novedades más recientes de otro 
         indexer.
-    [FIX]* Actualmente en busquedas imdb filtramos años de los titulos por que suelen estar mal, el problema es cuando el titulo es un año
+    [FIX] Actualmente en busquedas imdb filtramos años de los titulos por que suelen estar mal, el problema es cuando el titulo es un año
         como 1917.
     [IMRPOVE]  En wanted mostrar last check time
 
 [VERY LOW]
-    [IMPROVE] Log mensajes generales a syslog con logger
     [FIX/IMPROVE] jackett search cache query: cuando pasamos pagina se realiza otra query remota y parece que jackett no cachea, 
         evitarlo guardando el query+resultaos o ver que pasa con el cache de jackett
     [FIX/IMPROVE] fechas normalizar a formato comun
