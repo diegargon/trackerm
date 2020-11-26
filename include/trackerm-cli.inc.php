@@ -56,10 +56,10 @@ function transmission_scan() {
 
         if ($item['media_type'] == 'movies') {
             $log->debug(" Movie detected begin moving.. " . $item['title']);
-            moveMovie($item, $trans);
+            moveMovie($item);
         } else if ($item['media_type'] == 'shows') {
             $log->debug(" Show detected begin moving... " . $item['title']);
-            moveShow($item, $trans);
+            moveShow($item);
         }
     }
 }
@@ -119,8 +119,8 @@ function getRightTorrents($transfers, $transmission_db) {
     return (count($tors) > 0) ? $tors : false;
 }
 
-function moveMovie($item, $trans) {
-    global $cfg, $db, $log;
+function moveMovie($item) {
+    global $cfg, $db, $log, $trans;
 
     $orig_path = $cfg['TORRENT_FINISH_PATH'] . '/' . $item['dirname'];
     $files_dir = scandir_r($orig_path);
@@ -195,8 +195,8 @@ function moveMovie($item, $trans) {
     }
 }
 
-function moveShow($item, $trans) {
-    global $cfg, $db, $LNG, $log;
+function moveShow($item) {
+    global $cfg, $db, $LNG, $trans, $log;
 
     $orig_path = $cfg['TORRENT_FINISH_PATH'] . '/' . $item['dirname'];
 
