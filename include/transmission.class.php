@@ -29,6 +29,7 @@ class TorrentServer {
     }
 
     public function addUrl($url) {
+        //checking if work without rawurldecode($url)
         return $this->trans_conn->addUrl($url);
     }
 

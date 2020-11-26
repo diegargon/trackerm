@@ -21,7 +21,8 @@ $footer = getFooter();
 if (!empty($_GET['download'])) {
     $d_link = $_GET['download'];
 
-    $trans_response = $trans->addUrl(rawurldecode($d_link));
+    $trans_response = $trans->addUrl($d_link);
+
     foreach ($trans_response as $rkey => $rval) {
         $trans_db[0][$rkey] = $rval;
     }
