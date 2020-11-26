@@ -16,13 +16,14 @@ function search_movie_torrents($words, $head = null, $nohtml = false) {
     //FIXME jackett give error with accents
     //$words = iconv($cfg['CHARSET'], 'ASCII//TRANSLIT', $words); //replace accents
 
-
     $results_count = 0;
 
     foreach ($cfg['jackett_indexers'] as $indexer) {
         $caps = jackett_get_caps($indexer);
+        $categories = jackett_get_categories($caps['categories']['category']);
+
         if ($caps['searching']['movie-search']['@attributes']['available'] == "yes") {
-            $result[$indexer] = jackett_search_movies($words, $indexer);
+            $result[$indexer] = jackett_search_movies($words, $indexer, $categories);
         }
         isset($result[$indexer]['channel']['item']) ? $results_count = count($result[$indexer]['channel']['item']) + $results_count : null;
     }
@@ -51,8 +52,10 @@ function search_shows_torrents($words, $head = null, $nohtml = false) {
 
     foreach ($cfg['jackett_indexers'] as $indexer) {
         $caps = jackett_get_caps($indexer);
+        $categories = jackett_get_categories($caps['categories']['category']);
+
         if ($caps['searching']['tv-search']['@attributes']['available'] == "yes") {
-            $result[$indexer] = jackett_search_shows($words, $indexer);
+            $result[$indexer] = jackett_search_shows($words, $indexer, $categories);
         }
         isset($result[$indexer]['channel']['item']) ? $results_count = count($result[$indexer]['channel']['item']) + $results_count : null;
     }
@@ -103,7 +106,7 @@ function jackett_get_caps($indexer) {
     return curl_get_jackett($jackett_url, $params);
 }
 
-function jackett_search_movies($words, $indexer, $limit = null) {
+function jackett_search_movies($words, $indexer, $categories, $limit = null) {
     global $cfg;
 
     empty($limit) ? $limit = $cfg['jacket_results'] : null;
@@ -111,22 +114,17 @@ function jackett_search_movies($words, $indexer, $limit = null) {
     $jackett_url = $cfg['jackett_srv'] . $cfg['jackett_api'] . '/indexers/' . $indexer . '/results/torznab/';
     $words = rawurlencode($words);
 
-    $cats = '';
-    $end_cat = end($cfg['movies_categories']);
-    foreach ($cfg['movies_categories'] as $cat_id => $cat) {
-        if ($cat == $end_cat) {
-            $cats .= $cat_id;
-        } else {
-            $cats .= $cat_id . ',';
+    foreach ($categories as $category) {
+        if (substr($category, 0, 1) == 2) {
+            isset($cats) ? $cats .= ',' . $category : $cats = $category;
         }
     }
-
     $params = 'api?apikey=' . $cfg['jackett_key'] . '&t=search&extended=1&cat=' . $cats . '&q=' . $words . '&limit=' . $limit;
 
     return curl_get_jackett($jackett_url, $params);
 }
 
-function jackett_search_shows($words, $indexer, $limit = null) {
+function jackett_search_shows($words, $indexer, $categories, $limit = null) {
     global $cfg;
 
     empty($limit) ? $limit = $cfg['jacket_results'] : null;
@@ -136,13 +134,9 @@ function jackett_search_shows($words, $indexer, $limit = null) {
     $jackett_url = $cfg['jackett_srv'] . $cfg['jackett_api'] . '/indexers/' . $indexer . '/results/torznab/';
     $words = rawurlencode($words);
 
-    $cats = '';
-    $end_cat = end($cfg['shows_categories']);
-    foreach ($cfg['shows_categories'] as $cat_id => $cat) {
-        if ($cat == $end_cat) {
-            $cats .= $cat_id;
-        } else {
-            $cats .= $cat_id . ',';
+    foreach ($categories as $category) {
+        if (substr($category, 0, 1) == 5) {
+            isset($cats) ? $cats .= ',' . $category : $cats = $category;
         }
     }
     $params = 'api?apikey=' . $cfg['jackett_key'] . '&t=search&extended=1&cat=' . $cats . '&q=' . $words . '&limit=' . $limit;
@@ -297,4 +291,27 @@ function jackett_prep_shows($shows_results) {
         }
     }
     return $shows;
+}
+
+function jackett_get_categories($categories) {
+    $cats = [];
+
+    foreach ($categories as $category) {
+        if (isset($category['@attributes'])) {
+            if (isset($category['@attributes']['id'])) {
+                $cats[] = $category['@attributes']['id'];
+            }
+        }
+        if (isset($category['subcat'])) {
+            foreach ($category['subcat'] as $subcat) {
+                if (isset($subcat['@attributes'])) {
+                    if (isset($subcat['@attributes']['id'])) {
+                        $cats[] = $subcat['@attributes']['id'];
+                    }
+                }
+            }
+        }
+    }
+
+    return $cats;
 }

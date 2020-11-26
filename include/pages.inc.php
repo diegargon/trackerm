@@ -139,10 +139,13 @@ function page_news() {
     global $cfg;
 
     foreach ($cfg['jackett_indexers'] as $indexer) {
-        $results = jackett_search_movies('', $indexer);
+        $caps = jackett_get_caps($indexer);
+        $categories = jackett_get_categories($caps['categories']['category']);
+
+        $results = jackett_search_movies('', $indexer, $categories);
         ($results) ? $movies_res[$indexer] = $results : null;
         $results = null;
-        $results = jackett_search_shows('', $indexer);
+        $results = jackett_search_shows('', $indexer, $categories);
         $results ? $shows_res[$indexer] = $results : null;
     }
 

@@ -7,7 +7,6 @@ TODO
     [IMPROVE] Cuando se escanea eliminar torrents que se pudieron eliminar manualmente, quizas mantener en wanted pero "CANCELADO"
     [IMPROVE] Crear enlaces simbolicos para los seeding
     [IMPROVE] Al añadir un movie wanted pide confirmación para cambiar cada cuanto, meterlo directamente y si se quiere ya se cambia en la lista.
-    [FIX] Actualmente pedimos todas las categorias pedir segun CAPS
 
 [MED]
     [FIX] Wanted: Al menos cuando hay dos (en el caso visto misma serie) y moverlos no cambia el estadod el segundo, revisar logica.
