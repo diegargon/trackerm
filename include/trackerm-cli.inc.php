@@ -107,7 +107,7 @@ function getRightTorrents($transfers, $transmission_db) {
             foreach ($finished_list as $finished) {
                 foreach ($transmission_db as $torrent_db) {
                     if ($torrent_db['tid'] == $finished['id']) {
-                        $tors[] = array_merge($tors, $finished);
+                        $tors[] = $finished;
                     }
                 }
             }
