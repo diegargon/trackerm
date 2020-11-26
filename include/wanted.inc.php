@@ -15,7 +15,7 @@ function wanted_movies($wanted_id) {
 
     $wanted_type = 'movies';
 
-    $item = mediadb_getByDbId($wanted_id, 'tmdb_search');
+    $item = mediadb_getByDbId('movies', $wanted_id);
 
     if ($item === false) {
         return false;
@@ -66,7 +66,8 @@ function wanted_episode($id, $season, $episodes) {
             $episode = "0" . $episode;
         }
 
-        $item = $db->getItemByField('tmdb_search', 'themoviedb_id', $id);
+        $item = mediadb_getByDbId('shows', $id);
+
         $title_search = $item['title'] . ' S' . $season . 'E' . $episode;
 
         $wanted_item[$id]['id'] = $db->getLastId('wanted');

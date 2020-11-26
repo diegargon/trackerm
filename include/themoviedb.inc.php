@@ -37,26 +37,27 @@ function themoviedb_searchShows($search) {
     return isset($shows) ? $shows : null;
 }
 
-function themoviedb_MediaPrep($type, $items) {
-    global $db;
+function themoviedb_MediaPrep($media_type, $items) {
+    global $db, $log;
 
     $img_path = 'https://image.tmdb.org/t/p/w500';
 
-    if ($type == 'movies') {
+    if ($media_type == 'movies') {
         $tmdb_link = 'https://www.themoviedb.org/movie/';
-    } else if ($type == 'shows') {
+    } else if ($media_type == 'shows') {
         $tmdb_link = 'https://www.themoviedb.org/tv/';
     } else {
+        $log->err('mediaprep: media_type was not set');
         return false;
     }
 
     $fitems = [];
 
     foreach ($items as $item) {
-        if ($type == 'movies') {
+        if ($media_type == 'movies') {
             $title = $item['title'];
             $original_title = $item['original_title'];
-        } else if ($type == 'shows') {
+        } else if ($media_type == 'shows') {
             $title = $item['name'];
             $original_title = $item['original_name'];
         }
@@ -64,7 +65,7 @@ function themoviedb_MediaPrep($type, $items) {
         $link = $tmdb_link . $item['id'];
         $id = $item['id'];
         $fitems[$id]['id'] = $id;
-        $fitems[$id]['ilink'] = $type . '_db';
+        $fitems[$id]['ilink'] = $media_type . '_db';
         $fitems[$id]['themoviedb_id'] = $item['id'];
         $fitems[$id]['title'] = $title;
         $fitems[$id]['original_title'] = $original_title;
@@ -85,12 +86,12 @@ function themoviedb_MediaPrep($type, $items) {
             $fitems[$id]['release'] = '';
         }
 
-        if ($type == 'movies') {
+        if ($media_type == 'movies') {
             $library_item = $db->getItemByField('biblio-movies', 'themoviedb_id', $item['id']);
             if ($library_item !== false) {
                 $fitems[$id]['in_library'] = $library_item['id'];
             }
-        } else if ($type == 'shows') {
+        } else if ($media_type == 'shows') {
             $library_item = $db->getItemByField('biblio-shows', 'themoviedb_id', $item['id']);
             if ($library_item !== false) {
                 $fitems[$id]['in_library'] = $library_item['id'];
@@ -105,6 +106,7 @@ function themoviedb_MediaPrep($type, $items) {
             $fitems[$key]['id'] = $id;
         }
     }
+
     return isset($fitems) ? $fitems : false;
 }
 
@@ -175,10 +177,10 @@ function themoviedb_showsDetailsPrep($id, $seasons_data, $episodes_data) {
     return $item;
 }
 
-function themoviedb_getById($id, $table) {
+function themoviedb_getByLocalId($id) {
     global $db;
 
-    $search_db = $db->getTableData($table);
+    $search_db = $db->getTableData('tmdb_search');
 
     foreach ($search_db as $item) {
         if ($item['id'] == $id) {
@@ -188,17 +190,49 @@ function themoviedb_getById($id, $table) {
     return false;
 }
 
-function themoviedb_getByDbId($id, $table) {
-    global $db;
+function themoviedb_getByDbId($media_type, $id) {
+    global $db, $cfg, $log;
 
-    $search_db = $db->getTableData($table);
+
+    $search_db = $db->getTableData('tmdb_search');
 
     foreach ($search_db as $item) {
         if ($item['themoviedb_id'] == $id) {
+            $log->debug('getByDbId: Found in local db id' . $id);
             return $item;
         }
     }
-    return false;
+
+    $log->debug('getByDbId: Not Found in local db id' . $id);
+
+    if (!isset($media_type)) {
+        $log->err('getByDbId: media_type was not set' . $id);
+        return false;
+    }
+
+    if ($media_type == 'movies') {
+        $url = 'https://api.themoviedb.org/3/movie/' . $id . '?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['LANG'];
+    } else if ($media_type == 'shows') {
+        $url = 'https://api.themoviedb.org/3/tv/' . $id . '?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['LANG'];
+    } else {
+        return false;
+    }
+
+    $response_item[] = curl_get_json($url);
+
+
+    if (count($response_item) <= 0) {
+        $log->err('getByDbId: Request id=' . $id . ' to remote databse fail');
+        return false;
+    }
+
+    $result = themoviedb_MediaPrep($media_type, $response_item);
+    if (empty($result)) {
+        $log->err('getByDbId: mediaPrep return empty/false');
+        return false;
+    }
+
+    return current($result);
 }
 
 function themoviedb_getPopular() {

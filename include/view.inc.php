@@ -58,7 +58,7 @@ function view() {
         }
     }
 
-    if ($type == 'movies_library') {
+    if (isset($item['size'])) {
         $item['size'] = human_filesize($item['size']);
     }
 
@@ -79,6 +79,8 @@ function view() {
         $item['have_episodes'] = $i;
         $item['size'] = human_filesize($tsize);
     }
+
+
 
     if (!empty($item['poster']) && $cfg['CACHE_IMAGES']) {
         $cache_img_response = cacheImg($item['poster']);

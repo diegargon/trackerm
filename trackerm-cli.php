@@ -35,5 +35,5 @@ wanted_work();
 //rebuild('movies', $cfg['MOVIES_PATH']);
 //rebuild('shows', $cfg['SHOWS_PATH']);
 
-$log->info("Stopping trackerm automatic service...");
+$log->info("trackerm automatic service finish...");
 

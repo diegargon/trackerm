@@ -7,36 +7,6 @@
  *  @subpackage
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  */
-function get_latest() {
-    global $cfg;
-
-    $url = 'http://192.168.2.10:9117/api/v2.0/indexers/newpct/results/torznab/api?apikey=k1ryk9av87gxjk9e9sj7kpka5mommaxc&t=search&cat=&q=';
-    return curl_get($url);
-
-    //return $response;
-}
-
-function curl_get($url) {
-    global $cfg;
-
-    $headers = [
-        'Accept-Encoding: gzip, deflate',
-    ];
-
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    $response = curl_exec($ch);
-    curl_close($ch);
-
-    $xml = simplexml_load_string($response);
-    $json = json_encode($xml);
-    $array = json_decode($json, TRUE);
-    //echo "*" . var_dump($array);
-    return $array;
-}
-
 function curl_get_jackett($url, $params) {
 
     $headers = [
@@ -75,6 +45,7 @@ function curl_get_json($url) {
     global $cfg;
 
     $headers = [
+        'Content-Type: application/json;charset=utf-8',
         'Accept: text/html,application/xhtml+xml,application/xml,application/json;q=0.9,*/*;q=0.8',
         'Accept-Charset: utf-8;q=0.7,*;q=0.3',
         'Accept-Language:' . $cfg['LANG'] . ';q=0.6,es;q=0.4'

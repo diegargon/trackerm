@@ -27,12 +27,12 @@ function mediadb_showsDetailsPrep($id, $seasons_data, $episodes_data) {
     return themoviedb_showsDetailPrep($id, $seasons_data, $episodes_data);
 }
 
-function mediadb_getById($id, $table) {
-    return themoviedb_getById($id, $table);
+function mediadb_getByLocalId($id) {
+    return themoviedb_getByLocalId($id);
 }
 
-function mediadb_getByDbId($id, $table) {
-    return themoviedb_getByDbId($id, $table);
+function mediadb_getByDbId($media_type, $id) {
+    return themoviedb_getByDbId($media_type, $id);
 }
 
 function mediadb_getPopular() {

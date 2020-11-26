@@ -398,7 +398,7 @@ function submit_ident($type, $items) {
 
     foreach ($items as $my_id => $db_id) {
         if (!empty($db_id)) {
-            $db_item = mediadb_getById($db_id, 'tmdb_search');
+            $db_item = mediadb_getByLocalId($db_id);
 
             !empty($db_item['title']) ? $update_fields['title'] = $db_item['title'] : null;
             !empty($db_item['name']) ? $update_fields['title'] = $db_item['name'] : null;

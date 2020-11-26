@@ -12,7 +12,7 @@ require('config/config.priv.php');
 if (file_exists('/etc/trackerm.conf')) {
     require('/etc/trackerm.conf');
 } else {
-    echo '<br> The config file /etc/trackerm.conf is missed, please copy the default file in config.inc.php directory to /etc  and rename it as trackerm.conf and configure the settings';
+    echo '<br> The config file /etc/trackerm.conf is missed, please copy the default file in config.min.php directory to /etc  and rename it as trackerm.conf and configure the settings';
     exit();
 }
 

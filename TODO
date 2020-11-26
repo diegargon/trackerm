@@ -10,6 +10,7 @@ TODO
     [FIX] Actualmente pedimos todas las categorias pedir segun CAPS
 
 [MED]
+    [FIX] Wanted: Al menos cuando hay dos (en el caso visto misma serie) y moverlos no cambia el estadod el segundo, revisar logica.
     [NEW] Escaneo de directorios a más para avi sin ser torrents. $cfg['SCAN_MEDIA_DIR'] = 1;
     [NEW/IMPROVE] actualizacion automatica de titulos de episodios
     [FIX] codigo seguro

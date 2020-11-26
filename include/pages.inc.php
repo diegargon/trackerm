@@ -299,7 +299,7 @@ function page_wanted() {
             }
             $wanted_list_data .= '<span class="tag_added">' . $LNG['L_ADDED'] . ':' . date('d-m-y', $wanted_item['added']) . '</span>';
 
-            $mediadb_item = $db->getItemByField('tmdb_search', 'themoviedb_id', $wanted_item['themoviedb_id']);
+            $mediadb_item = mediadb_getByDbId($wanted_type, $wanted_item['themoviedb_id']);
             !empty($mediadb_item) ? $elink = $mediadb_item['elink'] : null;
 
             $wanted_list_data .= '<span class="tag_id">TMDB:';

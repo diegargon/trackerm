@@ -37,29 +37,30 @@ function transmission_scan() {
 
     $tors = getRightTorrents($transfers, $transmission_db);
 
-    if ($tors == false) {
-        $log->debug(" No torrents in valid state for move found");
+    if (empty($tors['finished']) && empty($tors['seeding'])) {
+        $log->debug(" Not found any finished or seeding torrent");
         return false;
     }
 
-//var_dump($tors);
+    if (!empty($tors['finished'])) {
+        $log->debug(" Found torrents finished: " . count($tors['finished']));
+        foreach ($tors['finished'] as $tor) {
+            $item = [];
 
-    foreach ($tors as $tor) {
-        $item = [];
+            $item['tid'] = $tor['id'];
+            $item['dirname'] = $tor['name'];
+            $item['title'] = getFileTitle($item['dirname']);
+            $item['status'] = $tor['status'];
+            $item['media_type'] = getMediaType($item['dirname']);
+            isset($tor['wanted_id']) ? $item['wanted_id'] = $tor['wanted_id'] : null;
 
-        $item['tid'] = $tor['id'];
-        $item['dirname'] = $tor['name'];
-        $item['title'] = getFileTitle($item['dirname']);
-        $item['status'] = $tor['status'];
-        $item['media_type'] = getMediaType($item['dirname']);
-        isset($tor['wanted_id']) ? $item['wanted_id'] = $tor['wanted_id'] : null;
-
-        if ($item['media_type'] == 'movies') {
-            $log->debug(" Movie detected begin moving.. " . $item['title']);
-            moveMovie($item);
-        } else if ($item['media_type'] == 'shows') {
-            $log->debug(" Show detected begin moving... " . $item['title']);
-            moveShow($item);
+            if ($item['media_type'] == 'movies') {
+                $log->debug(" Movie detected begin moving.. " . $item['title']);
+                moveMovie($item);
+            } else if ($item['media_type'] == 'shows') {
+                $log->debug(" Show detected begin moving... " . $item['title']);
+                moveShow($item);
+            }
         }
     }
 }
@@ -107,16 +108,16 @@ function getRightTorrents($transfers, $transmission_db) {
             foreach ($finished_list as $finished) {
                 foreach ($transmission_db as $torrent_db) {
                     if ($torrent_db['tid'] == $finished['id']) {
-                        $tors[] = $finished;
+                        $tors['finished'][] = $finished;
                     }
                 }
             }
         } else {
-            $tors = $finished_list;
+            $tors['finished'] = $finished_list;
         }
     }
 
-    return (count($tors) > 0) ? $tors : false;
+    return $tors;
 }
 
 function moveMovie($item) {
@@ -318,12 +319,12 @@ function wanted_work() {
             continue;
         }
         if (isset($wanted['wanted_state']) && $wanted['wanted_state'] > 0) {
-            $log->debug(" Jumping wanted {$wanted['title']} check by state ");
-            ($wanted['wanted_state'] == 1) ? $log->info($LNG['L_DOWNLOADING']) : null;
-            ($wanted['wanted_state'] == 2) ? $log->info($LNG['L_SEEDING']) : null;
-            ($wanted['wanted_state'] == 3) ? $log->info($LNG['L_STOPPED']) : null;
-            ($wanted['wanted_state'] == 4) ? $log->info($LNG['L_COMPLETED']) : null;
-            ($wanted['wanted_state'] == 9) ? $log->info($LNG['L_MOVED']) : null;
+            $logmsg = " Jumping wanted {$wanted['title']} check by state ";
+            ($wanted['wanted_state'] == 1) ? $log->info($logmsg . $LNG['L_DOWNLOADING']) : null;
+            ($wanted['wanted_state'] == 2) ? $log->info($logmsg . $LNG['L_SEEDING']) : null;
+            ($wanted['wanted_state'] == 3) ? $log->info($logmsg . $LNG['L_STOPPED']) : null;
+            ($wanted['wanted_state'] == 4) ? $log->info($logmsg . $LNG['L_COMPLETED']) : null;
+            ($wanted['wanted_state'] == 9) ? $log->info($logmsg . $LNG['L_MOVED']) : null;
             continue;
         }
 
