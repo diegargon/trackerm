@@ -41,7 +41,7 @@ function transmission_scan() {
         $log->debug(" Not found any finished or seeding torrent");
         return false;
     }
-
+    // FINISHED TORRENTS
     if (!empty($tors['finished'])) {
         $log->debug(" Found torrents finished: " . count($tors['finished']));
         foreach ($tors['finished'] as $tor) {
@@ -55,18 +55,38 @@ function transmission_scan() {
             isset($tor['wanted_id']) ? $item['wanted_id'] = $tor['wanted_id'] : null;
 
             if ($item['media_type'] == 'movies') {
-                $log->debug(" Movie detected begin moving.. " . $item['title']);
-                moveMovie($item);
+                $log->debug(" Movie stopped detected begin working on it.. " . $item['title']);
+                MovieJob($item);
             } else if ($item['media_type'] == 'shows') {
-                $log->debug(" Show detected begin moving... " . $item['title']);
-                moveShow($item);
+                $log->debug(" Show stopped detected begin working on it... " . $item['title']);
+                ShowJob($item);
+            }
+        }
+    }
+    // SEEDING TORRENTS
+    if (!empty($tors['seeding'])) {
+        $log->debug(" Found torrents seeding: " . count($tors['seeding']));
+        foreach ($tors['seeding'] as $tor) {
+            $item = [];
+
+            $item['tid'] = $tor['id'];
+            $item['dirname'] = $tor['name'];
+            $item['title'] = getFileTitle($item['dirname']);
+            $item['status'] = $tor['status'];
+            $item['media_type'] = getMediaType($item['dirname']);
+            isset($tor['wanted_id']) ? $item['wanted_id'] = $tor['wanted_id'] : null;
+
+            if ($item['media_type'] == 'movies') {
+                $log->debug(" Movie seeding detected begin linking.. " . $item['title']);
+            } else if ($item['media_type'] == 'shows') {
+                $log->debug(" Show seeeding detected begin linking... " . $item['title']);
             }
         }
     }
 }
 
 function getRightTorrents($transfers, $transmission_db) {
-    global $cfg, $db;
+    global $cfg, $db, $log;
 
     $finished_list = [];
     $seeding_list = [];
@@ -77,32 +97,43 @@ function getRightTorrents($transfers, $transmission_db) {
             $wanted_id = '';
             //aprovechamos para actualizar wanted
             foreach ($transmission_db as $item) {
-                if (isset($item['id']) && isset($item['wanted_id']) && isset($item['id']) == $transfer['id']) {
+                if (($item['tid'] == $transfer['id']) && isset($item['wanted_id'])) {
                     $wanted_id = $item['wanted_id'];
+
                     $wanted_item = $db->getItemById('wanted', $item['wanted_id']);
-                    if ($wanted_item['wanted_state'] != 9 && $wanted_item['wanted_state'] != 3) {
-                        $update_ary['wanted_state'] = 3;
+                    if (empty($wanted_item) ||
+                            ($wanted_item['wanted_state'] != 9 && $wanted_item['wanted_state'] != 3)
+                    ) {
+                        $update_ary['wanted_state'] = 3; //Stopped
                         $db->updateRecordById('wanted', $item['wanted_id'], $update_ary);
                     }
                 }
             }
             !empty($wanted_id) ? $transfer['wanted_id'] = $wanted_id : null;
-            $finished_list[] = array_merge($finished_list, $transfer);
+            $finished_list[] = $transfer;
         } else if ($transfer['status'] == 6 && $transfer['percentDone'] == 1) {
             $wanted_id = '';
             foreach ($transmission_db as $item) {
-                if (isset($item['id']) && isset($item['wanted_id']) && isset($item['id']) == $transfer['id']) {
+                if (($item['tid'] == $transfer['id']) && isset($item['wanted_id'])) {
                     $wanted_id = $item['wanted_id'];
-                    $update_ary['wanted_state'] = 2;
-                    $db->updateRecordById('wanted', $item['wanted_id'], $update_ary);
+
+                    $wanted_item = $db->getItemById('wanted', $item['wanted_id']);
+                    if (empty($wanted_item) ||
+                            ($wanted_item['wanted_state'] != 9 && $wanted_item['wanted_state'] != 2)
+                    ) {
+                        $update_ary['wanted_state'] = 2; //Seeding
+                        $db->updateRecordById('wanted', $item['wanted_id'], $update_ary);
+                    }
                 }
             }
+            !empty($wanted_id) ? $transfer['wanted_id'] = $wanted_id : null;
             $seeding_list[] = $transfer;
         }
     }
 
     $tors = [];
 
+    // FINISHED TORS
     if (count($finished_list) >= 1) {
         if ($cfg['MOVE_ONLY_INAPP']) {
             foreach ($finished_list as $finished) {
@@ -117,11 +148,27 @@ function getRightTorrents($transfers, $transmission_db) {
         }
     }
 
+    //SEEDING TORS
+    if (count($seeding_list) >= 1) {
+        if ($cfg['MOVE_ONLY_INAPP']) {
+            foreach ($seeding_list as $seeding) {
+                foreach ($transmission_db as $torrent_db) {
+                    if ($torrent_db['tid'] == $seeding['id']) {
+                        $tors['seeding'][] = $seeding;
+                    }
+                }
+            }
+        } else {
+            $tors['seeding'] = $seeding_list;
+        }
+    }
+
+
     return $tors;
 }
 
-function moveMovie($item) {
-    global $cfg, $db, $log, $trans;
+function MovieJob($item, $linked = false) {
+    global $cfg, $log, $trans, $db;
 
     $orig_path = $cfg['TORRENT_FINISH_PATH'] . '/' . $item['dirname'];
     $files_dir = scandir_r($orig_path);
@@ -148,7 +195,6 @@ function moveMovie($item) {
     }
 
     if (count($valid_files) >= 1) {
-        $i = 0;
 
         if ($cfg['CREATE_MOVIE_FOLDERS']) {
             $dest_path = $cfg['MOVIES_PATH'] . '/' . ucwords($item['title']);
@@ -162,41 +208,42 @@ function moveMovie($item) {
         } else {
             $dest_path = $cfg['MOVIES_PATH'];
         }
+
+        $i = 1;
         foreach ($valid_files as $valid_file) {
-            $many = '';
             $file_tags = getFileTags($valid_file);
             $ext = substr($valid_file, -4);
-            if ($i > 0) {
-                $many = '[' . $i . ']';
+
+            $new_file_name = ucwords($item['title']) . ' ' . $file_tags . $ext;
+            $final_dest_path = $dest_path . '/' . $new_file_name;
+
+            if (file_exists($final_dest_path)) {
+                $new_file_name = ucwords($item['title']) . ' ' . $file_tags . '[' . $i . ']' . $ext;
+                $final_dest_path = $dest_path . '/' . $new_file_name;
+                $i++;
             }
-            $new_file_name = ucwords($item['title']) . ' ' . $file_tags . $many . $ext;
-            $dest_path = $dest_path . '/' . $new_file_name;
-            $i++;
-            if (rename($valid_file, $dest_path)) {
-                // Added to trans/delete need check if works $db->deleteByFieldMatch('transmission', 'tid', $item['tid']);
-                (!empty($cfg['FILES_USERGROUP'])) ? chgrp($dest_path, $cfg['FILES_USERGROUP']) : null;
-                (!empty($cfg['FILES_PERMS'])) ? chmod($dest_path, $cfg['FILES_PERMS']) : null;
+            if (move_media($valid_file, $final_dest_path) && ($valid_file == end($valid_files) )) {
+                $log->debug(" Cleaning torrent id: " . $item['tid']);
                 $ids[] = $item['tid'];
                 $trans->delete($ids);
                 if (isset($item['wanted_id'])) {
+                    $log->debug(" Setting to moved wanted id: " . $item['wanted_id']);
                     $wanted_item = $db->getItemById('wanted', $item['wanted_id']);
                     if ($wanted_item != false) {
                         $update_ary['wanted_state'] = 9;
                         $db->updateRecordById('wanted', $item['wanted_id'], $update_ary);
                     }
                 }
-                $log->info(" Rename sucessful: $valid_file : $dest_path");
             } else {
-                $log->err(" Rename failed: $valid_file : $dest_path");
+                $log->err("Failed Move item " . var_dump($item));
             }
         }
-        //rebuild('movies', $cfg['MOVIES_PATH']); FIXME:RECURSIVE ERROR
     } else {
-        $log->info("\nNo valid files found on torrent with transmission id: " . $item['tid']);
+        $log->info(" No valid files found on torrent with transmission id: " . $item['tid']);
     }
 }
 
-function moveShow($item) {
+function ShowJob($item, $linked = false) {
     global $cfg, $db, $LNG, $trans, $log;
 
     $orig_path = $cfg['TORRENT_FINISH_PATH'] . '/' . $item['dirname'];
@@ -225,10 +272,8 @@ function moveShow($item) {
     }
 
     if (count($valid_files) >= 1) {
-
+        $i = 1;
         foreach ($valid_files as $valid_file) {
-            $i = 0;
-
             $many = '';
             $file_tags = getFileTags($valid_file);
             $ext = substr($valid_file, -4);
@@ -272,34 +317,46 @@ function moveShow($item) {
             $new_file_name = ucwords($item['title']) . ' ' . $episode . ' ' . $file_tags . $ext;
             $dest_path = $dest_path . '/' . $new_file_name;
 
-            if (($i > 0) && file_exists($dest_path)) {
+            if (file_exists($dest_path)) {
                 $many = '[' . $i . ']';
                 $new_file_name = ucwords($item['title']) . ' ' . $episode . ' ' . $file_tags . $many . $ext;
                 $dest_path = $dest_path . '/' . $new_file_name;
+                $i++;
             }
 
-            if (rename($valid_file, $dest_path)) {
-                // Added to trans/delete need check if works  $db->deleteByFieldMatch('transmission', 'tid', $item['tid']);
-                (!empty($cfg['FILES_USERGROUP'])) ? chgrp($dest_path, $cfg['FILES_USERGROUP']) : null;
-                (!empty($cfg['FILES_PERMS'])) ? chmod($dest_path, $cfg['FILES_PERMS']) : null;
+            if (move_media($valid_file, $dest_path) && ($valid_file == end($valid_files) )) {
+                $log->debug(" Cleaning torrent id: " . $item['tid']);
                 $ids[] = $item['tid'];
                 $trans->delete($ids);
                 if (isset($item['wanted_id'])) {
                     $wanted_item = $db->getItemById('wanted', $item['wanted_id']);
                     if ($wanted_item != false) {
+                        $log->debug(" Setting to moved wanted id: " . $item['wanted_id']);
                         $update_ary['wanted_state'] = 9;
                         $db->updateRecordById('wanted', $item['wanted_id'], $update_ary);
                     }
                 }
-                $log->info(" Rename sucessful: $valid_file : $dest_path");
             } else {
-                $log->err(" Rename failed: $valid_file : $dest_path");
+                $log->err("Failed Move item " . var_dump($item));
             }
         }
-        //rebuild('shows', $cfg['SHOWS_PATH']); FIXME:RECURSIVE ERROR
     } else {
         $log->info("No valid files found on torrent with id: " . $item['tid']);
     }
+}
+
+function move_media($valid_file, $final_dest_path) {
+    global $cfg, $log;
+
+    if (rename($valid_file, $final_dest_path)) {
+        (!empty($cfg['FILES_USERGROUP'])) ? chgrp($final_dest_path, $cfg['FILES_USERGROUP']) : null;
+        (!empty($cfg['FILES_PERMS'])) ? chmod($final_dest_path, $cfg['FILES_PERMS']) : null;
+        $log->info(" Rename sucessful: $valid_file : $final_dest_path");
+        return true;
+    }
+
+    $log->err(" Rename failed: $valid_file : $final_dest_path");
+    return false;
 }
 
 function wanted_work() {
@@ -483,8 +540,8 @@ function send_transmission($results) {
 function leave($msg = false) {
     global $log;
 
-    $log->debug(" Exit Called");
-    !empty($msg) ? print $msg . "\n" : print "\n";
+    $log->debug('Exit Called');
+    !empty($msg) ? $log->err($msg) : null;
 
     exit();
 }
