@@ -41,3 +41,6 @@ TODO
     [FIX] CLI: If rar check if have password, and warn user need password.
     [CHANGE] Use a real database system
     [NEW] Add optional user security for profiles
+    [IMPROVE/WANTED] Añadir la posibilidad de poner ignores y requerimientos aparte de los generales para evitar descargas no deseadas,
+    [IPROVE/WANTED] Añadir la posibilidad de buscar el titulo exacto, si buscamos "Run" o "Asesino" encontrara varios resultados con titulos
+        que contienen dichos terminos y igual se requiere que el titulo solo sea "RUN" o "ASESINO" a secas
