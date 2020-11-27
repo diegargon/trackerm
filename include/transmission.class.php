@@ -48,19 +48,37 @@ class TorrentServer {
     }
 
     public function stopAll() {
-        return $this->trans_conn->stopAll();
+        $ret = $this->trans_conn->stopAll();
+        //sleep(1);
+        $this->updateWanted();
+        return $ret;
     }
 
     public function stop($ids) {
+        $this->updateWantedToStatus($ids, 3);
         return $this->trans_conn->stop($ids);
     }
 
     public function startAll() {
-        return $this->trans_conn->startAll();
+        $ret = $this->trans_conn->startAll();
+        //sleep(1);
+        $this->updateWanted();
+        return $ret;
     }
 
     public function start($ids) {
-        return $this->trans_conn->startNow($ids);
+        $ret = $this->trans_conn->startNow($ids);
+        //sleep(1);
+        $this->updateWanted();
+        return $ret;
+    }
+
+    private function updateWantedToStatus($ids, $status) {
+        //TODO
+    }
+
+    private function updateWanted() {
+        //TODO check torrents ids and update wanted
     }
 
 }

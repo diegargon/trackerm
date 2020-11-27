@@ -6,6 +6,13 @@
  *  @package
  *  @subpackage
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
+
+  Wanted States
+  1 Downloading
+  2 Seeding
+  3 Stoped
+  4 Completed
+  9 MOVED
  */
 function wanted_list() {
     global $db, $cfg, $LNG;

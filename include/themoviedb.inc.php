@@ -198,15 +198,15 @@ function themoviedb_getByDbId($media_type, $id) {
 
     foreach ($search_db as $item) {
         if ($item['themoviedb_id'] == $id) {
-            $log->debug('getByDbId: Found in local db id' . $id);
+            $log->debug('getByDbId: Found in local db id=' . $id);
             return $item;
         }
     }
 
-    $log->debug('getByDbId: Not Found in local db id' . $id);
+    $log->debug('getByDbId: Not Found in local db id=' . $id);
 
     if (!isset($media_type)) {
-        $log->err('getByDbId: media_type was not set' . $id);
+        $log->err('getByDbId: media_type was not set ' . $id);
         return false;
     }
 
