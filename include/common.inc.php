@@ -30,6 +30,7 @@ require('include/file.utils.php');
 require('include/transmission.class.php');
 require('include/transmission.inc.php');
 require('include/library-common.inc.php');
+require('include/ident-title-utils.inc.php');
 require('include/view.inc.php');
 require('include/' . $cfg['search_db'] . '.inc.php');
 require('include/mediadb.inc.php');
