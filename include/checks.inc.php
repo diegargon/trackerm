@@ -11,6 +11,9 @@
 function do_checks() {
     global $cfg;
 
+    if (!file_exists('/etc/trackerm.conf')) {
+        echo "ERROR: trackerm ins't configure please copy & rename config/config.min.php to /etc/trackerm.conf and fill all fields\n";
+    }
     if (empty($cfg['db_api_token'])) {
         echo "ERROR: You must set in /config/config.inc.php db_api token with your themoviedb api key\n";
         exit();
