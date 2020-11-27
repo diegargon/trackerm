@@ -225,12 +225,8 @@ function page_wanted() {
     global $LNG, $cfg, $db;
 
     $want = [];
-    $want['SELECTED_MOVIES'] = '';
-    $want['SELECTED_SHOWS'] = '';
-    $want['page'] = $_GET['page'];
-    $item = [];
 
-    if (isset($_POST['check_day']) && !isset($_POST['submit_wanted'])) {
+    if (isset($_POST['check_day'])) {
         $wanted_mfy = $_POST['check_day'];
         foreach ($wanted_mfy as $w_mfy_id => $w_mfy_value) {
             $day_check['day_check'] = $w_mfy_value;
@@ -239,10 +235,7 @@ function page_wanted() {
     }
 
     isset($_GET['id']) ? $wanted_id = $_GET['id'] : $wanted_id = false;
-    isset($_GET['type']) ? $wanted_type = $_GET['type'] : $wanted_type = false;
-
-    $iurl = preg_replace('/&delete=\d{1,4}/', '', basename($_SERVER['REQUEST_URI']));
-
+    isset($_GET['media_type']) ? $wanted_type = $_GET['media_type'] : $wanted_type = false;
     isset($_GET['delete']) ? $db->deleteById('wanted', $_GET['delete']) : null;
 
     if (isset($_GET['ignore'])) {
@@ -256,67 +249,13 @@ function page_wanted() {
         $db->updateRecordById('wanted', $ignore_id, $update);
     }
 
-    if ($wanted_id !== false && $wanted_type !== false) {
-        if ($wanted_type == 'movies') {
-            $item = wanted_movies($wanted_id);
-        } else if ($wanted_type == 'shows') {
-            $item = wanted_shows($wanted_id);
-        }
+    if ($wanted_id !== false && $wanted_type !== false && $wanted_type == 'movies') {
+        wanted_movies($wanted_id);
     }
 
-    $wanted_list = $db->getTableData('wanted');
-    if (!empty($wanted_list)) {
-        $wanted_list_data = '<h2>' . $LNG['L_WANTED'] . '</h2>';
-        $wanted_list_data .= '<div class="wanted_list_container">';
-        foreach ($wanted_list as $wanted_item) {
-            $wanted_list_data .= '<div class="wanted_list_row">';
-            $wanted_list_data .= '<a href="' . $iurl . '&delete=' . $wanted_item['id'] . '" class="action_link">' . $LNG['L_DELETE'] . '</a>';
-            !empty($wanted_item['ignore']) ? $ignore_link = $LNG['L_UNIGNORE'] : $ignore_link = $LNG['L_IGNORE'];
-            $wanted_list_data .= '<a href="' . $iurl . '&ignore=' . $wanted_item['id'] . '" class="action_link">' . $ignore_link . '</a>';
-            $wanted_list_data .= '<span class="tag_id">' . $wanted_item['id'] . '</span>';
-            $wanted_state = $LNG['L_WAITING'];
-            if (!empty($wanted_item['wanted_state'])) {
-                if ($wanted_item['wanted_state'] == 1) {
-                    $wanted_state = $LNG['L_DOWNLOADING'];
-                } else if ($wanted_item['wanted_state'] == 2) {
-                    $wanted_state = $LNG['L_SEEDING'];
-                } else if ($wanted_item['wanted_state'] == 3) {
-                    $wanted_state = $LNG['L_STOPPED'];
-                } else if ($wanted_item['wanted_state'] == 4) {
-                    $wanted_state = $LNG['L_COMPLETED'];
-                } else if ($wanted_item['wanted_state'] == 9) {
-                    $wanted_state = $LNG['L_MOVED'];
-                }
-            }
+    $want['wanted_list'] = wanted_list();
 
-            $wanted_list_data .= '<span class="tag_state">' . $wanted_state . '</span>';
-            $wanted_list_data .= '<span class="tag_title">' . $wanted_item['title'] . '</span>';
-            $wanted_list_data .= '<span class="tag_type">' . $wanted_item['media_type'] . '</span>';
-            $day_check = day_check($wanted_item['id'], $wanted_item['day_check']);
-            $wanted_list_data .= '<span class="tag_day">' . $day_check . '</span>';
-            foreach ($cfg['TORRENT_QUALITYS_PREFS'] as $quality) {
-                $wanted_list_data .= '<span class="tag_quality">' . $quality . '</span>';
-            }
-            foreach ($cfg['TORRENT_IGNORES_PREFS'] as $ignores) {
-                $wanted_list_data .= '<span class="tag_ignore">' . $ignores . '</span>';
-            }
-            $wanted_list_data .= '<span class="tag_added">' . $LNG['L_ADDED'] . ':' . date('d-m-y', $wanted_item['added']) . '</span>';
-
-            $mediadb_item = mediadb_getByDbId($wanted_type, $wanted_item['themoviedb_id']);
-            !empty($mediadb_item) ? $elink = $mediadb_item['elink'] : null;
-
-            $wanted_list_data .= '<span class="tag_id">TMDB:';
-            if (!empty($elink)) {
-                $wanted_list_data .= '<a href="' . $elink . '" target=_blank>' . $wanted_item['themoviedb_id'] . '</a>';
-            } else {
-                $wanted_list_data .= $wanted_item['themoviedb_id'];
-            }
-            $wanted_list_data .= '</span></div>';
-        }
-        $wanted_list_data .= '</div>';
-        $want['wanted_list'] = $wanted_list_data;
-    }
-    return getTpl('wanted', array_merge($item, $want, $LNG, $cfg));
+    return getTpl('wanted', array_merge($want, $LNG, $cfg));
 }
 
 function page_identify() {

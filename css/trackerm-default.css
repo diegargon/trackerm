@@ -375,6 +375,7 @@ button {
 
 .wanted_page {
     width: 100%;
+    line-height: 2;
 }
 
 .wanted_title {

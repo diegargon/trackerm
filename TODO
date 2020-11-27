@@ -6,10 +6,10 @@ TODO
         si no coincide moverlo.
     [IMPROVE] Cuando se escanea eliminar torrents que se pudieron eliminar manualmente, quizas mantener en wanted pero "CANCELADO"
     [IMPROVE] Crear enlaces simbolicos para los seeding
-    [IMPROVE] Al añadir un movie wanted pide confirmación para cambiar cada cuanto, meterlo directamente y si se quiere ya se cambia en la lista.
 
 [MED]
     [FIX] Wanted: Al menos cuando hay dos (en el caso visto misma serie) y moverlos no cambia el estadod el segundo, revisar logica.
+    [FIX] WAnted: Cuando se elimina desde [T] un torrent en Wanted sigue poniendo Descargado, eliminar o cambiar estado a 'cancelado'
     [NEW] Escaneo de directorios a más para avi sin ser torrents. $cfg['SCAN_MEDIA_DIR'] = 1;
     [NEW/IMPROVE] actualizacion automatica de titulos de episodios
     [FIX] codigo seguro
@@ -20,7 +20,6 @@ TODO
         indexer.
     [FIX] Actualmente en busquedas imdb filtramos años de los titulos por que suelen estar mal, el problema es cuando el titulo es un año
         como 1917.
-    [IMRPOVE]  En wanted mostrar last check time
 
 [VERY LOW]
     [FIX/IMPROVE] jackett search cache query: cuando pasamos pagina se realiza otra query remota y parece que jackett no cachea, 

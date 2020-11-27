@@ -76,7 +76,7 @@
                         </span>
                     <?php } ?>
                     <?php if (!empty($tdata['wanted']) && empty($tdata['in_library'])) { ?>
-                        <a class="action_link" href="?page=wanted&id=<?= $tdata['themoviedb_id'] ?>&type=<?= $tdata['type'] ?>"><?= $tdata['L_WANTED'] ?></a>
+                        <a class="action_link" href="?page=wanted&id=<?= $tdata['themoviedb_id'] ?>&media_type=<?= $tdata['type'] ?>"><?= $tdata['L_WANTED'] ?></a>
                     <?php } ?>
                     <?php if (!empty($tdata['reidentify'])) { ?>
                         <a class="action_link" href="?page=identify&identify=<?= $tdata['id'] ?>&media_type=<?= $tdata['type'] ?>"><?= $tdata['L_IDENTIFY'] ?></a>

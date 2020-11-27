@@ -7,47 +7,73 @@
  *  @subpackage
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  */
+function wanted_list() {
+    global $db, $cfg, $LNG;
+    $iurl = '?page=wanted';
+
+    $wanted_list = $db->getTableData('wanted');
+    if (!empty($wanted_list)) {
+        $wanted_list_data = '';
+
+        foreach ($wanted_list as $wanted_item) {
+            $tdata = [];
+            $tdata['iurl'] = $iurl;
+
+            $tdata['wanted_state'] = $LNG['L_WAITING'];
+            if (!empty($wanted_item['wanted_state'])) {
+                if ($wanted_item['wanted_state'] == 1) {
+                    $tdata['wanted_state'] = $LNG['L_DOWNLOADING'];
+                } else if ($wanted_item['wanted_state'] == 2) {
+                    $tdata['wanted_state'] = $LNG['L_SEEDING'];
+                } else if ($wanted_item['wanted_state'] == 3) {
+                    $tdata['wanted_state'] = $LNG['L_STOPPED'];
+                } else if ($wanted_item['wanted_state'] == 4) {
+                    $tdata['wanted_state'] = $LNG['L_COMPLETED'];
+                } else if ($wanted_item['wanted_state'] == 9) {
+                    $tdata['wanted_state'] = $LNG['L_MOVED'];
+                }
+            }
+            !empty($wanted_item['ignore']) ? $tdata['ignore_link'] = $LNG['L_UNIGNORE'] : $tdata['ignore_link'] = $LNG['L_IGNORE'];
+            $wanted_item['day_check'] = day_check($wanted_item['id'], $wanted_item['day_check']);
+            $wanted_item['added'] = strftime("%x", $wanted_item['added']);
+            !empty($wanted_item['last_check']) ? $wanted_item['last_check'] = strftime("%A %H:%M", $wanted_item['last_check']) : $wanted_item['last_check'] = $LNG['L_NEVER'];
+            $mediadb_item = mediadb_getByDbId($wanted_item['media_type'], $wanted_item['themoviedb_id']);
+            !empty($mediadb_item) ? $tdata['elink'] = $mediadb_item['elink'] : null;
+
+            $wanted_list_data .= getTpl('wanted-item', array_merge($wanted_item, $tdata, $LNG, $cfg));
+        }
+        return $wanted_list_data;
+    }
+    return false;
+}
+
 function wanted_movies($wanted_id) {
-    global $db, $cfg;
+    global $db, $cfg, $log;
 
     $item = [];
     $wanted_item = [];
-
     $wanted_type = 'movies';
 
     $item = mediadb_getByDbId('movies', $wanted_id);
 
     if ($item === false) {
+        $log->debug('Wanted, seems that movie id not exists in the db ');
         return false;
     }
 
-    if (isset($_POST['submit_wanted'])) {
-        $id = $db->getLastId('wanted');
-        $wanted_item[$id]['id'] = $id;
-        $wanted_item[$id]['themoviedb_id'] = $item['themoviedb_id'];
-        $wanted_item[$id]['title'] = $item['title'];
-        $wanted_item[$id]['qualitys'] = $cfg['TORRENT_QUALITYS_PREFS'];
-        $wanted_item[$id]['ignores'] = $cfg['TORRENT_IGNORES_PREFS'];
-        $wanted_item[$id]['added'] = time();
-        $wanted_item[$id]['day_check'] = $_POST['check_day'];
-        $wanted_item[$id]['last_check'] = '';
-        $wanted_item[$id]['wanted_state'] = 0;
-        $wanted_item[$id]['media_type'] = $wanted_type;
-        $wanted_item[$id]['profile'] = $cfg['profile'];
-        $db->addUniqElements('wanted', $wanted_item, 'themoviedb_id');
-    }
-
-    $item['tags_quality'] = '';
-    $item['tags_ignore'] = '';
-    $item['tag_type'] = '<span class="tag_type">' . $wanted_type . '</span>';
-    foreach ($cfg['TORRENT_QUALITYS_PREFS'] as $quality) {
-        $item['tags_quality'] .= '<span class="tag_quality">' . $quality . '</span>';
-    }
-    foreach ($cfg['TORRENT_IGNORES_PREFS'] as $ignores) {
-        $item['tags_ignore'] .= '<span class="tag_ignore">' . $ignores . '</span>';
-    }
-
-    return $item;
+    $id = $db->getLastId('wanted');
+    $wanted_item[$id]['id'] = $id;
+    $wanted_item[$id]['themoviedb_id'] = $item['themoviedb_id'];
+    $wanted_item[$id]['title'] = $item['title'];
+    $wanted_item[$id]['qualitys'] = $cfg['TORRENT_QUALITYS_PREFS'];
+    $wanted_item[$id]['ignores'] = $cfg['TORRENT_IGNORES_PREFS'];
+    $wanted_item[$id]['added'] = time();
+    $wanted_item[$id]['day_check'] = 'L_DAY_ALL';
+    $wanted_item[$id]['last_check'] = '';
+    $wanted_item[$id]['wanted_state'] = 0;
+    $wanted_item[$id]['media_type'] = $wanted_type;
+    $wanted_item[$id]['profile'] = $cfg['profile'];
+    $db->addUniqElements('wanted', $wanted_item, 'themoviedb_id');
 }
 
 function wanted_episode($id, $season, $episodes) {
@@ -67,7 +93,6 @@ function wanted_episode($id, $season, $episodes) {
         }
 
         $item = mediadb_getByDbId('shows', $id);
-
         $title_search = $item['title'] . ' S' . $season . 'E' . $episode;
 
         $wanted_item[$id]['id'] = $db->getLastId('wanted');
@@ -131,7 +156,6 @@ function day_check($id, $day_time) {
     $data .= '<option ' . $sel_sun . ' value="L_DAY_SUN">' . $LNG['L_DAY_SUN']['name'] . '</option>';
     $data .= '</select>';
     $data .= '</form>';
-
 
     return $data;
 }
