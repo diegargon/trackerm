@@ -233,7 +233,7 @@ class DB {
     public function updateRecordsByField($table, $field, $value, $update_fields) {
         $this->getTableData($table);
 
-        if (!isset($this->tables[$table]['data'][$id])) {
+        if (!isset($this->tables[$table]['data'][$field])) {
             return false;
         }
 
