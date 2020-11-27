@@ -5,10 +5,12 @@ TODO
         Buscar archivos multimedia en el TORRENT DIR y buscar la forma de determina si coincide con alguno en la base de datos
         si no coincide moverlo.
     [IMPROVE] Cuando se escanea eliminar torrents que se pudieron eliminar manualmente, quizas mantener en wanted pero "CANCELADO"
-    [IMPROVE] Crear enlaces simbolicos para los seeding
-
+    [IMPROVE] Home, usar plantillas, general y por group items
+    [IMPROVE] Home, Info/Latest changes and basic manual how works
+    [FIX] CLI crear un archivo .unrar en el directorio despues de hacer un unrar borrarlo antes de delete el torrent por que si no no borra la carpeta.
+    [FIX] Cuando se borra un torrent manual cambiar si existe en wanted el estado.
+    [FEATURE] Home: Crear una bd para mensajes y mostrarlos en el home, para que trackrm pueda dejar mensajes como "movido" o "need unrar password" etc.
 [MED]
-    [FIX] Wanted: Al menos cuando hay dos (en el caso visto misma serie) y moverlos no cambia el estadod el segundo, revisar logica.
     [FIX] WAnted: Cuando se elimina desde [T] un torrent en Wanted sigue poniendo Descargado, eliminar o cambiar estado a 'cancelado'
     [NEW] Escaneo de directorios a más para avi sin ser torrents. $cfg['SCAN_MEDIA_DIR'] = 1;
     [NEW/IMPROVE] actualizacion automatica de titulos de episodios
@@ -36,3 +38,4 @@ TODO
     [NEW/IMPROVE] Filter tags en torrentes: posibilidad de filtrar por tags conocidos 720p 1080...
     [CHANGE] Actual Transmission rpc api to something basic, since is enough and the actual have alot of deps 
     [NEW] Home, show total size movies, total size shows, y aparte de nº episodios mostar el numero de series.
+    [FIX] CLI: If rar check if have password, and warn user need password.

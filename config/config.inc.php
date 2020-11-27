@@ -67,7 +67,9 @@ $cfg['jacket_results'] = 25;
 
 $cfg['MEDIA_LANGUAGE_TAG'] = [
     0 => 'SPANISH',
-    1 => 'ENGLISH'
+    1 => 'ENGLISH',
+    2 => 'CASTELLANO',
+    3 => 'ESPAÑOL',
 ];
 
 //If you want trackerm search for any extr tag in titles add the key here

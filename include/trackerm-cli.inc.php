@@ -78,8 +78,10 @@ function transmission_scan() {
 
             if ($item['media_type'] == 'movies') {
                 $log->debug(" Movie seeding detected begin linking.. " . $item['title']);
+                MovieJob($item, true);
             } else if ($item['media_type'] == 'shows') {
                 $log->debug(" Show seeeding detected begin linking... " . $item['title']);
+                ShowJob($item, true);
             }
         }
     }
@@ -176,11 +178,18 @@ function MovieJob($item, $linked = false) {
     foreach ($files_dir as $file) {
         $ext_check = substr($file, -3);
         if ($ext_check == 'rar' || $ext_check == 'RAR') {
-            $unrar = 'unrar x -p- -y "' . $file . '" "' . dirname($file) . '"';
-            $log->info("Need unrar $file");
-            exec($unrar);
-            //echo $unrar;
-            break;
+            $unrar_check = dirname($file) . '/trackerm-unrar';
+            if (!file_exists($unrar_check)) {
+                $unrar = 'unrar x -p- -y "' . $file . '" "' . dirname($file) . '"';
+                touch($unrar_check);
+                !empty($cfg['FILES_USERGROUP']) ? chgrp($unrar_check, $cfg['FILES_USERGROUP']) : null;
+                $log->info("Need unrar $file");
+                exec($unrar);
+                break;
+            } else {
+                $log->info("Unrar flag is set skipping");
+                break;
+            }
         }
     }
 
@@ -217,25 +226,33 @@ function MovieJob($item, $linked = false) {
             $new_file_name = ucwords($item['title']) . ' ' . $file_tags . $ext;
             $final_dest_path = $dest_path . '/' . $new_file_name;
 
-            if (file_exists($final_dest_path)) {
+            if (file_exists($final_dest_path) && !$linked && !is_link($final_dest_path)) {
                 $new_file_name = ucwords($item['title']) . ' ' . $file_tags . '[' . $i . ']' . $ext;
                 $final_dest_path = $dest_path . '/' . $new_file_name;
                 $i++;
+            } else if (file_exists($final_dest_path) && $linked) {
+                $log->debug(" Linking  $final_dest_path already done... skipping");
+                continue;
             }
-            if (move_media($valid_file, $final_dest_path) && ($valid_file == end($valid_files) )) {
-                $log->debug(" Cleaning torrent id: " . $item['tid']);
-                $ids[] = $item['tid'];
-                $trans->delete($ids);
-                if (isset($item['wanted_id'])) {
-                    $log->debug(" Setting to moved wanted id: " . $item['wanted_id']);
-                    $wanted_item = $db->getItemById('wanted', $item['wanted_id']);
-                    if ($wanted_item != false) {
-                        $update_ary['wanted_state'] = 9;
-                        $db->updateRecordById('wanted', $item['wanted_id'], $update_ary);
+
+            if (!$linked) {
+                $log->debug(" Moved work: " . $item['tid']);
+                if (move_media($valid_file, $final_dest_path) && ($valid_file == end($valid_files) )) {
+                    $log->debug(" Cleaning torrent id: " . $item['tid']);
+                    $ids[] = $item['tid'];
+                    $trans->delete($ids);
+                    if (isset($item['wanted_id'])) {
+                        $log->debug(" Setting to moved wanted id: " . $item['wanted_id']);
+                        $wanted_item = $db->getItemById('wanted', $item['wanted_id']);
+                        if ($wanted_item != false) {
+                            $update_ary['wanted_state'] = 9;
+                            $db->updateRecordById('wanted', $item['wanted_id'], $update_ary);
+                        }
                     }
                 }
             } else {
-                $log->err("Failed Move item " . var_dump($item));
+                $log->debug(" Link Seeding: " . $item['tid']);
+                linking_media($valid_file, $final_dest_path);
             }
         }
     } else {
@@ -253,11 +270,19 @@ function ShowJob($item, $linked = false) {
     foreach ($files_dir as $file) {
         $ext_check = substr($file, -3);
         if ($ext_check == 'rar' || $ext_check == 'RAR') {
-            $unrar = 'unrar x -y "' . $file . '" "' . dirname($file) . '"';
-            $log->info("Need unrar $file");
-            exec($unrar);
-            //$log->debug("" . $unrar;
-            break;
+            $unrar_check = dirname($file) . '/trackerm-unrar';
+            if (!file_exists($unrar_check)) {
+                touch($unrar_check);
+                !empty($cfg['FILES_USERGROUP']) ? chgrp($unrar_check, $cfg['FILES_USERGROUP']) : null;
+                $unrar = 'unrar x -y "' . $file . '" "' . dirname($file) . '"';
+                $log->info("Need unrar $file");
+                exec($unrar);
+                //$log->debug("" . $unrar;
+                break;
+            } else {
+                $log->info("Unrar flag is set skipping");
+                break;
+            }
         }
     }
 
@@ -315,29 +340,36 @@ function ShowJob($item, $linked = false) {
             //END CREATE FOLDERS
 
             $new_file_name = ucwords($item['title']) . ' ' . $episode . ' ' . $file_tags . $ext;
-            $dest_path = $dest_path . '/' . $new_file_name;
+            $final_dest_path = $dest_path . '/' . $new_file_name;
 
-            if (file_exists($dest_path)) {
+            if (file_exists($final_dest_path) && !$linked && !is_link($final_dest_path)) {
                 $many = '[' . $i . ']';
                 $new_file_name = ucwords($item['title']) . ' ' . $episode . ' ' . $file_tags . $many . $ext;
-                $dest_path = $dest_path . '/' . $new_file_name;
+                $final_dest_path = $dest_path . '/' . $new_file_name;
                 $i++;
+            } else if (file_exists($final_dest_path) && $linked) {
+                $log->debug(" Linking $final_dest_path already done... skipping");
+                continue;
             }
 
-            if (move_media($valid_file, $dest_path) && ($valid_file == end($valid_files) )) {
-                $log->debug(" Cleaning torrent id: " . $item['tid']);
-                $ids[] = $item['tid'];
-                $trans->delete($ids);
-                if (isset($item['wanted_id'])) {
-                    $wanted_item = $db->getItemById('wanted', $item['wanted_id']);
-                    if ($wanted_item != false) {
-                        $log->debug(" Setting to moved wanted id: " . $item['wanted_id']);
-                        $update_ary['wanted_state'] = 9;
-                        $db->updateRecordById('wanted', $item['wanted_id'], $update_ary);
+            if (!$linked) {
+                $log->debug(" Moved work: " . $item['tid']);
+                if (move_media($valid_file, $final_dest_path) && ($valid_file == end($valid_files) )) {
+                    $log->debug(" Cleaning torrent id: " . $item['tid']);
+                    $ids[] = $item['tid'];
+                    $trans->delete($ids);
+                    if (isset($item['wanted_id'])) {
+                        $wanted_item = $db->getItemById('wanted', $item['wanted_id']);
+                        if ($wanted_item != false) {
+                            $log->debug(" Setting to moved wanted id: " . $item['wanted_id']);
+                            $update_ary['wanted_state'] = 9;
+                            $db->updateRecordById('wanted', $item['wanted_id'], $update_ary);
+                        }
                     }
                 }
             } else {
-                $log->err("Failed Move item " . var_dump($item));
+                $log->debug(" Link Seeding: " . $item['tid']);
+                linking_media($valid_file, $final_dest_path);
             }
         }
     } else {
@@ -355,7 +387,21 @@ function move_media($valid_file, $final_dest_path) {
         return true;
     }
 
-    $log->err(" Rename failed: $valid_file : $final_dest_path");
+    $log->err(" Move failed: $valid_file : $final_dest_path");
+    return false;
+}
+
+function linking_media($valid_file, $final_dest_path) {
+    global $cfg, $log;
+
+    if (symlink($valid_file, $final_dest_path)) {
+        (!empty($cfg['FILES_USERGROUP'])) ? chgrp($valid_file, $cfg['FILES_USERGROUP']) : null;
+        (!empty($cfg['FILES_PERMS'])) ? chmod($valid_file, $cfg['FILES_PERMS']) : null;
+        $log->info(" Linking sucessful: $valid_file : $final_dest_path");
+        return true;
+    }
+
+    $log->err(" Linking failed: $valid_file : $final_dest_path");
     return false;
 }
 

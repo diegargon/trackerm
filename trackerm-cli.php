@@ -25,7 +25,7 @@ isset($argv[1]) && $argv[1] == '-console' ? $log->setConsole(true) : null;
 
 require('include/trackerm-cli.inc.php');
 $log->info("Starting trackerm automatic service...");
-$log->debug("Moving work...");
+$log->debug("Transmission work...");
 transmission_scan();
 
 $log->debug("Wanted work...");

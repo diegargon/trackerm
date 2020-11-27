@@ -39,6 +39,7 @@ in INSTALL.es , in bad english and not update in INSTALL.en
 
 ## Latest (Important)
 
+* Add temporaly linking media while seeding.
 * Warning: Changes how manage the config file now you need move at config.min.php and rename to /etc/tracker.conf
 * Add to Search wanted PROPER first
 * Improve Transmission page Add/delete buttons
