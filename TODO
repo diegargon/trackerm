@@ -39,3 +39,5 @@ TODO
     [CHANGE] Actual Transmission rpc api to something basic, since is enough and the actual have alot of deps 
     [NEW] Home, show total size movies, total size shows, y aparte de nº episodios mostar el numero de series.
     [FIX] CLI: If rar check if have password, and warn user need password.
+    [CHANGE] Use a real database system
+    [NEW] Add optional user security for profiles
