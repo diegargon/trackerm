@@ -45,7 +45,7 @@ Class Log {
                 if (is_array($msg)) {
                     $msg = print_r($msg, true);
                 }
-                $content = '[' . strftime("%c", time()) . ']' . $this->cfg['app_name'] . " : [" . $type . '] ' . $msg . "\n";
+                $content = '[' . strftime("%d %h %X", time()) . ']' . $this->cfg['app_name'] . " : [" . $type . '] ' . $msg . "\n";
                 file_put_contents($log_file, $content, FILE_APPEND);
             }
             if ($cfg['LOG_TO_SYSLOG']) {
