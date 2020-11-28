@@ -42,9 +42,9 @@ function getFileTitle($file) {
     $regex .= '(?!S\d{2}E\d{2})'; // SXXEXX
     $regex .= '(?!3D)'; // 3D
     $regex .= '(?!BRRip)'; // BRRIP
-    $regex .= '(?!.mkv)'; //.mkv
-    $regex .= '(?!.avi)'; //.avi
-    $regex .= '(?!.mp4)'; //.mp4
+    $regex .= '(?!\.mkv)'; //.mkv
+    $regex .= '(?!\.avi)'; //.avi
+    $regex .= '(?!\.mp4)'; //.mp4
 
     /* REGEX TERMINATION */
     $regex .= '.)*/i';
