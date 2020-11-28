@@ -10,14 +10,16 @@
 require('include/prefs.inc.php');
 session_start();
 
-if (isset($_GET['profile']) && array_key_exists($_GET['profile'], $cfg['profiles'])) {
+$profile = $filter->getInt($profile);
 
-    $_SESSION['profile'] = $_GET['profile'];
+if (isset($profile) && array_key_exists($profile, $cfg['profiles'])) {
+
+    $_SESSION['profile'] = $profile;
     setcookie("profile", $_SESSION['profile'], time() + 3600000);
-    $cfg['profile'] = $_GET['profile'];
+    $cfg['profile'] = $profile;
 }
 
-if (!isset($_GET['profile']) && !isset($_SESSION['profile']) && isset($_COOKIE['profile']) && array_key_exists($_COOKIE['profile'], $cfg['profiles'])) {
+if (!isset($profile) && !isset($_SESSION['profile']) && isset($_COOKIE['profile']) && array_key_exists($_COOKIE['profile'], $cfg['profiles'])) {
     $_SESSION['profile'] = $_COOKIE['profile'];
     $cfg['profile'] = $_COOKIE['profile'];
 }
