@@ -104,7 +104,7 @@ Class Log {
 
     public function setStateMsg($msg) {
         global $db;
-        $msg = '[' . strftime("%c", time()) . '] ' . $msg;
+        $msg = '[' . strftime("%d %h %X", time()) . '] ' . $msg;
         $db->addSimpleValue('state_msgs', $msg);
     }
 

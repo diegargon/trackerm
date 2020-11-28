@@ -10,7 +10,9 @@
 require('include/prefs.inc.php');
 session_start();
 
-$profile = $filter->getInt($profile);
+if (isset($_GET['profile'])) {
+    $profile = $filter->getInt('profile');
+}
 
 if (isset($profile) && array_key_exists($profile, $cfg['profiles'])) {
 
