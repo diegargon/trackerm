@@ -5,10 +5,8 @@ TODO
         Buscar archivos multimedia en el TORRENT DIR y buscar la forma de determina si coincide con alguno en la base de datos
         si no coincide moverlo.
     [IMPROVE] Cuando se escanea eliminar torrents que se pudieron eliminar manualmente, quizas mantener en wanted pero "CANCELADO"
-    [IMPROVE] Home, usar plantillas, general y por group items
-    [IMPROVE] Home, Info/Latest changes and basic manual how works
     [FIX] CLI crear un archivo .unrar en el directorio despues de hacer un unrar borrarlo antes de delete el torrent por que si no no borra la carpeta.
-    [FIX] Cuando se borra un torrent manual cambiar si existe en wanted el estado.
+    [FIX] Cuando se borra un torrent manual cambiar si existe en wanted el estado. Quizas opcion de recibir los mensajes de  SYSLOG
     [FEATURE] Home: Crear una bd para mensajes y mostrarlos en el home, para que trackrm pueda dejar mensajes como "movido" o "need unrar password" etc.
 [MED]
     [FIX] WAnted: Cuando se elimina desde [T] un torrent en Wanted sigue poniendo Descargado, eliminar o cambiar estado a 'cancelado'

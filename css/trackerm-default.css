@@ -451,18 +451,52 @@ button {
     border-radius: 0.12em;
     margin:3px;
 }
-.info_container {
-    width: 400px;
+
+.info_container {    
+    width:100%;
+    display:inline-flex;
+    font-size: 1.2em;
 }
+
+.info_column {   
+    border:0px solid blue;        
+}
+
+.info_column:first-of-type {
+    width: 35%;
+}
+
+.info_column:last-of-type {
+    width: 64%;
+}
+
 .home_item_container {
     border:1px solid #ff5b5b;
     padding: 10px;
-    border-collapse: collapse;
-    /* width: min-content; */
+    overflow-wrap: anywhere;
+    margin: 3px;
 }
 
 .home_item_title {
     margin-bottom: 15px;
+}
+
+.home_news {
+    overflow:auto;
+    resize: vertical;
+    height: 20%;
+}
+
+.home_starting {
+    height: 20%;
+    overflow:auto;
+    resize: vertical;
+}
+
+.home_state_msg {
+    height: 20%;
+    overflow:auto;
+    resize: vertical;    
 }
 
 .profiles {

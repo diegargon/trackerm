@@ -114,3 +114,19 @@ function scandir_r($dir) {
     }
     return isset($result) ? $result : false;
 }
+
+function getfile_ary($filename) {
+    $data = false;
+    if (file_exists($filename)) {
+        $data = file_get_contents($filename);
+    }
+    return !empty($data) ? explode("\n", $data) : false;
+}
+
+function getfile($filename) {
+    $data = false;
+    if (file_exists($filename)) {
+        $data = file_get_contents($filename);
+    }
+    return $data;
+}

@@ -15,7 +15,7 @@ function index_page() {
     $tdata = [];
     $tdata['title'] = $LNG['L_IDENTIFIED'] . ': ' . strtoupper($cfg['profiles'][$cfg['profile']]);
     $tdata['content'] = $LNG['L_SEARCH_ENGINE'] . ': ' . '<a href="https://themoviedb.org" target=_blank>themoviedb.org</a>';
-    $titems[] = getTpl('home-item', $tdata);
+    $titems['col1'][] = getTpl('home-item', $tdata);
     /////////
     $tdata = [];
     $tdata['title'] = $LNG['L_PROFILES'];
@@ -24,20 +24,43 @@ function index_page() {
         $tdata['content'] .= '<a class="action_link" href="?profile=' . $pid . '">' . strtoupper($profile) . '</a>';
     }
     $tdata['content'] .= '</div>';
-    $titems[] = getTpl('home-item', $tdata);
+    $titems['col1'][] = getTpl('home-item', $tdata);
     /////////
     $tdata = [];
     $tdata['title'] = $LNG['L_HARDDISK'];
     $tdata['content'] = '<span>' . $LNG['L_MOVIES'] . ' : ' . human_filesize(disk_free_space($cfg['MOVIES_PATH'])) . '/' . human_filesize(disk_total_space($cfg['MOVIES_PATH'])) . '</span><br/>'
             . '<span>' . $LNG['L_SHOWS'] . ' : ' . human_filesize(disk_free_space($cfg['SHOWS_PATH'])) . '/' . human_filesize(disk_total_space($cfg['SHOWS_PATH'])) . '</span>';
-    $titems[] = getTpl('home-item', $tdata);
+    $titems['col1'][] = getTpl('home-item', $tdata);
     /////////
     $tdata = [];
     $tdata['title'] = $LNG['L_DATABASE'];
     $tdata['content'] = '<span>' . $LNG['L_MOVIES'] . ' : ' . $db->getNumElements('biblio-movies') . '</span><br/>'
             . $LNG['L_EPISODES'] . ' : ' . $db->getNumElements('biblio-shows') . '</span>';
-    $titems[] = getTpl('home-item', $tdata);
+    $titems['col1'][] = getTpl('home-item', $tdata);
 
+    $tdata = [];
+    $tdata['title'] = $LNG['L_STATE_MSG'];
+    $tdata['content'] = '<br/>';
+    $tdata['content'] .= '<p></p>';
+    $tdata['main_class'] = 'home_state_msg';
+    $titems['col2'][] = getTpl('home-item', $tdata);
+
+    $tdata = [];
+    $tdata['title'] = $LNG['L_NEWS'];
+    $tdata['content'] = '';
+    $latest_ary = getfile_ary('LATEST');
+    $latest_ary = array_slice($latest_ary, 2);
+    foreach ($latest_ary as $latest) {
+        $tdata['content'] .= $latest . '<br/>';
+    }
+    $tdata['main_class'] = 'home_news';
+    $titems['col2'][] = getTpl('home-item', $tdata);
+
+    $tdata = [];
+    $tdata['title'] = $LNG['L_STARTING'];
+    $tdata['content'] = getfile('STARTING');
+    $tdata['main_class'] = 'home_starting';
+    $titems['col2'][] = getTpl('home-item', $tdata);
 
     $home = getTpl('home-page', $titems);
 

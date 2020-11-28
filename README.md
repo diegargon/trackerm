@@ -34,14 +34,10 @@ Seguridad y mejor codigo vendra mucho mas despacio.
 
 
 ## INSTALL
+
 Latest info: 
 in INSTALL.es , in bad english and not update in INSTALL.en
 
-## Latest (Important)
+## LATEST   
 
-* Add temporaly linking media while seeding.
-* Warning: Changes how manage the config file now you need move at config.min.php and rename to /etc/tracker.conf
-* Add to Search wanted PROPER first
-* Improve Transmission page Add/delete buttons
-* Add partially and no enought tested support for wanted items
-* Add partialy and not enought tested code for move files automatically (support unrar, create the direcotrys and rename)
+Go LATEST
