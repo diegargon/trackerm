@@ -8,9 +8,10 @@
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  */
 function view() {
-    global $cfg, $LNG, $db;
-    $type = $_GET['type'];
-    $id = $_GET['id'];
+    global $cfg, $LNG, $db, $filter;
+    $type = $filter->getString('type');
+    $id = $filter->getInt('id');
+
     $other = [];
     $page = '';
 
@@ -112,7 +113,13 @@ function view() {
 }
 
 function view_extra_movies($item, $opt = null) {
-    global $LNG;
+    global $LNG, $filter;
+
+    /*
+      $id = $filter->getInt('id');
+      $page = $filter->getString('page');
+      $type = $filter->getString('type');
+     */
 
     $extra = '';
 

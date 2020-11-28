@@ -75,13 +75,21 @@ function index_page() {
 }
 
 function page_view() {
-    global $db, $LNG;
-    if (!empty($_GET['deletereg']) && !empty($_GET['id']) && !empty($_GET['type'])) {
-        if ($_GET['type'] == 'movies_library') {
-            $db->deleteById('biblio-movies', $_GET['id']);
+    global $db, $LNG, $filter;
+
+    $id = $filter->getInt('id');
+    $deletereg = $filter->getInt('deletereg', 1);
+    $type = $filter->getString('type');
+
+    if (empty($id) || empty($type)) {
+        return msg_box($msg = ['title' => $LNG['L_ERRORS'], 'body' => '1A1001']);
+    }
+    if (!empty($deletereg)) {
+        if ($type == 'movies_library') {
+            $db->deleteById('biblio-movies', $id);
         }
-        if ($_GET['type'] == 'shows_library') {
-            $delete_item = $db->getItemById('biblio-shows', $_GET['id']);
+        if ($type == 'shows_library') {
+            $delete_item = $db->getItemById('biblio-shows', $id);
             $media_db_id = $delete_item['themoviedb_id'];
             $db->deleteByFieldMatch('biblio-shows', 'themoviedb_id', $media_db_id);
         }
@@ -287,14 +295,14 @@ function page_wanted() {
 }
 
 function page_identify() {
-    global $LNG, $db;
+    global $LNG, $db, $filter;
 
-    $media_type = isset($_GET['media_type']) ? $media_type = $_GET['media_type'] : $media_type = false;
-    $id = isset($_GET['identify']) ? $id = $_GET['identify'] : $id = false;
+    $media_type = $filter->getString('media_type');
+    $id = $filter->getInt('identify');
 
     if ($media_type === false || $id === false) {
         $box_msg['title'] = $LNG['L_ERROR'];
-        $box_msg['body'] = $LNG['L_UNKNOWN'];
+        $box_msg['body'] = '1A1002';
         return msg_box($box_msg);
     }
 
@@ -364,16 +372,18 @@ function page_identify() {
 }
 
 function page_download() {
-    global $db;
+    global $db, $filter;
 
-    if (!isset($_GET['id']) || !isset($_GET['type'])) {
+    $id = $filter->getInt('id');
+    $type = $filter->getString('type');
+
+    if (empty($id) || empty($type)) {
         exit();
     }
 
-    $id = $_GET['id'];
-    if ($_GET['type'] == 'movies_library') {
+    if ($type == 'movies_library') {
         $item = $db->getItemById('biblio-movies', $id);
-    } else if ($_GET['type'] == 'shows_library') {
+    } else if ($type == 'shows_library') {
         $item = $db->getItemById('biblio-shows', $id);
     } else {
         exit();

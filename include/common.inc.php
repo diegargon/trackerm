@@ -23,8 +23,15 @@ global $log;
 $log = new Log($cfg);
 
 require('include/db.inc.php');
+global $db;
+$db = new DB($cfg['ROOT_PATH'] . '/cache');
+
 require('lang/' . $cfg['LANG'] . '/lang.inc.php');
 require('include/checks.inc.php');
+require('include/filters.class.php');
+global $filter;
+$filter = new Filter();
+
 require('include/curl.inc.php');
 require('include/file.utils.php');
 require('include/transmission.class.php');
@@ -36,14 +43,11 @@ require('include/' . $cfg['search_db'] . '.inc.php');
 require('include/mediadb.inc.php');
 require('include/jackett.inc.php');
 require('include/wanted.inc.php');
-require __DIR__ . './../vendor/autoload.php';
+require ('vendor/autoload.php');
 
-global $db;
-$db = new DB($cfg['ROOT_PATH'] . '/cache');
+
 
 do_checks();
 
 global $trans;
-$trans = new TorrentServer($cfg);
-
-
+$trans = new TorrentServer($cfg); //FIXME: Connections results checks

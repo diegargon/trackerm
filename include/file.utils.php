@@ -89,7 +89,6 @@ function send_file($path) {
     flush();
 
     while (!feof($fd)) {
-
         $buffer = fread($fd, 2048);
         print $buffer;
     }

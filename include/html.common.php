@@ -107,7 +107,7 @@ function build_item($item, $detail = null) {
         $page .= '<a href="?page=view&id=' . $item['id'] . '&type=' . $item['ilink'] . '">' . $item['title'] . '</a>';
     } else if ($details == 1) {
         if (empty($item['poster'])) {
-            //TODO: Search in imdb for poster
+            //TODO: Search in imdb for poster if is torrent
             $item['poster'] = $cfg['img_url'] . '/not_available.jpg';
         } else {
             if ($cfg['CACHE_IMAGES']) {
@@ -135,7 +135,6 @@ function pager($npage, $nitems, &$topt) {
     /* PAGES */
     $pages = '';
     $items_per_page = $cfg['tresults_columns'] * $cfg['tresults_rows'];
-
     $num_pages = $nitems / $items_per_page;
 
     if ($num_pages > 1) {

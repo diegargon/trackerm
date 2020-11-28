@@ -29,7 +29,7 @@ $cfg['jackett_srv'] = '';
 $cfg['jackett_key'] = '';
 $cfg['jacket_results'] = 25;
 
-// What Jacket indexer will use, check in "Actions" links the name ex:  http://192.168.X.XX:9117/api/v2.0/indexers/NAME/results/
+// What Jacket indexer will use, check link in "Actions" the name ex:  http://192.168.X.XX:9117/api/v2.0/indexers/NAME/results/
 $cfg['jackett_indexers'] = [
 //    0 => 'newpct',
 //    1 => 'divxtotal',

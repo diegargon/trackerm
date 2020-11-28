@@ -13,8 +13,6 @@ function curl_get_jackett($url, $params) {
         'Accept-Encoding: gzip, deflate',
     ];
 
-    //echo "<br>" . $url . $params;
-    //$url = $url . $params;
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, trim($url . $params));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);

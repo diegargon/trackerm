@@ -86,10 +86,7 @@ function identify_media($type, $media) {
     $i = 0;
     $uniq_shows = [];
 
-    $iurl = basename($_SERVER['REQUEST_URI']);
-    $iurl = preg_replace('/&media_type=shows/', '', $iurl);
-    $iurl = preg_replace('/&media_type=movies/', '', $iurl);
-    $iurl = preg_replace('/&ident_delete=\d{1,4}/', '', $iurl);
+    $iurl = '?page=' . $_GET['page'];
 
     foreach ($media as $item) {
         if (empty($item['title'])) {

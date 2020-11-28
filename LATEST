@@ -1,9 +1,9 @@
-## Latest (Important)
+## Latest (Relevant)
 
 [28/11] Improve Home.
-[XX/XX] Add temporaly linking media while seeding.
-[XX/XX] Warning: Changes how manage the config file now you need move at config.min.php and rename to /etc/tracker.conf
-[XX/XX] Add to Search wanted PROPER first
-[XX/XX] Improve Transmission page Add/delete buttons
-[XX/XX] Add partially and no enought tested support for wanted items
-[XX/XX] Add partialy and not enought tested code for move files automatically (support unrar, create the direcotrys and rename)
+[27/11] Add temporaly linking media while seeding.
+[26/11] Warning: Changes how manage the config file now you need move at config.min.php and rename to /etc/tracker.conf
+[25/11] Add to Search wanted PROPER first
+[24/11] Improve Transmission page Add/delete buttons
+[23/11] Add partially and no enought tested support for wanted items
+[22/11] Add partialy and not enought tested code for move files automatically (support unrar, create the direcotrys and rename)

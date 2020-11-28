@@ -21,7 +21,7 @@ TODO
     [FIX] Actualmente en busquedas imdb filtramos años de los titulos por que suelen estar mal, el problema es cuando el titulo es un año
         como 1917.
     [FIX] No hay ninguna comprobacion de que la conexion a transmission esta correctamente establecida.
-
+    [CHANGE] TMDB: Añadir items de ultimas, popular o similar
 [VERY LOW]
     [FIX/IMPROVE] jackett search cache query: cuando pasamos pagina se realiza otra query remota y parece que jackett no cachea, 
         evitarlo guardando el query+resultaos o ver que pasa con el cache de jackett
