@@ -240,6 +240,7 @@ function MovieJob($item, $linked = false) {
                 if (move_media($valid_file, $final_dest_path) && ($valid_file == end($valid_files) )) {
                     $log->debug(" Cleaning torrent id: " . $item['tid']);
                     $ids[] = $item['tid'];
+                    file_exists(dirname($valid_file) . '/trackerm-unrar') ? unlink(dirname($valid_file) . '/trackerm-unrar') : null;
                     $trans->delete($ids);
                     if (isset($item['wanted_id'])) {
                         $log->debug(" Setting to moved wanted id: " . $item['wanted_id']);
@@ -357,6 +358,7 @@ function ShowJob($item, $linked = false) {
                 if (move_media($valid_file, $final_dest_path) && ($valid_file == end($valid_files) )) {
                     $log->debug(" Cleaning torrent id: " . $item['tid']);
                     $ids[] = $item['tid'];
+                    file_exists(dirname($valid_file) . '/trackerm-unrar') ? unlink(dirname($valid_file) . '/trackerm-unrar') : null;
                     $trans->delete($ids);
                     if (isset($item['wanted_id'])) {
                         $wanted_item = $db->getItemById('wanted', $item['wanted_id']);
