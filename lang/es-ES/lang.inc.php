@@ -61,7 +61,7 @@ $LNG = [
     'L_MOVIE' => 'Pelicula',
     'L_MORE' => 'Más',
     'L_MOVED' => 'Movido',
-    'L_MOVED_TO_LIBRARY', 'movido a tu libreria',
+    'L_MOVED_TO_LIBRARY' => 'movido a tu libreria',
     'L_NEVER' => 'Nunca',
     'L_NEWS' => 'Novedades',
     'L_NOID' => 'Sin identificar',
