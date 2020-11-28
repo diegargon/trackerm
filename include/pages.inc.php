@@ -8,7 +8,7 @@
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  */
 function index_page() {
-    global $cfg, $LNG, $db;
+    global $cfg, $LNG, $db, $log;
 
     $titems = [];
 
@@ -40,8 +40,15 @@ function index_page() {
 
     $tdata = [];
     $tdata['title'] = $LNG['L_STATE_MSG'];
-    $tdata['content'] = '<br/>';
-    $tdata['content'] .= '<p></p>';
+    $tdata['content'] = '';
+
+
+    $state_msgs = $log->getStateMsgs();
+    if (!empty($state_msgs)) {
+        foreach ($state_msgs as $state_msg) {
+            $tdata['content'] .= '<p>' . $state_msg . '</p>';
+        }
+    }
     $tdata['main_class'] = 'home_state_msg';
     $titems['col2'][] = getTpl('home-item', $tdata);
 

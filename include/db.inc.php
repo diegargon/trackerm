@@ -89,6 +89,22 @@ class DB {
         return $this->tables[$table]['data'][$item];
     }
 
+    public function addSimpleValue($table, $value) {
+        !isset($this->tables[$table]) ? $this->loadTable($table) : null;
+        $this->tables[$table]['data'][] = $value;
+        $this->tables[$table]['info']['last_update'] = time();
+        $this->saveTable($table);
+    }
+
+    public function getSimpleValues($table) {
+        !isset($this->tables[$table]) ? $this->loadTable($table) : null;
+        if (isset($this->tables[$table]['data'])) {
+            return $this->tables[$table]['data'];
+        }
+
+        return false;
+    }
+
     function getItemByID($table, $id) {
         !isset($this->tables[$table]) ? $this->loadTable($table) : null;
 

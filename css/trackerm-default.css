@@ -35,6 +35,9 @@ select {
     height: 28px;
     font-size: 1.1em;
     margin: 4px;
+    background-color: transparent;
+    border:1px solid grey;
+    color:  #ff5b5b;
 }
 
 .debug_border1 {
@@ -319,9 +322,9 @@ button {
 
 .num_pages_link, .submit_link, .num_pages_link_selected {
     font-weight: 900;
-    border:1px solid black;
+    border: 1px outset blanchedalmond;
     background-color: #937c00;
-    padding: 7px 20px 7px 20px;
+    padding: 7px 16px 7px 16px;
     text-decoration: none;
     font-size: 1.5em;
     margin-left: 4px;
@@ -400,17 +403,17 @@ button {
 }
 
 .tag_quality, .tag_type, .tag_day, .tag_id, .tag_added, .tag_state {
-    border: 1px solid green;
+    border: 3px solid green;
 }
 
 .tag_title {
-    border: 1px solid black;
+    border: 3px solid black;
     background: black;
     width: 5%;
 }
 
 .tag_ignore {
-    border: 1px solid #ff5b5b;
+    border: 3px solid #ff5b5b;
 }
 
 .tag_quality, .tag_ignore, .tag_type, .tag_day, .tag_id, .tag_added, .tag_title, .tag_state {

@@ -91,4 +91,17 @@ Class Log {
         $this->logged('LOG_EMERG', $msg);
     }
 
+    public function setStateMsg($msg) {
+        global $db;
+
+        $db->addSimpleValue('state_msgs', $msg);
+    }
+
+    public function getStateMsgs() {
+        global $db;
+
+        $state_msgs = $db->getSimpleValues('state_msgs');
+        return isset($state_msgs) ? array_reverse($state_msgs) : false;
+    }
+
 }
