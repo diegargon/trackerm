@@ -7,7 +7,7 @@ TODO
     [IMPROVE] Cuando se escanea eliminar torrents que se pudieron eliminar manualmente, quizas mantener en wanted pero "CANCELADO"
     [FIX] CLI crear un archivo .unrar en el directorio despues de hacer un unrar borrarlo antes de delete el torrent por que si no no borra la carpeta.
     [FIX] Cuando se borra un torrent manual cambiar si existe en wanted el estado. Quizas opcion de recibir los mensajes de  SYSLOG
-    [FEATURE] Home: Crear una bd para mensajes y mostrarlos en el home, para que trackrm pueda dejar mensajes como "movido" o "need unrar password" etc.
+   
 [MED]
     [FIX] WAnted: Cuando se elimina desde [T] un torrent en Wanted sigue poniendo Descargado, eliminar o cambiar estado a 'cancelado'
     [NEW] Escaneo de directorios a más para avi sin ser torrents. $cfg['SCAN_MEDIA_DIR'] = 1;
@@ -21,6 +21,7 @@ TODO
     [FIX] Actualmente en busquedas imdb filtramos años de los titulos por que suelen estar mal, el problema es cuando el titulo es un año
         como 1917.
     [FIX] No hay ninguna comprobacion de que la conexion a transmission esta correctamente establecida.
+
 [VERY LOW]
     [FIX/IMPROVE] jackett search cache query: cuando pasamos pagina se realiza otra query remota y parece que jackett no cachea, 
         evitarlo guardando el query+resultaos o ver que pasa con el cache de jackett
