@@ -9,14 +9,18 @@
  * https://github.com/transmission/transmission/blob/master/extras/rpc-spec.txt
  */
 function page_transmission() {
-    global $trans, $LNG;
+    global $trans, $LNG, $filter;
+
+    $tid = $filter->getInt('tid');
 
     isset($_POST['start_all']) ? $trans->startAll() : null;
     isset($_POST['stop_all']) ? $trans->stopAll() : null;
 
-    isset($_POST['start']) && !empty(($_POST['tid'])) ? $trans->start($_POST['tid']) . sleep(1) : null;
-    isset($_POST['stop']) && !empty(($_POST['tid'])) ? $trans->stop($_POST['tid']) . sleep(1) : null;
-    isset($_POST['delete']) && !empty($_POST['tid']) ? $trans->delete($_POST['tid']) . sleep(1) : null;
+    if ($tid !== false) {
+        isset($_POST['start']) ? $trans->start($tid) . sleep(1) : null;
+        isset($_POST['stop']) ? $trans->stop($tid) . sleep(1) : null;
+        isset($_POST['delete']) ? $trans->delete($tid) . sleep(1) : null;
+    }
 
     $status = [
         0 => $LNG['L_STOPPED'],

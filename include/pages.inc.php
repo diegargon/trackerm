@@ -46,7 +46,7 @@ function index_page() {
     $state_msgs = $log->getStateMsgs();
     if (!empty($state_msgs)) {
         foreach ($state_msgs as $state_msg) {
-            $tdata['content'] .= '<p>' . $state_msg . '</p>';
+            $tdata['content'] .= '<div class="state_msg">' . $state_msg . '</div>';
         }
     }
     $tdata['main_class'] = 'home_state_msg';

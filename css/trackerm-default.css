@@ -500,7 +500,7 @@ button {
     height: 20%;
     overflow:auto;
     resize: vertical;  
-    line-height: 0.2;
+    line-height: 1;
 }
 
 .profiles {
