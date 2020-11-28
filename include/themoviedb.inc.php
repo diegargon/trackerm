@@ -66,6 +66,7 @@ function themoviedb_MediaPrep($media_type, $items) {
         $id = $item['id'];
         $fitems[$id]['id'] = $id;
         $fitems[$id]['ilink'] = $media_type . '_db';
+        $fitems[$id]['media_type'] = $media_type;
         $fitems[$id]['themoviedb_id'] = $item['id'];
         $fitems[$id]['title'] = $title;
         $fitems[$id]['original_title'] = $original_title;
@@ -80,10 +81,11 @@ function themoviedb_MediaPrep($media_type, $items) {
         }
         $fitems[$id]['lang'] = $item['original_language'];
         $fitems[$id]['plot'] = $item['overview'];
+
         if (isset($item['release_date'])) {
             $fitems[$id]['release'] = $item['release_date'];
-        } else {
-            $fitems[$id]['release'] = '';
+        } else if (isset($item['first_air_date'])) {
+            $fitems[$id]['release'] = $item['first_air_date'];
         }
 
         if ($media_type == 'movies') {
