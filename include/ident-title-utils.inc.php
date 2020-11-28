@@ -8,8 +8,26 @@
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  */
 function getFileTitle($file) {
-    /* FIXME Better way */
-    /* REGEX */
+    global $cfg;
+
+    /* Better way? */
+
+    //regex case sensitive;
+    $regex_cs = '/^(?:';
+    $regex_cs .= '(?!SPANISH)';
+    $regex_cs .= '(?!ENGLISH)';
+    if (!empty($cfg['MEDIA_LANGUAGE_TAG']) && count($cfg['MEDIA_LANGUAGE_TAG']) > 0) {
+        foreach ($cfg['MEDIA_LANGUAGE_TAG'] as $custom_media_tag) {
+            $regex_cs .= '(?!' . strtoupper($custom_media_tag) . ')';
+        }
+    }
+    $regex_cs .= '.)*/';
+    $matches = [];
+    preg_match($regex_cs, $file, $matches);
+    $file = mb_strtolower($matches[0]);
+
+
+    /* REGEX  case insentive */
     /* GET ALL */
     $regex = '/^(?:';
     /* UNTIL */
@@ -36,8 +54,10 @@ function getFileTitle($file) {
     $regex .= '(?!DVDRip)'; //DVDRip
     $regex .= '(?!HDRip)'; //HDRip
     $regex .= '(?!WEBRip)'; //WebRip
+    $regex .= '(?!Bluray)'; //Bluray
     $regex .= '(?!4k-hdr)'; // 4k-hdr
-    $regex .= '(?!spanish)'; // spanish (dara probleams)
+    $regex .= '(?!\[spanish\])';
+    $regex .= '(?!\[english\])';
     $regex .= '(?!multi\senglish)'; // multi english
     $regex .= '(?!S\d{2}E\d{2})'; // SXXEXX
     $regex .= '(?!3D)'; // 3D
@@ -45,6 +65,12 @@ function getFileTitle($file) {
     $regex .= '(?!\.mkv)'; //.mkv
     $regex .= '(?!\.avi)'; //.avi
     $regex .= '(?!\.mp4)'; //.mp4
+
+    if (!empty($cfg['MEDIA_LANGUAGE_TAG']) && count($cfg['MEDIA_LANGUAGE_TAG']) > 0) {
+        foreach ($cfg['MEDIA_LANGUAGE_TAG'] as $custom_media_tag) {
+            $regex .= '(?!\[' . strtoupper($custom_media_tag) . '\])';
+        }
+    }
 
     /* REGEX TERMINATION */
     $regex .= '.)*/i';
