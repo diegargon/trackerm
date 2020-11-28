@@ -23,7 +23,7 @@ WARNING: At this momment i not using any database, just save in json files the d
 
 ## DIRECTORY PERMISSIONS
     Your www server must have this permissions:
-    * ( R/W )to cache : save db files and images (directory 775)
+    * ( R/W )to cache cache/log cache/images : save db files and images and logs (directory 775) 
     * ( R ) to MOVIES_PATH : Where your movies library reside
     * ( R ) to SHOWS_PATH : Where your shows library reside
     * ( R ) to TORRENT_FINISH_PATH : Where transmission drop your completed files

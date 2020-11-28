@@ -54,6 +54,14 @@ function do_checks() {
         echo "ERROR: Your cache directory must be writable: {$cfg['ROOT_PATH']}/cache \n";
         exit();
     }
+    if (!is_writable($cfg['ROOT_PATH'] . '/cache/images')) {
+        echo "ERROR: Your cache/images directory must be writable: {$cfg['ROOT_PATH']}/cache \n";
+        exit();
+    }
+    if (!is_writable($cfg['ROOT_PATH'] . '/cache/log')) {
+        echo "ERROR: Your cache/log directory must be writable: {$cfg['ROOT_PATH']}/cache \n";
+        exit();
+    }
     if (!is_writable($cfg['TORRENT_FINISH_PATH'])) {
         echo "ERROR: Your \"torrent finish path\" directory must be writable: {$cfg['TORRENT_FINISH_PATH']} \n";
     }

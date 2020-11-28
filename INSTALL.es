@@ -34,7 +34,7 @@ cualquier compatibilidad hacia atras. Y actualmente es facil corrompible, sobre 
 
 ## Permisos de directorio
     Your www server must have this permissions:
-    * ( R/W )to cache : save db files and images
+    * ( R/W ) to cache cache/log cache/images : save db files and images and logs (755)
     * ( R ) to MOVIES_PATH : Where your movies library reside
     * ( R ) to SHOWS_PATH : Where your shows library reside
     * ( R ) to Transmission: Where transmission drop your files

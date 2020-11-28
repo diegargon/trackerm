@@ -18,6 +18,7 @@ Class Log {
     }
 
     public function logged($type, $msg) {
+        global $cfg;
 
         $LOG_TYPE = [
             'LOG_EMERG' => 0, // 	system is unusable
@@ -39,14 +40,24 @@ Class Log {
                 echo $this->cfg['app_name'] . " : [" . $type . '] ' . $msg . "\n";
             }
 
-            openlog($this->cfg['app_name'] . ' ' . $this->cfg['VERSION'], LOG_NDELAY, LOG_SYSLOG);
-            if (is_array($msg)) {
-                $msg = print_r($msg, true);
-                isset($this->console) ? $this->cfg['app_name'] . " : [" . $type . '] ' . $msg . "\n" : null;
-                syslog($LOG_TYPE[$type], $msg);
-            } else {
-                isset($this->console) ? $this->cfg['app_name'] . " : [" . $type . '] ' . $msg . "\n" : null;
-                syslog($LOG_TYPE[$type], $msg);
+            if ($cfg['LOG_TO_FILE']) {
+                $log_file = 'cache/log/trackerm.log';
+                if (is_array($msg)) {
+                    $msg = print_r($msg, true);
+                }
+                $content = $this->cfg['app_name'] . " : [" . $type . '] ' . $msg . "\n";
+                file_put_contents($log_file, $content, FILE_APPEND);
+            }
+            if ($cfg['LOG_TO_SYSLOG']) {
+                openlog($this->cfg['app_name'] . ' ' . $this->cfg['VERSION'], LOG_NDELAY, LOG_SYSLOG);
+                if (is_array($msg)) {
+                    $msg = print_r($msg, true);
+                    isset($this->console) ? $this->cfg['app_name'] . " : [" . $type . '] ' . $msg . "\n" : null;
+                    syslog($LOG_TYPE[$type], $msg);
+                } else {
+                    isset($this->console) ? $this->cfg['app_name'] . " : [" . $type . '] ' . $msg . "\n" : null;
+                    syslog($LOG_TYPE[$type], $msg);
+                }
             }
         }
     }
