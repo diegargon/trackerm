@@ -499,7 +499,8 @@ button {
 .home_state_msg {
     height: 20%;
     overflow:auto;
-    resize: vertical;    
+    resize: vertical;  
+    line-height: 0.2;
 }
 
 .profiles {

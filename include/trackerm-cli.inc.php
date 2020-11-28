@@ -170,7 +170,7 @@ function getRightTorrents($transfers, $transmission_db) {
 }
 
 function MovieJob($item, $linked = false) {
-    global $cfg, $log, $trans, $db;
+    global $cfg, $log, $trans, $db, $LNG;
 
     $orig_path = $cfg['TORRENT_FINISH_PATH'] . '/' . $item['dirname'];
     $files_dir = scandir_r($orig_path);
@@ -181,7 +181,7 @@ function MovieJob($item, $linked = false) {
             $unrar_check = dirname($file) . '/trackerm-unrar';
             if (!file_exists($unrar_check)) {
                 if (check_file_encrypt('rar', $file)) {
-                    $log->setStateMsg("File encrypted detected. Need manually intervention ($file)");
+                    $log->setStateMsg(" {$LNG['L_ERR_FILE_ENCRYPT_MANUAL']} ($file)");
                     //TODO: we continue and try since the function need test and TODO.
                 }
                 $unrar = 'unrar x -p- -y "' . $file . '" "' . dirname($file) . '"';
@@ -278,7 +278,7 @@ function ShowJob($item, $linked = false) {
             $unrar_check = dirname($file) . '/trackerm-unrar';
             if (!file_exists($unrar_check)) {
                 if (check_file_encrypt('rar', $file)) {
-                    $log->setStateMsg("File encrypted detected. Need manually intervention ($file)");
+                    $log->setStateMsg(" {$LNG['L_ERR_FILE_ENCRYPT_MANUAL']} ($file)");
                     //TODO: we continue and try since the function need test and TODO.
                 }
                 touch($unrar_check);
@@ -388,13 +388,13 @@ function ShowJob($item, $linked = false) {
 }
 
 function move_media($valid_file, $final_dest_path) {
-    global $cfg, $log;
+    global $cfg, $log, $LNG;
 
     if (rename($valid_file, $final_dest_path)) {
         (!empty($cfg['FILES_USERGROUP'])) ? chgrp($final_dest_path, $cfg['FILES_USERGROUP']) : null;
         (!empty($cfg['FILES_PERMS'])) ? chmod($final_dest_path, $cfg['FILES_PERMS']) : null;
         $log->info(" Rename sucessful: $valid_file : $final_dest_path");
-        $log->setStateMsg(basename($final_dest_path) . ' moved to your library');
+        $log->setStateMsg(basename($final_dest_path) . ' ' . $LNG['L_MOVED_TO_LIBRARY']);
         return true;
     }
 
@@ -403,13 +403,13 @@ function move_media($valid_file, $final_dest_path) {
 }
 
 function linking_media($valid_file, $final_dest_path) {
-    global $cfg, $log;
+    global $cfg, $log, $LNG;
 
     if (symlink($valid_file, $final_dest_path)) {
         (!empty($cfg['FILES_USERGROUP'])) ? chgrp($valid_file, $cfg['FILES_USERGROUP']) : null;
         (!empty($cfg['FILES_PERMS'])) ? chmod($valid_file, $cfg['FILES_PERMS']) : null;
         $log->info(" Linking sucessful: $valid_file : $final_dest_path");
-        $log->setStateMsg(basename($final_dest_path) . ' linked to your library');
+        $log->setStateMsg(basename($final_dest_path) . ' ' . $LNG['L_LINKED_TO_LIBRARY']);
         return true;
     }
 
@@ -487,7 +487,7 @@ function wanted_work() {
             $valid_results[0]['media_type'] = $media_type;
             $valid_results[0]['wanted_id'] = $wanted_id;
             if (send_transmission($valid_results)) {
-                $log->setStateMsg('Wanted found:(' . $title . ') downloading');
+                $log->setStateMsg($LNG['L_WANTED_FOUND'] . ':(' . $title . ') ' . $LNG['L_DOWNLOADING']);
                 $update_ary['wanted_state'] = 1;
             }
         }
