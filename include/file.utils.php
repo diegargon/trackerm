@@ -129,3 +129,37 @@ function getfile($filename) {
     }
     return $data;
 }
+
+function check_file_encrypt($type, $file) {
+    global $log;
+
+    if ($type == 'rar') {
+        $f = fopen($file, 'rb');
+        $s = fread($f, 7);
+        if (bin2hex($s) == '526172211a0701') {
+            $log->debug('RAR5 signature found');
+            fseek($f, 7 + 6);
+            $s = fread($f, 1);
+            if (bin2hex($s) == "04") {
+                $log->debug('RAR5 encryption found');
+                return true;
+            }
+        } else if (bin2hex($s) == '526172211a0700') {
+            $log->debug('RAR4 signature found');
+            //TODO/FIX Same as RAR5 probably not work
+            fseek($f, 7 + 6);
+            $s = fread($f, 1);
+            if (bin2hex($s) == "04") {
+                $log->debug('RAR4 encryption found');
+                return true;
+            }
+        } else {
+            $log->debug("Unknown RAR signature: really a rar file?: $s");
+        }
+        fclose($f);
+    } else {
+        $log->debug("Check file encryption: filetype $type not supported ");
+    }
+
+    return false;
+}

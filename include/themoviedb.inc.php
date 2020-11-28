@@ -200,7 +200,7 @@ function themoviedb_getByDbId($media_type, $id) {
 
     foreach ($search_db as $item) {
         if ($item['themoviedb_id'] == $id) {
-            $log->debug('getByDbId: Found in local db id=' . $id);
+            //$log->debug('getByDbId: Found in local db id=' . $id);
             return $item;
         }
     }

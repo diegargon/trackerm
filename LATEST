@@ -1,5 +1,6 @@
 ## Latest (Relevant)
 
+[28/11] Preliminare test for rar encrypted and warn
 [28/11] Improve Home.
 [27/11] Add temporaly linking media while seeding.
 [26/11] Warning: Changes how manage the config file now you need move at config.min.php and rename to /etc/tracker.conf
