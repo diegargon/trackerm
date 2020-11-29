@@ -15,7 +15,7 @@ function themoviedb_searchMovies($search) {
 
     $url = 'https://api.themoviedb.org/3/search/movie?api_key=' . $cfg['db_api_token'] . '&query=' . $query . '&language=' . $cfg['LANG'];
 
-    $data = curl_get_json($url);
+    $data = curl_get_tmdb($url);
 
     (isset($data['results'])) ? $movies = themoviedb_MediaPrep('movies', $data['results']) : null;
 
@@ -30,7 +30,7 @@ function themoviedb_searchShows($search) {
 
     $url = 'https://api.themoviedb.org/3/search/tv?api_key=' . $cfg['db_api_token'] . '&query=' . $query . '&language=' . $cfg['LANG'];
 
-    $data = curl_get_json($url);
+    $data = curl_get_tmdb($url);
 
     (isset($data['results'])) ? $shows = themoviedb_MediaPrep('shows', $data['results']) : null;
 
@@ -117,7 +117,7 @@ function themoviedb_getSeasons($id, $update = false) {
 
     $seasons_url = 'https://api.themoviedb.org/3/tv/' . $id . '?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['LANG'];
 
-    $seasons_data = curl_get_json($seasons_url);
+    $seasons_data = curl_get_tmdb($seasons_url);
 
     if (isset($seasons_data['number_of_seasons'])) {
         $nseasons = $seasons_data['number_of_seasons'];
@@ -125,7 +125,7 @@ function themoviedb_getSeasons($id, $update = false) {
 
         for ($i = 1; $i <= $nseasons; $i++) {
             $seasons_url = 'https://api.themoviedb.org/3/tv/' . $id . '/season/' . $i . '?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['LANG'];
-            $episodes_data[$i] = curl_get_json($seasons_url);
+            $episodes_data[$i] = curl_get_tmdb($seasons_url);
         }
 
         $item = themoviedb_showsDetailsPrep($id, $seasons_data, $episodes_data);
@@ -220,7 +220,7 @@ function themoviedb_getByDbId($media_type, $id) {
         return false;
     }
 
-    $response_item[] = curl_get_json($url);
+    $response_item[] = curl_get_tmdb($url);
 
 
     if (count($response_item) <= 0) {
