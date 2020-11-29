@@ -313,7 +313,7 @@ function ShowJob($item, $linked = false) {
             $ext = substr($valid_file, -4);
 
             // EPISODE NAME STYLE SxxExx
-            $SE = getFileEpisode($valid_file);
+            $SE = getFileEpisode(basename($valid_file));
             if (!empty($SE['season'] && !empty($SE['chapter']))) {
                 (strlen($SE['season']) == 1) ? $_season = 0 . $SE['season'] : $_season = $SE['season'];
                 (strlen($SE['chapter']) == 1) ? $_episode = 0 . $SE['chapter'] : $_episode = $SE['chapter'];
