@@ -32,6 +32,11 @@ Si expones este codigo a internet tendras un grave problema de seguridad. ¿por 
 de seguridad.
 Seguridad y mejor codigo vendra mucho mas despacio.
 
+## Requiremens
+
+    Linux - PHP - Web Server - transmission-daemon - Jackett - themoviedb.org account&API key
+    composer - 
+
 ## INSTALL
 
 in INSTALL.es (Spanish) or in bad english and probably not update in INSTALL.en

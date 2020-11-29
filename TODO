@@ -1,34 +1,32 @@
 TODO
 
 [HIGH]
-    [IMPROVE] Si se borra manualmente un torrente bajado quedara el bd huerfanos. OPCION ORPHAN. 
-        Buscar archivos multimedia en el TORRENT DIR y buscar la forma de determina si coincide con alguno en la base de datos
-        si no coincide moverlo.
-    [IMPROVE] Cuando se escanea eliminar torrents que se pudieron eliminar manualmente, quizas mantener en wanted pero "CANCELADO"
     [FIX] Cuando se borra un torrent manual cambiar si existe en wanted el estado. Quizas opcion de recibir los mensajes de  SYSLOG
     [FIX/IMPROVE] jackett search cache query: cuando pasamos pagina se realiza otra query remota y parece que jackett no cachea, 
         evitarlo guardando el query+resultaos o ver que pasa con el cache de jackett. Lo ideal seria un tiempo de cache general y luego
-        otro por indexer [ 'newpct' => '6000']   
+        otro por indexer [ 'newpct' => '6000'] 
+    [FIX] Check for unrar before unrar.
 [MED]
     [FIX] WAnted: Cuando se elimina desde [T] un torrent en Wanted sigue poniendo Descargado, eliminar o cambiar estado a 'cancelado'
     [NEW] Escaneo de directorios a más para avi sin ser torrents. $cfg['SCAN_MEDIA_DIR'] = 1;
     [NEW/IMPROVE] actualizacion automatica de titulos de episodios
     [FIX] codigo seguro
     [IMPROVE] reorganizar codigo/funciones
-    [NEW] Biblio: buscador o derivar a una pagina buscador más facil.
+    [NEW] Biblio: buscador en nuestra libreria o  o enlace a una pagina buscador más facil de implementar.
     [IMPROVE] Publicado/novedades torrent muestra las 10 (ejemplo) ultimas novedades publicadas y despues las 10 de otro, lo ideal es obtener 
         "la novedad 1" de cada indexer seguido de la "novedad 2" etc para no tener que pasar paginas para ver las novedades más recientes de otro 
         indexer.
     [FIX] Actualmente en busquedas imdb filtramos años de los titulos por que suelen estar mal, el problema es cuando el titulo es un año
         como 1917.
     [FIX] No hay ninguna comprobacion de que la conexion a transmission esta correctamente establecida.
-    [CHANGE] TMDB: Añadir items de ultimas, popular o similar
-    [IMPROVE] Wanted Serie, poner en seguimiento nuevos capitulos de series, hay que ver como ver el release date pues en los datos tmdb solo
-    viene el americano. Una forma seria poner una opcion de "Sin Retraso", "Retraso una semana", "Retraso dos a cuatro ..." o un mes.
-
+    [IMPROVE] Cuando se escanea (cli) limpiar/eliminar torrents de wanted.db/tranmsmission.db que se pudieron eliminar manualmente, quizas 
+        mantener en wanted pero "CANCELADO"
+    [IMPROVE] Si se borra manualmente un torrente bajado quedara el bd huerfanos. OPCION ORPHAN. 
+        Buscar archivos multimedia en el TORRENT DIR y buscar la forma de determina si coincide con alguno en la base de datos
+        si no coincide moverlo.
 [VERY LOW]
+    [CHANGE] TMDB: Añadir items de ultimas, popular o similar
     [FIX/IMPROVE] fechas normalizar a formato comun
-    [NEW/IMPROVE] En el select de identificar estaria bien mostrar las caractulas al poner encima
     [NEW/IMPROVE] recargar con jquery solo las partes necesarias en vez de recargar toda la pagina
     [NEW/IMPROVE] menu rows/columns y otras configuraciones generales en todas las paginas o pagina config.
     [IMPROVE] rebuild pager/paginacion, se enredo mucho el codigo.
@@ -36,10 +34,13 @@ TODO
     [NEW/IMPROVE] Home: Informacion reducida de torrents en transmission y su estado
     [NEW] opcional: mostrar otros ratigns, filmaffinity, imdb
     [NEW] Menu/general_prefs.db para cambiar preferencias generales de config.inc.php
-    [NEW/IMPROVE] Filter tags en torrentes: posibilidad de filtrar por tags conocidos 720p 1080...
-    [CHANGE] Chamge actual Transmission rpc api to something basic, since is enough and the actual have alot of deps 
+    [NEW/IMPROVE] Filter tags en torrentes: posibilidad de filtrar por tags conocidos 720p 1080...    
     [CHANGE] Use a real database system
     [NEW] Add optional user security for profiles
     [IMPROVE/WANTED] Añadir la posibilidad de poner ignores y requerimientos aparte de los generales para evitar descargas no deseadas,
     [IPROVE/WANTED] Añadir la posibilidad de buscar el titulo exacto, si buscamos "Run" o "Asesino" encontrara varios resultados con titulos
         que contienen dichos terminos y igual se requiere que el titulo solo sea "RUN" o "ASESINO" a secas
+    [NEW/IMPROVE] En el select de identificar estaria bien mostrar las caractulas al poner encima
+    [CHANGE] Chamge actual Transmission rpc api to something basic, since is enough and the actual have alot of deps 
+    [IMPROVE] Wanted Serie, poner en seguimiento nuevos capitulos de series, hay que ver como ver el release date pues en los datos tmdb solo
+        viene el americano. Una forma seria poner una opcion de "Sin Retraso", "Retraso una semana", "Retraso dos a cuatro ..." o un mes.
