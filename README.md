@@ -20,7 +20,7 @@ is in a very very early stage.
 
 ## WARNING
 
-There are no security mechanisms in any line of code yet, use on your own risk. The code is totatally insecure. 
+There are no security mechanisms in any line of code yet, use on your own risk. The code is totally insecure. 
 If you expose this code to internet you have a very high security problem. why? want this app "now" and 
 have too much time but in few days,the solution was quick code without stopping and without pay attention
 to security  details. 
@@ -32,14 +32,14 @@ Si expones este codigo a internet tendras un grave problema de seguridad. ¿por 
 de seguridad.
 Seguridad y mejor codigo vendra mucho mas despacio.
 
-## Requiremens
+## Requeriments
 
     Linux - PHP - Web Server - transmission-daemon - Jackett - themoviedb.org account&API key
     composer - 
 
 ## INSTALL
 
-in INSTALL.es (Spanish) or in bad english and probably not update in INSTALL.en
+in INSTALL.es (Spanish) or in INSTALL.en, (bad english and probably not update).
 
 ## LATEST   
 
