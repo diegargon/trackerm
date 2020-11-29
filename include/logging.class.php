@@ -112,7 +112,7 @@ Class Log {
         global $db;
 
         $state_msgs = $db->getSimpleValues('state_msgs');
-        return isset($state_msgs) ? array_reverse($state_msgs) : false;
+        return !empty($state_msgs) ? array_reverse($state_msgs) : false;
     }
 
 }
