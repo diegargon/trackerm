@@ -178,7 +178,7 @@ function MovieJob($item, $linked = false) {
     foreach ($files_dir as $file) {
         $ext_check = substr($file, -3);
 
-        if (file_exist($cfg['UNRAR_PATH']) && ($ext_check == 'rar' || $ext_check == 'RAR')) {
+        if (file_exists($cfg['UNRAR_PATH']) && ($ext_check == 'rar' || $ext_check == 'RAR')) {
             $unrar_check = dirname($file) . '/trackerm-unrar';
             if (!file_exists($unrar_check)) {
                 if (check_file_encrypt('rar', $file)) {
