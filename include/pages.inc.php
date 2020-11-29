@@ -68,9 +68,11 @@ function index_page() {
     $tdata['title'] = $LNG['L_NEWS'];
     $tdata['content'] = '';
     $latest_ary = getfile_ary('LATEST');
-    $latest_ary = array_slice($latest_ary, 2);
-    foreach ($latest_ary as $latest) {
-        $tdata['content'] .= $latest . '<br/>';
+    if (!empty($latest_ary)) {
+        $latest_ary = array_slice($latest_ary, 2);
+        foreach ($latest_ary as $latest) {
+            $tdata['content'] .= $latest . '<br/>';
+        }
     }
     $tdata['main_class'] = 'home_news';
     $titems['col2'][] = getTpl('home-item', $tdata);
@@ -78,10 +80,11 @@ function index_page() {
     $tdata = [];
     $tdata['title'] = $LNG['L_LOGS'];
     $tdata['content'] = '';
-    $latest_ary = array_reverse(getfile_ary('cache/log/trackerm.log'));
-    //$latest_ary = array_slice($latest_ary, 2);
-    foreach ($latest_ary as $latest) {
-        $tdata['content'] .= $latest . '<br/>';
+    $latest_ary = getfile_ary('cache/log/trackerm.log');
+    if (!empty($latest_ary)) {
+        foreach (array_reverse($latest_ary) as $latest) {
+            $tdata['content'] .= $latest . '<br/>';
+        }
     }
     $tdata['main_class'] = 'home_log';
     $titems['col2'][] = getTpl('home-item', $tdata);
