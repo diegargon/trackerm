@@ -11,12 +11,14 @@
 function page_transmission() {
     global $trans, $LNG, $filter;
 
-    $tid = $filter->getInt('tid');
+    if (isset($_POST['tid'])) {
+        $tid = $filter->postInt('tid');
+    }
 
     isset($_POST['start_all']) ? $trans->startAll() : null;
     isset($_POST['stop_all']) ? $trans->stopAll() : null;
 
-    if ($tid !== false) {
+    if (!empty($tid)) {
         isset($_POST['start']) ? $trans->start($tid) . sleep(1) : null;
         isset($_POST['stop']) ? $trans->stop($tid) . sleep(1) : null;
         isset($_POST['delete']) ? $trans->delete($tid) . sleep(1) : null;
