@@ -192,21 +192,63 @@ function page_biblio() {
 }
 
 function page_news() {
-    global $cfg;
+    global $cfg, $db, $log;
 
-    foreach ($cfg['jackett_indexers'] as $indexer) {
-        $caps = jackett_get_caps($indexer);
-        $categories = jackett_get_categories($caps['categories']['category']);
+    $cache_movies_expire = 0;
+    $cache_shows_expire = 0;
 
-        $results = jackett_search_movies('', $indexer, $categories);
-        ($results) ? $movies_res[$indexer] = $results : null;
-        $results = null;
-        $results = jackett_search_shows('', $indexer, $categories);
-        $results ? $shows_res[$indexer] = $results : null;
+    if ($cfg['search_cache']) {
+        $movies_cache_check = $db->getItemById('jackett_search_movies', 'news');
+        if ((!$movies_cache_check) || (time() > ($movies_cache_check['cache_time'] + $cfg['search_cache_expire']))) {
+            $log->debug("News: Movies cache expire, requesting");
+            $cache_movies_expire = 1;
+        } else {
+            $log->debug("Movies (news) cache expire in " . (($movies_cache_check['cache_time'] + $cfg['search_cache_expire']) - time()));
+            $res_movies_db = $movies_cache_check['results'];
+        }
+
+        $shows_cache_check = $db->getItemById('jackett_search_shows', 'news');
+
+        if (($movies_cache_check) && (time() > ($shows_cache_check['cache_time'] + $cfg['search_cache_expire']))) {
+            $log->debug("News: Cache shows expire, requesting");
+            $cache_shows_expire = 1;
+        } else {
+            $log->debug("Shows (news) cache expire in " . (($shows_cache_check['cache_time'] + $cfg['search_cache_expire']) - time()));
+            $res_shows_db = $shows_cache_check['results'];
+        }
     }
 
-    $res_movies_db = jackett_prep_movies($movies_res);
-    $res_shows_db = jackett_prep_shows($shows_res);
+    if (!$cfg['search_cache'] || $cache_movies_expire || $cache_shows_expire) {
+        foreach ($cfg['jackett_indexers'] as $indexer) {
+            $caps = jackett_get_caps($indexer);
+            $categories = jackett_get_categories($caps['categories']['category']);
+            if (!$cfg['search_cache'] || ($cfg['search_cache'] && $cache_movies_expire)) {
+                $results = jackett_search_movies('', $indexer, $categories);
+                ($results) ? $movies_res[$indexer] = $results : null;
+            }
+            if (!$cfg['search_cache'] || ($cfg['search_cache'] && $cache_shows_expire)) {
+                $results = null;
+                $results = jackett_search_shows('', $indexer, $categories);
+                $results ? $shows_res[$indexer] = $results : null;
+            }
+        }
+
+        ($cache_movies_expire == 1) || !$cfg['search_cache'] ? $res_movies_db = jackett_prep_movies($movies_res) : null;
+        ($cache_shows_expire == 1) || !$cfg['search_cache'] ? $res_shows_db = jackett_prep_shows($shows_res) : null;
+
+        if (!$cfg['search_cache'] || ($cfg['search_cache'] && $cache_movies_expire)) {
+            $search_cache['search_keyword'] = 'news';
+            $search_cache['cache_time'] = time();
+            $search_cache['results'] = $res_movies_db;
+            $db->upsertElementById('jackett_search_movies', 'news', $search_cache);
+        }
+        if (!$cfg['search_cache'] || ($cfg['search_cache'] && $cache_shows_expire)) {
+            $search_cache['search_keyword'] = 'news';
+            $search_cache['cache_time'] = time();
+            $search_cache['results'] = $res_shows_db;
+            $db->upsertElementById('jackett_search_shows', 'news', $search_cache);
+        }
+    }
 
     /* BUILD PAGE */
 

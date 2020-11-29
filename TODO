@@ -2,16 +2,14 @@ TODO
 
 [HIGH]
     [FIX] Cuando se borra un torrent manual cambiar si existe en wanted el estado. Quizas opcion de recibir los mensajes de  SYSLOG
-    [FIX/IMPROVE] jackett search cache query: cuando pasamos pagina se realiza otra query remota y parece que jackett no cachea, 
-        evitarlo guardando el query+resultaos o ver que pasa con el cache de jackett. Lo ideal seria un tiempo de cache general y luego
-        otro por indexer [ 'newpct' => '6000'] , aprovechamos para aparte del search query, un torrent.db con todos los torrents obtenidos.
+    [IMPROVE] Home: Option to remove torrent cache files
 [MED]
     [FIX] WAnted: Cuando se elimina desde [T] un torrent en Wanted sigue poniendo Descargado, eliminar o cambiar estado a 'cancelado'
     [NEW] Escaneo de directorios a más para avi sin ser torrents. $cfg['SCAN_MEDIA_DIR'] = 1;
-    [NEW/IMPROVE] actualizacion automatica de titulos de episodios
+    [NEW/IMPROVE] actualizacion automatica de titulos de episodio a excepcion de que el show sea "ended"
     [FIX] codigo seguro
     [IMPROVE] reorganizar codigo/funciones
-    [NEW] Biblio: buscador en nuestra libreria o  o enlace a una pagina buscador más facil de implementar.
+    [NEW] Biblio: buscador en nuestra libreria o enlace a una pagina buscador más facil de implementar.
     [IMPROVE] Publicado/novedades torrent muestra las 10 (ejemplo) ultimas novedades publicadas y despues las 10 de otro, lo ideal es obtener 
         "la novedad 1" de cada indexer seguido de la "novedad 2" etc para no tener que pasar paginas para ver las novedades más recientes de otro 
         indexer.
@@ -24,24 +22,26 @@ TODO
         Buscar archivos multimedia en el TORRENT DIR y buscar la forma de determina si coincide con alguno en la base de datos
         si no coincide moverlo.
     [IMPROVE] Home: Button to clear log and state log
+    
 [VERY LOW]
     [CHANGE] TMDB: Añadir items de ultimas, popular o similar
-    [FIX/IMPROVE] fechas normalizar a formato comun
-    [NEW/IMPROVE] recargar con jquery solo las partes necesarias en vez de recargar toda la pagina
+    [FIX/IMPROVE] fechas normalizar a formato comun    
     [NEW/IMPROVE] menu rows/columns y otras configuraciones generales en todas las paginas o pagina config.
-    [IMPROVE] rebuild pager/paginacion, se enredo mucho el codigo.
-    [NEW] Opcion Filtrar torrent 720/1080
+    [IMPROVE] rebuild pager/paginacion, messy code.    
     [NEW/IMPROVE] Home: Informacion reducida de torrents en transmission y su estado
     [NEW] opcional: mostrar otros ratigns, filmaffinity, imdb
-    [NEW] Menu/general_prefs.db para cambiar preferencias generales de config.inc.php
-    [NEW/IMPROVE] Filter tags en torrentes: posibilidad de filtrar por tags conocidos 720p 1080...    
+    [NEW] Menu/general_prefs.db para cambiar preferencias generales de config.inc.php    
     [CHANGE] Use a real database system
-    [NEW] Add optional user security for profiles
     [IMPROVE/WANTED] Añadir la posibilidad de poner ignores y requerimientos aparte de los generales para evitar descargas no deseadas,
-    [IPROVE/WANTED] Añadir la posibilidad de buscar el titulo exacto, si buscamos "Run" o "Asesino" encontrara varios resultados con titulos
-        que contienen dichos terminos y igual se requiere que el titulo solo sea "RUN" o "ASESINO" a secas
-    [NEW/IMPROVE] En el select de identificar estaria bien mostrar las caractulas al poner encima
-    [CHANGE] Chamge actual Transmission rpc api to something basic, since is enough and the actual have alot of deps 
+    [IMPROVE/WANTED] Añadir la posibilidad de buscar el titulo exacto, si buscamos "Run" o "Asesino" encontrara varios resultados con titulos
+        que contienen dichos terminos y igual se requiere que el titulo solo sea "RUN" o "ASESINO" a secas    
+    [CHANGE] Change actual Transmission rpc api to something basic, since is enough and the actual have alot of deps 
     [IMPROVE] Wanted Serie, poner en seguimiento nuevos capitulos de series, hay que ver como ver el release date pues en los datos tmdb solo
         viene el americano. Una forma seria poner una opcion de "Sin Retraso", "Retraso una semana", "Retraso dos a cuatro ..." o un mes.
+    [NEW/IMPROVE] En el select de identificar estaria bien mostrar las caractulas al poner encima
     [NEW] Config UI
+    [NEW/IMPROVE] recargar con jquery solo las partes necesarias en vez de recargar toda la pagina
+
+[thigs to do when we use a real database]
+    [IMPROVE] In search and news filter torrents tags &words: like  720p  for show only 1080... and ignore keywords like "LANGUAGE"
+    [NEW] Add optional user security for profiles              
