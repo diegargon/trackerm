@@ -60,6 +60,7 @@ $cfg['DIR_PERMS'] = 0775;
 // Where your Jackett server reside, his API key, and how many result get per indexer
 $cfg['jackett_srv'] = 'http://192.168.X.X:9117';
 $cfg['jackett_key'] = '';
+/* MAX jacket i think its 1000  */
 $cfg['jacket_results'] = 25;
 
 // To avoid search for every language in titles for tags, give here what languages want tag.
@@ -122,8 +123,16 @@ $cfg['WANTED_DAY_DELAY'] = 3600;
 // Theme (actually only default)
 $cfg['theme'] = 'default';
 
+// Level of log error
 $cfg['SYSLOG_LEVEL'] = 'LOG_DEBUG';
+
+//Path to unrar utility
 $cfg['UNRAR_PATH'] = '/usr/bin/unrar';
+
+//Cache torrent searching (news too)
+$cfg['search_cache'] = 1;
+$cfg['search_cache_expire'] = 3600; //seconds
+
 /* * ********************************** */
 /* PROBABLY NOT NEED CONFIG BELOW HERE */
 /* * ********************************** */
