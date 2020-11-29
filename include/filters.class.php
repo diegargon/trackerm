@@ -15,6 +15,9 @@ Class Filter {
 
     //POST/GET
     function getInt($val, $size = PHP_INT_MAX) {
+        if (!isset($_GET[$val])) {
+            return false;
+        }
         if (!is_array($_GET[$val])) {
             if (!isset($_GET[$val]) || $_GET[$val] > $size || !is_numeric($_GET[$val])) {
                 return false;
@@ -36,6 +39,9 @@ Class Filter {
     }
 
     function postInt($val, $size = PHP_INT_MAX) {
+        if (!isset($_POST[$val])) {
+            return false;
+        }
         if (!is_array($_POST[$val])) {
             if (!isset($_POST[$val]) || $_POST[$val] > $size || !is_numeric($_POST[$val])) {
                 return false;
