@@ -35,7 +35,6 @@ TODO
     [NEW] Menu/general_prefs.db para cambiar preferencias generales de config.inc.php
     [NEW/IMPROVE] Filter tags en torrentes: posibilidad de filtrar por tags conocidos 720p 1080...
     [CHANGE] Chamge actual Transmission rpc api to something basic, since is enough and the actual have alot of deps 
-    [NEW] Home, show total size movies, total size shows, y aparte de nº episodios mostar el numero de series.
     [CHANGE] Use a real database system
     [NEW] Add optional user security for profiles
     [IMPROVE/WANTED] Añadir la posibilidad de poner ignores y requerimientos aparte de los generales para evitar descargas no deseadas,

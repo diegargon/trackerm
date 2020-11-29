@@ -28,14 +28,20 @@ function index_page() {
     /////////
     $tdata = [];
     $tdata['title'] = $LNG['L_HARDDISK'];
-    $tdata['content'] = '<span>' . $LNG['L_MOVIES'] . ' : ' . human_filesize(disk_free_space($cfg['MOVIES_PATH'])) . '/' . human_filesize(disk_total_space($cfg['MOVIES_PATH'])) . '</span><br/>'
-            . '<span>' . $LNG['L_SHOWS'] . ' : ' . human_filesize(disk_free_space($cfg['SHOWS_PATH'])) . '/' . human_filesize(disk_total_space($cfg['SHOWS_PATH'])) . '</span>';
+
+    $lib_stats = getLibraryStats();
+
+    $tdata['content'] = "<span>{$LNG['L_MOVIES']} : " . $lib_stats['movies_size'] . '</span><br/>';
+    $tdata['content'] .= "<span>{$LNG['L_SHOWS']} : " . $lib_stats['shows_size'] . '</span><br/>';
+    $tdata['content'] .= "<span>{$LNG['L_FREE_TOTAL']} {$LNG['L_ON']} {$LNG['L_MOVIES']} : " . human_filesize(disk_free_space($cfg['MOVIES_PATH'])) . ' / ' . human_filesize(disk_total_space($cfg['MOVIES_PATH'])) . '</span><br/>';
+    $tdata['content'] .= "<span>{$LNG['L_FREE_TOTAL']} {$LNG['L_ON']} {$LNG['L_SHOWS']} : " . human_filesize(disk_free_space($cfg['SHOWS_PATH'])) . ' / ' . human_filesize(disk_total_space($cfg['SHOWS_PATH'])) . '</span><br/>';
     $titems['col1'][] = getTpl('home-item', $tdata);
     /////////
     $tdata = [];
     $tdata['title'] = $LNG['L_DATABASE'];
-    $tdata['content'] = '<span>' . $LNG['L_MOVIES'] . ' : ' . $db->getNumElements('biblio-movies') . '</span><br/>'
-            . $LNG['L_EPISODES'] . ' : ' . $db->getNumElements('biblio-shows') . '</span>';
+    $tdata['content'] = "<span> {$LNG['L_MOVIES']} : {$lib_stats['num_movies']} </span><br/>";
+    $tdata['content'] .= "<span> {$LNG['L_SHOWS']} : {$lib_stats['num_shows']} </span><br/>";
+    $tdata['content'] .= "<span> {$LNG['L_EPISODES']} : {$lib_stats['num_episodes']} </span>";
     $titems['col1'][] = getTpl('home-item', $tdata);
 
     $tdata = [];

@@ -176,3 +176,46 @@ function submit_ident($type, $items) {
         }
     }
 }
+
+function getLibraryStats() {
+    global $db;
+
+    $stats['movies_size'] = 0;
+    $stats['shows_size'] = 0;
+
+    $movies_db = $db->getTableData('biblio-movies');
+    $stats['num_movies'] = $db->getNumElements('biblio-movies');
+
+    if (!empty($movies_db)) {
+        foreach ($movies_db as $db_movie) {
+            if (isset($db_movie['size'])) {
+                $stats['movies_size'] = $stats['movies_size'] + $db_movie['size'];
+            }
+        }
+        $stats['movies_size'] = human_filesize($stats['movies_size']);
+    }
+
+    $shows_db = $db->getTableData('biblio-shows');
+    $stats['num_episodes'] = $db->getNumElements('biblio-shows');
+    $count_shows = [];
+
+    if (!empty($shows_db)) {
+        foreach ($shows_db as $db_show) {
+            if (isset($db_show['size'])) {
+                $stats['shows_size'] = $stats['shows_size'] + $db_show['size'];
+            }
+
+            if (!empty($db_show['themoviedb_id'])) {
+                $tmdb_id = $db_show['themoviedb_id'];
+                if (!isset($count_shows[$tmdb_id])) {
+                    $count_shows[$tmdb_id] = 1;
+                }
+            }
+        }
+        $stats['shows_size'] = human_filesize($stats['shows_size']);
+    }
+
+    $stats['num_shows'] = count($count_shows);
+
+    return $stats;
+}

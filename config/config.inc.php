@@ -63,7 +63,8 @@ $cfg['jackett_key'] = '';
 $cfg['jacket_results'] = 25;
 
 // To avoid search for every language in titles for tags, give here what languages want tag.
-// Leave blank for avoid languages tag in files
+// Leave blank for avoid languages tag in files. This tags are case sensitive for avoid
+// match with titles like "Jonnhy English", use with caution.
 
 $cfg['MEDIA_LANGUAGE_TAG'] = [
     0 => 'SPANISH',
