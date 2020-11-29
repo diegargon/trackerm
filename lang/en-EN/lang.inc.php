@@ -56,6 +56,7 @@ $LNG = [
     'L_IDENTIFIED' => 'Identified',
     'L_LIBRARY' => 'Library',
     'L_LINKED_TO_LIBRARY' => 'Linked to your library',
+    'L_LOGS' => 'Logs',
     'L_IGNORE' => 'Ignore',
     'L_MOVIES' => 'Movies',
     'L_MOVIE' => 'Movie',

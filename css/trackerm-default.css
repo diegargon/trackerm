@@ -479,30 +479,42 @@ button {
     border:1px solid #ff5b5b;
     padding: 10px;
     overflow-wrap: anywhere;
-    margin: 3px;
+    margin: 3px; 
 }
 
 .home_item_title {
-    margin-bottom: 15px;
+    margin-bottom: 0px;
+}
+
+.home_item_title h2 {
+    margin: 3px;
+    margin-bottom: 8px;
 }
 
 .home_news {
     overflow:auto;
     resize: vertical;
-    height: 25%;
+    height: 10%;
 }
 
 .home_starting {
-    height: 25%;
+    height: 20%;
     overflow:auto;
     resize: vertical;
 }
 
 .home_state_msg {
-    height: 25%;
+    height: 20%;
     overflow:auto;
     resize: vertical;  
     line-height: 1;
+}
+
+.home_log {
+    height: 15%;
+    overflow:auto;
+    resize: vertical;  
+    line-height: 1;    
 }
 
 .profiles {
