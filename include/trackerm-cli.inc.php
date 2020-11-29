@@ -178,25 +178,27 @@ function MovieJob($item, $linked = false) {
     foreach ($files_dir as $file) {
         $ext_check = substr($file, -3);
 
-        if (file_exists($cfg['UNRAR_PATH']) && ($ext_check == 'rar' || $ext_check == 'RAR')) {
-            $unrar_check = dirname($file) . '/trackerm-unrar';
-            if (!file_exists($unrar_check)) {
-                if (check_file_encrypt('rar', $file)) {
-                    $log->setStateMsg(" {$LNG['L_ERR_FILE_ENCRYPT_MANUAL']} ($file)");
-                    //TODO: we continue and try since the function need test and TODO.
+        if ($ext_check == 'rar' || $ext_check == 'RAR') {
+            if (file_exists($cfg['UNRAR_PATH'])) {
+                $unrar_check = dirname($file) . '/trackerm-unrar';
+                if (!file_exists($unrar_check)) {
+                    if (check_file_encrypt('rar', $file)) {
+                        $log->setStateMsg(" {$LNG['L_ERR_FILE_ENCRYPT_MANUAL']} ($file)");
+                        //TODO: we continue and try since the function need test and TODO.
+                    }
+                    $unrar = $cfg['UNRAR_PATH'] . ' x -p- -y "' . $file . '" "' . dirname($file) . '"';
+                    touch($unrar_check);
+                    !empty($cfg['FILES_USERGROUP']) ? chgrp($unrar_check, $cfg['FILES_USERGROUP']) : null;
+                    $log->info("Need unrar $file");
+                    exec($unrar);
+                    break;
+                } else {
+                    $log->info("Unrar flag is set skipping");
+                    break;
                 }
-                $unrar = $cfg['UNRAR_PATH'] . ' x -p- -y "' . $file . '" "' . dirname($file) . '"';
-                touch($unrar_check);
-                !empty($cfg['FILES_USERGROUP']) ? chgrp($unrar_check, $cfg['FILES_USERGROUP']) : null;
-                $log->info("Need unrar $file");
-                exec($unrar);
-                break;
             } else {
-                $log->info("Unrar flag is set skipping");
-                break;
+                $log->setStateMsg($LNG['L_NEED_UNRAR']);
             }
-        } else {
-            $log->setStateMsg($LNG['L_NEED_UNRAR']);
         }
     }
 
@@ -277,26 +279,28 @@ function ShowJob($item, $linked = false) {
 
     foreach ($files_dir as $file) {
         $ext_check = substr($file, -3);
-        if (file_exist($cfg['UNRAR_PATH']) && ($ext_check == 'rar' || $ext_check == 'RAR')) {
-            $unrar_check = dirname($file) . '/trackerm-unrar';
-            if (!file_exists($unrar_check)) {
-                if (check_file_encrypt('rar', $file)) {
-                    $log->setStateMsg(" {$LNG['L_ERR_FILE_ENCRYPT_MANUAL']} ($file)");
-                    //TODO: we continue and try since the function need test and TODO.
+        if ($ext_check == 'rar' || $ext_check == 'RAR') {
+            if (file_exists($cfg['UNRAR_PATH'])) {
+                $unrar_check = dirname($file) . '/trackerm-unrar';
+                if (!file_exists($unrar_check)) {
+                    if (check_file_encrypt('rar', $file)) {
+                        $log->setStateMsg(" {$LNG['L_ERR_FILE_ENCRYPT_MANUAL']} ($file)");
+                        //TODO: we continue and try since the function need test and TODO.
+                    }
+                    touch($unrar_check);
+                    !empty($cfg['FILES_USERGROUP']) ? chgrp($unrar_check, $cfg['FILES_USERGROUP']) : null;
+                    $unrar = $cfg['UNRAR_PATH'] . ' x -y "' . $file . '" "' . dirname($file) . '"';
+                    $log->info("Need unrar $file");
+                    exec($unrar);
+                    //$log->debug("" . $unrar;
+                    break;
+                } else {
+                    $log->info("Unrar flag is set skipping");
+                    break;
                 }
-                touch($unrar_check);
-                !empty($cfg['FILES_USERGROUP']) ? chgrp($unrar_check, $cfg['FILES_USERGROUP']) : null;
-                $unrar = $cfg['UNRAR_PATH'] . ' x -y "' . $file . '" "' . dirname($file) . '"';
-                $log->info("Need unrar $file");
-                exec($unrar);
-                //$log->debug("" . $unrar;
-                break;
             } else {
-                $log->info("Unrar flag is set skipping");
-                break;
+                $log->setStateMsg($LNG['L_NEED_UNRAR']);
             }
-        } else {
-            $log->setStateMsg($LNG['L_NEED_UNRAR']);
         }
     }
 
