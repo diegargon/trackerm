@@ -69,6 +69,7 @@ $LNG = [
     'L_NO_PEERS' => 'No peers',
     'L_NOTHING_FOUND' => 'Without results',
     'L_NOEXISTS' => 'No exists',
+    'L_NEED_UNRAR' => 'Unrar file detected but can\'t found unrar',
     'L_ON' => 'on',
     'L_PAGE_NOEXISTS' => 'The page required not exists',
     'L_PATH' => 'Path',

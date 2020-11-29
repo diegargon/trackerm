@@ -123,7 +123,7 @@ $cfg['WANTED_DAY_DELAY'] = 3600;
 $cfg['theme'] = 'default';
 
 $cfg['SYSLOG_LEVEL'] = 'LOG_DEBUG';
-
+$cfg['UNRAR_PATH'] = '/usr/bin/unrar';
 /* * ********************************** */
 /* PROBABLY NOT NEED CONFIG BELOW HERE */
 /* * ********************************** */

@@ -70,6 +70,7 @@ $LNG = [
     'L_NO_PEERS' => 'Sin fuentes',
     'L_NOTHING_FOUND' => 'No se han encontrado resultados',
     'L_NOEXISTS' => 'No existe',
+    'L_NEED_UNRAR' => 'Fichero unrar detectado pero no localizo donde encontrar unrar',
     'L_ON' => 'en',
     'L_PAGE_NOEXISTS' => 'La pagina solicitada no existe',
     'L_PATH' => 'Ruta',
