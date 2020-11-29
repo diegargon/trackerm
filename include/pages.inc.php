@@ -60,7 +60,7 @@ function index_page() {
 
     $tdata = [];
     $tdata['title'] = $LNG['L_STARTING'];
-    $tdata['content'] = getfile('STARTING');
+    $tdata['content'] = getfile('STARTING' . substr($cfg['LANG'], 0, 2));
     $tdata['main_class'] = 'home_starting';
     $titems['col2'][] = getTpl('home-item', $tdata);
 

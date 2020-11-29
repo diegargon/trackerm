@@ -17,7 +17,7 @@ global $cfg;
 $cfg['db_api_token'] = '';
 $cfg['search_db'] = 'themoviedb';
 // Lang es-ES or en-EN
-$cfg['LANG'] = 'es-ES';
+$cfg['LANG'] = 'en-EN';
 
 // Full path where trackerm reside
 $cfg['ROOT_PATH'] = '';

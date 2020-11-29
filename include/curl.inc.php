@@ -46,7 +46,7 @@ function curl_get_json($url) {
         'Content-Type: application/json;charset=utf-8',
         'Accept: text/html,application/xhtml+xml,application/xml,application/json;q=0.9,*/*;q=0.8',
         'Accept-Charset: utf-8;q=0.7,*;q=0.3',
-        'Accept-Language:' . $cfg['LANG'] . ';q=0.6,es;q=0.4'
+        'Accept-Language:' . $cfg['LANG'] . ';q=0.6,' . substr($cfg['LANG'], 0, 2) . ';q=0.4'
     ];
 
     $ch = curl_init($url);
