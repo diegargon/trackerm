@@ -200,20 +200,20 @@ function page_news() {
     if ($cfg['search_cache']) {
         $movies_cache_check = $db->getItemById('jackett_search_movies', 'news');
         if ((!$movies_cache_check) || (time() > ($movies_cache_check['cache_time'] + $cfg['search_cache_expire']))) {
-            $log->debug("News: Movies cache expire, requesting");
+            $log->debug("News: Movies cache expire, Requesting");
             $cache_movies_expire = 1;
         } else {
-            $log->debug("Movies (news) cache expire in " . (($movies_cache_check['cache_time'] + $cfg['search_cache_expire']) - time()));
+            //$log->debug("Movies (news) cache expire in " . (($movies_cache_check['cache_time'] + $cfg['search_cache_expire']) - time()));
             $res_movies_db = $movies_cache_check['results'];
         }
 
         $shows_cache_check = $db->getItemById('jackett_search_shows', 'news');
 
         if (($movies_cache_check) && (time() > ($shows_cache_check['cache_time'] + $cfg['search_cache_expire']))) {
-            $log->debug("News: Cache shows expire, requesting");
+            $log->debug("News: Cache shows expire. Requesting");
             $cache_shows_expire = 1;
         } else {
-            $log->debug("Shows (news) cache expire in " . (($shows_cache_check['cache_time'] + $cfg['search_cache_expire']) - time()));
+            //$log->debug("Shows (news) cache expire in " . (($shows_cache_check['cache_time'] + $cfg['search_cache_expire']) - time()));
             $res_shows_db = $shows_cache_check['results'];
         }
     }

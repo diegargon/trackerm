@@ -18,11 +18,11 @@ function search_movie_torrents($words, $head = null, $nohtml = false) {
     if ($cfg['search_cache']) {
         $movies_cache_check = $db->getItemById('jackett_search_movies', $words);
         if ((!$movies_cache_check) || (time() > ($movies_cache_check['cache_time'] + $cfg['search_cache_expire']))) {
-            $log->debug("Movies search cache expire requesting");
+            $log->debug("Movies search cache expire. Requesting...");
             $cache_movies_expire = 1;
         } else {
             $movies_db = $movies_cache_check['results'];
-            $log->debug("Movies seach cache expire in " . (time() - ($movies_cache_check['cache_time'] + $cfg['search_cache_expire'])));
+            //$log->debug("Movies search cache expire in " . (time() - ($movies_cache_check['cache_time'] + $cfg['search_cache_expire'])));
             if (count($movies_db) <= 0) {
                 return false;
             }
@@ -75,10 +75,10 @@ function search_shows_torrents($words, $head = null, $nohtml = false) {
     if ($cfg['search_cache']) {
         $shows_cache_check = $db->getItemById('jackett_search_shows', $words);
         if ((!$shows_cache_check) || (time() > ($shows_cache_check['cache_time'] + $cfg['search_cache_expire']))) {
-            $log->debug("Shows search cache expire requesting");
+            $log->debug("Shows search cache expire. Requesting...");
             $cache_shows_expire = 1;
         } else {
-            $log->debug("Shows search cache expire in " . (($shows_cache_check['cache_time'] + $cfg['search_cache_expire']) - time()));
+            //$log->debug("Shows search cache expire in " . (($shows_cache_check['cache_time'] + $cfg['search_cache_expire']) - time()));
             $shows_db = $shows_cache_check['results'];
 
             if (count($shows_db) <= 0) {
