@@ -5,14 +5,14 @@
 ## Description: 
 
 Probando a realizar una alternativa Sonarr+Radar sobre servidor web
-Warning: Codigo/esbozo realizado a correr (el grueso fue programado  en 3 intensos dias), no solo hay que pulirlo si no que esta sin seguridad y
-asi continuara hasta que tenga una version con las funciones basicas.
+Warning: Codigo/esbozo realizado a correr (el grueso fue programado  en 3 intensos dias), no solo hay que pulirlo y reescribir mucho si no que esta sin 
+seguridad y asi continuara hasta que tenga una version con las funciones basicas.
 Probablemente de momento no deberias instalarlo.
 Puedes ver sceenshots del aspecto actual(posiblemente desactualizado) en /screenshots aunque cambiara que el proyecto esta en fase muy 
 muy temprana.
 
 Trying a Sonarr & Radarr alternative over a web server.
-Warning: Outline code, "fast coding" (the bulk was done in 3 days) have to polish a lot and came without any security, and 
+Warning: Fast coding (the bulk was done in 3 days) have to polish alot/rewrite alot and came without any security, and 
 will remain like this until i have a working code with basic features.
 Probably you shouldn't install it at this moment.
 You can see screenshots of the current appearance (not latest probably) in /screenshots although it going to change since this proyect 
