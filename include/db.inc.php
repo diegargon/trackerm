@@ -240,8 +240,17 @@ class DB {
 
             return true;
         }
-
         return false;
+    }
+
+    public function upsertElementById($table, $id, $element) {
+        !isset($this->tables[$table]) ? $this->loadTable($table) : null;
+
+        $this->tables[$table]['data'][$id] = $element;
+        $this->tables[$table]['info']['last_update'] = time();
+        $this->saveTable($table);
+
+        return true;
     }
 
     /* NOT TESTED */
@@ -306,10 +315,14 @@ class DB {
     }
 
     private function saveTable($table) {
+        global $log;
+
         $db_file = $this->dbpath . '/' . $table . '.db';
         $this->tables[$table]['info']['last_saved'] = time();
         if (save_to_file_json($db_file, $this->dbpath, $this->tables[$table])) {
             return true;
+        } else {
+            $log->debug("db:save_to_file_json failed");
         }
         return false;
     }
