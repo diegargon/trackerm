@@ -12,6 +12,8 @@ function view() {
     $type = $filter->getString('type');
     $id = $filter->getInt('id');
 
+    empty($id) ? msg_box($msg = ['title' => $LNG['L_ERRORS'], 'body' => $LNG['L_ERR_BAD_ID']]) : null;
+
     $other = [];
     $page = '';
 
@@ -38,6 +40,8 @@ function view() {
     $other['page_type'] = $type;
 
     $item = $db->getItemByID($t_type, $id);
+
+    empty($item) ? msg_box($msg = ['title' => $LNG['L_ERRORS'], 'body' => $LNG['L_ITEM_NOT_FOUND'] . '1A1003']) : null;
 
     if ($type == 'movies_db') {
         $library_item = $db->getItemByField('biblio-movies', 'themoviedb_id', $item['themoviedb_id']);
