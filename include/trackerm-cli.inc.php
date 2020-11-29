@@ -240,7 +240,7 @@ function MovieJob($item, $linked = false) {
                 $final_dest_path = $dest_path . '/' . $new_file_name;
                 $i++;
             } else if (file_exists($final_dest_path) && $linked) {
-                $log->debug(" Linking  $final_dest_path already done... skipping");
+                $log->debug(" Linking  " . basename($final_dest_path) . " already done... skipping");
                 continue;
             }
 
@@ -366,7 +366,7 @@ function ShowJob($item, $linked = false) {
                 $final_dest_path = $dest_path . '/' . $new_file_name;
                 $i++;
             } else if (file_exists($final_dest_path) && $linked) {
-                $log->debug(" Linking $final_dest_path already done... skipping");
+                $log->debug(" Linking " . basename($final_dest_path) . " already done... skipping");
                 continue;
             }
 
@@ -438,6 +438,9 @@ function wanted_work() {
     }
 
     foreach ($wanted_list as $wanted) {
+        $valid_results = [];
+        $update_ary = [];
+
         if (!empty($wanted['ignore'])) {
             $log->debug(" Jumping wanted {$wanted['title']} check by ignore state ");
             continue;
