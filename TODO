@@ -44,3 +44,4 @@ TODO
     [CHANGE] Chamge actual Transmission rpc api to something basic, since is enough and the actual have alot of deps 
     [IMPROVE] Wanted Serie, poner en seguimiento nuevos capitulos de series, hay que ver como ver el release date pues en los datos tmdb solo
         viene el americano. Una forma seria poner una opcion de "Sin Retraso", "Retraso una semana", "Retraso dos a cuatro ..." o un mes.
+    [NEW] Config UI
