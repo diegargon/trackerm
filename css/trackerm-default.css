@@ -459,10 +459,12 @@ button {
     width:100%;
     display:inline-flex;
     font-size: 1.2em;
+    border:0px solid white;
 }
 
 .info_column {   
-    border:0px solid blue;        
+    border:0px solid blue; 
+    height: 90vh;
 }
 
 .info_column:first-of-type {
@@ -487,17 +489,17 @@ button {
 .home_news {
     overflow:auto;
     resize: vertical;
-    height: 20%;
+    height: 25%;
 }
 
 .home_starting {
-    height: 20%;
+    height: 25%;
     overflow:auto;
     resize: vertical;
 }
 
 .home_state_msg {
-    height: 20%;
+    height: 25%;
     overflow:auto;
     resize: vertical;  
     line-height: 1;
