@@ -4,7 +4,7 @@ TODO
     [FIX] Cuando se borra un torrent manual cambiar si existe en wanted el estado. Quizas opcion de recibir los mensajes de  SYSLOG
     [FIX/IMPROVE] jackett search cache query: cuando pasamos pagina se realiza otra query remota y parece que jackett no cachea, 
         evitarlo guardando el query+resultaos o ver que pasa con el cache de jackett. Lo ideal seria un tiempo de cache general y luego
-        otro por indexer [ 'newpct' => '6000'] 
+        otro por indexer [ 'newpct' => '6000'] , aprovechamos para aparte del search query, un torrent.db con todos los torrents obtenidos.
     [FIX] Check for unrar before unrar.
 [MED]
     [FIX] WAnted: Cuando se elimina desde [T] un torrent en Wanted sigue poniendo Descargado, eliminar o cambiar estado a 'cancelado'
