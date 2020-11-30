@@ -6,7 +6,7 @@ TODO
     [IMPROVE] Cuando se escanea (cli) limpiar/eliminar torrents de wanted.db/tranmsmission.db que se pudieron eliminar manualmente, quizas 
         mantener en wanted pero "CANCELADO"
     [IMPROVE] General redesign state changes.
-
+    [IMPROVE] News: Mixed Indexers elements on New now present by indexer order
 [MED]
 
     [NEW] Escaneo de directorios a más para avi sin ser torrents. $cfg['SCAN_MEDIA_DIR'] = 1;
@@ -14,9 +14,6 @@ TODO
     [FIX] codigo seguro
     [IMPROVE] reorganizar codigo/funciones
     [NEW] Biblio: buscador en nuestra libreria o enlace a una pagina buscador más facil de implementar.
-    [IMPROVE] Publicado/novedades torrent muestra las 10 (ejemplo) ultimas novedades publicadas y despues las 10 de otro, lo ideal es obtener 
-        "la novedad 1" de cada indexer seguido de la "novedad 2" etc para no tener que pasar paginas para ver las novedades más recientes de otro 
-        indexer.
     [FIX] Actualmente en busquedas imdb filtramos años de los titulos por que suelen estar mal, el problema es cuando el titulo es un año
         como 1917.
     [FIX] No hay ninguna comprobacion de que la conexion a transmission esta correctamente establecida.
