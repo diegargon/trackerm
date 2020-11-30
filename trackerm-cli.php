@@ -7,7 +7,7 @@
  *  @subpackage
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  */
-define('CLI', true);
+define('IN_WEB', true);
 
 //NEED FOR ROOT_PATH and load common and config files FIX with better way
 if (file_exists('/etc/trackerm.conf')) {

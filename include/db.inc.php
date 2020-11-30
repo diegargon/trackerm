@@ -8,6 +8,8 @@
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  *
  */
+!defined('IN_WEB') ? exit : true;
+
 class DB {
 
     private $tables = [];

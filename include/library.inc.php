@@ -7,6 +7,8 @@
  *  @subpackage
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  */
+!defined('IN_WEB') ? exit : true;
+
 function show_my_movies() {
     global $db, $cfg;
 

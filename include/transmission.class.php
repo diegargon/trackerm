@@ -8,6 +8,7 @@
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  */
 // Actualmente https://github.com/irazasyed/php-transmission-sdk
+!defined('IN_WEB') ? exit : true;
 
 class TorrentServer {
 

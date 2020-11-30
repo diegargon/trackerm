@@ -7,6 +7,8 @@
  *  @subpackage
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  */
+!defined('IN_WEB') ? exit : true;
+
 function curl_get($url, $curl_opt) {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, trim($url));

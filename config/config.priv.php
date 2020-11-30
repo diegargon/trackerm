@@ -10,6 +10,7 @@
 /* * ********************************** */
 /* PROBABLY NOT NEED CONFIG ANYTHING HERE */
 /* * ********************************** */
+!defined('IN_WEB') ? exit : true;
 
 $cfg['app_name'] = 'trackerm';
 $cfg['tresults_details'] = 1;

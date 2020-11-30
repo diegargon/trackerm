@@ -8,6 +8,8 @@
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  *
  */
+!defined('IN_WEB') ? exit : true;
+
 function do_checks() {
     global $cfg;
 

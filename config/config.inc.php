@@ -11,6 +11,8 @@
 /* THIS FILE DOES NOTHING  THIS IS ONLY A EXAMPLE  MINAMAL REQUIRED CONFIGURATION */
 /* copy and rename it to /etc/trackerm.conf and edit                              */
 /* * ******************************************************************************* */
+!defined('IN_WEB') ? exit : true;
+
 global $cfg;
 
 // themoviedb.org api */

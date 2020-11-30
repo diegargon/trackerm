@@ -14,6 +14,8 @@
   4 Completed
   9 MOVED
  */
+!defined('IN_WEB') ? exit : true;
+
 function wanted_list() {
     global $db, $cfg, $LNG;
     $iurl = '?page=wanted';

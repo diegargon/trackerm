@@ -8,6 +8,8 @@
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  * https://github.com/transmission/transmission/blob/master/extras/rpc-spec.txt
  */
+!defined('IN_WEB') ? exit : true;
+
 function page_transmission() {
     global $trans, $LNG, $filter;
 

@@ -7,6 +7,8 @@
  *  @subpackage
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  */
+define('IN_WEB', true);
+
 require('include/common.inc.php');
 require('include/session.inc.php');
 require('include/pages.inc.php');
