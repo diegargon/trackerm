@@ -114,7 +114,7 @@ Class Log {
         global $db;
 
         $state_msgs = $db->getSimpleValues('state_msgs');
-        return !empty($state_msgs) ? array_reverse($state_msgs) : false;
+        return !empty($state_msgs) && $state_msgs !== false ? array_reverse($state_msgs) : false;
     }
 
     public function clearStateMsgs() {
