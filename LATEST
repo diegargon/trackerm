@@ -1,6 +1,6 @@
 ## Latest (Relevant)
 
-[30/11] Activate by default config [search_cache][search_expire] now trackerm cache search results by default 3600s
+[30/11] Search key config key :search_cache & search_expire. Now trackerm cache search results. By default 3600s
 [29/11] Improve Home info
 [28/11] Preliminare test for rar encrypted and warn
 [28/11] Improve Home.
