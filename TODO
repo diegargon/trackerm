@@ -2,8 +2,13 @@ TODO
 
 [HIGH]
     [FIX] Cuando se borra un torrent manual cambiar si existe en wanted el estado. Quizas opcion de recibir los mensajes de  SYSLOG
-[MED]
     [FIX] WAnted: Cuando se elimina desde [T] un torrent en Wanted sigue poniendo Descargado, eliminar o cambiar estado a 'cancelado'
+    [IMPROVE] Cuando se escanea (cli) limpiar/eliminar torrents de wanted.db/tranmsmission.db que se pudieron eliminar manualmente, quizas 
+        mantener en wanted pero "CANCELADO"
+    [IMPROVE] General redesign state changes.
+
+[MED]
+
     [NEW] Escaneo de directorios a más para avi sin ser torrents. $cfg['SCAN_MEDIA_DIR'] = 1;
     [NEW/IMPROVE] actualizacion automatica de titulos de episodio a excepcion de que el show sea "ended"
     [FIX] codigo seguro
@@ -15,13 +20,10 @@ TODO
     [FIX] Actualmente en busquedas imdb filtramos años de los titulos por que suelen estar mal, el problema es cuando el titulo es un año
         como 1917.
     [FIX] No hay ninguna comprobacion de que la conexion a transmission esta correctamente establecida.
-    [IMPROVE] Cuando se escanea (cli) limpiar/eliminar torrents de wanted.db/tranmsmission.db que se pudieron eliminar manualmente, quizas 
-        mantener en wanted pero "CANCELADO"
     [IMPROVE] Si se borra manualmente un torrente bajado quedara el bd huerfanos. OPCION ORPHAN. 
         Buscar archivos multimedia en el TORRENT DIR y buscar la forma de determina si coincide con alguno en la base de datos
         si no coincide moverlo.
-    [IMPROVE] Home: Button to clear log and state log
-    
+
 [VERY LOW]
     [CHANGE] TMDB: Añadir items de ultimas, popular o similar
     [FIX/IMPROVE] fechas normalizar a formato comun    
