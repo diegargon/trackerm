@@ -2,7 +2,6 @@ TODO
 
 [HIGH]
     [FIX] Cuando se borra un torrent manual cambiar si existe en wanted el estado. Quizas opcion de recibir los mensajes de  SYSLOG
-    [IMPROVE] Home: Option to remove torrent cache files
 [MED]
     [FIX] WAnted: Cuando se elimina desde [T] un torrent en Wanted sigue poniendo Descargado, eliminar o cambiar estado a 'cancelado'
     [NEW] Escaneo de directorios a más para avi sin ser torrents. $cfg['SCAN_MEDIA_DIR'] = 1;
