@@ -28,7 +28,7 @@ class TorrentServer {
         return $array;
     }
 
-    public function addUrl($url, $save_path = null, $options = null) {
+    public function addUrl($url, $save_path = null, $options = []) {
         return $this->trans_conn->addUrl($url, $save_path, $options);
     }
 

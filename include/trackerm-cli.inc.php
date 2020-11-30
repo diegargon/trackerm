@@ -585,7 +585,7 @@ function send_transmission($results) {
 
         $d_link = $result['download'];
 
-        ($cfg['WANTED_PAUSED']) ? $trans_opt['paused'] = true : $trans_opt = false;
+        ($cfg['WANTED_PAUSED']) ? $trans_opt['paused'] = true : $trans_opt = [];
 
         $trans_response = $trans->addUrl($d_link, null, $trans_opt);
         foreach ($trans_response as $rkey => $rval) {
