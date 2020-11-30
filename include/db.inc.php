@@ -105,7 +105,7 @@ class DB {
         return false;
     }
 
-    function getItemByID($table, $id) {
+    public function getItemByID($table, $id) {
         !isset($this->tables[$table]) ? $this->loadTable($table) : null;
 
         if (!isset($this->tables[$table]['data'][$id])) {
@@ -114,7 +114,7 @@ class DB {
         return $this->tables[$table]['data'][$id];
     }
 
-    function getIdByField($table, $field, $field_value) {
+    public function getIdByField($table, $field, $field_value) {
         !isset($this->tables[$table]) ? $this->loadTable($table) : null;
 
         if (!isset($this->tables[$table]['data'])) {
@@ -129,7 +129,7 @@ class DB {
         return false;
     }
 
-    function getItemByField($table, $field, $field_value) {
+    public function getItemByField($table, $field, $field_value) {
         !isset($this->tables[$table]) ? $this->loadTable($table) : null;
 
         if (!empty($this->tables[$table]['data'])) {
@@ -143,7 +143,7 @@ class DB {
         return false;
     }
 
-    function deleteById($table, $id) {
+    public function deleteById($table, $id) {
         !isset($this->tables[$table]) ? $this->loadTable($table) : null;
 
         if (!isset($this->tables[$table]['data'][$id])) {
@@ -154,7 +154,7 @@ class DB {
         $this->saveTable($table);
     }
 
-    function deleteByFieldMatch($table, $field, $field_value) {
+    public function deleteByFieldMatch($table, $field, $field_value) {
         !isset($this->tables[$table]) ? $this->loadTable($table) : null;
 
         if (!empty($this->tables[$table]['data'])) {
@@ -298,6 +298,11 @@ class DB {
         $this->saveTable($table);
 
         return true;
+    }
+
+    public function clearTable($table) {
+        $this->tables[$table]['data'] = '';
+        $this->saveTable($table);
     }
 
     private function loadTable($table) {

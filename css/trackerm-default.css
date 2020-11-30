@@ -510,11 +510,21 @@ button {
     line-height: 1;
 }
 
+.home_state_msg input {
+    font-size: 0.8em;
+    float: right;        
+}
+
 .home_log {
     height: 15%;
     overflow:auto;
     resize: vertical;  
     line-height: 1;    
+}
+
+.home_log input {
+    font-size: 0.8em;
+    float: right;    
 }
 
 .profiles {

@@ -115,4 +115,9 @@ Class Log {
         return !empty($state_msgs) ? array_reverse($state_msgs) : false;
     }
 
+    public function clearStateMsgs() {
+        global $db;
+        return $db->clearTable('state_msgs');
+    }
+
 }

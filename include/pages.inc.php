@@ -12,11 +12,13 @@ function index_page() {
 
     $titems = [];
 
+    // General Info
     $tdata = [];
     $tdata['title'] = $LNG['L_IDENTIFIED'] . ': ' . strtoupper($cfg['profiles'][$cfg['profile']]);
     $tdata['content'] = $LNG['L_SEARCH_ENGINE'] . ': ' . '<a href="https://themoviedb.org" target=_blank>themoviedb.org</a>';
     $titems['col1'][] = getTpl('home-item', $tdata);
-    /////////
+
+    // Profiles
     $tdata = [];
     $tdata['title'] = $LNG['L_PROFILES'];
     $tdata['content'] = '<div class="profiles">';
@@ -25,7 +27,8 @@ function index_page() {
     }
     $tdata['content'] .= '</div>';
     $titems['col1'][] = getTpl('home-item', $tdata);
-    /////////
+
+    // Hard disk
     $tdata = [];
     $tdata['title'] = $LNG['L_HARDDISK'];
 
@@ -36,7 +39,8 @@ function index_page() {
     $tdata['content'] .= "<span>{$LNG['L_FREE_TOTAL']} {$LNG['L_ON']} {$LNG['L_MOVIES']} : " . human_filesize(disk_free_space($cfg['MOVIES_PATH'])) . ' / ' . human_filesize(disk_total_space($cfg['MOVIES_PATH'])) . '</span><br/>';
     $tdata['content'] .= "<span>{$LNG['L_FREE_TOTAL']} {$LNG['L_ON']} {$LNG['L_SHOWS']} : " . human_filesize(disk_free_space($cfg['SHOWS_PATH'])) . ' / ' . human_filesize(disk_total_space($cfg['SHOWS_PATH'])) . '</span><br/>';
     $titems['col1'][] = getTpl('home-item', $tdata);
-    /////////
+
+    // Database
     $tdata = [];
     $tdata['title'] = $LNG['L_DATABASE'];
     $tdata['content'] = "<span> {$LNG['L_MOVIES']} : {$lib_stats['num_movies']} </span><br/>";
@@ -44,11 +48,11 @@ function index_page() {
     $tdata['content'] .= "<span> {$LNG['L_EPISODES']} : {$lib_stats['num_episodes']} </span>";
     $titems['col1'][] = getTpl('home-item', $tdata);
 
+    // States Messages
+    isset($_POST['clear_state']) ? $log->clearStateMsgs() : null;
     $tdata = [];
     $tdata['title'] = $LNG['L_STATE_MSG'];
-    $tdata['content'] = '';
-
-
+    $tdata['content'] = '<form method="POST"><input type="submit" class="submit_btn" name="clear_state" value="' . $LNG['L_CLEAR'] . '" />';
     $state_msgs = $log->getStateMsgs();
     if (!empty($state_msgs)) {
         foreach ($state_msgs as $state_msg) {
@@ -58,12 +62,14 @@ function index_page() {
     $tdata['main_class'] = 'home_state_msg';
     $titems['col2'][] = getTpl('home-item', $tdata);
 
+    // Starting Info
     $tdata = [];
     $tdata['title'] = $LNG['L_STARTING'];
     $tdata['content'] = getfile('STARTING.' . substr($cfg['LANG'], 0, 2));
     $tdata['main_class'] = 'home_starting';
     $titems['col2'][] = getTpl('home-item', $tdata);
 
+    // LATEST info
     $tdata = [];
     $tdata['title'] = $LNG['L_NEWS'];
     $tdata['content'] = '';
@@ -77,18 +83,23 @@ function index_page() {
     $tdata['main_class'] = 'home_news';
     $titems['col2'][] = getTpl('home-item', $tdata);
 
+    // LOGS
+    isset($_POST['clear_log']) ? file_put_contents('cache/log/trackerm.log', '') : null;
     $tdata = [];
     $tdata['title'] = $LNG['L_LOGS'];
-    $tdata['content'] = '';
+    $tdata['content'] = '<form method="POST"><input type="submit" class="submit_btn" name="clear_log" value="' . $LNG['L_CLEAR'] . '" />';
     $latest_ary = getfile_ary('cache/log/trackerm.log');
     if (!empty($latest_ary)) {
         foreach (array_reverse($latest_ary) as $latest) {
-            $tdata['content'] .= $latest . '<br/>';
+            if (!empty(trim($latest))) {
+                $tdata['content'] .= $latest . '<br/>';
+            }
         }
     }
     $tdata['main_class'] = 'home_log';
     $titems['col2'][] = getTpl('home-item', $tdata);
 
+    //FIN
     $home = getTpl('home-page', $titems);
 
     return $home;
