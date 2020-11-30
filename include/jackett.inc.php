@@ -17,6 +17,7 @@ function search_movie_torrents($words, $head = null, $nohtml = false) {
 
     if ($cfg['search_cache']) {
         $movies_cache_check = $db->getItemById('jackett_search_movies', $words);
+        !isset($movies_cache_check['cache_time']) ? $movies_cache_check['cache_time'] = 0 : null;
         if ((!$movies_cache_check) || (time() > ($movies_cache_check['cache_time'] + $cfg['search_cache_expire']))) {
             $log->debug("Movies search cache expire. Requesting...");
             $cache_movies_expire = 1;
@@ -74,6 +75,7 @@ function search_shows_torrents($words, $head = null, $nohtml = false) {
 
     if ($cfg['search_cache']) {
         $shows_cache_check = $db->getItemById('jackett_search_shows', $words);
+        !isset($shows_cache_check['cache_time']) ? $shows_cache_check['cache_time'] = 0 : null;
         if ((!$shows_cache_check) || (time() > ($shows_cache_check['cache_time'] + $cfg['search_cache_expire']))) {
             $log->debug("Shows search cache expire. Requesting...");
             $cache_shows_expire = 1;
