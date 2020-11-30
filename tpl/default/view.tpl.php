@@ -94,7 +94,7 @@
                 <hr/>
                 <?php if (!empty($tdata['download'])) { ?>
                     <div class="view_download">
-                        <a class="submit_link" href="<?= basename($_SERVER['REQUEST_URI']) . '&download=' . rawurlencode($tdata['download']) ?>"><?= $tdata['L_DOWNLOAD'] ?></a>
+                        <a onClick="show_loading()" class="submit_link" href="<?= basename($_SERVER['REQUEST_URI']) . '&download=' . rawurlencode($tdata['download']) ?>"><?= $tdata['L_DOWNLOAD'] ?></a>
                     </div>
                 <?php } ?>
                 <div class="view_extra">

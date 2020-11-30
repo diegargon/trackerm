@@ -60,6 +60,16 @@ select {
     border:0px solid black;    
 }
 
+.loading {
+    display: none;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    top: 0;
+    left: 0;
+    background: rgba(58, 58, 58, 0.9) url('../tpl/default/img/loading.gif') 50% 50% no-repeat;
+}
 .main_menu {
     border:0px solid #ff5b5b;
     /* background-color: activeborder;*/

@@ -170,7 +170,7 @@ function pager($npage, $nitems, &$topt) {
                         $link_npage_class .= '_selected';
                     }
                 }
-                $pages .= '<a class="' . $link_npage_class . '" href="' . $iurl . '&npage=' . $i . $extra . '">' . $i . '</a>';
+                $pages .= '<a onClick="show_loading()"  class="' . $link_npage_class . '" href="' . $iurl . '&npage=' . $i . $extra . '">' . $i . '</a>';
             }
         }
     }
