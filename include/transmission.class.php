@@ -14,7 +14,7 @@ class TorrentServer {
     public $trans_conn;
 
     public function __construct($cfg) {
-        $this->trans_conn = new Transmission\Client($cfg['trans_hostname'], $cfg['trans_port'], $cfg['trans_username'], $cfg['trans_passwd'], $httpClientBuilder = null);
+        $result = $this->trans_conn = new Transmission\Client($cfg['trans_hostname'], $cfg['trans_port'], $cfg['trans_username'], $cfg['trans_passwd'], $httpClientBuilder = null);
     }
 
     public function getAll() {
@@ -28,9 +28,8 @@ class TorrentServer {
         return $array;
     }
 
-    public function addUrl($url) {
-        //checking if work without rawurldecode($url)
-        return $this->trans_conn->addUrl($url);
+    public function addUrl($url, $save_path = null, $options = null) {
+        return $this->trans_conn->addUrl($url, $save_path, $options);
     }
 
     public function delete($ids) {

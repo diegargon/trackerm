@@ -576,7 +576,7 @@ function wanted_check_flags($results) {
 }
 
 function send_transmission($results) {
-    global $db, $trans;
+    global $db, $cfg, $trans;
 
     //var_dump($results);
     foreach ($results as $result) {
@@ -585,7 +585,9 @@ function send_transmission($results) {
 
         $d_link = $result['download'];
 
-        $trans_response = $trans->addUrl($d_link);
+        ($cfg['WANTED_PAUSED']) ? $trans_opt['paused'] = true : $trans_opt = false;
+
+        $trans_response = $trans->addUrl($d_link, null, $trans_opt);
         foreach ($trans_response as $rkey => $rval) {
             $trans_db[0][$rkey] = $rval;
         }

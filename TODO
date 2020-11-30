@@ -8,7 +8,7 @@ TODO
     [IMPROVE] General redesign state changes.
     [IMPROVE] News: Mixed Indexers elements on New now present by indexer order
 [MED]
-
+    
     [NEW] Escaneo de directorios a más para avi sin ser torrents. $cfg['SCAN_MEDIA_DIR'] = 1;
     [NEW/IMPROVE] actualizacion automatica de titulos de episodio a excepcion de que el show sea "ended"
     [FIX] codigo seguro
@@ -20,7 +20,7 @@ TODO
     [IMPROVE] Si se borra manualmente un torrente bajado quedara el bd huerfanos. OPCION ORPHAN. 
         Buscar archivos multimedia en el TORRENT DIR y buscar la forma de determina si coincide con alguno en la base de datos
         si no coincide moverlo.
-
+     [IMPROVE] Config option for avoid wanted to start downloading, cli will be add stopped and change flag to READY
 [VERY LOW]
     [CHANGE] TMDB: Añadir items de ultimas, popular o similar
     [FIX/IMPROVE] fechas normalizar a formato comun    

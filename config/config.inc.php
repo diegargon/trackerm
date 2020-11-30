@@ -97,6 +97,9 @@ $cfg['trans_port'] = '9091';
 $cfg['trans_username'] = '';
 $cfg['trans_passwd'] = '';
 
+// Add wanted in pause 1
+$cfg['WANTED_PAUSED'] = 0;
+
 // Must cache images?
 $cfg['CACHE_IMAGES'] = 1;
 $cfg['CACHE_IMAGES_PATH'] = '/cache/images';
