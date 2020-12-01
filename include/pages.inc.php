@@ -213,7 +213,8 @@ function page_news() {
     if ($cfg['search_cache']) {
         $movies_cache_check = $db->getItemById('jackett_search_movies', 'news');
         !isset($movies_cache_check['cache_time']) ? $movies_cache_check['cache_time'] = 0 : null;
-        if ((!$movies_cache_check) || (time() > ($movies_cache_check['cache_time'] + $cfg['search_cache_expire']))) {
+
+        if ((time() > ($movies_cache_check['cache_time'] + $cfg['search_cache_expire']))) {
             $log->debug("News: Movies cache expire, Requesting");
             $cache_movies_expire = 1;
         } else {
@@ -223,7 +224,7 @@ function page_news() {
 
         $shows_cache_check = $db->getItemById('jackett_search_shows', 'news');
         !isset($shows_cache_check['cache_time']) ? $shows_cache_check['cache_time'] = 0 : null;
-        if (($shows_cache_check) && (time() > ($shows_cache_check['cache_time'] + $cfg['search_cache_expire']))) {
+        if ((time() > ($shows_cache_check['cache_time'] + $cfg['search_cache_expire']))) {
             $log->debug("News: Cache shows expire. Requesting");
             $cache_shows_expire = 1;
         } else {
