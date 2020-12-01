@@ -1,6 +1,10 @@
 ## Latest (Relevant)
 
-[01/11] Change and simplify messy wanted code. You must remove cache/wanted.db (you lost all wanted items)
+[01/12] Change and simplify messy wanted code. You must remove cache/wanted.db (you lost all wanted items)
+[01/12] Thinking in begin to use a real database system. ATM i save the content in JSON format files. Easy corrupted and
+        not multiuser friendly. Normally i use Mysql, but seems disproportionate, so i'm hesitating a lot. 
+        Thinking in the alternative, small and simple. Probably something NoSQL, probably MongoDB. Probably SQL, something like
+        SQLLite.  
 [30/11] Search key config key :search_cache & search_expire. Now trackerm cache search results. By default 3600s
 [29/11] Improve Home info
 [28/11] Preliminare test for rar encrypted and add warn messages
