@@ -93,8 +93,13 @@ class DB {
 
     public function addSimpleValue($table, $value) {
         !isset($this->tables[$table]) ? $this->loadTable($table) : null;
-        $this->tables[$table]['data'][] = $value;
+        $last_id = $this->getLastId($table);
+
+        $this->tables[$table]['data'][$last_id] = $value;
+        $last_id++;
+        $this->tables[$table]['info']['last_id'] = $last_id;
         $this->tables[$table]['info']['last_update'] = time();
+
         $this->saveTable($table);
     }
 
@@ -303,7 +308,7 @@ class DB {
     }
 
     public function clearTable($table) {
-        $this->tables[$table]['data'] = '';
+        $this->tables[$table]['data'] = [];
         $this->saveTable($table);
     }
 
