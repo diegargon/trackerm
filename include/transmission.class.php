@@ -23,7 +23,7 @@ class TorrentServer {
         5 => 'L_QUEUENING_TO_SEED',
         6 => 'L_SEEDING',
         7 => 'L_NO_PEERS',
-        // Custom Status
+        // Custom Status used in wanted
         8 => 'L_COMPLETED', //tor 0 y percenDone 1
         9 => 'L_MOVED',
         10 => 'L_DELETED',

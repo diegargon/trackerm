@@ -30,8 +30,12 @@ function page_transmission() {
     $tdata['body'] = '';
 
     foreach ($transfers as $transfer) {
-        $transfer['status_name'] = $trans->getStatusName($transfer['status']);
-        $tdata['body'] .= getTpl('transmission-row', array_merge($transfer, $LNG));
+        $transfer['status'] == 0 ? $tdata['show_start'] = 1 : $tdata['show_start'] = '';
+        $transfer['status'] != 0 && $transfer['status'] < 8 ? $data['show_stop'] = 1 : $tdata['show_stop'] = '';
+
+        $tdata['status_name'] = $trans->getStatusName($transfer['status']);
+        $transfer['percentDone'] == 1 ? $tdata['percent'] = '100' : $tdata['percent'] = ((float) $transfer['percentDone']) * 100;
+        $tdata['body'] .= getTpl('transmission-row', array_merge($transfer, $tdata, $LNG));
     }
 
     $page .= getTpl('transmission-body', array_merge($tdata, $LNG));

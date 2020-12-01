@@ -14,14 +14,20 @@
     </div>
     <div class="tor_tags">
         <div class="tor_action">
-            <input type="submit" class="submit_btn" name="start" value="<?= $tdata['L_START'] ?>"/>
-            <input type="submit" class="submit_btn" name="stop" value="<?= $tdata['L_STOP'] ?>"/>
+            <?php if ($tdata['show_start']) { ?>
+                <input type="submit" class="submit_btn" name="start" value="<?= $tdata['L_START'] ?>"/>
+            <?php
+            }
+            if ($tdata['show_stop']) {
+                ?>
+                <input type="submit" class="submit_btn" name="stop" value="<?= $tdata['L_STOP'] ?>"/>
+<?php } ?>
             <input type="submit" class="submit_btn" name="delete" value="<?= $tdata['L_DELETE'] ?>" <?= "onclick=\"return confirm('sure?');\"" ?> />
             <input type="hidden" name="tid[]" value="<?= $tdata['id'] ?>"/>
         </div>
         <div class="tor_tag"><?= $tdata['id'] ?></div>
-        <?= $tdata['percentDone'] == 1 ? $percentDone = '100' : $percentDone = (float) $tdata['percentDone']; ?>
-        <div class="tor_tag"><?= $tdata['L_COMPLETED'] . ': ' . $percentDone ?>%</div>
+
+        <div class="tor_tag"><?= $tdata['L_COMPLETED'] . ': ' . $tdata['percent'] ?>%</div>
         <div class="tor_tag"><?= $tdata['L_STATUS'] . ': ' . $tdata['status_name'] ?> </div>
         <div class="tor_tag"><?= $tdata['L_DESTINATION'] . ': ' . $tdata['downloadDir'] ?> </div>
     </div>
