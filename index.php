@@ -15,8 +15,7 @@ require('include/pages.inc.php');
 require('include/html.common.php');
 require('include/library.inc.php');
 
-isset($_GET['page']) ? $req_page = $_GET['page'] : $req_page = '';
-
+$req_page = $filter->getString('page');
 $body = getMenu();
 $footer = getFooter();
 
@@ -28,11 +27,26 @@ if (!empty($_GET['download'])) {
     foreach ($trans_response as $rkey => $rval) {
         $trans_db[0][$rkey] = $rval;
     }
-    !empty($_GET['themoviedb_id']) ? $trans_db[0]['themoviedb_id'] = $_GET['themoviedb_id'] : null; //TODO enviar para autoidentificar
-    $trans_db[0]['tid'] = $trans_db[0]['id'];
-    $trans_db[0]['status'] = -1;
-    $trans_db[0]['profile'] = (int) $cfg['profile'];
-    $db->addUniqElements('transmission', $trans_db, 'tid');
+
+    /*
+      $themoviedb_id = $filter->getInt('themoviedb_id');
+      !empty($themoviedb_id) ? $wanted_db[0]['themoviedb_id'] = $themoviedb_id : null; //TODO enviar para autoidentificar
+      $wanted_db[0]['tid'] = $trans_db[0]['id'];
+      $wanted_db[0]['wanted_status'] = 1;
+      $wanted_db[0]['direct'] = 1;
+      $wanted_db[0]['profile'] = (int) $cfg['profile'];
+      $wanted_db[0]['added'] = time();
+     */
+    $wanted_db[] = [
+        'tid' => $trans_db[0]['id'],
+        'wanted_status' => 1,
+        'themoviedb_id' => !empty($themoviedb_id) ? $wanted_db[0]['themoviedb_id'] = $themoviedb_id : null,
+        'direct' => 1,
+        'profile' => (int) $cfg['profile'],
+        'added' => time(),
+    ];
+
+    $db->addUniqElements('wanted', $wanted_db, 'tid');
 }
 
 if (!isset($req_page) || $req_page == '') {

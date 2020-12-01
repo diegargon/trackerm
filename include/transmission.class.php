@@ -13,9 +13,24 @@
 class TorrentServer {
 
     public $trans_conn;
+    public $status = [
+        // Torrent Status
+        0 => 'L_STOPPED',
+        1 => 'L_VERIFYING',
+        2 => 'L_CHECKING_FILES',
+        3 => 'L_QUEUENING',
+        4 => 'L_DOWNLOADING',
+        5 => 'L_QUEUENING_TO_SEED',
+        6 => 'L_SEEDING',
+        7 => 'L_NO_PEERS',
+        // Custom Status
+        8 => 'L_COMPLETED', //tor 0 y percenDone 1
+        9 => 'L_MOVED',
+        10 => 'L_DELETED',
+    ];
 
     public function __construct($cfg) {
-        $result = $this->trans_conn = new Transmission\Client($cfg['trans_hostname'], $cfg['trans_port'], $cfg['trans_username'], $cfg['trans_passwd'], $httpClientBuilder = null);
+        return $this->trans_conn = new Transmission\Client($cfg['trans_hostname'], $cfg['trans_port'], $cfg['trans_username'], $cfg['trans_passwd'], $httpClientBuilder = null);
     }
 
     public function getAll() {
@@ -30,55 +45,97 @@ class TorrentServer {
     }
 
     public function addUrl($url, $save_path = null, $options = []) {
-        return $this->trans_conn->addUrl($url, $save_path, $options);
+        $ret = $this->trans_conn->addUrl($url, $save_path, $options);
+        sleep(1);
+        $this->updateWanted();
+        return $ret;
     }
 
     public function delete($ids) {
-        global $db;
 
-        $trans_db = $db->getTableData('transmission');
-        foreach ($ids as $id) {
-            foreach ($trans_db as $trans) {
-                if ($trans['tid'] == $id) {
-                    $db->deleteByFieldMatch('transmission', 'tid', $trans['tid']);
-                }
-            }
-        }
-        return $this->trans_conn->remove($ids, true);
+        $ret = $this->trans_conn->remove($ids, true);
+        $this->setWantedDelete($ids);
+
+        return $ret;
     }
 
     public function stopAll() {
         $ret = $this->trans_conn->stopAll();
-        //sleep(1);
+        sleep(1);
         $this->updateWanted();
         return $ret;
     }
 
     public function stop($ids) {
-        $this->updateWantedToStatus($ids, 3);
-        return $this->trans_conn->stop($ids);
+        $ret = $this->trans_conn->stop($ids);
+        sleep(1);
+        $this->updateWanted();
+
+        return $ret;
     }
 
     public function startAll() {
         $ret = $this->trans_conn->startAll();
-        //sleep(1);
+        sleep(1);
         $this->updateWanted();
         return $ret;
     }
 
     public function start($ids) {
         $ret = $this->trans_conn->startNow($ids);
-        //sleep(1);
+        sleep(1);
         $this->updateWanted();
         return $ret;
     }
 
-    private function updateWantedToStatus($ids, $status) {
-        //TODO
+    public function getStatusName($status) {
+        global $LNG;
+        return $LNG[$this->status[$status]];
     }
 
-    private function updateWanted() {
-        //TODO check torrents ids and update wanted
+    public function updateWanted() {
+        global $db;
+
+        $trans = $this->getAll();
+
+        $tids = [];
+        foreach ($trans as $item) {
+            $item['status'] == 0 && $item['percentDone'] == 1 ? $status = 8 : $status = $item['status'];
+
+            $tids[] = $item['id'];
+
+            $wanted_item = $db->getItemByField('wanted', 'tid', $item['id']);
+            if ($wanted_item && ($wanted_item['wanted_status'] != $status)) {
+                $wanted_item['wanted_status'] = $status;
+                $db->upsertElementById('wanted', $wanted_item['id'], $wanted_item);
+            }
+        }
+        // check if all wanted started are in transmission if not is probably remove from OUTAPP. change status to 10 deleted.
+        $wanted_db = $db->getTableData('wanted');
+
+        foreach ($wanted_db as $wanted_item) {
+            if (($wanted_item['direct'] !== 1) && ($wanted_item['wanted_status'] > 0) &&
+                    ($wanted_item['wanted_status'] < 9) && !in_array($wanted_item['id'], $tids)) {
+                $wanted_item['wanted_status'] = 10;
+                $db->upsertElementById('wanted', $wanted_item['id'], $wanted_item);
+            }
+        }
+    }
+
+    private function setWantedDelete($ids) {
+        global $db, $log, $LNG;
+        foreach ($ids as $id) {
+            $wanted_item = $db->getItemByField('wanted', 'tid', $id);
+            if ($wanted_item !== false) {
+                if (isset($wanted_item['direct']) && $wanted_item['direct'] == 1) {
+                    $db->deleteById('wanted', $wanted_item['id']);
+                } else if (empty($wanted_item['direct']) && ($wanted_item['wanted_status'] != 9)) {
+                    $wanted_item['wanted_status'] = 10;
+                    $log->setStateMsgs($LNG['L_TOR_MAN_DEL'] . " id: {$wanteed_item['title']}");
+                    $db->upsertElementById('wanted', $wanted_item['id'], $wanted_item);
+                }
+            }
+        }
     }
 
 }

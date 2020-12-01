@@ -6,21 +6,18 @@
  *  @package
  *  @subpackage
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
-
-  Wanted States
-  1 Downloading
-  2 Seeding
-  3 Stoped
-  4 Completed
-  9 MOVED
  */
 !defined('IN_WEB') ? exit : true;
 
 function wanted_list() {
-    global $db, $cfg, $LNG;
+    global $db, $cfg, $LNG, $trans;
     $iurl = '?page=wanted';
 
+    //update wanted agains transmission-daemon
+    $trans->updateWanted();
+
     $wanted_list = $db->getTableData('wanted');
+
     if (!empty($wanted_list)) {
         $wanted_list_data = '';
 
@@ -28,19 +25,13 @@ function wanted_list() {
             $tdata = [];
             $tdata['iurl'] = $iurl;
 
-            $tdata['wanted_state'] = $LNG['L_WAITING'];
-            if (!empty($wanted_item['wanted_state'])) {
-                if ($wanted_item['wanted_state'] == 1) {
-                    $tdata['wanted_state'] = $LNG['L_DOWNLOADING'];
-                } else if ($wanted_item['wanted_state'] == 2) {
-                    $tdata['wanted_state'] = $LNG['L_SEEDING'];
-                } else if ($wanted_item['wanted_state'] == 3) {
-                    $tdata['wanted_state'] = $LNG['L_STOPPED'];
-                } else if ($wanted_item['wanted_state'] == 4) {
-                    $tdata['wanted_state'] = $LNG['L_COMPLETED'];
-                } else if ($wanted_item['wanted_state'] == 9) {
-                    $tdata['wanted_state'] = $LNG['L_MOVED'];
-                }
+            if (empty($wanted_item['id']) || $wanted_item['direct'] == 1) {
+                continue;
+            }
+
+            $tdata['status_name'] = $LNG['L_SEARCHING'];
+            if (isset($wanted_item['wanted_status']) && ($wanted_item['wanted_status'] >= 0)) {
+                $tdata['status_name'] = $trans->getStatusName($wanted_item['wanted_status']);
             }
             !empty($wanted_item['ignore']) ? $tdata['ignore_link'] = $LNG['L_UNIGNORE'] : $tdata['ignore_link'] = $LNG['L_IGNORE'];
             $wanted_item['day_check'] = day_check($wanted_item['id'], $wanted_item['day_check']);
@@ -79,9 +70,10 @@ function wanted_movies($wanted_id) {
     $wanted_item[$id]['added'] = time();
     $wanted_item[$id]['day_check'] = 'L_DAY_ALL';
     $wanted_item[$id]['last_check'] = '';
-    $wanted_item[$id]['wanted_state'] = 0;
+    $wanted_item[$id]['direct'] = 0;
+    $wanted_item[$id]['wanted_status'] = -1;
     $wanted_item[$id]['media_type'] = $wanted_type;
-    $wanted_item[$id]['profile'] = $cfg['profile'];
+    $wanted_item[$id]['profile'] = (int) $cfg['profile'];
     $db->addUniqElements('wanted', $wanted_item, 'themoviedb_id');
 }
 
@@ -112,11 +104,12 @@ function wanted_episode($id, $season, $episodes) {
         $wanted_item[$id]['added'] = time();
         $wanted_item[$id]['day_check'] = 'L_DAY_ALL';
         $wanted_item[$id]['last_check'] = '';
-        $wanted_item[$id]['wanted_state'] = 0;
+        $wanted_item[$id]['direct'] = 0;
+        $wanted_item[$id]['wanted_status'] = -1;
         $wanted_item[$id]['media_type'] = 'shows';
         $wanted_item[$id]['season'] = $season;
         $wanted_item[$id]['episode'] = $episode;
-        $wanted_item[$id]['profile'] = $cfg['profile'];
+        $wanted_item[$id]['profile'] = (int) $cfg['profile'];
 
         $db->addUniqElements('wanted', $wanted_item, 'title');
     }

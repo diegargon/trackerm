@@ -121,6 +121,7 @@ $LNG = [
     'L_TITLE' => 'Title',
     'L_TORRENT' => 'Torrent',
     'L_TORRENTS' => 'Torrents',
+    'L_TOR_MAN_DEL' => 'Seems this torrent was manually deleted',
     'L_UPDATE' => 'Actualizar',
     'L_UPDATE_EPISODES' => 'Update ep.',
     'L_UNIGNORE' => 'Unignore',

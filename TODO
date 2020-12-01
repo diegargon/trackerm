@@ -1,45 +1,45 @@
 TODO
 
 [HIGH]
-    [FIX] Cuando se borra un torrent manual cambiar si existe en wanted el estado. Quizas opcion de recibir los mensajes de  SYSLOG
-    [FIX] WAnted: Cuando se elimina desde [T] un torrent en Wanted sigue poniendo Descargado, eliminar o cambiar estado a 'cancelado'
-    [IMPROVE] Cuando se escanea (cli) limpiar/eliminar torrents de wanted.db/tranmsmission.db que se pudieron eliminar manualmente, quizas 
-        mantener en wanted pero "CANCELADO"
-    [IMPROVE] General redesign state changes.
     [IMPROVE] News: Mixed Indexers elements on New now present by indexer order
-[MED]
-    
+
+[MED]  
     [NEW] Escaneo de directorios a más para avi sin ser torrents. $cfg['SCAN_MEDIA_DIR'] = 1;
     [NEW/IMPROVE] actualizacion automatica de titulos de episodio a excepcion de que el show sea "ended"
     [FIX] codigo seguro
     [IMPROVE] reorganizar codigo/funciones
     [NEW] Biblio: buscador en nuestra libreria o enlace a una pagina buscador más facil de implementar.
-    [FIX] Actualmente en busquedas imdb filtramos años de los titulos por que suelen estar mal, el problema es cuando el titulo es un año
-        como 1917.
     [FIX] No hay ninguna comprobacion de que la conexion a transmission esta correctamente establecida.
     [IMPROVE] Si se borra manualmente un torrente bajado quedara el bd huerfanos. OPCION ORPHAN. 
         Buscar archivos multimedia en el TORRENT DIR y buscar la forma de determina si coincide con alguno en la base de datos
         si no coincide moverlo.
-     [IMPROVE] Config option for avoid wanted to start downloading, cli will be add stopped and change flag to READY
+    [IMPROVE] [T] Remove Start or Stop button  depending of start o stop torrent state
+    [IMPROVE] Two search_cache_expire  search_cache_expire and news_cache_expire
+    [CHANGE] Use a real database system
+    [IMPROVE/WANTED] Añadir la posibilidad de buscar el titulo exacto, si buscamos "Run" o "Asesino" encontrara varios resultados con titulos
+        que contienen dichos terminos y igual se requiere que el titulo solo sea "RUN" o "ASESINO" a secas    
+    [IMPROVE] Send state msg when change to 10 (delete) the torrents)
 [VERY LOW]
     [CHANGE] TMDB: Añadir items de ultimas, popular o similar
     [FIX/IMPROVE] fechas normalizar a formato comun    
     [NEW/IMPROVE] menu rows/columns y otras configuraciones generales en todas las paginas o pagina config.
     [IMPROVE] rebuild pager/paginacion, messy code.    
-    [NEW/IMPROVE] Home: Informacion reducida de torrents en transmission y su estado
-    [NEW] opcional: mostrar otros ratigns, filmaffinity, imdb
-    [NEW] Menu/general_prefs.db para cambiar preferencias generales de config.inc.php    
-    [CHANGE] Use a real database system
-    [IMPROVE/WANTED] Añadir la posibilidad de poner ignores y requerimientos aparte de los generales para evitar descargas no deseadas,
-    [IMPROVE/WANTED] Añadir la posibilidad de buscar el titulo exacto, si buscamos "Run" o "Asesino" encontrara varios resultados con titulos
-        que contienen dichos terminos y igual se requiere que el titulo solo sea "RUN" o "ASESINO" a secas    
-    [CHANGE] Change actual Transmission rpc api to something basic, since is enough and the actual have alot of deps 
+    [NEW/IMPROVE] Home: Informacion reducida de torrents en transmission y su estado    
+    [NEW] mediainfo (read file metadata)
+    [FIX] Actualmente en busquedas imdb filtramos años de los titulos por que suelen estar mal, el problema es cuando el titulo es un año
+        como 1917.    
+    [IMPROVE/WANTED] Añadir la posibilidad de poner ignores y requerimientos aparte de los generales para evitar descargas no deseadas,    
     [IMPROVE] Wanted Serie, poner en seguimiento nuevos capitulos de series, hay que ver como ver el release date pues en los datos tmdb solo
-        viene el americano. Una forma seria poner una opcion de "Sin Retraso", "Retraso una semana", "Retraso dos a cuatro ..." o un mes.
-    [NEW/IMPROVE] En el select de identificar estaria bien mostrar las caractulas al poner encima
-    [NEW] Config UI
+        viene el americano. Una forma seria poner una opcion de "Sin Retraso", "Retraso una semana", "Retraso dos a cuatro ..." o un mes.    
     [NEW/IMPROVE] recargar con jquery solo las partes necesarias en vez de recargar toda la pagina
 
 [thigs to do when we use a real database]
     [IMPROVE] In search and news filter torrents tags &words: like  720p  for show only 1080... and ignore keywords like "LANGUAGE"
-    [NEW] Add optional user security for profiles              
+    [NEW] Add optional user security for profiles      
+    [NEW] Config UI
+
+[BACKLOG]
+    [CHANGE] Change actual Transmission rpc api to something basic, since is enough and the actual have alot of deps 
+    [NEW/IMPROVE] En el select de identificar estaria bien mostrar las caractulas al poner encima
+    [NEW] opcional: mostrar otros ratigns, filmaffinity, imdb
+    [IMPROVE] Select Home items

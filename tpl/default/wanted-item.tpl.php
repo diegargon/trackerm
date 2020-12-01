@@ -12,7 +12,7 @@
     <a href="<?= $tdata['iurl'] . '&delete=' . $tdata['id'] ?>" class="action_link"><?= $tdata['L_DELETE'] ?></a>
     <a href="<?= $tdata['iurl'] . '&ignore=' . $tdata['id'] ?>" class="action_link"><?= $tdata['ignore_link'] ?></a>
     <span class="tag_id"><?= $tdata['id'] ?></span>
-    <span class="tag_state"><?= $tdata['wanted_state'] ?></span>
+    <span class="tag_state"><?= $tdata['status_name'] ?></span>
     <span class="tag_title"><?= $tdata['title'] ?></span>
     <span class="tag_type"><?= $tdata['media_type'] ?></span>
     <span class="tag_day"><?= $tdata['day_check'] ?></span>

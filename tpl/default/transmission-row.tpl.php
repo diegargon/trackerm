@@ -22,7 +22,7 @@
         <div class="tor_tag"><?= $tdata['id'] ?></div>
         <?= $tdata['percentDone'] == 1 ? $percentDone = '100' : $percentDone = (float) $tdata['percentDone']; ?>
         <div class="tor_tag"><?= $tdata['L_COMPLETED'] . ': ' . $percentDone ?>%</div>
-        <div class="tor_tag"><?= $tdata['L_STATUS'] . ': ' . $tdata[$tdata['status']] ?> </div>
+        <div class="tor_tag"><?= $tdata['L_STATUS'] . ': ' . $tdata['status_name'] ?> </div>
         <div class="tor_tag"><?= $tdata['L_DESTINATION'] . ': ' . $tdata['downloadDir'] ?> </div>
     </div>
 </form>

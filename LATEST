@@ -1,5 +1,6 @@
 ## Latest (Relevant)
 
+[01/11] Change and simplify wanted you must remove cache/wanted.db (you lost all wanted item)
 [30/11] Search key config key :search_cache & search_expire. Now trackerm cache search results. By default 3600s
 [29/11] Improve Home info
 [28/11] Preliminare test for rar encrypted and warn

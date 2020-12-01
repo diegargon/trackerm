@@ -25,21 +25,11 @@ function scanAppMedia() {
 }
 
 function transmission_scan() {
-    global $db, $trans, $cfg, $log;
+    global $log;
 
+    $tors = getRightTorrents();
 
-    $transfers = $trans->getAll();
-
-    $transmission_db = $db->getTableData('transmission');
-
-    if ($cfg['MOVE_ONLY_INAPP'] && empty($transmission_db)) {
-        $log->debug(" No Torrents (INAPP set)");
-        return false;
-    }
-
-    $tors = getRightTorrents($transfers, $transmission_db);
-
-    if (empty($tors['finished']) && empty($tors['seeding'])) {
+    if ($tors == false || (empty($tors['finished']) && empty($tors['seeding']))) {
         $log->debug(" Not found any finished or seeding torrent");
         return false;
     }
@@ -89,48 +79,25 @@ function transmission_scan() {
     }
 }
 
-function getRightTorrents($transfers, $transmission_db) {
-    global $cfg, $db, $log;
+function getRightTorrents() {
+    global $cfg, $db, $log, $trans;
 
     $finished_list = [];
     $seeding_list = [];
 
+    $transfers = $trans->getAll();
+
+    $wanted_db = $db->getTableData('wanted');
+
+    if ($cfg['MOVE_ONLY_INAPP'] && empty($wanted_db)) {
+        $log->debug(" No Torrents (INAPP set)");
+        return false;
+    }
 
     foreach ($transfers as $transfer) {
         if ($transfer['status'] == 0 && $transfer['percentDone'] == 1) {
-            $wanted_id = '';
-            //aprovechamos para actualizar wanted
-            foreach ($transmission_db as $item) {
-                if (($item['tid'] == $transfer['id']) && isset($item['wanted_id'])) {
-                    $wanted_id = $item['wanted_id'];
-
-                    $wanted_item = $db->getItemById('wanted', $item['wanted_id']);
-                    if (empty($wanted_item) ||
-                            ($wanted_item['wanted_state'] != 9 && $wanted_item['wanted_state'] != 3)
-                    ) {
-                        $update_ary['wanted_state'] = 3; //Stopped
-                        $db->updateRecordById('wanted', $item['wanted_id'], $update_ary);
-                    }
-                }
-            }
-            !empty($wanted_id) ? $transfer['wanted_id'] = $wanted_id : null;
             $finished_list[] = $transfer;
         } else if ($transfer['status'] == 6 && $transfer['percentDone'] == 1) {
-            $wanted_id = '';
-            foreach ($transmission_db as $item) {
-                if (($item['tid'] == $transfer['id']) && isset($item['wanted_id'])) {
-                    $wanted_id = $item['wanted_id'];
-
-                    $wanted_item = $db->getItemById('wanted', $item['wanted_id']);
-                    if (empty($wanted_item) ||
-                            ($wanted_item['wanted_state'] != 9 && $wanted_item['wanted_state'] != 2)
-                    ) {
-                        $update_ary['wanted_state'] = 2; //Seeding
-                        $db->updateRecordById('wanted', $item['wanted_id'], $update_ary);
-                    }
-                }
-            }
-            !empty($wanted_id) ? $transfer['wanted_id'] = $wanted_id : null;
             $seeding_list[] = $transfer;
         }
     }
@@ -141,8 +108,8 @@ function getRightTorrents($transfers, $transmission_db) {
     if (count($finished_list) >= 1) {
         if ($cfg['MOVE_ONLY_INAPP']) {
             foreach ($finished_list as $finished) {
-                foreach ($transmission_db as $torrent_db) {
-                    if ($torrent_db['tid'] == $finished['id']) {
+                foreach ($wanted_db as $wanted_item) {
+                    if ($wanted_item['tid'] == $finished['id']) {
                         $tors['finished'][] = $finished;
                     }
                 }
@@ -156,8 +123,8 @@ function getRightTorrents($transfers, $transmission_db) {
     if (count($seeding_list) >= 1) {
         if ($cfg['MOVE_ONLY_INAPP']) {
             foreach ($seeding_list as $seeding) {
-                foreach ($transmission_db as $torrent_db) {
-                    if ($torrent_db['tid'] == $seeding['id']) {
+                foreach ($wanted_db as $wanted_item) {
+                    if ($wanted_item['tid'] == $seeding['id']) {
                         $tors['seeding'][] = $seeding;
                     }
                 }
@@ -253,13 +220,12 @@ function MovieJob($item, $linked = false) {
                     $ids[] = $item['tid'];
                     file_exists(dirname($valid_file) . '/trackerm-unrar') ? unlink(dirname($valid_file) . '/trackerm-unrar') : null;
                     $trans->delete($ids);
-                    if (isset($item['wanted_id'])) {
-                        $log->debug(" Setting to moved wanted id: " . $item['wanted_id']);
-                        $wanted_item = $db->getItemById('wanted', $item['wanted_id']);
-                        if ($wanted_item != false) {
-                            $update_ary['wanted_state'] = 9;
-                            $db->updateRecordById('wanted', $item['wanted_id'], $update_ary);
-                        }
+
+                    $wanted_item = $db->getItemByField('wanted', 'tid', $item['tid']);
+                    if (!empty($wanted_item)) {
+                        $log->debug(" Setting to moved wanted id: " . $wanted_item['wanted_id']);
+                        $update_ary['wanted_status'] = 9;
+                        $db->updateRecordById('wanted', $wanted_item['wanted_id'], $update_ary);
                     }
                 }
             } else {
@@ -379,13 +345,12 @@ function ShowJob($item, $linked = false) {
                     $ids[] = $item['tid'];
                     file_exists(dirname($valid_file) . '/trackerm-unrar') ? unlink(dirname($valid_file) . '/trackerm-unrar') : null;
                     $trans->delete($ids);
-                    if (isset($item['wanted_id'])) {
-                        $wanted_item = $db->getItemById('wanted', $item['wanted_id']);
-                        if ($wanted_item != false) {
-                            $log->debug(" Setting to moved wanted id: " . $item['wanted_id']);
-                            $update_ary['wanted_state'] = 9;
-                            $db->updateRecordById('wanted', $item['wanted_id'], $update_ary);
-                        }
+
+                    $wanted_item = $db->getItemByField('wanted', 'tid', $item['tid']);
+                    if (!empty($wanted_item)) {
+                        $log->debug(" Setting to moved wanted id: " . $wanted_item['id']);
+                        $update_ary['wanted_status'] = 9;
+                        $db->updateRecordById('wanted', $wanted_item['id'], $update_ary);
                     }
                 }
             } else {
@@ -429,7 +394,7 @@ function linking_media($valid_file, $final_dest_path) {
 }
 
 function wanted_work() {
-    global $db, $cfg, $LNG, $log;
+    global $db, $cfg, $LNG, $log, $trans;
 
     $day_of_week = date("w");
 
@@ -441,19 +406,17 @@ function wanted_work() {
 
     foreach ($wanted_list as $wanted) {
         $valid_results = [];
-        $update_ary = [];
 
+        if ($wanted['direct'] == 1) {
+            $log->debug(" Jumping wanted {$wanted['id']} by direct ");
+            continue;
+        }
         if (!empty($wanted['ignore'])) {
             $log->debug(" Jumping wanted {$wanted['title']} check by ignore state ");
             continue;
         }
-        if (isset($wanted['wanted_state']) && $wanted['wanted_state'] > 0) {
-            $logmsg = " Jumping wanted {$wanted['title']} check by state ";
-            ($wanted['wanted_state'] == 1) ? $log->info($logmsg . $LNG['L_DOWNLOADING']) : null;
-            ($wanted['wanted_state'] == 2) ? $log->info($logmsg . $LNG['L_SEEDING']) : null;
-            ($wanted['wanted_state'] == 3) ? $log->info($logmsg . $LNG['L_STOPPED']) : null;
-            ($wanted['wanted_state'] == 4) ? $log->info($logmsg . $LNG['L_COMPLETED']) : null;
-            ($wanted['wanted_state'] == 9) ? $log->info($logmsg . $LNG['L_MOVED']) : null;
+        if (isset($wanted['wanted_status']) && $wanted['wanted_status'] > 0) {
+            $log->debug(" Jumping wanted {$wanted['title']} check by state " . $trans->getStatusName($wanted['wanted_status']));
             continue;
         }
 
@@ -502,15 +465,8 @@ function wanted_work() {
             $valid_results[0]['wanted_id'] = $wanted_id;
             if (send_transmission($valid_results)) {
                 $log->setStateMsg($LNG['L_WANTED_FOUND'] . ':(' . $title . ') ' . $LNG['L_DOWNLOADING']);
-                $update_ary['wanted_state'] = 1;
             }
         }
-
-        $update_ary['last_check'] = time();
-        $update_ary['first_check'] = 1;
-
-
-        $db->updateRecordById('wanted', $wanted_id, $update_ary);
 
         $log->debug("********************************************************************************************************");
     }
@@ -593,21 +549,17 @@ function send_transmission($results) {
         foreach ($trans_response as $rkey => $rval) {
             $trans_db[0][$rkey] = $rval;
         }
-        $trans_db[0]['tid'] = $trans_db[0]['id'];
-        $trans_db[0]['status'] = -1;
-        $trans_db[0]['profile'] = 0;
-        if (!empty($result['themoviedb_id'])) {
-            $trans_db[0]['themoviedb_id'] = $result['themoviedb_id'];
+        //UPDATE WANTED.DB
+        if ($cfg['WANTED_PAUSED']) {
+            $update_ary['wanted_status'] = 0;
+        } else {
+            $update_ary['wanted_status'] = 1;
         }
-        if (!empty($result['wanted_id'])) {
-            $trans_db[0]['wanted_id'] = $result['wanted_id'];
-        }
+        $update_ary['tid'] = $trans_db[0]['id'];
+        $update_ary['last_check'] = time();
+        $update_ary['first_check'] = 1;
 
-        if (!empty($result['media_type'])) {
-            $trans_db[0]['media_type'] = $result['media_type'];
-        }
-
-        $db->addUniqElements('transmission', $trans_db, 'tid');
+        $db->updateRecordById('wanted', $result['wanted_id'], $update_ary);
     }
     return true;
 }
