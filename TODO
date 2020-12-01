@@ -13,7 +13,6 @@ TODO
     [IMPROVE] Si se borra manualmente un torrente bajado quedara el bd huerfanos. OPCION ORPHAN. 
         Buscar archivos multimedia en el TORRENT DIR y buscar la forma de determina si coincide con alguno en la base de datos
         si no coincide moverlo.
-    [IMPROVE] [T] Remove Start or Stop button  depending of start o stop torrent state
     [IMPROVE] Two search_cache_expire  search_cache_expire and news_cache_expire
     [CHANGE] Use a real database system
     [IMPROVE/WANTED] Añadir la posibilidad de buscar el titulo exacto, si buscamos "Run" o "Asesino" encontrara varios resultados con titulos
