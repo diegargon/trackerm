@@ -9,7 +9,6 @@ if (1) {
 }
 
 require('config/config.inc.php');
-require('config/config.priv.php');
 
 if (file_exists('/etc/trackerm.conf')) {
     require('/etc/trackerm.conf');
@@ -17,6 +16,8 @@ if (file_exists('/etc/trackerm.conf')) {
     echo '<br> The config file /etc/trackerm.conf is missed, please copy the default file in config.min.php directory to /etc  and rename it as trackerm.conf and configure the settings';
     exit();
 }
+
+require('config/config.priv.php');
 
 setlocale(LC_ALL, $cfg['LOCALE']);
 
@@ -27,6 +28,11 @@ $log = new Log($cfg);
 require('include/db.inc.php');
 global $db;
 $db = new DB($cfg['ROOT_PATH'] . '/cache');
+
+require('include/sqlite3.inc.php');
+global $newdb;
+$newdb = new newDb($cfg['DB_FILE'], $log);
+$newdb->connect();
 
 require('lang/' . $cfg['LANG'] . '/lang.inc.php');
 require('include/checks.inc.php');
@@ -41,7 +47,6 @@ require('include/transmission.inc.php');
 require('include/library-common.inc.php');
 require('include/ident-title-utils.inc.php');
 require('include/view.inc.php');
-require('include/sqlite3.inc.php');
 require('include/' . $cfg['search_db'] . '.inc.php');
 require('include/mediadb.inc.php');
 require('include/jackett.inc.php');

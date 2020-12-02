@@ -8,15 +8,15 @@
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  */
 function create_db() {
-    global $db;
+    global $newdb;
 
     //DB_INFO
 
-    $db->query('CREATE TABLE IF NOT EXISTS "db_info" (
+    $newdb->query('CREATE TABLE IF NOT EXISTS "db_info" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                     "version" INTEGER NOT NULL,
                     "app_name" VARCHAR NOT NULL,
-                    "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
                 )');
 
     $query = [
@@ -24,11 +24,11 @@ function create_db() {
         "version" => 1,
     ];
 
-    $db->insert('db_info', $query);
+    $newdb->insert('db_info', $query);
 
     // PREFERENCES
 
-    $db->query('CREATE TABLE IF NOT EXISTS "preferences" (
+    $newdb->query('CREATE TABLE IF NOT EXISTS "preferences" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                     "username" INTEGER NOT NULL UNIQUE,
                     "password" VARCHAR NULL,
@@ -36,19 +36,18 @@ function create_db() {
                     "tresults_rows" INTEGER NULL,
                     "tresults_columns" INTEGER NULL,
                     "max_identify_items" INTEGER NULL,
-                    "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
                 )');
 
     $query = [
         "username" => 'default',
     ];
 
-
-    $db->insert('preferences', $query);
+    $newdb->insert('preferences', $query);
 
     // TMDB_SEARCH
 
-    $db->query('CREATE TABLE IF NOT EXISTS "tmdb_search" (
+    $newdb->query('CREATE TABLE IF NOT EXISTS "tmdb_search" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                     "themoviedb_id" INTEGER NOT NULL UNIQUE,
                     "ilink" VARCHAR NULL,
@@ -64,23 +63,23 @@ function create_db() {
                     "plot" VARCHAR NULL,
                     "release" VARCHAR NULL,
                     "in_library" INT NULL,
-                    "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
                 )');
 
 
     // LOG MSGS
 
-    $db->query('CREATE TABLE IF NOT EXISTS "log_msgs" (
+    $newdb->query('CREATE TABLE IF NOT EXISTS "log_msgs" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                     "type" VARCHAR NOT NULL,
                     "msg" VARCHAR NOT NULL,
-                    "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
                 )');
 
 
     // LIBRARY MOVIES
 
-    $db->query('CREATE TABLE IF NOT EXISTS "library_movies" (
+    $newdb->query('CREATE TABLE IF NOT EXISTS "library_movies" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                     "title" VARCHAR NULL,
                     "themoviedb_id" INTEGER NULL UNIQUE,
@@ -98,13 +97,13 @@ function create_db() {
                     "lang" VARCHAR NULL,
                     "plot" VARCHAR NULL,
                     "master" INTEGER NULL,
-                    "added" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    "added" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                    "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
                 )');
 
     //LIBRARY SHOWS
 
-    $db->query('CREATE TABLE IF NOT EXISTS "library_shows" (
+    $newdb->query('CREATE TABLE IF NOT EXISTS "library_shows" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                     "title" VARCHAR NULL,
                     "themoviedb_id" INTEGER NULL UNIQUE,
@@ -124,12 +123,12 @@ function create_db() {
                     "season" INTEGER NULL,
                     "episode" INTEGER NULL,
                     "master" INTEGER NULL,
-                    "added" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    "added" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                    "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
                 )');
 
     //JACKET MOVIES
-    $db->query('CREATE TABLE IF NOT EXISTS "jackett_movies" (
+    $newdb->query('CREATE TABLE IF NOT EXISTS "jackett_movies" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                     "title" VARCHAR NOT NULL,
                     "guid" VARCHAR NOT NULL UNIQUE,
@@ -143,12 +142,12 @@ function create_db() {
                     "category" INTEGER NULL,
                     "source" VARCHAR NULL,
                     "poster" VARCHAR NULL,
-                    "added" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    "added" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                    "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
                 )');
 
     //JACKET SHOWS
-    $db->query('CREATE TABLE IF NOT EXISTS "jackett_shows" (
+    $newdb->query('CREATE TABLE IF NOT EXISTS "jackett_shows" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                     "title" VARCHAR NOT NULL,
                     "guid" VARCHAR NOT NULL UNIQUE,
@@ -162,23 +161,41 @@ function create_db() {
                     "category" INTEGER NULL,
                     "source" VARCHAR NULL,
                     "poster" VARCHAR NULL,
-                    "added" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    "added" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                    "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+                )');
+
+    //SHOWS DETAILS
+    $newdb->query('CREATE TABLE IF NOT EXISTS "shows_details" (
+                    "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                    "themoviedb_id" INTEGER NOT NULL,
+                    "season" INTEGER NOT NULL,
+                    "episode" INTEGER NOT NULL,
+                    "seasons" INTEGER  NULL,
+                    "episodes" INTEGER NULL,
+                    "title" VARCHAR NULL,
+                    "plot" VARCHAR NULL,
+                    "release" VARCHAR NULL,
+                    "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
                 )');
 }
 
-/* QUEDAN shows_detauls jacket_search_* que tienen arrays */
+/* QUEDAN shows_detauls
+ *  jacket_search_* que tienen arrays
+  jacket_search no se usara, se buscara en jackets_shows/movies y para las nuevas las ultimas "added"
+ *
+ *  */
 
 function update_db($from) {
-    global $db;
+    global $newdb;
 
 
     if ($from <= 2) {
         //$set['version'] = 3;
-        //$db->update('db_info', $set);
+        //$newdb->update('db_info', $set);
     }
     if ($from <= 3) {
         //$set['version'] = 4;
-        //$db->update('db_info', $set);
+        //$newdb->update('db_info', $set);
     }
 }

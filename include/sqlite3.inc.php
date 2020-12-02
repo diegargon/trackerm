@@ -23,11 +23,12 @@ class newDB {
     private $version = 1;
     private $db;
     private $db_path;
-    private $log = [];
+    private $log;
     private $querys = [];
 
-    public function __construct($db_path) {
+    public function __construct($db_path, $log) {
         $this->db_path = $db_path;
+        $this->log = $log;
     }
 
     public function connect() {
@@ -40,17 +41,17 @@ class newDB {
         if (empty($this->db)) {
             return $this->fail();
         } else {
-            echo "\nConnection ok";
+            $this->log->debug("Connection ok");
         }
         $version = $this->getDbVersion();
         if ($version < $this->version) {
-            echo "\nNeed upgrade the database... upgrading";
+            $this->log->debug("Need upgrade the database... upgrading");
             $this->upgradeDb($version);
         } else if ($version > $this->version) {
-            echo "\nThis database version is newer than this api";
+            $this->log->debug("This database version is newer than this api");
         }
-        echo "\nSeems all go fine";
-        echo "\nDB Version $version";
+        $this->log->debug("Seems all go fine");
+        $this->log->debug("DB Version $version");
     }
 
     /* Common / Helpers */
@@ -85,11 +86,11 @@ class newDB {
     public function upsertItemByField($table, $item, $field, $value) {
         $_item = $this->getItemByField($table, $field, $value);
         if (!empty($_item)) {
-            echo "\nupser actualiza";
+            $this->log->debug("upser actualiza");
             $this->updateItemByField($table, $item, $field, $value);
             return true;
         } else {
-            echo "\nupsert crea nuevo";
+            $this->log->debug("upsert crea nuevo");
             $this->addItem($table, $item);
             return true;
         }
@@ -179,7 +180,6 @@ class newDB {
         }
         $query .= $query_keys . ') VALUES (' . $query_binds;
         $query .= ')';
-
         $this->querys[] = $query;
 
         $statement = $this->db->prepare($query);
@@ -269,7 +269,6 @@ class newDB {
                 $statement->bindValue($bkey, $bvalue);
             }
         }
-
         $response = $statement->execute();
 
         return $response;
@@ -316,7 +315,8 @@ class newDB {
             }
         }
 
-        return (($statement->execute()) || $this->fail());
+        $response = $statement->execute();
+        return $response;
     }
 
     public function escape($string) {
@@ -356,31 +356,31 @@ class newDB {
 
     private function checkInstall() {
         if (file_exists($this->db_path)) {
-            $this->log[] = 'db file exists';
+            $this->log->debug('db file exists');
             //check if exist tables
             return true;
         } else {
-            $this->log[] = 'db file not exists';
+            $this->log->debug('db file not exists');
             return false;
         }
     }
 
     private function fail() {
-        echo "\n FAIL \n";
+        $this->log->debug(" FAIL ");
         echo print_r($this->querys);
         return false;
     }
 
     private function createTables() {
-        echo "\nEntering create tables\n";
-        require('../config/db.sql.php');
+        $this->log->debug("Entering create tables");
+        require('config/db.sql.php');
 
         return create_db();
     }
 
     private function upgradeDb($from) {
-        echo "\nEntering updatedb from $from \n";
-        require('../config/db.sql.php');
+        $this->log->debug("Entering updatedb from $from ");
+        require('config/db.sql.php');
 
         return update_db($from);
     }
