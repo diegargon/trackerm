@@ -30,7 +30,7 @@ function create_db() {
 
     $db->query('CREATE TABLE IF NOT EXISTS "preferences" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                    "username" INTEGER NOT NULL,
+                    "username" INTEGER NOT NULL UNIQUE,
                     "password" VARCHAR NULL,
                     "theme" VARCHAR NULL,
                     "tresults_rows" INTEGER NULL,
@@ -50,7 +50,7 @@ function create_db() {
 
     $db->query('CREATE TABLE IF NOT EXISTS "tmdb_search" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                    "themoviedb_id" INTEGER NOT NULL,
+                    "themoviedb_id" INTEGER NOT NULL UNIQUE,
                     "ilink" VARCHAR NULL,
                     "title" VARCHAR NOT NULL,
                     "original_title" VARCHAR NULL,
@@ -82,8 +82,9 @@ function create_db() {
 
     $db->query('CREATE TABLE IF NOT EXISTS "library_movies" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                    "themoviedb_id" INTEGER NULL,
-                    "file_name" VARCHAR NOT NULL,
+                    "title" VARCHAR NULL,
+                    "themoviedb_id" INTEGER NULL UNIQUE,
+                    "file_name" VARCHAR NOT NULL UNIQUE,
                     "predictible_title" VARCHAR NULL,
                     "original_title" VARCHAR NULL,
                     "ilink" VARCHAR NULL,
@@ -105,8 +106,9 @@ function create_db() {
 
     $db->query('CREATE TABLE IF NOT EXISTS "library_shows" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                    "themoviedb_id" INTEGER NULL,
-                    "file_name" VARCHAR NOT NULL,
+                    "title" VARCHAR NULL,
+                    "themoviedb_id" INTEGER NULL UNIQUE,
+                    "file_name" VARCHAR NOT NULL UNIQUE,
                     "predictible_title" VARCHAR NULL,
                     "original_title" VARCHAR NULL,
                     "ilink" VARCHAR NULL,
@@ -130,7 +132,7 @@ function create_db() {
     $db->query('CREATE TABLE IF NOT EXISTS "jackett_movies" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                     "title" VARCHAR NOT NULL,
-                    "guid" VARCHAR NOT NULL,
+                    "guid" VARCHAR NOT NULL UNIQUE,
                     "download" VARCHAR NOT NULL,
                     "ilink" VARCHAR NULL,
                     "lang" VARCHAR NULL,
@@ -149,7 +151,7 @@ function create_db() {
     $db->query('CREATE TABLE IF NOT EXISTS "jackett_shows" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                     "title" VARCHAR NOT NULL,
-                    "guid" VARCHAR NOT NULL,
+                    "guid" VARCHAR NOT NULL UNIQUE,
                     "download" VARCHAR NOT NULL,
                     "ilink" VARCHAR NULL,
                     "lang" VARCHAR NULL,

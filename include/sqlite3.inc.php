@@ -68,14 +68,19 @@ class newDB {
     public function getItemById($table, $id) {
         //select($table, $what = null, $where = null, $extra = null)
         $where['id'] = ['value' => $id];
-        $query = $this->select($table, null, $where, 'LIMIT 1');
-        return $this->fetch($query);
+        $result = $this->select($table, null, $where, 'LIMIT 1');
+        $row = $this->fetch($result);
+        $this->finalize($result);
+
+        return $row;
     }
 
     public function getItemByField($table, $field, $value) {
         $where[$field] = ['value' => $value];
-        $query = $this->select($table, null, $where, 'LIMIT 1');
-        return $this->fetch($query);
+        $result = $this->select($table, null, $where, 'LIMIT 1');
+        $row = $this->fetch($result);
+        $this->finalize($result);
+        return $row;
     }
 
     public function updateItemById($table, $id, $values) {
@@ -90,11 +95,10 @@ class newDB {
 
     public function deleteById($table, $id) {
         $where['id'] = ['value' => $id];
-        $this->delete($table, $where);
+        $this->delete($table, $where, 'LIMIT 1');
     }
 
     public function updateById($table, $id, $set) {
-
         $where['id'] = ['value' => $id];
         $this->update($table, $set, $where, 'LIMIT 1');
     }
@@ -132,6 +136,7 @@ class newDB {
         $query .= ')';
 
         $this->querys[] = $query;
+
         $statement = $this->db->prepare($query);
 
         foreach ($bind_values as $bkey => $bvalue) {
@@ -178,7 +183,7 @@ class newDB {
                 $bind_values[':' . $where_k] = $where_v['value'];
             }
         }
-        !empty($extra) ? $query .= $extra : null;
+        !empty($extra) ? $query .= ' ' . $extra : null;
         $this->querys[] = $query;
         $statement = $this->db->prepare($query);
 
@@ -193,7 +198,7 @@ class newDB {
         return $response;
     }
 
-    public function delete($table, $where) {
+    public function delete($table, $where, $extra = null) {
 
         $query = 'DELETE FROM ' . $table . ' ';
 
@@ -210,7 +215,7 @@ class newDB {
                 $bind_values[':' . $where_k] = $where_v['value'];
             }
         }
-
+        !empty($extra) ? $query .= ' ' . $extra : null;
         $this->querys[] = $query;
         $statement = $this->db->prepare($query);
 
@@ -243,6 +248,7 @@ class newDB {
         }
 
         if ($where != null) {
+            $query .= ' WHERE ';
             foreach ($where as $where_k => $where_v) {
                 !empty($where_v['op']) ? $operator = $where_v['op'] : $operator = '=';
                 !empty($where_v['logic']) ? $logic = $where_v['logic'] : $logic = 'AND';
@@ -254,7 +260,7 @@ class newDB {
                 $bind_values[':' . $where_k] = $where_v['value'];
             }
         }
-        !empty($extra) ? $query .= $extra : null;
+        !empty($extra) ? $query .= ' ' . $extra : null;
         $this->querys[] = $query;
 
         $statement = $this->db->prepare($query);
@@ -281,6 +287,7 @@ class newDB {
         while ($row = $result->fetchArray()) {
             $rows[] = $row;
         }
+        $this->finalize($result);
         return $rows;
     }
 
