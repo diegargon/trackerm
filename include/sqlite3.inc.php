@@ -53,7 +53,17 @@ class newDB {
         echo "\nDB Version $version";
     }
 
-    /* Helpers */
+    /* Common / Helpers */
+
+    public function addItem($table, $item) {
+        $this->insert($table, $item);
+    }
+
+    public function addItems($table, $items) {
+        foreach ($items as $item) {
+            $this->insert($table, $item);
+        }
+    }
 
     public function getItemById($table, $id) {
         //select($table, $what = null, $where = null, $extra = null)
@@ -69,7 +79,7 @@ class newDB {
     }
 
     public function updateItemById($table, $id, $values) {
-        $where['id'] = $id;
+        $where['id'] = ['value' => $id];
 
         $this->update($table, $values, $where, 'LIMIT 1');
     }
@@ -81,6 +91,24 @@ class newDB {
     public function deleteById($table, $id) {
         $where['id'] = ['value' => $id];
         $this->delete($table, $where);
+    }
+
+    public function updateById($table, $id, $set) {
+
+        $where['id'] = ['value' => $id];
+        $this->update($table, $set, $where, 'LIMIT 1');
+    }
+
+    //exact mean word separated with spaces don't known yet if works like this possible TODO/FIX
+    public function search($table, $field, $value, $exact = null, $extra = null) {
+        $value = $this->escapeString($value);
+        $query = "SELECT * FROM " . $table . " WHERE " . $field . " LIKE ";
+        if (!empty($exact)) {
+            $query .= "'%" . $value . "%'";
+        } else {
+            $query .= "'% " . $value . " %'";
+        }
+        $this->query($query);
     }
 
     /* MAIN */
@@ -238,6 +266,10 @@ class newDB {
         }
 
         return (($statement->execute()) || $this->fail());
+    }
+
+    public function escape($string) {
+        return $this->db->escapeString($string);
     }
 
     public function fetch($result) {
