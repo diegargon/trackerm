@@ -47,4 +47,5 @@ $cfg['shows_categories'] = [
 
 $cfg['categories'] = $cfg['movies_categories'] + $cfg['shows_categories'];
 $cfg['VERSION'] = 'A72';
+$cfg['DB_VERSION'] = 1;
 

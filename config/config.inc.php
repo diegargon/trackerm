@@ -70,10 +70,10 @@ $cfg['jacket_results'] = 25;
 // match with titles like "Jonnhy English", use with caution.
 
 $cfg['MEDIA_LANGUAGE_TAG'] = [
-    0 => 'SPANISH',
-    1 => 'ENGLISH',
-    2 => 'CASTELLANO',
-    3 => 'ESPAÑOL',
+    1 => 'SPANISH',
+    2 => 'ENGLISH',
+    3 => 'CASTELLANO',
+    4 => 'ESPAÑOL',
 ];
 
 //If you want trackerm search for any extr tag in titles add the key here
@@ -81,16 +81,16 @@ $cfg['EXTRA_TAG'] = [];
 
 // What Jacket indexer will use, check in "Actions" links the name ex:  http://192.168.X.XX:9117/api/v2.0/indexers/NAME/results/
 $cfg['jackett_indexers'] = [
-    0 => 'newpct',
-    1 => 'divxtotal',
-    2 => 'mejortorrent',
-//    3 => 'moviesdvdr',
+    1 => 'newpct',
+    2 => 'divxtotal',
+    3 => 'mejortorrent',
+//    4 => 'moviesdvdr',
 //     5 => 'rarbg',
 ];
 
 // User profiles, at least default must exists
 $cfg['profiles'] = [
-    0 => 'default',
+    1 => 'default',
 ];
 
 // Transmission connection details
