@@ -68,10 +68,11 @@ function create_db() {
                 )');
 
 
-    // STATE MSGS
+    // LOG MSGS
 
-    $db->query('CREATE TABLE IF NOT EXISTS "state_msgs" (
+    $db->query('CREATE TABLE IF NOT EXISTS "log_msgs" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                    "type" VARCHAR NOT NULL,
                     "msg" VARCHAR NOT NULL,
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 )');

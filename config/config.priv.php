@@ -22,6 +22,8 @@ $cfg['jackett_api'] = '/api/v2.0';
 $cfg['img_url'] = $cfg['REL_PATH'] . '/img';
 $cfg['LOG_TO_SYSLOG'] = 1;
 $cfg['LOG_TO_FILE'] = 1;
+
+$cfg['DB_FILE'] = $cfg['ROOT_PATH'] . '/cache/trackerm.db';
 $cfg['movies_categories'] = [
     2000 => 'Movies',
     2010 => 'Movies/Foreign',
@@ -47,5 +49,4 @@ $cfg['shows_categories'] = [
 
 $cfg['categories'] = $cfg['movies_categories'] + $cfg['shows_categories'];
 $cfg['VERSION'] = 'A72';
-$cfg['DB_VERSION'] = 1;
 

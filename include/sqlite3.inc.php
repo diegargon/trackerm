@@ -53,6 +53,38 @@ class newDB {
         echo "\nDB Version $version";
     }
 
+    /* Helpers */
+
+    public function getItemById($table, $id) {
+        //select($table, $what = null, $where = null, $extra = null)
+        $where['id'] = ['value' => $id];
+        $query = $this->select($table, null, $where, 'LIMIT 1');
+        return $this->fetch($query);
+    }
+
+    public function getItemByField($table, $field, $value) {
+        $where[$field] = ['value' => $value];
+        $query = $this->select($table, null, $where, 'LIMIT 1');
+        return $this->fetch($query);
+    }
+
+    public function updateItemById($table, $id, $values) {
+        $where['id'] = $id;
+
+        $this->update($table, $values, $where, 'LIMIT 1');
+    }
+
+    public function getTableData($table) {
+        return $this->select($table);
+    }
+
+    public function deleteById($table, $id) {
+        $where['id'] = ['value' => $id];
+        $this->delete($table, $where);
+    }
+
+    /* MAIN */
+
     public function insert($table, $values) {
         $query = 'INSERT INTO "' . $table . '" (';
         $query_binds = '';
@@ -81,6 +113,19 @@ class newDB {
         return (($statement->execute()) || $this->fail());
     }
 
+    public function upsert() {
+        /*
+          TODO
+          SYNTAX
+
+          INSERT INTO players (user_name, age)
+          VALUES('steven', 32)
+          ON CONFLICT(user_name)
+          DO UPDATE SET age=excluded.age;
+
+         */
+    }
+
     /*
       $where['userid'] = [ 'value' => diego, 'op' => '=', 'logic' => 'AND' ];
      */
@@ -106,6 +151,38 @@ class newDB {
             }
         }
         !empty($extra) ? $query .= $extra : null;
+        $this->querys[] = $query;
+        $statement = $this->db->prepare($query);
+
+        if (!empty($bind_values)) {
+            foreach ($bind_values as $bkey => $bvalue) {
+                $statement->bindValue($bkey, $bvalue);
+            }
+        }
+
+        $response = $statement->execute();
+
+        return $response;
+    }
+
+    public function delete($table, $where) {
+
+        $query = 'DELETE FROM ' . $table . ' ';
+
+        if ($where != null) {
+            $query .= ' WHERE ';
+            foreach ($where as $where_k => $where_v) {
+                !empty($where_v['op']) ? $operator = $where_v['op'] : $operator = '=';
+                !empty($where_v['logic']) ? $logic = $where_v['logic'] : $logic = 'AND';
+
+                $query .= ' "' . $where_k . '" ' . $operator . ' :' . $where_k;
+                if ($where_v != end($where)) {
+                    $query .= ' ' . $operator . ' ';
+                }
+                $bind_values[':' . $where_k] = $where_v['value'];
+            }
+        }
+
         $this->querys[] = $query;
         $statement = $this->db->prepare($query);
 
@@ -175,7 +252,7 @@ class newDB {
         return $rows;
     }
 
-    public function lastId() {
+    public function getLastId() {
         return $this->db->lastInsertRowID();
     }
 
