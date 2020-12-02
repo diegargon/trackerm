@@ -65,8 +65,39 @@ class newDB {
         }
     }
 
+    public function addItemUniqField($table, $item, $field, $value) {
+        $id = $this->getIdByField($table, $field, $value);
+        if (empty($id)) {
+            $this->addItem($table, $item);
+            return true;
+        }
+        //item already exists
+        return false;
+    }
+
+    public function addItemsUniqField($table, $items, $field, $value) {
+        foreach ($items as $item) {
+            $this->addItemUniqField($table, $item, $field, $value);
+        }
+    }
+
+    //TODO create a upsert insert and replace SQLite have it... i think
+    public function upsertItemByField($table, $item, $field, $value) {
+        $_item = $this->getItemByField($table, $field, $value);
+        if (!empty($_item)) {
+            echo "\nupser actualiza";
+            $this->updateItemByField($table, $item, $field, $value);
+            return true;
+        } else {
+            echo "\nupsert crea nuevo";
+            $this->addItem($table, $item);
+            return true;
+        }
+
+        return false;
+    }
+
     public function getItemById($table, $id) {
-        //select($table, $what = null, $where = null, $extra = null)
         $where['id'] = ['value' => $id];
         $result = $this->select($table, null, $where, 'LIMIT 1');
         $row = $this->fetch($result);
@@ -83,24 +114,38 @@ class newDB {
         return $row;
     }
 
+    public function getIdByField($table, $field, $value) {
+        $where[$field] = ['value' => $value];
+        $result = $this->select($table, 'id', $where, 'LIMIT 1');
+        $row = $this->fetch($result);
+        $this->finalize($result);
+        return $row['id'];
+    }
+
     public function updateItemById($table, $id, $values) {
         $where['id'] = ['value' => $id];
 
         $this->update($table, $values, $where, 'LIMIT 1');
     }
 
+    public function updateItemByField($table, $item, $field, $value) {
+        $where[$field] = ['value' => $value];
+
+        $this->update($table, $item, $where, 'LIMIT 1');
+    }
+
     public function getTableData($table) {
         return $this->select($table);
     }
 
-    public function deleteById($table, $id) {
+    public function deleteItemById($table, $id) {
         $where['id'] = ['value' => $id];
         $this->delete($table, $where, 'LIMIT 1');
     }
 
-    public function updateById($table, $id, $set) {
-        $where['id'] = ['value' => $id];
-        $this->update($table, $set, $where, 'LIMIT 1');
+    public function deleteItemByField($table, $field, $value) {
+        $where[$field] = ['value' => $value];
+        $this->delete($table, $where, 'LIMIT 1');
     }
 
     //exact mean word separated with spaces don't known yet if works like this possible TODO/FIX
@@ -243,7 +288,7 @@ class newDB {
         $query .= ' SET ';
         foreach ($set as $set_k => $set_v) {
             $query .= ' "' . $set_k . '" = ' . ':' . $set_k;
-
+            ($set_v != end($set)) ? $query .= ', ' : null;
             $bind_values[':' . $set_k] = $set_v;
         }
 
