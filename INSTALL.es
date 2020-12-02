@@ -61,6 +61,10 @@ Apache+Php (o similar), Jacket, Transmission, Composer, cuenta+api key themovied
 
         $ composer require irazasyed/php-transmission-sdk  php-http/httplug-pack  php-http/guzzle6-adapter
 
+    * sqlite3 posiblemente utilice esta base de datos (aun no la estoy utilizando) normalmente viene instalada por defecto
+    en muchas distros, hay que activarla tambien para apache/php
+        $ apt-get install php-sqlite3
+
 ## CONFIGURACION
     Toda las opcines personalizables de configuración van en /etc/trackerm.conf copie el archivo de la carpeta /config/config.min.php 
     a /etc y renombrelo como trackerm.conf y configurelo.

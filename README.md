@@ -35,7 +35,12 @@ Seguridad y mejor codigo vendra mucho mas despacio.
 ## Requeriments
 
     Linux - PHP - Web Server - transmission-daemon - Jackett - themoviedb.org account&API key
-    composer - 
+    composer - sqlite3(not yet but probably)
+
+    Version Compatibility? it's not the momment. I working on:
+    Ubuntu 20.04
+    Php 7.4
+    Sqlite 3.31.1
 
 ## INSTALL
 

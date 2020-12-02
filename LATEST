@@ -1,5 +1,6 @@
-## Latest (Relevant)
+## Latest / News (Relevant)
 
+[02/12] Finnally begin working (slow) for use a real database, the winner was sqlite3. That going to take some weeks.
 [01/12] Change and simplify messy wanted code. You must remove cache/wanted.db (you lost all wanted items)
 [01/12] Thinking in begin to use a real database system. ATM i save the content in JSON format files. Easy corrupted and
         not multiuser friendly. Normally i use Mysql, but seems disproportionate, so i'm hesitating a lot. 
