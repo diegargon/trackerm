@@ -121,25 +121,25 @@ function view() {
 function view_extra_movies($item, $opt = null) {
     global $LNG, $filter;
 
-    /*
-      $id = $filter->getInt('id');
-      $page = $filter->getString('page');
-      $type = $filter->getString('type');
-     */
+
+    $id = $filter->getInt('id');
+    $page = $filter->getString('page');
+    $type = $filter->getString('type');
+
 
     $extra = '';
 
     $extra .= '<form method="GET" action="">';
-    $extra .= '<input type="hidden" name="page" value="' . $_GET['page'] . '"/>';
-    $extra .= '<input type="hidden" name="id" value="' . $_GET['id'] . '"/>';
-    $extra .= '<input type="hidden" name="type" value="' . $_GET['type'] . '"/>';
+    $extra .= '<input type="hidden" name="page" value="' . $page . '"/>';
+    $extra .= '<input type="hidden" name="id" value="' . $id . '"/>';
+    $extra .= '<input type="hidden" name="type" value="' . $type . '"/>';
     $extra .= '<input class="submit_btn" type="submit" name="more_movies" value="' . $LNG['L_SEARCH_MOVIES'] . '" >';
     $extra .= '<input class="submit_btn" type="submit" name="more_torrents" value="' . $LNG['L_SHOW_TORRENTS'] . '" >';
 
     $title = getFileTitle($item['title']);
 
     if (!empty($_GET['search_movie_db'])) {
-        $stitle = trim($_GET['search_movie_db']);
+        $stitle = trim($filter->getString('search_movie_db'));
     } else {
         $stitle = $title;
     }
@@ -170,21 +170,25 @@ function view_extra_movies($item, $opt = null) {
 }
 
 function view_extra_shows($item, $opt) {
-    global $LNG;
+    global $LNG, $filter;
+
+    $page = $filter->getInt('page');
+    $id = $filter->getInt('id');
+    $type = $filter->getString('type');
 
     $extra = '';
 
     $extra .= '<form method="GET">';
-    $extra .= '<input type="hidden" name="page" value="' . $_GET['page'] . '"/>';
-    $extra .= '<input type="hidden" name="id" value="' . $_GET['id'] . '"/>';
-    $extra .= '<input type="hidden" name="type" value="' . $_GET['type'] . '"/>';
+    $extra .= '<input type="hidden" name="page" value="' . $page . '"/>';
+    $extra .= '<input type="hidden" name="id" value="' . $id . '"/>';
+    $extra .= '<input type="hidden" name="type" value="' . $type . '"/>';
     $extra .= '<input class="submit_btn" type="submit" name="more_shows" value="' . $LNG['L_SEARCH_SHOWS'] . '" >';
     $extra .= '<input class="submit_btn" type="submit" name="more_torrents" value="' . $LNG['L_SHOW_TORRENTS'] . '" >';
 
     $title = getFileTitle($item['title']);
 
     if (!empty($_GET['search_shows_db'])) {
-        $stitle = trim($_GET['search_shows_db']);
+        $stitle = trim($filter->getString('search_shows_db'));
     } else {
         $stitle = $title;
     }
@@ -200,7 +204,7 @@ function view_extra_shows($item, $opt) {
     }
 
     if (
-            isset($_GET['more_torrents']) || (!empty($opt['auto_show_torrents']) && !isseT($_GET['more_shows']))
+            isset($_GET['more_torrents']) || (!empty($opt['auto_show_torrents']) && !isset($_GET['more_shows']))
     ) {
         $extra .= search_shows_torrents($stitle);
     }
@@ -209,7 +213,7 @@ function view_extra_shows($item, $opt) {
 }
 
 function view_seasons($id, $update = false) {
-    global $db, $LNG;
+    global $db, $LNG, $filter;
 
     $seasons_data = '';
     $episode_data = '';
@@ -226,8 +230,12 @@ function view_seasons($id, $update = false) {
         $item = mediadb_getSeasons($id, $update);
     }
 
-    if (!empty($_GET['wanted']) && !empty($_GET['season']) && !empty($_GET['episode'])) {
-        wanted_episode($id, $_GET['season'], $_GET['episode']);
+    $wanted = $filter->getInt('wanted');
+    $season = $filter->getInt('season');
+    $episode = $filter->getInt('episode');
+
+    if (!empty($wanted) && !empty($season) && !empty($episode)) {
+        wanted_episode($id, $season, $episode);
     }
     $seasons_data .= '<span>Tº' . $LNG['L_SEASONS'] . ': ' . $item['n_seasons'] . '</span><br/>';
     $seasons_data .= '<span>Tº' . $LNG['L_EPISODES'] . ': ' . $item['n_episodes'] . '</span><br/>';
@@ -243,23 +251,23 @@ function view_seasons($id, $update = false) {
 
         $seasons_data .= '<a class="season_link" href="' . $iurl . '&season=' . $i . '">' . $LNG['L_SEASON'] . ': ' . $i . '</a>';
 
-        if (isset($_GET['season']) && $_GET['season'] == $i) {
+        if (isset($season) && $season == $i) {
             $episode_data = '<div class="divTable">';
             $have_episodes = [];
-            foreach ($seasons[$i]['episodes'] as $num => $episode) {
+            foreach ($seasons[$i]['episodes'] as $num => $episode_db) {
                 $episode_data .= '<div class="divTableRow">';
 
                 $have = check_if_have_show($id, $i, $num);
                 $episode_data .= '<div class="divTableCellEpisodes">' . $num . '</div>';
                 if ($have !== false) {
                     $have_episodes[] = $num;
-                    $episode_data .= '<div class="divTableCellEpisodes" style="color:yellow;">' . $episode['title'] . '</div>';
+                    $episode_data .= '<div class="divTableCellEpisodes" style="color:yellow;">' . $episode_db['title'] . '</div>';
                     $episode_data .= '<div class="divTableCellEpisodes">';
                     $episode_data .= '<a class="episode_link" href="?page=download&type=shows_library&id=' . $have['id'] . '">';
                     $episode_data .= $LNG['L_DOWNLOAD'];
                     $episode_data .= '</a></div>';
                 } else {
-                    $episode_data .= '<div class="divTableCellEpisodes">' . $episode['title'] . '</div>';
+                    $episode_data .= '<div class="divTableCellEpisodes">' . $episode_db['title'] . '</div>';
                     $episode_data .= '<div class="divTableCellEpisodes">';
                     $episode_data .= '<a class="episode_link" href="' . $iurl . '&wanted=1&season=' . $i . '&episode=' . $num . '">';
                     $episode_data .= $LNG['L_WANTED'];
