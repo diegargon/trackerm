@@ -139,7 +139,11 @@ class newDB {
     }
 
     public function getTableData($table) {
-        return $this->select($table);
+        $result = $this->select($table);
+        $rows = $this->fetchAll($result);
+        $this->finalize($result);
+
+        return $rows;
     }
 
     public function deleteItemById($table, $id) {

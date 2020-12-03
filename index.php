@@ -30,10 +30,8 @@ if (!empty($_GET['download'])) {
         'themoviedb_id' => !empty($themoviedb_id) ? $wanted_db[0]['themoviedb_id'] = $themoviedb_id : null,
         'direct' => 1,
         'profile' => (int) $cfg['profile'],
-        'added' => time(),
     ];
-
-    $db->addUniqElements('wanted', $wanted_db, 'tid');
+    $newdb->addItemUniqField('wanted', $wanted_db, 'tid');
 }
 
 if (!isset($req_page) || $req_page == '') {

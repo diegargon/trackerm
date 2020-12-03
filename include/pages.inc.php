@@ -448,7 +448,7 @@ function page_torrents() {
 }
 
 function page_wanted() {
-    global $LNG, $cfg, $db, $filter;
+    global $LNG, $cfg, $newdb, $filter;
 
     $want = [];
 
@@ -456,23 +456,23 @@ function page_wanted() {
         $wanted_mfy = $filter->postInt('check_day');
         foreach ($wanted_mfy as $w_mfy_id => $w_mfy_value) {
             $day_check['day_check'] = $w_mfy_value;
-            $db->updateRecordById('wanted', $w_mfy_id, $day_check);
+            $newdb->updateItemById('wanted', $w_mfy_id, $day_check);
         }
     }
 
     isset($_GET['id']) ? $wanted_id = $_GET['id'] : $wanted_id = false;
     isset($_GET['media_type']) ? $wanted_type = $_GET['media_type'] : $wanted_type = false;
-    isset($_GET['delete']) ? $db->deleteById('wanted', $_GET['delete']) : null;
+    isset($_GET['delete']) && $filter->getInt('delete') ? $newdb->deleteItemById('wanted', $filter->getInt('delete')) : null;
 
     if (isset($_GET['ignore'])) {
         $ignore_id = $_GET['ignore'];
-        $wanted_ignore_item = $db->getItemById('wanted', $ignore_id);
+        $wanted_ignore_item = $newdb->getItemById('wanted', $ignore_id);
         if (empty($wanted_ignore_item['ignore'])) {
             $update['ignore'] = 1;
         } else {
             $update['ignore'] = 0;
         }
-        $db->updateRecordById('wanted', $ignore_id, $update);
+        $newdb->updateItemById('wanted', $ignore_id, $update);
     }
 
     if ($wanted_id !== false && $wanted_type !== false && $wanted_type == 'movies') {

@@ -10,13 +10,13 @@
 !defined('IN_WEB') ? exit : true;
 
 function wanted_list() {
-    global $db, $cfg, $LNG, $trans;
+    global $newdb, $cfg, $LNG, $trans;
     $iurl = '?page=wanted';
 
     //update wanted agains transmission-daemon
     $trans->updateWanted();
 
-    $wanted_list = $db->getTableData('wanted');
+    $wanted_list = $newdb->getTableData('wanted');
 
     if (!empty($wanted_list)) {
         $wanted_list_data = '';
@@ -35,7 +35,7 @@ function wanted_list() {
             }
             !empty($wanted_item['ignore']) ? $tdata['ignore_link'] = $LNG['L_UNIGNORE'] : $tdata['ignore_link'] = $LNG['L_IGNORE'];
             $wanted_item['day_check'] = day_check($wanted_item['id'], $wanted_item['day_check']);
-            $wanted_item['added'] = strftime("%x", $wanted_item['added']);
+            $wanted_item['added'] = strftime("%x", strtotime($wanted_item['added']));
             !empty($wanted_item['last_check']) ? $wanted_item['last_check'] = strftime("%A %H:%M", $wanted_item['last_check']) : $wanted_item['last_check'] = $LNG['L_NEVER'];
             $mediadb_item = mediadb_getByDbId($wanted_item['media_type'], $wanted_item['themoviedb_id']);
             !empty($mediadb_item) ? $tdata['elink'] = $mediadb_item['elink'] : null;
@@ -48,10 +48,10 @@ function wanted_list() {
 }
 
 function wanted_movies($wanted_id) {
-    global $db, $cfg, $log;
+    global $newdb, $cfg, $log;
 
     $item = [];
-    $wanted_item = [];
+
     $wanted_type = 'movies';
 
     $item = mediadb_getByDbId('movies', $wanted_id);
@@ -61,25 +61,24 @@ function wanted_movies($wanted_id) {
         return false;
     }
 
-    $id = $db->getLastId('wanted');
-    $wanted_item[$id]['id'] = $id;
-    $wanted_item[$id]['themoviedb_id'] = $item['themoviedb_id'];
-    $wanted_item[$id]['title'] = $item['title'];
-    $wanted_item[$id]['added'] = time();
-    $wanted_item[$id]['day_check'] = 0;
-    $wanted_item[$id]['last_check'] = '';
-    $wanted_item[$id]['direct'] = 0;
-    $wanted_item[$id]['wanted_status'] = -1;
-    $wanted_item[$id]['media_type'] = $wanted_type;
-    $wanted_item[$id]['profile'] = (int) $cfg['profile'];
-    $db->addUniqElements('wanted', $wanted_item, 'themoviedb_id');
+    $wanted_item = [
+        'themoviedb_id' => $item['themoviedb_id'],
+        'title' => $item['title'],
+        'added' => time(),
+        'day_check' => 0,
+        'last_check' => '',
+        'direct' => 0,
+        'wanted_status' => -1,
+        'media_type' => $wanted_type,
+        'profile' => (int) $cfg['profile'],
+    ];
+
+    $newdb->addItemUniqField('wanted', $wanted_item, 'themoviedb_id');
 }
 
 function wanted_episode($id, $season, $episodes) {
-    global $db, $cfg;
+    global $newdb, $cfg;
 
-    $wanted_item = [];
-    //echo $id .':'. $season .':'. $episode .'<br>';
     if (strlen($season) == 1) {
         $season = "0" . $season;
     }
@@ -94,20 +93,19 @@ function wanted_episode($id, $season, $episodes) {
         $item = mediadb_getByDbId('shows', $id);
         $title_search = $item['title'] . ' S' . $season . 'E' . $episode;
 
-        $wanted_item[$id]['id'] = $db->getLastId('wanted');
-        $wanted_item[$id]['themoviedb_id'] = $item['themoviedb_id'];
-        $wanted_item[$id]['title'] = $title_search;
-        $wanted_item[$id]['added'] = time();
-        $wanted_item[$id]['day_check'] = 0;
-        $wanted_item[$id]['last_check'] = '';
-        $wanted_item[$id]['direct'] = 0;
-        $wanted_item[$id]['wanted_status'] = -1;
-        $wanted_item[$id]['media_type'] = 'shows';
-        $wanted_item[$id]['season'] = $season;
-        $wanted_item[$id]['episode'] = $episode;
-        $wanted_item[$id]['profile'] = (int) $cfg['profile'];
-
-        $db->addUniqElements('wanted', $wanted_item, 'title');
+        $wanted_item = [
+            'themoviedb_id' => $item['themoviedb_id'],
+            'title' => $title_search,
+            'day_check' => 0,
+            'last_check' => '',
+            'direct' => 0,
+            'wanted_status' => -1,
+            'media_type' => 'shows',
+            'season' => $season,
+            'episode' => $episode,
+            'profile' => (int) $cfg['profile'],
+        ];
+        $newdb->addItemUniqField('wanted', $wanted_item, 'title');
     }
 }
 

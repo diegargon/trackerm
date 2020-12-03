@@ -94,45 +94,50 @@ class TorrentServer {
     }
 
     public function updateWanted() {
-        global $db;
+        global $newdb;
 
         $trans = $this->getAll();
 
         $tids = [];
         foreach ($trans as $item) {
+
             $item['status'] == 0 && $item['percentDone'] == 1 ? $status = 8 : $status = $item['status'];
 
             $tids[] = $item['id'];
 
-            $wanted_item = $db->getItemByField('wanted', 'tid', $item['id']);
+            $wanted_item = $newdb->getItemByField('wanted', 'tid', $item['id']);
+
             if ($wanted_item && ($wanted_item['wanted_status'] != $status)) {
-                $wanted_item['wanted_status'] = $status;
-                $db->upsertElementById('wanted', $wanted_item['id'], $wanted_item);
+                $update_ary['wanted_status'] = $status;
+                $update_ary['id'] = $wanted_item['id'];
+                $newdb->upsertItemByField('wanted', $update_ary, 'id');
             }
         }
         // check if all wanted started are in transmission if not is probably remove from OUTAPP. change status to 10 deleted.
-        $wanted_db = $db->getTableData('wanted');
+        $wanted_db = $newdb->getTableData('wanted');
 
         foreach ($wanted_db as $wanted_item) {
-            if (($wanted_item['direct'] !== 1) && ($wanted_item['wanted_status'] > 0) &&
-                    ($wanted_item['wanted_status'] < 9) && !in_array($wanted_item['id'], $tids)) {
-                $wanted_item['wanted_status'] = 10;
-                $db->upsertElementById('wanted', $wanted_item['id'], $wanted_item);
+            if (($wanted_item['direct'] !== 1) && ($wanted_item['wanted_status'] > 1) &&
+                    ($wanted_item['wanted_status'] < 9) && !in_array($wanted_item['tid'], $tids)) {
+                $update_ary['wanted_status'] = 10;
+                $update_ary['id'] = $wanted_item['id'];
+                $newdb->upsertItemByField('wanted', $update_ary, 'id');
             }
         }
     }
 
     private function setWantedDelete($ids) {
-        global $db, $log, $LNG;
+        global $newdb, $log, $LNG;
         foreach ($ids as $id) {
-            $wanted_item = $db->getItemByField('wanted', 'tid', $id);
+            $wanted_item = $newdb->getItemByField('wanted', 'tid', $id);
             if ($wanted_item !== false) {
                 if (isset($wanted_item['direct']) && $wanted_item['direct'] == 1) {
-                    $db->deleteById('wanted', $wanted_item['id']);
+                    $newdb->deleteItemById('wanted', $wanted_item['id']);
                 } else if (empty($wanted_item['direct']) && ($wanted_item['wanted_status'] != 9)) {
                     $wanted_item['wanted_status'] = 10;
-                    $log->addStateMsgs($LNG['L_TOR_MAN_DEL'] . " id: {$wanteed_item['title']}");
-                    $db->upsertElementById('wanted', $wanted_item['id'], $wanted_item);
+                    $log->addStateMsg($LNG['L_TOR_MAN_DEL'] . " id: {$wanted_item['title']}");
+                    $newdb->upsertItemByField('wanted', $wanted_item, 'id');
+                    //$db->upsertElementById('wanted', $wanted_item['id'], $wanted_item);
                 }
             }
         }

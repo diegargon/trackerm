@@ -80,14 +80,14 @@ function transmission_scan() {
 }
 
 function getRightTorrents() {
-    global $cfg, $db, $log, $trans;
+    global $cfg, $log, $trans, $newdb;
 
     $finished_list = [];
     $seeding_list = [];
 
     $transfers = $trans->getAll();
 
-    $wanted_db = $db->getTableData('wanted');
+    $wanted_db = $newdb->getTableData('wanted');
 
     if ($cfg['MOVE_ONLY_INAPP'] && empty($wanted_db)) {
         $log->debug(" No Torrents (INAPP set)");
@@ -139,7 +139,7 @@ function getRightTorrents() {
 }
 
 function MovieJob($item, $linked = false) {
-    global $cfg, $log, $trans, $db, $LNG;
+    global $cfg, $log, $trans, $newdb, $LNG;
 
     $orig_path = $cfg['TORRENT_FINISH_PATH'] . '/' . $item['dirname'];
     $files_dir = scandir_r($orig_path);
@@ -221,11 +221,13 @@ function MovieJob($item, $linked = false) {
                     file_exists(dirname($valid_file) . '/trackerm-unrar') ? unlink(dirname($valid_file) . '/trackerm-unrar') : null;
                     $trans->delete($ids);
 
-                    $wanted_item = $db->getItemByField('wanted', 'tid', $item['tid']);
+                    $wanted_item = $newdb->getItemByField('wanted', 'tid', $item['tid']);
                     if (!empty($wanted_item)) {
                         $log->debug(" Setting to moved wanted id: " . $wanted_item['wanted_id']);
                         $update_ary['wanted_status'] = 9;
-                        $db->updateRecordById('wanted', $wanted_item['wanted_id'], $update_ary);
+                        $update_ary['id'] = $wanted_item['wanted_id'];
+                        $newdb->updateItemByField('wanted', $update_ary, 'id');
+                        //$db->updateRecordById('wanted', $wanted_item['wanted_id'], $update_ary);
                     }
                 }
             } else {
@@ -239,7 +241,7 @@ function MovieJob($item, $linked = false) {
 }
 
 function ShowJob($item, $linked = false) {
-    global $cfg, $db, $LNG, $trans, $log;
+    global $cfg, $newdb, $LNG, $trans, $log;
 
     $orig_path = $cfg['TORRENT_FINISH_PATH'] . '/' . $item['dirname'];
 
@@ -346,11 +348,13 @@ function ShowJob($item, $linked = false) {
                     file_exists(dirname($valid_file) . '/trackerm-unrar') ? unlink(dirname($valid_file) . '/trackerm-unrar') : null;
                     $trans->delete($ids);
 
-                    $wanted_item = $db->getItemByField('wanted', 'tid', $item['tid']);
+                    $wanted_item = $newdb->getItemByField('wanted', 'tid', $item['tid']);
                     if (!empty($wanted_item)) {
                         $log->debug(" Setting to moved wanted id: " . $wanted_item['id']);
                         $update_ary['wanted_status'] = 9;
-                        $db->updateRecordById('wanted', $wanted_item['id'], $update_ary);
+                        $update_ary['id'] = $wanted_item['id'];
+                        $newdb->updateItemByField('wanted', $update_ary, 'id');
+                        //$db->updateRecordById('wanted', $wanted_item['id'], $update_ary);
                     }
                 }
             } else {
@@ -394,11 +398,11 @@ function linking_media($valid_file, $final_dest_path) {
 }
 
 function wanted_work() {
-    global $db, $cfg, $LNG, $log, $trans;
+    global $newdb, $cfg, $LNG, $log, $trans;
 
     $day_of_week = date("w");
 
-    $wanted_list = $db->getTableData('wanted');
+    $wanted_list = $newdb->getTableData('wanted');
     if (empty($wanted_list) || $wanted_list < 1) {
         $log->debug(" Wanted list empty");
         return false;
@@ -534,7 +538,7 @@ function wanted_check_flags($results) {
 }
 
 function send_transmission($results) {
-    global $db, $cfg, $trans;
+    global $newdb, $cfg, $trans;
 
     //var_dump($results);
     foreach ($results as $result) {
@@ -559,7 +563,8 @@ function send_transmission($results) {
         $update_ary['last_check'] = time();
         $update_ary['first_check'] = 1;
 
-        $db->updateRecordById('wanted', $result['wanted_id'], $update_ary);
+
+        $newdb->updateItemById('wanted', $result['wanted_id'], $update_ary);
     }
     return true;
 }
