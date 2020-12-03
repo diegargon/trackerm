@@ -47,6 +47,17 @@ $cfg['shows_categories'] = [
     5080 => 'TV/Documentary'
 ];
 
+$cfg['CHECK_DAYS'] = [
+    0 => 'L_DAY_ALL',
+    1 => 'L_DAY_MON',
+    2 => 'L_DAY_TUE',
+    3 => 'L_DAY_WED',
+    4 => 'L_DAY_THU',
+    5 => 'L_DAY_FRI',
+    6 => 'L_DAY_SAT',
+    7 => 'L_DAY_SUN',
+];
+
 $cfg['categories'] = $cfg['movies_categories'] + $cfg['shows_categories'];
 $cfg['VERSION'] = 'A72';
 

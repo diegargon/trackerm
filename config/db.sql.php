@@ -184,6 +184,24 @@ function create_db() {
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
         )');
 
+    //WANTED
+    $newdb->query('CREATE TABLE IF NOT EXISTS "wanted" (
+                    "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                    "themoviedb_id" INTEGER NULL,
+                    "title" VARCHAR NULL,
+                    "season" INTEGER  NULL,
+                    "episode" INTEGER NULL,
+                    "quality" INTEGER NULL,
+                    "ignores" INTEGER NULL,
+                    "day_check" INTEGER NULL,
+                    "last_check INTEGER NULL,
+                    "direct" INTEGER NULL,
+                    "wanted_status" INTEGER NULL,
+                    "media_type" VARCHAR NULL,
+                    "profile" INTEGER NULL,
+                    "added" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                    "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+        )');
     //SHOWS DETAILS
     $newdb->query('CREATE TABLE IF NOT EXISTS "shows_details" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -197,6 +215,7 @@ function create_db() {
                     "release" VARCHAR NULL,
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
                 )');
+
     //Jacket
 }
 

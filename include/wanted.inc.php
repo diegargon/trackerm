@@ -65,10 +65,8 @@ function wanted_movies($wanted_id) {
     $wanted_item[$id]['id'] = $id;
     $wanted_item[$id]['themoviedb_id'] = $item['themoviedb_id'];
     $wanted_item[$id]['title'] = $item['title'];
-    $wanted_item[$id]['qualitys'] = $cfg['TORRENT_QUALITYS_PREFS'];
-    $wanted_item[$id]['ignores'] = $cfg['TORRENT_IGNORES_PREFS'];
     $wanted_item[$id]['added'] = time();
-    $wanted_item[$id]['day_check'] = 'L_DAY_ALL';
+    $wanted_item[$id]['day_check'] = 0;
     $wanted_item[$id]['last_check'] = '';
     $wanted_item[$id]['direct'] = 0;
     $wanted_item[$id]['wanted_status'] = -1;
@@ -99,10 +97,8 @@ function wanted_episode($id, $season, $episodes) {
         $wanted_item[$id]['id'] = $db->getLastId('wanted');
         $wanted_item[$id]['themoviedb_id'] = $item['themoviedb_id'];
         $wanted_item[$id]['title'] = $title_search;
-        $wanted_item[$id]['qualitys'] = $cfg['TORRENT_QUALITYS_PREFS'];
-        $wanted_item[$id]['ignores'] = $cfg['TORRENT_IGNORES_PREFS'];
         $wanted_item[$id]['added'] = time();
-        $wanted_item[$id]['day_check'] = 'L_DAY_ALL';
+        $wanted_item[$id]['day_check'] = 0;
         $wanted_item[$id]['last_check'] = '';
         $wanted_item[$id]['direct'] = 0;
         $wanted_item[$id]['wanted_status'] = -1;
@@ -121,41 +117,41 @@ function day_check($id, $day_time) {
     $data = '';
     $sel_all = $sel_mon = $sel_tue = $sel_wed = $sel_thu = $sel_fri = $sel_sat = $sel_sun = '';
     switch ($day_time) {
-        case 'L_DAY_ALL':
+        case 0:
             $sel_all = 'selected';
             break;
-        case 'L_DAY_MON':
+        case 1:
             $sel_mon = 'selected';
             break;
-        case 'L_DAY_TUE':
+        case 2:
             $sel_tue = 'selected';
             break;
-        case 'L_DAY_WED':
+        case 3:
             $sel_wed = 'selected';
             break;
-        case 'L_DAY_THU':
+        case 4:
             $sel_thu = 'selected';
             break;
-        case 'L_DAY_FRI':
+        case 5:
             $sel_fri = 'selected';
             break;
-        case 'L_DAY_SAT':
+        case 6:
             $sel_sat = 'selected';
             break;
-        case 'L_DAY_SUN':
+        case 7:
             $sel_sun = 'selected';
             break;
     }
     $data .= '<form class="form_inline" method="POST" action="">';
     $data .= '<select onchange="this.form.submit()" name="check_day[' . $id . ']">';
-    $data .= '<option ' . $sel_all . ' value="L_DAY_ALL">' . $LNG['L_DAY_ALL'] . '</option>';
-    $data .= '<option ' . $sel_mon . ' value="L_DAY_MON">' . $LNG['L_DAY_MON']['name'] . '</option>';
-    $data .= '<option ' . $sel_tue . ' value="L_DAY_TUE">' . $LNG['L_DAY_TUE']['name'] . '</option>';
-    $data .= '<option ' . $sel_wed . ' value="L_DAY_WED">' . $LNG['L_DAY_WED']['name'] . '</option>';
-    $data .= '<option ' . $sel_thu . ' value="L_DAY_THU">' . $LNG['L_DAY_THU']['name'] . '</option>';
-    $data .= '<option ' . $sel_fri . ' value="L_DAY_FRI">' . $LNG['L_DAY_FRI']['name'] . '</option>';
-    $data .= '<option ' . $sel_sat . ' value="L_DAY_SAT">' . $LNG['L_DAY_SAT']['name'] . '</option>';
-    $data .= '<option ' . $sel_sun . ' value="L_DAY_SUN">' . $LNG['L_DAY_SUN']['name'] . '</option>';
+    $data .= '<option ' . $sel_all . ' value="0">' . $LNG['L_DAY_ALL'] . '</option>';
+    $data .= '<option ' . $sel_mon . ' value="1">' . $LNG['L_DAY_MON'] . '</option>';
+    $data .= '<option ' . $sel_tue . ' value="2">' . $LNG['L_DAY_TUE'] . '</option>';
+    $data .= '<option ' . $sel_wed . ' value="3">' . $LNG['L_DAY_WED'] . '</option>';
+    $data .= '<option ' . $sel_thu . ' value="4">' . $LNG['L_DAY_THU'] . '</option>';
+    $data .= '<option ' . $sel_fri . ' value="5">' . $LNG['L_DAY_FRI'] . '</option>';
+    $data .= '<option ' . $sel_sat . ' value="6">' . $LNG['L_DAY_SAT'] . '</option>';
+    $data .= '<option ' . $sel_sun . ' value="7">' . $LNG['L_DAY_SUN'] . '</option>';
     $data .= '</select>';
     $data .= '</form>';
 

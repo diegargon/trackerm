@@ -448,12 +448,12 @@ function page_torrents() {
 }
 
 function page_wanted() {
-    global $LNG, $cfg, $db;
+    global $LNG, $cfg, $db, $filter;
 
     $want = [];
 
     if (isset($_POST['check_day'])) {
-        $wanted_mfy = $_POST['check_day'];
+        $wanted_mfy = $filter->postInt('check_day');
         foreach ($wanted_mfy as $w_mfy_id => $w_mfy_value) {
             $day_check['day_check'] = $w_mfy_value;
             $db->updateRecordById('wanted', $w_mfy_id, $day_check);
