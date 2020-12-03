@@ -66,7 +66,8 @@ class newDB {
         }
     }
 
-    public function addItemUniqField($table, $item, $field, $value) {
+    public function addItemUniqField($table, $item, $field) {
+        $value = $item[$field];
         $id = $this->getIdByField($table, $field, $value);
         if (empty($id)) {
             $this->addItem($table, $item);
@@ -76,18 +77,19 @@ class newDB {
         return false;
     }
 
-    public function addItemsUniqField($table, $items, $field, $value) {
+    public function addItemsUniqField($table, $items, $field) {
         foreach ($items as $item) {
-            $this->addItemUniqField($table, $item, $field, $value);
+            $this->addItemUniqField($table, $item, $field);
         }
     }
 
     //TODO create a upsert insert and replace SQLite have it... i think
-    public function upsertItemByField($table, $item, $field, $value) {
+    public function upsertItemByField($table, $item, $field) {
+        $value = $item[$field];
         $_item = $this->getItemByField($table, $field, $value);
         if (!empty($_item)) {
             $this->log->debug("upser actualiza");
-            $this->updateItemByField($table, $item, $field, $value);
+            $this->updateItemByField($table, $item, $field);
             return true;
         } else {
             $this->log->debug("upsert crea nuevo");
@@ -120,7 +122,8 @@ class newDB {
         $result = $this->select($table, 'id', $where, 'LIMIT 1');
         $row = $this->fetch($result);
         $this->finalize($result);
-        return $row['id'];
+
+        return ($row) ? $row['id'] : false;
     }
 
     public function updateItemById($table, $id, $values) {
@@ -129,8 +132,8 @@ class newDB {
         $this->update($table, $values, $where, 'LIMIT 1');
     }
 
-    public function updateItemByField($table, $item, $field, $value) {
-        $where[$field] = ['value' => $value];
+    public function updateItemByField($table, $item, $field) {
+        $where[$field] = ['value' => $item[$field]];
 
         $this->update($table, $item, $where, 'LIMIT 1');
     }
@@ -158,6 +161,7 @@ class newDB {
         } else {
             $query .= "'% " . $value . " %'";
         }
+        !empty($extra) ? $query .= ' ' . $extra : null;
         $this->query($query);
     }
 
@@ -168,12 +172,13 @@ class newDB {
         $query_binds = '';
         $query_keys = '';
         $bind_values = [];
+
         foreach ($values as $key => $value) {
             $query_keys .= '"' . $key . '"';
             $query_binds .= ':' . $key;
             $bind_values[':' . $key] = $value;
 
-            if ($value != end($values)) {
+            if ($key != array_key_last($values)) {
                 $query_keys .= ', ';
                 $query_binds .= ', ';
             }
@@ -222,14 +227,15 @@ class newDB {
                 !empty($where_v['logic']) ? $logic = $where_v['logic'] : $logic = 'AND';
 
                 $query .= ' "' . $where_k . '" ' . $operator . ' :' . $where_k;
-                if ($where_v != end($where)) {
-                    $query .= ' ' . $operator . ' ';
+                if ($where_k != array_key_last($where)) {
+                    $query .= ' ' . $logic . ' ';
                 }
                 $bind_values[':' . $where_k] = $where_v['value'];
             }
         }
         !empty($extra) ? $query .= ' ' . $extra : null;
         $this->querys[] = $query;
+
         $statement = $this->db->prepare($query);
 
         if (!empty($bind_values)) {
@@ -254,8 +260,8 @@ class newDB {
                 !empty($where_v['logic']) ? $logic = $where_v['logic'] : $logic = 'AND';
 
                 $query .= ' "' . $where_k . '" ' . $operator . ' :' . $where_k;
-                if ($where_v != end($where)) {
-                    $query .= ' ' . $operator . ' ';
+                if ($where_k != array_key_last($where)) {
+                    $query .= ' ' . $logic . ' ';
                 }
                 $bind_values[':' . $where_k] = $where_v['value'];
             }
@@ -287,7 +293,7 @@ class newDB {
         $query .= ' SET ';
         foreach ($set as $set_k => $set_v) {
             $query .= ' "' . $set_k . '" = ' . ':' . $set_k;
-            ($set_v != end($set)) ? $query .= ', ' : null;
+            ($set_k != array_key_last($set)) ? $query .= ', ' : null;
             $bind_values[':' . $set_k] = $set_v;
         }
 
@@ -298,7 +304,7 @@ class newDB {
                 !empty($where_v['logic']) ? $logic = $where_v['logic'] : $logic = 'AND';
 
                 $query .= ' "' . $where_k . '" ' . $operator . ' :' . $where_k;
-                if ($where_v != end($where)) {
+                if ($where_k != array_key_last($where)) {
                     $query .= ' ' . $logic . ' ';
                 }
                 $bind_values[':' . $where_k] = $where_v['value'];
@@ -327,11 +333,12 @@ class newDB {
         return $result->fetchArray(SQLITE3_ASSOC);
     }
 
-    public function fetch_all($result) {
+    public function fetchAll($result) {
         $rows = [];
-        while ($row = $result->fetchArray()) {
+        while ($row = $this->fetch($result)) {
             $rows[] = $row;
         }
+
         $this->finalize($result);
         return $rows;
     }

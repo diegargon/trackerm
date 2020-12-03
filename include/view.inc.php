@@ -10,7 +10,7 @@
 !defined('IN_WEB') ? exit : true;
 
 function view() {
-    global $cfg, $LNG, $db, $filter;
+    global $cfg, $LNG, $db, $newdb, $filter;
     $type = $filter->getString('type');
     $id = $filter->getInt('id');
 
@@ -41,8 +41,11 @@ function view() {
     }
     $other['page_type'] = $type;
 
-    $item = $db->getItemByID($t_type, $id);
-
+    if ($t_type == 'tmdb_search') {
+        $item = $newdb->getItemByID($t_type, $id);
+    } else {
+        $item = $db->getItemByID($t_type, $id);
+    }
     empty($item) ? msg_box($msg = ['title' => $LNG['L_ERRORS'], 'body' => $LNG['L_ITEM_NOT_FOUND'] . '1A1003']) : null;
 
     if ($type == 'movies_db') {

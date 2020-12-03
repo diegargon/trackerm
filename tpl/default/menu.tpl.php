@@ -9,7 +9,7 @@
 ?>
 
 <div class = "main_menu">
-    <a onClick="show_loading()" href="<?= $tdata['REL_PATH'] ?>"><div class="menu_element"><?= strtoupper($cfg['profiles'][$cfg['profile']]) ?></div></a>
+    <a onClick="show_loading()" href="<?= $tdata['REL_PATH'] ?>"><div class="menu_element"><?= strtoupper($tdata['username']) ?></div></a>
     <a onClick="show_loading()" href="?page=biblio"><div class="menu_element"><?= $tdata['L_LIBRARY'] ?></div></a>
     <a onClick="show_loading()" href="?page=news"><div class="menu_element"><?= $tdata['L_RELEASE'] ?></div></a>
     <a onClick="show_loading()" href="?page=wanted"><div class="menu_element"><?= $tdata['L_WANTED'] ?></div></a>

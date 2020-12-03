@@ -40,7 +40,7 @@ function themoviedb_searchShows($search) {
 }
 
 function themoviedb_MediaPrep($media_type, $items) {
-    global $db, $log;
+    global $db, $newdb, $log;
 
     $img_path = 'https://image.tmdb.org/t/p/w500';
 
@@ -56,6 +56,7 @@ function themoviedb_MediaPrep($media_type, $items) {
     $fitems = [];
 
     foreach ($items as $item) {
+
         if ($media_type == 'movies') {
             $title = $item['title'];
             $original_title = $item['original_title'];
@@ -65,49 +66,46 @@ function themoviedb_MediaPrep($media_type, $items) {
         }
 
         $link = $tmdb_link . $item['id'];
-        $id = $item['id'];
-        $fitems[$id]['id'] = $id;
-        $fitems[$id]['ilink'] = $media_type . '_db';
-        $fitems[$id]['media_type'] = $media_type;
-        $fitems[$id]['themoviedb_id'] = $item['id'];
-        $fitems[$id]['title'] = $title;
-        $fitems[$id]['original_title'] = $original_title;
-        $fitems[$id]['rating'] = $item['vote_average'];
-        $fitems[$id]['popularity'] = $item['popularity'];
-        $fitems[$id]['elink'] = $link;
-        if (!empty($item['poster_path'])) {
-            $fitems[$id]['poster'] = $img_path . $item['poster_path'];
-        }
-        if (!empty($item['backdrop_path'])) {
-            $fitems[$id]['scene'] = $img_path . $item['backdrop_path'];
-        }
-        $fitems[$id]['lang'] = $item['original_language'];
-        $fitems[$id]['plot'] = $item['overview'];
 
         if (isset($item['release_date'])) {
-            $fitems[$id]['release'] = $item['release_date'];
+            $release = $item['release_date'];
         } else if (isset($item['first_air_date'])) {
-            $fitems[$id]['release'] = $item['first_air_date'];
+            $release = $item['first_air_date'];
         }
 
         if ($media_type == 'movies') {
             $library_item = $db->getItemByField('biblio-movies', 'themoviedb_id', $item['id']);
             if ($library_item !== false) {
-                $fitems[$id]['in_library'] = $library_item['id'];
+                $in_library = $library_item['id'];
             }
         } else if ($media_type == 'shows') {
             $library_item = $db->getItemByField('biblio-shows', 'themoviedb_id', $item['id']);
             if ($library_item !== false) {
-                $fitems[$id]['in_library'] = $library_item['id'];
+                $in_library = $library_item['id'];
             }
         }
-        $db->addUniqElements('tmdb_search', $fitems, 'themoviedb_id');
+        $fitems[] = [
+            'ilink' => $media_type . '_db',
+            'media_type' => $media_type,
+            'themoviedb_id' => $item['id'],
+            'title' => $title,
+            'original_title' => $original_title,
+            'rating' => $item['vote_average'],
+            'popularity' => $item['popularity'],
+            'elink' => $link,
+            'poster' => !empty($item['poster_path']) ? $img_path . $item['poster_path'] : null,
+            'scene' => !empty($item['backdrop_path']) ? $img_path . $item['backdrop_path'] : null,
+            'lang' => $item['original_language'],
+            'plot' => $item['overview'],
+            'release' => $release,
+        ];
     }
+
+    $newdb->addItemsUniqField('tmdb_search', $fitems, 'themoviedb_id');
 
     if (!empty($fitems)) {
         foreach ($fitems as $key => $fitem) {
-            $id = $db->getIdByField('tmdb_search', 'themoviedb_id', $fitem['themoviedb_id']);
-            $fitems[$key]['id'] = $id;
+            $fitems[$key]['id'] = $newdb->getIdByField('tmdb_search', 'themoviedb_id', $fitem['themoviedb_id']);
         }
     }
 
@@ -182,29 +180,19 @@ function themoviedb_showsDetailsPrep($id, $seasons_data, $episodes_data) {
 }
 
 function themoviedb_getByLocalId($id) {
-    global $db;
+    global $newdb;
 
-    $search_db = $db->getTableData('tmdb_search');
+    $item = $newdb->getItemById('tmdb_search', $id);
 
-    foreach ($search_db as $item) {
-        if ($item['id'] == $id) {
-            return $item;
-        }
-    }
-    return false;
+    return $item ? $item : false;
 }
 
 function themoviedb_getByDbId($media_type, $id) {
-    global $db, $cfg, $log;
+    global $newdb, $cfg, $log;
 
-
-    $search_db = $db->getTableData('tmdb_search');
-
-    foreach ($search_db as $item) {
-        if ($item['themoviedb_id'] == $id) {
-            //$log->debug('getByDbId: Found in local db id=' . $id);
-            return $item;
-        }
+    $item = $newdb->getItemByField('tmdb_search', 'themoviedb_id', $id);
+    if ($item) {
+        return $item;
     }
 
     $log->debug('getByDbId: Not Found in local db id=' . $id);

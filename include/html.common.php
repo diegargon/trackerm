@@ -10,9 +10,9 @@
 !defined('IN_WEB') ? exit : true;
 
 function getMenu() {
-    global $cfg, $LNG;
+    global $cfg, $LNG, $user;
 
-    return getTpl('menu', array_merge($cfg, $LNG));
+    return getTpl('menu', array_merge($cfg, $LNG, $user));
 }
 
 function getFooter() {

@@ -9,11 +9,7 @@
  */
 define('IN_WEB', true);
 
-require('include/common.inc.php');
-require('include/session.inc.php');
-require('include/pages.inc.php');
-require('include/html.common.php');
-require('include/library.inc.php');
+require('include/usermode.inc.php');
 
 $req_page = $filter->getString('page');
 $body = getMenu();
@@ -28,15 +24,6 @@ if (!empty($_GET['download'])) {
         $trans_db[0][$rkey] = $rval;
     }
 
-    /*
-      $themoviedb_id = $filter->getInt('themoviedb_id');
-      !empty($themoviedb_id) ? $wanted_db[0]['themoviedb_id'] = $themoviedb_id : null; //TODO enviar para autoidentificar
-      $wanted_db[0]['tid'] = $trans_db[0]['id'];
-      $wanted_db[0]['wanted_status'] = 1;
-      $wanted_db[0]['direct'] = 1;
-      $wanted_db[0]['profile'] = (int) $cfg['profile'];
-      $wanted_db[0]['added'] = time();
-     */
     $wanted_db[] = [
         'tid' => $trans_db[0]['id'],
         'wanted_status' => 1,

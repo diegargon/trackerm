@@ -9,29 +9,26 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-require('include/prefs.inc.php');
 session_start();
 
-if (isset($_GET['profile'])) {
-    $profile = $filter->getInt('profile');
-}
+global $user;
 
-if (isset($profile) && array_key_exists($profile, $cfg['profiles'])) {
-
-    $_SESSION['profile'] = $profile;
-    setcookie("profile", $_SESSION['profile'], time() + 3600000);
-    $cfg['profile'] = $profile;
-}
-
-if (!isset($profile) && !isset($_SESSION['profile']) && isset($_COOKIE['profile']) && array_key_exists($_COOKIE['profile'], $cfg['profiles'])) {
-    $_SESSION['profile'] = $_COOKIE['profile'];
-    $cfg['profile'] = $_COOKIE['profile'];
-}
-
-if (isset($_SESSION['profile']) && array_key_exists($_SESSION['profile'], $cfg['profiles'])) {
-    $cfg['profile'] = $_SESSION['profile'];
+if (isset($_GET['userid'])) {
+    $user['uid'] = $filter->getInt('userid');
+    $_SESSION['uid'] = $user['uid'];
+    setcookie("uid", $user['uid'], time() + 3600000);
+} else if (isset($_SESSION['uid'])) {
+    $user['uid'] = $_SESSION['uid'];
+} else if (isset($_COOKIE['uid'])) {
+    $user['uid'] = $_COOKIE['uid'];
+    $_SESSION["uid"] = $user['uid'];
 } else {
-    $cfg['profile'] = 0;
+    $user['uid'] = 1; //DEFAULT;
+    $user['username'] = 'default';
 }
 
-loadPrefs();
+$user_ = get_profile($user['uid']);
+
+($user_) ? $user = $user_ : null;
+
+

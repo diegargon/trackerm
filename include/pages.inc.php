@@ -10,13 +10,13 @@
 !defined('IN_WEB') ? exit : true;
 
 function index_page() {
-    global $cfg, $LNG, $db, $log;
+    global $cfg, $user, $LNG, $log;
 
     $titems = [];
 
     // General Info
     $tdata = [];
-    $tdata['title'] = $LNG['L_IDENTIFIED'] . ': ' . strtoupper($cfg['profiles'][$cfg['profile']]);
+    $tdata['title'] = $LNG['L_IDENTIFIED'] . ': ' . strtoupper($user['username']);
     $tdata['content'] = $LNG['L_SEARCH_ENGINE'] . ': ' . '<a href="https://themoviedb.org" target=_blank>themoviedb.org</a>';
     $titems['col1'][] = getTpl('home-item', $tdata);
 
@@ -24,9 +24,12 @@ function index_page() {
     $tdata = [];
     $tdata['title'] = $LNG['L_PROFILES'];
     $tdata['content'] = '<div class="profiles">';
-    foreach ($cfg['profiles'] as $pid => $profile) {
-        $tdata['content'] .= '<a class="action_link" href="?profile=' . $pid . '">' . strtoupper($profile) . '</a>';
+
+    $users = get_profiles();
+    foreach ($users as $user) {
+        $tdata['content'] .= '<a class="action_link" href="?userid=' . $user['id'] . '">' . strtoupper($user['username']) . '</a>';
     }
+
     $tdata['content'] .= '</div>';
     $titems['col1'][] = getTpl('home-item', $tdata);
 

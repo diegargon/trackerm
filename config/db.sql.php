@@ -10,7 +10,7 @@
 function create_db() {
     global $newdb;
 
-    //DB_INFO
+    //DB_INFO DONE
 
     $newdb->query('CREATE TABLE IF NOT EXISTS "db_info" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -26,26 +26,31 @@ function create_db() {
 
     $newdb->insert('db_info', $query);
 
-    // PREFERENCES
+    // USERS DONE
+    $newdb->query('CREATE TABLE IF NOT EXISTS "users" (
+                    "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                    "username" varchar NOT NULL UNIQUE,
+                    "password" varchar NULL,
+                    "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+       )');
+
+    $query = [
+        'username' => 'default'
+    ];
+    $newdb->insert('users', $query);
+
+    // PREFERENCES DONE
 
     $newdb->query('CREATE TABLE IF NOT EXISTS "preferences" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                    "username" INTEGER NOT NULL UNIQUE,
-                    "password" VARCHAR NULL,
-                    "theme" VARCHAR NULL,
-                    "tresults_rows" INTEGER NULL,
-                    "tresults_columns" INTEGER NULL,
-                    "max_identify_items" INTEGER NULL,
-                    "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+                    "uid" INTEGER NOT NULL,
+                    "pref_name" VARCHAR NOT NULL,
+                    "pref_value" VARCHAR NOT NULL,
+                    "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                    UNIQUE (uid, pref_name)
                 )');
 
-    $query = [
-        "username" => 'default',
-    ];
-
-    $newdb->insert('preferences', $query);
-
-    // TMDB_SEARCH
+    // TMDB_SEARCH DONE
 
     $newdb->query('CREATE TABLE IF NOT EXISTS "tmdb_search" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -53,6 +58,7 @@ function create_db() {
                     "ilink" VARCHAR NULL,
                     "title" VARCHAR NOT NULL,
                     "original_title" VARCHAR NULL,
+                    "media_type" VARCHAR NULL,
                     "rating" REAL NULL,
                     "popularity" REAL NULL,
                     "elink" VARCHAR NULL,
