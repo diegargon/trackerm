@@ -216,23 +216,11 @@ function view_extra_shows($item, $opt) {
 }
 
 function view_seasons($id, $update = false) {
-    global $db, $LNG, $filter;
+    //FIX REBUILD/MESSY
+    global $newdb, $LNG, $filter;
 
     $seasons_data = '';
     $episode_data = '';
-
-    $item = $db->getItemByField('shows_details', 'themoviedb_id', $id);
-    if (
-            ($item === false) &&
-            ( ($item = mediadb_getSeasons($id, $update)) === false )
-    ) {
-        return false;
-    }
-
-    if ($item !== false && $update !== false) {
-        $item = mediadb_getSeasons($id, $update);
-    }
-
     $wanted = $filter->getInt('wanted');
     $season = $filter->getInt('season');
     $episode = $filter->getInt('episode');
@@ -240,69 +228,94 @@ function view_seasons($id, $update = false) {
     if (!empty($wanted) && !empty($season) && !empty($episode)) {
         wanted_episode($id, $season, $episode);
     }
-    $seasons_data .= '<span>Tº' . $LNG['L_SEASONS'] . ': ' . $item['n_seasons'] . '</span><br/>';
-    $seasons_data .= '<span>Tº' . $LNG['L_EPISODES'] . ': ' . $item['n_episodes'] . '</span><br/>';
-    $seasons = $item['seasons'];
+
+    //TODO SELECT ONLY ITEMS GET $season if not season get one element for nseasons
+    if (empty($season)) {
+        $item = $newdb->getItemByField('shows_details', 'themoviedb_id', $id);
+        if ($item === false || $update) {
+            mediadb_getSeasons($id);
+            $item = $newdb->getItemByField('shows_details', 'themoviedb_id', $id);
+        }
+    } else {
+        $where['themoviedb_id'] = ['value' => $id];
+        $where['season'] = ['value' => $season];
+
+        $results = $newdb->select('shows_details', null, $where);
+        $items = $newdb->fetchAll($results);
+        $newdb->finalize($results);
+        if ($items === false || $update) {
+            $items = mediadb_getSeasons($id);
+        }
+    }
+    !empty($item) ? $seasons = $item['seasons'] : $seasons = $items[0]['seasons'];
+    !empty($item) ? $episodes = $item['episodes'] : $episodes = $items[0]['episodes'];
+
+    $seasons_data .= '<span>Tº' . $LNG['L_SEASONS'] . ': ' . $seasons . '</span><br/>';
+    $seasons_data .= '<span>Tº' . $LNG['L_EPISODES'] . ': ' . $episodes . '</span><br/>';
+
     $iurl = basename($_SERVER['REQUEST_URI']);
     $iurl = preg_replace('/&season=\d{1,4}/', '', $iurl);
     $iurl = preg_replace('/&season=\d{1,4}/', '', $iurl);
     $iurl = preg_replace('/&episode=\d{1,4}/', '', $iurl);
-    for ($i = 1; $i <= $item['n_seasons']; $i++) {
-        if (!isset($seasons[$i]['episodes'])) {
-            continue;
-        }
 
+
+    for ($i = 1; $i <= $seasons; $i++) {
         $seasons_data .= '<a class="season_link" href="' . $iurl . '&season=' . $i . '">' . $LNG['L_SEASON'] . ': ' . $i . '</a>';
+    }
 
-        if (isset($season) && $season == $i) {
-            $episode_data = '<div class="divTable">';
+    $episode_data = '';
+    if ($season) {
+        $episode_data .= '<div class="divTable">';
+        foreach ($items as $item) {
             $have_episodes = [];
-            foreach ($seasons[$i]['episodes'] as $num => $episode_db) {
+            if ($item['season'] == $season) {
+                $have = check_if_have_show($id, $i, $item['episode']);
                 $episode_data .= '<div class="divTableRow">';
-
-                $have = check_if_have_show($id, $i, $num);
-                $episode_data .= '<div class="divTableCellEpisodes">' . $num . '</div>';
+                $episode_data .= '<div class="divTableCellEpisodes">' . $item['episode'] . '</div>';
                 if ($have !== false) {
-                    $have_episodes[] = $num;
-                    $episode_data .= '<div class="divTableCellEpisodes" style="color:yellow;">' . $episode_db['title'] . '</div>';
+                    $have_episodes[] = $item['episode'];
+                    $episode_data .= '<div class="divTableCellEpisodes" style="color:yellow;">' . $item['title'] . '</div>';
                     $episode_data .= '<div class="divTableCellEpisodes">';
                     $episode_data .= '<a class="episode_link" href="?page=download&type=shows_library&id=' . $have['id'] . '">';
                     $episode_data .= $LNG['L_DOWNLOAD'];
                     $episode_data .= '</a></div>';
                 } else {
-                    $episode_data .= '<div class="divTableCellEpisodes">' . $episode_db['title'] . '</div>';
+                    $episode_data .= '<div class="divTableCellEpisodes">' . $item['title'] . '</div>';
                     $episode_data .= '<div class="divTableCellEpisodes">';
-                    $episode_data .= '<a class="episode_link" href="' . $iurl . '&wanted=1&season=' . $i . '&episode=' . $num . '">';
+                    $episode_data .= '<a class="episode_link" href="' . $iurl . '&wanted=1&season=' . $i . '&episode=' . $item['episode'] . '">';
                     $episode_data .= $LNG['L_WANTED'];
                     $episode_data .= '</a>';
                     $episode_data .= '</div>';
                 }
                 $episode_data .= '</div>';
             }
+        }
+        $episode_data .= '<div class="divTableRow">';
+        $episode_data .= '<div class="divTableCellEpisodes"></div>';
+        $episode_data .= '<div class="divTableCellEpisodes"></div>';
+        $episode_data .= '<div class="divTableCellEpisodes">';
 
-            $episode_data .= '<div class="divTableRow">';
-            $episode_data .= '<div class="divTableCellEpisodes"></div>';
-            $episode_data .= '<div class="divTableCellEpisodes"></div>';
-            $episode_data .= '<div class="divTableCellEpisodes">';
-            $episode_list = '';
-            $n_episodes = $seasons[$i]['n_episodes'];
-            for ($a = 1; $a <= $n_episodes; $a++) {
-                if (!in_array($a, $have_episodes)) {
-                    if ($a == $n_episodes) {
-                        $episode_list .= $a;
-                    } else {
-                        $episode_list .= $a . ',';
-                    }
+        $episode_list = '';
+        $n_episodes = count($items);
+        for ($a = 1; $a <= $n_episodes; $a++) {
+            if (!in_array($a, $have_episodes)) {
+                if ($a == $n_episodes) {
+                    $episode_list .= $a;
+                } else {
+                    $episode_list .= $a . ',';
                 }
             }
-            if (!empty($episode_list)) {
-                $episode_data .= '<a class="episode_link" href="' . $iurl . '&wanted=1&season=' . $i . '&episode=' . $episode_list . '">' . $LNG['L_WANT_ALL'] . '</a>';
-            }
-            $episode_data .= '</div></div></div>';
         }
-    }
-    $seasons_data .= '<br/>' . $episode_data;
+        if (!empty($episode_list)) {
+            $episode_data .= '<a class="episode_link" href="' . $iurl . '&wanted=1&season=' . $i . '&episode=' . $episode_list . '">' . $LNG['L_WANT_ALL'] . '</a>';
+        }
 
+        $episode_data .= '</div>'; //CELL
+        $episode_data .= '</div>'; //ROW
+        $episode_data .= '</div>'; //TABLE
+    }
+
+    $seasons_data .= '<br/>' . $episode_data;
     return $seasons_data;
 }
 

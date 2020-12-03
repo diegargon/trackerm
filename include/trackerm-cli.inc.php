@@ -227,7 +227,6 @@ function MovieJob($item, $linked = false) {
                         $update_ary['wanted_status'] = 9;
                         $update_ary['id'] = $wanted_item['wanted_id'];
                         $newdb->updateItemByField('wanted', $update_ary, 'id');
-                        //$db->updateRecordById('wanted', $wanted_item['wanted_id'], $update_ary);
                     }
                 }
             } else {
@@ -354,7 +353,6 @@ function ShowJob($item, $linked = false) {
                         $update_ary['wanted_status'] = 9;
                         $update_ary['id'] = $wanted_item['id'];
                         $newdb->updateItemByField('wanted', $update_ary, 'id');
-                        //$db->updateRecordById('wanted', $wanted_item['id'], $update_ary);
                     }
                 }
             } else {

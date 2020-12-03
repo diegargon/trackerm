@@ -117,6 +117,14 @@ class newDB {
         return $row;
     }
 
+    public function getItemsByField($table, $field, $value) {
+        $where[$field] = ['value' => $value];
+        $result = $this->select($table, null, $where);
+        $rows = $this->fetchAll($result);
+        $this->finalize($result);
+        return $rows;
+    }
+
     public function getIdByField($table, $field, $value) {
         $where[$field] = ['value' => $value];
         $result = $this->select($table, 'id', $where, 'LIMIT 1');
@@ -170,6 +178,13 @@ class newDB {
     }
 
     /* MAIN */
+
+    public function count($table) {
+        $result = $this->query('SELECT COUNT (*) FROM ' . $table);
+        $row = $result->fetchArray();
+
+        return $row[0];
+    }
 
     public function insert($table, $values) {
         $query = 'INSERT INTO "' . $table . '" (';

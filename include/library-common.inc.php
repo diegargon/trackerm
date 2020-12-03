@@ -179,13 +179,13 @@ function submit_ident($type, $items) {
 }
 
 function getLibraryStats() {
-    global $db;
+    global $newdb;
 
     $stats['movies_size'] = 0;
     $stats['shows_size'] = 0;
 
-    $movies_db = $db->getTableData('biblio-movies');
-    $stats['num_movies'] = $db->getNumElements('biblio-movies');
+    $movies_db = $newdb->getTableData('library_movies');
+    $stats['num_movies'] = $newdb->count('library_movies');
 
     if (!empty($movies_db)) {
         foreach ($movies_db as $db_movie) {
@@ -196,8 +196,8 @@ function getLibraryStats() {
         $stats['movies_size'] = human_filesize($stats['movies_size']);
     }
 
-    $shows_db = $db->getTableData('biblio-shows');
-    $stats['num_episodes'] = $db->getNumElements('biblio-shows');
+    $shows_db = $newdb->getTableData('library_shows');
+    $stats['num_episodes'] = $newdb->count('library_shows');
     $count_shows = [];
 
     if (!empty($shows_db)) {

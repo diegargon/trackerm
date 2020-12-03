@@ -209,14 +209,17 @@ function create_db() {
     $newdb->query('CREATE TABLE IF NOT EXISTS "shows_details" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                     "themoviedb_id" INTEGER NOT NULL,
+                    "seasons" INTEGER NOT  NULL,
+                    "episodes" INTEGER NOT NULL,
+                    "release" VARCHAR NULL,
                     "season" INTEGER NOT NULL,
                     "episode" INTEGER NOT NULL,
-                    "seasons" INTEGER  NULL,
-                    "episodes" INTEGER NULL,
+                    "episode_release" INTEGER NULL,
                     "title" VARCHAR NULL,
                     "plot" VARCHAR NULL,
-                    "release" VARCHAR NULL,
-                    "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+                    "update" INTEGER NULL,
+                    "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                    UNIQUE (themoviedb_id, season, episode)
                 )');
 
     //Jacket
