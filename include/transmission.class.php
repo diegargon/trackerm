@@ -131,7 +131,7 @@ class TorrentServer {
                     $db->deleteById('wanted', $wanted_item['id']);
                 } else if (empty($wanted_item['direct']) && ($wanted_item['wanted_status'] != 9)) {
                     $wanted_item['wanted_status'] = 10;
-                    $log->setStateMsgs($LNG['L_TOR_MAN_DEL'] . " id: {$wanteed_item['title']}");
+                    $log->addStateMsgs($LNG['L_TOR_MAN_DEL'] . " id: {$wanteed_item['title']}");
                     $db->upsertElementById('wanted', $wanted_item['id'], $wanted_item);
                 }
             }

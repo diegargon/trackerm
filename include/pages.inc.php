@@ -59,9 +59,11 @@ function index_page() {
     $tdata['title'] = $LNG['L_STATE_MSG'];
     $tdata['content'] = '<form method="POST"><input type="submit" class="submit_btn" name="clear_state" value="' . $LNG['L_CLEAR'] . '" />';
     $state_msgs = $log->getStateMsgs();
-    if (!empty($state_msgs)) {
+
+    if ((count($state_msgs) > 0)) {
         foreach ($state_msgs as $state_msg) {
-            $tdata['content'] .= '<div class="state_msg">' . $state_msg . '</div>';
+            $date = '[' . strftime("%d %h %X", strtotime($state_msg['created'])) . ']';
+            $tdata['content'] .= '<div class="state_msg">' . $date . $state_msg['msg'] . '</div>';
         }
     }
     $tdata['main_class'] = 'home_state_msg';

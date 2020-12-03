@@ -104,23 +104,28 @@ Class Log {
         $this->logged('LOG_EMERG', $msg);
     }
 
-    public function setStateMsg($msg) {
-        global $db;
-        $msg = '[' . strftime("%d %h %X", time()) . '] ' . $msg;
-        $db->addSimpleValue('state_msgs', $msg);
+    public function addStateMsg($msg) {
+        global $newdb;
+        $newdb->addItem('log_msgs', ['type' => 'state', 'msg' => $msg]);
     }
 
     public function getStateMsgs() {
-        global $db;
+        global $newdb;
 
-        $state_msgs = $db->getSimpleValues('state_msgs');
+        $where['type'] = ['value' => 'state'];
+
+        $response = $newdb->select('log_msgs', null, $where, 'LIMIT 200');
+        $state_msgs = $newdb->fetchAll($response);
 
         return !empty($state_msgs) && is_array($state_msgs) ? array_reverse($state_msgs) : false;
     }
 
     public function clearStateMsgs() {
         global $db;
-        return $db->clearTable('state_msgs');
+
+        $where['type'] = ['value' => 'state'];
+
+        return $db->delete('log_msgs', $where);
     }
 
 }
