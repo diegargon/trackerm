@@ -153,46 +153,6 @@ function search_shows_torrents($words, $head = null, $nohtml = false) {
     return $page;
 }
 
-function old_search_shows_torrents($words, $head = null, $nohtml = false) {
-    global $cfg, $db, $log;
-
-    $result = [];
-    $page = '';
-    $results_count = 0;
-    $results_count = 0;
-
-    foreach ($cfg['jackett_indexers'] as $indexer) {
-        $caps = jackett_get_caps($indexer);
-        $categories = jackett_get_categories($caps['categories']['category']);
-
-        if ($caps['searching']['tv-search']['@attributes']['available'] == "yes") {
-            $result[$indexer] = jackett_search_shows($words, $indexer, $categories);
-        }
-        isset($result[$indexer]['channel']['item']) ? $results_count = count($result[$indexer]['channel']['item']) + $results_count : null;
-    }
-
-    if ($results_count <= 0) {
-        return false;
-    }
-
-
-    $shows_db = jackett_prep_shows($result);
-    $search_cache['search_keyword'] = $words;
-    $search_cache['cache_time'] = time();
-    $search_cache['results'] = $shows_db;
-    //$db->upsertElementById('jackett_search_shows', $words, $search_cache);
-
-
-    $topt['search_type'] = 'shows';
-
-    if ($nohtml) {
-        return $shows_db;
-    }
-    $page .= buildTable($head, $shows_db, $topt);
-
-    return $page;
-}
-
 /*
  * http://192.168.:9117/api/v2.0/indexers/newpct/results/torznab/api?t=tvsearch&cat=5030,5040&extended=1&apikey=&offset=0&limit=100
  *
