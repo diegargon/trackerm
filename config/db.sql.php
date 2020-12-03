@@ -194,7 +194,7 @@ function create_db() {
                     "quality" INTEGER NULL,
                     "ignores" INTEGER NULL,
                     "day_check" INTEGER NULL,
-                    "last_check INTEGER NULL,
+                    "last_check" INTEGER NULL,
                     "direct" INTEGER NULL,
                     "wanted_status" INTEGER NULL,
                     "media_type" VARCHAR NULL,
