@@ -46,7 +46,6 @@ function rebuild($media_type, $path) {
             $items[$last_id]['path'] = $file;
             $items[$last_id]['tags'] = getFileTags($file_name);
             $items[$last_id]['ext'] = substr($file_name, -3);
-            $items[$last_id]['added'] = time();
             $chapter = getFileEpisode($file_name);
             if (!empty($chapter)) {
                 $items[$last_id]['season'] = intval($chapter['season']);

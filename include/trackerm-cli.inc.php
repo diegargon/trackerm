@@ -443,7 +443,7 @@ function wanted_work() {
         $media_type = $wanted['media_type'];
         $log->debug(" Search for : " . $title . '[' . $media_type . ']');
         if ($media_type == 'movies') {
-            $results = search_movie_torrents($title, null, true);
+            $results = search_movies_torrents($title, null, true);
             if (!empty($results) && count($results) > 0) {
                 $valid_results = wanted_check_flags($results);
             } else {

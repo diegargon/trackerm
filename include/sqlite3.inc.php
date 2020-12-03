@@ -88,11 +88,11 @@ class newDB {
         $value = $item[$field];
         $_item = $this->getItemByField($table, $field, $value);
         if (!empty($_item)) {
-            $this->log->debug("upser actualiza");
+            //$this->log->debug("upser actualiza");
             $this->updateItemByField($table, $item, $field);
             return true;
         } else {
-            $this->log->debug("upsert crea nuevo");
+            //$this->log->debug("upsert crea nuevo");
             $this->addItem($table, $item);
             return true;
         }

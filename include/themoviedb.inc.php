@@ -101,9 +101,9 @@ function themoviedb_MediaPrep($media_type, $items) {
         ];
     }
 
-    $newdb->addItemsUniqField('tmdb_search', $fitems, 'themoviedb_id');
-
     if (!empty($fitems)) {
+        $newdb->addItemsUniqField('tmdb_search', $fitems, 'themoviedb_id');
+
         foreach ($fitems as $key => $fitem) {
             $fitems[$key]['id'] = $newdb->getIdByField('tmdb_search', 'themoviedb_id', $fitem['themoviedb_id']);
         }

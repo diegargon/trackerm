@@ -41,7 +41,7 @@ function view() {
     }
     $other['page_type'] = $type;
 
-    if ($t_type == 'tmdb_search') {
+    if ($t_type == 'tmdb_search' || $t_type == 'jackett_movies' || $t_type == 'jackett_shows') {
         $item = $newdb->getItemByID($t_type, $id);
     } else {
         $item = $db->getItemByID($t_type, $id);
@@ -159,7 +159,7 @@ function view_extra_movies($item, $opt = null) {
     if (
             isset($_GET['more_torrents']) || (!empty($opt['auto_show_torrents']) && !isset($_GET['more_movies']))
     ) {
-        $torrent_results = search_movie_torrents($stitle);
+        $torrent_results = search_movies_torrents($stitle);
         if ($torrent_results !== false) {
             $extra .= $torrent_results;
         } else {

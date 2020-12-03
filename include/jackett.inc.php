@@ -9,8 +9,11 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-function search_movie_torrents($words, $head = null, $nohtml = false) {
-    global $cfg, $log, $db;
+function search_movies_torrents($words, $head = null, $nohtml = false) {
+    global $cfg, $log, $newdb;
+
+    //   $result = $newdb->getTableData('jackett_movies');
+//    $rows = $newdb->fetchAll($result);
 
     $result = [];
     $page = '';
@@ -18,16 +21,22 @@ function search_movie_torrents($words, $head = null, $nohtml = false) {
     $cache_movies_expire = 0;
 
     if ($cfg['search_cache']) {
-        $movies_cache_check = $db->getItemById('jackett_search_movies', $words);
-        !isset($movies_cache_check['cache_time']) ? $movies_cache_check['cache_time'] = 0 : null;
-        if ((!$movies_cache_check) || (time() > ($movies_cache_check['cache_time'] + $cfg['search_cache_expire']))) {
-            $log->debug("Movies search cache expire. Requesting...");
+        $movies_cache_check = $newdb->getItemByField('jackett_search_movies_cache', 'words', $words);
+        !isset($movies_cache_check['update']) ? $movies_cache_check['update'] = 0 : null;
+
+        if ((time() > ($movies_cache_check['update'] + $cfg['search_cache_expire']))) {
+            $log->debug("News: Movies cache expire, Requesting");
             $cache_movies_expire = 1;
         } else {
-            $movies_db = $movies_cache_check['results'];
-            //$log->debug("Movies search cache expire in " . (time() - ($movies_cache_check['cache_time'] + $cfg['search_cache_expire'])));
-            if (count($movies_db) <= 0) {
+            $log->debug("News:  Using movies cache");
+            $ids = explode(',', $movies_cache_check['ids']);
+
+            if (empty($ids) || count($ids) <= 0) {
                 return false;
+            }
+            foreach ($ids as $cache_id) {
+
+                $movies_db[] = $newdb->getItemById('jackett_movies', trim($cache_id));
             }
         }
     }
@@ -46,13 +55,19 @@ function search_movie_torrents($words, $head = null, $nohtml = false) {
         if ($results_count <= 0) {
             return false;
         }
+        $movies_db = jackett_prep_movies($result);
 
-        if (!$cfg['search_cache'] || $cache_movies_expire == 1) {
-            $movies_db = jackett_prep_movies($result);
-            $search_cache['search_keyword'] = $words;
-            $search_cache['cache_time'] = time();
-            $search_cache['results'] = $movies_db;
-            $db->upsertElementById('jackett_search_movies', $words, $search_cache);
+        if (($cfg['search_cache'] && $cache_movies_expire)) {
+            $movies_cache['words'] = $words;
+            $movies_cache['update'] = time();
+            $movies_cache['ids'] = '';
+
+            $last_element = end($movies_db);
+            foreach ($movies_db as $tocache_movie) {
+                $movies_cache['ids'] .= $tocache_movie['id'];
+                $tocache_movie['id'] != $last_element['id'] ? $movies_cache['ids'] .= ', ' : null;
+            }
+            $newdb->upsertItemByField('jackett_search_movies_cache', $movies_cache, 'words');
         }
     }
 
@@ -67,26 +82,33 @@ function search_movie_torrents($words, $head = null, $nohtml = false) {
 }
 
 function search_shows_torrents($words, $head = null, $nohtml = false) {
-    global $cfg, $db, $log;
+    global $cfg, $log, $newdb;
+
+    //   $result = $newdb->getTableData('jackett_shows');
+//    $rows = $newdb->fetchAll($result);
 
     $result = [];
     $page = '';
     $results_count = 0;
-    $results_count = 0;
     $cache_shows_expire = 0;
 
     if ($cfg['search_cache']) {
-        $shows_cache_check = $db->getItemById('jackett_search_shows', $words);
-        !isset($shows_cache_check['cache_time']) ? $shows_cache_check['cache_time'] = 0 : null;
-        if ((!$shows_cache_check) || (time() > ($shows_cache_check['cache_time'] + $cfg['search_cache_expire']))) {
-            $log->debug("Shows search cache expire. Requesting...");
+        $shows_cache_check = $newdb->getItemByField('jackett_search_shows_cache', 'words', $words);
+        !isset($shows_cache_check['update']) ? $shows_cache_check['update'] = 0 : null;
+
+        if ((time() > ($shows_cache_check['update'] + $cfg['search_cache_expire']))) {
+            $log->debug("News: Movies cache expire, Requesting");
             $cache_shows_expire = 1;
         } else {
-            //$log->debug("Shows search cache expire in " . (($shows_cache_check['cache_time'] + $cfg['search_cache_expire']) - time()));
-            $shows_db = $shows_cache_check['results'];
+            $log->debug("News:  Using shows cache");
+            $ids = explode(',', $shows_cache_check['ids']);
 
-            if (count($shows_db) <= 0) {
+            if (empty($ids) || count($ids) <= 0) {
                 return false;
+            }
+            foreach ($ids as $cache_id) {
+
+                $shows_db[] = $newdb->getItemById('jackett_shows', trim($cache_id));
             }
         }
     }
@@ -105,15 +127,62 @@ function search_shows_torrents($words, $head = null, $nohtml = false) {
         if ($results_count <= 0) {
             return false;
         }
+        $shows_db = jackett_prep_shows($result);
 
-        if (!$cfg['search_cache'] || $cache_shows_expire == 1) {
-            $shows_db = jackett_prep_shows($result);
-            $search_cache['search_keyword'] = $words;
-            $search_cache['cache_time'] = time();
-            $search_cache['results'] = $shows_db;
-            $db->upsertElementById('jackett_search_shows', $words, $search_cache);
+        if (($cfg['search_cache'] && $cache_shows_expire)) {
+            $shows_cache['words'] = $words;
+            $shows_cache['update'] = time();
+            $shows_cache['ids'] = '';
+
+            $last_element = end($shows_db);
+            foreach ($shows_db as $tocache_movie) {
+                $shows_cache['ids'] .= $tocache_movie['id'];
+                $tocache_movie['id'] != $last_element['id'] ? $shows_cache['ids'] .= ', ' : null;
+            }
+            $newdb->upsertItemByField('jackett_search_shows_cache', $shows_cache, 'words');
         }
     }
+
+    $topt['search_type'] = 'shows';
+    if ($nohtml) {
+        return $shows_db;
+    }
+
+    $page .= buildTable($head, $shows_db, $topt);
+
+    return $page;
+}
+
+function old_search_shows_torrents($words, $head = null, $nohtml = false) {
+    global $cfg, $db, $log;
+
+    $result = [];
+    $page = '';
+    $results_count = 0;
+    $results_count = 0;
+
+    foreach ($cfg['jackett_indexers'] as $indexer) {
+        $caps = jackett_get_caps($indexer);
+        $categories = jackett_get_categories($caps['categories']['category']);
+
+        if ($caps['searching']['tv-search']['@attributes']['available'] == "yes") {
+            $result[$indexer] = jackett_search_shows($words, $indexer, $categories);
+        }
+        isset($result[$indexer]['channel']['item']) ? $results_count = count($result[$indexer]['channel']['item']) + $results_count : null;
+    }
+
+    if ($results_count <= 0) {
+        return false;
+    }
+
+
+    $shows_db = jackett_prep_shows($result);
+    $search_cache['search_keyword'] = $words;
+    $search_cache['cache_time'] = time();
+    $search_cache['results'] = $shows_db;
+    //$db->upsertElementById('jackett_search_shows', $words, $search_cache);
+
+
     $topt['search_type'] = 'shows';
 
     if ($nohtml) {
@@ -195,7 +264,7 @@ function jackett_search_shows($words, $indexer, $categories, $limit = null) {
 }
 
 function jackett_prep_movies($movies_results) {
-    global $db;
+    global $newdb;
 
     $movies = [];
     foreach ($movies_results as $indexer) {
@@ -213,7 +282,6 @@ function jackett_prep_movies($movies_results) {
             !empty($movie['description']) ? $description = $movie['description'] : $description = '';
 
             $movies[] = [
-                'id' => '',
                 'ilink' => 'movies_torrent',
                 'guid' => $movie['guid'],
                 'title' => $movie['title'],
@@ -225,7 +293,6 @@ function jackett_prep_movies($movies_results) {
                 'category' => $movie['category'],
                 'source' => $movie['jackettindexer'],
                 'poster' => $poster,
-                'added' => time(),
             ];
         } else if (isset($indexer['channel']['item'])) {
             foreach ($indexer['channel']['item'] as $movie) {
@@ -238,7 +305,6 @@ function jackett_prep_movies($movies_results) {
                 !empty($movie['coverurl']) ? $poster = $movie['coverurl'] : $poster = '';
                 !empty($movie['description']) ? $description = $movie['description'] : $description = '';
                 $movies[] = [
-                    'id' => '',
                     'ilink' => 'movies_torrent',
                     'guid' => $movie['guid'],
                     'title' => $movie['title'],
@@ -250,27 +316,25 @@ function jackett_prep_movies($movies_results) {
                     'category' => $movie['category'],
                     'source' => $movie['jackettindexer'],
                     'poster' => $poster,
-                    'added' => time(),
                 ];
             }
         }
     }
 
-    if (!empty($movies)) {
-
-        $db->addUniqElements('jackett_movies', $movies, 'guid');
-
-        //add ID's
+    if (!empty($movies) && count($movies) > 0) {
+        $newdb->addItemsUniqField('jackett_movies', $movies, 'guid');
+        //add ids
         foreach ($movies as $key => $movie) {
-            $id = $db->getIdByField('jackett_movies', 'guid', $movie['guid']);
+            $id = $newdb->getIdByField('jackett_movies', 'guid', $movie['guid']);
             $movies[$key]['id'] = $id;
         }
     }
+
     return $movies;
 }
 
 function jackett_prep_shows($shows_results) {
-    global $db;
+    global $newdb;
 
     $shows = [];
     foreach ($shows_results as $indexer) {
@@ -287,7 +351,6 @@ function jackett_prep_shows($shows_results) {
             !empty($show['description']) ? $description = $show['description'] : $description = '';
 
             $shows[] = [
-                'id' => '',
                 'ilink' => 'shows_torrent',
                 'guid' => $show['guid'],
                 'title' => $show['title'],
@@ -299,7 +362,6 @@ function jackett_prep_shows($shows_results) {
                 'category' => $show['category'],
                 'source' => $show['jackettindexer'],
                 'poster' => $poster,
-                'added' => time(),
             ];
         } else if (isset($indexer['channel']['item'])) {
             foreach ($indexer['channel']['item'] as $show) {
@@ -313,7 +375,6 @@ function jackett_prep_shows($shows_results) {
                 !empty($show['description']) ? $description = $show['description'] : $description = '';
 
                 $shows[] = [
-                    'id' => '',
                     'ilink' => 'shows_torrent',
                     'guid' => $show['guid'],
                     'title' => $show['title'],
@@ -325,21 +386,21 @@ function jackett_prep_shows($shows_results) {
                     'category' => $show['category'],
                     'source' => $show['jackettindexer'],
                     'poster' => $poster,
-                    'added' => time(),
                 ];
             }
         }
     }
 
-    if (!empty($shows)) {
-        $db->addUniqElements('jackett_shows', $shows, 'guid');
+    if (!empty($shows) && count($shows) > 0) {
+        $newdb->addItemsUniqField('jackett_shows', $shows, 'guid');
 
-        //add ID's
+        //add ids
         foreach ($shows as $key => $show) {
-            $id = $db->getIdByField('jackett_shows', 'guid', $show['guid']);
+            $id = $newdb->getIdByField('jackett_shows', 'guid', $show['guid']);
             $shows[$key]['id'] = $id;
         }
     }
+
     return $shows;
 }
 

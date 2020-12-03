@@ -60,7 +60,7 @@ function index_page() {
     $tdata['content'] = '<form method="POST"><input type="submit" class="submit_btn" name="clear_state" value="' . $LNG['L_CLEAR'] . '" />';
     $state_msgs = $log->getStateMsgs();
 
-    if ((count($state_msgs) > 0)) {
+    if (!empty($state_msgs) && (count($state_msgs) > 0)) {
         foreach ($state_msgs as $state_msg) {
             $date = '[' . strftime("%d %h %X", strtotime($state_msg['created'])) . ']';
             $tdata['content'] .= '<div class="state_msg">' . $date . $state_msg['msg'] . '</div>';
@@ -210,6 +210,114 @@ function page_biblio() {
 }
 
 function page_news() {
+    global $cfg, $newdb, $log;
+
+    $cache_movies_expire = 0;
+    $cache_shows_expire = 0;
+
+    if ($cfg['search_cache']) {
+
+        $movies_cache_check = $newdb->getItemByField('jackett_search_movies_cache', 'words', '');
+        !isset($movies_cache_check['update']) ? $movies_cache_check['update'] = 0 : null;
+
+        if ((time() > ($movies_cache_check['update'] + $cfg['search_cache_expire']))) {
+            $log->debug("News: Movies cache expire, Requesting");
+            $cache_movies_expire = 1;
+        } else {
+            $log->debug("News:  Using movies cache");
+            $ids = explode(',', $movies_cache_check['ids']);
+            if (empty($ids) || count($ids) <= 0) {
+                return false;
+            }
+            foreach ($ids as $cache_id) {
+                $res_movies_db[] = $newdb->getItemById('jackett_movies', trim($cache_id));
+            }
+        }
+
+        $shows_cache_check = $newdb->getItemByField('jackett_search_shows_cache', 'words', '');
+        !isset($shows_cache_check['update']) ? $shows_cache_check['update'] = 0 : null;
+
+        if ((time() > ($shows_cache_check['update'] + $cfg['search_cache_expire']))) {
+            $log->debug("News: Shows cache expire, Requesting");
+            $cache_shows_expire = 1;
+        } else {
+            $log->debug("News:  Using shows cache");
+            $ids = explode(',', $shows_cache_check['ids']);
+            if (empty($ids) || count($ids) <= 0) {
+                return false;
+            }
+            foreach ($ids as $cache_id) {
+                $res_shows_db[] = $newdb->getItemById('jackett_shows', trim($cache_id));
+            }
+        }
+    }
+
+
+    if (!$cfg['search_cache'] || $cache_movies_expire || $cache_shows_expire) {
+        foreach ($cfg['jackett_indexers'] as $indexer) {
+            $caps = jackett_get_caps($indexer);
+            $categories = jackett_get_categories($caps['categories']['category']);
+
+            $results = jackett_search_movies('', $indexer, $categories);
+            ($results) ? $movies_res[$indexer] = $results : null;
+
+            $results = null;
+            $results = jackett_search_shows('', $indexer, $categories);
+            $results ? $shows_res[$indexer] = $results : null;
+        }
+    }
+
+    ($cache_movies_expire == 1) || !$cfg['search_cache'] ? $res_movies_db = jackett_prep_movies($movies_res) : null;
+    ($cache_shows_expire == 1) || !$cfg['search_cache'] ? $res_shows_db = jackett_prep_shows($shows_res) : null;
+
+    /* BUILD PAGE */
+
+    $page_news = '';
+
+    if (!empty($res_movies_db)) {
+        $topt['search_type'] = 'movies';
+        $page_news_movies = buildTable('L_MOVIES', $res_movies_db, $topt);
+        $page_news .= $page_news_movies;
+    }
+
+    if (!empty($res_shows_db)) {
+        $topt['search_type'] = 'shows';
+        $page_news_shows = buildTable('L_SHOWS', $res_shows_db, $topt);
+        $page_news .= $page_news_shows;
+    }
+
+    //UPDATE CACHE
+
+    if (($cfg['search_cache'] && $cache_movies_expire)) {
+        $movies_cache['words'] = '';
+        $movies_cache['update'] = time();
+        $movies_cache['ids'] = '';
+
+        $last_element = end($res_movies_db);
+        foreach ($res_movies_db as $tocache_movie) {
+            $movies_cache['ids'] .= $tocache_movie['id'];
+            $tocache_movie['id'] != $last_element['id'] ? $movies_cache['ids'] .= ', ' : null;
+        }
+        $newdb->upsertItemByField('jackett_search_movies_cache', $movies_cache, 'words');
+    }
+    if (($cfg['search_cache'] && $cache_shows_expire)) {
+        $shows_cache['words'] = '';
+        $shows_cache['update'] = time();
+        $shows_cache['ids'] = '';
+
+        $last_element = end($res_shows_db);
+        foreach ($res_shows_db as $tocache_show) {
+            $shows_cache['ids'] .= $tocache_show['id'];
+            $tocache_show['id'] != $last_element['id'] ? $shows_cache['ids'] .= ', ' : null;
+        }
+        $newdb->upsertItemByField('jackett_search_shows_cache', $shows_cache, 'words');
+    }
+
+
+    return $page_news;
+}
+
+function old_page_news() {
     global $cfg, $db, $log;
 
     $cache_movies_expire = 0;
@@ -321,7 +429,7 @@ function page_torrents() {
     $page = getTpl('page_torrents', array_merge($tdata, $LNG));
 
     if (!empty($_GET['search_movies_torrents'])) {
-        $page .= search_movie_torrents(trim($_GET['search_movies_torrents']), 'L_TORRENT');
+        $page .= search_movies_torrents(trim($_GET['search_movies_torrents']), 'L_TORRENT');
     }
 
     if (!empty($_GET['search_shows_torrents'])) {
