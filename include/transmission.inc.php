@@ -30,8 +30,8 @@ function page_transmission() {
     $tdata['body'] = '';
 
     foreach ($transfers as $transfer) {
-        $transfer['status'] == 0 ? $tdata['show_start'] = 1 : $tdata['show_start'] = '';
-        $transfer['status'] != 0 && $transfer['status'] < 8 ? $data['show_stop'] = 1 : $tdata['show_stop'] = '';
+        $transfer['status'] == 0 ? $tdata['show_start'] = 1 : $tdata['show_start'] = 0;
+        $transfer['status'] != 0 && $transfer['status'] < 8 ? $tdata['show_stop'] = 1 : $tdata['show_stop'] = 0;
 
         $tdata['status_name'] = $trans->getStatusName($transfer['status']);
         $transfer['percentDone'] == 1 ? $tdata['percent'] = '100' : $tdata['percent'] = ((float) $transfer['percentDone']) * 100;
