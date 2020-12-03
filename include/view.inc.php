@@ -175,8 +175,8 @@ function view_extra_movies($item, $opt = null) {
 function view_extra_shows($item, $opt) {
     global $LNG, $filter;
 
-    $page = $filter->getInt('page');
     $id = $filter->getInt('id');
+    $page = $filter->getString('page');
     $type = $filter->getString('type');
 
     $extra = '';
