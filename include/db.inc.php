@@ -20,7 +20,7 @@
  */
 class DB {
 
-    private $version = 1;
+    private $version = 2;
     private $db;
     private $db_path;
     private $log;
@@ -49,7 +49,7 @@ class DB {
             $debug_msg .= ("DbV:NeedUp->");
             ($this->upgradeDb($version)) ? $debug_msg .= 'ok' : $debug_msg .= 'fail';
         } else if ($version > $this->version) {
-            $debug_msg .= ("DbV:NewerApiProblem");
+            $debug_msg .= ("DbV:NewerDBThanApiProblem");
         } else {
             $debug_msg .= 'DbChecks(ok) v' . $version;
         }

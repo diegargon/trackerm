@@ -553,6 +553,7 @@ function send_transmission($results) {
             $update_ary['wanted_status'] = 1;
         }
         $update_ary['tid'] = $trans_db[0]['id'];
+        $update_ary['hashString'] = $trans_db[0]['hashString'];
         $update_ary['last_check'] = time();
         $update_ary['first_check'] = 1;
 

@@ -27,6 +27,7 @@ if (!empty($_GET['download'])) {
     $wanted_db = [
         'tid' => $trans_db[0]['id'],
         'wanted_status' => 1,
+        'hashString' => $trans_db[0]['hashString'],
         'themoviedb_id' => !empty($themoviedb_id) ? $wanted_db[0]['themoviedb_id'] = $themoviedb_id : null,
         'direct' => 1,
         'profile' => (int) $cfg['profile'],

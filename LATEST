@@ -1,5 +1,7 @@
 ## Latest / News (Relevant)
 
+[04/12] Bug: I track wanted and transmmision torrents with the transmission id, bu if we restart transmission-daemon the ids change. 
+        and would tangle all, there will be a fix next days.
 [04/12] Next day or weeks probably only fix and rewrite the messy code
 [04/12] Data now is save to sqllite, you need rebuild your library
 [02/12] Finnally begin working (slow) for use a real database, the winner was sqlite3. That going to take some weeks.

@@ -20,7 +20,7 @@ function create_db() {
 
     $query = [
         "app_name" => 'trackerm',
-        "version" => 1,
+        "version" => 2,
     ];
 
     $db->insert('db_info', $query);
@@ -200,6 +200,7 @@ function create_db() {
                     "quality" INTEGER NULL,
                     "ignores" INTEGER NULL,
                     "ignore" INTEGER NULL,
+                    "hashString" VARCHAR NULL,
                     "tid" INTEGER NULL,
                     "first_check" INTEGER NULL,
                     "day_check" INTEGER NULL,
@@ -239,14 +240,17 @@ function update_db($from) {
     global $db;
 
 
-    if ($from <= 2) {
-        //$set['version'] = 3;
-        //$db->update('db_info', $set);
+    if ($from < 2) {
+        $query = 'ALTER TABLE wanted add column hashstring VARCHAR NULL';
+        $db->query($query);
+        $set['version'] = 2;
+        $db->update('db_info', $set);
     }
-    if ($from <= 3) {
-        //$set['version'] = 4;
-        //$db->update('db_info', $set);
-    }
-
+    /*
+      if ($from < 3) {
+      $set['version'] = 3;
+      $db->update('db_info', $set);
+      }
+     */
     return true;
 }
