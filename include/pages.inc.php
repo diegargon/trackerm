@@ -201,7 +201,7 @@ function page_library() {
     $tdata['max_columns_sel_none'] = $max_columns_sel_none;
     /* FIN */
 
-    $page = getTpl('library_options', array_merge($tdata, $LNG));
+    $page = getTpl('library_options', array_merge($tdata, $LNG, $cfg));
 
     $page .= show_my_movies();
     $page .= show_my_shows();
