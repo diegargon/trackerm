@@ -11,15 +11,10 @@
 
 function scanAppMedia() {
     /*
-      global $db, $cfg;
+      global $newdb, $cfg;
 
       $log->debug(" [out] Cheking media files in " . $cfg['TORRENT_FINISH_PATH'];
-      $files = [];
-      $files = scandir_r($cfg['TORRENT_FINISH_PATH']);
 
-      if ($files === false) {
-      return false;
-      }
 
      */
 }
