@@ -10,7 +10,7 @@
 !defined('IN_WEB') ? exit : true;
 
 function rebuild($media_type, $path) {
-    global $cfg, $db;
+    global $cfg, $db, $log;
 
 
     $items = [];
@@ -63,13 +63,18 @@ function rebuild($media_type, $path) {
              */
             if ($media_type == 'shows') {
                 $SE = getFileEpisode($file_name);
-
                 if (!empty($SE)) {
                     $season = intval($SE['season']);
                     $episode = intval($SE['episode']);
+                    $items[$i]['season'] = $season;
+                    $items[$i]['episode'] = $episode;
+                } else {
+                    $msg_log = 'Can\'t determine SE for this file: ' . $items[$i]['file_name'];
+                    $log->addStateMsg($msg_log);
+                    $log->warning($msg_log);
+                    $items[$i]['season'] = 'X';
+                    $items[$i]['episode'] = 'X';
                 }
-                $items[$i]['season'] = $season;
-                $items[$i]['episode'] = $episode;
             }
 
             // auto identify episodes already identified

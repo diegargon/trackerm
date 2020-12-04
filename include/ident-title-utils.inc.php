@@ -89,38 +89,54 @@ function getFileTitle($file) {
 
 function getFileEpisode($file_name) {
 
-    /* FORMAT Cap.101 */
-    $match = [];
-    if (preg_match('/\[Cap.(.*?)\]/i', $file_name, $match) == 1) {
-        $episode_noformat = $match[1];
-        if (strlen($episode_noformat) == 3) {
-            $ses = substr($episode_noformat, 0, 1);
-            $epi = substr($episode_noformat, 1, 2);
-        }
-        if (strlen($episode_noformat) == 4) {
-            $ses = substr($episode_noformat, 0, 2);
-            $epi = substr($episode_noformat, 2, 3);
-        }
-        $episode['season'] = $ses;
-        $episode['episode'] = $epi;
-    }
-
-    /* FORMAT 1x01 */
-    if (preg_match('/[0-9]{1,2}(x|X)[0-9]{2,2}/i', $file_name, $match) == 1) {
-        $_episode = $match[0];
-        $episode['season'] = substr($_episode, 0, stripos($_episode, 'x'));
-        $episode['episode'] = substr($_episode, stripos($_episode, 'x') + 1);
-    }
+    $SE = [];
 
     /* FORMAT S01E01 */
 
     if (preg_match('/S\d{2}E\d{2}/i', $file_name, $match) == 1) {
         $matched = $match[0];
-        $episode['season'] = substr($matched, 1, stripos($matched, 'E'));
-        $episode['episode'] = substr($matched, stripos($matched, 'E') + 1);
+        $SE['season'] = substr($matched, 1, stripos($matched, 'E'));
+        $SE['episode'] = substr($matched, stripos($matched, 'E') + 1);
+
+        return $SE;
     }
 
-    return isset($episode) ? $episode : false;
+
+    /* FORMAT Cap.101 */
+    $match = [];
+    if (preg_match('/\[Cap.(.*?)\]/i', $file_name, $match) == 1) {
+        $SE_MATCH = $match[1];
+        if (strlen($SE_MATCH) == 3) {
+            $ses = substr($SE_MATCH, 0, 1);
+            $epi = substr($SE_MATCH, 1, 2);
+        }
+        if (strlen($SE_MATCH) == 4) {
+            $ses = substr($SE_MATCH, 0, 2);
+            $epi = substr($SE_MATCH, 2, 3);
+        }
+        $SE['season'] = $ses;
+        $SE['episode'] = $epi;
+
+        return $SE;
+    }
+
+    /* FORMAT 1x01 */
+    if (preg_match('/[0-9]{1,2}(x|X)[0-9]{2,2}/i', $file_name, $match) == 1) {
+        $SE_MATCH = $match[0];
+        $SE['season'] = substr($SE_MATCH, 0, stripos($SE_MATCH, 'x'));
+        $SE['episode'] = substr($SE_MATCH, stripos($SE_MATCH, 'x') + 1);
+
+        return $SE;
+    }
+
+    /* FORMAT 000 not temp , this must the near the last check */
+    if (preg_match('/[0-9]{3}/', $file_name, $match)) {
+        $SE['season'] = 1;
+        $SE['episode'] = $match[0];
+        return $SE;
+    }
+
+    return false;
 }
 
 function getFileYear($file_name) {
