@@ -227,7 +227,7 @@ function view_seasons($id, $update = false) {
         wanted_episode($id, $season, $episode);
     }
 
-    //TODO SELECT ONLY ITEMS GET $season if not season get one element for nseasons
+    //TODO SELECT ONLY ITEMS GET $season / if not season get one element for nseasons
     if (empty($season)) {
         $item = $db->getItemByField('shows_details', 'themoviedb_id', $id);
         if ($item === false || $update) {
@@ -281,7 +281,7 @@ function view_seasons($id, $update = false) {
                 } else {
                     $episode_data .= '<div class="divTableCellEpisodes">' . $item['title'] . '</div>';
                     $episode_data .= '<div class="divTableCellEpisodes">';
-                    $episode_data .= '<a class="episode_link" href="' . $iurl . '&wanted=1&season=' . $i . '&episode=' . $item['episode'] . '">';
+                    $episode_data .= '<a class="episode_link" href="' . $iurl . '&wanted=1&season=' . $item['season'] . '&episode=' . $item['episode'] . '">';
                     $episode_data .= $LNG['L_WANTED'];
                     $episode_data .= '</a>';
                     $episode_data .= '</div>';
