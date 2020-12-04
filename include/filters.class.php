@@ -20,37 +20,30 @@ Class Filter {
         if (!isset($_GET[$val])) {
             return false;
         }
-        if (!is_array($_GET[$val])) {
-            if (!isset($_GET[$val]) || $_GET[$val] > $size || !is_numeric($_GET[$val])) {
-                return false;
-            }
-            $values = $_GET[$val];
-        } else {
-            $values = $_GET[$val];
-            if (count($values) <= 0) {
-                return false;
-            }
-            foreach ($values as $val) {
-                if (!is_numeric($val) || $val > $size) {
-                    return false;
-                }
-            }
-        }
 
-        return $values;
+        return $this->varInt($_GET[$val], $size);
     }
 
     function postInt($val, $size = PHP_INT_MAX) {
         if (!isset($_POST[$val])) {
             return false;
         }
-        if (!is_array($_POST[$val])) {
-            if (!isset($_POST[$val]) || $_POST[$val] > $size || !is_numeric($_POST[$val])) {
+
+        return $this->varInt($_POST[$val], $size);
+    }
+
+    function varInt($val, $size = PHP_INT_MAX) {
+        if (!isset($val)) {
+            return false;
+        }
+
+        if (!is_array($val)) {
+            if (!isset($val) || $val > $size || !is_numeric($val)) {
                 return false;
             }
-            $values = $_POST[$val];
+            $values = $val;
         } else {
-            $values = $_POST[$val];
+            $values = $val;
             if (count($values) <= 0) {
                 return false;
             }
@@ -66,36 +59,53 @@ Class Filter {
 
     //Simple String words without accents or special characters
     function getString($val, $size = null) {
-        if (empty($_GET[$val]) || (!empty($size) && (strlen($_GET[$val]) > $size))) {
+        if (empty($_GET[$val])) {
             return false;
         }
-        //TODO FILTER
-        return $_GET[$val];
+
+        return $this->varString($_GET[$val], $size);
     }
 
     function postString($val, $size = null) {
-        if (empty($_POST[$val]) || (!empty($size) && (strlen($_POST[$val]) > $size))) {
+        if (empty($_POST[$val])) {
             return false;
         }
+
+        return $this->varString($_POST[$val], $size);
+    }
+
+    function varString($val, $size = null) {
+        if (empty($val) || (!empty($size) && (strlen($val) > $size))) {
+            return false;
+        }
+
         //TODO FILTER
-        return $_POST[$val];
+        return $val;
     }
 
     //UTF8
     function getUtf8($val, $size = null) {
-        if (empty($_GET[$val]) || (!empty($size) && (strlen($_GET[$val]) > $size))) {
+        if (empty($_GET[$val])) {
             return false;
         }
-        //TODO FILTER
-        return $_GET[$val];
+
+        return $this->varUtf8($_GET[$val], $size);
     }
 
     function postUtf8($val, $size = null) {
-        if (empty($_POST[$val]) || (!empty($size) && (strlen($_POST[$val]) > $size))) {
+        if (empty($_POST[$val])) {
+            return false;
+        }
+
+        return $this->varUtf8($_POST[$val], $size);
+    }
+
+    function varUtf8($val, $size = null) {
+        if (empty($val) || (!empty($size) && (strlen($val) > $size))) {
             return false;
         }
         //TODO FILTER
-        return $_POST[$val];
+        return $val;
     }
 
 }
