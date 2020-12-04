@@ -24,21 +24,23 @@ Warning: Fast coding (the bulk was done in 3 days) have to polish alot/rewrite a
 will remain like this until i have a working code with basic features.
 Probably you shouldn't install it at this moment.
 
-## CURRENT STATE
+## CURRENT STATUS
 
 **ENGLISH**
 
 Now we use a sql database (sqllite) instead of plain text, i can't guarantee backwards compatibility between versions yet, but will
 not be something frequent if happens. Anyway, all work for setting from 0 is near automatic, just only click on rebuild the library and identify items.
 
-About security, i begin adding checks but ins't not secure yet for expose to internet (and not security passwords for enter), you must still 
+About security, i begin adding checks but ins't secure yet for expose to internet (you can't set a security passwords for enter), you must still 
 use other method like .htaccess or similar
 
-About code, after the change from plain/text among other things i have a lot of messy code that need rewrite and rewrite querys to database 
+About code, after the changes from plain/text among other things i have a lot of messy code that need rewrite and rewrite querys to database 
 but for this type of application this is not a priority.
 
-I 'fast coding' this app in about 10 days, now for a while i would have less time to update, and going to slow down this focusing for in fix 
+I 'fast coding' this app in about 10 days, now for a while i would have less time to update, and going to slow down this focusing to fix 
 the messy code, bugs and security things than add new options.
+
+You can use ISSUES for bugs and other things.
 
 **SPANISH**
 
