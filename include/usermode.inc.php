@@ -7,7 +7,7 @@
  *  @subpackage
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  */
-require('include/common.inc.php');
+require_once('include/common.inc.php');
 
 //while we haven't ui for create users we check $cfg['profiles'] and add to database
 foreach ($cfg['profiles'] as $cfgprofile) {
@@ -15,12 +15,12 @@ foreach ($cfg['profiles'] as $cfgprofile) {
     $newdb->upsertItemByField('users', $profiles, 'username');
 }
 
-require('include/user.inc.php');
+require_once('include/user.inc.php');
 
-require('include/session.inc.php');
-require('include/prefs.inc.php');
+require_once('include/session.inc.php');
+require_once('include/prefs.inc.php');
 loadPrefs();
 
-require('include/pages.inc.php');
-require('include/html.common.php');
-require('include/library.inc.php');
+require_once('include/pages.inc.php');
+require_once('include/html.common.php');
+require_once('include/library.inc.php');

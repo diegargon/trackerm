@@ -146,6 +146,12 @@ class newDB {
         $this->update($table, $item, $where, 'LIMIT 1');
     }
 
+    public function updateItemsByField($table, $items, $field) {
+        $where[$field] = ['value' => $items[$field]];
+
+        $this->update($table, $items, $where);
+    }
+
     public function getTableData($table) {
         $result = $this->select($table);
         $rows = $this->fetchAll($result);
@@ -399,14 +405,14 @@ class newDB {
 
     private function createTables() {
         $this->log->debug("Entering create tables");
-        require('config/db.sql.php');
+        require_once('config/db.sql.php');
 
         return create_db();
     }
 
     private function upgradeDb($from) {
         $this->log->debug("Entering updatedb from $from ");
-        require('config/db.sql.php');
+        require_once('config/db.sql.php');
 
         return update_db($from);
     }

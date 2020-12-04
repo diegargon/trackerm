@@ -88,7 +88,7 @@ function getFileTitle($file) {
 }
 
 function getFileEpisode($file_name) {
-    //TODO change chapter -> episode in all code
+    //TODO change episode -> episode in all code
 
     /* FORMAT Cap.101 */
     $match = [];
@@ -102,26 +102,26 @@ function getFileEpisode($file_name) {
             $temp = substr($capitulo_noformat, 0, 2);
             $cap = substr($capitulo_noformat, 2, 3);
         }
-        $chapter['season'] = $temp;
-        $chapter['chapter'] = $cap;
+        $episode['season'] = $temp;
+        $episode['episode'] = $cap;
     }
 
     /* FORMAT 1x01 */
     if (preg_match('/[0-9]{1,2}(x|X)[0-9]{2,2}/i', $file_name, $match) == 1) {
-        $_chapter = $match[0];
-        $chapter['season'] = substr($_chapter, 0, stripos($_chapter, 'x'));
-        $chapter['chapter'] = substr($_chapter, stripos($_chapter, 'x') + 1);
+        $_episode = $match[0];
+        $episode['season'] = substr($_episode, 0, stripos($_episode, 'x'));
+        $episode['episode'] = substr($_episode, stripos($_episode, 'x') + 1);
     }
 
     /* FORMAT S01E01 */
 
     if (preg_match('/S\d{2}E\d{2}/i', $file_name, $match) == 1) {
         $matched = $match[0];
-        $chapter['season'] = substr($matched, 1, stripos($matched, 'E'));
-        $chapter['chapter'] = substr($matched, stripos($matched, 'E') + 1);
+        $episode['season'] = substr($matched, 1, stripos($matched, 'E'));
+        $episode['episode'] = substr($matched, stripos($matched, 'E') + 1);
     }
 
-    return isset($chapter) ? $chapter : false;
+    return isset($episode) ? $episode : false;
 }
 
 function getFileYear($file_name) {
@@ -129,9 +129,9 @@ function getFileYear($file_name) {
     $match = [];
 
     if (preg_match('/\([1-9]{4}\)/', $file_name, $match)) {
-        isset($match[0]) ? $year = str_replace('(', '', str_replace(')', '', $match[0])) : null;
+        isset($match[0]) ? $year = str_replace('(', '', str_replace(')', '', $match[0])) : $year = false;
     } else if (preg_match('/[1-9]{4}/', $file_name, $match)) {
-        isset($match[0]) ? $year = $match[0] : null;
+        isset($match[0]) ? $year = $match[0] : $year = false;
     }
 
     return $year;

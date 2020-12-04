@@ -11,7 +11,7 @@ define('IN_WEB', true);
 
 //NEED FOR ROOT_PATH and load common and config files FIX with better way
 if (file_exists('/etc/trackerm.conf')) {
-    require('/etc/trackerm.conf');
+    require_once('/etc/trackerm.conf');
 } else {
     echo "\n" . 'The config file /etc/trackerm.conf is missed, please copy the default file in config.inc.php directory to /etc  and rename it as trackerm.conf and configure the settings' . "\n";
     exit();
@@ -19,11 +19,11 @@ if (file_exists('/etc/trackerm.conf')) {
 
 chdir($cfg['ROOT_PATH']);
 
-require('include/common.inc.php');
+require_once('include/common.inc.php');
 
 isset($argv[1]) && $argv[1] == '-console' ? $log->setConsole(true) : null;
 
-require('include/trackerm-cli.inc.php');
+require_once('include/trackerm-cli.inc.php');
 $log->info("Starting trackerm automatic service...");
 $log->debug("Transmission work...");
 transmission_scan();

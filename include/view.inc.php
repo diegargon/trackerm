@@ -10,7 +10,7 @@
 !defined('IN_WEB') ? exit : true;
 
 function view() {
-    global $cfg, $LNG, $db, $newdb, $filter;
+    global $cfg, $LNG, $newdb, $newdb, $filter;
     $type = $filter->getString('type');
     $id = $filter->getInt('id');
 
@@ -20,11 +20,11 @@ function view() {
     $page = '';
 
     if ($type == 'movies_library') {
-        $t_type = 'biblio-movies';
+        $t_type = 'library_movies';
         $other['reidentify'] = 1;
         $other['deletereg'] = 1;
     } else if ($type == 'shows_library') {
-        $t_type = 'biblio-shows';
+        $t_type = 'library_shows';
         $other['reidentify'] = 1;
         $other['deletereg'] = 1;
     } else if ($type == 'movies_torrent') {
@@ -41,20 +41,18 @@ function view() {
     }
     $other['page_type'] = $type;
 
-    if ($t_type == 'tmdb_search' || $t_type == 'jackett_movies' || $t_type == 'jackett_shows') {
-        $item = $newdb->getItemByID($t_type, $id);
-    } else {
-        $item = $db->getItemByID($t_type, $id);
-    }
+
+    $item = $newdb->getItemById($t_type, $id);
+
     empty($item) ? msg_box($msg = ['title' => $LNG['L_ERRORS'], 'body' => $LNG['L_ITEM_NOT_FOUND'] . '1A1003']) : null;
 
     if ($type == 'movies_db') {
-        $library_item = $db->getItemByField('biblio-movies', 'themoviedb_id', $item['themoviedb_id']);
+        $library_item = $newdb->getItemByField('library_movies', 'themoviedb_id', $item['themoviedb_id']);
         if ($library_item !== false) {
             $item['in_library'] = $library_item['id'];
         }
     } else if ($type == 'shows_db') {
-        $library_item = $db->getItemByField('biblio-shows', 'themoviedb_id', $item['themoviedb_id']);
+        $library_item = $newdb->getItemByField('library_shows', 'themoviedb_id', $item['themoviedb_id']);
         if ($library_item !== false) {
             $item['in_library'] = $library_item['id'];
         }
@@ -73,7 +71,7 @@ function view() {
     }
 
     if ($type == 'shows_library') {
-        $shows_library = $db->getTableData('biblio-shows');
+        $shows_library = $newdb->getTableData('library_shows');
 
         $i = 0;
         $tsize = 0;
@@ -269,7 +267,8 @@ function view_seasons($id, $update = false) {
         foreach ($items as $item) {
             $have_episodes = [];
             if ($item['season'] == $season) {
-                $have = check_if_have_show($id, $i, $item['episode']);
+                $have = check_if_have_show($id, $item['season'], $item['episode']);
+
                 $episode_data .= '<div class="divTableRow">';
                 $episode_data .= '<div class="divTableCellEpisodes">' . $item['episode'] . '</div>';
                 if ($have !== false) {
@@ -320,22 +319,28 @@ function view_seasons($id, $update = false) {
 }
 
 function check_if_have_show($id, $season, $episode) {
-    global $db;
+    global $newdb;
 
-    $shows = $db->getTableData('biblio-shows');
-    //echo $id .':'. $season .':'. $episode .'<br>';
+    $shows = $newdb->getTableData('library_shows');
+    //echo $id . ':' . $season . ':' . $episode . '<br>';
+    //where['themoviedb_id'] = ['value' => 62688];
+    //$results = $newdb->select('library_shows', null, $where);
+    //$rows = $newdb->fetchAll($results);
+    //$newdb->finalize($results);
+
     foreach ($shows as $show) {
+
         if (
                 isset($show['themoviedb_id']) &&
                 isset($show['season']) &&
-                isset($show['chapter']) &&
+                isset($show['episode']) &&
                 $show['themoviedb_id'] == $id &&
                 $show['season'] == $season &&
-                $show['chapter'] == $episode
+                $show['episode'] == $episode
         ) {
+
             return $show;
         }
     }
-
     return false;
 }

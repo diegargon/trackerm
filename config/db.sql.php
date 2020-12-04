@@ -96,6 +96,9 @@ function create_db() {
                     "scene" VARCHAR NULL,
                     "lang" VARCHAR NULL,
                     "plot" VARCHAR NULL,
+                    "title_year" VARCHAR NULL,
+                    "poster" VARCHAR NULL,
+                    "release" VARCHAR NULL,
                     "master" INTEGER NULL,
                     "added" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
@@ -105,7 +108,7 @@ function create_db() {
     $newdb->query('CREATE TABLE IF NOT EXISTS "library_shows" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                     "title" VARCHAR NULL,
-                    "themoviedb_id" INTEGER NULL UNIQUE,
+                    "themoviedb_id" INTEGER NULL,
                     "file_name" VARCHAR NOT NULL UNIQUE,
                     "predictible_title" VARCHAR NULL,
                     "original_title" VARCHAR NULL,
@@ -121,6 +124,9 @@ function create_db() {
                     "plot" VARCHAR NULL,
                     "season" INTEGER NULL,
                     "episode" INTEGER NULL,
+                    "title_year" VARCHAR NULL,
+                    "poster" VARCHAR NULL,
+                    "release" VARCHAR NULL,
                     "master" INTEGER NULL,
                     "added" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL

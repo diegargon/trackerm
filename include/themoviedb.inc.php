@@ -40,7 +40,7 @@ function themoviedb_searchShows($search) {
 }
 
 function themoviedb_MediaPrep($media_type, $items) {
-    global $db, $newdb, $log;
+    global $newdb, $newdb, $log;
 
     $img_path = 'https://image.tmdb.org/t/p/w500';
 
@@ -74,12 +74,12 @@ function themoviedb_MediaPrep($media_type, $items) {
         }
 
         if ($media_type == 'movies') {
-            $library_item = $db->getItemByField('biblio-movies', 'themoviedb_id', $item['id']);
+            $library_item = $newdb->getItemByField('library_movies', 'themoviedb_id', $item['id']);
             if ($library_item !== false) {
                 $in_library = $library_item['id'];
             }
         } else if ($media_type == 'shows') {
-            $library_item = $db->getItemByField('biblio-shows', 'themoviedb_id', $item['id']);
+            $library_item = $newdb->getItemByField('library_shows', 'themoviedb_id', $item['id']);
             if ($library_item !== false) {
                 $in_library = $library_item['id'];
             }
@@ -97,7 +97,7 @@ function themoviedb_MediaPrep($media_type, $items) {
             'scene' => !empty($item['backdrop_path']) ? $img_path . $item['backdrop_path'] : null,
             'lang' => $item['original_language'],
             'plot' => $item['overview'],
-            'release' => $release,
+            'release' => isset($release) ? $release : null,
         ];
     }
 

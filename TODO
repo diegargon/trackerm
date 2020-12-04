@@ -1,8 +1,7 @@
 TODO
 
 [HIGH]
-    [CHANGE] Change some store code for adapt for easy transition to the "user a real database" change
-    [CHANGE] Use a real database system
+
 [MED]  
     [NEW] Escaneo de directorios a más para avi sin ser torrents. $cfg['SCAN_MEDIA_DIR'] = 1;
     [NEW/IMPROVE] actualizacion automatica de titulos de episodio a excepcion de que el show sea "ended"
@@ -17,6 +16,7 @@ TODO
     [IMPROVE/WANTED] Añadir la posibilidad de buscar el titulo exacto, si buscamos "Run" o "Asesino" encontrara varios resultados con titulos
         que contienen dichos terminos y igual se requiere que el titulo solo sea "RUN" o "ASESINO" a secas    
     [IMPROVE] Send state msg when change to 10 (delete) the torrents)
+    [FIX] Borrar registro de show no borra todos los registros 
 [VERY LOW]
     [CHANGE] TMDB: Añadir items de ultimas, popular o similar
     [FIX/IMPROVE] fechas normalizar a formato comun    
@@ -30,13 +30,15 @@ TODO
     [IMPROVE] Wanted Serie, poner en seguimiento nuevos capitulos de series, hay que ver como ver el release date pues en los datos tmdb solo
         viene el americano. Una forma seria poner una opcion de "Sin Retraso", "Retraso una semana", "Retraso dos a cuatro ..." o un mes.    
     [NEW/IMPROVE] recargar con jquery solo las partes necesarias en vez de recargar toda la pagina
+    [FIX] A la hora de identificar las series siguientes capitulos los identifica por el predictible_title, si hubiera varias series con el mismo titulo habria problemas. 
+    [FIX] filesearch con glob da error recursivo si se lanza rebuild(shows) rebuild(movies) segido.
 
 [thigs to do when we use a real database]
     [IMPROVE] In search and news filter torrents tags &words: like  720p  for show only 1080... and ignore keywords like "LANGUAGE"
     [NEW] Add optional user security for profiles      
     [NEW] Config UI
     [IMPROVE] News: Mixed Indexers elements on New now present by indexer order
-
+    
 [BACKLOG]
     [CHANGE] Change actual Transmission rpc api to something basic, since is enough and the actual have alot of deps 
     [NEW/IMPROVE] En el select de identificar estaria bien mostrar las caractulas al poner encima

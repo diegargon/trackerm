@@ -121,11 +121,11 @@ Class Log {
     }
 
     public function clearStateMsgs() {
-        global $db;
+        global $newdb;
 
         $where['type'] = ['value' => 'state'];
 
-        return $db->delete('log_msgs', $where);
+        return $newdb->delete('log_msgs', $where);
     }
 
 }

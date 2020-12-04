@@ -10,72 +10,91 @@
 !defined('IN_WEB') ? exit : true;
 
 function rebuild($media_type, $path) {
-    global $cfg, $db;
+    global $cfg, $newdb;
 
 
     $items = [];
     $files = findfiles($path, $cfg['media_ext']);
 
     if ($media_type == 'movies') {
-        $db_file = 'biblio-movies';
+        $library_table = 'library_movies';
         $ilink = 'movies_library';
     } else if ($media_type == 'shows') {
-        $db_file = 'biblio-shows';
+        $library_table = 'library_shows';
         $ilink = 'shows_library';
     }
 
-    $media = $db->getTableData($db_file);
-    $last_id = $db->getLastId($db_file);
+    $media = $newdb->getTableData($library_table);
 
+    $i = 0;
     foreach ($files as $file) {
         if ($media === false ||
                 array_search($file, array_column($media, 'path')) === false
         ) {
-            $items[$last_id]['id'] = $last_id;
-            $items[$last_id]['ilink'] = $ilink;
-            /* File */
-            $items[$last_id]['file_name'] = $file_name = trim(basename($file));
-            $items[$last_id]['size'] = filesize($file);
 
-            /* TITLE  */
+            $file_name = trim(basename($file));
             $predictible_title = getFileTitle($file_name);
-            $items[$last_id]['predictible_title'] = ucwords($predictible_title);
-            $items[$last_id]['title'] = '';
             $year = getFileYear($file_name);
-            !empty($year) ? $items[$last_id]['year'] = $year : null;
-            $items[$last_id]['path'] = $file;
-            $items[$last_id]['tags'] = getFileTags($file_name);
-            $items[$last_id]['ext'] = substr($file_name, -3);
-            $chapter = getFileEpisode($file_name);
-            if (!empty($chapter)) {
-                $items[$last_id]['season'] = intval($chapter['season']);
-                $items[$last_id]['chapter'] = intval($chapter['chapter']);
+            $tags = getFileTags($file_name);
+            $ext = substr($file_name, -3);
+
+
+            $items[$i] = [
+                'ilink' => $ilink,
+                'file_name' => $file_name,
+                'size' => filesize($file),
+                'predictible_title' => ucwords($predictible_title),
+                'title' => '',
+                'title_year' => $year,
+                'path' => $file,
+                'tags' => $tags,
+                'ext' => $ext,
+            ];
+            /*
+              $items[$i]['ilink'] = $ilink;
+              $items[$i]['file_name'] = $file_name;
+              $items[$i]['size'] = filesize($file);
+              $items[$i]['predictible_title'] = ucwords($predictible_title);
+              $items[$i]['title'] = '';
+              $items[$i]['title_year'] = $year;
+              $items[$i]['path'] = $file;
+              $items[$i]['tags'] = $tags;
+              $items[$i]['ext'] = $ext;
+             */
+            if ($media_type == 'shows') {
+                $SE = getFileEpisode($file_name);
+
+                if (!empty($SE)) {
+                    $season = intval($SE['season']);
+                    $episode = intval($SE['episode']);
+                }
+                $items[$i]['season'] = $season;
+                $items[$i]['episode'] = $episode;
             }
 
-            /* auto identify episodes already identified */
+            // auto identify episodes already identified
             if ($media_type == 'shows') {
                 foreach ($media as $id_item) {
 
                     if ($id_item['predictible_title'] === ucwords($predictible_title) &&
                             !empty($id_item['themoviedb_id'])
                     ) {
-                        $items[$last_id]['themoviedb_id'] = $id_item['themoviedb_id'];
-                        $items[$last_id]['title'] = $id_item['title'];
-                        $items[$last_id]['poster'] = $id_item['poster'];
-                        $items[$last_id]['rating'] = $id_item['rating'];
-                        $items[$last_id]['popularity'] = $id_item['popularity'];
-                        $items[$last_id]['scene'] = $id_item['scene'];
-                        $items[$last_id]['lang'] = $id_item['lang'];
-                        $items[$last_id]['plot'] = $id_item['plot'];
-                        $items[$last_id]['original_title'] = $id_item['original_title'];
+                        $items[$i]['themoviedb_id'] = $id_item['themoviedb_id'];
+                        $items[$i]['title'] = $id_item['title'];
+                        $items[$i]['poster'] = $id_item['poster'];
+                        $items[$i]['rating'] = $id_item['rating'];
+                        $items[$i]['popularity'] = $id_item['popularity'];
+                        $items[$i]['scene'] = $id_item['scene'];
+                        $items[$i]['lang'] = $id_item['lang'];
+                        $items[$i]['plot'] = $id_item['plot'];
+                        $items[$i]['original_title'] = $id_item['original_title'];
                     }
                 }
             }
-            $last_id++;
         }
+        $i++;
     }
-
-    isset($items) ? $db->addElements($db_file, $items) : null;
+    isset($items) ? $newdb->addItems($library_table, $items) : null;
 
     return true;
 }
@@ -150,7 +169,8 @@ function identify_media($type, $media) {
 }
 
 function submit_ident($type, $items) {
-    global $db;
+    global $newdb;
+
 
     foreach ($items as $my_id => $db_id) {
         if (!empty($db_id)) {
@@ -160,8 +180,8 @@ function submit_ident($type, $items) {
             !empty($db_item['name']) ? $update_fields['title'] = $db_item['name'] : null;
             $update_fields['themoviedb_id'] = $db_item['themoviedb_id'];
             !empty($db_item['poster']) ? $update_fields['poster'] = $db_item['poster'] : null;
-            !empty($db_item['chapter']) ? $update_fields['chapter'] = $db_item['chapter'] : null;
-            !empty($db_item['season']) ? $update_fields['season'] = $db_item['season'] : null;
+            //!empty($db_item['episode']) ? $update_fields['episode'] = $db_item['episode'] : null;
+            //!empty($db_item['season']) ? $update_fields['season'] = $db_item['season'] : null;
             !empty($db_item['original_title']) ? $update_fields['original_title'] = $db_item['original_title'] : null;
             !empty($db_item['rating']) ? $update_fields['rating'] = $db_item['rating'] : null;
             !empty($db_item['popularity']) ? $update_fields['popularity'] = $db_item['popularity'] : null;
@@ -169,10 +189,13 @@ function submit_ident($type, $items) {
             !empty($db_item['lang']) ? $update_fields['lang'] = $db_item['lang'] : null;
             !empty($db_item['plot']) ? $update_fields['plot'] = $db_item['plot'] : null;
             !empty($db_item['release']) ? $update_fields['release'] = $db_item['release'] : null;
+
             if ($type == 'movies') {
-                $db->updateRecordById('biblio-movies', $my_id, $update_fields);
+                $newdb->updateItemById('library_movies', $my_id, $update_fields);
             } else if ($type == 'shows') {
-                $db->updateRecordsBySameField('biblio-shows', $my_id, 'predictible_title', $update_fields);
+                $mylib_show = $newdb->getItemById('library_shows', $my_id);
+                $update_fields['predictible_title'] = $mylib_show['predictible_title'];
+                $newdb->updateItemsByField('library_shows', $update_fields, 'predictible_title');
             }
         }
     }

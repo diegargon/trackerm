@@ -32,7 +32,7 @@
                 </span><br/>
                 <?php if (!empty($tdata['added'])) { ?>
                     <span><?= $tdata['L_ADDED'] ?> :</span>
-                    <span class="view_added"><?= date("d-m-y", $tdata['added']) ?></span>
+                    <span class="view_added"><?= strftime("%d %h %X", strtotime($tdata['created'])) ?></span>
                     <br/>
                 <?php } ?>
                 <?php if (!empty($tdata['release'])) { ?>

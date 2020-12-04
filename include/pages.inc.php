@@ -113,7 +113,7 @@ function index_page() {
 }
 
 function page_view() {
-    global $db, $LNG, $filter;
+    global $newdb, $LNG, $filter;
 
     $id = $filter->getInt('id');
     $deletereg = $filter->getInt('deletereg', 1);
@@ -124,12 +124,12 @@ function page_view() {
     }
     if (!empty($deletereg)) {
         if ($type == 'movies_library') {
-            $db->deleteById('biblio-movies', $id);
+            $newdb->deleteItemById('library_movies', $id);
         }
         if ($type == 'shows_library') {
-            $delete_item = $db->getItemById('biblio-shows', $id);
+            $delete_item = $newdb->getItemById('library_shows', $id);
             $media_db_id = $delete_item['themoviedb_id'];
-            $db->deleteByFieldMatch('biblio-shows', 'themoviedb_id', $media_db_id);
+            $newdb->deleteItemByField('library_shows', 'themoviedb_id', $media_db_id);
         }
         return msg_box($msg = ['title' => $LNG['L_SUCCESS'], 'body' => $LNG['L_DELETE_SUCCESSFUL']]);
     }
@@ -137,7 +137,7 @@ function page_view() {
     return view();
 }
 
-function page_biblio() {
+function page_library() {
     global $LNG, $cfg;
 
     if (
@@ -317,86 +317,6 @@ function page_news() {
     return $page_news;
 }
 
-function old_page_news() {
-    global $cfg, $db, $log;
-
-    $cache_movies_expire = 0;
-    $cache_shows_expire = 0;
-
-    if ($cfg['search_cache']) {
-        $movies_cache_check = $db->getItemById('jackett_search_movies', 'news');
-        !isset($movies_cache_check['cache_time']) ? $movies_cache_check['cache_time'] = 0 : null;
-
-        if ((time() > ($movies_cache_check['cache_time'] + $cfg['search_cache_expire']))) {
-            $log->debug("News: Movies cache expire, Requesting");
-            $cache_movies_expire = 1;
-        } else {
-            //$log->debug("Movies (news) cache expire in " . (($movies_cache_check['cache_time'] + $cfg['search_cache_expire']) - time()));
-            $res_movies_db = $movies_cache_check['results'];
-        }
-
-        $shows_cache_check = $db->getItemById('jackett_search_shows', 'news');
-        !isset($shows_cache_check['cache_time']) ? $shows_cache_check['cache_time'] = 0 : null;
-        if ((time() > ($shows_cache_check['cache_time'] + $cfg['search_cache_expire']))) {
-            $log->debug("News: Cache shows expire. Requesting");
-            $cache_shows_expire = 1;
-        } else {
-            //$log->debug("Shows (news) cache expire in " . (($shows_cache_check['cache_time'] + $cfg['search_cache_expire']) - time()));
-            $res_shows_db = $shows_cache_check['results'];
-        }
-    }
-
-    if (!$cfg['search_cache'] || $cache_movies_expire || $cache_shows_expire) {
-        foreach ($cfg['jackett_indexers'] as $indexer) {
-            $caps = jackett_get_caps($indexer);
-            $categories = jackett_get_categories($caps['categories']['category']);
-            if (!$cfg['search_cache'] || ($cfg['search_cache'] && $cache_movies_expire)) {
-                $results = jackett_search_movies('', $indexer, $categories);
-                ($results) ? $movies_res[$indexer] = $results : null;
-            }
-            if (!$cfg['search_cache'] || ($cfg['search_cache'] && $cache_shows_expire)) {
-                $results = null;
-                $results = jackett_search_shows('', $indexer, $categories);
-                $results ? $shows_res[$indexer] = $results : null;
-            }
-        }
-
-        ($cache_movies_expire == 1) || !$cfg['search_cache'] ? $res_movies_db = jackett_prep_movies($movies_res) : null;
-        ($cache_shows_expire == 1) || !$cfg['search_cache'] ? $res_shows_db = jackett_prep_shows($shows_res) : null;
-
-        if (!$cfg['search_cache'] || ($cfg['search_cache'] && $cache_movies_expire)) {
-            $search_cache['search_keyword'] = 'news';
-            $search_cache['cache_time'] = time();
-            $search_cache['results'] = $res_movies_db;
-            $db->upsertElementById('jackett_search_movies', 'news', $search_cache);
-        }
-        if (!$cfg['search_cache'] || ($cfg['search_cache'] && $cache_shows_expire)) {
-            $search_cache['search_keyword'] = 'news';
-            $search_cache['cache_time'] = time();
-            $search_cache['results'] = $res_shows_db;
-            $db->upsertElementById('jackett_search_shows', 'news', $search_cache);
-        }
-    }
-
-    /* BUILD PAGE */
-
-    $page_news = '';
-
-    if (!empty($res_movies_db)) {
-        $topt['search_type'] = 'movies';
-        $page_news_movies = buildTable('L_MOVIES', $res_movies_db, $topt);
-        $page_news .= $page_news_movies;
-    }
-
-    if (!empty($res_shows_db)) {
-        $topt['search_type'] = 'shows';
-        $page_news_shows = buildTable('L_SHOWS', $res_shows_db, $topt);
-        $page_news .= $page_news_shows;
-    }
-
-    return $page_news;
-}
-
 function page_tmdb() {
     global $LNG;
 
@@ -485,7 +405,7 @@ function page_wanted() {
 }
 
 function page_identify() {
-    global $LNG, $db, $filter;
+    global $LNG, $newdb, $filter;
 
     $media_type = $filter->getString('media_type');
     $id = $filter->getInt('identify');
@@ -499,9 +419,9 @@ function page_identify() {
     $tdata['head'] = '';
 
     if ($media_type == 'movies') {
-        $item = $db->getItemByID('biblio-movies', $id);
+        $item = $newdb->getItemById('library_movies', $id);
     } else {
-        $item = $db->getItemByID('biblio-shows', $id);
+        $item = $newdb->getItemById('library_shows', $id);
     }
 
     if (isset($_POST['identify']) && isset($_POST['selected'])) {
@@ -562,7 +482,7 @@ function page_identify() {
 }
 
 function page_download() {
-    global $db, $filter;
+    global $newdb, $filter;
 
     $id = $filter->getInt('id');
     $type = $filter->getString('type');
@@ -572,9 +492,9 @@ function page_download() {
     }
 
     if ($type == 'movies_library') {
-        $item = $db->getItemById('biblio-movies', $id);
+        $item = $newdb->getItemById('library_movies', $id);
     } else if ($type == 'shows_library') {
-        $item = $db->getItemById('biblio-shows', $id);
+        $item = $newdb->getItemById('library_shows', $id);
     } else {
         exit();
     }

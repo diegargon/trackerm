@@ -8,7 +8,7 @@ if (1) {
     ini_set("display_errors", 1);
 }
 
-require('config/config.inc.php');
+require_once('config/config.inc.php');
 
 if (file_exists('/etc/trackerm.conf')) {
     require('/etc/trackerm.conf');
@@ -17,41 +17,41 @@ if (file_exists('/etc/trackerm.conf')) {
     exit();
 }
 
-require('config/config.priv.php');
+require_once('config/config.priv.php');
 
 setlocale(LC_ALL, $cfg['LOCALE']);
 
-require('include/logging.class.php');
+require_once('include/logging.class.php');
 global $log;
 $log = new Log($cfg);
 
-require('include/db.inc.php');
+require_once('include/db.inc.php');
 global $db;
 $db = new DB($cfg['ROOT_PATH'] . '/cache');
 
-require('include/sqlite3.inc.php');
+require_once('include/sqlite3.inc.php');
 global $newdb;
 $newdb = new newDb($cfg['DB_FILE'], $log);
 $newdb->connect();
 
-require('lang/' . $cfg['LANG'] . '/lang.inc.php');
-require('include/checks.inc.php');
-require('include/filters.class.php');
+require_once('lang/' . $cfg['LANG'] . '/lang.inc.php');
+require_once('include/checks.inc.php');
+require_once('include/filters.class.php');
 global $filter;
 $filter = new Filter();
 
-require('include/curl.inc.php');
-require('include/file.utils.php');
-require('include/transmission.class.php');
-require('include/transmission.inc.php');
-require('include/library-common.inc.php');
-require('include/ident-title-utils.inc.php');
-require('include/view.inc.php');
-require('include/' . $cfg['search_db'] . '.inc.php');
-require('include/mediadb.inc.php');
-require('include/jackett.inc.php');
-require('include/wanted.inc.php');
-require ('vendor/autoload.php');
+require_once('include/curl.inc.php');
+require_once('include/file.utils.php');
+require_once('include/transmission.class.php');
+require_once('include/transmission.inc.php');
+require_once('include/library-common.inc.php');
+require_once('include/ident-title-utils.inc.php');
+require_once('include/view.inc.php');
+require_once('include/' . $cfg['search_db'] . '.inc.php');
+require_once('include/mediadb.inc.php');
+require_once('include/jackett.inc.php');
+require_once('include/wanted.inc.php');
+require_once('vendor/autoload.php');
 
 
 

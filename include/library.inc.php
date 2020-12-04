@@ -10,7 +10,7 @@
 !defined('IN_WEB') ? exit : true;
 
 function show_my_movies() {
-    global $db, $cfg;
+    global $newdb, $cfg;
 
     $page = '';
 
@@ -18,13 +18,13 @@ function show_my_movies() {
         submit_ident('movies', $_POST['mult_movies_select']);
     }
     if (!empty($_GET['ident_delete']) && ($_GET['media_type'] == 'movies')) {
-        $db->deleteByID('biblio-movies', $_GET['ident_delete']);
+        $newdb->deleteItemById('library_movies', $_GET['ident_delete']);
     }
 
-    $movies = $db->getTableData('biblio-movies');
-    if ($movies == false || isset($_POST['rebuild_movies'])) {
+    $movies = $newdb->getTableData('library_movies');
+    if (isset($_POST['rebuild_movies'])) {
         rebuild('movies', $cfg['MOVIES_PATH']);
-        $movies = $db->getTableData('biblio-movies');
+        $movies = $newdb->getTableData('library_movies');
     }
 
     if ($movies != false) {
@@ -38,7 +38,7 @@ function show_my_movies() {
         }
 
         usort($movies_identifyed, function ($a, $b) {
-            return strcmp($a["added"], $b["added"]);
+            return strcmp($a["created"], $b["created"]);
         });
         $movies_identifyed = array_reverse($movies_identifyed);
 
@@ -49,7 +49,7 @@ function show_my_movies() {
 }
 
 function show_my_shows() {
-    global $db, $cfg;
+    global $newdb, $cfg;
 
     $page = '';
     $topt = [];
@@ -59,15 +59,15 @@ function show_my_shows() {
     }
 
     if (!empty($_GET['ident_delete']) && ($_GET['media_type'] == 'shows')) {
-        $delete_ident_item = $db->getItemById('biblio-shows', $_GET['ident_delete']);
+        $delete_ident_item = $newdb->getItemById('library_shows', $_GET['ident_delete']);
         $delete_ptitle_match = $delete_ident_item['predictible_title'];
-        $db->deleteByFieldMatch('biblio-shows', 'predictible_title', $delete_ptitle_match);
+        $newdb->deleteItemByField('library_shows', 'predictible_title', $delete_ptitle_match);
     }
-    $shows = $db->getTableData('biblio-shows');
+    $shows = $newdb->getTableData('library_shows');
 
-    if ($shows == false || isset($_POST['rebuild_shows'])) {
+    if (isset($_POST['rebuild_shows'])) {
         rebuild('shows', $cfg['SHOWS_PATH']);
-        $shows = $db->getTableData('biblio-shows');
+        $shows = $newdb->getTableData('library_shows');
     }
 
     if ($shows != false) {
@@ -83,7 +83,7 @@ function show_my_shows() {
         }
 
         usort($shows_identifyed, function ($a, $b) {
-            return strcmp($a["added"], $b["added"]);
+            return strcmp($a["created"], $b["created"]);
         });
         $shows_identifyed = array_reverse($shows_identifyed);
 

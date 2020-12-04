@@ -9,7 +9,7 @@
  */
 define('IN_WEB', true);
 
-require('include/usermode.inc.php');
+require_once('include/usermode.inc.php');
 
 $req_page = $filter->getString('page');
 $body = getMenu();
@@ -36,8 +36,8 @@ if (!empty($_GET['download'])) {
 
 if (!isset($req_page) || $req_page == '') {
     $body .= index_page();
-} else if ($req_page == 'biblio') {
-    $body .= page_biblio();
+} else if ($req_page == 'library') {
+    $body .= page_library();
 } else if ($req_page == 'news') {
     $body .= page_news();
 } else if ($req_page == 'tmdb') {
