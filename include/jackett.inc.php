@@ -21,18 +21,17 @@ function search_movies_torrents($words, $head = null, $nohtml = false) {
         $movies_cache_check = $db->getItemByField('jackett_search_movies_cache', 'words', $words);
         !isset($movies_cache_check['update']) ? $movies_cache_check['update'] = 0 : null;
 
-        if ((time() > ($movies_cache_check['update'] + $cfg['search_cache_expire']))) {
+        if (time() > ($movies_cache_check['update'] + $cfg['search_cache_expire'])) {
             $log->debug("News: Movies cache expire, Requesting");
             $cache_movies_expire = 1;
         } else {
-            $log->debug("News:  Using movies cache");
+            //$log->debug("News:  Using movies cache");
             $ids = explode(',', $movies_cache_check['ids']);
 
             if (empty($ids) || count($ids) <= 0) {
                 return false;
             }
             foreach ($ids as $cache_id) {
-
                 $movies_db[] = $db->getItemById('jackett_movies', trim($cache_id));
             }
         }
@@ -81,9 +80,6 @@ function search_movies_torrents($words, $head = null, $nohtml = false) {
 function search_shows_torrents($words, $head = null, $nohtml = false) {
     global $cfg, $log, $db;
 
-    //   $result = $db->getTableData('jackett_shows');
-//    $rows = $db->fetchAll($result);
-
     $result = [];
     $page = '';
     $results_count = 0;
@@ -93,18 +89,17 @@ function search_shows_torrents($words, $head = null, $nohtml = false) {
         $shows_cache_check = $db->getItemByField('jackett_search_shows_cache', 'words', $words);
         !isset($shows_cache_check['update']) ? $shows_cache_check['update'] = 0 : null;
 
-        if ((time() > ($shows_cache_check['update'] + $cfg['search_cache_expire']))) {
+        if (time() > ($shows_cache_check['update'] + $cfg['search_cache_expire'])) {
             $log->debug("News: Movies cache expire, Requesting");
             $cache_shows_expire = 1;
         } else {
-            $log->debug("News:  Using shows cache");
+            //$log->debug("News:  Using shows cache");
             $ids = explode(',', $shows_cache_check['ids']);
 
             if (empty($ids) || count($ids) <= 0) {
                 return false;
             }
             foreach ($ids as $cache_id) {
-
                 $shows_db[] = $db->getItemById('jackett_shows', trim($cache_id));
             }
         }
