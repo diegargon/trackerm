@@ -175,13 +175,10 @@ function submit_ident($type, $items) {
     foreach ($items as $my_id => $db_id) {
         if (!empty($db_id)) {
             $db_item = mediadb_getByLocalId($db_id);
-
             !empty($db_item['title']) ? $update_fields['title'] = $db_item['title'] : null;
             !empty($db_item['name']) ? $update_fields['title'] = $db_item['name'] : null;
             $update_fields['themoviedb_id'] = $db_item['themoviedb_id'];
             !empty($db_item['poster']) ? $update_fields['poster'] = $db_item['poster'] : null;
-            //!empty($db_item['episode']) ? $update_fields['episode'] = $db_item['episode'] : null;
-            //!empty($db_item['season']) ? $update_fields['season'] = $db_item['season'] : null;
             !empty($db_item['original_title']) ? $update_fields['original_title'] = $db_item['original_title'] : null;
             !empty($db_item['rating']) ? $update_fields['rating'] = $db_item['rating'] : null;
             !empty($db_item['popularity']) ? $update_fields['popularity'] = $db_item['popularity'] : null;

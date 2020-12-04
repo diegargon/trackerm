@@ -88,19 +88,24 @@ function show_my_shows() {
         $shows_identifyed = array_reverse($shows_identifyed);
 
         $uniq_shows = [];
-
-        $sizes = [];
-        $have_episodes = [];
+        $sum_sizes = [];
+        $episode_count = [];
 
         foreach ($shows_identifyed as $show) {
             $exists = false;
-            if (isset($sizes[$show['themoviedb_id']])) {
-                $sizes[$show['themoviedb_id']] = $show['size'] + $sizes[$show['themoviedb_id']];
-                $have_episodes[$show['themoviedb_id']] = 1 + $have_episodes[$show['themoviedb_id']];
+
+            if (isset($sum_sizes[$show['themoviedb_id']])) {
+                $sum_sizes[$show['themoviedb_id']] = $show['size'] + $sum_sizes[$show['themoviedb_id']];
             } else {
-                $sizes[$show['themoviedb_id']] = $show['size'];
-                $have_episodes[$show['themoviedb_id']] = 1;
+                $sum_sizes[$show['themoviedb_id']] = $show['size'];
             }
+
+            if (isset($episode_count[$show['themoviedb_id']])) {
+                $episode_count[$show['themoviedb_id']] = 1 + $episode_count[$show['themoviedb_id']];
+            } else {
+                $episode_count[$show['themoviedb_id']] = 1;
+            }
+
             foreach ($uniq_shows as $item) {
                 if ($item['title'] == $show['title']) {
                     $exists = true;
@@ -112,8 +117,8 @@ function show_my_shows() {
 
             $exists === false ? $uniq_shows[] = $show : null;
         }
-        count($sizes) > 1 ? $topt['sizes'] = $sizes : null;
-        count($have_episodes) > 1 ? $topt['have_episodes'] = $have_episodes : null;
+        count($sum_sizes) > 1 ? $topt['sizes'] = $sum_sizes : null;
+        count($episode_count) > 1 ? $topt['episode_count'] = $episode_count : null;
 
         $topt['search_type'] = 'shows';
         $page .= buildTable('L_SHOWS', $uniq_shows, $topt);

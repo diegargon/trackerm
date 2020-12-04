@@ -88,22 +88,21 @@ function getFileTitle($file) {
 }
 
 function getFileEpisode($file_name) {
-    //TODO change episode -> episode in all code
 
     /* FORMAT Cap.101 */
     $match = [];
     if (preg_match('/\[Cap.(.*?)\]/i', $file_name, $match) == 1) {
-        $capitulo_noformat = $match[1];
-        if (strlen($capitulo_noformat) == 3) {
-            $temp = substr($capitulo_noformat, 0, 1);
-            $cap = substr($capitulo_noformat, 1, 2);
+        $episode_noformat = $match[1];
+        if (strlen($episode_noformat) == 3) {
+            $ses = substr($episode_noformat, 0, 1);
+            $epi = substr($episode_noformat, 1, 2);
         }
-        if (strlen($capitulo_noformat) == 4) {
-            $temp = substr($capitulo_noformat, 0, 2);
-            $cap = substr($capitulo_noformat, 2, 3);
+        if (strlen($episode_noformat) == 4) {
+            $ses = substr($episode_noformat, 0, 2);
+            $epi = substr($episode_noformat, 2, 3);
         }
-        $episode['season'] = $temp;
-        $episode['episode'] = $cap;
+        $episode['season'] = $ses;
+        $episode['episode'] = $epi;
     }
 
     /* FORMAT 1x01 */
@@ -167,6 +166,7 @@ function getFileTags($file_name) {
     $tags = '';
 
     //Would tag wrong in media where year is part of title and not a tag
+    //tag wrong when Season/Episode its something like 1501
     $year = getFileYear($file_name);
     if (!empty($year)) {
         $tags .= '[' . $year . ']';
@@ -181,17 +181,13 @@ function getFileTags($file_name) {
     if (stripos($file_name, 'vose') !== false) {
         $tags .= "[VOSE]";
     }
-    if (
-            stripos($file_name, 'dual') !== false
-    ) {
+    if (stripos($file_name, 'dual') !== false) {
         $tags .= "[DUAL]";
     }
     if (stripos($file_name, '720p') !== false) {
         $tags .= "[720p]";
     }
-    if (
-            stripos($file_name, '1080p') !== false
-    ) {
+    if (stripos($file_name, '1080p') !== false) {
         $tags .= "[1080p]";
     }
     if (stripos($file_name, '480p') !== false) {

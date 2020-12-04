@@ -75,9 +75,9 @@ function buildTable($head, $db_ary, $topt = null) {
             $item['size'] = human_filesize($topt['sizes'][$item['themoviedb_id']]);
         }
 
-        if (!empty($item['themoviedb_id']) && !empty($topt['have_episodes'][$item['themoviedb_id']])) {
+        if (!empty($item['themoviedb_id']) && !empty($topt['episode_count'][$item['themoviedb_id']])) {
 
-            $item['have_episodes'] = $topt['have_episodes'][$item['themoviedb_id']];
+            $item['episode_count'] = $topt['episode_count'][$item['themoviedb_id']];
         }
 
         $num_col_items == 0 ? $page .= '<div class="divTableRow">' : null;

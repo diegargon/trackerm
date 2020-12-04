@@ -170,8 +170,6 @@ function jackett_get_caps($indexer) {
     global $cfg;
     $params = '';
 
-    //$jackett_url = $cfg['jackett_srv'] . $cfg['jackett_api'] . '/indexers/' . $indexer . '/results/torznab/api?apikey=' . $cfg['jackett_key'] . '&t=caps';
-    //return curl_get_jackett($jackett_url, $params);
     $jackett_url = $cfg['jackett_srv'] . $cfg['jackett_api'] . '/indexers/' . $indexer . '/results/torznab/';
     $params = 'api?apikey=' . $cfg['jackett_key'] . '&t=caps';
     return curl_get_jackett($jackett_url, $params);
