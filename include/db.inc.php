@@ -394,7 +394,7 @@ class DB {
             //check if exist tables
             return true;
         } else {
-            $this->log->err('Db file not exists: ' . $this->$db_path);
+            $this->log->err('Db file not exists: ' . $this->db_path);
             return false;
         }
     }
