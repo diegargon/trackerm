@@ -24,7 +24,7 @@ if (!empty($_GET['download'])) {
         $trans_db[0][$rkey] = $rval;
     }
 
-    $wanted_db[] = [
+    $wanted_db = [
         'tid' => $trans_db[0]['id'],
         'wanted_status' => 1,
         'themoviedb_id' => !empty($themoviedb_id) ? $wanted_db[0]['themoviedb_id'] = $themoviedb_id : null,
@@ -55,8 +55,7 @@ if (!isset($req_page) || $req_page == '') {
 } else if ($req_page == 'transmission') {
     $body .= page_transmission();
 } else {
-    $box_msg['title'] = $LNG['L_ERROR'] . ' : ' . $LNG['L_NOEXISTS'];
-    $box_msg['body'] = $LNG['L_PAGE_NOEXISTS'];
+    $box_msg = ['title' => $LNG['L_ERROR'] . ' : ' . $LNG['L_NOEXISTS'], 'body' => $LNG['L_PAGE_NOEXISTS']];
     $body .= msg_box($box_msg);
 }
 
