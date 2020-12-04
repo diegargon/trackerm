@@ -6,21 +6,23 @@
 
 **SPANISH**
 
-Probando a realizar una alternativa Sonarr+Radar sobre servidor web
+Probando a realizar una alternativa Sonarr+Radar sobre servidor web.
+Puedes ver sceenshots del aspecto actual(posiblemente desactualizado) en /screenshots aunque cambiara que el proyecto esta en fase muy 
+muy temprana.
+
 Warning: Codigo/esbozo realizado a correr (el grueso fue programado  en 3 intensos dias), no solo hay que pulirlo y reescribir mucho si no que esta sin 
 seguridad y asi continuara hasta que tenga una version con las funciones basicas.
 Probablemente de momento no deberias instalarlo.
-Puedes ver sceenshots del aspecto actual(posiblemente desactualizado) en /screenshots aunque cambiara que el proyecto esta en fase muy 
-muy temprana.
+
 
 **ENGLISH**
 
 Trying a Sonarr & Radarr alternative over a web server.
+You can see screenshots of the current appearance (not latest probably) in /screenshots although it going to change since this proyect 
+is in a very very early stage.
 Warning: Fast coding (the bulk was done in 3 days) have to polish alot/rewrite alot and came without any security, and 
 will remain like this until i have a working code with basic features.
 Probably you shouldn't install it at this moment.
-You can see screenshots of the current appearance (not latest probably) in /screenshots although it going to change since this proyect 
-is in a very very early stage.
 
 ## CURRENT STATE
 
@@ -74,7 +76,7 @@ Seguridad y mejor codigo vendra mucho mas despacio.
 ## Requeriments
 
     Linux - PHP - Web Server - transmission-daemon - Jackett - themoviedb.org account&API key
-    composer - sqlite3(not yet but probably)
+    composer - sqlite3
 
     Version Compatibility? it's not the momment. I working on:
     Ubuntu 20.04
