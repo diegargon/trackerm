@@ -156,11 +156,11 @@ function check_file_encrypt($type, $file) {
                 return true;
             }
         } else {
-            $log->debug("Unknown RAR signature: really a rar file?: $s");
+            $log->warning("Unknown RAR signature: really a rar file?: $s");
         }
         fclose($f);
     } else {
-        $log->debug("Check file encryption: filetype $type not supported ");
+        $log->warning("Check file encryption: filetype $type not supported ");
     }
 
     return false;

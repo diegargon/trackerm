@@ -10,9 +10,7 @@ if (1) {
 
 require_once('config/config.inc.php');
 
-if (file_exists('/etc/trackerm.conf')) {
-    require('/etc/trackerm.conf');
-} else {
+if (!file_exists('/etc/trackerm.conf')) {
     echo '<br> The config file /etc/trackerm.conf is missed, please copy the default file in config.min.php directory to /etc  and rename it as trackerm.conf and configure the settings';
     exit();
 }
@@ -48,8 +46,6 @@ require_once('include/mediadb.inc.php');
 require_once('include/jackett.inc.php');
 require_once('include/wanted.inc.php');
 require_once('vendor/autoload.php');
-
-
 
 do_checks();
 

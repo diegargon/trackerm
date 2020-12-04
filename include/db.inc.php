@@ -399,7 +399,8 @@ class DB {
 
     private function fail() {
         $this->log->debug(" FAIL ");
-        echo print_r($this->querys);
+        $err_msg = print_r($this->querys, true);
+        $this->log->err($err_msg);
         return false;
     }
 

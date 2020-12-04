@@ -45,7 +45,6 @@ function curl_get_jackett($url, $params) {
         return false;
     }
     $json = json_encode($xml);
-
     $array = json_decode($json, TRUE);
 
     return $array;
@@ -63,7 +62,11 @@ function curl_get_tmdb($url) {
 
     $response = curl_get($url, $curl_opt['headers']);
 
-    $array = json_decode($response, TRUE);
+    if ($response) {
+        $array = json_decode($response, TRUE);
+    } else {
+        return false;
+    }
     //var_dump($array);
 
     return $array;

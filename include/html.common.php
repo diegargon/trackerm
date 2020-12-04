@@ -39,9 +39,8 @@ function buildTable($head, $db_ary, $topt = null) {
     }
     empty($topt['columns']) ? $columns = $cfg['tresults_columns'] : $columns = $topt['columns'];
     empty($topt['max_items']) ? $max_items = $cfg['tresults_rows'] * $columns : $max_items = $topt['max_items'];
-    $page = '';
 
-    $page .= '<div class="type_head_container">';
+    $page = '<div class="type_head_container">';
 
     !empty($head) ? $page .= '<div class="type_head"><h2>' . $LNG[$head] . '</h2></div>' : null;
 
