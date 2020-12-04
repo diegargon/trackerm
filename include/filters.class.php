@@ -64,6 +64,7 @@ Class Filter {
         return $values;
     }
 
+    //Simple String words without accents or special characters
     function getString($val, $size = null) {
         if (empty($_GET[$val]) || (!empty($size) && (strlen($_GET[$val]) > $size))) {
             return false;
@@ -73,6 +74,23 @@ Class Filter {
     }
 
     function postString($val, $size = null) {
+        if (empty($_POST[$val]) || (!empty($size) && (strlen($_POST[$val]) > $size))) {
+            return false;
+        }
+        //TODO FILTER
+        return $_POST[$val];
+    }
+
+    //UTF8
+    function getUtf8($val, $size = null) {
+        if (empty($_GET[$val]) || (!empty($size) && (strlen($_GET[$val]) > $size))) {
+            return false;
+        }
+        //TODO FILTER
+        return $_GET[$val];
+    }
+
+    function postUtf8($val, $size = null) {
         if (empty($_POST[$val]) || (!empty($size) && (strlen($_POST[$val]) > $size))) {
             return false;
         }
