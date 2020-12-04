@@ -5,6 +5,7 @@
 ## Description: 
 
 SPANISH
+
 Probando a realizar una alternativa Sonarr+Radar sobre servidor web
 Warning: Codigo/esbozo realizado a correr (el grueso fue programado  en 3 intensos dias), no solo hay que pulirlo y reescribir mucho si no que esta sin 
 seguridad y asi continuara hasta que tenga una version con las funciones basicas.
@@ -13,6 +14,7 @@ Puedes ver sceenshots del aspecto actual(posiblemente desactualizado) en /screen
 muy temprana.
 
 ENGLISH
+
 Trying a Sonarr & Radarr alternative over a web server.
 Warning: Fast coding (the bulk was done in 3 days) have to polish alot/rewrite alot and came without any security, and 
 will remain like this until i have a working code with basic features.
@@ -23,6 +25,7 @@ is in a very very early stage.
 ## CURRENT STATE
 
 ENGLISH
+
 Now we use a sql database (sqllite) instead of plain text, i can't guarantee backwards compatibility between versions yet, but will
 not be something frequent if happens. Anyway, all work for setting from 0 is near automatic, just only click on rebuild the library and identify items.
 
@@ -36,6 +39,7 @@ I 'fast coding' this app in about 10 days, now for a while i would have less tim
 the messy code, bugs and security things than add new options.
 
 SPANISH
+
 Ahora utilizo una base de datos sql en vez de archivos de texto, no puedo todavia garantizar compatibilidad entre versiones pero no sera 
 frecuente si pasa. De todas formas, configurarlo de 0 es facil al ser casi automatico, escanear de nuevo la libreria y identificar los objetos/media
 
@@ -51,6 +55,7 @@ en mejorar el codigo que esta liado, bugs y temas relativos a la seguridad antes
 ## WARNING
 
 ENGLISH
+
 There are no security mechanisms in any line of code yet, use on your own risk. The code is totally insecure. 
 If you expose this code to internet you have a very high security problem. why? want this app "now" and 
 have too much time but in few days,the solution was quick code without stopping and without pay attention
@@ -58,6 +63,7 @@ to security  details.
 Security and better code will comming more slowly
 
 SPANISH
+
 No hay ningun mecanismo de seguridad en ninguna linea del codigo todavia. El codigo es totalmente inseguro. 
 Si expones este codigo a internet tendras un grave problema de seguridad. ¿por que? queria esta aplicación 
 "ya" y tenia mucho tiempo pero en pocos dias, la solución fue teclear codigo rapido y sin pararme en detalles 
