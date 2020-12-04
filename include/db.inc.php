@@ -46,12 +46,13 @@ class DB {
         }
         $version = $this->getDbVersion();
         if ($version < $this->version) {
-            $this->log->debug("Need upgrade the database... upgrading");
-            $this->upgradeDb($version);
+            $debug_msg .= ("DbV:NeedUp->");
+            ($this->upgradeDb($version)) ? $debug_msg .= 'ok' : $debug_msg .= 'fail';
         } else if ($version > $this->version) {
-            $this->log->debug("This database version is newer than this api");
+            $debug_msg .= ("DbV:NewerApiProblem");
+        } else {
+            $debug_msg .= 'DbChecks(ok) v' . $version;
         }
-        $debug_msg .= 'DbChecks(ok) v' . $version;
 
         $this->log->debug($debug_msg);
     }
