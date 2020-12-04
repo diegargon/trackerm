@@ -331,8 +331,9 @@ function page_tmdb() {
     (!empty($_GET['search_movies'])) ? $search_movies = $filter->getUtf8('search_movies') : $search_movies = '';
     (!empty($_GET['search_shows'])) ? $search_shows = $filter->getUtf8('search_shows') : $search_shows = '';
 
-    $tdata['search_movies_word'] = $search_movies = '';
-    $tdata['search_shows_word'] = $search_shows = '';
+
+    $tdata['search_movies_word'] = $search_movies;
+    $tdata['search_shows_word'] = $search_shows;
 
     $page = getTpl('page_tmdb', array_merge($LNG, $tdata));
 
@@ -357,8 +358,8 @@ function page_torrents() {
     (!empty($_GET['search_movies_torrents'])) ? $search_movies_torrents = $filter->getUtf8('search_movies_torrents') : $search_movies_torrents = '';
     (!empty($_GET['search_shows_torrents'])) ? $search_shows_torrents = $filter->getUtf8('search_shows_torrents') : $search_shows_torrents = '';
 
-    $tdata['search_movies_word'] = $search_movies_torrents = '';
-    $tdata['search_shows_word'] = $search_shows_torrents = '';
+    $tdata['search_movies_word'] = $search_movies_torrents;
+    $tdata['search_shows_word'] = $search_shows_torrents;
 
     $page = getTpl('page_torrents', array_merge($tdata, $LNG));
 
