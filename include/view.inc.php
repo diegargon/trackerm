@@ -10,7 +10,7 @@
 !defined('IN_WEB') ? exit : true;
 
 function view() {
-    global $cfg, $LNG, $newdb, $newdb, $filter;
+    global $cfg, $LNG, $db, $db, $filter;
     $type = $filter->getString('type');
     $id = $filter->getInt('id');
 
@@ -42,17 +42,17 @@ function view() {
     $other['page_type'] = $type;
 
 
-    $item = $newdb->getItemById($t_type, $id);
+    $item = $db->getItemById($t_type, $id);
 
     empty($item) ? msg_box($msg = ['title' => $LNG['L_ERRORS'], 'body' => $LNG['L_ITEM_NOT_FOUND'] . '1A1003']) : null;
 
     if ($type == 'movies_db') {
-        $library_item = $newdb->getItemByField('library_movies', 'themoviedb_id', $item['themoviedb_id']);
+        $library_item = $db->getItemByField('library_movies', 'themoviedb_id', $item['themoviedb_id']);
         if ($library_item !== false) {
             $item['in_library'] = $library_item['id'];
         }
     } else if ($type == 'shows_db') {
-        $library_item = $newdb->getItemByField('library_shows', 'themoviedb_id', $item['themoviedb_id']);
+        $library_item = $db->getItemByField('library_shows', 'themoviedb_id', $item['themoviedb_id']);
         if ($library_item !== false) {
             $item['in_library'] = $library_item['id'];
         }
@@ -71,7 +71,7 @@ function view() {
     }
 
     if ($type == 'shows_library') {
-        $shows_library = $newdb->getTableData('library_shows');
+        $shows_library = $db->getTableData('library_shows');
 
         $i = 0;
         $tsize = 0;
@@ -215,7 +215,7 @@ function view_extra_shows($item, $opt) {
 
 function view_seasons($id, $update = false) {
     //FIX REBUILD/MESSY
-    global $newdb, $LNG, $filter;
+    global $db, $LNG, $filter;
 
     $seasons_data = '';
     $episode_data = '';
@@ -229,18 +229,18 @@ function view_seasons($id, $update = false) {
 
     //TODO SELECT ONLY ITEMS GET $season if not season get one element for nseasons
     if (empty($season)) {
-        $item = $newdb->getItemByField('shows_details', 'themoviedb_id', $id);
+        $item = $db->getItemByField('shows_details', 'themoviedb_id', $id);
         if ($item === false || $update) {
             mediadb_getSeasons($id);
-            $item = $newdb->getItemByField('shows_details', 'themoviedb_id', $id);
+            $item = $db->getItemByField('shows_details', 'themoviedb_id', $id);
         }
     } else {
         $where['themoviedb_id'] = ['value' => $id];
         $where['season'] = ['value' => $season];
 
-        $results = $newdb->select('shows_details', null, $where);
-        $items = $newdb->fetchAll($results);
-        $newdb->finalize($results);
+        $results = $db->select('shows_details', null, $where);
+        $items = $db->fetchAll($results);
+        $db->finalize($results);
         if ($items === false || $update) {
             $items = mediadb_getSeasons($id);
         }
@@ -319,14 +319,14 @@ function view_seasons($id, $update = false) {
 }
 
 function check_if_have_show($id, $season, $episode) {
-    global $newdb;
+    global $db;
 
-    $shows = $newdb->getTableData('library_shows');
+    $shows = $db->getTableData('library_shows');
     //echo $id . ':' . $season . ':' . $episode . '<br>';
     //where['themoviedb_id'] = ['value' => 62688];
-    //$results = $newdb->select('library_shows', null, $where);
-    //$rows = $newdb->fetchAll($results);
-    //$newdb->finalize($results);
+    //$results = $db->select('library_shows', null, $where);
+    //$rows = $db->fetchAll($results);
+    //$db->finalize($results);
 
     foreach ($shows as $show) {
 

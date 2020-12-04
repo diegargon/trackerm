@@ -8,10 +8,10 @@
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  */
 function create_db() {
-    global $newdb;
+    global $db;
 
     //DB_INFO DONE
-    $newdb->query('CREATE TABLE IF NOT EXISTS "db_info" (
+    $db->query('CREATE TABLE IF NOT EXISTS "db_info" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                     "version" INTEGER NOT NULL,
                     "app_name" VARCHAR NOT NULL,
@@ -23,10 +23,10 @@ function create_db() {
         "version" => 1,
     ];
 
-    $newdb->insert('db_info', $query);
+    $db->insert('db_info', $query);
 
     // USERS DONE
-    $newdb->query('CREATE TABLE IF NOT EXISTS "users" (
+    $db->query('CREATE TABLE IF NOT EXISTS "users" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                     "username" varchar NOT NULL UNIQUE,
                     "password" varchar NULL,
@@ -36,10 +36,10 @@ function create_db() {
     $query = [
         'username' => 'default'
     ];
-    $newdb->insert('users', $query);
+    $db->insert('users', $query);
 
     // PREFERENCES DONE
-    $newdb->query('CREATE TABLE IF NOT EXISTS "preferences" (
+    $db->query('CREATE TABLE IF NOT EXISTS "preferences" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                     "uid" INTEGER NOT NULL,
                     "pref_name" VARCHAR NOT NULL,
@@ -49,7 +49,7 @@ function create_db() {
                 )');
 
     // TMDB_SEARCH DONE
-    $newdb->query('CREATE TABLE IF NOT EXISTS "tmdb_search" (
+    $db->query('CREATE TABLE IF NOT EXISTS "tmdb_search" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                     "themoviedb_id" INTEGER NOT NULL UNIQUE,
                     "ilink" VARCHAR NULL,
@@ -70,7 +70,7 @@ function create_db() {
                 )');
 
     // LOG MSGS DONE
-    $newdb->query('CREATE TABLE IF NOT EXISTS "log_msgs" (
+    $db->query('CREATE TABLE IF NOT EXISTS "log_msgs" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                     "type" VARCHAR NOT NULL,
                     "msg" VARCHAR NOT NULL,
@@ -79,7 +79,7 @@ function create_db() {
 
 
     // LIBRARY MOVIES
-    $newdb->query('CREATE TABLE IF NOT EXISTS "library_movies" (
+    $db->query('CREATE TABLE IF NOT EXISTS "library_movies" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                     "title" VARCHAR NULL,
                     "themoviedb_id" INTEGER NULL UNIQUE,
@@ -105,7 +105,7 @@ function create_db() {
                 )');
 
     //LIBRARY SHOWS
-    $newdb->query('CREATE TABLE IF NOT EXISTS "library_shows" (
+    $db->query('CREATE TABLE IF NOT EXISTS "library_shows" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                     "title" VARCHAR NULL,
                     "themoviedb_id" INTEGER NULL,
@@ -133,7 +133,7 @@ function create_db() {
                 )');
 
     //JACKET MOVIES DONE
-    $newdb->query('CREATE TABLE IF NOT EXISTS "jackett_movies" (
+    $db->query('CREATE TABLE IF NOT EXISTS "jackett_movies" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                     "title" VARCHAR NOT NULL,
                     "guid" VARCHAR NOT NULL UNIQUE,
@@ -152,7 +152,7 @@ function create_db() {
                 )');
 
     //JACKET SHOWS DONE
-    $newdb->query('CREATE TABLE IF NOT EXISTS "jackett_shows" (
+    $db->query('CREATE TABLE IF NOT EXISTS "jackett_shows" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                     "title" VARCHAR NOT NULL,
                     "guid" VARCHAR NOT NULL UNIQUE,
@@ -171,7 +171,7 @@ function create_db() {
                 )');
 
     //JACKET SEARCH MOVIES CACHE DONE
-    $newdb->query('CREATE TABLE IF NOT EXISTS "jackett_search_movies_cache" (
+    $db->query('CREATE TABLE IF NOT EXISTS "jackett_search_movies_cache" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                     "words" VARCHAR NULL,
                     "media_type" VARCHAR NULL,
@@ -181,7 +181,7 @@ function create_db() {
         )');
 
     //JACKET SEARCH SHOWS CACHE DONE
-    $newdb->query('CREATE TABLE IF NOT EXISTS "jackett_search_shows_cache" (
+    $db->query('CREATE TABLE IF NOT EXISTS "jackett_search_shows_cache" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                     "words" VARCHAR NULL,
                     "media_type" VARCHAR NULL,
@@ -191,7 +191,7 @@ function create_db() {
         )');
 
     //WANTED
-    $newdb->query('CREATE TABLE IF NOT EXISTS "wanted" (
+    $db->query('CREATE TABLE IF NOT EXISTS "wanted" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                     "themoviedb_id" INTEGER NULL,
                     "title" VARCHAR NULL,
@@ -212,7 +212,7 @@ function create_db() {
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
         )');
     //SHOWS DETAILS
-    $newdb->query('CREATE TABLE IF NOT EXISTS "shows_details" (
+    $db->query('CREATE TABLE IF NOT EXISTS "shows_details" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                     "themoviedb_id" INTEGER NOT NULL,
                     "seasons" INTEGER NOT  NULL,
@@ -236,15 +236,15 @@ function create_db() {
  *  */
 
 function update_db($from) {
-    global $newdb;
+    global $db;
 
 
     if ($from <= 2) {
         //$set['version'] = 3;
-        //$newdb->update('db_info', $set);
+        //$db->update('db_info', $set);
     }
     if ($from <= 3) {
         //$set['version'] = 4;
-        //$newdb->update('db_info', $set);
+        //$db->update('db_info', $set);
     }
 }

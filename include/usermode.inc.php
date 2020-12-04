@@ -12,7 +12,7 @@ require_once('include/common.inc.php');
 //while we haven't ui for create users we check $cfg['profiles'] and add to database
 foreach ($cfg['profiles'] as $cfgprofile) {
     $profiles['username'] = $cfgprofile;
-    $newdb->upsertItemByField('users', $profiles, 'username');
+    $db->upsertItemByField('users', $profiles, 'username');
 }
 
 require_once('include/user.inc.php');

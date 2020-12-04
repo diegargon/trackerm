@@ -10,7 +10,7 @@
 !defined('IN_WEB') ? exit : true;
 
 function rebuild($media_type, $path) {
-    global $cfg, $newdb;
+    global $cfg, $db;
 
 
     $items = [];
@@ -24,7 +24,7 @@ function rebuild($media_type, $path) {
         $ilink = 'shows_library';
     }
 
-    $media = $newdb->getTableData($library_table);
+    $media = $db->getTableData($library_table);
 
     $i = 0;
     foreach ($files as $file) {
@@ -94,7 +94,7 @@ function rebuild($media_type, $path) {
         }
         $i++;
     }
-    isset($items) ? $newdb->addItems($library_table, $items) : null;
+    isset($items) ? $db->addItems($library_table, $items) : null;
 
     return true;
 }
@@ -169,7 +169,7 @@ function identify_media($type, $media) {
 }
 
 function submit_ident($type, $items) {
-    global $newdb;
+    global $db;
 
 
     foreach ($items as $my_id => $db_id) {
@@ -191,24 +191,24 @@ function submit_ident($type, $items) {
             !empty($db_item['release']) ? $update_fields['release'] = $db_item['release'] : null;
 
             if ($type == 'movies') {
-                $newdb->updateItemById('library_movies', $my_id, $update_fields);
+                $db->updateItemById('library_movies', $my_id, $update_fields);
             } else if ($type == 'shows') {
-                $mylib_show = $newdb->getItemById('library_shows', $my_id);
+                $mylib_show = $db->getItemById('library_shows', $my_id);
                 $update_fields['predictible_title'] = $mylib_show['predictible_title'];
-                $newdb->updateItemsByField('library_shows', $update_fields, 'predictible_title');
+                $db->updateItemsByField('library_shows', $update_fields, 'predictible_title');
             }
         }
     }
 }
 
 function getLibraryStats() {
-    global $newdb;
+    global $db;
 
     $stats['movies_size'] = 0;
     $stats['shows_size'] = 0;
 
-    $movies_db = $newdb->getTableData('library_movies');
-    $stats['num_movies'] = $newdb->count('library_movies');
+    $movies_db = $db->getTableData('library_movies');
+    $stats['num_movies'] = $db->count('library_movies');
 
     if (!empty($movies_db)) {
         foreach ($movies_db as $db_movie) {
@@ -219,8 +219,8 @@ function getLibraryStats() {
         $stats['movies_size'] = human_filesize($stats['movies_size']);
     }
 
-    $shows_db = $newdb->getTableData('library_shows');
-    $stats['num_episodes'] = $newdb->count('library_shows');
+    $shows_db = $db->getTableData('library_shows');
+    $stats['num_episodes'] = $db->count('library_shows');
     $count_shows = [];
 
     if (!empty($shows_db)) {

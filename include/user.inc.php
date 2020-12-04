@@ -8,15 +8,15 @@
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  */
 function get_profiles() {
-    global $newdb;
+    global $db;
 
-    $results = $newdb->select('users');
+    $results = $db->select('users');
 
-    return $newdb->fetchAll($results);
+    return $db->fetchAll($results);
 }
 
 function get_profile($uid) {
-    global $newdb;
+    global $db;
 
-    return $newdb->getItemById('users', $uid);
+    return $db->getItemById('users', $uid);
 }

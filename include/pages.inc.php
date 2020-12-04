@@ -113,7 +113,7 @@ function index_page() {
 }
 
 function page_view() {
-    global $newdb, $LNG, $filter;
+    global $db, $LNG, $filter;
 
     $id = $filter->getInt('id');
     $deletereg = $filter->getInt('deletereg', 1);
@@ -124,12 +124,12 @@ function page_view() {
     }
     if (!empty($deletereg)) {
         if ($type == 'movies_library') {
-            $newdb->deleteItemById('library_movies', $id);
+            $db->deleteItemById('library_movies', $id);
         }
         if ($type == 'shows_library') {
-            $delete_item = $newdb->getItemById('library_shows', $id);
+            $delete_item = $db->getItemById('library_shows', $id);
             $media_db_id = $delete_item['themoviedb_id'];
-            $newdb->deleteItemByField('library_shows', 'themoviedb_id', $media_db_id);
+            $db->deleteItemByField('library_shows', 'themoviedb_id', $media_db_id);
         }
         return msg_box($msg = ['title' => $LNG['L_SUCCESS'], 'body' => $LNG['L_DELETE_SUCCESSFUL']]);
     }
@@ -210,14 +210,14 @@ function page_library() {
 }
 
 function page_news() {
-    global $cfg, $newdb, $log;
+    global $cfg, $db, $log;
 
     $cache_movies_expire = 0;
     $cache_shows_expire = 0;
 
     if ($cfg['search_cache']) {
 
-        $movies_cache_check = $newdb->getItemByField('jackett_search_movies_cache', 'words', '');
+        $movies_cache_check = $db->getItemByField('jackett_search_movies_cache', 'words', '');
         !isset($movies_cache_check['update']) ? $movies_cache_check['update'] = 0 : null;
 
         if ((time() > ($movies_cache_check['update'] + $cfg['search_cache_expire']))) {
@@ -230,11 +230,11 @@ function page_news() {
                 return false;
             }
             foreach ($ids as $cache_id) {
-                $res_movies_db[] = $newdb->getItemById('jackett_movies', trim($cache_id));
+                $res_movies_db[] = $db->getItemById('jackett_movies', trim($cache_id));
             }
         }
 
-        $shows_cache_check = $newdb->getItemByField('jackett_search_shows_cache', 'words', '');
+        $shows_cache_check = $db->getItemByField('jackett_search_shows_cache', 'words', '');
         !isset($shows_cache_check['update']) ? $shows_cache_check['update'] = 0 : null;
 
         if ((time() > ($shows_cache_check['update'] + $cfg['search_cache_expire']))) {
@@ -247,7 +247,7 @@ function page_news() {
                 return false;
             }
             foreach ($ids as $cache_id) {
-                $res_shows_db[] = $newdb->getItemById('jackett_shows', trim($cache_id));
+                $res_shows_db[] = $db->getItemById('jackett_shows', trim($cache_id));
             }
         }
     }
@@ -298,7 +298,7 @@ function page_news() {
             $movies_cache['ids'] .= $tocache_movie['id'];
             $tocache_movie['id'] != $last_element['id'] ? $movies_cache['ids'] .= ', ' : null;
         }
-        $newdb->upsertItemByField('jackett_search_movies_cache', $movies_cache, 'words');
+        $db->upsertItemByField('jackett_search_movies_cache', $movies_cache, 'words');
     }
     if (($cfg['search_cache'] && $cache_shows_expire)) {
         $shows_cache['words'] = '';
@@ -310,7 +310,7 @@ function page_news() {
             $shows_cache['ids'] .= $tocache_show['id'];
             $tocache_show['id'] != $last_element['id'] ? $shows_cache['ids'] .= ', ' : null;
         }
-        $newdb->upsertItemByField('jackett_search_shows_cache', $shows_cache, 'words');
+        $db->upsertItemByField('jackett_search_shows_cache', $shows_cache, 'words');
     }
 
 
@@ -368,7 +368,7 @@ function page_torrents() {
 }
 
 function page_wanted() {
-    global $LNG, $cfg, $newdb, $filter;
+    global $LNG, $cfg, $db, $filter;
 
     $want = [];
 
@@ -376,23 +376,23 @@ function page_wanted() {
         $wanted_mfy = $filter->postInt('check_day');
         foreach ($wanted_mfy as $w_mfy_id => $w_mfy_value) {
             $day_check['day_check'] = $w_mfy_value;
-            $newdb->updateItemById('wanted', $w_mfy_id, $day_check);
+            $db->updateItemById('wanted', $w_mfy_id, $day_check);
         }
     }
 
     isset($_GET['id']) ? $wanted_id = $_GET['id'] : $wanted_id = false;
     isset($_GET['media_type']) ? $wanted_type = $_GET['media_type'] : $wanted_type = false;
-    isset($_GET['delete']) && $filter->getInt('delete') ? $newdb->deleteItemById('wanted', $filter->getInt('delete')) : null;
+    isset($_GET['delete']) && $filter->getInt('delete') ? $db->deleteItemById('wanted', $filter->getInt('delete')) : null;
 
     if (isset($_GET['ignore'])) {
         $ignore_id = $_GET['ignore'];
-        $wanted_ignore_item = $newdb->getItemById('wanted', $ignore_id);
+        $wanted_ignore_item = $db->getItemById('wanted', $ignore_id);
         if (empty($wanted_ignore_item['ignore'])) {
             $update['ignore'] = 1;
         } else {
             $update['ignore'] = 0;
         }
-        $newdb->updateItemById('wanted', $ignore_id, $update);
+        $db->updateItemById('wanted', $ignore_id, $update);
     }
 
     if ($wanted_id !== false && $wanted_type !== false && $wanted_type == 'movies') {
@@ -405,7 +405,7 @@ function page_wanted() {
 }
 
 function page_identify() {
-    global $LNG, $newdb, $filter;
+    global $LNG, $db, $filter;
 
     $media_type = $filter->getString('media_type');
     $id = $filter->getInt('identify');
@@ -419,9 +419,9 @@ function page_identify() {
     $tdata['head'] = '';
 
     if ($media_type == 'movies') {
-        $item = $newdb->getItemById('library_movies', $id);
+        $item = $db->getItemById('library_movies', $id);
     } else {
-        $item = $newdb->getItemById('library_shows', $id);
+        $item = $db->getItemById('library_shows', $id);
     }
 
     if (isset($_POST['identify']) && isset($_POST['selected'])) {
@@ -482,7 +482,7 @@ function page_identify() {
 }
 
 function page_download() {
-    global $newdb, $filter;
+    global $db, $filter;
 
     $id = $filter->getInt('id');
     $type = $filter->getString('type');
@@ -492,9 +492,9 @@ function page_download() {
     }
 
     if ($type == 'movies_library') {
-        $item = $newdb->getItemById('library_movies', $id);
+        $item = $db->getItemById('library_movies', $id);
     } else if ($type == 'shows_library') {
-        $item = $newdb->getItemById('library_shows', $id);
+        $item = $db->getItemById('library_shows', $id);
     } else {
         exit();
     }

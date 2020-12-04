@@ -105,27 +105,27 @@ Class Log {
     }
 
     public function addStateMsg($msg) {
-        global $newdb;
-        $newdb->addItem('log_msgs', ['type' => 'state', 'msg' => $msg]);
+        global $db;
+        $db->addItem('log_msgs', ['type' => 'state', 'msg' => $msg]);
     }
 
     public function getStateMsgs() {
-        global $newdb;
+        global $db;
 
         $where['type'] = ['value' => 'state'];
 
-        $response = $newdb->select('log_msgs', null, $where, 'LIMIT 200');
-        $state_msgs = $newdb->fetchAll($response);
+        $response = $db->select('log_msgs', null, $where, 'LIMIT 200');
+        $state_msgs = $db->fetchAll($response);
 
         return !empty($state_msgs) && is_array($state_msgs) ? array_reverse($state_msgs) : false;
     }
 
     public function clearStateMsgs() {
-        global $newdb;
+        global $db;
 
         $where['type'] = ['value' => 'state'];
 
-        return $newdb->delete('log_msgs', $where);
+        return $db->delete('log_msgs', $where);
     }
 
 }

@@ -94,7 +94,7 @@ class TorrentServer {
     }
 
     public function updateWanted() {
-        global $newdb;
+        global $db;
 
         $trans = $this->getAll();
 
@@ -105,39 +105,38 @@ class TorrentServer {
 
             $tids[] = $item['id'];
 
-            $wanted_item = $newdb->getItemByField('wanted', 'tid', $item['id']);
+            $wanted_item = $db->getItemByField('wanted', 'tid', $item['id']);
 
             if ($wanted_item && ($wanted_item['wanted_status'] != $status)) {
                 $update_ary['wanted_status'] = $status;
                 $update_ary['id'] = $wanted_item['id'];
-                $newdb->upsertItemByField('wanted', $update_ary, 'id');
+                $db->upsertItemByField('wanted', $update_ary, 'id');
             }
         }
         // check if all wanted started are in transmission if not is probably remove from OUTAPP. change status to 10 deleted.
-        $wanted_db = $newdb->getTableData('wanted');
+        $wanted_db = $db->getTableData('wanted');
 
         foreach ($wanted_db as $wanted_item) {
             if (($wanted_item['direct'] !== 1) && ($wanted_item['wanted_status'] > 1) &&
                     ($wanted_item['wanted_status'] < 9) && !in_array($wanted_item['tid'], $tids)) {
                 $update_ary['wanted_status'] = 10;
                 $update_ary['id'] = $wanted_item['id'];
-                $newdb->upsertItemByField('wanted', $update_ary, 'id');
+                $db->upsertItemByField('wanted', $update_ary, 'id');
             }
         }
     }
 
     private function setWantedDelete($ids) {
-        global $newdb, $log, $LNG;
+        global $db, $log, $LNG;
         foreach ($ids as $id) {
-            $wanted_item = $newdb->getItemByField('wanted', 'tid', $id);
+            $wanted_item = $db->getItemByField('wanted', 'tid', $id);
             if ($wanted_item !== false) {
                 if (isset($wanted_item['direct']) && $wanted_item['direct'] == 1) {
-                    $newdb->deleteItemById('wanted', $wanted_item['id']);
+                    $db->deleteItemById('wanted', $wanted_item['id']);
                 } else if (empty($wanted_item['direct']) && ($wanted_item['wanted_status'] != 9)) {
                     $wanted_item['wanted_status'] = 10;
                     $log->addStateMsg($LNG['L_TOR_MAN_DEL'] . " id: {$wanted_item['title']}");
-                    $newdb->upsertItemByField('wanted', $wanted_item, 'id');
-                    //$db->upsertElementById('wanted', $wanted_item['id'], $wanted_item);
+                    $db->upsertItemByField('wanted', $wanted_item, 'id');
                 }
             }
         }

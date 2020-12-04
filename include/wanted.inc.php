@@ -10,13 +10,13 @@
 !defined('IN_WEB') ? exit : true;
 
 function wanted_list() {
-    global $newdb, $cfg, $LNG, $trans;
+    global $db, $cfg, $LNG, $trans;
     $iurl = '?page=wanted';
 
     //update wanted agains transmission-daemon
     $trans->updateWanted();
 
-    $wanted_list = $newdb->getTableData('wanted');
+    $wanted_list = $db->getTableData('wanted');
 
     if (!empty($wanted_list)) {
         $wanted_list_data = '';
@@ -48,7 +48,7 @@ function wanted_list() {
 }
 
 function wanted_movies($wanted_id) {
-    global $newdb, $cfg, $log;
+    global $db, $cfg, $log;
 
     $item = [];
 
@@ -73,11 +73,11 @@ function wanted_movies($wanted_id) {
         'profile' => (int) $cfg['profile'],
     ];
 
-    $newdb->addItemUniqField('wanted', $wanted_item, 'themoviedb_id');
+    $db->addItemUniqField('wanted', $wanted_item, 'themoviedb_id');
 }
 
 function wanted_episode($id, $season, $episodes) {
-    global $newdb, $cfg;
+    global $db, $cfg;
 
     if (strlen($season) == 1) {
         $season = "0" . $season;
@@ -105,7 +105,7 @@ function wanted_episode($id, $season, $episodes) {
             'episode' => $episode,
             'profile' => (int) $cfg['profile'],
         ];
-        $newdb->addItemUniqField('wanted', $wanted_item, 'title');
+        $db->addItemUniqField('wanted', $wanted_item, 'title');
     }
 }
 

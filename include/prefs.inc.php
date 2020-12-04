@@ -10,12 +10,12 @@
 !defined('IN_WEB') ? exit : true;
 
 function loadPrefs() {
-    global $cfg, $newdb, $user;
+    global $cfg, $db, $user;
 
     $where['uid'] = ['value' => $user['id']];
-    $results = $newdb->select('preferences', null, $where);
+    $results = $db->select('preferences', null, $where);
 
-    if (($user_prefs = $newdb->fetchAll($results))) {
+    if (($user_prefs = $db->fetchAll($results))) {
         foreach ($user_prefs as $pref) {
             if (!empty($pref['pref_name']) && !empty($pref['pref_value'])) {
                 $cfg[$pref['pref_name']] = $pref['pref_value'];
@@ -25,7 +25,7 @@ function loadPrefs() {
 }
 
 function setPrefsItem($key, $value) {
-    global $newdb, $user;
+    global $db, $user;
 
     $newitem = [
         'uid' => $user['id'],
@@ -36,17 +36,17 @@ function setPrefsItem($key, $value) {
     $where['uid'] = ['value' => $user['id']];
     $where['pref_name'] = ['value' => $key];
 
-    $result = $newdb->select('preferences', null, $where, 'LIMIT 1');
+    $result = $db->select('preferences', null, $where, 'LIMIT 1');
 
-    $prefs = $newdb->fetch($result);
+    $prefs = $db->fetch($result);
 
     if ($prefs) {
 
         if ($prefs['pref_value'] != $value) {
             $set['pref_value'] = $value;
-            $newdb->update('preferences', $set, $where, 'LIMIT 1');
+            $db->update('preferences', $set, $where, 'LIMIT 1');
         }
     } else {
-        $newdb->addItem('preferences', $newitem);
+        $db->addItem('preferences', $newitem);
     }
 }

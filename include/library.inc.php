@@ -10,7 +10,7 @@
 !defined('IN_WEB') ? exit : true;
 
 function show_my_movies() {
-    global $newdb, $cfg;
+    global $db, $cfg;
 
     $page = '';
 
@@ -18,13 +18,13 @@ function show_my_movies() {
         submit_ident('movies', $_POST['mult_movies_select']);
     }
     if (!empty($_GET['ident_delete']) && ($_GET['media_type'] == 'movies')) {
-        $newdb->deleteItemById('library_movies', $_GET['ident_delete']);
+        $db->deleteItemById('library_movies', $_GET['ident_delete']);
     }
 
-    $movies = $newdb->getTableData('library_movies');
+    $movies = $db->getTableData('library_movies');
     if (isset($_POST['rebuild_movies'])) {
         rebuild('movies', $cfg['MOVIES_PATH']);
-        $movies = $newdb->getTableData('library_movies');
+        $movies = $db->getTableData('library_movies');
     }
 
     if ($movies != false) {
@@ -49,7 +49,7 @@ function show_my_movies() {
 }
 
 function show_my_shows() {
-    global $newdb, $cfg;
+    global $db, $cfg;
 
     $page = '';
     $topt = [];
@@ -59,15 +59,15 @@ function show_my_shows() {
     }
 
     if (!empty($_GET['ident_delete']) && ($_GET['media_type'] == 'shows')) {
-        $delete_ident_item = $newdb->getItemById('library_shows', $_GET['ident_delete']);
+        $delete_ident_item = $db->getItemById('library_shows', $_GET['ident_delete']);
         $delete_ptitle_match = $delete_ident_item['predictible_title'];
-        $newdb->deleteItemByField('library_shows', 'predictible_title', $delete_ptitle_match);
+        $db->deleteItemByField('library_shows', 'predictible_title', $delete_ptitle_match);
     }
-    $shows = $newdb->getTableData('library_shows');
+    $shows = $db->getTableData('library_shows');
 
     if (isset($_POST['rebuild_shows'])) {
         rebuild('shows', $cfg['SHOWS_PATH']);
-        $shows = $newdb->getTableData('library_shows');
+        $shows = $db->getTableData('library_shows');
     }
 
     if ($shows != false) {

@@ -40,7 +40,7 @@ function themoviedb_searchShows($search) {
 }
 
 function themoviedb_MediaPrep($media_type, $items) {
-    global $newdb, $newdb, $log;
+    global $db, $db, $log;
 
     $img_path = 'https://image.tmdb.org/t/p/w500';
 
@@ -74,12 +74,12 @@ function themoviedb_MediaPrep($media_type, $items) {
         }
 
         if ($media_type == 'movies') {
-            $library_item = $newdb->getItemByField('library_movies', 'themoviedb_id', $item['id']);
+            $library_item = $db->getItemByField('library_movies', 'themoviedb_id', $item['id']);
             if ($library_item !== false) {
                 $in_library = $library_item['id'];
             }
         } else if ($media_type == 'shows') {
-            $library_item = $newdb->getItemByField('library_shows', 'themoviedb_id', $item['id']);
+            $library_item = $db->getItemByField('library_shows', 'themoviedb_id', $item['id']);
             if ($library_item !== false) {
                 $in_library = $library_item['id'];
             }
@@ -102,10 +102,10 @@ function themoviedb_MediaPrep($media_type, $items) {
     }
 
     if (!empty($fitems)) {
-        $newdb->addItemsUniqField('tmdb_search', $fitems, 'themoviedb_id');
+        $db->addItemsUniqField('tmdb_search', $fitems, 'themoviedb_id');
 
         foreach ($fitems as $key => $fitem) {
-            $fitems[$key]['id'] = $newdb->getIdByField('tmdb_search', 'themoviedb_id', $fitem['themoviedb_id']);
+            $fitems[$key]['id'] = $db->getIdByField('tmdb_search', 'themoviedb_id', $fitem['themoviedb_id']);
         }
     }
 
@@ -113,7 +113,7 @@ function themoviedb_MediaPrep($media_type, $items) {
 }
 
 function themoviedb_getSeasons($id) {
-    global $cfg, $newdb;
+    global $cfg, $db;
 
     $seasons_url = 'https://api.themoviedb.org/3/tv/' . $id . '?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['LANG'];
 
@@ -137,15 +137,15 @@ function themoviedb_getSeasons($id) {
             $where['season'] = ['value' => $item['season']];
             $where['episode'] = ['value' => $item['episode']];
 
-            $results = $newdb->select('shows_details', null, $where, 'LIMIT 1');
-            $result_row = $newdb->fetch($results);
-            $newdb->finalize($results);
+            $results = $db->select('shows_details', null, $where, 'LIMIT 1');
+            $result_row = $db->fetch($results);
+            $db->finalize($results);
 
             if ($result_row) {
                 $where_update['id'] = ['value' => $result_row['id']];
-                $newdb->update('shows_details', $item, $where_update, 'LIMIT 1');
+                $db->update('shows_details', $item, $where_update, 'LIMIT 1');
             } else {
-                $newdb->insert('shows_details', $item);
+                $db->insert('shows_details', $item);
             }
         }
 
@@ -155,7 +155,7 @@ function themoviedb_getSeasons($id) {
 }
 
 function themoviedb_showsDetailsPrep($id, $seasons_data, $episodes_data) {
-    global $newdb;
+    global $db;
 
 
     $item_seasons = [
@@ -203,17 +203,17 @@ function themoviedb_showsDetailsPrep($id, $seasons_data, $episodes_data) {
 }
 
 function themoviedb_getByLocalId($id) {
-    global $newdb;
+    global $db;
 
-    $item = $newdb->getItemById('tmdb_search', $id);
+    $item = $db->getItemById('tmdb_search', $id);
 
     return $item ? $item : false;
 }
 
 function themoviedb_getByDbId($media_type, $id) {
-    global $newdb, $cfg, $log;
+    global $db, $cfg, $log;
 
-    $item = $newdb->getItemByField('tmdb_search', 'themoviedb_id', $id);
+    $item = $db->getItemByField('tmdb_search', 'themoviedb_id', $id);
     if ($item) {
         return $item;
     }
