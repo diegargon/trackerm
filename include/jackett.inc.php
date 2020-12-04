@@ -12,9 +12,6 @@
 function search_movies_torrents($words, $head = null, $nohtml = false) {
     global $cfg, $log, $newdb;
 
-    //   $result = $newdb->getTableData('jackett_movies');
-//    $rows = $newdb->fetchAll($result);
-
     $result = [];
     $page = '';
     $results_count = 0;
@@ -207,8 +204,6 @@ function jackett_search_shows($words, $indexer, $categories, $limit = null) {
     global $cfg;
 
     empty($limit) ? $limit = $cfg['jacket_results'] : null;
-
-    //$jackett_url = $cfg['jackett_srv'] . $cfg['jackett_api'] . '/indexers/' . $indexer . '/results/torznab/api?apikey=' . $cfg['jackett_key'] . '&t=search&extended=1&cat=5000&q=' . $words . '&limit=' . $limit;
 
     $jackett_url = $cfg['jackett_srv'] . $cfg['jackett_api'] . '/indexers/' . $indexer . '/results/torznab/';
     $words = rawurlencode($words);
