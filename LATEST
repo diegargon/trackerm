@@ -1,5 +1,6 @@
 ## Latest / News (Relevant)
 
+[04/12] Next day or weeks probably only fix and rewrite the messy code
 [04/12] Data now is save to sqllite, you need rebuild your library
 [02/12] Finnally begin working (slow) for use a real database, the winner was sqlite3. That going to take some weeks.
 [02/12] Begin working too in some basic security checks

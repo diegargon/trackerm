@@ -17,6 +17,7 @@ TODO
         que contienen dichos terminos y igual se requiere que el titulo solo sea "RUN" o "ASESINO" a secas    
     [IMPROVE] Send state msg when change to 10 (delete) the torrents)
 [VERY LOW]
+    [IMPROVE] Pagination actually get all results and do a array_slice, now with SQL database when use cache we can  do that better.
     [CHANGE] TMDB: Añadir items de ultimas, popular o similar
     [FIX/IMPROVE] fechas normalizar a formato comun    
     [NEW/IMPROVE] menu rows/columns y otras configuraciones generales en todas las paginas o pagina config.
