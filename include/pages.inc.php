@@ -138,15 +138,17 @@ function page_view() {
 }
 
 function page_library() {
-    global $LNG, $cfg;
+    global $LNG, $cfg, $filter;
 
     if (
-            isset($_POST['num_id_show']) &&
-            ($cfg['max_identify_items'] != $_POST['num_id_show'])
+            isset($_POST['num_ident_toshow']) &&
+            ($cfg['max_identify_items'] != $_POST['num_ident_toshow'])
     ) {
-        $cfg['max_identify_items'] = $_POST['num_id_show'];
-        setPrefsItem('max_identify_items', $cfg['max_identify_items']);
+        $num_ident_toshow = $filter->postInt('num_ident_toshow');
+        $cfg['max_identify_items'] = $num_ident_toshow;
+        setPrefsItem('max_identify_items', $num_ident_toshow);
     }
+
     ($cfg['max_identify_items'] == 0) ? $max_id_sel_0 = 'selected' : $max_id_sel_0 = '';
     ($cfg['max_identify_items'] == 5) ? $max_id_sel_5 = 'selected' : $max_id_sel_5 = '';
     ($cfg['max_identify_items'] == 10) ? $max_id_sel_10 = 'selected' : $max_id_sel_10 = '';
@@ -166,8 +168,9 @@ function page_library() {
         if ($_POST['num_rows_results'] == $LNG['L_DEFAULT']) {
             $max_rows_sel_none = 'selected';
         } else {
-            $cfg['tresults_rows'] = $_POST['num_rows_results'];
-            setPrefsItem('tresults_rows', $cfg['tresults_rows']);
+            $num_rows_results = $filter->postInt('num_rows_results');
+            $cfg['tresults_rows'] = $num_rows_results;
+            setPrefsItem('tresults_rows', $num_rows_results);
         }
     }
 
@@ -187,8 +190,9 @@ function page_library() {
         if ($_POST['num_columns_results'] == $LNG['L_DEFAULT']) {
             $max_columns_sel_none = 'selected';
         } else {
-            $cfg['tresults_columns'] = $_POST['num_columns_results'];
-            setPrefsItem('tresults_columns', $cfg['tresults_columns']);
+            $num_columns_results = $filter->postInt('num_columns_results');
+            $cfg['tresults_columns'] = $num_columns_results;
+            setPrefsItem('tresults_columns', $num_columns_results);
         }
     }
 
@@ -258,12 +262,16 @@ function page_news() {
             $caps = jackett_get_caps($indexer);
             $categories = jackett_get_categories($caps['categories']['category']);
 
-            $results = jackett_search_movies('', $indexer, $categories);
-            ($results) ? $movies_res[$indexer] = $results : null;
-
-            $results = null;
-            $results = jackett_search_shows('', $indexer, $categories);
-            $results ? $shows_res[$indexer] = $results : null;
+            if ($cache_movies_expire) {
+                $results = '';
+                $results = jackett_search_movies('', $indexer, $categories);
+                ($results) ? $movies_res[$indexer] = $results : null;
+            }
+            if ($cache_shows_expire) {
+                $results = '';
+                $results = jackett_search_shows('', $indexer, $categories);
+                $results ? $shows_res[$indexer] = $results : null;
+            }
         }
     }
 
@@ -318,21 +326,24 @@ function page_news() {
 }
 
 function page_tmdb() {
-    global $LNG;
+    global $LNG, $filter;
 
-    (!empty($_GET['search_movies'])) ? $tdata['search_movies_word'] = $_GET['search_movies'] : $tdata['search_movies_word'] = '';
-    (!empty($_GET['search_shows'])) ? $tdata['search_shows_word'] = $_GET['search_shows'] : $tdata['search_shows_word'] = '';
+    (!empty($_GET['search_movies'])) ? $search_movies = $filter->getUtf8('search_movies') : $search_movies = '';
+    (!empty($_GET['search_shows'])) ? $search_shows = $filter->getUtf8('search_shows') : $search_shows = '';
+
+    $tdata['search_movies_word'] = $search_movies = '';
+    $tdata['search_shows_word'] = $search_shows = '';
 
     $page = getTpl('page_tmdb', array_merge($LNG, $tdata));
 
-    if (!empty($_GET['search_movies'])) {
-        $movies = mediadb_searchMovies(trim($_GET['search_movies']));
+    if (!empty($search_movies)) {
+        $movies = mediadb_searchMovies(trim($search_movies));
         $topt['search_type'] = 'movies';
         !empty($movies) ? $page .= buildTable('L_DB', $movies, $topt) : null;
     }
 
-    if (!empty($_GET['search_shows'])) {
-        $shows = mediadb_searchShows(trim($_GET['search_shows']));
+    if (!empty($search_shows)) {
+        $shows = mediadb_searchShows(trim($search_shows));
         $topt['search_type'] = 'shows';
         !empty($shows) ? $page .= buildTable('L_DB', $shows, $topt) : null;
     }
@@ -341,19 +352,22 @@ function page_tmdb() {
 }
 
 function page_torrents() {
-    global $LNG;
+    global $LNG, $filter;
 
-    (!empty($_GET['search_movies_torrents'])) ? $tdata['search_movies_word'] = $_GET['search_movies_torrents'] : $tdata['search_movies_word'] = '';
-    (!empty($_GET['search_shows_torrents'])) ? $tdata['search_shows_word'] = $_GET['search_shows_torrents'] : $tdata['search_shows_word'] = '';
+    (!empty($_GET['search_movies_torrents'])) ? $search_movies_torrents = $filter->getUtf8('search_movies_torrents') : $search_movies_torrents = '';
+    (!empty($_GET['search_shows_torrents'])) ? $search_shows_torrents = $filter->getUtf8('search_shows_torrents') : $search_shows_torrents = '';
+
+    $tdata['search_movies_word'] = $search_movies_torrents = '';
+    $tdata['search_shows_word'] = $search_shows_torrents = '';
 
     $page = getTpl('page_torrents', array_merge($tdata, $LNG));
 
-    if (!empty($_GET['search_movies_torrents'])) {
-        $page .= search_movies_torrents(trim($_GET['search_movies_torrents']), 'L_TORRENT');
+    if (!empty($search_movies_torrents)) {
+        $page .= search_movies_torrents(trim($search_movies_torrents), 'L_TORRENT');
     }
 
-    if (!empty($_GET['search_shows_torrents'])) {
-        $torrent_results = search_shows_torrents(trim($_GET['search_shows_torrents']), 'L_TORRENT');
+    if (!empty($search_shows_torrents)) {
+        $torrent_results = search_shows_torrents(trim($search_shows_torrents), 'L_TORRENT');
 
         if ($torrent_results !== false) {
             $page .= $torrent_results;
@@ -380,12 +394,13 @@ function page_wanted() {
         }
     }
 
-    isset($_GET['id']) ? $wanted_id = $_GET['id'] : $wanted_id = false;
-    isset($_GET['media_type']) ? $wanted_type = $_GET['media_type'] : $wanted_type = false;
+
+    isset($_GET['id']) ? $wanted_id = $filter->getInt('id') : $wanted_id = false;
+    isset($_GET['media_type']) ? $wanted_type = $filter->getString('media_type') : $wanted_type = false;
     isset($_GET['delete']) && $filter->getInt('delete') ? $db->deleteItemById('wanted', $filter->getInt('delete')) : null;
 
     if (isset($_GET['ignore'])) {
-        $ignore_id = $_GET['ignore'];
+        $ignore_id = $filter->getInt('ignore');
         $wanted_ignore_item = $db->getItemById('wanted', $ignore_id);
         if (empty($wanted_ignore_item['ignore'])) {
             $update['ignore'] = 1;
@@ -424,21 +439,23 @@ function page_identify() {
         $item = $db->getItemById('library_shows', $id);
     }
 
-    if (isset($_POST['identify']) && isset($_POST['selected'])) {
+    if (isset($_POST['identify']) && $filter->postInt('selected')) {
 
-        submit_ident($media_type, $_POST['selected']);
+        submit_ident($media_type, $filter->postInt('selected'));
 
         return msg_box($msg = ['title' => $LNG['L_SUCCESS'], 'body' => $LNG['L_ADDED_SUCCESSFUL']]);
     }
-    !empty($_POST['submit_title']) ? $tdata['search_title'] = $_POST['submit_title'] : $tdata['search_title'] = $item['predictible_title'];
+    !empty($_POST['submit_title']) ? $submit_title = $filter->postUtf8('submit_title') : $submit_title = $item['predictible_title'];
+
+    $tdata['search_title'] = $submit_title;
 
     $item_selected = [];
 
-    if (!empty($_POST['submit_title'])) {
+    if (!empty($submit_title)) {
         if ($media_type == 'movies') {
-            $db_media = mediadb_searchMovies($_POST['submit_title']);
+            $db_media = mediadb_searchMovies($submit_title);
         } else {
-            $db_media = mediadb_searchShows($_POST['submit_title']);
+            $db_media = mediadb_searchShows($submit_title);
         }
         $results_opt = '';
         if (!empty($db_media)) {
@@ -446,7 +463,7 @@ function page_identify() {
 
             foreach ($db_media as $db_item) {
                 //var_dump($db_item);
-                if (!empty($_POST['selected']) && ($db_item['id'] == current($_POST['selected']))) {
+                if (!empty($filter->postInt('selected')) && ($db_item['id'] == current($filter->postInt('selected')))) {
                     $selected = 'selected';
                     $item_selected = $db_item;
                 } else {

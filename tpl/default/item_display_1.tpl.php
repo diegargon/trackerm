@@ -26,9 +26,9 @@
                 <span class="item_download"><a class="action_link" href="<?= basename($_SERVER['REQUEST_URI']) . '&download=' . rawurlencode($tdata['download']) ?>"><?= $tdata['L_DOWNLOAD_MIN'] ?></a></span>
                 <?php
             }
-            if (!empty($tdata['have_episodes'])) {
+            if (!empty($tdata['episode_count'])) {
                 ?>
-                <span class="item_have_episodes">[<?= $tdata['L_EPISODE_MIN'] . $tdata['have_episodes'] ?>]</span>
+                <span class="item_episode_count">[<?= $tdata['L_EPISODE_MIN'] . $tdata['episode_count'] ?>]</span>
                 <?php
             }
             if (!empty($tdata['size'])) {

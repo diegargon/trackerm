@@ -15,7 +15,7 @@
     </form>
     <form method="post">
         <?= $tdata['L_IDENTIFY'] ?>:
-        <select name="num_id_show" onchange="this.form.submit()">
+        <select name="num_ident_toshow" onchange="this.form.submit()">
             <option <?= $tdata['max_id_sel_0'] ?> value="0">0</option>
             <option <?= $tdata['max_id_sel_5'] ?> value="5">5</option>
             <option <?= $tdata['max_id_sel_10'] ?> value="10">10</option>
