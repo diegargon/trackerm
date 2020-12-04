@@ -1,12 +1,12 @@
 TODO
 
 [HIGH]
-
+    [FIX] security on the code
+    [IMPROVE] fix all messy code due fast coding
+    [FIX] Delete show register must remove all show/episode registres.
 [MED]  
     [NEW] Escaneo de directorios a más para avi sin ser torrents. $cfg['SCAN_MEDIA_DIR'] = 1;
     [NEW/IMPROVE] actualizacion automatica de titulos de episodio a excepcion de que el show sea "ended"
-    [FIX] codigo seguro
-    [IMPROVE] reorganizar codigo/funciones
     [NEW] Biblio: buscador en nuestra libreria o enlace a una pagina buscador más facil de implementar.
     [FIX] No hay ninguna comprobacion de que la conexion a transmission esta correctamente establecida.
     [IMPROVE] Si se borra manualmente un torrente bajado quedara el bd huerfanos. OPCION ORPHAN. 
@@ -16,7 +16,6 @@ TODO
     [IMPROVE/WANTED] Añadir la posibilidad de buscar el titulo exacto, si buscamos "Run" o "Asesino" encontrara varios resultados con titulos
         que contienen dichos terminos y igual se requiere que el titulo solo sea "RUN" o "ASESINO" a secas    
     [IMPROVE] Send state msg when change to 10 (delete) the torrents)
-    [FIX] Borrar registro de show no borra todos los registros 
 [VERY LOW]
     [CHANGE] TMDB: Añadir items de ultimas, popular o similar
     [FIX/IMPROVE] fechas normalizar a formato comun    
@@ -32,7 +31,7 @@ TODO
     [NEW/IMPROVE] recargar con jquery solo las partes necesarias en vez de recargar toda la pagina
     [FIX] A la hora de identificar las series siguientes capitulos los identifica por el predictible_title, si hubiera varias series con el mismo titulo habria problemas. 
     [FIX] filesearch con glob da error recursivo si se lanza rebuild(shows) rebuild(movies) segido.
-
+    [IMPROVE][LIBRARY] Los shows deberian de tener un registro maestro con los datos y los demas, los archivos ser registro secundarios.
 [thigs to do when we use a real database]
     [IMPROVE] In search and news filter torrents tags &words: like  720p  for show only 1080... and ignore keywords like "LANGUAGE"
     [NEW] Add optional user security for profiles      
