@@ -389,6 +389,10 @@ class DB {
         return $result['version'];
     }
 
+    public function getQuerys() {
+        return $this->querys;
+    }
+
     function query($query) {
         return $this->db->query($query);
     }
