@@ -18,7 +18,7 @@
   y luego el select * o lo que sea;
 
  */
-class newDB {
+class DB {
 
     private $version = 1;
     private $db;

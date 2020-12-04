@@ -25,9 +25,9 @@ require_once('include/logging.class.php');
 global $log;
 $log = new Log($cfg);
 
-require_once('include/sqlite3.inc.php');
+require_once('include/db.inc.php');
 global $db;
-$db = new newDb($cfg['DB_FILE'], $log);
+$db = new DB($cfg['DB_FILE'], $log);
 $db->connect();
 
 require_once('lang/' . $cfg['LANG'] . '/lang.inc.php');
