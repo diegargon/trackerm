@@ -32,11 +32,11 @@ function do_checks() {
         echo "ERROR: You must set in /config/config.inc.php LANG (only supported languages es-ES/en-En) \n";
         exit();
     }
-    if (empty($cfg['MOVIES_PATH']) || !is_dir($cfg['MOVIES_PATH'])) {
+    if ($cfg['WANT_MOVIES'] && empty($cfg['MOVIES_PATH']) || !is_dir($cfg['MOVIES_PATH'])) {
         echo "ERROR: You must set in /config/config.inc.php MOVIES_PATH where your movies reside \n";
         exit();
     }
-    if (empty($cfg['SHOWS_PATH']) || !is_dir($cfg['MOVIES_PATH'])) {
+    if ($cfg['WANT_SHOWS'] && empty($cfg['SHOWS_PATH']) || !is_dir($cfg['MOVIES_PATH'])) {
         echo "ERROR: You must set in /config/config.inc.php SHOWS_PATH where your shows reside \n";
         exit();
     }

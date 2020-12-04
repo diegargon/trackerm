@@ -42,7 +42,12 @@
             <option <?= $tdata['max_rows_sel_8'] ?> value="8">8</option>
             <option <?= $tdata['max_rows_sel_10'] ?> value="10">10</option>
         </select>
-        <input class="submit_btn" type="submit" name="rebuild_movies" value="<?= $tdata['L_RESCAN_MOVIES'] ?>"/>
-        <input class="submit_btn" type="submit" name="rebuild_shows" value="<?= $tdata['L_RESCAN_SHOWS'] ?>"/>
+        <?php if ($tdata['WANT_MOVIES']) { ?>
+            <input class="submit_btn" type="submit" name="rebuild_movies" value="<?= $tdata['L_REESCAN_MOVIES'] ?>"/>
+        <?php }
+        if ($tdata['WANT_SHOWS']) {
+            ?>
+            <input class="submit_btn" type="submit" name="rebuild_shows" value="<?= $tdata['L_REESCAN_SHOWS'] ?>"/>
+<?php } ?>
     </form>
 </div>

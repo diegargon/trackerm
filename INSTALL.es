@@ -5,9 +5,9 @@ Este proyecto esta muy muy verde todavia, cambiara bastante entre commits y no p
 Si lo instalas y utilizas probablemente tendras que recrear (borrar y volver a crear) las base de datos y estar al tanto de los cambios en el config.inc.php.
 
 De todos modos el trabajo a realizar para tener todo OK otra vez no es mucho (salvo que tenga miles de archivos multimedia), y seria "pinchar en los botones 
-de rescan" y volver a identificar los archivos multimedia.
+de REESCAN" y volver a identificar los archivos multimedia.
 
-Para usarlo renombre el archivo _configure.inc.php a configure.inc.php,  edite/configure el configure.inc.php, y pulse rescanear los directorios y 
+Para usarlo renombre el archivo _configure.inc.php a configure.inc.php,  edite/configure el configure.inc.php, y pulse REESCANear los directorios y 
 identifique sus peliculas/shows.
 
 En el tab de torrentes puedes buscar peliculas/shows y ponerlos a descargarlos en transmission pulsando download

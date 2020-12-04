@@ -27,6 +27,10 @@ $cfg['ROOT_PATH'] = '';
 // Relative path (Webserver) where trackerm reside
 $cfg['REL_PATH'] = '/trackerm';
 
+// if you only want MOVIES and not SHOWS or vice versa  change to 0
+$cfg['WANT_MOVIES'] = 1;
+$cfg['WANT_SHOWS'] = 1;
+
 // Your Movies and Shows  paths
 $cfg['MOVIES_PATH'] = '';
 $cfg['SHOWS_PATH'] = '';
