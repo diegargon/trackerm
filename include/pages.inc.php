@@ -129,7 +129,7 @@ function page_view() {
         if ($type == 'shows_library') {
             $delete_item = $db->getItemById('library_shows', $id);
             $media_db_id = $delete_item['themoviedb_id'];
-            $db->deleteItemByField('library_shows', 'themoviedb_id', $media_db_id);
+            $db->deleteItemsByField('library_shows', 'themoviedb_id', $media_db_id);
         }
         return msg_box($msg = ['title' => $LNG['L_SUCCESS'], 'body' => $LNG['L_DELETE_SUCCESSFUL']]);
     }

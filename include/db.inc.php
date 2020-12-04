@@ -172,6 +172,11 @@ class DB {
         $this->delete($table, $where, 'LIMIT 1');
     }
 
+    public function deleteItemsByField($table, $field, $value) {
+        $where[$field] = ['value' => $value];
+        $this->delete($table, $where);
+    }
+
     //exact mean word separated with spaces don't known yet if works like this possible TODO/FIX
     public function search($table, $field, $value, $exact = null, $extra = null) {
         $value = $this->escapeString($value);

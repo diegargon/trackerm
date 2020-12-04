@@ -2,8 +2,7 @@ TODO
 
 [HIGH]
     [FIX] security on the code
-    [IMPROVE] fix all messy code due fast coding
-    [FIX] Delete show register must remove all show/episode registres.
+    [IMPROVE] fix all messy code due fast coding    
 [MED]  
     [NEW] Escaneo de directorios a más para avi sin ser torrents. $cfg['SCAN_MEDIA_DIR'] = 1;
     [NEW/IMPROVE] actualizacion automatica de titulos de episodio a excepcion de que el show sea "ended"
