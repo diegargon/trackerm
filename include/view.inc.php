@@ -223,6 +223,21 @@ function view_seasons($id, $update = false) {
     $season = $filter->getInt('season');
     $episode = $filter->getInt('episode');
 
+    if (empty($episode) && !empty($_GET['episode'])) {
+
+        $episodes_check = explode(',', $_GET['episode']);
+        $episodes_checked = [];
+
+        if (count($episodes_check) > 0) {
+            foreach ($episodes_check as $key => $episode_check) {
+                $episodes_checked[$key] = trim($episode_check);
+            }
+            if ($filter->varInt($episodes_checked)) {
+                $episode = $_GET['episode'];
+            }
+        }
+    }
+
     if (!empty($wanted) && !empty($season) && !empty($episode)) {
         wanted_episode($id, $season, $episode);
     }
@@ -264,8 +279,9 @@ function view_seasons($id, $update = false) {
     $episode_data = '';
     if ($season) {
         $episode_data .= '<div class="divTable">';
+        $have_episodes = [];
+
         foreach ($items as $item) {
-            $have_episodes = [];
             if ($item['season'] == $season) {
                 $have = check_if_have_show($id, $item['season'], $item['episode']);
 
@@ -296,6 +312,7 @@ function view_seasons($id, $update = false) {
 
         $episode_list = '';
         $n_episodes = count($items);
+
         for ($a = 1; $a <= $n_episodes; $a++) {
             if (!in_array($a, $have_episodes)) {
                 if ($a == $n_episodes) {
