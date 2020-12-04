@@ -18,6 +18,20 @@ Probably you shouldn't install it at this moment.
 You can see screenshots of the current appearance (not latest probably) in /screenshots although it going to change since this proyect 
 is in a very very early stage.
 
+## CURRENT STATE
+
+Now we use a sql database (sqllite) instead of plain text, i can't guarantee backwards compatibility between versions yet, but will
+not be something frequent. Anyway, all work for setting from 0 is near automatic, just only click on rebuild the library and identify items.
+
+About security, i begin adding checks but ins't not secure yet for expose to internet (and not security passwords for enter), you must still 
+use other method (.htaccess) 
+
+About code, after the change from plain/text among other things i have a lot of messy code that need rewrite and rewrite querys to database 
+but for this type of application this is not a priority.
+
+I 'fast coding' this app in about 10 days, now for a while i would have less time to update, and going to slow down this focusing for in fix 
+the messy code, bugs and security things than add new options.
+
 ## WARNING
 
 There are no security mechanisms in any line of code yet, use on your own risk. The code is totally insecure. 
