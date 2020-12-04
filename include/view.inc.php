@@ -281,7 +281,7 @@ function view_seasons($id, $update = false) {
                 } else {
                     $episode_data .= '<div class="divTableCellEpisodes">' . $item['title'] . '</div>';
                     $episode_data .= '<div class="divTableCellEpisodes">';
-                    $episode_data .= '<a class="episode_link" href="' . $iurl . '&wanted=1&season=' . $item['season'] . '&episode=' . $item['episode'] . '">';
+                    $episode_data .= '<a class="episode_link" href="' . $iurl . '&wanted=1&season=' . $season . '&episode=' . $item['episode'] . '">';
                     $episode_data .= $LNG['L_WANTED'];
                     $episode_data .= '</a>';
                     $episode_data .= '</div>';
@@ -306,7 +306,7 @@ function view_seasons($id, $update = false) {
             }
         }
         if (!empty($episode_list)) {
-            $episode_data .= '<a class="episode_link" href="' . $iurl . '&wanted=1&season=' . $i . '&episode=' . $episode_list . '">' . $LNG['L_WANT_ALL'] . '</a>';
+            $episode_data .= '<a class="episode_link" href="' . $iurl . '&wanted=1&season=' . $season . '&episode=' . $episode_list . '">' . $LNG['L_WANT_ALL'] . '</a>';
         }
 
         $episode_data .= '</div>'; //CELL
