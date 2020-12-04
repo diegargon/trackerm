@@ -32,6 +32,7 @@ class DB {
     }
 
     public function connect() {
+        $debug_msg = '';
         $response = $this->checkInstall();
         $this->db = new SQLite3($this->db_path, SQLITE3_OPEN_CREATE | SQLITE3_OPEN_READWRITE);
         if (!$response && !empty($this->db)) {
@@ -41,7 +42,7 @@ class DB {
         if (empty($this->db)) {
             return $this->fail();
         } else {
-            $this->log->debug("Connection ok");
+            $debug_msg .= 'Conn(ok)';
         }
         $version = $this->getDbVersion();
         if ($version < $this->version) {
@@ -50,8 +51,9 @@ class DB {
         } else if ($version > $this->version) {
             $this->log->debug("This database version is newer than this api");
         }
-        $this->log->debug("Seems all go fine");
-        $this->log->debug("DB Version $version");
+        $debug_msg .= 'DbChecks(ok) v' . $version;
+
+        $this->log->debug($debug_msg);
     }
 
     /* Common / Helpers */
@@ -388,11 +390,11 @@ class DB {
 
     private function checkInstall() {
         if (file_exists($this->db_path)) {
-            $this->log->debug('db file exists');
+            //$this->log->debug('db file exists');
             //check if exist tables
             return true;
         } else {
-            $this->log->debug('db file not exists');
+            $this->log->err('Db file not exists: ' . $this->$db_path);
             return false;
         }
     }
@@ -405,14 +407,14 @@ class DB {
     }
 
     private function createTables() {
-        $this->log->debug("Entering create tables");
+        $this->log->debug("exec:createTables");
         require_once('config/db.sql.php');
 
         return create_db();
     }
 
     private function upgradeDb($from) {
-        $this->log->debug("Entering updatedb from $from ");
+        $this->log->debug("exec:upgradeDB from $from ");
         require_once('config/db.sql.php');
 
         return update_db($from);
