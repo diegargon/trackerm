@@ -2,13 +2,14 @@
 ## Como funcionara
 
 Este proyecto esta muy muy verde todavia, cambiara bastante entre commits y no puede y no tendra compatibilidad entre versiones anteriores de momento.
-Si lo instalas y utilizas probablemente tendras que recrear (borrar y volver a crear) las base de datos y estar al tanto de los cambios en el config.inc.php.
+Si lo instalas y utilizas probablemente tendras que recrear (borrar y volver a crear) las base de datos y estar al tanto de los cambios en los archivos 
+de configuración, principalmente config.min.php  comparlo con tu /etc/tracker.conf
 
-De todos modos el trabajo a realizar para tener todo OK otra vez no es mucho (salvo que tenga miles de archivos multimedia), y seria "pinchar en los botones 
+De todos modos el trabajo a realizar para tener todo OK otra vez desde 0 no es mucho (salvo que tenga miles de archivos multimedia), y seria "pinchar en los botones 
 de REESCAN" y volver a identificar los archivos multimedia.
 
-Para usarlo renombre el archivo _configure.inc.php a configure.inc.php,  edite/configure el configure.inc.php, y pulse REESCANear los directorios y 
-identifique sus peliculas/shows.
+Para usarlo renombre el archivo config.min.php  a /etc/trackerm.conf y rellene lo que se pide. Todos los datos ahí son obligatorios.
+Luego pinche en escanear la libreria y identifique sus archivos multimedia actuales.
 
 En el tab de torrentes puedes buscar peliculas/shows y ponerlos a descargarlos en transmission pulsando download
 
@@ -18,23 +19,18 @@ En "Publicado" veras los ultimos torrents publicados
 
 En biblioteca podras ver tus peliculas/series, identificar y ver episodios y cuales faltan, tambien hay enlace para descargar localmente.
 
-En el futuro trackerm podra seguir tus series, descargarlas automaticamente así como mover los archivos automatica a tu libreria.
+Es más que recomendable si tienes que borrar un archivo torrent de transmission añadido con trackm hacerlo desde trackerm. Para el mejr funcionamiento
+es mejor que todo lo hagas desde trackerm.
 
-Es más que recomendable si tienes que borrar un archivo torrent de transmission añadido con trackm hacerlo desde trackm 
-
-El sistema de seguimiento automatico (aun muy alpha) aunque funciona parcialmente con los torrents al menos en español (otras variantes no probadas)
+El sistema de seguimiento automatico (aun alpha) aunque funciona con los torrents al menos en español (otras variantes no probadas)
 se activa metiendo el tracker-cli.php en el cron y poner que se ejecute cada poco tiempo (hay otros mecanismos en el archivo de config que evitan
 sobrecargar el sistema si lo pones cada poco, 15 minutos, 30 minutos o o 1 hora estan bien si quieres que esten  todas las tareas bien actualizadas, 
-O Dias si tampoco tienes prisa. Hay que cambiar el ROOT_PATH en ese archivo tracker-cli.php.
-Para evitar tenerlo que hacerlo dedspues de cada  actualizacion cree el archivo /etc/trackerm_root_path y añada y una simple linea con la localización 
-de su instalación de trackrm, ejemplo: /var/www/trackerm (Ver Tareas automaticas)
+o dias si tampoco tienes prisa.
 
-Atencion: En estos momentos no estoy utilizando ninguna base de datos , solo guardando los datos en archivos, esto cambiar en el futuro y rompera
-cualquier compatibilidad hacia atras. Y actualmente es facil corrompible, sobre todo en entornos multiusuario.
 
 ## Permisos de directorio
     Your www server must have this permissions:
-    * ( R/W ) to cache cache/log cache/images : save db files and images and logs (755)
+    * ( R/W ) to cache cache/log cache/images cahce/log : save db files and images and logs (755)
     * ( R ) to MOVIES_PATH : Where your movies library reside
     * ( R ) to SHOWS_PATH : Where your shows library reside
     * ( R ) to Transmission: Where transmission drop your files
@@ -46,10 +42,11 @@ cualquier compatibilidad hacia atras. Y actualmente es facil corrompible, sobre 
 
 
 ## Resumen requisitos:
-Apache+Php (o similar), Jacket, Transmission, Composer, cuenta+api key themoviedb.org, CRON
+Apache+Php7+sqlite3 , Jacket, Transmission, Composer, cuenta+api key themoviedb.org, CRON,
 
 ## Instalación
     * Copiar los archivos de src a la carpeta destino (AKA: dest)
+    * Copia el archivo config.min.php a /etc/tracker.conf y rellenalo, todo los campos son necesarios
 
     * Instalar composer si no lo teneis, hay guias pero basicamente 
 
@@ -57,16 +54,17 @@ Apache+Php (o similar), Jacket, Transmission, Composer, cuenta+api key themovied
 
         $ php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 
-    *  Ir a la carpeta dest y teclear
+    *  Ir a la carpeta dest y teclear lo siguiente para cumplir las dependencias.
 
         $ composer require irazasyed/php-transmission-sdk  php-http/httplug-pack  php-http/guzzle6-adapter
 
-    * sqlite3 posiblemente utilice esta base de datos (aun no la estoy utilizando) normalmente viene instalada por defecto
-    en muchas distros, hay que activarla tambien para apache/php
+    * sqlite3 normalmente viene instalada por defect en muchas distros, hay que activarla tambien para apache/php, en ubuntu
+    al instalarla se activa.
+
         $ apt-get install php-sqlite3
 
 ## CONFIGURACION
-    Toda las opcines personalizables de configuración van en /etc/trackerm.conf copie el archivo de la carpeta /config/config.min.php 
+    Toda las opciones personalizables de configuración van en /etc/trackerm.conf copie el archivo de la carpeta /config/config.min.php 
     a /etc y renombrelo como trackerm.conf y configurelo.
 
     La variables de configuración completas estan en config/config.inc.php , no edite ninguno de esos  archivo se sobreescribiran.
@@ -75,31 +73,29 @@ Apache+Php (o similar), Jacket, Transmission, Composer, cuenta+api key themovied
     y basicamente rellenar todo de config.min.php en /etc/trackerm.conf
 
 ## Tareas automaticas: Seguimiento y mover a la libreria.
-    En estos momentos todos los mecanismos automaticos estan en desarrollo y no funciona o funcionan parcialmente
-    No recomiendo su uso salvo para colaborar, en cuyo caso es mejor ejecutarlo a mano y ver la salida. Actualmente no hay logeo a syslog
+    En estos momentos todos los mecanismos automaticos estan en desarrolle y contendra fallos.
+    
     Para su actual o uso futuro hay que añadir trackerm-cli.php a CRON, seria recomendable moverlo fuera del ROOT_PATH.
 
-    Como funcionara (no lo hace todavía) :
+    Como funcionara  :
     * Automaticamente buscara torrentes en "seguimiento" los dias que configuraras, si encuentra coincidencia que satisfaga los filtros lo descargara.
-    * Automaticamente movera todos los archivos descargados por transmission a tu libreria siempre que se pulsara el descargar desde trackrm, opcionalmente tambien podra
-        mover todos los archivos mientras sean multimedia si así se configura
-    * Automaticamente y activalando buscara y movera archivos huerfanos en el directorio de descargas de transmission. Los archivos huerfanos son aquellos
-     que no constan en transmission ya sea por que los hemos borrado manualmente en vez de pararlos/pausarlos u otro motivo
-    * Automaticamente y activandolo podra mover todos los archivos multimedia de determinas carpetas que configuremos.
-    * Automaticamente descomprime archivos rar, no soporta contraseñas hasta que Jackett las soporte. (el cli actualmente se bloquea si encuentra uno)
+    * Automaticamente movera todos los archivos descargados por transmission a tu libreria, opcionalmente puedes configurarlo para que mueva solo los
+    que descargastes pulsando dentro de la aplicación trackerm. Por defecto mueve todo los archivos multimedia (video)
+    * (no disponible todavía) Automaticamente y activandolo podra mover todos los archivos multimedia de determinas carpetas que configuremos.
+    * Automaticamente descomprime archivos rar, no soporta contraseñas hasta que Jackett las soporte. Si avisa.
+
     El funcionamiento para que automaticamente se muevan los archivos bajados por transmission es el siguiente:
         Primero busca los archivos que indicamos en trackrm descargar, si los encuentra mira si esta parado/pausa o sirviendo(seeding) si es así en el primer caso
-        parado, lo movera y borrar el torrent, en el segundo caso (aun no programado), creara un enlace simbolico para poder acceder al archivo desde tu libreria
+        parado, lo movera y borrar el torrent, en el segundo caso, creara un enlace simbolico para poder acceder al archivo desde tu libreria
         hasta que sea parado o pare de "servirse" el archivo, en cuyo caso se movera.
-        Actualmente solo mueve los archivos parados/pausa.
 
     La linea basica para ejecutar las tareas automaticas  (ejemplo cada 15 minutos) es la siguiente (/etc/crontab)
     */15 *   * * *   root    /usr/bin/php  /path/to/trackerm-cli.php
-    Puedes poner trackerm en el directorio que quieras y cambiar de usuario si este tiene los permisos necesarios.
+    Puedes poner trackerm en el directorio que quieras y cambiar de usuario si este tiene los permisos necesarios para las carpetas relacionadas.
 
 ## VERSION
     Advertencia: Puedes comprobar la version en el archivo VERSION. Mientras este en alpha (0.0.X) hasta la versión 0.1, toda version es factible de romper
-    la compatibilidad hacia atras, y lo hara. Si actualizas y hay errores posiblemente tengas que borrar los archivos de la base de datos cache/*.db y quizas
+    la compatibilidad hacia atras. Si actualizas y hay errores posiblemente tengas que borrar los archivos de la base de datos cache/*.db y quizas
     puedas tener algun problema con las variables nuevas del archivo de configuración, si algo falla despues de una instalación revisalo.
 
 ## Lenguaje
@@ -108,11 +104,11 @@ Apache+Php (o similar), Jacket, Transmission, Composer, cuenta+api key themovied
 ## Requisitos: Detalles:
 
 * Apache (o similar)
-    Instalado y configurado, con soport php, curl
+    Instalado y configurado, con soport php7,sqlite3, curl
 
     * Para el cache de las imagenes/posters se necesita allow_url_fopen en php.ini
     * Se necesitan permisos de lectura/escritura en cache y cache/images 775 si cambiamos el propietario al del servidor web o 777 (inseguro)
-      Database files and images will be stored in cache dir, must be writable.
+
 * Jackett
     Instalado y configurado añadiendo algunos indexers de peliculas/series.
     Necesitas la clave api para conectarse al servidor jackett, esta ira en config.inc.php
@@ -129,4 +125,4 @@ Apache+Php (o similar), Jacket, Transmission, Composer, cuenta+api key themovied
 * TheMovieDB.ORG    
     Es importante para el correcto funcionamiento crearse una cuenta en dicha pagina, se utilizar para buscar peliculas/series, caratulas, identificar y demas.
     Necesitais una clave api de un proveedor, actualmente solo soporta themoviedb.org (el api key va en config.inc.php)
-    Quizas en el futuro se añadan otras alternativas pero de momento solo hay esta.
+    Quizas en el futuro se añadan otras alternativas pero de momento solo hay esta y es imprescindible.
