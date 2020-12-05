@@ -140,7 +140,7 @@ function view_extra_movies($item, $opt = null) {
     $title = getFileTitle($item['title']);
 
     if (!empty($_GET['search_movie_db'])) {
-        $stitle = trim($filter->getString('search_movie_db'));
+        $stitle = trim($filter->getUtf8('search_movie_db'));
     } else {
         $stitle = $title;
     }
@@ -338,25 +338,28 @@ function view_seasons($id, $update = false) {
 function check_if_have_show($id, $season, $episode) {
     global $db;
 
-    $shows = $db->getTableData('library_shows');
-    //echo $id . ':' . $season . ':' . $episode . '<br>';
-    //where['themoviedb_id'] = ['value' => 62688];
-    //$results = $db->select('library_shows', null, $where);
-    //$rows = $db->fetchAll($results);
-    //$db->finalize($results);
+    if (!is_numeric($id) || !is_numeric($season) || !is_numeric($episode)) {
+        return false;
+    }
 
-    foreach ($shows as $show) {
+    $where['themoviedb_id'] = ['value' => $id];
+    $where['season'] = ['value' => $season];
+    $results = $db->select('library_shows', null, $where);
+    $season_episodes = $db->fetchAll($results);
+
+
+    foreach ($season_episodes as $s_episode) {
 
         if (
-                isset($show['themoviedb_id']) &&
-                isset($show['season']) &&
-                isset($show['episode']) &&
-                $show['themoviedb_id'] == $id &&
-                $show['season'] == $season &&
-                $show['episode'] == $episode
+                isset($s_episode['themoviedb_id']) &&
+                isset($s_episode['season']) &&
+                isset($s_episode['episode']) &&
+                $s_episode['themoviedb_id'] == $id &&
+                $s_episode['season'] == $season &&
+                $s_episode['episode'] == $episode
         ) {
 
-            return $show;
+            return $s_episode;
         }
     }
     return false;
