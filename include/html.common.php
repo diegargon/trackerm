@@ -60,8 +60,9 @@ function buildTable($head, $db_ary, $topt = null) {
 
     !empty($head) ? $page .= '<div class="type_head"><h2>' . $LNG[$head] . '</h2></div>' : null;
 
-    $page .= pager($npage, count($db_ary), $topt);
-
+    if (!isset($topt['nopages'])) {
+        $page .= pager($npage, count($db_ary), $topt);
+    }
     $page .= '</div>';
 
     $page .= '<div class="divTable">';

@@ -247,9 +247,12 @@ function update_db($from) {
         $db->update('db_info', $set);
     }
     /*
-     *
+      // NEXT UPDATE
+      // to hash movie files add  CREATE AND ALTER to movies/shows_library "hash" VARCHAR NULL,
+      // add new(CREATE) table config al estilo preferences for save general pref
+
       if ($from < 3) {
-      // add to CREATE AND ALTER to movies/shows_library "hash" VARCHAR NULL,
+
       $set['version'] = 3;
       $db->update('db_info', $set);
       }

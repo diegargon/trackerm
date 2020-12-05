@@ -263,7 +263,7 @@ function page_news() {
 }
 
 function page_tmdb() {
-    global $LNG, $filter;
+    global $LNG, $filter, $cfg;
 
     (!empty($_GET['search_movies'])) ? $search_movies = $filter->getUtf8('search_movies') : $search_movies = '';
     (!empty($_GET['search_shows'])) ? $search_shows = $filter->getUtf8('search_shows') : $search_shows = '';
@@ -285,7 +285,12 @@ function page_tmdb() {
         $topt['search_type'] = 'shows';
         !empty($shows) ? $page .= buildTable('L_DB', $shows, $topt) : null;
     }
-
+    if (!isset($_GET['search_movies']) && !isset($_GET['search_shows'])) {
+        $topt['nopages'] = 1;
+        $results = mediadb_getTrending();
+        ($cfg['WANT_MOVIES']) ? $page .= buildTable('L_TRENDING_MOVIES', $results['movies'], $topt) : null;
+        ($cfg['WANT_SHOWS']) ? $page .= buildTable('L_TRENDING_SHOWS', $results['shows'], $topt) : null;
+    }
     return $page;
 }
 

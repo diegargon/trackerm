@@ -256,3 +256,19 @@ function themoviedb_getPopular() {
       https://api.themoviedb.org/3/tv/popular?api_key=<<api_key>>&language=en-US&page=1
      */
 }
+
+function themoviedb_getTrending() {
+    global $cfg;
+
+    $movies_url = 'https://api.themoviedb.org/3/trending/movie/week?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['LANG'];
+    $shows_url = 'https://api.themoviedb.org/3/trending/tv/week?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['LANG'];
+    if ($cfg['WANT_MOVIES']) {
+        $response_items = curl_get_tmdb($movies_url);
+        $results['movies'] = themoviedb_MediaPrep('movies', $response_items['results']);
+    }
+    if ($cfg['WANT_SHOWS']) {
+        $response_items = curl_get_tmdb($shows_url);
+        $results['shows'] = themoviedb_MediaPrep('shows', $response_items['results']);
+    }
+    return $results;
+}

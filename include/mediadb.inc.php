@@ -40,3 +40,7 @@ function mediadb_getByDbId($media_type, $id) {
 function mediadb_getPopular() {
     return themoviedb_getPopular();
 }
+
+function mediadb_getTrending() {
+    return themoviedb_getTrending();
+}
