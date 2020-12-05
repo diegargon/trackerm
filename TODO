@@ -15,26 +15,22 @@ TODO
     [IMPROVE] Two search_cache_expire  search_cache_expire and news_cache_expire    
     [IMPROVE/WANTED] Añadir la posibilidad de buscar el titulo exacto, si buscamos "Run" o "Asesino" encontrara varios resultados con titulos
         que contienen dichos terminos y igual se requiere que el titulo solo sea "RUN" o "ASESINO" a secas    
-    [IMPROVE] Send state msg when change to 10 (delete) the torrents)
+
 [VERY LOW]
     [IMPROVE] Pagination actually get all results and do a array_slice, now with SQL database when use cache we can  do that better.
     [CHANGE] TMDB: Añadir items de ultimas, popular o similar
     [FIX/IMPROVE] fechas normalizar a formato comun    
     [NEW/IMPROVE] menu rows/columns y otras configuraciones generales en todas las paginas o pagina config.
     [IMPROVE] rebuild pager/paginacion, messy code.    
-    [NEW/IMPROVE] Home: Informacion reducida de torrents en transmission y su estado    
     [NEW] mediainfo (read file metadata)
     [FIX] Actualmente en busquedas imdb filtramos años de los titulos por que suelen estar mal, el problema es cuando el titulo es un año
         como 1917.    
     [IMPROVE/WANTED] Añadir la posibilidad de poner ignores y requerimientos aparte de los generales para evitar descargas no deseadas,    
     [IMPROVE] Wanted Serie, poner en seguimiento nuevos capitulos de series, hay que ver como ver el release date pues en los datos tmdb solo
-        viene el americano. Una forma seria poner una opcion de "Sin Retraso", "Retraso una semana", "Retraso dos a cuatro ..." o un mes.    
-    [NEW/IMPROVE] recargar con jquery solo las partes necesarias en vez de recargar toda la pagina
+        viene el americano. Una forma seria poner una opcion de "Sin Retraso", "Retraso una semana", "Retraso dos a cuatro ..." o un mes.        
     [FIX] A la hora de identificar las series siguientes capitulos los identifica por el predictible_title, si hubiera varias series con el mismo titulo habria problemas. 
-    [FIX] filesearch con glob da error recursivo si se lanza rebuild(shows) rebuild(movies) segido.
+    [FIX] filesearch  (recursive gloob error) when launch  rebuild(shows) rebuild(movies) at same time.
     [IMPROVE][LIBRARY] Los shows deberian de tener un registro maestro con los datos y los demas, los archivos ser registro secundarios.
-[thigs to do when we use a real database]
-    [IMPROVE] In search and news filter torrents tags &words: like  720p  for show only 1080... and ignore keywords like "LANGUAGE"
     [NEW] Add optional user security for profiles      
     [NEW] Config UI
     [IMPROVE] News: Mixed Indexers elements on New now present by indexer order
@@ -44,3 +40,5 @@ TODO
     [NEW/IMPROVE] En el select de identificar estaria bien mostrar las caractulas al poner encima
     [NEW] opcional: mostrar otros ratigns, filmaffinity, imdb
     [IMPROVE] Select Home items
+    [NEW/IMPROVE] Home: Informacion reducida de torrents en transmission y su estado (when begin use jquery)
+    [NEW/IMPROVE] recargar con jquery solo las partes necesarias en vez de recargar toda la pagina
