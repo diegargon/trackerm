@@ -36,7 +36,7 @@ select {
     font-size: 1.1em;
     margin: 4px;
     background-color: transparent;
-    border:1px solid grey;
+    border:0px solid grey; 
     color:  #ff5b5b;
 }
 
@@ -70,10 +70,34 @@ select {
     left: 0;
     background: rgba(58, 58, 58, 0.9) url('../tpl/default/img/loading.gif') 50% 50% no-repeat;
 }
+
 .main_menu {
     border:0px solid #ff5b5b;
     /* background-color: activeborder;*/
-    margin-bottom: 1%;
+    margin-bottom: 3px;
+}
+
+.menu_element, .menu_element_join_left, .menu_element_join_right {
+    border:0px solid blue;
+    display:inline-block;
+    padding: 10px;
+    margin: 5px;
+    background: darkcyan;
+    font-size:1.5em;
+    font-weight:bold;
+}
+
+.menu_element_join_left {
+    margin-left:-10px;
+    border-left: 1px solid black;    
+}
+
+.menu_element_join_right {
+    margin-right:0px;
+}
+
+.menu_element a {
+    text-decoration: none;
 }
 
 button {
@@ -210,22 +234,7 @@ button {
 
 .item_size {}
 
-.item_links {
-
-}
-.menu_element {
-    border:0px solid blue;
-    display:inline-block;
-    padding: 10px;
-    margin: 5px;
-    background: darkcyan;
-    font-size:1.5em;
-    font-weight:bold;
-}
-
-.menu_element href {
-    text-decoration: none;
-}
+.item_links {}
 
 .submit_btn {
     display: inline-block;
@@ -296,10 +305,12 @@ button {
     width:100%;
 }
 
-.library_options {
+.menu_options {
     border:0px solid blueviolet;
     padding: 4px;
-    padding-top: 10px;
+}
+.menu_options form {
+    display:inline;
 }
 
 .search_container {    
@@ -353,10 +364,6 @@ button {
     margin-top: 15px;
 }
 
-.library_options form {
-    display:inline;
-}
-
 .type_head_container{
     width: 100%;
     padding-right: 4%;
@@ -395,9 +402,7 @@ button {
     font-weight: bold;
 }
 
-.wanted_list_container {
-
-}
+.wanted_list_container {}
 
 .wanted_list_row {
     padding: 10px 1px 10px 1px;
