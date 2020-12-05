@@ -1,7 +1,6 @@
 TODO
 
 [HIGH]
-    [FIX] Comprobar los archivos que falta y borrarlos de la base de datos si no si se añaden otra vez hay problemas por que la base de datos da error de duplicado
     [FIX] security on the code
     [IMPROVE] fix all messy code due fast coding    
 

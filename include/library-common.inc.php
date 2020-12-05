@@ -12,7 +12,6 @@
 function rebuild($media_type, $path) {
     global $cfg, $db, $log;
 
-
     $items = [];
     $files = findfiles($path, $cfg['media_ext']);
 
@@ -27,6 +26,11 @@ function rebuild($media_type, $path) {
     $media = $db->getTableData($library_table);
 
     $i = 0;
+
+    //check if each media path it in $files if not proably delete, then delete db entry
+    //this avoid problems if the file was moved
+    (isset($media) && count($media) > 0) ? clean_database($media_type, $files, $media) : null;
+
     foreach ($files as $file) {
         if ($media === false ||
                 array_search($file, array_column($media, 'path')) === false
@@ -50,17 +54,7 @@ function rebuild($media_type, $path) {
                 'tags' => $tags,
                 'ext' => $ext,
             ];
-            /*
-              $items[$i]['ilink'] = $ilink;
-              $items[$i]['file_name'] = $file_name;
-              $items[$i]['size'] = filesize($file);
-              $items[$i]['predictible_title'] = ucwords($predictible_title);
-              $items[$i]['title'] = '';
-              $items[$i]['title_year'] = $year;
-              $items[$i]['path'] = $file;
-              $items[$i]['tags'] = $tags;
-              $items[$i]['ext'] = $ext;
-             */
+
             if ($media_type == 'shows') {
                 $SE = getFileEpisode($file_name);
                 if (!empty($SE)) {
@@ -102,6 +96,21 @@ function rebuild($media_type, $path) {
     isset($items) ? $db->addItems($library_table, $items) : null;
 
     return true;
+}
+
+function clean_database($media_type, $files, $media) {
+    global $log, $db;
+
+    foreach ($media as $item) {
+        if (!in_array($item['path'], $files)) {
+            $log->addStateMsg('Media ' . $item['title'] . ' seems moved or deleted removing from db');
+            if ($media_type == 'movies') {
+                $db->deleteItemById('library_movies', $item['id']);
+            } else if ($media_type == 'shows') {
+                $db->deleteItemById('library_shows', $item['id']);
+            }
+        }
+    }
 }
 
 function identify_media($type, $media) {
