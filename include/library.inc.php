@@ -22,10 +22,6 @@ function show_my_movies() {
     }
 
     $movies = $db->getTableData('library_movies');
-    if (isset($_POST['rebuild_movies'])) {
-        rebuild('movies', $cfg['MOVIES_PATH']);
-        $movies = $db->getTableData('library_movies');
-    }
 
     if ($movies != false) {
         $page .= identify_media('movies', $movies);
@@ -64,11 +60,6 @@ function show_my_shows() {
         $db->deleteItemByField('library_shows', 'predictible_title', $delete_ptitle_match);
     }
     $shows = $db->getTableData('library_shows');
-
-    if (isset($_POST['rebuild_shows'])) {
-        rebuild('shows', $cfg['SHOWS_PATH']);
-        $shows = $db->getTableData('library_shows');
-    }
 
     if ($shows != false) {
 

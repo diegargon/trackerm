@@ -199,7 +199,11 @@ function pager($npage, $nitems, &$topt) {
 }
 
 function getOptions() {
-    global $cfg, $filter, $LNG;
+    global $cfg, $filter, $LNG, $log;
+
+    (isset($_POST['rebuild_movies'])) ? rebuild('movies', $cfg['MOVIES_PATH']) . $log->addStateMsg('Rebuild movies called') : null;
+    (isset($_POST['rebuild_shows'])) ? rebuild('shows', $cfg['SHOWS_PATH']) . $log->addStateMsg('Rebuild shows called') : null;
+
     if (
             isset($_POST['num_ident_toshow']) &&
             ($cfg['max_identify_items'] != $_POST['num_ident_toshow'])
