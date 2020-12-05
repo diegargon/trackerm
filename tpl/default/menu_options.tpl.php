@@ -7,13 +7,15 @@
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  */
 ?>
-<div class="library_options">
+<div class="menu_options">
+    <!--
     <form method="GET" action="">
         <input type="text" name="search_text" value="TODO" />
         <input type="hidden" name="page" value="<?= $_GET['page'] ?>">
         <input class="submit_btn"  type="submit" value="<?= $tdata['L_SEARCH'] ?>"/>
     </form>
-    <form method="post">
+    -->
+    <form method="post" action="<?= str_replace('&sw_opt=1', '', basename($_SERVER['REQUEST_URI'])) ?>">
         <?= $tdata['L_IDENTIFY'] ?>:
         <select name="num_ident_toshow" onchange="this.form.submit()">
             <option <?= $tdata['max_id_sel_0'] ?> value="0">0</option>
@@ -44,10 +46,11 @@
         </select>
         <?php if ($tdata['WANT_MOVIES']) { ?>
             <input class="submit_btn" type="submit" name="rebuild_movies" value="<?= $tdata['L_REESCAN_MOVIES'] ?>"/>
-        <?php }
+            <?php
+        }
         if ($tdata['WANT_SHOWS']) {
             ?>
             <input class="submit_btn" type="submit" name="rebuild_shows" value="<?= $tdata['L_REESCAN_SHOWS'] ?>"/>
-<?php } ?>
+        <?php } ?>
     </form>
 </div>

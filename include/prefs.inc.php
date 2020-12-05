@@ -17,11 +17,26 @@ function loadPrefs() {
 
     if (($user_prefs = $db->fetchAll($results))) {
         foreach ($user_prefs as $pref) {
-            if (!empty($pref['pref_name']) && !empty($pref['pref_value'])) {
+            if (!empty($pref['pref_name']) && isset($pref['pref_value'])) {
                 $cfg[$pref['pref_name']] = $pref['pref_value'];
             }
         }
     }
+}
+
+function getPrefsItem($r_key) {
+    global $db, $user;
+
+    $where['uid'] = ['value' => $user['id']];
+    $results = $db->select('preferences', null, $where);
+    $user_prefs = $db->fetchAll($results);
+
+    foreach ($user_prefs as $pref) {
+        if ($pref['pref_name'] == $r_key) {
+            return $pref['pref_value'];
+        }
+    }
+    return false;
 }
 
 function setPrefsItem($key, $value) {

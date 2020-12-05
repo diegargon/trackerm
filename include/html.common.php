@@ -12,6 +12,19 @@
 function getMenu() {
     global $cfg, $LNG, $user;
 
+    if (isset($_GET['sw_opt'])) {
+        $value = getPrefsItem('hide_opt');
+        if ($value == 0) {
+            setPrefsItem('hide_opt', 1);
+            $cfg['hide_opt'] = 1;
+        } else {
+            setPrefsItem('hide_opt', 0);
+            $cfg['hide_opt'] = 0;
+        }
+    }
+
+    empty($cfg['hide_opt']) ? $user['menu_opt'] = getOptions() : null;
+
     return getTpl('menu', array_merge($cfg, $LNG, $user));
 }
 
@@ -30,13 +43,16 @@ function getTpl($tpl, $tdata) {
 }
 
 function buildTable($head, $db_ary, $topt = null) {
-    global $cfg, $LNG;
+    global $cfg, $LNG, $filter;
+    //TODO FILTERS
+    $npage = $filter->getInt('npage');
 
     if (isset($_GET['search_type']) && isset($topt['search_type']) && ($_GET['search_type'] == $topt['search_type'])) {
-        isset($_GET['npage']) ? $npage = $_GET['npage'] : $npage = 1;
+        empty($npage) ? $npage = 1 : null;
     } else {
         $npage = 1;
     }
+
     empty($topt['columns']) ? $columns = $cfg['tresults_columns'] : $columns = $topt['columns'];
     empty($topt['max_items']) ? $max_items = $cfg['tresults_rows'] * $columns : $max_items = $topt['max_items'];
 
@@ -53,13 +69,12 @@ function buildTable($head, $db_ary, $topt = null) {
     $num_items = 0;
 
     if (
-            empty($_GET['npage']) ||
+            $npage == 1 ||
             (isset($topt['search_type']) && ($_GET['search_type'] != $topt['search_type']))
     ) {
 
         $db_ary_slice = $db_ary;
     } else {
-        $npage = $_GET['npage'];
         $npage_jump = ($max_items * $npage) - $max_items;
         $db_ary_slice = array_slice($db_ary, $npage_jump);
     }
@@ -131,25 +146,28 @@ function msg_box($msg) {
 }
 
 function pager($npage, $nitems, &$topt) {
-    global $cfg;
+    global $cfg, $filter;
 
     /* PAGES */
     $pages = '';
     $items_per_page = $cfg['tresults_columns'] * $cfg['tresults_rows'];
     $num_pages = $nitems / $items_per_page;
+    $search_type = $filter->getUtf8('search_type');
+
+    $page = $filter->getString('page');
 
     if ($num_pages > 1) {
-        $iurl = '?page=' . $_GET['page'];
+        $iurl = '?page=' . $page;
 
-        (!empty($_GET['type'])) ? $iurl .= '&type=' . $_GET['type'] : null;
-        (!empty($_GET['id'])) ? $iurl .= '&id=' . $_GET['id'] : null;
-        (!empty($_GET['search_shows_torrents'])) ? $iurl .= '&search_shows_torrents=' . $_GET['search_shows_torrents'] : null;
-        (!empty($_GET['search_movies_torrents'])) ? $iurl .= '&search_movies_torrents=' . $_GET['search_movies_torrents'] : null;
-        (!empty($_GET['more_movies'])) ? $iurl .= '&more_movies=' . $_GET['more_movies'] : null;
-        (!empty($_GET['more_torrents'])) ? $iurl .= '&more_torrents=' . $_GET['more_torrents'] : null;
-        (!empty($_GET['search_movie_db'])) ? $iurl .= '&search_movie_db=' . $_GET['search_movie_db'] : null;
-        (!empty($_GET['search_movies'])) ? $iurl .= '&search_movies=' . $_GET['search_movies'] : null;
-        (!empty($_GET['search_shows'])) ? $iurl .= '&search_shows=' . $_GET['search_shows'] : null;
+        (!empty($filter->getString('type'))) ? $iurl .= '&type=' . $filter->getString('type') : null;
+        (!empty($filter->getInt('id'))) ? $iurl .= '&id=' . $filter->getInt('type') : null;
+        (!empty($filter->getUtf8('search_shows_torrents'))) ? $iurl .= '&search_shows_torrents=' . $filter->getUtf8('search_shows_torrents') : null;
+        (!empty($filter->getUtf8('search_movies_torrents'))) ? $iurl .= '&search_movies_torrents=' . $filter->getUtf8('search_movies_torrents') : null;
+        (!empty($_GET['more_movies'])) ? $iurl .= '&more_movies=1' : null;
+        (!empty($_GET['more_movies'])) ? $iurl .= '&more_torrents=1' : null;
+        (!empty($filter->getUtf8('search_movie_db'))) ? $iurl .= '&search_movie_db=' . $filter->getUtf8('search_movie_db') : null;
+        (!empty($filter->getUtf8('search_movies'))) ? $iurl .= '&search_movies=' . $filter->getUtf8('search_movies') : null;
+        (!empty($filter->getUtf8('search_shows'))) ? $iurl .= '&search_shows=' . $filter->getUtf8('search_movies') : null;
 
         for ($i = 1; $i <= ceil($num_pages); $i++) {
             if (
@@ -164,8 +182,8 @@ function pager($npage, $nitems, &$topt) {
                     $extra = '&search_type=' . $topt['search_type'];
                 }
 
-                if (isset($_GET['npage']) && ($_GET['npage'] == $i)) {
-                    if (isset($topt['search_type']) && ($_GET['search_type'] != $topt['search_type'])) {
+                if (isset($npage) && ($npage == $i)) {
+                    if (isset($topt['search_type']) && ($search_type != $topt['search_type'])) {
 
                     } else {
                         $link_npage_class .= '_selected';
@@ -177,4 +195,74 @@ function pager($npage, $nitems, &$topt) {
     }
 
     return '<div class="type_pages_numbers">' . $pages . '</div>';
+}
+
+function getOptions() {
+    global $cfg, $filter, $LNG;
+    if (
+            isset($_POST['num_ident_toshow']) &&
+            ($cfg['max_identify_items'] != $_POST['num_ident_toshow'])
+    ) {
+        $num_ident_toshow = $filter->postInt('num_ident_toshow');
+        $cfg['max_identify_items'] = $num_ident_toshow;
+        setPrefsItem('max_identify_items', $num_ident_toshow);
+    }
+
+    ($cfg['max_identify_items'] == 0) ? $max_id_sel_0 = 'selected' : $max_id_sel_0 = '';
+    ($cfg['max_identify_items'] == 5) ? $max_id_sel_5 = 'selected' : $max_id_sel_5 = '';
+    ($cfg['max_identify_items'] == 10) ? $max_id_sel_10 = 'selected' : $max_id_sel_10 = '';
+    ($cfg['max_identify_items'] == 20) ? $max_id_sel_20 = 'selected' : $max_id_sel_20 = '';
+    ($cfg['max_identify_items'] == 50) ? $max_id_sel_50 = 'selected' : $max_id_sel_50 = '';
+
+    $tdata['max_id_sel_0'] = $max_id_sel_0;
+    $tdata['max_id_sel_5'] = $max_id_sel_5;
+    $tdata['max_id_sel_10'] = $max_id_sel_10;
+    $tdata['max_id_sel_20'] = $max_id_sel_20;
+    $tdata['max_id_sel_50'] = $max_id_sel_50;
+
+    /* ROWS */
+    $max_rows_sel_none = '';
+
+    if (isset($_POST['num_rows_results'])) {
+        if ($_POST['num_rows_results'] == $LNG['L_DEFAULT']) {
+            $max_rows_sel_none = 'selected';
+        } else {
+            $num_rows_results = $filter->postInt('num_rows_results');
+            $cfg['tresults_rows'] = $num_rows_results;
+            setPrefsItem('tresults_rows', $num_rows_results);
+        }
+    }
+
+    ($cfg['tresults_rows'] == 1) ? $tdata['max_rows_sel_1'] = 'selected' : $tdata['max_rows_sel_1'] = '';
+    ($cfg['tresults_rows'] == 2) ? $tdata['max_rows_sel_2'] = 'selected' : $tdata['max_rows_sel_2'] = '';
+    ($cfg['tresults_rows'] == 4) ? $tdata['max_rows_sel_4'] = 'selected' : $tdata['max_rows_sel_4'] = '';
+    ($cfg['tresults_rows'] == 6) ? $tdata['max_rows_sel_6'] = 'selected' : $tdata['max_rows_sel_6'] = '';
+    ($cfg['tresults_rows'] == 8) ? $tdata['max_rows_sel_8'] = 'selected' : $tdata['max_rows_sel_8'] = '';
+    ($cfg['tresults_rows'] == 10) ? $tdata['max_rows_sel_10'] = 'selected' : $tdata['max_rows_sel_10'] = '';
+    $tdata['max_rows_sel_none'] = $max_rows_sel_none;
+
+    /* COLUMNS */
+
+    $max_columns_sel_none = '';
+
+    if (isset($_POST['num_columns_results'])) {
+        if ($_POST['num_columns_results'] == $LNG['L_DEFAULT']) {
+            $max_columns_sel_none = 'selected';
+        } else {
+            $num_columns_results = $filter->postInt('num_columns_results');
+            $cfg['tresults_columns'] = $num_columns_results;
+            setPrefsItem('tresults_columns', $num_columns_results);
+        }
+    }
+
+    ($cfg['tresults_columns'] == 1) ? $tdata['max_columns_sel_1'] = 'selected' : $tdata['max_columns_sel_1'] = '';
+    ($cfg['tresults_columns'] == 2) ? $tdata['max_columns_sel_2'] = 'selected' : $tdata['max_columns_sel_2'] = '';
+    ($cfg['tresults_columns'] == 4) ? $tdata['max_columns_sel_4'] = 'selected' : $tdata['max_columns_sel_4'] = '';
+    ($cfg['tresults_columns'] == 6) ? $tdata['max_columns_sel_6'] = 'selected' : $tdata['max_columns_sel_6'] = '';
+    ($cfg['tresults_columns'] == 8) ? $tdata['max_columns_sel_8'] = 'selected' : $tdata['max_columns_sel_8'] = '';
+    ($cfg['tresults_columns'] == 10) ? $tdata['max_columns_sel_10'] = 'selected' : $tdata['max_columns_sel_10'] = '';
+    $tdata['max_columns_sel_none'] = $max_columns_sel_none;
+    /* FIN */
+
+    return getTpl('menu_options', array_merge($tdata, $LNG, $cfg));
 }

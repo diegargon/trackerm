@@ -15,8 +15,7 @@ $req_page = $filter->getString('page');
 $body = getMenu();
 $footer = getFooter();
 
-if (!empty($_GET['download'])) {
-    $d_link = $_GET['download'];
+if (!(empty($d_link = $filter->getUrl('download')))) {
 
     $trans_response = $trans->addUrl($d_link);
 
@@ -35,9 +34,9 @@ if (!empty($_GET['download'])) {
     $db->addItemUniqField('wanted', $wanted_db, 'hashString');
 }
 
-if (!isset($req_page) || $req_page == '') {
+if (!isset($req_page) || $req_page == '' || $req_page == 'index') {
     $body .= index_page();
-} else if ($req_page == 'library') {
+} else if ($req_page == 'library' || $req_page == 'library_movies' || $req_page == 'library_shows') {
     $body .= page_library();
 } else if ($req_page == 'news') {
     $body .= page_news();
