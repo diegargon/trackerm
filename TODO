@@ -1,9 +1,10 @@
 TODO
 
 [HIGH]
-    [FIX] Comprobar los archivos que falta y borrarlos de la base de datos si no si se añeden otra vez hay problemas por que la base de datos da error de duplicado
+    [FIX] Comprobar los archivos que falta y borrarlos de la base de datos si no si se añaden otra vez hay problemas por que la base de datos da error de duplicado
     [FIX] security on the code
     [IMPROVE] fix all messy code due fast coding    
+
 [MED]  
     [NEW] Escaneo de directorios a más para avi sin ser torrents. $cfg['SCAN_MEDIA_DIR'] = 1;
     [NEW/IMPROVE] actualizacion automatica de titulos de episodio a excepcion de que el show sea "ended"
@@ -17,6 +18,8 @@ TODO
         que contienen dichos terminos y igual se requiere que el titulo solo sea "RUN" o "ASESINO" a secas    
 
 [VERY LOW]
+    
+    [IMPROVE] Add Trailers from TMDB
     [IMPROVE] Pagination actually get all results and do a array_slice, now with SQL database when use cache we can  do that better.
     [CHANGE] TMDB: Añadir items de ultimas, popular o similar
     [FIX/IMPROVE] fechas normalizar a formato comun    
@@ -34,7 +37,7 @@ TODO
     [NEW] Add optional user security for profiles      
     [NEW] Config UI
     [IMPROVE] News: Mixed Indexers elements on New now present by indexer order
-    
+    [IMPROVE] Add hashes files when scaning the database hash first and last  X bytes for fast hashing
 [BACKLOG]
     [CHANGE] Change actual Transmission rpc api to something basic, since is enough and the actual have alot of deps 
     [NEW/IMPROVE] En el select de identificar estaria bien mostrar las caractulas al poner encima

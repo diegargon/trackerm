@@ -32,7 +32,7 @@ if (!empty($_GET['download'])) {
         'direct' => 1,
         'profile' => (int) $cfg['profile'],
     ];
-    $db->addItemUniqField('wanted', $wanted_db, 'tid');
+    $db->addItemUniqField('wanted', $wanted_db, 'hashString');
 }
 
 if (!isset($req_page) || $req_page == '') {

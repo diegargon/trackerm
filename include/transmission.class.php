@@ -24,7 +24,7 @@ class TorrentServer {
         6 => 'L_SEEDING',
         7 => 'L_NO_PEERS',
         // Custom Status used in wanted
-        8 => 'L_COMPLETED', //tor 0 y percenDone 1
+        8 => 'L_COMPLETED', //tor sttoped 0 y percenDone 1
         9 => 'L_MOVED',
         10 => 'L_DELETED',
     ];
@@ -52,11 +52,36 @@ class TorrentServer {
     }
 
     public function delete($ids) {
+        $hashes = [];
+
+        $trans = $this->getAll();
+        foreach ($ids as $id) {
+            foreach ($trans as $item) {
+                if ($item['id'] == $id) {
+                    $hashes[] = $item['hashString'];
+                }
+            }
+        }
 
         $ret = $this->trans_conn->remove($ids, true);
-        $this->setWantedDelete($ids);
+        $this->setWantedDelete($hashes);
 
         return $ret;
+    }
+
+    public function deleteHashes($hashes) {
+        $ids = [];
+        $trans = $this->getAll();
+        foreach ($hashes as $hash) {
+            foreach ($trans as $item) {
+                if ($item['hashString'] == $hash) {
+                    $ids[] = $item['id'];
+                }
+            }
+        }
+        if (count($ids) > 0) {
+            $this->delete($ids);
+        }
     }
 
     public function stopAll() {
@@ -98,14 +123,14 @@ class TorrentServer {
 
         $trans = $this->getAll();
 
-        $tids = [];
+        $hashes = [];
         foreach ($trans as $item) {
 
             $item['status'] == 0 && $item['percentDone'] == 1 ? $status = 8 : $status = $item['status'];
 
-            $tids[] = $item['id'];
+            $hashes[] = $item['hashString'];
 
-            $wanted_item = $db->getItemByField('wanted', 'tid', $item['id']);
+            $wanted_item = $db->getItemByField('wanted', 'hashString', $item['hashString']);
 
             if ($wanted_item && ($wanted_item['wanted_status'] != $status)) {
                 $update_ary['wanted_status'] = $status;
@@ -117,8 +142,8 @@ class TorrentServer {
         $wanted_db = $db->getTableData('wanted');
 
         foreach ($wanted_db as $wanted_item) {
-            if (($wanted_item['direct'] !== 1) && ($wanted_item['wanted_status'] > 1) &&
-                    ($wanted_item['wanted_status'] < 9) && !in_array($wanted_item['tid'], $tids)) {
+            if (($wanted_item['wanted_status'] > 1) &&
+                    ($wanted_item['wanted_status'] < 9) && !in_array($wanted_item['hashString'], $hashes)) {
                 $update_ary['wanted_status'] = 10;
                 $update_ary['id'] = $wanted_item['id'];
                 $db->upsertItemByField('wanted', $update_ary, 'id');
@@ -126,16 +151,16 @@ class TorrentServer {
         }
     }
 
-    private function setWantedDelete($ids) {
+    private function setWantedDelete($hashes) {
         global $db, $log, $LNG;
-        foreach ($ids as $id) {
-            $wanted_item = $db->getItemByField('wanted', 'tid', $id);
+        foreach ($hashes as $hash) {
+            $wanted_item = $db->getItemByField('wanted', 'hashString', $hash);
             if ($wanted_item !== false) {
-                if (isset($wanted_item['direct']) && $wanted_item['direct'] == 1) {
+                if (!empty($wanted_item['direct'] == 1)) {
                     $db->deleteItemById('wanted', $wanted_item['id']);
                 } else if (empty($wanted_item['direct']) && ($wanted_item['wanted_status'] != 9)) {
+                    $log->addStateMsg($LNG['L_TOR_MAN_DEL'] . " {$wanted_item['title']} status: {$wanted_item['wanted_status']}");
                     $wanted_item['wanted_status'] = 10;
-                    $log->addStateMsg($LNG['L_TOR_MAN_DEL'] . " id: {$wanted_item['title']}");
                     $db->upsertItemByField('wanted', $wanted_item, 'id');
                 }
             }

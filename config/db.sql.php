@@ -247,7 +247,9 @@ function update_db($from) {
         $db->update('db_info', $set);
     }
     /*
+     *
       if ($from < 3) {
+      // add to CREATE AND ALTER to movies/shows_library "hash" VARCHAR NULL,
       $set['version'] = 3;
       $db->update('db_info', $set);
       }

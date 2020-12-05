@@ -35,6 +35,7 @@ function transmission_scan() {
             $item = [];
 
             $item['tid'] = $tor['id'];
+            $item['hashString'] = $tor['hashString'];
             $item['dirname'] = $tor['name'];
             $item['title'] = getFileTitle($item['dirname']);
             $item['status'] = $tor['status'];
@@ -57,6 +58,7 @@ function transmission_scan() {
             $item = [];
 
             $item['tid'] = $tor['id'];
+            $item['hashString'] = $tor['hashString'];
             $item['dirname'] = $tor['name'];
             $item['title'] = getFileTitle($item['dirname']);
             $item['status'] = $tor['status'];
@@ -104,7 +106,7 @@ function getRightTorrents() {
         if ($cfg['MOVE_ONLY_INAPP']) {
             foreach ($finished_list as $finished) {
                 foreach ($wanted_db as $wanted_item) {
-                    if ($wanted_item['tid'] == $finished['id']) {
+                    if ($wanted_item['hashString'] == $finished['hashString']) {
                         $tors['finished'][] = $finished;
                     }
                 }
@@ -119,7 +121,7 @@ function getRightTorrents() {
         if ($cfg['MOVE_ONLY_INAPP']) {
             foreach ($seeding_list as $seeding) {
                 foreach ($wanted_db as $wanted_item) {
-                    if ($wanted_item['tid'] == $seeding['id']) {
+                    if ($wanted_item['hashString'] == $seeding['hashString']) {
                         $tors['seeding'][] = $seeding;
                     }
                 }
@@ -209,28 +211,29 @@ function MovieJob($item, $linked = false) {
             }
 
             if (!$linked) {
-                $log->debug(" Moved work: " . $item['tid']);
+                $log->debug(" Moved work: " . $item['hashString']);
                 if (move_media($valid_file, $final_dest_path) && ($valid_file == end($valid_files) )) {
-                    $log->debug(" Cleaning torrent id: " . $item['tid']);
-                    $ids[] = $item['tid'];
+                    $log->debug(" Cleaning torrent id/hash:  {$item['tid']} : {$item['hashString']}");
+                    $hashes[] = $item['hashString'];
                     file_exists(dirname($valid_file) . '/trackerm-unrar') ? unlink(dirname($valid_file) . '/trackerm-unrar') : null;
-                    $trans->delete($ids);
 
-                    $wanted_item = $db->getItemByField('wanted', 'tid', $item['tid']);
+                    $wanted_item = $db->getItemByField('wanted', 'hashString', $item['hashString']);
                     if (!empty($wanted_item)) {
                         $log->debug(" Setting to moved wanted id: " . $wanted_item['wanted_id']);
                         $update_ary['wanted_status'] = 9;
-                        $update_ary['id'] = $wanted_item['wanted_id'];
+                        $update_ary['id'] = $wanted_item['id'];
                         $db->updateItemByField('wanted', $update_ary, 'id');
                     }
+
+                    $trans->deleteHashes($hashes);
                 }
             } else {
-                $log->debug(" Link Seeding: " . $item['tid']);
+                $log->debug(" Link Seeding: {$item['tid']} : {$item['hashString']}");
                 linking_media($valid_file, $final_dest_path);
             }
         }
     } else {
-        $log->info(" No valid files found on torrent with transmission id: " . $item['tid']);
+        $log->info(" No valid files found on torrent with transmission id: {$item['tid']} : {$item['hashString']} ");
     }
 }
 
@@ -249,11 +252,11 @@ function ShowJob($item, $linked = false) {
                 if (!file_exists($unrar_check)) {
                     if (check_file_encrypt('rar', $file)) {
                         $log->addStateMsg(" {$LNG['L_ERR_FILE_ENCRYPT_MANUAL']} ($file)");
-                        //TODO: we continue and try since the function need test and TODO.
+                        // we continue and try since the function need test and TODO.
                     }
                     touch($unrar_check);
                     !empty($cfg['FILES_USERGROUP']) ? chgrp($unrar_check, $cfg['FILES_USERGROUP']) : null;
-                    $unrar = $cfg['UNRAR_PATH'] . ' x -y "' . $file . '" "' . dirname($file) . '"';
+                    $unrar = $cfg['UNRAR_PATH'] . ' x -p- -y "' . $file . '" "' . dirname($file) . '"';
                     $log->info("Need unrar $file");
                     exec($unrar);
                     //$log->debug("" . $unrar;
@@ -335,28 +338,28 @@ function ShowJob($item, $linked = false) {
             }
 
             if (!$linked) {
-                $log->debug(" Moved work: " . $item['tid']);
+                $log->debug(" Moved work: {$item['tid']} : {$item['hashString']}");
                 if (move_media($valid_file, $final_dest_path) && ($valid_file == end($valid_files) )) {
-                    $log->debug(" Cleaning torrent id: " . $item['tid']);
-                    $ids[] = $item['tid'];
+                    $log->debug(" Cleaning torrent: {$item['tid']} : {$item['hashString']}");
+                    $hashes[] = $item['hashString'];
                     file_exists(dirname($valid_file) . '/trackerm-unrar') ? unlink(dirname($valid_file) . '/trackerm-unrar') : null;
-                    $trans->delete($ids);
 
-                    $wanted_item = $db->getItemByField('wanted', 'tid', $item['tid']);
+                    $wanted_item = $db->getItemByField('wanted', 'hashString', $item['hashString']);
                     if (!empty($wanted_item)) {
-                        $log->debug(" Setting to moved wanted id: " . $wanted_item['id']);
+                        $log->debug(" Setting to moved wanted {$item['tid']} : {$item['hashString']}");
                         $update_ary['wanted_status'] = 9;
                         $update_ary['id'] = $wanted_item['id'];
                         $db->updateItemByField('wanted', $update_ary, 'id');
                     }
+                    $trans->deleteHashes($hashes);
                 }
             } else {
-                $log->debug(" Link Seeding: " . $item['tid']);
+                $log->debug(" Link Seeding: {$item['tid']} : {$item['hashString']}");
                 linking_media($valid_file, $final_dest_path);
             }
         }
     } else {
-        $log->info("No valid files found on torrent with id: " . $item['tid']);
+        $log->info("No valid files found on torrent with {$item['tid']} : {$item['hashString']}");
     }
 }
 

@@ -15,13 +15,13 @@ function page_transmission() {
 
     $tid = $filter->postInt('tid');
 
-    isset($_POST['start_all']) ? $trans->startAll() : null;
-    isset($_POST['stop_all']) ? $trans->stopAll() : null;
+    isset($_POST['start_all']) ? $trans->startAll() . sleep(1) : null;
+    isset($_POST['stop_all']) ? $trans->stopAll() . sleep(1) : null;
 
     if (!empty($tid)) {
-        isset($_POST['start']) ? $trans->start($tid) . sleep(1) : null;
-        isset($_POST['stop']) ? $trans->stop($tid) . sleep(1) : null;
-        isset($_POST['delete']) ? $trans->delete($tid) . sleep(1) : null;
+        isset($_POST['start']) ? $trans->start($tid) . usleep(500000) : null;
+        isset($_POST['stop']) ? $trans->stop($tid) . usleep(500000) : null;
+        isset($_POST['delete']) ? $trans->delete($tid) . usleep(500000) : null;
     }
 
     $transfers = $trans->getAll();

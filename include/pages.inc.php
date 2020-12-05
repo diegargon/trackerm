@@ -383,9 +383,10 @@ function page_torrents() {
 }
 
 function page_wanted() {
-    global $LNG, $cfg, $db, $filter;
+    global $LNG, $cfg, $db, $filter, $trans;
 
     $want = [];
+    $trans->updateWanted();
 
     if (isset($_POST['check_day'])) {
         $wanted_mfy = $filter->postInt('check_day');
@@ -394,7 +395,6 @@ function page_wanted() {
             $db->updateItemById('wanted', $w_mfy_id, $day_check);
         }
     }
-
 
     isset($_GET['id']) ? $wanted_id = $filter->getInt('id') : $wanted_id = false;
     isset($_GET['media_type']) ? $wanted_type = $filter->getString('media_type') : $wanted_type = false;
