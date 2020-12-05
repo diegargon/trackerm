@@ -108,4 +108,29 @@ Class Filter {
         return $val;
     }
 
+    //URL
+    function getUrl($val, $size = null) {
+        if (empty($_GET[$val])) {
+            return false;
+        }
+
+        return $this->varUrl($_GET[$val], $size);
+    }
+
+    function postUrl($val, $size = null) {
+        if (empty($_POST[$val])) {
+            return false;
+        }
+
+        return $this->varUrl($_POST[$val], $size);
+    }
+
+    function varUrl($val, $size = null) {
+        if (empty($val) || (!empty($size) && (strlen($val) > $size))) {
+            return false;
+        }
+
+        return $val;
+    }
+
 }
