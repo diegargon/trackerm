@@ -7,7 +7,7 @@ TODO
 
 [MED]  
     [NEW] Escaneo de directorios a más para avi sin ser torrents. $cfg['SCAN_MEDIA_DIR'] = 1;
-    [NEW/IMPROVE] actualizacion automatica de titulos de episodio a excepcion de que el show sea "ended"
+    [NEW/IMPROVE] actualizacion automatica cada semana de titulos de episodio a excepcion de que el show sea "ended"
     [NEW] Biblio: buscador en nuestra libreria o enlace a una pagina buscador más facil de implementar.
     [FIX] No hay ninguna comprobacion de que la conexion a transmission esta correctamente establecida.
     [IMPROVE] Si se borra manualmente un torrente bajado quedara el bd huerfanos. OPCION ORPHAN. 
@@ -20,8 +20,7 @@ TODO
 [VERY LOW]
     
     [IMPROVE] Add Trailers from TMDB
-    [IMPROVE] Pagination actually get all results and do a array_slice, now with SQL database when use cache we can  do that better.
-    [CHANGE] TMDB: Añadir items de ultimas, popular o similar
+    [IMPROVE] Pagination actually get all results and do a array_slice, now with SQL database when use cache we can  do that better.    
     [FIX/IMPROVE] fechas normalizar a formato comun    
     [NEW/IMPROVE] menu rows/columns y otras configuraciones generales en todas las paginas o pagina config.
     [IMPROVE] rebuild pager/paginacion, messy code.    
@@ -35,7 +34,7 @@ TODO
     [FIX] filesearch  (recursive gloob error) when launch  rebuild(shows) rebuild(movies) at same time.
     [IMPROVE][LIBRARY] Los shows deberian de tener un registro maestro con los datos y los demas, los archivos ser registro secundarios.
     [NEW] Add optional user security for profiles      
-    [NEW] Config UI
+    [NEW] Config UI && integrate all config in database, ride config files
     [IMPROVE] News: Mixed Indexers elements on New now present by indexer order
     [IMPROVE] Add hashes files when scaning the database hash first and last  X bytes for fast hashing
 [BACKLOG]
