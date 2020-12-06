@@ -252,6 +252,7 @@ function update_db($from) {
       // add new(CREATE) table config al estilo preferences for save general pref
       // add CREATE and ALTER wanted exact INTERGER null (to improve wanted to search a exact name. Example: "run" and not "run run" o "the run"
       // custom_words_ignore custom_words_require fields for wanted. Configure each wanted with custom fields
+      // Table:Wanted wanted_season to track we want the season not one especifique episode
       if ($from < 3) {
 
       $set['version'] = 3;

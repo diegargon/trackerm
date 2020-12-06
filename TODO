@@ -15,7 +15,8 @@ TODO
     [IMPROVE] Two search_cache_expire  search_cache_expire and news_cache_expire    
     [IMPROVE/WANTED] Añadir la posibilidad de buscar el titulo exacto, si buscamos "Run" o "Asesino" encontrara varios resultados con titulos
         que contienen dichos terminos y igual se requiere que el titulo solo sea "RUN" o "ASESINO" a secas    
-
+    [IMPROVE] Allow WANT SEASON, wanted will check for  all torrents one first time, and after every day configure check the
+            the first episode missed
 [VERY LOW]
     
     [IMPROVE] Add Trailers from TMDB
