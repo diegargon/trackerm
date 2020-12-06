@@ -5,6 +5,7 @@ TODO
     [IMPROVE] fix all messy code due fast coding    
 
 [MED]  
+    [FIX/IMPROVE][WANTED] Disable day want when seedig/finish or moved.
     [NEW] Escaneo de directorios a más para avi sin ser torrents. $cfg['SCAN_MEDIA_DIR'] = 1;
     [NEW/IMPROVE] actualizacion automatica cada semana de titulos de episodio a excepcion de que el show sea "ended"
     [NEW] Biblio: buscador en nuestra libreria o enlace a una pagina buscador más facil de implementar.
