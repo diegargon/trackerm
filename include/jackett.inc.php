@@ -145,16 +145,6 @@ function search_shows_torrents($words, $head = null, $nohtml = false) {
     return $page;
 }
 
-/*
- * http://192.168.:9117/api/v2.0/indexers/newpct/results/torznab/api?t=tvsearch&cat=5030,5040&extended=1&apikey=&offset=0&limit=100
- *
- * rsss feed:
- * 192.168.:9117/api/v2.0/indexers/newpct/results/torznab/api?apikey=k&t=search&cat=&q=
- *
- * get capat
- * http://192.168.:9117/api/v2.0/indexers/newpct/results/torznab/api?apikey=c&t=caps
- */
-
 function jackett_get($indexer, $limit = null) {
     global $cfg;
 

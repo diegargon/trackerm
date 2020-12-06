@@ -246,11 +246,7 @@ function page_wanted() {
     if (isset($_GET['ignore'])) {
         $ignore_id = $filter->getInt('ignore');
         $wanted_ignore_item = $db->getItemById('wanted', $ignore_id);
-        if (empty($wanted_ignore_item['ignore'])) {
-            $update['ignore'] = 1;
-        } else {
-            $update['ignore'] = 0;
-        }
+        (empty($wanted_ignore_item['ignore'])) ? $update['ignore'] = 1 : $update['ignore'] = 0;
         $db->updateItemById('wanted', $ignore_id, $update);
     }
 
@@ -296,11 +292,8 @@ function page_identify() {
     $item_selected = [];
 
     if (!empty($submit_title)) {
-        if ($media_type == 'movies') {
-            $db_media = mediadb_searchMovies($submit_title);
-        } else {
-            $db_media = mediadb_searchShows($submit_title);
-        }
+        ($media_type == 'movies') ? $db_media = mediadb_searchMovies($submit_title) : $db_media = mediadb_searchShows($submit_title);
+
         $results_opt = '';
         if (!empty($db_media)) {
             $select = '';
@@ -359,8 +352,7 @@ function page_download() {
     } else {
         exit();
     }
-    if (!empty($item) && file_exists($item['path'])) {
-        send_file($item['path']);
-    }
+    (!empty($item) && file_exists($item['path'])) ? send_file($item['path']) : null;
+
     exit();
 }
