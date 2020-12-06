@@ -25,7 +25,21 @@
             <?php } ?>
         </div>
         <div class="wanted_list_container">
-            <?= isset($tdata['wanted_list']) ? $tdata['wanted_list'] : null ?>
+            <div class="divTableWanted">
+                <div class="divTableHeadingWanted">
+                    <div class="divTableCellWanted"></div>
+                    <div class="divTableCellWanted"></div>
+                    <div class="divTableCellWanted">ID</div>
+                    <div class="divTableCellWanted"><?= $tdata['L_STATUS'] ?></div>
+                    <div class="divTableCellWanted"></div>
+                    <div class="divTableCellWanted"><?= $tdata['L_ADDED'] ?></div>
+                    <div class="divTableCellWanted"><?= $tdata['L_CHECKED'] ?></div>
+                    <div class="divTableCellWanted"><?= $tdata['L_TYPE'] ?></div>
+                    <div class="divTableCellWanted">TMDB</div>
+                    <div class="divTableCellWanted"><?= $tdata['L_TITLE'] ?></div>
+                </div>
+                <?= isset($tdata['wanted_list']) ? $tdata['wanted_list'] : null ?>
+            </div>
         </div>
     </div>
 </div>

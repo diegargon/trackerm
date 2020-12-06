@@ -22,6 +22,8 @@ $cfg['jackett_api'] = '/api/v2.0';
 $cfg['img_url'] = $cfg['REL_PATH'] . '/img';
 $cfg['LOG_TO_SYSLOG'] = 1;
 $cfg['LOG_TO_FILE'] = 1;
+$cfg['CHARSET'] = 'UTF-8';
+$cfg['LOCALE'] = str_replace('-', '_', $cfg['LANG']) . '.' . $cfg['CHARSET'];
 
 $cfg['DB_FILE'] = $cfg['ROOT_PATH'] . '/cache/trackerm.db';
 $cfg['movies_categories'] = [

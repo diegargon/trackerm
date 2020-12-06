@@ -28,7 +28,6 @@ function wanted_list() {
             if (empty($wanted_item['id']) || $wanted_item['direct'] == 1) {
                 continue;
             }
-
             $tdata['status_name'] = $LNG['L_SEARCHING'];
             if (isset($wanted_item['wanted_status']) && ($wanted_item['wanted_status'] >= 0)) {
                 $tdata['status_name'] = $trans->getStatusName($wanted_item['wanted_status']);

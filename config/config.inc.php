@@ -147,8 +147,6 @@ $cfg['search_cache_expire'] = 900; //seconds
 /* * ********************************** */
 
 $cfg['TORRENT_MEDIA_REGEX'] = '/(\.avi|\.mp4|\.mkv)/i';
-$cfg['CHARSET'] = 'UTF-8';
-$cfg['LOCALE'] = str_replace('-', '_', $cfg['LANG']) . '.' . $cfg['CHARSET'];
 
 $cfg['media_ext'] = [
     "mkv",

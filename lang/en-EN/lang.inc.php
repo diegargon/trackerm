@@ -128,6 +128,7 @@ $LNG = [
     'L_TRENDING' => 'Trending',
     'L_TRENDING_MOVIES' => 'Trending Movies',
     'L_TRENDING_SHOWS' => 'Trending Shows',
+    'L_TYPE' => 'Type',
     'L_UPDATE' => 'Actualizar',
     'L_UPDATE_EPISODES' => 'Update ep.',
     'L_UNIGNORE' => 'Unignore',

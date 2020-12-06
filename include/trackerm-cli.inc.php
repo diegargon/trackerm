@@ -466,6 +466,10 @@ function wanted_work() {
             if (send_transmission($valid_results)) {
                 $log->addStateMsg($LNG['L_WANTED_FOUND'] . ':(' . $title . ') ' . $LNG['L_DOWNLOADING']);
             }
+        } else {
+            $update_ary['last_check'] = time();
+            $update_ary['first_check'] = 1;
+            $db->updateItemById('wanted', $wanted['id'], $update_ary);
         }
 
         $log->debug("********************************************************************************************************");
