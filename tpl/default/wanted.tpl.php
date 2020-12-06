@@ -11,6 +11,18 @@
 <div class="wanted_page">
     <div class="wanted_list">
         <h2><?= $tdata['L_WANTED'] ?></h2>
+        <div class="wanted_opt_global">
+            <?php
+            foreach ($cfg['TORRENT_QUALITYS_PREFS'] as $quality) {
+                ?>
+                <span class="tag_quality"><?= $quality ?></span>
+                <?php
+            }
+            foreach ($cfg['TORRENT_IGNORES_PREFS'] as $ignores) {
+                ?>
+                <span class="tag_ignore"><?= $ignores ?></span>
+            <?php } ?>
+        </div>
         <div class="wanted_list_container">
             <?= isset($tdata['wanted_list']) ? $tdata['wanted_list'] : null ?>
         </div>

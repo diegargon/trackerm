@@ -1,6 +1,6 @@
 # trackerm
 
-![alt text](https://github.com/diegargon/trackm/blob/master/screenshots/library-screenshot.png?raw=true)
+![alt text](https://github.com/diegargon/trackerm/blob/master/screenshots/library-screenshot.png?raw=true)
 
 ## Description: 
 

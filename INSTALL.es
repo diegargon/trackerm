@@ -19,7 +19,7 @@ En "Publicado" veras los ultimos torrents publicados
 
 En biblioteca podras ver tus peliculas/series, identificar y ver episodios y cuales faltan, tambien hay enlace para descargar localmente.
 
-Es más que recomendable si tienes que borrar un archivo torrent de transmission añadido con trackm hacerlo desde trackerm. Para el mejr funcionamiento
+Es más que recomendable si tienes que borrar un archivo torrent de transmission añadido con trackerm hacerlo desde trackerm. Para el mejr funcionamiento
 es mejor que todo lo hagas desde trackerm.
 
 El sistema de seguimiento automatico (aun alpha) aunque funciona con los torrents al menos en español (otras variantes no probadas)

@@ -41,20 +41,16 @@ class DB {
         }
         if (empty($this->db)) {
             return $this->fail();
-        } else {
-            $debug_msg .= 'Conn(ok)';
         }
+
         $version = $this->getDbVersion();
         if ($version < $this->version) {
             $debug_msg .= ("DbV:NeedUp->");
             ($this->upgradeDb($version)) ? $debug_msg .= 'ok' : $debug_msg .= 'fail';
         } else if ($version > $this->version) {
             $debug_msg .= ("DbV:NewerDBThanApiProblem");
-        } else {
-            $debug_msg .= 'DbChecks(ok) v' . $version;
         }
-
-        $this->log->debug($debug_msg);
+        !empty($debug_msg) ? $this->log->debug($debug_msg) : null;
     }
 
     /* Common / Helpers */
@@ -91,11 +87,9 @@ class DB {
         $value = $item[$field];
         $_item = $this->getItemByField($table, $field, $value);
         if (!empty($_item)) {
-            //$this->log->debug("upser actualiza");
             $this->updateItemByField($table, $item, $field);
             return true;
         } else {
-            //$this->log->debug("upsert crea nuevo");
             $this->addItem($table, $item);
             return true;
         }

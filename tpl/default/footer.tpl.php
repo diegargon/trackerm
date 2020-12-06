@@ -9,6 +9,6 @@
 ?>
 <div class="footer">
     <p class="copyright">
-        <a href="https://github.com/diegargon/trackm" target="_blank">trackerm</a> - Copyright @ 2020 Diego García
+        <a href="https://github.com/diegargon/trackerm" target="_blank">trackerm</a> - Copyright @ 2020 Diego García
     </p>
 </div>

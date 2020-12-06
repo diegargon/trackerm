@@ -250,7 +250,8 @@ function update_db($from) {
       // NEXT UPDATE
       // to hash movie files add  CREATE AND ALTER to movies/shows_library "hash" VARCHAR NULL,
       // add new(CREATE) table config al estilo preferences for save general pref
-
+      // add CREATE and ALTER wanted exact INTERGER null (to improve wanted to search a exact name. Example: "run" and not "run run" o "the run"
+      // custom_words_ignore custom_words_require fields for wanted. Configure each wanted with custom fields
       if ($from < 3) {
 
       $set['version'] = 3;

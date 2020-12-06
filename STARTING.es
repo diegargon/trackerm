@@ -15,7 +15,7 @@ Con un solo click trackerm lo enviara si esta correctamente configurado a transm
 <b>Seguimiento :</b> En esta sección podras ver y administrar las peliculas/series en seguimiento.
 trackerm buscara y descargar automaticamente las peliculas/series que quieras en cuanto esten 
 disponibles. Puedes tambien cambiar cada cuanto quieres que las busque. Sea cual sea la opción que
-elijas trackm lo buscara ese dia o cada dia varias veces (configurable en el archivo de configuración.
+elijas trackerm lo buscara ese dia o cada dia varias veces (configurable en el archivo de configuración.
 Puedes tambien pulsar sobre ignorar para que de momento ignore la entrada.
 <br/>
 <b>Torrents :</b> Es un buscador de torrents

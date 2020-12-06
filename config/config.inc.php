@@ -41,7 +41,7 @@ $cfg['TORRENT_FINISH_PATH'] = '';
 // (1) will move only media download with trackerm,(0) will scan and move all media download with transmission
 $cfg['MOVE_ONLY_INAPP'] = 0;
 
-// With this option we order to trackm search for other media in torrent directory that we example delete the
+// With this option we order to trackerm search for other media in torrent directory that we example delete the
 // transmission torrent instead or paused/stopped
 // In this case trackrm will move all matches but not delete the directorys related.
 

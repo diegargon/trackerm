@@ -7,17 +7,17 @@ now and update tomorrow you must probably remove all database entrys in cache an
 Select the path (config file only atm) where your movies/shows reside, click on rebuild buttons and identify your movies/shows.
 
 In "Themoviedb" tab you can search for movies/shows and  automatically will show you the torrents, if there is none you can choose 'wanted' and  
-trackm will check released torrents and automatically download when a match appears. 
+trackerm will check released torrents and automatically download when a match appears. 
 
 In Torrents tab you can search movies/shows torrents and clicking in download will automatically send to Transmission-daemon
 
-In Wanted/Seguimiento you can see what movies/shows trackm are tracking for download
+In Wanted/Seguimiento you can see what movies/shows trackerm are tracking for download
 
 In Released/Publicado you can see the latest torrent releases
 
 In Library/Biblioteca you can see your movies/shows, identify, show seasons and check missing episodes.
 
-trackm will track your transmission movie/shows downloads and automatically move to your library path.
+trackerm will track your transmission movie/shows downloads and automatically move to your library path.
 
 ## DIRECTORY PERMISSIONS
     Your www server must have this permissions:

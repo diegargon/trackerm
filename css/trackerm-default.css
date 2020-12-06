@@ -417,12 +417,15 @@ button {
     padding: 5px;
 }
 
+.wanted_opt_global {
+    margin-bottom: 12px;
+}
 .tag_quality, .tag_type, .tag_day, .tag_id, .tag_added, .tag_state {
     border: 3px solid green;
 }
 
 .tag_title {
-    border: 3px solid black;
+    border: 3px solid #2fb78a;
     background: black;
     width: 5%;
 }
