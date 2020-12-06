@@ -120,7 +120,7 @@ function page_view() {
     $type = $filter->getString('type');
 
     if (empty($id) || empty($type)) {
-        return msg_box($msg = ['title' => $LNG['L_ERRORS'], 'body' => '1A1001']);
+        return msg_box($msg = ['title' => $LNG['L_ERROR'], 'body' => '1A1001']);
     }
     if (!empty($deletereg)) {
         if ($type == 'movies_library') {
@@ -207,11 +207,11 @@ function page_torrents() {
     $page = getTpl('page_torrents', array_merge($tdata, $LNG));
 
     if (!empty($search_movies_torrents)) {
-        $page .= search_movies_torrents(trim($search_movies_torrents), 'L_TORRENT');
+        $page .= search_media_torrents('movies', trim($search_movies_torrents), 'L_TORRENT');
     }
 
     if (!empty($search_shows_torrents)) {
-        $torrent_results = search_shows_torrents(trim($search_shows_torrents), 'L_TORRENT');
+        $torrent_results = search_media_torrents('shows', trim($search_shows_torrents), 'L_TORRENT');
 
         if ($torrent_results !== false) {
             $page .= $torrent_results;

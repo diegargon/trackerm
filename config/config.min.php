@@ -7,10 +7,15 @@
  *  @subpackage
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  */
+/* * ******************************************************************************* */
+/* THIS FILE DOES NOTHING  THIS IS ONLY A EXAMPLE OF  MINIMAL REQUIRED CONFIGURATION */
+/* copy and rename it to /etc/trackerm.conf and edit                              */
+/* * ******************************************************************************* */
+
 // themoviedb.org api */
 $cfg['db_api_token'] = '';
 // Lang es-ES or en-EN
-$cfg['LANG'] = '';
+$cfg['LANG'] = 'en-EN';
 
 // Full path where trackerm reside
 $cfg['ROOT_PATH'] = '';
@@ -27,7 +32,6 @@ $cfg['TORRENT_FINISH_PATH'] = '';
 
 $cfg['jackett_srv'] = '';
 $cfg['jackett_key'] = '';
-$cfg['jacket_results'] = 25;
 
 // What Jacket indexer will use, check link in "Actions" the name ex:  http://192.168.X.XX:9117/api/v2.0/indexers/NAME/results/
 $cfg['jackett_indexers'] = [
@@ -38,7 +42,7 @@ $cfg['jackett_indexers'] = [
 //     5 => 'rarbg',
 ];
 
-// Transmission connection details
+// Transmission connection details (user/pass can be blank if you not setup passwords)
 $cfg['trans_hostname'] = '';
 $cfg['trans_port'] = '9091';
 $cfg['trans_username'] = '';

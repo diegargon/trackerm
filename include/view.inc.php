@@ -157,7 +157,7 @@ function view_extra_movies($item, $opt = null) {
     if (
             isset($_GET['more_torrents']) || (!empty($opt['auto_show_torrents']) && !isset($_GET['more_movies']))
     ) {
-        $torrent_results = search_movies_torrents($stitle);
+        $torrent_results = search_media_torrents('movies', $stitle);
         if ($torrent_results !== false) {
             $extra .= $torrent_results;
         } else {
@@ -207,7 +207,7 @@ function view_extra_shows($item, $opt) {
     if (
             isset($_GET['more_torrents']) || (!empty($opt['auto_show_torrents']) && !isset($_GET['more_shows']))
     ) {
-        $extra .= search_shows_torrents($stitle);
+        $extra .= search_media_torrents('shows', $stitle);
     }
 
     return $extra;

@@ -14,10 +14,10 @@ function page_new_media($media_type) {
 
     if ($media_type == 'movies') {
         $search_cache_db = 'jackett_search_movies_cache';
-        $jacket_db = 'jackett_movies';
+        $jackett_db = 'jackett_movies';
     } else {
         $search_cache_db = 'jackett_search_shows_cache';
-        $jacket_db = 'jackett_shows';
+        $jackett_db = 'jackett_shows';
     }
 
     if ($cfg['search_cache']) {
@@ -34,7 +34,7 @@ function page_new_media($media_type) {
                 return false;
             }
             foreach ($ids as $cache_id) {
-                $res_media_db[] = $db->getItemById($jacket_db, trim($cache_id));
+                $res_media_db[] = $db->getItemById($jackett_db, trim($cache_id));
             }
         }
     }
@@ -52,11 +52,7 @@ function page_new_media($media_type) {
         }
     }
 
-    if ($media_type == 'movies') {
-        ($cache_media_expire == 1) || !$cfg['search_cache'] ? $res_media_db = jackett_prep_movies($media_res) : null;
-    } else if ($media_type == 'shows') {
-        ($cache_media_expire == 1) || !$cfg['search_cache'] ? $res_media_db = jackett_prep_shows($media_res) : null;
-    }
+    ($cache_media_expire == 1) || !$cfg['search_cache'] ? $res_media_db = jackett_prep_media($media_type, $media_res) : null;
 
     /* BUILD PAGE */
     $page_news = '';

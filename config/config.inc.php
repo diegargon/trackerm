@@ -7,10 +7,6 @@
  *  @subpackage
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  */
-/* * ******************************************************************************* */
-/* THIS FILE DOES NOTHING  THIS IS ONLY A EXAMPLE  MINAMAL REQUIRED CONFIGURATION */
-/* copy and rename it to /etc/trackerm.conf and edit                              */
-/* * ******************************************************************************* */
 !defined('IN_WEB') ? exit : true;
 
 global $cfg;
@@ -67,7 +63,7 @@ $cfg['DIR_PERMS'] = 0775;
 $cfg['jackett_srv'] = 'http://192.168.X.X:9117';
 $cfg['jackett_key'] = '';
 /* MAX jacket i think its 1000  */
-$cfg['jacket_results'] = 25;
+$cfg['jackett_results'] = 500;
 
 // To avoid search for every language in titles for tags, give here what languages want tag.
 // Leave blank for avoid languages tag in files. This tags are case sensitive for avoid
@@ -85,9 +81,9 @@ $cfg['EXTRA_TAG'] = [];
 
 // What Jacket indexer will use, check in "Actions" links the name ex:  http://192.168.X.XX:9117/api/v2.0/indexers/NAME/results/
 $cfg['jackett_indexers'] = [
-    1 => 'newpct',
-    2 => 'divxtotal',
-    3 => 'mejortorrent',
+//    1 => 'newpct',
+//    2 => 'divxtotal',
+//    3 => 'mejortorrent',
 //    4 => 'moviesdvdr',
 //     5 => 'rarbg',
 ];

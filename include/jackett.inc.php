@@ -9,41 +9,52 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-function search_movies_torrents($words, $head = null, $nohtml = false) {
+function search_media_torrents($media_type, $words, $head = null, $nohtml = false) {
     global $cfg, $log, $db;
+
+    if ($media_type == 'movies') {
+        $jackett_search_media_cache = 'jackett_search_movies_cache';
+        $jackett_db = 'jackett_movies';
+    } else if ($media_type == 'shows') {
+        $jackett_search_media_cache = 'jackett_search_shows_cache';
+        $jackett_db = 'jackett_shows';
+    } else {
+        return false;
+    }
 
     $result = [];
     $page = '';
     $results_count = 0;
-    $cache_movies_expire = 0;
+    $cache_media_expire = 0;
 
     if ($cfg['search_cache']) {
-        $movies_cache_check = $db->getItemByField('jackett_search_movies_cache', 'words', $words);
-        !isset($movies_cache_check['update']) ? $movies_cache_check['update'] = 0 : null;
+        $media_cache_check = $db->getItemByField($jackett_search_media_cache, 'words', $words);
+        !isset($media_cache_check['update']) ? $media_cache_check['update'] = 0 : null;
 
-        if (time() > ($movies_cache_check['update'] + $cfg['search_cache_expire'])) {
-            $log->debug("News: Movies cache expire, Requesting");
-            $cache_movies_expire = 1;
+        if (time() > ($media_cache_check['update'] + $cfg['search_cache_expire'])) {
+            $log->debug("News: Media cache expire, Requesting");
+            $cache_media_expire = 1;
         } else {
-            //$log->debug("News:  Using movies cache");
-            $ids = explode(',', $movies_cache_check['ids']);
+            //$log->debug("News:  Using media cache");
+            $ids = explode(',', $media_cache_check['ids']);
 
             if (empty($ids) || count($ids) <= 0) {
                 return false;
             }
             foreach ($ids as $cache_id) {
-                $movies_db[] = $db->getItemById('jackett_movies', trim($cache_id));
+                $media_db[] = $db->getItemById($jackett_db, trim($cache_id));
             }
         }
     }
 
-    if (!$cfg['search_cache'] || $cache_movies_expire) {
+    if (!$cfg['search_cache'] || $cache_media_expire) {
         foreach ($cfg['jackett_indexers'] as $indexer) {
             $caps = jackett_get_caps($indexer);
             $categories = jackett_get_categories($caps['categories']['category']);
 
-            if ($caps['searching']['movie-search']['@attributes']['available'] == "yes") {
-                $result[$indexer] = jackett_search_media('movies', $words, $indexer, $categories);
+            ($media_type) == 'movies' ? $jackett_media_key = 'movie-search' : $jackett_media_key = 'tv-search';
+            if ($caps['searching'][$jackett_media_key]['@attributes']['available'] == "yes") {
+                $result[$indexer] = jackett_search_media($media_type, $words, $indexer, $categories);
             }
             isset($result[$indexer]['channel']['item']) ? $results_count = count($result[$indexer]['channel']['item']) + $results_count : null;
         }
@@ -51,124 +62,36 @@ function search_movies_torrents($words, $head = null, $nohtml = false) {
         if ($results_count <= 0) {
             return false;
         }
-        $movies_db = jackett_prep_movies($result);
 
-        if (($cfg['search_cache'] && $cache_movies_expire)) {
-            $movies_cache['words'] = $words;
-            $movies_cache['update'] = time();
-            $movies_cache['ids'] = '';
+        $media_db = jackett_prep_media($media_type, $result);
+        if (($cfg['search_cache'] && $cache_media_expire)) {
+            $media_cache['words'] = $words;
+            $media_cache['update'] = time();
+            $media_cache['ids'] = '';
 
-            $last_element = end($movies_db);
-            foreach ($movies_db as $tocache_movie) {
-                $movies_cache['ids'] .= $tocache_movie['id'];
-                $tocache_movie['id'] != $last_element['id'] ? $movies_cache['ids'] .= ', ' : null;
+            $last_element = end($media_db);
+            foreach ($media_db as $tocache_media) {
+                $media_cache['ids'] .= $tocache_media['id'];
+                $tocache_media['id'] != $last_element['id'] ? $media_cache['ids'] .= ', ' : null;
             }
-            $db->upsertItemByField('jackett_search_movies_cache', $movies_cache, 'words');
+            $db->upsertItemByField($jackett_search_media_cache, $media_cache, 'words');
         }
     }
 
-    $topt['search_type'] = 'movies';
+    $topt['search_type'] = $media_type;
     if ($nohtml) {
-        return $movies_db;
+        return $media_db;
     }
 
-    $page .= buildTable($head, $movies_db, $topt);
+    $page .= buildTable($head, $media_db, $topt);
 
     return $page;
-}
-
-function search_shows_torrents($words, $head = null, $nohtml = false) {
-    global $cfg, $log, $db;
-
-    $result = [];
-    $page = '';
-    $results_count = 0;
-    $cache_shows_expire = 0;
-
-    if ($cfg['search_cache']) {
-        $shows_cache_check = $db->getItemByField('jackett_search_shows_cache', 'words', $words);
-        !isset($shows_cache_check['update']) ? $shows_cache_check['update'] = 0 : null;
-
-        if (time() > ($shows_cache_check['update'] + $cfg['search_cache_expire'])) {
-            $log->debug("News: Movies cache expire, Requesting");
-            $cache_shows_expire = 1;
-        } else {
-            //$log->debug("News:  Using shows cache");
-            $ids = explode(',', $shows_cache_check['ids']);
-
-            if (empty($ids) || count($ids) <= 0) {
-                return false;
-            }
-            foreach ($ids as $cache_id) {
-                $shows_db[] = $db->getItemById('jackett_shows', trim($cache_id));
-            }
-        }
-    }
-
-    if (!$cfg['search_cache'] || $cache_shows_expire) {
-        foreach ($cfg['jackett_indexers'] as $indexer) {
-            $caps = jackett_get_caps($indexer);
-            $categories = jackett_get_categories($caps['categories']['category']);
-
-            if ($caps['searching']['tv-search']['@attributes']['available'] == "yes") {
-                $result[$indexer] = jackett_search_media('shows', $words, $indexer, $categories);
-            }
-            isset($result[$indexer]['channel']['item']) ? $results_count = count($result[$indexer]['channel']['item']) + $results_count : null;
-        }
-
-        if ($results_count <= 0) {
-            return false;
-        }
-        $shows_db = jackett_prep_shows($result);
-
-        if (($cfg['search_cache'] && $cache_shows_expire)) {
-            $shows_cache['words'] = $words;
-            $shows_cache['update'] = time();
-            $shows_cache['ids'] = '';
-
-            $last_element = end($shows_db);
-            foreach ($shows_db as $tocache_movie) {
-                $shows_cache['ids'] .= $tocache_movie['id'];
-                $tocache_movie['id'] != $last_element['id'] ? $shows_cache['ids'] .= ', ' : null;
-            }
-            $db->upsertItemByField('jackett_search_shows_cache', $shows_cache, 'words');
-        }
-    }
-
-    $topt['search_type'] = 'shows';
-    if ($nohtml) {
-        return $shows_db;
-    }
-
-    $page .= buildTable($head, $shows_db, $topt);
-
-    return $page;
-}
-
-function jackett_get($indexer, $limit = null) {
-    global $cfg;
-
-    (empty($limit)) ? $limit = $cfg['jacket_results'] : null;
-
-    $jackett_url = $cfg['jackett_srv'] . $cfg['jackett_api'] . '/indexers/' . $indexer . '/results/torznab/';
-    $params = 'api?t=search&extended=1&apikey=' . $cfg['jackett_key'] . '&limit=' . $limit;
-
-    return curl_get_jackett($jackett_url, $params);
-}
-
-function jackett_get_caps($indexer) {
-    global $cfg;
-    $params = '';
-
-    $jackett_url = $cfg['jackett_srv'] . $cfg['jackett_api'] . '/indexers/' . $indexer . '/results/torznab/';
-    $params = 'api?apikey=' . $cfg['jackett_key'] . '&t=caps';
-    return curl_get_jackett($jackett_url, $params);
 }
 
 function jackett_search_media($media_type, $words, $indexer, $categories, $limit = null) {
     global $cfg;
 
-    empty($limit) ? $limit = $cfg['jacket_results'] : null;
+    empty($limit) ? $limit = $cfg['jackett_results'] : null;
 
     $jackett_url = $cfg['jackett_srv'] . $cfg['jackett_api'] . '/indexers/' . $indexer . '/results/torznab/';
     $words = rawurlencode($words);
@@ -186,145 +109,98 @@ function jackett_search_media($media_type, $words, $indexer, $categories, $limit
     return curl_get_jackett($jackett_url, $params);
 }
 
-function jackett_prep_movies($movies_results) {
+function jackett_prep_media($media_type, $media_results) {
     global $db;
 
-    $movies = [];
-    foreach ($movies_results as $indexer) {
+    $jackett_db = 'jackett_' . $media_type;
 
+    $media = [];
+    foreach ($media_results as $indexer) {
+        //One item
         if (isset($indexer['channel']['item']['title'])) {
-            $movie = $indexer['channel']['item'];
-            isset($movie['files']) ? $files = $movie['files'] : $files = '';
+            $item = $indexer['channel']['item'];
+            isset($item['files']) ? $files = $item['files'] : $files = '';
 
-            $torznab = $movie['torznab'];
+            $torznab = $item['torznab'];
             foreach ($torznab as $attr) {
-                $movie[$attr['@attributes']['name']] = $attr['@attributes']['value'];
+                $item[$attr['@attributes']['name']] = $attr['@attributes']['value'];
             }
+            isset($item['coverurl']) ? $poster = $item['coverurl'] : $poster = '';
+            !empty($item['description']) ? $description = $item['description'] : $description = '';
 
-            isset($movie['coverurl']) ? $poster = $movie['coverurl'] : $poster = '';
-            !empty($movie['description']) ? $description = $movie['description'] : $description = '';
-
-            $movies[] = [
-                'ilink' => 'movies_torrent',
-                'guid' => $movie['guid'],
-                'title' => $movie['title'],
-                'release' => $movie['pubDate'],
-                'size' => $movie['size'],
+            ($media_type == 'movies') ? $ilink = 'movies_torrent' : $ilink = 'shows_torrent';
+            $media[] = [
+                'ilink' => $ilink,
+                'guid' => $item['guid'],
+                'title' => $item['title'],
+                'release' => $item['pubDate'],
+                'size' => $item['size'],
                 'plot' => $description,
                 'files' => $files,
-                'download' => $movie['link'],
-                'category' => $movie['category'],
-                'source' => $movie['jackettindexer'],
+                'download' => $item['link'],
+                'category' => $item['category'],
+                'source' => $item['jackettindexer'],
                 'poster' => $poster,
             ];
+            //More than one
         } else if (isset($indexer['channel']['item'])) {
-            foreach ($indexer['channel']['item'] as $movie) {
-                isset($movie['files']) ? $files = $movie['files'] : $files = '';
+            foreach ($indexer['channel']['item'] as $item) {
+                isset($item['files']) ? $files = $item['files'] : $files = '';
 
-                $torznab = $movie['torznab'];
+                $torznab = $item['torznab'];
                 foreach ($torznab as $attr) {
-                    $movie[$attr['@attributes']['name']] = $attr['@attributes']['value'];
+                    $item[$attr['@attributes']['name']] = $attr['@attributes']['value'];
                 }
-                !empty($movie['coverurl']) ? $poster = $movie['coverurl'] : $poster = '';
-                !empty($movie['description']) ? $description = $movie['description'] : $description = '';
-                $movies[] = [
-                    'ilink' => 'movies_torrent',
-                    'guid' => $movie['guid'],
-                    'title' => $movie['title'],
-                    'release' => $movie['pubDate'],
-                    'size' => $movie['size'],
+                !empty($item['coverurl']) ? $poster = $item['coverurl'] : $poster = '';
+                !empty($item['description']) ? $description = $item['description'] : $description = '';
+
+                $media[] = [
+                    'ilink' => 'media_torrent',
+                    'guid' => $item['guid'],
+                    'title' => $item['title'],
+                    'release' => $item['pubDate'],
+                    'size' => $item['size'],
                     'plot' => $description,
                     'files' => $files,
-                    'download' => $movie['link'],
-                    'category' => $movie['category'],
-                    'source' => $movie['jackettindexer'],
+                    'download' => $item['link'],
+                    'category' => $item['category'],
+                    'source' => $item['jackettindexer'],
                     'poster' => $poster,
                 ];
             }
         }
     }
 
-    if (!empty($movies) && count($movies) > 0) {
-        $db->addItemsUniqField('jackett_movies', $movies, 'guid');
-//add ids
-        foreach ($movies as $key => $movie) {
-            $id = $db->getIdByField('jackett_movies', 'guid', $movie['guid']);
-            $movies[$key]['id'] = $id;
+    if (!empty($media) && count($media) > 0) {
+        $db->addItemsUniqField($jackett_db, $media, 'guid');
+        //add ids
+        foreach ($media as $key => $item) {
+            $id = $db->getIdByField($jackett_db, 'guid', $item['guid']);
+            $media[$key]['id'] = $id;
         }
     }
 
-    return $movies;
+    return $media;
 }
 
-function jackett_prep_shows($shows_results) {
-    global $db;
+function jackett_get($indexer, $limit = null) {
+    global $cfg;
 
-    $shows = [];
-    foreach ($shows_results as $indexer) {
+    (empty($limit)) ? $limit = $cfg['jackett_results'] : null;
 
-        if (isset($indexer['channel']['item']['title'])) {
-            $show = $indexer['channel']['item'];
-            isset($show['files']) ? $files = $show['files'] : $files = '';
+    $jackett_url = $cfg['jackett_srv'] . $cfg['jackett_api'] . '/indexers/' . $indexer . '/results/torznab/';
+    $params = 'api?t=search&extended=1&apikey=' . $cfg['jackett_key'] . '&limit=' . $limit;
 
-            $torznab = $show['torznab'];
-            foreach ($torznab as $attr) {
-                $show[$attr['@attributes']['name']] = $attr['@attributes']['value'];
-            }
-            !empty($show['coverurl']) ? $poster = $show['coverurl'] : $poster = '';
-            !empty($show['description']) ? $description = $show['description'] : $description = '';
+    return curl_get_jackett($jackett_url, $params);
+}
 
-            $shows[] = [
-                'ilink' => 'shows_torrent',
-                'guid' => $show['guid'],
-                'title' => $show['title'],
-                'release' => $show['pubDate'],
-                'size' => $show['size'],
-                'plot' => $description,
-                'files' => $files,
-                'download' => $show['link'],
-                'category' => $show['category'],
-                'source' => $show['jackettindexer'],
-                'poster' => $poster,
-            ];
-        } else if (isset($indexer['channel']['item'])) {
-            foreach ($indexer['channel']['item'] as $show) {
-                isset($show['files']) ? $files = $show['files'] : $files = '';
+function jackett_get_caps($indexer) {
+    global $cfg;
+    $params = '';
 
-                $torznab = $show['torznab'];
-                foreach ($torznab as $attr) {
-                    $show[$attr['@attributes']['name']] = $attr['@attributes']['value'];
-                }
-                !empty($show['coverurl']) ? $poster = $show['coverurl'] : $poster = '';
-                !empty($show['description']) ? $description = $show['description'] : $description = '';
-
-                $shows[] = [
-                    'ilink' => 'shows_torrent',
-                    'guid' => $show['guid'],
-                    'title' => $show['title'],
-                    'release' => $show['pubDate'],
-                    'size' => $show['size'],
-                    'plot' => $description,
-                    'files' => $files,
-                    'download' => $show['link'],
-                    'category' => $show['category'],
-                    'source' => $show['jackettindexer'],
-                    'poster' => $poster,
-                ];
-            }
-        }
-    }
-
-    if (!empty($shows) && count($shows) > 0) {
-        $db->addItemsUniqField('jackett_shows', $shows, 'guid');
-
-//add ids
-        foreach ($shows as $key => $show) {
-            $id = $db->getIdByField('jackett_shows', 'guid', $show['guid']);
-            $shows[$key]['id'] = $id;
-        }
-    }
-
-    return $shows;
+    $jackett_url = $cfg['jackett_srv'] . $cfg['jackett_api'] . '/indexers/' . $indexer . '/results/torznab/';
+    $params = 'api?apikey=' . $cfg['jackett_key'] . '&t=caps';
+    return curl_get_jackett($jackett_url, $params);
 }
 
 function jackett_get_categories($categories) {
