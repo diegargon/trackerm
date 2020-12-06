@@ -277,7 +277,7 @@ class DB {
 
     /* NOT TESTED */
 
-    public function select_multiple($table, $what = null, $field, $values) {
+    public function selectMultiple($table, $what = null, $field, $values) {
         $values = explode(',', $values);
 
         foreach ($values as $key => $value) {
