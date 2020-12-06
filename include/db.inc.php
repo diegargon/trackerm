@@ -223,17 +223,16 @@ class DB {
         return (($statement->execute()) || $this->fail());
     }
 
-    public function upsert() {
-        /*
-          TODO
-          SYNTAX
-
-          INSERT INTO players (user_name, age)
-          VALUES('steven', 32)
-          ON CONFLICT(user_name)
-          DO UPDATE SET age=excluded.age;
-
-         */
+    public function upsert($table, $set, $where) {
+        $result = $this->select($table, 'id', $where, 'LIMIT 1');
+        $item = $this->fetch($result);
+        $this->finalize($result);
+        if ($item) {
+            $update_where['id'] = ['value' => $item['id']];
+            $this->update($table, $set, $update_where);
+        } else {
+            $this->insert($table, $set);
+        }
     }
 
     /*
