@@ -275,6 +275,25 @@ class DB {
         return $response;
     }
 
+    /* NOT TESTED */
+
+    public function select_multiple($table, $what = null, $field, $values) {
+        $values = explode(',', $values);
+
+        foreach ($values as $key => $value) {
+            $values[$key] = trim($value);
+            isset($binds) ? $binds = ',?' : $binds = '?,';
+        }
+        !isset($what) ? $what = '*' : null;
+
+        $query = 'SELECT * FROM ' . $what . ' WHERE ' . $field . ' IN(' . $binds . ')';
+        $stmt = $this->db->prepare($query);
+        $stmt->execute($values);
+        $rows = $this->fetchAll($stmt);
+
+        return $rows;
+    }
+
     public function delete($table, $where, $extra = null) {
 
         $query = 'DELETE FROM ' . $table . ' ';
