@@ -175,7 +175,6 @@ function identify_media($type, $media) {
 function submit_ident($type, $items) {
     global $db;
 
-
     foreach ($items as $my_id => $db_id) {
         if (!empty($db_id)) {
             $db_item = mediadb_getByLocalId($db_id);
@@ -209,7 +208,7 @@ function getLibraryStats() {
     $stats['shows_size'] = 0;
 
     $movies_db = $db->getTableData('library_movies');
-    $stats['num_movies'] = $db->count('library_movies');
+    $stats['num_movies'] = count($movies_db);
 
     if (!empty($movies_db)) {
         foreach ($movies_db as $db_movie) {
@@ -221,7 +220,7 @@ function getLibraryStats() {
     }
 
     $shows_db = $db->getTableData('library_shows');
-    $stats['num_episodes'] = $db->count('library_shows');
+    $stats['num_episodes'] = count($shows_db);
     $count_shows = [];
 
     if (!empty($shows_db)) {
