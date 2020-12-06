@@ -52,6 +52,7 @@ $LNG = [
     'L_FILENAME' => 'File name',
     'L_FINISHED' => 'Finished',
     'L_FREE_TOTAL' => 'Free/Total',
+    'L_GLOBAL_TAGS' => 'Global Tags',
     'L_HOME' => 'Home',
     'L_HARDDISK' => 'Hard Disk',
     'L_IDENT_MOVIES' => 'Identify movies',

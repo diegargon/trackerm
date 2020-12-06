@@ -14,11 +14,9 @@
     <span class="tag_id"><?= $tdata['id'] ?></span>
     <span class="tag_state"><?= $tdata['status_name'] ?></span>
     <span class="tag_day"><?= $tdata['day_check'] ?></span>
-
-    <span class="tag_type"><?= $tdata['media_type'] ?></span>
-
     <span class="tag_added"><?= $tdata['L_ADDED'] . ' :' . $tdata['added'] ?></span>
     <span class="tag_day"><?= $tdata['L_CHECKED'] . ': ' . $tdata['last_check'] ?></span>
+    <span class="tag_type"><?= $tdata['lang_media_type'] ?></span>    
     <span class="tag_id">TMDB:
         <?php if (!empty($tdata['elink'])) { ?>
             <a href="<?= $tdata['elink'] ?>" target="_blank"><?= $tdata['themoviedb_id'] ?></a>

@@ -12,6 +12,7 @@
     <div class="wanted_list">
         <h2><?= $tdata['L_WANTED'] ?></h2>
         <div class="wanted_opt_global">
+            <div class="global_title"><?= $tdata['L_GLOBAL_TAGS'] ?></div>
             <?php
             foreach ($cfg['TORRENT_QUALITYS_PREFS'] as $quality) {
                 ?>

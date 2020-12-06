@@ -420,8 +420,15 @@ button {
 .wanted_opt_global {
     margin-bottom: 12px;
 }
+
 .tag_quality, .tag_type, .tag_day, .tag_id, .tag_added, .tag_state {
     border: 3px solid green;
+}
+
+.global_title {
+    float:left;
+    font-weight: bold;
+    margin-right: 5px;
 }
 
 .tag_title {

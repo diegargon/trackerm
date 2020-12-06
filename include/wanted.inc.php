@@ -39,7 +39,7 @@ function wanted_list() {
             !empty($wanted_item['last_check']) ? $wanted_item['last_check'] = strftime("%A %H:%M", $wanted_item['last_check']) : $wanted_item['last_check'] = $LNG['L_NEVER'];
             $mediadb_item = mediadb_getByDbId($wanted_item['media_type'], $wanted_item['themoviedb_id']);
             !empty($mediadb_item) ? $tdata['elink'] = $mediadb_item['elink'] : null;
-
+            $wanted_item['media_type'] == 'movies' ? $tdata['lang_media_type'] = $LNG['L_MOVIES'] : $tdata['lang_media_type'] = $LNG['L_SHOWS'];
             $wanted_list_data .= getTpl('wanted-item', array_merge($wanted_item, $tdata, $LNG, $cfg));
         }
         return $wanted_list_data;
