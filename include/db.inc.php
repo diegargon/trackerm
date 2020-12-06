@@ -286,7 +286,7 @@ class DB {
         }
         !isset($what) ? $what = '*' : null;
 
-        $query = 'SELECT * FROM ' . $what . ' WHERE ' . $field . ' IN(' . $binds . ')';
+        $query = 'SELECT ' . $what . ' FROM ' . $table . ' WHERE ' . $field . ' IN(' . $binds . ')';
         $stmt = $this->db->prepare($query);
         $stmt->execute($values);
         $rows = $this->fetchAll($stmt);
