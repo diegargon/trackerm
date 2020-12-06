@@ -21,14 +21,14 @@ function page_new_media($media_type) {
     }
 
     if ($cfg['search_cache']) {
-        $media_cache_check = $db->getItemByField($search_cache_db, 'words', '');
+        $where['words'] = $media_cache_check = $db->getItemByField($search_cache_db, 'words', '');
         !isset($media_cache_check['update']) ? $media_cache_check['update'] = 0 : null;
 
         if ((time() > ($media_cache_check['update'] + $cfg['search_cache_expire']))) {
             $log->debug("News: $media_type cache expire, Requesting");
             $cache_media_expire = 1;
         } else {
-            $log->debug("News: $media_type using shows cache");
+            $log->debug("News: $media_type using cache " . ( ($media_cache_check['update'] + $cfg['search_cache_expire']) - time()));
             $ids = explode(',', $media_cache_check['ids']);
             if (empty($ids) || count($ids) <= 0) {
                 return false;
@@ -49,7 +49,7 @@ function page_new_media($media_type) {
                 if ($media_type == 'movies') {
                     $results = jackett_search_movies('', $indexer, $categories);
                 } else if ($media_type == 'shows') {
-                    $results = jackett_search_movies('', $indexer, $categories);
+                    $results = jackett_search_shows('', $indexer, $categories);
                 }
                 $results ? $media_res[$indexer] = $results : null;
             }
@@ -77,6 +77,7 @@ function page_new_media($media_type) {
         $media_cache['words'] = '';
         $media_cache['update'] = time();
         $media_cache['ids'] = '';
+        $media_cache['media_type'] = $media_type;
 
         $last_element = end($res_media_db);
         foreach ($res_media_db as $tocache_media) {
@@ -84,7 +85,9 @@ function page_new_media($media_type) {
             $tocache_media['id'] != $last_element['id'] ? $media_cache['ids'] .= ', ' : null;
         }
 
-        $db->upsertItemByField($search_cache_db, $media_cache, 'words');
+        $where['words'] = ['value' => ''];
+        $where['media_type'] = ['value' => $media_type];
+        $db->upsert($search_cache_db, $media_cache, $where);
     }
 
     return $page_news;
