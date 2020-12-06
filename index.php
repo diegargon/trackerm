@@ -38,7 +38,7 @@ if (!isset($req_page) || $req_page == '' || $req_page == 'index') {
     $body .= index_page();
 } else if ($req_page == 'library' || $req_page == 'library_movies' || $req_page == 'library_shows') {
     $body .= page_library();
-} else if ($req_page == 'news') {
+} else if ($req_page == 'news' || $req_page == 'new_movies' || $req_page == 'new_shows') {
     $body .= page_news();
 } else if ($req_page == 'tmdb') {
     $body .= page_tmdb();

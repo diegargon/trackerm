@@ -24,3 +24,4 @@ loadPrefs();
 require_once('include/pages.inc.php');
 require_once('include/html.common.php');
 require_once('include/library.inc.php');
+require_once('include/new_media.inc.php');

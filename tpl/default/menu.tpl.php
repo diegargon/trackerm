@@ -18,7 +18,9 @@
     <a onClick="show_loading()" href="?page=library"><div class="menu_element_join_right"><?= $tdata['L_LIBRARY'] ?></div></a>
     <a onClick="show_loading()" href="?page=library_movies"><div class="menu_element_join_left"><?= $tdata['L_MOVIES_MIN'] ?></div></a>
     <a onClick="show_loading()" href="?page=library_shows"><div class="menu_element_join_left"><?= $tdata['L_SHOWS_MIN'] ?></div></a>
-    <a onClick="show_loading()" href="?page=news"><div class="menu_element"><?= $tdata['L_RELEASE'] ?></div></a>
+    <a onClick="show_loading()" href="?page=news"><div class="menu_element_join_right"><?= $tdata['L_RELEASE'] ?></div></a>
+    <a onClick="show_loading()" href="?page=new_movies"><div class="menu_element_join_left"><?= $tdata['L_MOVIES_MIN'] ?></div></a>
+    <a onClick="show_loading()" href="?page=new_shows"><div class="menu_element_join_left"><?= $tdata['L_SHOWS_MIN'] ?></div></a>
     <a onClick="show_loading()" href="?page=wanted"><div class="menu_element"><?= $tdata['L_WANTED'] ?></div></a>
     <a onClick="show_loading()" href="?page=torrents"><div class="menu_element"><?= $tdata['L_TORRENTS'] ?></div></a>
     <a onClick="show_loading()" href="?page=tmdb"><div class="menu_element"><?= 'TMDB' ?></div></a>
