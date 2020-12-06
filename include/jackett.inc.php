@@ -43,7 +43,7 @@ function search_movies_torrents($words, $head = null, $nohtml = false) {
             $categories = jackett_get_categories($caps['categories']['category']);
 
             if ($caps['searching']['movie-search']['@attributes']['available'] == "yes") {
-                $result[$indexer] = jackett_search_movies($words, $indexer, $categories);
+                $result[$indexer] = jackett_search_media('movies', $words, $indexer, $categories);
             }
             isset($result[$indexer]['channel']['item']) ? $results_count = count($result[$indexer]['channel']['item']) + $results_count : null;
         }
@@ -111,7 +111,7 @@ function search_shows_torrents($words, $head = null, $nohtml = false) {
             $categories = jackett_get_categories($caps['categories']['category']);
 
             if ($caps['searching']['tv-search']['@attributes']['available'] == "yes") {
-                $result[$indexer] = jackett_search_shows($words, $indexer, $categories);
+                $result[$indexer] = jackett_search_media('shows', $words, $indexer, $categories);
             }
             isset($result[$indexer]['channel']['item']) ? $results_count = count($result[$indexer]['channel']['item']) + $results_count : null;
         }
@@ -165,7 +165,7 @@ function jackett_get_caps($indexer) {
     return curl_get_jackett($jackett_url, $params);
 }
 
-function jackett_search_movies($words, $indexer, $categories, $limit = null) {
+function jackett_search_media($media_type, $words, $indexer, $categories, $limit = null) {
     global $cfg;
 
     empty($limit) ? $limit = $cfg['jacket_results'] : null;
@@ -173,29 +173,14 @@ function jackett_search_movies($words, $indexer, $categories, $limit = null) {
     $jackett_url = $cfg['jackett_srv'] . $cfg['jackett_api'] . '/indexers/' . $indexer . '/results/torznab/';
     $words = rawurlencode($words);
 
+    ($media_type == 'movies') ? $jkt_cat_first_digit = 2 : $jkt_cat_first_digit = 5;
+
     foreach ($categories as $category) {
-        if (substr($category, 0, 1) == 2) {
+        if (substr($category, 0, 1) == $jkt_cat_first_digit) {
             isset($cats) ? $cats .= ',' . $category : $cats = $category;
         }
     }
-    $params = 'api?apikey=' . $cfg['jackett_key'] . '&t=search&extended=1&cat=' . $cats . '&q=' . $words . '&limit=' . $limit;
 
-    return curl_get_jackett($jackett_url, $params);
-}
-
-function jackett_search_shows($words, $indexer, $categories, $limit = null) {
-    global $cfg;
-
-    empty($limit) ? $limit = $cfg['jacket_results'] : null;
-
-    $jackett_url = $cfg['jackett_srv'] . $cfg['jackett_api'] . '/indexers/' . $indexer . '/results/torznab/';
-    $words = rawurlencode($words);
-
-    foreach ($categories as $category) {
-        if (substr($category, 0, 1) == 5) {
-            isset($cats) ? $cats .= ',' . $category : $cats = $category;
-        }
-    }
     $params = 'api?apikey=' . $cfg['jackett_key'] . '&t=search&extended=1&cat=' . $cats . '&q=' . $words . '&limit=' . $limit;
 
     return curl_get_jackett($jackett_url, $params);
@@ -261,7 +246,7 @@ function jackett_prep_movies($movies_results) {
 
     if (!empty($movies) && count($movies) > 0) {
         $db->addItemsUniqField('jackett_movies', $movies, 'guid');
-        //add ids
+//add ids
         foreach ($movies as $key => $movie) {
             $id = $db->getIdByField('jackett_movies', 'guid', $movie['guid']);
             $movies[$key]['id'] = $id;
@@ -332,7 +317,7 @@ function jackett_prep_shows($shows_results) {
     if (!empty($shows) && count($shows) > 0) {
         $db->addItemsUniqField('jackett_shows', $shows, 'guid');
 
-        //add ids
+//add ids
         foreach ($shows as $key => $show) {
             $id = $db->getIdByField('jackett_shows', 'guid', $show['guid']);
             $shows[$key]['id'] = $id;

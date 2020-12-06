@@ -46,11 +46,7 @@ function page_new_media($media_type) {
 
             if ($cache_media_expire) {
                 $results = '';
-                if ($media_type == 'movies') {
-                    $results = jackett_search_movies('', $indexer, $categories);
-                } else if ($media_type == 'shows') {
-                    $results = jackett_search_shows('', $indexer, $categories);
-                }
+                $results = jackett_search_media($media_type, '', $indexer, $categories);
                 $results ? $media_res[$indexer] = $results : null;
             }
         }
