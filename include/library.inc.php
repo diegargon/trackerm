@@ -14,7 +14,7 @@ function show_my_movies() {
 
     $page = '';
 
-    if (isset($_POST['mult_movies_select']) && !empty($_POST['mult_movies_select'])) {
+    if (!empty($_POST['mult_movies_select'])) {
         submit_ident('movies', $_POST['mult_movies_select']);
     }
     if (!empty($_GET['ident_delete']) && ($_GET['media_type'] == 'movies')) {

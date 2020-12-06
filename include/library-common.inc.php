@@ -123,6 +123,8 @@ function identify_media($type, $media) {
     $iurl = '?page=' . $_GET['page'];
 
     foreach ($media as $item) {
+        $title_tdata['results_opt'] = '';
+
         if (empty($item['title'])) {
             if ($i >= $cfg['max_identify_items']) {
                 break;
@@ -140,39 +142,27 @@ function identify_media($type, $media) {
             } else {
                 return false;
             }
-            $results_opt = '';
+
             if (!empty($db_media)) {
 
                 foreach ($db_media as $db_item) {
                     $year = trim(substr($db_item['release'], 0, 4));
-                    $results_opt .= '<option value="' . $db_item['id'] . '">';
-                    $results_opt .= $db_item['title'];
-                    !empty($year) ? $results_opt .= ' (' . $year . ')' : null;
-                    $results_opt .= '</option>';
+                    $title_tdata['results_opt'] .= '<option value="' . $db_item['id'] . '">';
+                    $title_tdata['results_opt'] .= $db_item['title'];
+                    !empty($year) ? $title_tdata['results_opt'] .= ' (' . $year . ')' : null;
+                    $title_tdata['results_opt'] .= '</option>';
                 }
             }
-            $results_opt .= '<option value="">' . $LNG['L_NOID'] . '</option>';
-            $titles .= '<div class="divTableRow"><div class="divTableCellID">' . $item['predictible_title'] . '</div>';
-            $titles .= '<div class="divTableCellID">';
-            if ($type == 'movies') {
-                $titles .= '<select class="ident_select" name="mult_movies_select[' . $item['id'] . ']">' . $results_opt . '</select>';
-            } else if ($type == 'shows') {
-                $titles .= '<select class="ident_select" name="mult_shows_select[' . $item['id'] . ']">' . $results_opt . '</select>';
-            }
-            $titles .= '</div>';
-            $titles .= '<div class="divTableCellID">';
-            $titles .= '<span><a class="action_link" href="' . $iurl . '&media_type=' . $type . '&ident_delete=' . $item['id'] . '">' . $LNG['L_DELETE'] . '</a></span>';
-            $titles .= '<span><a class="action_link" href="?page=identify&media_type=' . $type . '&identify=' . $item['id'] . '">' . $LNG['L_MORE'] . '</a></span>';
-            $titles .= '</div>';
-            $titles .= '</div>';
-
+            $title_tdata['del_iurl'] = $iurl . '&media_type=' . $type . '&ident_delete=' . $item['id'];
+            $title_tdata['more_iurl'] = '?page=identify&media_type=' . $type . '&identify=' . $item['id'];
+            $title_tdata['media_type'] = $type;
+            $titles .= $table = getTpl('identify_item', array_merge($LNG, $item, $title_tdata));
             $i++;
         }
     }
 
     if (!empty($titles)) {
         $tdata['titles'] = $titles;
-        $tdata['type'] = $type;
         $tdata['head'] = $LNG['L_IDENT_' . strtoupper($type) . ''];
 
         $table = getTpl('identify', array_merge($LNG, $tdata));

@@ -68,6 +68,7 @@ $LNG = [
     'L_MOVIES_MIN' => 'M',
     'L_MOVIE' => 'Movie',
     'L_MORE' => 'Más',
+    'L_MORE_SIGN' => '+',
     'L_MOVED' => 'Moved',
     'L_MOVED_TO_LIBRARY' => 'moved to library',
     'L_NEVER' => 'Never',
