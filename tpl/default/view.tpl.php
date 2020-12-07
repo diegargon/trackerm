@@ -24,11 +24,7 @@
             <div class="">
                 <span>IDs :</span><span>
                     <?= $tdata['id'] ?>
-                    <?php
-                    if (isset($tdata['themoviedb_id'])) {
-                        echo ' / ' . $tdata['themoviedb_id'];
-                    }
-                    ?>
+                    <?= (isset($tdata['themoviedb_id'])) ? ' / ' . $tdata['themoviedb_id'] : null ?>
                 </span><br/>
                 <?php if (!empty($tdata['added'])) { ?>
                     <span><?= $tdata['L_ADDED'] ?> :</span>

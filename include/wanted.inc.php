@@ -71,7 +71,7 @@ function wanted_movies($wanted_id) {
         'media_type' => $wanted_type,
         'profile' => (int) $cfg['profile'],
     ];
-
+    //FIXME Can be two equal tmdb ids, movie and show change this
     $db->addItemUniqField('wanted', $wanted_item, 'themoviedb_id');
 }
 
