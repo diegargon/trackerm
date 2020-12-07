@@ -38,16 +38,18 @@ Class Filter {
         }
 
         if (!is_array($val)) {
-            if (!isset($val) || $val > $size || !is_numeric($val)) {
+
+            if (!isset($val) || trim($val) > $size || !is_numeric(trim($val))) {
                 return false;
             }
-            $values = $val;
+            $values = trm($val);
         } else {
             $values = $val;
             if (count($values) <= 0) {
                 return false;
             }
-            foreach ($values as $val) {
+            foreach ($values as $key => $val) {
+                $values[$key] = trim($val);
                 if (!is_numeric($val) || $val > $size) {
                     return false;
                 }
