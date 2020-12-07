@@ -41,6 +41,8 @@ function getFileTitle($file) {
     $regex .= '(?!\s\d+x)'; //space y 1x
     $regex .= '(?!_-\d+)';  // los char _- y digitos
     $regex .= '(?!_\d+_)';  // los char _digitos_
+    $regex .= '(?!.\d+x)';  // .digits and x (.1x)
+    $regex .= '(?!_\d+x)';  // .digits and x (_1x)
     $regex .= '(?!-\s+Temporada)';  // - Temporada
     $regex .= '(?!-\s+Season)';  // - Season
     $regex .= '(?!\d{4})'; // 4 digitos por fecha igual da problemas
@@ -121,7 +123,7 @@ function getFileEpisode($file_name) {
     }
 
     /* FORMAT 1x01 */
-    if (preg_match('/[0-9]{1,2}(x|X)[0-9]{2,2}/i', $file_name, $match) == 1) {
+    if (preg_match('/[0-9]{1,2}(x)[0-9]{2,2}/i', $file_name, $match) == 1) {
         $SE_MATCH = $match[0];
         $SE['season'] = substr($SE_MATCH, 0, stripos($SE_MATCH, 'x'));
         $SE['episode'] = substr($SE_MATCH, stripos($SE_MATCH, 'x') + 1);
