@@ -3,7 +3,9 @@ TODO
 [HIGH]
     [FIX] security on the code
     [IMPROVE] fix all messy code due fast coding    
-
+    [REVISE] trackerm use themoviedb id for many task, like delete things and change others things but not check if is shows or movies
+    when using this id to change something on local database. These ids are not uniq to media/show, there are movies and shows with
+    same ID and if you got a movie and a show with same id ... problem.
 [MED]  
     [FIX/IMPROVE][WANTED] Disable day want when seedig/finish or moved.
     [NEW] Escaneo de directorios a más para avi sin ser torrents. $cfg['SCAN_MEDIA_DIR'] = 1;
