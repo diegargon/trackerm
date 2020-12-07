@@ -42,7 +42,7 @@ Class Filter {
             if (!isset($val) || trim($val) > $size || !is_numeric(trim($val))) {
                 return false;
             }
-            $values = trm($val);
+            $values = trim($val);
         } else {
             $values = $val;
             if (count($values) <= 0) {
