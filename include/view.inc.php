@@ -226,13 +226,9 @@ function view_seasons($id, $update = false) {
     if (empty($episode) && !empty($_GET['episode'])) {
 
         $episodes_check = explode(',', $_GET['episode']);
-        $episodes_checked = [];
 
         if (count($episodes_check) > 0) {
-            foreach ($episodes_check as $key => $episode_check) {
-                $episodes_checked[$key] = trim($episode_check);
-            }
-            if ($filter->varInt($episodes_checked)) {
+            if ($filter->varInt($episodes_check)) {
                 $episode = $_GET['episode'];
             }
         }
@@ -242,7 +238,6 @@ function view_seasons($id, $update = false) {
         wanted_episode($id, $season, $episode);
     }
 
-    //TODO SELECT ONLY ITEMS GET $season / if not season get one element for nseasons
     if (empty($season)) {
         $item = $db->getItemByField('shows_details', 'themoviedb_id', $id);
         if ($item === false || $update) {
@@ -270,7 +265,6 @@ function view_seasons($id, $update = false) {
     $iurl = preg_replace('/&season=\d{1,4}/', '', $iurl);
     $iurl = preg_replace('/&season=\d{1,4}/', '', $iurl);
     $iurl = preg_replace('/&episode=\d{1,4}/', '', $iurl);
-
 
     for ($i = 1; $i <= $seasons; $i++) {
         $seasons_data .= '<a class="season_link" href="' . $iurl . '&season=' . $i . '">' . $LNG['L_SEASON'] . ': ' . $i . '</a>';
