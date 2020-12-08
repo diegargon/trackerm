@@ -336,7 +336,7 @@ function get_valid_files($item) {
             }
         }
     } else {
-        $log->err("$orig_path is not a directory (NOT IMPLEMENTED");
+        $log->err("$orig_path is not a directory (NOT IMPLEMENTED)");
         return false;
     }
 
