@@ -155,7 +155,7 @@ function jackett_prep_media($media_type, $media_results) {
                 !empty($item['description']) ? $description = $item['description'] : $description = '';
 
                 $media[] = [
-                    'ilink' => $media_type . '_torrent',
+                    'ilink' => $ilink,
                     'guid' => $item['guid'],
                     'title' => $item['title'],
                     'release' => $item['pubDate'],
