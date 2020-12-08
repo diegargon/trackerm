@@ -37,6 +37,7 @@ function transmission_scan() {
             $item['tid'] = $tor['id'];
             $item['hashString'] = $tor['hashString'];
             $item['files_location'] = $tor['name'];
+            $item['files'] = $tor['files'];
             $item['title'] = getFileTitle($tor['name']);
             $item['status'] = $tor['status'];
             $item['media_type'] = getMediaType($tor['name']);
@@ -60,16 +61,17 @@ function transmission_scan() {
             $item['tid'] = $tor['id'];
             $item['hashString'] = $tor['hashString'];
             $item['files_location'] = $tor['name'];
+            $item['files'] = $tor['files'];
             $item['title'] = getFileTitle($tor['name']);
             $item['status'] = $tor['status'];
             $item['media_type'] = getMediaType($tor['name']);
             isset($tor['wanted_id']) ? $item['wanted_id'] = $tor['wanted_id'] : null;
 
             if ($item['media_type'] == 'movies') {
-                $log->debug(" Movie seeding detected begin linking.. " . $item['title']);
+                $log->debug(" Movie seeding detected tid:[{$item['tid']}] begin linking.. " . $item['title']);
                 MovieJob($item, true);
             } else if ($item['media_type'] == 'shows') {
-                $log->debug(" Show seeeding detected begin linking... " . $item['title']);
+                $log->debug(" Show seeeding detected tid:[{$item['tid']}] begin linking... " . $item['title']);
                 ShowJob($item, true);
             }
         }
@@ -336,8 +338,20 @@ function get_valid_files($item) {
             }
         }
     } else {
-        $log->err("$orig_path is not a directory (NOT IMPLEMENTED)");
-        return false;
+        $log->debug("$orig_path is not a directory");
+
+        $ext_check = substr($item['files_location'], -3);
+        if ($ext_check == 'rar' || $ext_check == 'RAR') {
+            $log->err("File {$item['files_location']} is rar file: not implemented yey unrar when rar is out of adirectory");
+            $log->addStateMsg("File {$item['files_location']} is rar file: not implemented yey unrar when rar is out of adirectory");
+            return false;
+        }
+        foreach ($item['files'] as $file) {
+            if (preg_match($cfg['TORRENT_MEDIA_REGEX'], $file['name'])) {
+                $file_full_path = $cfg['TORRENT_FINISH_PATH'] . '/' . $file['name'];
+                $valid_files[] = $file_full_path;
+            }
+        }
     }
 
     return $valid_files;
