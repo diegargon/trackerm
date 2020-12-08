@@ -153,7 +153,7 @@ function jackett_prep_media($media_type, $media_results) {
                 }
                 !empty($item['coverurl']) ? $poster = $item['coverurl'] : $poster = '';
                 !empty($item['description']) ? $description = $item['description'] : $description = '';
-
+                ($media_type == 'movies') ? $ilink = 'movies_torrent' : $ilink = 'shows_torrent';
                 $media[] = [
                     'ilink' => $ilink,
                     'guid' => $item['guid'],
