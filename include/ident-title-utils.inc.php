@@ -167,15 +167,27 @@ function getMediaType($file_name) {
     if (preg_match('/\[Cap.(.*?)\]/i', $file_name)) {
         return 'shows';
     }
+    //Temp. 1 Capitulo 1
     if (preg_match('/Temp\.\s+\d{1,2}\s+Capitulo\s+\d{1,2}/i', $file_name)) {
         return 'shows';
     }
-    /*
-      if (preg_match('',$file_name)) {
-      return 'shows';
-      }
+    //Season 1
+    if (preg_match('/season\s+\d{1,2}/i', $file_name)) {
+        return 'shows';
+    }
+    //Temporada 1
+    if (preg_match('/Temporada\s+\d{1,2}/i', $file_name)) {
+        return 'shows';
+    }
+    // T1*Completa
+    if (preg_match('/T\d{1,2}.+Completa/i', $file_name)) {
+        return 'shows';
+    }
+    // T1*Full
+    if (preg_match('/T\d{1,2}.+Full/i', $file_name)) {
+        return 'shows';
+    }
 
-     */
     return 'movies';
 }
 
