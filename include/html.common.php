@@ -10,7 +10,7 @@
 !defined('IN_WEB') ? exit : true;
 
 function getMenu() {
-    global $cfg, $LNG, $user;
+    global $cfg, $LNG, $user, $filter;
 
     if (isset($_GET['sw_opt'])) {
         $value = getPrefsItem('hide_opt');
@@ -23,9 +23,21 @@ function getMenu() {
         }
     }
 
-    empty($cfg['hide_opt']) ? $user['menu_opt'] = getOptions() : null;
+    if (!empty($filter->getString('page'))) {
+        $tdata['menu_opt_link'] = str_replace('&sw_opt=1', '', basename($_SERVER['REQUEST_URI'])) . '&sw_opt=1';
+    } else {
+        $tdata['menu_opt_link'] = "?page=index&sw_opt=1";
+    }
 
-    return getTpl('menu', array_merge($cfg, $LNG, $user));
+    if (empty($cfg['hide_opt'])) {
+        $user['menu_opt'] = getOptions();
+        $tdata['arrow'] = '&uarr;';
+    } else {
+        $tdata['arrow'] = '&darr;';
+    }
+
+
+    return getTpl('menu', array_merge($cfg, $LNG, $user, $tdata));
 }
 
 function getFooter() {
@@ -203,6 +215,8 @@ function getOptions() {
 
     (isset($_POST['rebuild_movies'])) ? rebuild('movies', $cfg['MOVIES_PATH']) . $log->addStateMsg('Rebuild movies called') : null;
     (isset($_POST['rebuild_shows'])) ? rebuild('shows', $cfg['SHOWS_PATH']) . $log->addStateMsg('Rebuild shows called') : null;
+
+    $tdata['page'] = $filter->getString('page');
 
     if (
             isset($_POST['num_ident_toshow']) &&

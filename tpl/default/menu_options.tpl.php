@@ -44,11 +44,11 @@
             <option <?= $tdata['max_rows_sel_8'] ?> value="8">8</option>
             <option <?= $tdata['max_rows_sel_10'] ?> value="10">10</option>
         </select>
-        <?php if ($tdata['WANT_MOVIES']) { ?>
+        <?php if ($tdata['WANT_MOVIES'] && ($tdata['page'] == 'library' || $tdata['page'] == 'library_movies')) { ?>
             <input class="submit_btn" type="submit" name="rebuild_movies" value="<?= $tdata['L_REESCAN_MOVIES'] ?>"/>
             <?php
         }
-        if ($tdata['WANT_SHOWS']) {
+        if ($tdata['WANT_SHOWS'] && ($tdata['page'] == 'library' || $tdata['page'] == 'library_movies')) {
             ?>
             <input class="submit_btn" type="submit" name="rebuild_shows" value="<?= $tdata['L_REESCAN_SHOWS'] ?>"/>
         <?php } ?>
