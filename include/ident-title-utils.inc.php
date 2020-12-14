@@ -187,7 +187,10 @@ function getMediaType($file_name) {
     if (preg_match('/T\d{1,2}.+Full/i', $file_name)) {
         return 'shows';
     }
-
+    // Temp 1
+    if (preg_match('/Temp.+\d{1,2}/i', $file_name)) {
+        return 'shows';
+    }
     return 'movies';
 }
 

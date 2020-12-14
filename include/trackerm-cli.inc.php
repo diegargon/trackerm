@@ -172,7 +172,7 @@ function MovieJob($item, $linked = false) {
                 $final_dest_path = $dest_path . '/' . $new_file_name;
                 $i++;
             } else if (file_exists($final_dest_path) && $linked) {
-                $log->debug(" Linking  " . basename($final_dest_path) . " already done... skipping");
+                //$log->debug(" Linking  " . basename($final_dest_path) . " already done... skipping");
                 continue;
             }
 
@@ -182,6 +182,7 @@ function MovieJob($item, $linked = false) {
                     $log->debug(" Cleaning torrent id/hash:  {$item['tid']} : {$item['hashString']}");
                     $hashes[] = $item['hashString'];
                     file_exists(dirname($valid_file) . '/trackerm-unrar') ? unlink(dirname($valid_file) . '/trackerm-unrar') : null;
+                    file_exists(dirname($valid_file) . '.unrar') ? unlink(dirname($valid_file) . '.unrar') : null;
 
                     $wanted_item = $db->getItemByField('wanted', 'hashString', $item['hashString']);
                     if (!empty($wanted_item)) {
@@ -192,6 +193,8 @@ function MovieJob($item, $linked = false) {
                     }
 
                     $trans->deleteHashes($hashes);
+                    $work_path = dirname($valid_file);
+                    file_exists($work_path) && ($work_path != $cfg['TORRENT_FINISH_PATH']) && (end($valid_files) == $valid_file) ? rmdir($work_path) : null;
                 }
             } else {
                 $log->debug(" Link Seeding: {$item['tid']} : {$item['hashString']}");
@@ -217,7 +220,7 @@ function ShowJob($item, $linked = false) {
             $file_tags = getFileTags($valid_file);
             $ext = substr($valid_file, -4);
 
-            // EPISODE NAME STYLE SxxExx
+            // TAG EPISODE NAME STYLE SxxExx
             $SE = getFileEpisode(basename($valid_file));
             if (!empty($SE['season'] && !empty($SE['episode']))) {
                 (strlen($SE['season']) == 1) ? $_season = 0 . $SE['season'] : $_season = $SE['season'];
@@ -232,12 +235,14 @@ function ShowJob($item, $linked = false) {
             $episode .= 'E' . $_episode;
             //END EPISODE NAME
             //CREATE PATHS
+            //get again title from indiviual files instead of directory
+            $title = getFileTitle(basename($valid_file));
             if ($cfg['CREATE_SHOWS_SEASON_FOLDER'] && !empty($_season)) {
                 ($_season != "xx") ? $_season = (int) $_season : null; // 01 to 1 for directory
-                $dest_path = $cfg['SHOWS_PATH'] . '/' . ucwords($item['title'] . '/' . $LNG['L_SEASON'] . ' ' . $_season);
-                $dest_path_father = $cfg['SHOWS_PATH'] . '/' . ucwords($item['title']);
+                $dest_path = $cfg['SHOWS_PATH'] . '/' . ucwords($title . '/' . $LNG['L_SEASON'] . ' ' . $_season);
+                $dest_path_father = $cfg['SHOWS_PATH'] . '/' . ucwords($title);
             } else {
-                $dest_path = $cfg['SHOWS_PATH'] . '/' . ucwords($item['title']);
+                $dest_path = $cfg['SHOWS_PATH'] . '/' . ucwords($title);
             }
             //END CREATE PATHS
             //CREATE FOLDERS
@@ -253,16 +258,16 @@ function ShowJob($item, $linked = false) {
             }
             //END CREATE FOLDERS
 
-            $new_file_name = ucwords($item['title']) . ' ' . $episode . ' ' . $file_tags . $ext;
+            $new_file_name = ucwords($title) . ' ' . $episode . ' ' . $file_tags . $ext;
             $final_dest_path = $dest_path . '/' . $new_file_name;
 
             if (file_exists($final_dest_path) && !$linked && !is_link($final_dest_path)) {
                 $many = '[' . $i . ']';
-                $new_file_name = ucwords($item['title']) . ' ' . $episode . ' ' . $file_tags . $many . $ext;
+                $new_file_name = ucwords($title) . ' ' . $episode . ' ' . $file_tags . $many . $ext;
                 $final_dest_path = $dest_path . '/' . $new_file_name;
                 $i++;
             } else if (file_exists($final_dest_path) && $linked) {
-                $log->debug(" Linking " . basename($final_dest_path) . " already done... skipping");
+                //$log->debug(" Linking " . basename($final_dest_path) . " already done... skipping");
                 continue;
             }
 
@@ -272,6 +277,7 @@ function ShowJob($item, $linked = false) {
                     $log->debug(" Cleaning torrent: {$item['tid']} : {$item['hashString']}");
                     $hashes[] = $item['hashString'];
                     file_exists(dirname($valid_file) . '/trackerm-unrar') ? unlink(dirname($valid_file) . '/trackerm-unrar') : null;
+                    file_exists(dirname($valid_file) . '.rar.unrar') ? unlink(dirname($valid_file) . '.rar.unrar') : null;
 
                     $wanted_item = $db->getItemByField('wanted', 'hashString', $item['hashString']);
                     if (!empty($wanted_item)) {
@@ -281,6 +287,9 @@ function ShowJob($item, $linked = false) {
                         $db->updateItemByField('wanted', $update_ary, 'id');
                     }
                     $trans->deleteHashes($hashes);
+                    $work_path = dirname($valid_file);
+                    file_exists($work_path) && ($work_path != $cfg['TORRENT_FINISH_PATH']) && (end($valid_files) == $valid_file) ? rmdir($work_path) : null;
+                    $log->debug("Test why not work: $work_path:" . end($valid_files) . ':' . $valid_file);
                 }
             } else {
                 $log->debug(" Link Seeding: {$item['tid']} : {$item['hashString']}");
@@ -341,15 +350,45 @@ function get_valid_files($item) {
         $log->debug("$orig_path is not a directory");
 
         $ext_check = substr($item['files_location'], -3);
+        $work_path = $cfg['TORRENT_FINISH_PATH'] . '/' . substr($item['files_location'], 0, -4);
         if ($ext_check == 'rar' || $ext_check == 'RAR') {
-            $log->err("File {$item['files_location']} is rar file: not implemented yey unrar when rar is out of adirectory");
-            $log->addStateMsg("File {$item['files_location']} is rar file: not implemented yey unrar when rar is out of adirectory");
-            return false;
-        }
-        foreach ($item['files'] as $file) {
-            if (preg_match($cfg['TORRENT_MEDIA_REGEX'], $file['name'])) {
-                $file_full_path = $cfg['TORRENT_FINISH_PATH'] . '/' . $file['name'];
-                $valid_files[] = $file_full_path;
+            if (!file_exists($work_path)) {
+                mkdir($work_path);
+            }
+            if (file_exists($cfg['UNRAR_PATH'])) {
+
+                $unrar_check = $orig_path . '.unrar';
+                if (!file_exists($unrar_check)) {
+                    if (check_file_encrypt('rar', $file)) {
+                        $log->addStateMsg(" {$LNG['L_ERR_FILE_ENCRYPT_MANUAL']} ($file)");
+                        // we continue and try since the function need test and TODO.
+                    }
+                    $unrar = $cfg['UNRAR_PATH'] . ' e -p- -y "' . $orig_path . '" "' . $work_path . '"';
+                    exec($unrar);
+                    touch($unrar_check);
+                }
+
+                $files_dir = scandir_r($work_path);
+
+                if (empty($files_dir)) {
+                    $log->debug("Work path is empty");
+                }
+                foreach ($files_dir as $file) {
+                    if (preg_match($cfg['TORRENT_MEDIA_REGEX'], $file)) {
+                        $valid_files[] = $file;
+                    } else {
+                        if (!is_dir($file)) {
+                            unlink($file);
+                        }
+                    }
+                }
+            }
+        } else {
+            foreach ($item['files'] as $file) {
+                if (preg_match($cfg['TORRENT_MEDIA_REGEX'], $file['name'])) {
+                    $file_full_path = $cfg['TORRENT_FINISH_PATH'] . '/' . $file['name'];
+                    $valid_files[] = $file_full_path;
+                }
             }
         }
     }
