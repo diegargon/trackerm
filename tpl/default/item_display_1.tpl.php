@@ -41,6 +41,11 @@
                 <span class="item_rating">[<?= $tdata['L_RATING_MIN'] . $tdata['rating'] ?>]</span>
                 <?php
             }
+            if (!empty($tdata['trailer'])) {
+                ?>
+                <span class="item_link"><a href="<?= $tdata['trailer'] ?>" target="_blank">[T]</a></span>
+                <?php
+            }
             if (!empty($tdata['in_library'])) {
                 ?>
                 <span class="action_link">

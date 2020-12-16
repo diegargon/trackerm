@@ -272,3 +272,36 @@ function themoviedb_getTrending() {
     }
     return $results;
 }
+
+function themoviedb_getTrailer($media_type, $id) {
+    global $cfg, $log;
+
+    if (empty($media_type) || empty($id)) {
+        return false;
+    }
+
+    if ($media_type == 'movies') {
+        $tmdb_type = 'movie';
+    } else if ($media_type == 'shows') {
+        $tmdb_type = 'tv';
+    } else {
+        return false;
+    }
+
+    $url = "http://api.themoviedb.org/3/{$tmdb_type}/{$id}/videos?api_key=" . $cfg['db_api_token'] . '&language=' . $cfg['LANG'];
+
+    $curl_data = curl_get_tmdb($url);
+    $results = array_pop($curl_data['results']);
+
+    if (isset($results['site']) && $results['site'] == 'YouTube') {
+        $video = 'http://www.youtube.com/embed/' . $results['key'];
+    } else if (!empty($results['site'])) {
+        $log->warning('Video trailer site not implemented ' . $results['site']);
+        $video = false;
+    } else {
+        $log->debug('Get Trailer seems got nothing');
+        return false;
+    }
+
+    return $video;
+}

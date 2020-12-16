@@ -107,6 +107,7 @@ function buildTable($head, $db_ary, $topt = null) {
 
             $item['episode_count'] = $topt['episode_count'][$item['themoviedb_id']];
         }
+        !empty($topt['search_type']) ? $item['media_type'] = $topt['search_type'] : null;
 
         $num_col_items == 0 ? $page .= '<div class="divTableRow">' : null;
         $page .= '<div class="divTableCell">';
@@ -146,6 +147,13 @@ function build_item($item, $detail = null) {
                 }
             }
         }
+
+        if (!isset($item['trailer']) && (isset($item['themoviedb_id']) && isset($item['media_type']))) {
+            //TODO upgrade database for add trailer
+            //$trailer = mediadb_getTrailer($item['media_type'], $item['themoviedb_id']);
+            !empty($trailer) ? $item['trailer'] = $trailer : null;
+        }
+
         $page .= getTpl('item_display_1', array_merge($item, $LNG));
     }
 

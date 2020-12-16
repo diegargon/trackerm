@@ -257,7 +257,10 @@ button {
 
 .item_size {}
 
-.item_links {}
+.item_link {
+    color: #ff5b5b;
+    background-color: #06001c;
+}
 
 .submit_btn {
     display: inline-block;
