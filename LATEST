@@ -1,5 +1,6 @@
 ## Latest / News (Relevant)
 
+[17/12] Wanted: Removed ignore button, now for ignore select "never" on day check
 [16/12] Some fixed, upgrade the db, and add trailers to movies
 [08/12] Fixed bug when moving files if the completed torrent not use a directory (need fix when this file is rar, rar only works
         it container in a directory

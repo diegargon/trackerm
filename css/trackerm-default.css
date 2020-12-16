@@ -172,7 +172,8 @@ button {
 .divTableHeadingWanted {
     background-color: #343144;
     display: table-header-group;
-    font-weight: bold;    
+    font-weight: bold;
+    text-align:center;
 }
 
 .divTableFoot {
@@ -460,16 +461,12 @@ button {
 .tag_title {
     border: 3px solid #2fb78a;
     background: black;
-    width: 5%;
 }
 
-.tag_ignore {
-    border: 3px solid #ff5b5b;
-}
-
-.tag_quality, .tag_ignore, .tag_type, .tag_day, .tag_id, .tag_added, .tag_title, .tag_state {
+.tag_quality, .tag_type, .tag_day, .tag_id, .tag_added, .tag_title, .tag_state {
     /* margin: 1px 2px 1px 2px; */
     padding: 6px 10px 6px 10px;
+    margin-right: 4px;
 }
 
 .season_link {

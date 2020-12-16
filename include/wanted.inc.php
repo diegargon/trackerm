@@ -32,8 +32,7 @@ function wanted_list() {
             if (isset($wanted_item['wanted_status']) && ($wanted_item['wanted_status'] >= 0)) {
                 $tdata['status_name'] = $trans->getStatusName($wanted_item['wanted_status']);
             }
-            !empty($wanted_item['ignore']) ? $tdata['ignore_link'] = $LNG['L_UNIGNORE'] : $tdata['ignore_link'] = $LNG['L_IGNORE'];
-            $wanted_item['day_check'] = day_check($wanted_item['id'], $wanted_item['day_check']);
+            $wanted_item['day_check'] = day_check($wanted_item['id'], $wanted_item['day_check'], $wanted_item['wanted_status']);
             $wanted_item['added'] = strftime("%x", strtotime($wanted_item['added']));
             !empty($wanted_item['last_check']) ? $wanted_item['last_check'] = strftime("%A %H:%M", $wanted_item['last_check']) : $wanted_item['last_check'] = $LNG['L_NEVER'];
             $mediadb_item = mediadb_getByDbId($wanted_item['media_type'], $wanted_item['themoviedb_id']);
@@ -108,12 +107,16 @@ function wanted_episode($id, $season, $episodes) {
     }
 }
 
-function day_check($id, $day_time) {
+function day_check($id, $day_time, $wanted_status) {
     global $LNG;
 
     $data = '';
-    $sel_all = $sel_mon = $sel_tue = $sel_wed = $sel_thu = $sel_fri = $sel_sat = $sel_sun = '';
+    $sel_all = $sel_never = $sel_mon = $sel_tue = $sel_wed = $sel_thu = $sel_fri = $sel_sat = $sel_sun = '';
+
     switch ($day_time) {
+        case -1:
+            $sel_never = 'selected';
+            break;
         case 0:
             $sel_all = 'selected';
             break;
@@ -139,8 +142,11 @@ function day_check($id, $day_time) {
             $sel_sun = 'selected';
             break;
     }
+
+    ($wanted_status != -1 ) ? $disabled = 'disabled' : $disabled = '';
     $data .= '<form class="form_inline" method="POST" action="">';
-    $data .= '<select onchange="this.form.submit()" name="check_day[' . $id . ']">';
+    $data .= '<select ' . $disabled . ' onchange="this.form.submit()" name="check_day[' . $id . ']">';
+    $data .= '<option ' . $sel_never . ' value="-1">' . $LNG['L_NEVER'] . '</option>';
     $data .= '<option ' . $sel_all . ' value="0">' . $LNG['L_DAY_ALL'] . '</option>';
     $data .= '<option ' . $sel_mon . ' value="1">' . $LNG['L_DAY_MON'] . '</option>';
     $data .= '<option ' . $sel_tue . ' value="2">' . $LNG['L_DAY_TUE'] . '</option>';

@@ -443,20 +443,20 @@ function wanted_work() {
             $log->debug(" Jumping wanted {$wanted['id']} by direct ");
             continue;
         }
-        if (!empty($wanted['ignore'])) {
-            $log->debug(" Jumping wanted {$wanted['title']} check by ignore state ");
-            continue;
-        }
+
         if (isset($wanted['wanted_status']) && $wanted['wanted_status'] > 0) {
             $log->debug(" Jumping wanted {$wanted['title']} check by state " . $trans->getStatusName($wanted['wanted_status']));
             continue;
         }
 
-        if ($wanted['day_check'] != 0) {
-            if ($wanted['day_check'] != $day_of_week) {
-                $log->debug(" Jumping wanted {$wanted['title']} check by date, today is not {$LNG[$cfg['CHECK_DAYS'][$wanted['day_check']]]}");
-                continue;
-            }
+        if ($wanted['day_check'] == -1) {
+            $log->debug(" Jumping wanted {$wanted['title']} check by date, {$LNG['L_NEVER']}");
+            continue;
+        }
+
+        if (($wanted['day_check'] > 0) && $wanted['day_check'] == $day_of_week) {
+            $log->debug(" Jumping wanted {$wanted['title']} check by date, today is not {$LNG[$cfg['CHECK_DAYS'][$wanted['day_check']]]}");
+            continue;
         }
 
         $last_check = $wanted['last_check'];

@@ -337,7 +337,7 @@ function update_db($from) {
     }
     /*
       NEXT UPDATES:
-
+      remove from wanted ignore field, not need
      */
     /*
       if ($from < 4) {

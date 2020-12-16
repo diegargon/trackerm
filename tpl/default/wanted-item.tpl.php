@@ -14,28 +14,25 @@
         <a href="<?= $tdata['iurl'] . '&delete=' . $tdata['id'] ?>" class="action_link"><?= $tdata['L_DELETE'] ?></a>
     </div>
     <div class="divTableCellWanted">
-        <a href="<?= $tdata['iurl'] . '&ignore=' . $tdata['id'] ?>" class="action_link"><?= $tdata['ignore_link'] ?></a>
+        <div class="tag_id"><?= $tdata['id'] ?></div>
     </div>
     <div class="divTableCellWanted">
-        <span class="tag_id"><?= $tdata['id'] ?></span>
+        <div class="tag_state"><?= $tdata['status_name'] ?></div>
     </div>
     <div class="divTableCellWanted">
-        <span class="tag_state"><?= $tdata['status_name'] ?></span>
+        <div class="tag_day"><?= $tdata['day_check'] ?></div>
     </div>
     <div class="divTableCellWanted">
-        <span class="tag_day"><?= $tdata['day_check'] ?></span>
+        <div class="tag_added"><?= $tdata['added'] ?></div>
     </div>
     <div class="divTableCellWanted">
-        <span class="tag_added"><?= $tdata['added'] ?></span>
+        <div class="tag_day"><?= $tdata['last_check'] ?></div>
     </div>
     <div class="divTableCellWanted">
-        <span class="tag_day"><?= $tdata['last_check'] ?></span>
+        <div class="tag_type"><?= $tdata['lang_media_type'] ?></div>
     </div>
     <div class="divTableCellWanted">
-        <span class="tag_type"><?= $tdata['lang_media_type'] ?></span>
-    </div>
-    <div class="divTableCellWanted">
-        <span class="tag_id">
+        <div class="tag_id">
             <?php if (!empty($tdata['elink'])) { ?>
                 <a href="<?= $tdata['elink'] ?>" target="_blank"><?= $tdata['themoviedb_id'] ?></a>
                 <?php
@@ -43,9 +40,9 @@
                 print $tdata['themoviedb_id'];
             }
             ?>
-        </span>
+        </div>
     </div>
     <div class="divTableCellWanted">
-        <span class="tag_title"><?= $tdata['title'] ?></span>
+        <div class="tag_title"><?= $tdata['title'] ?></div>
     </div>
 </div>

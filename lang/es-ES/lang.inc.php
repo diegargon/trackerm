@@ -133,7 +133,6 @@ $LNG = [
     'L_TYPE' => 'Tipo',
     'L_UPDATE' => 'Actualizar',
     'L_UPDATE_EPISODES' => 'Actualizar ep.',
-    'L_UNIGNORE' => 'Unignore',
     'L_VERIFYING' => 'Verifying',
     'L_WANTED' => 'Seguimiento',
     'L_WANTED_FOUND' => 'Exito seguimiento',

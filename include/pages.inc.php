@@ -243,13 +243,6 @@ function page_wanted() {
     isset($_GET['media_type']) ? $wanted_type = $filter->getString('media_type') : $wanted_type = false;
     isset($_GET['delete']) && $filter->getInt('delete') ? $db->deleteItemById('wanted', $filter->getInt('delete')) : null;
 
-    if (isset($_GET['ignore'])) {
-        $ignore_id = $filter->getInt('ignore');
-        $wanted_ignore_item = $db->getItemById('wanted', $ignore_id);
-        (empty($wanted_ignore_item['ignore'])) ? $update['ignore'] = 1 : $update['ignore'] = 0;
-        $db->updateItemById('wanted', $ignore_id, $update);
-    }
-
     if ($wanted_id !== false && $wanted_type !== false && $wanted_type == 'movies') {
         wanted_movies($wanted_id);
     }

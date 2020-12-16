@@ -28,7 +28,6 @@
             <div class="divTableWanted">
                 <div class="divTableHeadingWanted">
                     <div class="divTableCellWanted"></div>
-                    <div class="divTableCellWanted"></div>
                     <div class="divTableCellWanted">ID</div>
                     <div class="divTableCellWanted"><?= $tdata['L_STATUS'] ?></div>
                     <div class="divTableCellWanted"></div>
