@@ -2,8 +2,9 @@ TODO
 
 [HIGH]
     [FIX] security on the code
-    [IMPROVE] fix all messy code due fast coding 
-    [REVISE] trackerm use themoviedb id for many task, the id is not uniq, one movie and one show can have same id, check conflict in wanted
+    [IMPROVE] fix all messy code due fast coding
+    [FIX] filesearch  (recursive gloob error) when launch  rebuild(shows) rebuild(movies) at same time.
+ 
 [MED]  
     [FIX/IMPROVE][WANTED] Disable day want when seedig/finish or moved.
     [NEW] Escaneo de directorios a más para avi sin ser torrents. $cfg['SCAN_MEDIA_DIR'] = 1;
@@ -20,17 +21,14 @@ TODO
             the first episode missed
     [IMPROVE] Added config table, to improve the config with tables and config ui
     [IMPROVE] Added field file_hash to library.* to improve to hash files in librarys (first bytes/last bytes)
-    [IMPROVE] Added field Trailer to library.* to begin improve adding trailers to library items , tmdb_search have already trailer field
     [IMPROVE] Added wanted fields custom_words_ignore and custom_words_require , for optional add keywords to each wanted item
     [IMPROVE] Added wanted field exact_title to force wanted search the exact title "Run" not match "Logans Run"
     [IMPROVE] Added wanted field track_show for add and keep track of show (automatically download current episodes of a show each week
-     [IMPROVE] Added table library_history  when rescan detect delete files and delete items from database keep basic info on history for added again to library on future
+    [IMPROVE] Added table library_history  when rescan detect delete files and delete items from database keep basic info on history for added again to library on future
             the idea of this its help to have files on external devices and add/remove to/from library when is detected without need of identify. Will help to Redownladed 
              content.
-    [IMPROVE] Add update field to library_*, for keep track last update for check example if new info or trailers added and not check agains tmdb every request
-[VERY LOW]
-    
-    [IMPROVE] Add Trailers from TMDB
+
+[VERY LOW]  
     [IMPROVE] Pagination actually get all results and do a array_slice, now with SQL database when use cache we can  do that better.    
     [FIX/IMPROVE] fechas normalizar a formato comun    
     [NEW/IMPROVE] menu rows/columns y otras configuraciones generales en todas las paginas o pagina config.
@@ -42,12 +40,12 @@ TODO
     [IMPROVE] Wanted Serie, poner en seguimiento nuevos capitulos de series, hay que ver como ver el release date pues en los datos tmdb solo
         viene el americano. Una forma seria poner una opcion de "Sin Retraso", "Retraso una semana", "Retraso dos a cuatro ..." o un mes.        
     [FIX] A la hora de identificar las series siguientes capitulos los identifica por el predictible_title, si hubiera varias series con el mismo titulo habria problemas. 
-    [FIX] filesearch  (recursive gloob error) when launch  rebuild(shows) rebuild(movies) at same time.
     [IMPROVE][LIBRARY] Los shows deberian de tener un registro maestro con los datos y los demas, los archivos ser registro secundarios.
     [NEW] Add optional user security for profiles      
     [NEW] Config UI && integrate all config in database, ride config files
     [IMPROVE] News: Mixed Indexers elements on New now present by indexer order
     [IMPROVE] Add hashes files when scaning the database hash first and last  X bytes for fast hashing
+
 [BACKLOG]
     [CHANGE] Change actual Transmission rpc api to something basic, since is enough and the actual have alot of deps 
     [NEW/IMPROVE] En el select de identificar estaria bien mostrar las caractulas al poner encima
