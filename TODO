@@ -3,7 +3,6 @@ TODO
 [HIGH]
     [FIX] security on the code
     [IMPROVE] fix all messy code due fast coding 
-    [FIX] trackerm-cli only works if completed torrent files are in a direcotry, not work if is a file 
     [REVISE] trackerm use themoviedb id for many task, the id is not uniq, one movie and one show can have same id, check conflict in wanted
 [MED]  
     [FIX/IMPROVE][WANTED] Disable day want when seedig/finish or moved.
@@ -17,8 +16,18 @@ TODO
     [IMPROVE] Two search_cache_expire  search_cache_expire and news_cache_expire    
     [IMPROVE/WANTED] Añadir la posibilidad de buscar el titulo exacto, si buscamos "Run" o "Asesino" encontrara varios resultados con titulos
         que contienen dichos terminos y igual se requiere que el titulo solo sea "RUN" o "ASESINO" a secas    
-    [IMPROVE] Allow WANT SEASON, wanted will check for  all torrents one first time, and after every day configure check the
+    [IMPROVE] Allow WANT SHOW, wanted will check for  all torrents one first time, and after every day configure check the
             the first episode missed
+    [IMPROVE] Added config table, to improve the config with tables and config ui
+    [IMPROVE] Added field file_hash to library.* to improve to hash files in librarys (first bytes/last bytes)
+    [IMPROVE] Added field Trailer to library.* to begin improve adding trailers to library items , tmdb_search have already trailer field
+    [IMPROVE] Added wanted fields custom_words_ignore and custom_words_require , for optional add keywords to each wanted item
+    [IMPROVE] Added wanted field exact_title to force wanted search the exact title "Run" not match "Logans Run"
+    [IMPROVE] Added wanted field track_show for add and keep track of show (automatically download current episodes of a show each week
+     [IMPROVE] Added table library_history  when rescan detect delete files and delete items from database keep basic info on history for added again to library on future
+            the idea of this its help to have files on external devices and add/remove to/from library when is detected without need of identify. Will help to Redownladed 
+             content.
+    [IMPROVE] Add update field to library_*, for keep track last update for check example if new info or trailers added and not check agains tmdb every request
 [VERY LOW]
     
     [IMPROVE] Add Trailers from TMDB

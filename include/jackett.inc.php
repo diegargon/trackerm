@@ -29,9 +29,9 @@ function search_media_torrents($media_type, $words, $head = null, $nohtml = fals
 
     if ($cfg['search_cache']) {
         $media_cache_check = $db->getItemByField($jackett_search_media_cache, 'words', $words);
-        !isset($media_cache_check['update']) ? $media_cache_check['update'] = 0 : null;
+        !isset($media_cache_check['updated']) ? $media_cache_check['updated'] = 0 : null;
 
-        if (time() > ($media_cache_check['update'] + $cfg['search_cache_expire'])) {
+        if (time() > ($media_cache_check['updated'] + $cfg['search_cache_expire'])) {
             $log->debug("News: Media cache expire, Requesting");
             $cache_media_expire = 1;
         } else {
@@ -66,7 +66,7 @@ function search_media_torrents($media_type, $words, $head = null, $nohtml = fals
         $media_db = jackett_prep_media($media_type, $result);
         if (($cfg['search_cache'] && $cache_media_expire)) {
             $media_cache['words'] = $words;
-            $media_cache['update'] = time();
+            $media_cache['updated'] = time();
             $media_cache['ids'] = '';
 
             $last_element = end($media_db);

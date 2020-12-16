@@ -20,7 +20,7 @@
  */
 class DB {
 
-    private $version = 2;
+    private $version = 3;
     private $db;
     private $db_path;
     private $log;

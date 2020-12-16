@@ -22,13 +22,13 @@ function page_new_media($media_type) {
 
     if ($cfg['search_cache']) {
         $where['words'] = $media_cache_check = $db->getItemByField($search_cache_db, 'words', '');
-        !isset($media_cache_check['update']) ? $media_cache_check['update'] = 0 : null;
+        !isset($media_cache_check['updated']) ? $media_cache_check['updated'] = 0 : null;
 
-        if ((time() > ($media_cache_check['update'] + $cfg['search_cache_expire']))) {
+        if ((time() > ($media_cache_check['updated'] + $cfg['search_cache_expire']))) {
             $log->debug("News: $media_type cache expire, Requesting");
             $cache_media_expire = 1;
         } else {
-            $log->debug("News: $media_type using cache " . ( ($media_cache_check['update'] + $cfg['search_cache_expire']) - time()));
+            $log->debug("News: $media_type using cache " . ( ($media_cache_check['updated'] + $cfg['search_cache_expire']) - time()));
             $ids = explode(',', $media_cache_check['ids']);
             if (empty($ids) || count($ids) <= 0) {
                 return false;
@@ -67,7 +67,7 @@ function page_new_media($media_type) {
     //UPDATE CACHE
     if (($cfg['search_cache'] && $cache_media_expire)) {
         $media_cache['words'] = '';
-        $media_cache['update'] = time();
+        $media_cache['updated'] = time();
         $media_cache['ids'] = '';
         $media_cache['media_type'] = $media_type;
 

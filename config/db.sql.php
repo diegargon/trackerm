@@ -20,7 +20,7 @@ function create_db() {
 
     $query = [
         "app_name" => 'trackerm',
-        "version" => 2,
+        "version" => 3,
     ];
 
     $db->insert('db_info', $query);
@@ -47,6 +47,17 @@ function create_db() {
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                     UNIQUE (uid, pref_name)
                 )');
+    // CONFIG
+    $db->query('CREATE TABLE IF NOT EXISTS "config" (
+                    "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                    "cfg_key" VARCHAR NOT NULL,
+                    "cfg_value" VARCHAR NOT NULL,
+                    "cfg_perms" VARCHAR NULL,
+                    "cfg_desc" VARCHAR NULL,
+                    "modify" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                    "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                    UNIQUE (cfg_key)
+                )');
 
     // TMDB_SEARCH
     $db->query('CREATE TABLE IF NOT EXISTS "tmdb_search" (
@@ -66,6 +77,7 @@ function create_db() {
                     "plot" VARCHAR NULL,
                     "release" VARCHAR NULL,
                     "in_library" INT NULL,
+                    "updated" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
                 )');
 
@@ -89,6 +101,7 @@ function create_db() {
                     "ilink" VARCHAR NULL,
                     "size" INTEGER NULL,
                     "path" VARCHAR NULL,
+                    "file_hash" VARCHAR NULL,
                     "tags" VARCHAR NULL,
                     "ext" VARCHAR NULL,
                     "rating" REAL NULL,
@@ -97,9 +110,11 @@ function create_db() {
                     "lang" VARCHAR NULL,
                     "plot" VARCHAR NULL,
                     "title_year" VARCHAR NULL,
+                    "trailer" VARCHAR NULL,
                     "poster" VARCHAR NULL,
                     "release" VARCHAR NULL,
                     "master" INTEGER NULL,
+                    "updated" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                     "added" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
                 )');
@@ -115,6 +130,7 @@ function create_db() {
                     "ilink" VARCHAR NULL,
                     "size" INTEGER NULL,
                     "path" VARCHAR NULL,
+                    "file_hash" VARCHAR NULL,
                     "tags" VARCHAR NULL,
                     "ext" VARCHAR NULL,
                     "rating" REAL NULL,
@@ -125,9 +141,26 @@ function create_db() {
                     "season" INTEGER NULL,
                     "episode" INTEGER NULL,
                     "title_year" VARCHAR NULL,
+                    "trailer" VARCHAR NULL,
                     "poster" VARCHAR NULL,
                     "release" VARCHAR NULL,
                     "master" INTEGER NULL,
+                    "updated" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                    "added" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                    "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+                )');
+
+    //LIBRARY HISTORY
+    $db->query('CREATE TABLE IF NOT EXISTS "library_history" (
+                    "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                    "title" VARCHAR NULL,
+                    "themoviedb_id" INTEGER NULL,
+                    "media_type" VARCHAR NULL,
+                    "file_name" VARCHAR NOT NULL,
+                    "size" INTEGER NULL,
+                    "file_hash" VARCHAR NULL,
+                    "season" INTEGER NULL,
+                    "episode" INTEGER NULL,
                     "added" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
                 )');
@@ -176,7 +209,7 @@ function create_db() {
                     "words" VARCHAR NULL,
                     "media_type" VARCHAR NULL,
                     "ids" VARCHAR NULL,
-                    "update" INTEGER NOT NULL,
+                    "updated" INTEGER NOT NULL,
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
         )');
 
@@ -186,7 +219,7 @@ function create_db() {
                     "words" VARCHAR NULL,
                     "media_type" VARCHAR NULL,
                     "ids" VARCHAR NULL,
-                    "update" INTEGER NOT NULL,
+                    "updated" INTEGER NOT NULL,
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
         )');
 
@@ -200,6 +233,9 @@ function create_db() {
                     "quality" INTEGER NULL,
                     "ignores" INTEGER NULL,
                     "ignore" INTEGER NULL,
+                    "custom_words_ignore" VARCHAR NULL,
+                    "custom_words_require" VARCHAR NULL,
+                    "exact_title" INTEGER NULL,
                     "hashString" VARCHAR NULL,
                     "tid" INTEGER NULL,
                     "first_check" INTEGER NULL,
@@ -207,6 +243,7 @@ function create_db() {
                     "last_check" INTEGER NULL,
                     "direct" INTEGER NULL,
                     "wanted_status" INTEGER NULL,
+                    "track_show" INTEGER NULL,
                     "media_type" VARCHAR NULL,
                     "profile" INTEGER NULL,
                     "added" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
@@ -224,7 +261,7 @@ function create_db() {
                     "episode_release" INTEGER NULL,
                     "title" VARCHAR NULL,
                     "plot" VARCHAR NULL,
-                    "update" INTEGER NULL,
+                    "updated" INTEGER NULL,
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                     UNIQUE (themoviedb_id, season, episode)
                 )');
@@ -246,17 +283,64 @@ function update_db($from) {
         $set['version'] = 2;
         $db->update('db_info', $set);
     }
-    /*
-      // NEXT UPDATE
-      // to hash movie files add  CREATE AND ALTER to movies/shows_library "hash" VARCHAR NULL,
-      // add new(CREATE) table config al estilo preferences for save general pref
-      // add CREATE and ALTER wanted exact INTERGER null (to improve wanted to search a exact name. Example: "run" and not "run run" o "the run"
-      // custom_words_ignore custom_words_require fields for wanted. Configure each wanted with custom fields
-      // Table:Wanted wanted_season to track we want the season not one especifique episode
-      // add trailer to library_shows library_movies
-      if ($from < 3) {
 
-      $set['version'] = 3;
+    if ($from < 3) {
+        //LIBRARY_MOVIES
+        $db->query('ALTER TABLE library_movies add column trailer VARCHAR NULL');
+        $db->query('ALTER TABLE library_movies add column file_hash VARCHAR NULL');
+        $db->query('ALTER TABLE library_movies add column updated TIMESTAMP DEFAULT 0 NOT NULL');
+        //LIBRARY_SHOWS
+        $db->query('ALTER TABLE library_shows add column trailer VARCHAR NULL');
+        $db->query('ALTER TABLE library_shows add column file_hash VARCHAR NULL');
+        $db->query('ALTER TABLE library_shows add column updated TIMESTAMP DEFAULT 0 NOT NULL');
+        //TMDB_SEARCH
+        $db->query('ALTER TABLE tmdb_search add column updated TIMESTAMP DEFAULT 0 NOT NULL');
+        //WANTED
+        $db->query('ALTER TABLE wanted add column track_show INTEGER NULL');
+        $db->query('ALTER TABLE wanted add column custom_words_ignore VARCHAR NULL');
+        $db->query('ALTER TABLE wanted add column custom_words_require VARCHAR NULL');
+        $db->query('ALTER TABLE wanted add column exact_title INTEGER NULL');
+        //SHOWS_DETAILS
+        $db->query("ALTER TABLE shows_details RENAME COLUMN 'update' TO updated");
+        //JACKET_SEARCH_*_CACHES
+        $db->query("ALTER TABLE jackett_search_movies_cache RENAME COLUMN 'update' TO updated");
+        $db->query("ALTER TABLE jackett_search_shows_cache RENAME COLUMN 'update' TO updated");
+        //CONFIG
+        $db->query('CREATE TABLE IF NOT EXISTS "config" (
+                    "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                    "cfg_key" VARCHAR NOT NULL,
+                    "cfg_value" VARCHAR NOT NULL,
+                    "cfg_perms" VARCHAR NULL,
+                    "cfg_desc" VARCHAR NULL,
+                    "modify" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                    "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                    UNIQUE (cfg_key)
+                )');
+        //LIBRARY_HISTORY
+        $db->query('CREATE TABLE IF NOT EXISTS "library_history" (
+                    "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                    "title" VARCHAR NULL,
+                    "themoviedb_id" INTEGER NULL,
+                    "media_type" VARCHAR NULL,
+                    "file_name" VARCHAR NOT NULL,
+                    "size" INTEGER NULL,
+                    "file_hash" VARCHAR NULL,
+                    "season" INTEGER NULL,
+                    "episode" INTEGER NULL,
+                    "added" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                    "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+                )');
+
+        $set['version'] = 3;
+        $db->update('db_info', $set);
+    }
+    /*
+      NEXT UPDATES:
+
+     */
+    /*
+      if ($from < 4) {
+      $set['version'] = 4;
       $db->update('db_info', $set);
       }
      */
