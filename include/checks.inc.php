@@ -81,4 +81,8 @@ function do_checks() {
         echo "ERROR: You must set in /config/config.inc.php trans_port with the port of transmission-daemon server ex: \"9091\"\n";
         exit();
     }
+    if (file_exists($cfg['DB_FILE']) && !is_writable($cfg['DB_FILE'])) {
+        echo "ERROR: db exists but is not writable\n";
+        exit();
+    }
 }

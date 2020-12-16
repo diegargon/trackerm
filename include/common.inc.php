@@ -20,6 +20,10 @@ require_once('config/config.priv.php');
 
 setlocale(LC_ALL, $cfg['LOCALE']);
 
+require_once('include/checks.inc.php');
+
+do_checks();
+
 require_once('include/logging.class.php');
 global $log;
 $log = new Log($cfg);
@@ -30,7 +34,6 @@ $db = new DB($cfg['DB_FILE'], $log);
 $db->connect();
 
 require_once('lang/' . $cfg['LANG'] . '/lang.inc.php');
-require_once('include/checks.inc.php');
 require_once('include/filters.class.php');
 global $filter;
 $filter = new Filter();
@@ -47,8 +50,6 @@ require_once('include/mediadb.inc.php');
 require_once('include/jackett.inc.php');
 require_once('include/wanted.inc.php');
 require_once('vendor/autoload.php');
-
-do_checks();
 
 global $trans;
 $trans = new TorrentServer($cfg); //FIXME: Connections results checks
