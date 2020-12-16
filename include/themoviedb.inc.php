@@ -84,6 +84,8 @@ function themoviedb_MediaPrep($media_type, $items) {
                 $in_library = $library_item['id'];
             }
         }
+        $trailer = mediadb_getTrailer($media_type, $item['id']);
+
         $fitems[] = [
             'ilink' => $media_type . '_db',
             'media_type' => $media_type,
@@ -97,6 +99,8 @@ function themoviedb_MediaPrep($media_type, $items) {
             'scene' => !empty($item['backdrop_path']) ? $img_path . $item['backdrop_path'] : null,
             'lang' => $item['original_language'],
             'plot' => $item['overview'],
+            'trailer' => $trailer,
+            'updated' => time(),
             'release' => isset($release) ? $release : null,
         ];
     }
@@ -299,9 +303,9 @@ function themoviedb_getTrailer($media_type, $id) {
         $log->warning('Video trailer site not implemented ' . $results['site']);
         $video = false;
     } else {
-        $log->debug('Get Trailer seems got nothing');
+        $log->debug("Get $media_type trailer seems got nothing on id: $id");
         return false;
     }
 
-    return $video;
+    return trim($video);
 }

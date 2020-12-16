@@ -187,6 +187,7 @@ function submit_ident($type, $items) {
             !empty($db_item['popularity']) ? $update_fields['popularity'] = $db_item['popularity'] : null;
             !empty($db_item['scene']) ? $update_fields['scene'] = $db_item['scene'] : null;
             !empty($db_item['lang']) ? $update_fields['lang'] = $db_item['lang'] : null;
+            !empty($db_item['trailer']) ? $update_fields['trailer'] = $db_item['trailer'] : null;
             !empty($db_item['plot']) ? $update_fields['plot'] = $db_item['plot'] : null;
             !empty($db_item['release']) ? $update_fields['release'] = $db_item['release'] : null;
 

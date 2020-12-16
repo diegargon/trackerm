@@ -152,3 +152,8 @@ $cfg['media_ext'] = [
     "mp4",
     "MP4",
 ];
+
+//When missing a field from ex:tmdb we try after few days if update
+$cfg['DB_UPD_MISSING_DELAY'] = 864000; //10 days
+//After a long delay we check if there are any change in tmdb entry for update our entry
+$cfg['DB_UPD_LONG_DELAY'] = $cfg['DB_UPD_MISSING_DELAY'] * 3;

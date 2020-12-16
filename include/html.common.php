@@ -148,12 +148,6 @@ function build_item($item, $detail = null) {
             }
         }
 
-        if (!isset($item['trailer']) && (isset($item['themoviedb_id']) && isset($item['media_type']))) {
-            //TODO upgrade database for add trailer
-            //$trailer = mediadb_getTrailer($item['media_type'], $item['themoviedb_id']);
-            !empty($trailer) ? $item['trailer'] = $trailer : null;
-        }
-
         $page .= getTpl('item_display_1', array_merge($item, $LNG));
     }
 

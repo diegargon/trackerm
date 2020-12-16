@@ -295,6 +295,7 @@ function update_db($from) {
         $db->query('ALTER TABLE library_shows add column updated TIMESTAMP DEFAULT 0 NOT NULL');
         //TMDB_SEARCH
         $db->query('ALTER TABLE tmdb_search add column updated TIMESTAMP DEFAULT 0 NOT NULL');
+        $db->query('DELETE FROM tmdb_search');
         //WANTED
         $db->query('ALTER TABLE wanted add column track_show INTEGER NULL');
         $db->query('ALTER TABLE wanted add column custom_words_ignore VARCHAR NULL');
