@@ -289,7 +289,6 @@ function ShowJob($item, $linked = false) {
                     $trans->deleteHashes($hashes);
                     $work_path = dirname($valid_file);
                     file_exists($work_path) && ($work_path != $cfg['TORRENT_FINISH_PATH']) && (end($valid_files) == $valid_file) ? rmdir($work_path) : null;
-                    $log->debug("Test why not work: $work_path:" . end($valid_files) . ':' . $valid_file);
                 }
             } else {
                 $log->debug(" Link Seeding: {$item['tid']} : {$item['hashString']}");
