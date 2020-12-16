@@ -91,7 +91,7 @@ function themoviedb_MediaPrep($media_type, $items) {
             'title' => $title,
             'original_title' => $original_title,
             'rating' => $item['vote_average'],
-            'popularity' => $item['popularity'],
+            'popularity' => isset($item['popularity']) ? $item['popularity'] : 0,
             'elink' => $link,
             'poster' => !empty($item['poster_path']) ? $img_path . $item['poster_path'] : null,
             'scene' => !empty($item['backdrop_path']) ? $img_path . $item['backdrop_path'] : null,
@@ -151,7 +151,7 @@ function themoviedb_getSeasons($id) {
 
         return $items;
     }
-    return $false;
+    return false;
 }
 
 function themoviedb_showsDetailsPrep($id, $seasons_data, $episodes_data) {
