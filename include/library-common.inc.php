@@ -203,7 +203,7 @@ function submit_ident($type, $items) {
 }
 
 function getLibraryStats() {
-    global $db;
+    global $db, $cfg;
 
     $stats['movies_size'] = 0;
     $stats['shows_size'] = 0;
@@ -242,5 +242,6 @@ function getLibraryStats() {
 
     $stats['num_shows'] = count($count_shows);
 
+    $stats['db_size'] = file_exists($cfg['DB_FILE']) ? human_filesize(filesize($cfg['DB_FILE'])) : 0;
     return $stats;
 }
