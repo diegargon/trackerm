@@ -122,7 +122,7 @@ $cfg['TORRENT_IGNORES_PREFS'] = [
     1 => 'SCREENER',
 ];
 
-// The space time in seconds for search the wanted elements the day we choose for seach
+// The space time in seconds for search the wanted elements the day we choose for search
 // default 3600 seconds. Will try search each hour (if cron is configure for less)
 $cfg['WANTED_DAY_DELAY'] = 3600;
 // Theme (actually only default)
@@ -136,7 +136,7 @@ $cfg['UNRAR_PATH'] = '/usr/bin/unrar';
 
 //Cache torrent searching (news too)
 $cfg['search_cache'] = 1;
-$cfg['search_cache_expire'] = 900; //seconds
+$cfg['search_cache_expire'] = 3600; //seconds
 
 /* * ********************************** */
 /* PROBABLY NOT NEED CONFIG BELOW HERE */
@@ -153,7 +153,7 @@ $cfg['media_ext'] = [
     "MP4",
 ];
 
-//When missing a field from ex:tmdb we try after few days if update
+//When missing a field from ex:tmdb we try after few days check if added
 $cfg['DB_UPD_MISSING_DELAY'] = 864000; //10 days
 //After a long delay we check if there are any change in tmdb entry for update our entry
 $cfg['DB_UPD_LONG_DELAY'] = $cfg['DB_UPD_MISSING_DELAY'] * 3;
