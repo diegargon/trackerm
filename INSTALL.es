@@ -73,9 +73,10 @@ Apache+Php7+sqlite3 , Jacket, Transmission, Composer, cuenta+api key themoviedb.
     y basicamente rellenar todo de config.min.php en /etc/trackerm.conf
 
 ## Tareas automaticas: Seguimiento y mover a la libreria.
-    En estos momentos todos los mecanismos automaticos estan en desarrolle y contendran fallos.
+    En estos momentos todos los mecanismos automaticos estan en desarrollo y contendran fallos.
     
-    Para usarlo hay que añadir trackerm-cli.php a CRON. Posiblemente seria recomendable moverlo fuera del ROOT_PATH.
+    Para usarlo hay que añadir trackerm-cli.php a CRON. Posiblemente seria recomendable moverlo fuera del ROOT_PATH. Si lo moviera
+    tenga en cuenta que al actualizarlo tendra que moverlo otra vez y sobreescribir el antiguo.
 
     Como funcionara  :
     * Automaticamente buscara torrentes en "seguimiento" los dias que configuraras, si encuentra coincidencias que satisfaga los filtros lo descargara.
@@ -91,7 +92,8 @@ Apache+Php7+sqlite3 , Jacket, Transmission, Composer, cuenta+api key themoviedb.
 
     La linea basica para ejecutar las tareas automaticas  (ejemplo cada 15 minutos) es la siguiente (/etc/crontab)
     */15 *   * * *   root    /usr/bin/php  /path/to/trackerm-cli.php
-    Puedes poner trackerm en el directorio que quieras y cambiar de usuario si este tiene los permisos necesarios para las carpetas relacionadas.
+    Puedes poner trackerm en el directorio que quieras y cambiar de usuario si este tiene los permisos necesarios para las carpetas relacionadas. Si lo mueve
+    recuerde hacerlo siempre que actualice trackerm.
 
 ## VERSION
     Advertencia: Puedes comprobar la version en el archivo VERSION. Mientras este en alpha (0.0.X) hasta la versión 0.1, toda version es factible de romper

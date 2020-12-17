@@ -52,7 +52,8 @@ trackerm will track your transmission movie/shows downloads and automatically mo
     Basic line for /etc/crontab: 
         */15 *   * * *   root    /usr/bin/php  /path/to/trackerm-cli.php
 
-    You can put trackerm-cli where you want and change user if the right permissions is set. Remember the permission for all directorys.
+    You can put trackerm-cli where you want and change user if the right permissions is set. Remember the permission for all directorys. If you move the trackerm-cli file
+    out of his original place remember each time you upgrade trackerm you must move and overwrite the file.
 
 ## VERSION
     WARNING: You can check the version on VERSION file. While in alpha 0.0.X and until 0.1 there is no garantee of backwards compatibity.
