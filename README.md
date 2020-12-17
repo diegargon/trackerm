@@ -28,10 +28,14 @@ Probably you shouldn't install it at this moment.
 
 ATTENTION: This software was made to maintain a private multimedia library of files of which you have rights of use. The misuse or illegal 
 use of this program is solely responsibility of the user. 
+
 This software  uses third  party search engines and it is the sole responsibility of the  user to click on the links whose content is legal to use in your country.
+
 <b>Since we use third party search engines, we haven't control over search engine results</b>
+
 This tool is for private/personal use, exposing this tool to the internet for use of third parties may entail a crime according to your country 
 and the rights of the material you expose. 
+
 Please inform yourself of the laws in your country.
 
 ## CURRENT STATUS
