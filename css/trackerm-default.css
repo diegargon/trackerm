@@ -312,7 +312,7 @@ button {
 }
 
 .view_description_container {  
-    border:5px solid black;
+    border:0px solid black;
     width: 100%;
     padding: 10px;
     padding-right: 2%;
