@@ -48,7 +48,7 @@
             <input class="submit_btn" type="submit" name="rebuild_movies" value="<?= $tdata['L_REESCAN_MOVIES'] ?>"/>
             <?php
         }
-        if ($tdata['WANT_SHOWS'] && ($tdata['page'] == 'library' || $tdata['page'] == 'library_movies')) {
+        if ($tdata['WANT_SHOWS'] && ($tdata['page'] == 'library' || $tdata['page'] == 'library_shows')) {
             ?>
             <input class="submit_btn" type="submit" name="rebuild_shows" value="<?= $tdata['L_REESCAN_SHOWS'] ?>"/>
         <?php } ?>
