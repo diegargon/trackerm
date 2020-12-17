@@ -15,8 +15,6 @@ TODO
         Buscar archivos multimedia en el TORRENT DIR y buscar la forma de determina si coincide con alguno en la base de datos
         si no coincide moverlo.
     [IMPROVE] Two search_cache_expire  search_cache_expire and news_cache_expire    
-    [IMPROVE/WANTED] Añadir la posibilidad de buscar el titulo exacto, si buscamos "Run" o "Asesino" encontrara varios resultados con titulos
-        que contienen dichos terminos y igual se requiere que el titulo solo sea "RUN" o "ASESINO" a secas    
     [IMPROVE] Allow WANT SHOW, wanted will check for  all torrents one first time, and after every day configure check the
             the first episode missed
     [IMPROVE] Added config table, to improve the config with tables and config ui
@@ -31,7 +29,6 @@ TODO
 [VERY LOW]  
     [IMPROVE] Pagination actually get all results and do a array_slice, now with SQL database when use cache we can  do that better.    
     [FIX/IMPROVE] fechas normalizar a formato comun    
-    [NEW/IMPROVE] menu rows/columns y otras configuraciones generales en todas las paginas o pagina config.
     [IMPROVE] rebuild pager/paginacion, messy code.    
     [NEW] mediainfo (read file metadata)
     [FIX] Actualmente en busquedas imdb filtramos años de los titulos por que suelen estar mal, el problema es cuando el titulo es un año
@@ -47,7 +44,7 @@ TODO
     [IMPROVE] Add hashes files when scaning the database hash first and last  X bytes for fast hashing
 
 [BACKLOG]
-    [CHANGE] Change actual Transmission rpc api to something basic, since is enough and the actual have alot of deps 
+    [CHANGE] Change actual Transmission rpc api to something basic, since some basic is enough and the actual have alot of deps 
     [NEW/IMPROVE] En el select de identificar estaria bien mostrar las caractulas al poner encima
     [NEW] opcional: mostrar otros ratigns, filmaffinity, imdb
     [IMPROVE] Select Home items

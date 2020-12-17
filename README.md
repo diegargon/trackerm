@@ -12,7 +12,7 @@ muy temprana.
 
 Warning: Codigo/esbozo realizado a correr (el grueso fue programado  en 3 intensos dias), no solo hay que pulirlo y reescribir mucho si no que esta sin 
 seguridad y asi continuara hasta que tenga una version con las funciones basicas.
-Probablemente de momento no deberias instalarlo.
+Si lo instalas espera errores.
 
 
 **ENGLISH**
@@ -22,7 +22,7 @@ You can see screenshots of the current appearance (not latest probably) in /scre
 is in a very very early stage.
 Warning: Fast coding (the bulk was done in 3 days) have to polish alot/rewrite alot and came without any security, and 
 will remain like this until i have a working code with basic features.
-Probably you shouldn't install it at this moment.
+If you install expect errors.
 
 ## LEGAL
 
