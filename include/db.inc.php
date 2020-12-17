@@ -35,6 +35,8 @@ class DB {
         $debug_msg = '';
         $response = $this->checkInstall();
         $this->db = new SQLite3($this->db_path, SQLITE3_OPEN_CREATE | SQLITE3_OPEN_READWRITE);
+        $this->db->busyTimeout(5000);
+        $this->db->exec('PRAGMA journal_mode = wal;');
         if (!$response && !empty($this->db)) {
             $this->createTables();
             $response = $this->checkInstall();
@@ -406,8 +408,13 @@ class DB {
         return $this->querys;
     }
 
-    function query($query) {
+    public function query($query) {
         return $this->db->query($query);
+    }
+
+    public function close() {
+        $this->db->close();
+        unset($this->db);
     }
 
     private function checkInstall() {

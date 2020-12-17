@@ -60,6 +60,8 @@ if (!isset($req_page) || $req_page == '' || $req_page == 'index') {
 }
 
 $page = getTpl('html_mstruct', $tdata = ['body' => $body, 'footer' => $footer]);
+$db->close();
+
 echo $page;
 
 
