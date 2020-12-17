@@ -1,47 +1,46 @@
-Bienvenido.
-<br/>
-Este software fue concebido para llevar cuenta con apoyo del software Jackett
-descargar archivos multimedia "legales" de tus sitios favoritos.
-<br/>
-Se divide en las siguientes secciones:
-<br/>
-<b>Biblioteca :</b> Aquí puedes ver las peliculas que posees, una vez configurado los directorios en 
-el archivo de configuración solo tienes que pulsar reescanear y comenzar a identificar las peliculas.
-Cuando descargues nuevas archivos apareceran en la primeros resultados despues de clickear en reescan.
-<br/>
-<b>Publicados :</b> Aquí puedes ver y descargar los ultimos lanzamientos de tus trackers favoritos. 
-Con un solo click trackerm lo enviara si esta correctamente configurado a transmission-daemon
-<br/>
-<b>Seguimiento :</b> En esta sección podras ver y administrar las peliculas/series en seguimiento.
-trackerm buscara y descargar automaticamente las peliculas/series que quieras en cuanto esten 
-disponibles. Puedes tambien cambiar cada cuanto quieres que las busque. Sea cual sea la opción que
-elijas trackerm lo buscara ese dia o cada dia varias veces (configurable en el archivo de configuración.
-<br/>
-<b>Torrents :</b> Es un buscador de enlaces a torrents proveeido por Jackett 
-<br/>
-<b>TMDB :</b> Es un buscador de peliculas utilizando el motor de themoviedb.org
-<br/>
-<b>T :</b> Desde aquí podras ver y de forma basica administrar las descargas de transmission-daemon
-<br/>
- Basicamente la mecanica para manejar este programa es buscar en Torrent un torrent y darle a descargar
-o buscar una pelicula y mostrar los torrentes, si no hay torrentes puedes ponerla en seguimiento
-y trackerm la descargara cuando encuentre un torrent.
-<br/>
-Cuando termine de descargar trackerm lo movera automaticamente a tu libreria cuando el archivo torrente 
-este parado o si esta seeding/compartiendo creara temporalmente un enlace a tu libreria para
-que puedas verlo sin necesidad de pararlo. Cuando lo pares o se pare despues del seeding automaticamente 
-lo movera.
- Despues de moverlo definitivamente, automaticamente se borrara de transmission
-<br/>
-Para el  más correcto y mejor funcionamiento de todo el proceso es preciso que todo el proceso
-se realice por medio de trackerm. Y aunque trackerm tambien incluye mecanismos para manejar archivos
-descargados de otras formas, lo más fiable es utilizar siempre la plataforma, para realizar las tareas.
-</p>
-<p>ATENCION: Este software se realizo para el mantenimiento de una biblioteca multimedia prviada de archivos
-de los cuales tengas derechos de uso. El mal o ilegal uso de este programa es solo responsabilidad del
-usuario. Este software no provee enlaces a archivos protegidos por derechos de autor, utiliza buscadores 
-de terceros y es solo responsabilidad del usuario pinchar en los enlaces cuyo contenido es legal su uso.
-Esta herramienta es para uso privado, exponer esta herramienta a internet o uso de terceros puede conllevar 
-un delito segun el pais y los derechos del material que expongas. Por favor informese de las leyes al respecto
-en su pais</p>
+Welcome<br/>
 
+This software was conceived to support beside Jackett download LEGAL media files
+from your favorite sites.
+<br/>
+It is divided into the following sections:
+<br/>
+<b> Library: </b> Here you can see the movies you own, once you have configured the directories in
+the configuration file you just have to press reescan and start identifying the movies.
+When you download new files they will appear in the first results, after clicking in reescan.
+<br/>
+<b> Published: </b> Here you can see and download the latest releases of your favorite trackers.
+With a single click trackerm will send it if it is correctly configured to transmission-daemon
+<br/>
+<b> Follow-up: </b> In this section you will be able to see and manage the movies / series in follow-up.
+trackerm will automatically search and download the movies/series you want as soon as they are
+available. You can also change how often you want search for them. Whichever option you
+you choose trackerm will look for it along a certain day or every day. The day will do a check several 
+times (configurable in the configuration file.
+<br/>
+<b> Torrents: </b> It is a torrent search engine that use Jackett provided links
+<br/>
+<b> TMDB: </b> It's a movie search engine using themoviedb.org engine
+<br/>
+<b> T: </b> From here you can see and basically manage the transmission-daemon downloads
+<br/>
+ Basically the mechanics to handle this program is to search in Torrent for a torrent and to download
+or search for a movie and show the torrents, if there are no torrents you can track it
+and trackerm will download it when it finds a torrent.
+<br/>
+When it finishes downloading trackerm will automatically move it to your library when the torrent file
+is stopped or if it is seeding / sharing it will temporarily create a link to your library so
+ you can see it without stopping it. When you stop or stop seeding it it will automatically move it.
+ After moving it permanently, trackerm will automatically delete the file from transmission.
+<br/>
+For the most correct and best operation of the entire process, it is necessary that the entire process
+is done through trackerm. And although trackerm also includes mechanisms to handle files
+downloaded in other ways, the most reliable thing is to always use the platform to carry out the tasks.
+</p>
+<p> ATTENTION: This software was made to maintain a private multimedia library of files
+of which you have rights of use. The misuse or illegal use of this program is solely the responsibility of the
+user. This software does not provide links to files protected by copyright, uses third party search engines
+and it is the sole responsibility of the user to click on the links whose content is legal to use.
+This tool is for private use, exposing this tool to the internet for use of third parties may entail
+a crime according to the country and the rights of the material you expose. Please inform yourself of the laws in
+in your country </p>
