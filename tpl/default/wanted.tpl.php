@@ -30,7 +30,7 @@
                     <div class="divTableCellWanted"></div>
                     <div class="divTableCellWanted">ID</div>
                     <div class="divTableCellWanted"><?= $tdata['L_STATUS'] ?></div>
-                    <div class="divTableCellWanted"></div>
+                    <div class="divTableCellWanted"><?= $tdata['L_CHECKDAY'] ?></div>
                     <div class="divTableCellWanted"><?= $tdata['L_ADDED'] ?></div>
                     <div class="divTableCellWanted"><?= $tdata['L_CHECKED'] ?></div>
                     <div class="divTableCellWanted"><?= $tdata['L_TYPE'] ?></div>
