@@ -186,7 +186,7 @@ function MovieJob($item, $linked = false) {
 
                     $wanted_item = $db->getItemByField('wanted', 'hashString', $item['hashString']);
                     if (!empty($wanted_item)) {
-                        $log->debug(" Setting to moved wanted id: " . $wanted_item['wanted_id']);
+                        $log->debug(" Setting to moved wanted id: " . $wanted_item['id']);
                         $update_ary['wanted_status'] = 9;
                         $update_ary['id'] = $wanted_item['id'];
                         $db->updateItemByField('wanted', $update_ary, 'id');
