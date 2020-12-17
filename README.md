@@ -24,6 +24,16 @@ Warning: Fast coding (the bulk was done in 3 days) have to polish alot/rewrite a
 will remain like this until i have a working code with basic features.
 Probably you shouldn't install it at this moment.
 
+## LEGAL
+
+ATTENTION: This software was made to maintain a private multimedia library of files
+of which you have rights of use. The misuse or illegal use of this program is solely the responsibility of the
+user. This software does not provide links to files protected by copyright, uses third party search engines
+and it is the sole responsibility of the user to click on the links whose content is legal to use.
+This tool is for private use, exposing this tool to the internet for use of third parties may entail
+a crime according to the country and the rights of the material you expose. Please inform yourself of the laws in
+in your country 
+
 ## CURRENT STATUS
 
 **ENGLISH**
