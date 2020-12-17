@@ -479,7 +479,8 @@ function wanted_work() {
             $search['words'] = $title;
             $results = search_media_torrents($media_type, $search, null, true);
             if (!empty($results) && count($results) > 0) {
-                $valid_results = wanted_check_flags($results);
+                $results_pass_flags = wanted_check_flags($results);
+                $valid_results = wanted_check_title($search, $results_pass_flags); //exact title
             } else {
                 $log->debug('No results founds for ' . $title);
             }
@@ -492,7 +493,8 @@ function wanted_work() {
             $log->debug(' Search for : ' . $title . " $s_episode [ $media_type ]");
             $results = search_media_torrents($media_type, $search, null, true);
             if (!empty($results) && count($results) > 0) {
-                $valid_results = wanted_check_flags($results);
+                $results_pass_flags = wanted_check_flags($results);
+                $valid_results = wanted_check_title($search, $results_pass_flags); //exact title
             } else {
                 $log->debug('No results founds for ' . $title . ' ' . $s_episode);
             }
@@ -502,7 +504,8 @@ function wanted_work() {
             $valid_results[0]['themoviedb_id'] = $themoviedb_id;
             $valid_results[0]['media_type'] = $media_type;
             $valid_results[0]['wanted_id'] = $wanted_id;
-            if (send_transmission($valid_results)) {
+            $first_valid[] = $valid_results[0];
+            if (send_transmission($first_valid)) {
                 $log->addStateMsg($LNG['L_WANTED_FOUND'] . ':(' . $title . ') ' . $LNG['L_DOWNLOADING']);
             }
         } else {
@@ -513,6 +516,26 @@ function wanted_work() {
 
         $log->debug("********************************************************************************************************");
     }
+}
+
+function wanted_check_title($search, $results) {
+    global $log;
+
+    $words = $search['words'];
+    $valid = [];
+
+    foreach ($results as $item) {
+        $title = trim(getFileTitle($item['title']));
+
+        if (strtolower($title) == strtolower($words)) {
+            $log->debug('Wanted: Valid title found ' . $item['title']);
+            $valid[] = $item;
+        } else {
+            $log->debug('Wanted: Title discarded since not exact ' . $title);
+        }
+    }
+
+    return (count($valid) > 0) ? $valid : false;
 }
 
 function wanted_check_flags($results) {
@@ -526,7 +549,7 @@ function wanted_check_flags($results) {
             foreach ($cfg['TORRENT_IGNORES_PREFS'] as $ignore) {
                 if (stripos($result['title'], $ignore)) {
                     $ignore_flag = 1;
-                    $log->debug(" Wanted: Ignored coincidence for item " . $result['title'] . " by ignore key " . $ignore);
+                    $log->debug('Wanted: Ignored coincidence for item ' . $result['title'] . ' by ignore key ' . $ignore);
                 }
             }
             if ($ignore_flag != 1) {
@@ -539,6 +562,7 @@ function wanted_check_flags($results) {
 
     if (count($cfg['TORRENT_QUALITYS_PREFS']) > 0) {
 
+        //build quality array with PROPER and without PROPER
         $_order = 0;
         foreach ($cfg['TORRENT_QUALITYS_PREFS'] as $quality) {
             if ($quality == 'ANY') {
@@ -553,20 +577,11 @@ function wanted_check_flags($results) {
         }
 
         foreach ($TORRENT_QUALITYS_PREFS_PROPER as $quality) {
-            $desire_quality = 0;
-
             foreach ($noignore as $noignore_result) {
-
                 if (stripos($noignore_result['title'], $quality) || $quality == 'ANY') {
-                    $log->debug(" Wanted: Quality coincidence for item " . $noignore_result['title'] . " by quality key " . $quality);
-                    $desire_quality = 1;
-                    break;
+                    $log->debug('Wanted: Quality coincidence for item ' . $noignore_result['title'] . ' by quality key ' . $quality);
+                    $valid_results[] = $noignore_result;
                 }
-            }
-
-            if ($desire_quality == 1) {
-                $valid_results[] = $noignore_result;
-                break;
             }
         }
     } else {
@@ -579,7 +594,7 @@ function wanted_check_flags($results) {
 function send_transmission($results) {
     global $db, $cfg, $trans;
 
-    //var_dump($results);
+
     foreach ($results as $result) {
 
         $trans_db = [];
@@ -602,7 +617,6 @@ function send_transmission($results) {
         $update_ary['hashString'] = $trans_db[0]['hashString'];
         $update_ary['last_check'] = time();
         $update_ary['first_check'] = 1;
-
 
         $db->updateItemById('wanted', $result['wanted_id'], $update_ary);
     }
