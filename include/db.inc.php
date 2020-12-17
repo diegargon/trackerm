@@ -226,6 +226,7 @@ class DB {
     }
 
     public function upsert($table, $set, $where) {
+        //FIX upsert with fixed field name id not good
         $result = $this->select($table, 'id', $where, 'LIMIT 1');
         $item = $this->fetch($result);
         $this->finalize($result);
