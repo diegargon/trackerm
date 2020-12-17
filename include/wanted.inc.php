@@ -35,6 +35,12 @@ function wanted_list() {
             $wanted_item['day_check'] = day_check($wanted_item['id'], $wanted_item['day_check'], $wanted_item['wanted_status']);
             $wanted_item['added'] = strftime("%x", strtotime($wanted_item['added']));
             !empty($wanted_item['last_check']) ? $wanted_item['last_check'] = strftime("%A %H:%M", $wanted_item['last_check']) : $wanted_item['last_check'] = $LNG['L_NEVER'];
+            if ($wanted_item['media_type'] == 'shows') {
+                (strlen($wanted_item['season']) == 1) ? $season = '0' . $wanted_item['season'] : $season = $wanted_item['season'];
+                (strlen($wanted_item['episode']) == 1) ? $episode = '0' . $wanted_item['episode'] : $episode = $wanted_item['episode'];
+                $s_episode = 'S' . $season . 'E' . $episode;
+                $wanted_item['shown_title'] = $wanted_item['title'] . ' ' . $s_episode;
+            }
             $mediadb_item = mediadb_getByDbId($wanted_item['media_type'], $wanted_item['themoviedb_id']);
             !empty($mediadb_item) ? $tdata['elink'] = $mediadb_item['elink'] : null;
             $wanted_item['media_type'] == 'movies' ? $tdata['lang_media_type'] = $LNG['L_MOVIES'] : $tdata['lang_media_type'] = $LNG['L_SHOWS'];
@@ -89,11 +95,11 @@ function wanted_episode($id, $season, $episodes) {
         }
 
         $item = mediadb_getByDbId('shows', $id);
-        $title_search = $item['title'] . ' S' . $season . 'E' . $episode;
+        //$title_search = $item['title'] . ' S' . $season . 'E' . $episode;
 
         $wanted_item = [
             'themoviedb_id' => $item['themoviedb_id'],
-            'title' => $title_search,
+            'title' => $item['title'],
             'day_check' => 0,
             'last_check' => '',
             'direct' => 0,

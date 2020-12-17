@@ -43,6 +43,6 @@
         </div>
     </div>
     <div class="divTableCellWanted">
-        <div class="tag_title"><?= $tdata['title'] ?></div>
+        <div class="tag_title"><?= !empty($tdata['shown_title']) ? $tdata['shown_title'] : $tdata['title'] ?></div>
     </div>
 </div>

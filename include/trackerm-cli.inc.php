@@ -432,7 +432,7 @@ function wanted_work() {
 
     $wanted_list = $db->getTableData('wanted');
     if (empty($wanted_list) || $wanted_list < 1) {
-        $log->debug(" Wanted list empty");
+        $log->debug("Wanted list empty");
         return false;
     }
 
@@ -440,22 +440,22 @@ function wanted_work() {
         $valid_results = [];
 
         if ($wanted['direct'] == 1) {
-            $log->debug(" Jumping wanted {$wanted['id']} by direct ");
+            $log->debug("Jumping wanted {$wanted['id']} by direct ");
             continue;
         }
 
         if (isset($wanted['wanted_status']) && $wanted['wanted_status'] > 0) {
-            $log->debug(" Jumping wanted {$wanted['title']} check by state " . $trans->getStatusName($wanted['wanted_status']));
+            $log->debug("Jumping wanted {$wanted['title']} check by state " . $trans->getStatusName($wanted['wanted_status']));
             continue;
         }
 
         if ($wanted['day_check'] == -1) {
-            $log->debug(" Jumping wanted {$wanted['title']} check by date, {$LNG['L_NEVER']}");
+            $log->debug("Jumping wanted {$wanted['title']} check by date, {$LNG['L_NEVER']}");
             continue;
         }
 
         if (($wanted['day_check'] > 0) && $wanted['day_check'] == $day_of_week) {
-            $log->debug(" Jumping wanted {$wanted['title']} check by date, today is not {$LNG[$cfg['CHECK_DAYS'][$wanted['day_check']]]}");
+            $log->debug("Jumping wanted {$wanted['title']} check by date, today is not {$LNG[$cfg['CHECK_DAYS'][$wanted['day_check']]]}");
             continue;
         }
 
@@ -465,7 +465,7 @@ function wanted_work() {
             $next_check = $last_check + $cfg['WANTED_DAY_DELAY'];
             if ($next_check > time()) {
                 $next_check = $next_check - time();
-                $log->debug(" Jumping wanted {$wanted['title']} check by delay, next check in $next_check seconds");
+                $log->debug("Jumping wanted {$wanted['title']} check by delay, next check in $next_check seconds");
                 continue;
             }
         }
@@ -473,23 +473,28 @@ function wanted_work() {
         $themoviedb_id = $wanted['themoviedb_id'];
         $title = $wanted['title'];
         $media_type = $wanted['media_type'];
-        $log->debug(" Search for : " . $title . '[' . $media_type . ']');
+
         if ($media_type == 'movies') {
+            $log->debug(' Search for : ' . $title . "[ $media_type ]");
             $search['words'] = $title;
             $results = search_media_torrents($media_type, $search, null, true);
             if (!empty($results) && count($results) > 0) {
                 $valid_results = wanted_check_flags($results);
             } else {
-                $log->debug(" No results founds for " . $title);
+                $log->debug('No results founds for ' . $title);
             }
         } else {
-            //$episode = 'S' . $wanted['season'] . 'E' . $wanted['episode'];
+            (strlen($wanted['season']) == 1) ? $season = '0' . $wanted['season'] : $season = $wanted['season'];
+            (strlen($wanted['episode']) == 1) ? $episode = '0' . $wanted['episode'] : $episode = $wanted['episode'];
+            $s_episode = 'S' . $season . 'E' . $episode;
             $search['words'] = $title;
+            $search['episode'] = $s_episode;
+            $log->debug(' Search for : ' . $title . " $s_episode [ $media_type ]");
             $results = search_media_torrents($media_type, $search, null, true);
             if (!empty($results) && count($results) > 0) {
                 $valid_results = wanted_check_flags($results);
             } else {
-                $log->debug(" No results founds for " . $title);
+                $log->debug('No results founds for ' . $title . ' ' . $s_episode);
             }
         }
 

@@ -12,14 +12,19 @@
 function search_media_torrents($media_type, $search, $head = null, $nohtml = false) {
     global $cfg, $log, $db;
 
-    $words = $search['words'];
-
     if ($media_type == 'movies') {
         $jackett_search_media_cache = 'jackett_search_movies_cache';
         $jackett_db = 'jackett_movies';
+        $search_words = $search['words'];
     } else if ($media_type == 'shows') {
         $jackett_search_media_cache = 'jackett_search_shows_cache';
         $jackett_db = 'jackett_shows';
+
+        if (!empty($search['episode'])) {
+            $search_words = $search['words'] . ' ' . $search['episode'];
+        } else {
+            $search_words = $search['words'];
+        }
     } else {
         return false;
     }
@@ -30,7 +35,7 @@ function search_media_torrents($media_type, $search, $head = null, $nohtml = fal
     $cache_media_expire = 0;
 
     if ($cfg['search_cache']) {
-        $media_cache_check = $db->getItemByField($jackett_search_media_cache, 'words', $words);
+        $media_cache_check = $db->getItemByField($jackett_search_media_cache, 'words', $search_words);
         !isset($media_cache_check['updated']) ? $media_cache_check['updated'] = 0 : null;
 
         if (time() > ($media_cache_check['updated'] + $cfg['search_cache_expire'])) {
@@ -56,7 +61,7 @@ function search_media_torrents($media_type, $search, $head = null, $nohtml = fal
 
             ($media_type) == 'movies' ? $jackett_media_key = 'movie-search' : $jackett_media_key = 'tv-search';
             if ($caps['searching'][$jackett_media_key]['@attributes']['available'] == "yes") {
-                $result[$indexer] = jackett_search_media($media_type, $words, $indexer, $categories);
+                $result[$indexer] = jackett_search_media($media_type, $search_words, $indexer, $categories);
             }
             isset($result[$indexer]['channel']['item']) ? $results_count = count($result[$indexer]['channel']['item']) + $results_count : null;
         }
@@ -67,7 +72,7 @@ function search_media_torrents($media_type, $search, $head = null, $nohtml = fal
 
         $media_db = jackett_prep_media($media_type, $result);
         if (($cfg['search_cache'] && $cache_media_expire)) {
-            $media_cache['words'] = $words;
+            $media_cache['words'] = $search_words;
             $media_cache['updated'] = time();
             $media_cache['ids'] = '';
 
