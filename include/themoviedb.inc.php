@@ -295,8 +295,11 @@ function themoviedb_getTrailer($media_type, $id) {
     $url = "http://api.themoviedb.org/3/{$tmdb_type}/{$id}/videos?api_key=" . $cfg['db_api_token'] . '&language=' . $cfg['LANG'];
 
     $curl_data = curl_get_tmdb($url);
-    $results = array_pop($curl_data['results']);
-
+    if (!empty($curl_data['results']) && count($curl_data['results']) > 0) {
+        $results = array_pop($curl_data['results']);
+    } else {
+        return false;
+    }
     if (isset($results['site']) && $results['site'] == 'YouTube') {
         $video = 'http://www.youtube.com/embed/' . $results['key'];
     } else if (!empty($results['site'])) {
