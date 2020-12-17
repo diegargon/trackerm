@@ -35,12 +35,13 @@ function index_page() {
 
     // Hard disk
     $tdata = [];
-    $tdata['title'] = $LNG['L_HARDDISK'];
+    $tdata['title'] = '';
 
     $lib_stats = getLibraryStats();
-
-    $tdata['content'] = "<span>{$LNG['L_MOVIES']} : " . $lib_stats['movies_size'] . '</span><br/>';
+    $tdata['content'] = "<h3>{$LNG['L_LIBRARY']}</h3>";
+    $tdata['content'] .= "<span>{$LNG['L_MOVIES']} : " . $lib_stats['movies_size'] . '</span><br/>';
     $tdata['content'] .= "<span>{$LNG['L_SHOWS']} : " . $lib_stats['shows_size'] . '</span><br/>';
+    $tdata['content'] .= "<h3>{$LNG['L_HARDDISK']}</h3>";
     $tdata['content'] .= "<span>{$LNG['L_FREE_TOTAL']} {$LNG['L_ON']} {$LNG['L_MOVIES']} : " . human_filesize(disk_free_space($cfg['MOVIES_PATH'])) . ' / ' . human_filesize(disk_total_space($cfg['MOVIES_PATH'])) . '</span><br/>';
     $tdata['content'] .= "<span>{$LNG['L_FREE_TOTAL']} {$LNG['L_ON']} {$LNG['L_SHOWS']} : " . human_filesize(disk_free_space($cfg['SHOWS_PATH'])) . ' / ' . human_filesize(disk_total_space($cfg['SHOWS_PATH'])) . '</span><br/>';
     $titems['col1'][] = getTpl('home-item', $tdata);
@@ -48,7 +49,8 @@ function index_page() {
     // Database
     $tdata = [];
     $tdata['title'] = $LNG['L_DATABASE'];
-    $tdata['content'] = "<span> {$LNG['L_MOVIES']} : {$lib_stats['num_movies']} </span><br/>";
+    $tdata['content'] = "<span> {$LNG['L_SIZE']} : {$lib_stats['db_size']} </span><br/>";
+    $tdata['content'] .= "<span> {$LNG['L_MOVIES']} : {$lib_stats['num_movies']} </span><br/>";
     $tdata['content'] .= "<span> {$LNG['L_SHOWS']} : {$lib_stats['num_shows']} </span><br/>";
     $tdata['content'] .= "<span> {$LNG['L_EPISODES']} : {$lib_stats['num_episodes']} </span>";
     $titems['col1'][] = getTpl('home-item', $tdata);
@@ -67,13 +69,6 @@ function index_page() {
         }
     }
     $tdata['main_class'] = 'home_state_msg';
-    $titems['col2'][] = getTpl('home-item', $tdata);
-
-    // Starting Info
-    $tdata = [];
-    $tdata['title'] = $LNG['L_STARTING'];
-    $tdata['content'] = getfile('STARTING.' . substr($cfg['LANG'], 0, 2));
-    $tdata['main_class'] = 'home_starting';
     $titems['col2'][] = getTpl('home-item', $tdata);
 
     // LATEST info
@@ -104,6 +99,13 @@ function index_page() {
         }
     }
     $tdata['main_class'] = 'home_log';
+    $titems['col2'][] = getTpl('home-item', $tdata);
+
+    // Starting Info
+    $tdata = [];
+    $tdata['title'] = $LNG['L_STARTING'];
+    $tdata['content'] = getfile('STARTING.' . substr($cfg['LANG'], 0, 2));
+    $tdata['main_class'] = 'home_starting';
     $titems['col2'][] = getTpl('home-item', $tdata);
 
     //FIN
@@ -207,11 +209,13 @@ function page_torrents() {
     $page = getTpl('page_torrents', array_merge($tdata, $LNG));
 
     if (!empty($search_movies_torrents)) {
-        $page .= search_media_torrents('movies', trim($search_movies_torrents), 'L_TORRENT');
+        $search['words'] = trim($search_movies_torrents);
+        $page .= search_media_torrents('movies', $search, 'L_TORRENT');
     }
 
     if (!empty($search_shows_torrents)) {
-        $torrent_results = search_media_torrents('shows', trim($search_shows_torrents), 'L_TORRENT');
+        $search['words'] = trim($search_shows_torrents);
+        $torrent_results = search_media_torrents('shows', $search, 'L_TORRENT');
 
         if ($torrent_results !== false) {
             $page .= $torrent_results;

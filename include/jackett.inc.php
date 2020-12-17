@@ -9,8 +9,10 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-function search_media_torrents($media_type, $words, $head = null, $nohtml = false) {
+function search_media_torrents($media_type, $search, $head = null, $nohtml = false) {
     global $cfg, $log, $db;
+
+    $words = $search['words'];
 
     if ($media_type == 'movies') {
         $jackett_search_media_cache = 'jackett_search_movies_cache';

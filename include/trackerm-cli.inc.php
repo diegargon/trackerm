@@ -475,7 +475,8 @@ function wanted_work() {
         $media_type = $wanted['media_type'];
         $log->debug(" Search for : " . $title . '[' . $media_type . ']');
         if ($media_type == 'movies') {
-            $results = search_media_torrents($media_type, $title, null, true);
+            $search['words'] = $title;
+            $results = search_media_torrents($media_type, $search, null, true);
             if (!empty($results) && count($results) > 0) {
                 $valid_results = wanted_check_flags($results);
             } else {
@@ -483,7 +484,8 @@ function wanted_work() {
             }
         } else {
             //$episode = 'S' . $wanted['season'] . 'E' . $wanted['episode'];
-            $results = search_media_torrents($media_type, $title, null, true);
+            $search['words'] = $title;
+            $results = search_media_torrents($media_type, $search, null, true);
             if (!empty($results) && count($results) > 0) {
                 $valid_results = wanted_check_flags($results);
             } else {

@@ -22,6 +22,7 @@ $LNG = [
     'L_COMPLETED' => 'Completed',
     'L_CHECKED' => 'Checked',
     'L_CHECKING_FILES' => 'Checking files',
+    'L_CHECKDAY' => 'Dia.Comp',
     'L_DATABASE' => 'Base de datos',
     'L_DEFAULT' => 'Default',
     'L_DOWNLOAD' => 'Download',
