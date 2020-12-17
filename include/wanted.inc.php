@@ -109,7 +109,17 @@ function wanted_episode($id, $season, $episodes) {
             'episode' => $episode,
             'profile' => (int) $cfg['profile'],
         ];
-        $db->addItemUniqField('wanted', $wanted_item, 'title');
+        $where_check = [
+            'title' => ['value' => $wanted_item['title']],
+            'season' => ['value' => $season],
+            'episode' => ['value' => $episode],
+        ];
+        $result = $db->select('wanted', 'id', $where_check, 'LIMIT 1');
+        $item = $db->fetch($result);
+        $db->finalize($result);
+        if (!$item) {
+            $db->insert('wanted', $wanted_item);
+        }
     }
 }
 
