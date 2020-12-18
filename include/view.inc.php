@@ -274,11 +274,20 @@ function view_seasons($id, $update = false) {
 
     $episode_data = '';
     if ($season) {
-        $episode_data .= '<div class="divTable">';
+        $episode_data .= '<div class="episode_container">';
+        $episode_data .= '<hr/><div class="divTable">';
         $have_episodes = [];
 
+        $item_counter = 0;
         foreach ($items as $item) {
             if ($item['season'] == $season) {
+                if ($item_counter == 12) {
+                    $episode_data .= '</div>'; //Table
+                    $episode_data .= '</div>'; //Container
+                    $episode_data .= '<div class="episode_container">';
+                    $episode_data .= '<hr/><div class="divTable">';
+                    $item_counter = 0;
+                }
                 $have = check_if_have_show($id, $item['season'], $item['episode']);
 
                 $episode_data .= '<div class="divTableRow">';
@@ -299,13 +308,13 @@ function view_seasons($id, $update = false) {
                     $episode_data .= '</div>';
                 }
                 $episode_data .= '</div>';
+                $item_counter++;
             }
         }
-        $episode_data .= '<div class="divTableRow">';
-        $episode_data .= '<div class="divTableCellEpisodes"></div>';
-        $episode_data .= '<div class="divTableCellEpisodes"></div>';
-        $episode_data .= '<div class="divTableCellEpisodes">';
+        $episode_data .= '</div>'; //EPISODE_CONTAINER
+        $episode_data .= '</div>'; //TABLE
 
+        $episode_data .= '<div class="episode_options">';
         $episode_list = '';
         $n_episodes = count($items);
 
@@ -321,10 +330,7 @@ function view_seasons($id, $update = false) {
         if (!empty($episode_list)) {
             $episode_data .= '<a class="episode_link" href="' . $iurl . '&wanted=1&season=' . $season . '&episode=' . $episode_list . '">' . $LNG['L_WANT_ALL'] . '</a>';
         }
-
-        $episode_data .= '</div>'; //CELL
-        $episode_data .= '</div>'; //ROW
-        $episode_data .= '</div>'; //TABLE
+        $episode_data .= '</div>';
     }
 
     $seasons_data .= '<br/>' . $episode_data;

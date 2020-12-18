@@ -220,10 +220,16 @@ button {
     border: 0px solid #ff5b5b;    
 }
 
-.divTableCellID:last-of-type {
+.divTableCellID:last-of-type {}
 
+.episode_container {
+    float:left;
+    border: 0px solid blue;
+    width: 49%;
 }
-
+.episode_options {
+    clear:both;
+}
 .display {
     display: grid;
     border:0px solid #ff5b5b;
