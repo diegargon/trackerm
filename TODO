@@ -12,17 +12,7 @@ TODO
     [FIX] No hay ninguna comprobacion de que la conexion a transmission esta correctamente establecida.
     [IMPROVE] Si se borra manualmente un torrente bajado quedara el bd huerfanos. OPCION ORPHAN. 
         Buscar archivos multimedia en el TORRENT DIR y buscar la forma de determina si coincide con alguno en la base de datos
-        si no coincide moverlo. 
-    [IMPROVE] Allow WANT SHOW, wanted will check for  all torrents one first time, and after every day configure check the
-            the first episode missed
-    [IMPROVE] Added config table, to improve the config with tables and config ui
-    [IMPROVE] Added field file_hash to library.* to improve to hash files in librarys (first bytes/last bytes)
-    [IMPROVE] Added wanted fields custom_words_ignore and custom_words_require , for optional add keywords to each wanted item
-    [IMPROVE] Added wanted field exact_title to force wanted search the exact title "Run" not match "Logans Run"
-    [IMPROVE] Added wanted field track_show for add and keep track of show (automatically download current episodes of a show each week
-    [IMPROVE] Added table library_history  when rescan detect delete files and delete items from database keep basic info on history for added again to library on future
-            the idea of this its help to have files on external devices and add/remove to/from library when is detected without need of identify. Will help to Redownladed 
-             content.
+        si no coincide moverlo.     
 
 [VERY LOW]  
     [IMPROVE] Pagination actually get all results and do a array_slice, now with SQL database when use cache we can  do that better.    
@@ -30,14 +20,17 @@ TODO
     [IMPROVE] rebuild pager/paginacion, messy code.        
     [FIX] Actualmente en busquedas imdb filtramos años de los titulos por que suelen estar mal, el problema es cuando el titulo es un año
         como 1917.    
-    [IMPROVE/WANTED] Añadir la posibilidad de poner ignores y requerimientos aparte de los generales para evitar descargas no deseadas,    
-    [IMPROVE] Wanted Serie, poner en seguimiento nuevos capitulos de series, hay que ver como ver el release date pues en los datos tmdb solo
-        viene el americano. Una forma seria poner una opcion de "Sin Retraso", "Retraso una semana", "Retraso dos a cuatro ..." o un mes.        
+    [IMPROVE/WANTED] Añadir la posibilidad de poner ignores y requerimientos aparte de los generales para evitar descargas no deseadas,
+                        Added wanted fields custom_words_ignore and custom_words_requir
+    [IMPROVE] Wanted Serie, poner en seguimiento "series" o sea nuevos capitulos de series.
+            Added wanted field track_show for add and keep track of show (automatically download current episodes of a show each week)
     [FIX] A la hora de identificar las series siguientes capitulos los identifica por el predictible_title, si hubiera varias series con el mismo titulo habria problemas. 
-    [IMPROVE][LIBRARY] Los shows deberian de tener un registro maestro con los datos y los demas, los archivos ser registro secundarios.
+    [IMPROVE][LIBRARY] Los shows deberian de tener un registro maestro con los datos y los demas, los capitulos ser registro secundarios.
+            Quizas tener dos DBs una library_shows, library_episodes.
     [NEW] Add optional user security for profiles      
     [NEW] Config UI && integrate all config in database, ride config files    
-    [IMPROVE] Add hashes files when scaning the database hash first and last  X bytes for fast hashing
+        Added config table, to improve the config with tables and config ui   
+    [IMPROVE] When reescan files check agains library_history (deleted items) for autoidentify items that came back to library.
 
 [BACKLOG]
     [NEW] mediainfo (read file metadata)
