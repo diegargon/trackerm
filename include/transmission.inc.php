@@ -2,10 +2,10 @@
 
 /**
  *
- *  @author diego@envigo.net
+ *  @author diego/@/envigo.net
  *  @package
  *  @subpackage
- *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
+ *  @copyright Copyright @ 2020 Diego Garcia (diego/@/envigo.net)
  * https://github.com/transmission/transmission/blob/master/extras/rpc-spec.txt
  */
 !defined('IN_WEB') ? exit : true;
