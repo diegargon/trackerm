@@ -105,6 +105,17 @@ function clean_database($media_type, $files, $media) {
     foreach ($media as $item) {
         if (!in_array($item['path'], $files)) {
             $log->addStateMsg('Media ' . $item['title'] . ' seems moved or deleted removing from db');
+            if (isset($item['themoviedb_id'])) {
+                $values['title'] = $item['title'];
+                $values['themoviedb_id'] = $item['themoviedb_id'];
+                $values['media_type'] = $media_type;
+                $values['file_name'] = $item['file_name'];
+                $values['size'] = $item['size'];
+                $values['file_hash'] = $item['file_hash'];
+                isset($item['season']) ? $values['season'] = $item['season'] : null;
+                isset($item['episode']) ? $values['episode'] = $item['episode'] : null;
+                $db->insert('library_history', $values);
+            }
             if ($media_type == 'movies') {
                 $db->deleteItemById('library_movies', $item['id']);
             } else if ($media_type == 'shows') {
