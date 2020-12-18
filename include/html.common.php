@@ -166,7 +166,7 @@ function pager($npage, $nitems, &$topt) {
     /* PAGES */
     $pages = '';
     $items_per_page = $cfg['tresults_columns'] * $cfg['tresults_rows'];
-    $num_pages = $nitems / $items_per_page;
+    $num_pages = ceil($nitems / $items_per_page);
     $search_type = $filter->getUtf8('search_type');
 
     $page = $filter->getString('page');
@@ -185,10 +185,8 @@ function pager($npage, $nitems, &$topt) {
         (!empty($filter->getUtf8('search_shows'))) ? $iurl .= '&search_shows=' . $filter->getUtf8('search_movies') : null;
 
         for ($i = 1; $i <= ceil($num_pages); $i++) {
-            if (
-                    (($i <= ($npage + 3)) && $i >= ($npage - 1) ||
-                    ($i >= (ceil($num_pages) - 3 )) ||
-                    ($i == 1) || ($i == ceil($num_pages) ))
+            if (($i == 1 || $i == $num_pages || $i == $npage) ||
+                    in_range($i, ($npage - 3), ($npage + 3), TRUE)
             ) {
                 $extra = '';
                 $link_npage_class = "num_pages_link";

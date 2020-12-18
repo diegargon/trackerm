@@ -50,6 +50,7 @@ require_once('include/mediadb.inc.php');
 require_once('include/jackett.inc.php');
 require_once('include/wanted.inc.php');
 require_once('vendor/autoload.php');
+require_once('include/utils.inc.php');
 
 global $trans;
 $trans = new TorrentServer($cfg); //FIXME: Connections results checks
