@@ -7,6 +7,8 @@
  *  @subpackage
  *  @copyright Copyright @ 2020 Diego Garcia (diego/@/envigo.net)
  */
+!defined('IN_WEB') ? exit : true;
+
 require_once('include/common.inc.php');
 
 //while we haven't ui for create users we check $cfg['profiles'] and add to database
