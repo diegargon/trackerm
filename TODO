@@ -12,8 +12,7 @@ TODO
     [FIX] No hay ninguna comprobacion de que la conexion a transmission esta correctamente establecida.
     [IMPROVE] Si se borra manualmente un torrente bajado quedara el bd huerfanos. OPCION ORPHAN. 
         Buscar archivos multimedia en el TORRENT DIR y buscar la forma de determina si coincide con alguno en la base de datos
-        si no coincide moverlo.
-    [IMPROVE] Two search_cache_expire  search_cache_expire and news_cache_expire    
+        si no coincide moverlo. 
     [IMPROVE] Allow WANT SHOW, wanted will check for  all torrents one first time, and after every day configure check the
             the first episode missed
     [IMPROVE] Added config table, to improve the config with tables and config ui

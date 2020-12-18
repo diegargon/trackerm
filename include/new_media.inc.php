@@ -26,11 +26,11 @@ function page_new_media($media_type) {
         $where['words'] = $media_cache_check = $db->getItemByField($search_cache_db, 'words', '');
         !isset($media_cache_check['updated']) ? $media_cache_check['updated'] = 0 : null;
 
-        if ((time() > ($media_cache_check['updated'] + $cfg['search_cache_expire']))) {
+        if ((time() > ($media_cache_check['updated'] + $cfg['new_cache_expire']))) {
             $log->debug("News: $media_type cache expire, Requesting");
             $cache_media_expire = 1;
         } else {
-            $log->debug("News: $media_type using cache " . ( ($media_cache_check['updated'] + $cfg['search_cache_expire']) - time()));
+            $log->debug("News: $media_type using cache " . ( ($media_cache_check['updated'] + $cfg['new_cache_expire']) - time()));
             $ids = explode(',', $media_cache_check['ids']);
             if (empty($ids) || count($ids) <= 0) {
                 return false;

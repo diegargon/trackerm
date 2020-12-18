@@ -134,9 +134,10 @@ $cfg['SYSLOG_LEVEL'] = 'LOG_DEBUG';
 //Path to unrar utility
 $cfg['UNRAR_PATH'] = '/usr/bin/unrar';
 
-//Cache torrent searching (news too)
+//Cache torrent searching && news
 $cfg['search_cache'] = 1;
 $cfg['search_cache_expire'] = 3600; //seconds
+$cfg['new_cache_expire'] = 3600; //seconds
 
 /* * ********************************** */
 /* PROBABLY NOT NEED CONFIG BELOW HERE */
