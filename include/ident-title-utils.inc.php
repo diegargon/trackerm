@@ -231,6 +231,9 @@ function getFileTags($file_name) {
     } else if (stripos($file_name, 'AC3') !== false) {
         $tags .= "[AC3]";
     }
+    if (stripos($file_name, 'DTS 5.1') !== false) {
+        $tags .= "[DTS 5.1]";
+    }
     if (stripos($file_name, 'DVDRip') !== false) {
         $tags .= "[DVDRip]";
     } else if (stripos($file_name, 'DVD') !== false) {
