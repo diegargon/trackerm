@@ -62,6 +62,7 @@ function page_new_media($media_type) {
     if (!empty($res_media_db)) {
         $topt['search_type'] = $media_type;
         ($media_type == 'movies') ? $head = 'L_MOVIES' : $head = 'L_SHOWS';
+        $res_media_db = mix_media_res($res_media_db);
         $page_news_media = buildTable($head, $res_media_db, $topt);
         $page_news .= $page_news_media;
     }
@@ -85,4 +86,85 @@ function page_new_media($media_type) {
     }
 
     return $page_news;
+}
+
+function mix_media_res($res_media_db) {
+    $indexers = [];
+    $media = [];
+
+    foreach ($res_media_db as $item) {
+        $indexers[$item['source']][] = $item;
+    }
+    $max_items_by_indexer = 0;
+    $total_indexers = count($indexers);
+    $indexers_names = [];
+    foreach ($indexers as $key => $indexer) {
+        $indexers_names[] = $key;
+        $total_indexer = count($indexer);
+        if ($total_indexer > $max_items_by_indexer) {
+            $max_items_by_indexer = $total_indexer;
+        }
+    }
+    /*  order two by indexer
+      for ($i = 0; $i <= ($max_items_by_indexer) / 2; $i++) {
+      foreach ($indexers as $indexer) {
+      isset($indexer[$i]) ? $media[] = $indexer[$i] : null;
+      isset($indexer[$i + 1]) ? $media[] = $indexer[$i + 1] : null;
+      }
+      }
+     */
+
+    $total_indexers = count($indexers);
+    $last_item = null;
+    $indexer_pointer = 0;
+    $i = 0;
+
+    //testing func: must break when all arrays are empty, for safe while testing break after 10000 too
+    //That walk throught indexers arrays for mix results, and if in the same indexers (next entry) the  result have same title
+    //its added too, if not change to another indexer for mix results.
+    //Probably must be a better way of doing this. And probably tomorrow i don't
+    //known how works this messy... and is better rewrite again than found a maybe in the future bug.
+
+    while ($i != 10000) {
+        if (isset($indexers[$indexers_names[$indexer_pointer]][0])) {
+            $item = $indexers[$indexers_names[$indexer_pointer]][0];
+            if (!isset($last_item['title'])) {
+                $media[] = array_shift($indexers[$indexers_names[$indexer_pointer]]);
+                $last_item = $item;
+            } else if (isset($last_item['title']) && (getFileTitle($item['title']) == getFileTitle($last_item['title']))) {
+                $media[] = array_shift($indexers[$indexers_names[$indexer_pointer]]);
+                $last_item = $item;
+            } else {
+                $last_item = null;
+                if ($indexer_pointer < ($total_indexers - 1)) {
+                    $indexer_pointer++;
+                } else {
+                    $indexer_pointer = 0;
+                }
+            }
+        } else {
+            if ($indexer_pointer < ($total_indexers - 1)) {
+                $indexer_pointer++;
+            } else {
+                $indexer_pointer = 0;
+            }
+        }
+
+        $elements_rest = 0;
+        foreach ($indexers_names as $indexer_name) {
+            if (count($indexers[$indexer_name]) > 0) {
+                $elements_rest = 1;
+                break; //for
+            }
+        }
+        if ($elements_rest == 0) {
+            break; //while
+        }
+        $i++;
+    }
+
+
+
+    //return $res_media_db;
+    return $media;
 }
