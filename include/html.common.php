@@ -175,11 +175,11 @@ function pager($npage, $nitems, &$topt) {
         $iurl = '?page=' . $page;
 
         (!empty($filter->getString('type'))) ? $iurl .= '&type=' . $filter->getString('type') : null;
-        (!empty($filter->getInt('id'))) ? $iurl .= '&id=' . $filter->getInt('type') : null;
+        (!empty($filter->getInt('id'))) ? $iurl .= '&id=' . $filter->getInt('id') : null;
         (!empty($filter->getUtf8('search_shows_torrents'))) ? $iurl .= '&search_shows_torrents=' . $filter->getUtf8('search_shows_torrents') : null;
         (!empty($filter->getUtf8('search_movies_torrents'))) ? $iurl .= '&search_movies_torrents=' . $filter->getUtf8('search_movies_torrents') : null;
         (!empty($_GET['more_movies'])) ? $iurl .= '&more_movies=1' : null;
-        (!empty($_GET['more_movies'])) ? $iurl .= '&more_torrents=1' : null;
+        (!empty($_GET['more_torrents'])) ? $iurl .= '&more_torrents=1' : null;
         (!empty($filter->getUtf8('search_movie_db'))) ? $iurl .= '&search_movie_db=' . $filter->getUtf8('search_movie_db') : null;
         (!empty($filter->getUtf8('search_movies'))) ? $iurl .= '&search_movies=' . $filter->getUtf8('search_movies') : null;
         (!empty($filter->getUtf8('search_shows'))) ? $iurl .= '&search_shows=' . $filter->getUtf8('search_movies') : null;
