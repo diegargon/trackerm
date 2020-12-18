@@ -52,7 +52,7 @@ function setPrefsItem($key, $value) {
     $where['pref_name'] = ['value' => $key];
 
     $result = $db->select('preferences', null, $where, 'LIMIT 1');
-
+    $db->finalize($result);
     $prefs = $db->fetch($result);
 
     if ($prefs) {

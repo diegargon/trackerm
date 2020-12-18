@@ -252,7 +252,7 @@ function view_seasons($id, $update = false) {
 
         $results = $db->select('shows_details', null, $where);
         $items = $db->fetchAll($results);
-        $db->finalize($results);
+
         if ($items === false || $update) {
             $items = mediadb_getSeasons($id);
         }
