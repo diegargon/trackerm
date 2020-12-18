@@ -68,10 +68,8 @@ function transmission_scan() {
             isset($tor['wanted_id']) ? $item['wanted_id'] = $tor['wanted_id'] : null;
 
             if ($item['media_type'] == 'movies') {
-                $log->debug(" Movie seeding detected tid:[{$item['tid']}] begin linking.. " . $item['title']);
                 MovieJob($item, true);
             } else if ($item['media_type'] == 'shows') {
-                $log->debug(" Show seeeding detected tid:[{$item['tid']}] begin linking... " . $item['title']);
                 ShowJob($item, true);
             }
         }
@@ -172,7 +170,6 @@ function MovieJob($item, $linked = false) {
                 $final_dest_path = $dest_path . '/' . $new_file_name;
                 $i++;
             } else if (file_exists($final_dest_path) && $linked) {
-                //$log->debug(" Linking  " . basename($final_dest_path) . " already done... skipping");
                 continue;
             }
 
@@ -267,7 +264,6 @@ function ShowJob($item, $linked = false) {
                 $final_dest_path = $dest_path . '/' . $new_file_name;
                 $i++;
             } else if (file_exists($final_dest_path) && $linked) {
-                //$log->debug(" Linking " . basename($final_dest_path) . " already done... skipping");
                 continue;
             }
 
