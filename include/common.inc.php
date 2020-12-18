@@ -41,7 +41,6 @@ $filter = new Filter();
 require_once('include/curl.inc.php');
 require_once('include/file.utils.php');
 require_once('include/transmission.class.php');
-require_once('include/transmission.inc.php');
 require_once('include/library-common.inc.php');
 require_once('include/ident-title-utils.inc.php');
 require_once('include/view.inc.php');
