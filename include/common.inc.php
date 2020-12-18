@@ -28,7 +28,7 @@ require_once('include/logging.class.php');
 global $log;
 $log = new Log($cfg);
 
-require_once('include/db.inc.php');
+require_once('include/db.class.php');
 global $db;
 $db = new DB($cfg['DB_FILE'], $log);
 $db->connect();
