@@ -51,6 +51,7 @@ function getFileTitle($file) {
     $regex .= '(?!M1080)'; // M1080
     $regex .= '(?!BD1080)'; // BD1080
     $regex .= '(?!2160p)'; // 2160p
+    $regex .= '(?!4K)'; //4K
     $regex .= '(?!UHD)'; // UHD
     $regex .= '(?!HD4K)'; //HD4K
     $regex .= '(?!Xvid)'; //XviD
@@ -59,7 +60,6 @@ function getFileTitle($file) {
     $regex .= '(?!HDRip)'; //HDRip
     $regex .= '(?!WEBRip)'; //WebRip
     $regex .= '(?!Bluray)'; //Bluray
-    $regex .= '(?!4k-hdr)'; // 4k-hdr
     $regex .= '(?!\[spanish\])';
     $regex .= '(?!\[english\])';
     $regex .= '(?!multi\senglish)'; // multi english
