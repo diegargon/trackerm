@@ -41,7 +41,7 @@ function rebuild($media_type, $path) {
             $year = getFileYear($file_name);
             $tags = getFileTags($file_name);
             $ext = substr($file_name, -3);
-
+            $hash = file_hash($file);
 
             $items[$i] = [
                 'ilink' => $ilink,
@@ -50,6 +50,7 @@ function rebuild($media_type, $path) {
                 'predictible_title' => ucwords($predictible_title),
                 'title' => '',
                 'title_year' => $year,
+                'file_hash' => $hash,
                 'path' => $file,
                 'tags' => $tags,
                 'ext' => $ext,

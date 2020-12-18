@@ -170,3 +170,17 @@ function check_file_encrypt($type, $file) {
 
     return false;
 }
+
+function file_hash($file) {
+    $length = 2048;
+
+    $fp = fopen($file, 'rb');
+    $first_data = fread($fp, $length);
+    fseek($fp, ($length * -1), SEEK_END);
+    $last_data = fgets($fp, 50);
+    fclose($fp);
+
+    $data = $first_data . $last_data;
+
+    return hash('md5', $data);
+}

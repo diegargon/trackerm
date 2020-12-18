@@ -724,6 +724,30 @@ function update_trailers() {
     }
 }
 
+/* That function will be not necesary in the future, since new movies already hashed on rebuild */
+
+function hash_missing() {
+    global $db;
+
+    $query = $db->query('SELECT id,path FROM library_movies WHERE file_hash IS NULL LIMIT 50');
+    $results = $db->fetchAll($query);
+
+    foreach ($results as $item) {
+        $hash = file_hash($item['path']);
+        $update_query = "update library_movies SET file_hash='$hash' WHERE id='{$item['id']}' LIMIT 1";
+        $db->query($update_query);
+    }
+
+    $query = $db->query('SELECT id,path FROM library_shows WHERE file_hash IS NULL LIMIT 50');
+    $results = $db->fetchAll($query);
+
+    foreach ($results as $item) {
+        $hash = file_hash($item['path']);
+        $update_query = "update library_shows SET file_hash='$hash' WHERE id='{$item['id']}' LIMIT 1";
+        $db->query($update_query);
+    }
+}
+
 function leave($msg = false) {
     global $log;
 
