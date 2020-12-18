@@ -1,5 +1,7 @@
 ## Latest / News (Relevant)
 
+[18/12] Fixed recursive directory bug that prevent do automatically file scan
+        Now trackerm-cli autoscan the library for new items when exec
 [18/12] Improve wanted, now search for exact title  to avoid wrong downloads
 [17/12] Important! trackerm change how handle wanted shows downloads for improve in next releases, you must remove manually the 
         shows/episodes in your wanted list and add again. If not the Automatic download service can't find your wanted shows.

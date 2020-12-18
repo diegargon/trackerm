@@ -10,28 +10,33 @@
 // https://www.php.net/manual/en/function.glob.php#111217
 !defined('IN_WEB') ? exit : true;
 
-function findFiles($directory, $extensions = array()) {
-
-    function glob_recursive($directory, &$directories = array()) {
-        foreach (glob($directory, GLOB_ONLYDIR | GLOB_NOSORT) as $folder) {
-            $directories[] = $folder;
-            glob_recursive("{$folder}/*", $directories);
-        }
-    }
-
-    glob_recursive($directory, $directories);
-    $files = array();
-    foreach ($directories as $directory) {
-        foreach ($extensions as $extension) {
-            foreach (glob("{$directory}/*.{$extension}") as $file) {
-                $files[] = $file;
-            }
+function findFiles($directory, $extensions = []) {
+    $content = getDirContents($directory);
+    $files = [];
+    foreach ($content as $file) {
+        $ext = substr($file, -3);
+        if (in_array($ext, $extensions)) {
+            $files[] = $file;
         }
     }
     return $files;
 }
 
-#
+function getDirContents($dir, &$results = []) {
+    $files = scandir($dir);
+
+    foreach ($files as $key => $value) {
+        $path = realpath($dir . DIRECTORY_SEPARATOR . $value);
+        if (!is_dir($path)) {
+            $results[] = $path;
+        } else if ($value != "." && $value != "..") {
+            getDirContents($path, $results);
+            $results[] = $path;
+        }
+    }
+
+    return $results;
+}
 
 function human_filesize($bytes, $decimals = 2) {
     $sz = 'BKMGTP';

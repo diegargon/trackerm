@@ -31,9 +31,8 @@ transmission_scan();
 $log->debug("Wanted work...");
 wanted_work();
 
-//FIXME: Error glob_recursive file_search
-//rebuild('movies', $cfg['MOVIES_PATH']);
-//rebuild('shows', $cfg['SHOWS_PATH']);
+rebuild('movies', $cfg['MOVIES_PATH']);
+rebuild('shows', $cfg['SHOWS_PATH']);
 update_trailers();
 
 $log->info("trackerm automatic service finish...");

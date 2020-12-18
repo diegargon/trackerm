@@ -1,3 +1,5 @@
+0.0.76 findFiles change checking if works ok
+0.0.75 Change how wanted shows is handle (need remove wanted shows and add again
 0.0.74 Switch to SQLite
 0.0.73 You must remove wanted.db file in cache.
 0.0.72

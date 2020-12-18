@@ -3,7 +3,6 @@ TODO
 [HIGH]
     [FIX] security on the code
     [IMPROVE] fix all messy code due fast coding
-    [FIX] filesearch  (recursive gloob error) when launch  rebuild(shows) rebuild(movies) at same time.
     [FIX] Clean wanted.db/direct torrents that was delete outside app
 
 [MED]  
