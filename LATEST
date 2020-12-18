@@ -1,5 +1,7 @@
 ## Latest / News (Relevant)
 
+[18/12] Add mix new indexers releases for avoid display all new releases per indexer consecutively  
+        Fix bug not working pager on view extra torrents.
 [18/12] Fixed recursive directory bug that prevent do automatically file scan
         Now trackerm-cli autoscan the library for new items when exec
 [18/12] Improve wanted, now search for exact title  to avoid wrong downloads

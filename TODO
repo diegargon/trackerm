@@ -28,8 +28,7 @@ TODO
 [VERY LOW]  
     [IMPROVE] Pagination actually get all results and do a array_slice, now with SQL database when use cache we can  do that better.    
     [FIX/IMPROVE] fechas normalizar a formato comun    
-    [IMPROVE] rebuild pager/paginacion, messy code.    
-    [NEW] mediainfo (read file metadata)
+    [IMPROVE] rebuild pager/paginacion, messy code.        
     [FIX] Actualmente en busquedas imdb filtramos años de los titulos por que suelen estar mal, el problema es cuando el titulo es un año
         como 1917.    
     [IMPROVE/WANTED] Añadir la posibilidad de poner ignores y requerimientos aparte de los generales para evitar descargas no deseadas,    
@@ -38,11 +37,11 @@ TODO
     [FIX] A la hora de identificar las series siguientes capitulos los identifica por el predictible_title, si hubiera varias series con el mismo titulo habria problemas. 
     [IMPROVE][LIBRARY] Los shows deberian de tener un registro maestro con los datos y los demas, los archivos ser registro secundarios.
     [NEW] Add optional user security for profiles      
-    [NEW] Config UI && integrate all config in database, ride config files
-    [IMPROVE] News: Mixed Indexers elements on New now present by indexer order
+    [NEW] Config UI && integrate all config in database, ride config files    
     [IMPROVE] Add hashes files when scaning the database hash first and last  X bytes for fast hashing
 
 [BACKLOG]
+    [NEW] mediainfo (read file metadata)
     [CHANGE] Change actual Transmission rpc api to something basic, since some basic is enough and the actual have alot of deps 
     [NEW/IMPROVE] En el select de identificar estaria bien mostrar las caractulas al poner encima
     [NEW] opcional: mostrar otros ratigns, filmaffinity, imdb
