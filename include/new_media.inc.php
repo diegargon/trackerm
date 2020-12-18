@@ -163,8 +163,5 @@ function mix_media_res($res_media_db) {
         $i++;
     }
 
-
-
-    //return $res_media_db;
     return $media;
 }
