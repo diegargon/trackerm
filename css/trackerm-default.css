@@ -312,6 +312,7 @@ button {
 }
 
 .view_poster_container {
+    position:relative;
     border:0px solid blue;
     padding-left:2%;
 }
@@ -622,8 +623,8 @@ button {
 
 .guessed_poster {
   position: absolute;
-  top: 23px;
-  left: -5px;    
+  top: 15px;
+  left: 0px;    
   font-weight: bold;
   transform: rotate(-45deg);
   color: chartreuse;

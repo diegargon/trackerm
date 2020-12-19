@@ -21,21 +21,27 @@ function view() {
 
     if ($type == 'movies_library') {
         $t_type = 'library_movies';
+        $media_type = 'movies';
         $other['reidentify'] = 1;
         $other['deletereg'] = 1;
     } else if ($type == 'shows_library') {
         $t_type = 'library_shows';
+        $media_type = 'shows';
         $other['reidentify'] = 1;
         $other['deletereg'] = 1;
     } else if ($type == 'movies_torrent') {
         $t_type = 'jackett_movies';
+        $media_type = 'movies';
     } else if ($type == 'shows_torrent') {
         $t_type = 'jackett_shows';
+        $media_type = 'shows';
     } else if ($type == 'movies_db') {
+        $media_type = 'movies';
         $other['wanted'] = 1;
         $t_type = 'tmdb_search';
     } else if ($type == 'shows_db') {
         $t_type = 'tmdb_search';
+        $media_type = 'shows';
     } else {
         return false;
     }
@@ -94,6 +100,22 @@ function view() {
         $cache_img_response = cacheImg($item['poster']);
         if ($cache_img_response !== false) {
             $item['poster'] = $cache_img_response;
+        }
+    }
+
+    if (empty($item['poster'])) {
+        $item['poster'] = $cfg['img_url'] . '/not_available.jpg';
+        empty($item['media_type']) ? $item['media_type'] = $media_type : null;
+
+        $poster = mediadb_guessPoster($item);
+        if (!empty($poster)) {
+            if ($cfg['CACHE_IMAGES']) {
+                $cache_img_response = cacheImg($poster);
+                if ($cache_img_response !== false) {
+                    $item['poster'] = $cache_img_response;
+                }
+            }
+            $item['guessed_poster'] = 1;
         }
     }
     $other['extra'] = '';

@@ -12,6 +12,11 @@
     <div class="view_content">
         <div class="view_poster_container">
             <img class="view_poster" src="<?= isset($tdata['poster']) ? $tdata['poster'] : null ?>" alt=""/>
+            <?php
+            if (!empty($tdata['guessed_poster'])) {
+                ?>
+                <div class="guessed_poster"><?= $tdata['L_POSTER_GUESSED'] ?></div>
+            <?php } ?>
         </div>
 
         <div class="view_description_container">

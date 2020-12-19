@@ -137,8 +137,8 @@ function build_item($item, $detail = null) {
         $page .= '<a href="?page=view&id=' . $item['id'] . '&type=' . $item['ilink'] . '">' . $item['title'] . '</a>';
     } else if ($details == 1) {
         if (empty($item['poster'])) {
+            $item['poster'] = $cfg['img_url'] . '/not_available.jpg';
             $poster = mediadb_guessPoster($item);
-            $item['poster'] = $poster;
             if (!empty($poster)) {
                 if ($cfg['CACHE_IMAGES']) {
                     $cache_img_response = cacheImg($poster);
@@ -147,8 +147,6 @@ function build_item($item, $detail = null) {
                     }
                 }
                 $item['guessed_poster'] = 1;
-            } else {
-                $item['poster'] = $cfg['img_url'] . '/not_available.jpg';
             }
         } else {
             if ($cfg['CACHE_IMAGES']) {
