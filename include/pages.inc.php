@@ -195,7 +195,7 @@ function page_tmdb() {
         !empty($shows) ? $page .= buildTable('L_DB', $shows, $topt) : null;
     }
     if (!isset($_GET['search_movies']) && !isset($_GET['search_shows'])) {
-        $topt['nopages'] = 1;
+        $topt['no_pages'] = 1;
         $results = mediadb_getTrending();
         ($cfg['WANT_MOVIES']) ? $page .= buildTable('L_TRENDING_MOVIES', $results['movies'], $topt) : null;
         ($cfg['WANT_SHOWS']) ? $page .= buildTable('L_TRENDING_SHOWS', $results['shows'], $topt) : null;
