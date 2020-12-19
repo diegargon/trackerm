@@ -55,6 +55,7 @@ $LNG = [
     'L_FINISHED' => 'Finalizado',
     'L_FREE_TOTAL' => 'Libre/Total',
     'L_GLOBAL_TAGS' => 'Tags Globales',
+    'L_GUESSED' => 'Adivinado',
     'L_HOME' => 'Home',
     'L_HARDDISK' => 'Disco Duro',
     'L_HAVEIT' => 'La tengo!',
