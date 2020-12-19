@@ -339,7 +339,7 @@ function update_db($from) {
       NEXT UPDATES:
       remove from wanted ignore field, not need
       tmdb_search: add normalize_title and add the title without accents,_:.,tolower?; check iconv func
-      perhaps add in all tables with title the normalize
+      perhaps add in all tables with title the normalize, then modify the search in database title for use normalize_title.
      */
     /*
       if ($from < 4) {

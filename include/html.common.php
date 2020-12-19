@@ -137,16 +137,19 @@ function build_item($item, $detail = null) {
         $page .= '<a href="?page=view&id=' . $item['id'] . '&type=' . $item['ilink'] . '">' . $item['title'] . '</a>';
     } else if ($details == 1) {
         if (empty($item['poster'])) {
+
             $item['poster'] = $cfg['img_url'] . '/not_available.jpg';
-            $poster = mediadb_guessPoster($item);
-            if (!empty($poster)) {
-                if ($cfg['CACHE_IMAGES']) {
-                    $cache_img_response = cacheImg($poster);
-                    if ($cache_img_response !== false) {
-                        $item['poster'] = $cache_img_response;
+            if (!isset($item['themoviedb_id'])) {
+                $poster = mediadb_guessPoster($item);
+                if (!empty($poster)) {
+                    if ($cfg['CACHE_IMAGES']) {
+                        $cache_img_response = cacheImg($poster);
+                        if ($cache_img_response !== false) {
+                            $item['poster'] = $cache_img_response;
+                        }
                     }
+                    $item['guessed_poster'] = 1;
                 }
-                $item['guessed_poster'] = 1;
             }
         } else {
             if ($cfg['CACHE_IMAGES']) {
@@ -154,6 +157,13 @@ function build_item($item, $detail = null) {
                 if ($cache_img_response !== false) {
                     $item['poster'] = $cache_img_response;
                 }
+            }
+        }
+
+        if (!isset($item['themoviedb_id']) && empty($item['trailer'])) {
+            $trailer = mediadb_guessTrailer($item);
+            if (!empty($trailer)) {
+                $item['trailer'] = $trailer;
             }
         }
 
