@@ -221,10 +221,10 @@ function jackett_get_categories($categories) {
         }
         if (isset($category['subcat'])) {
             foreach ($category['subcat'] as $subcat) {
-                if (isset($subcat['@attributes'])) {
-                    if (isset($subcat['@attributes']['id'])) {
-                        $cats[] = $subcat['@attributes']['id'];
-                    }
+                if (isset($subcat['@attributes']['id'])) {
+                    $cats[] = $subcat['@attributes']['id'];
+                } else if (isset($subcat['id'])) {
+                    $cats[] = $subcat['id'];
                 }
             }
         }
