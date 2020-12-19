@@ -42,15 +42,13 @@ function page_new_media($media_type) {
     }
 
     if (!$cfg['search_cache'] || $cache_media_expire) {
+
         foreach ($cfg['jackett_indexers'] as $indexer) {
             $caps = jackett_get_caps($indexer);
             $categories = jackett_get_categories($caps['categories']['category']);
-
-            if ($cache_media_expire) {
-                $results = '';
-                $results = jackett_search_media($media_type, '', $indexer, $categories);
-                $results ? $media_res[$indexer] = $results : null;
-            }
+            $results = '';
+            $results = jackett_search_media($media_type, '', $indexer, $categories);
+            $results ? $media_res[$indexer] = $results : null;
         }
     }
 
