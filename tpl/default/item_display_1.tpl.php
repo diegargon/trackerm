@@ -13,6 +13,11 @@
         <a href="?page=view&id=<?= $tdata['id'] ?>&type=<?= $tdata['ilink'] ?> ">
             <img class="img_poster_preview"  alt="" src="<?= $tdata['poster'] ?>"/>
         </a>
+        <?php
+        if (!empty($tdata['guessed_poster'])) {
+            ?>
+            <div class="guessed_poster"><?= $tdata['L_POSTER_GUESSED'] ?></div>
+        <?php } ?>
     </div>
     <div class="item_details">
         <div class="item_title"><?= $tdata['title'] ?>

@@ -163,6 +163,9 @@ button {
     /* vertical-align:top; */
 }
 
+.divTableCell {
+    position: relative;    
+}
 .divTableHeading {
     background-color: #EEE;
     display: table-header-group;
@@ -238,6 +241,7 @@ button {
 }
 
 .poster_preview{
+    /* position: relative; */
     display: inline-block;
     text-align: center; 
 }
@@ -614,4 +618,13 @@ button {
 
 .tor_general_options , .tor_action {
     display:inline-flex;
+}
+
+.guessed_poster {
+  position: absolute;
+  top: 23px;
+  left: -5px;    
+  font-weight: bold;
+  transform: rotate(-45deg);
+  color: chartreuse;
 }

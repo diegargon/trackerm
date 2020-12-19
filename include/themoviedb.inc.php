@@ -106,10 +106,22 @@ function themoviedb_MediaPrep($media_type, $items) {
     }
 
     if (!empty($fitems)) {
-        $db->addItemsUniqField('tmdb_search', $fitems, 'themoviedb_id');
 
         foreach ($fitems as $key => $fitem) {
-            $fitems[$key]['id'] = $db->getIdByField('tmdb_search', 'themoviedb_id', $fitem['themoviedb_id']);
+            $where_select['media_type'] = ['value' => $fitem['media_type']];
+            $where_select['themoviedb_id'] = ['value' => $fitem['themoviedb_id']];
+            $results = $db->select('tmdb_search', 'id', $where_select, 'LIMIT 1');
+            $res_item = $db->fetch($results);
+            if (empty($res_item) || count($res_item) < 1) {
+                $db->insert('tmdb_search', $fitem);
+                $fitems[$key]['id'] = $db->getLastId();
+            } else {
+                if (!empty($res_item)) {
+                    $fitems[$key]['id'] = $res_item['id'];
+                    $db->update('tmdb_search', $fitem, ['id' => ['value' => $res_item['id']]]);
+                }
+            }
+            $db->finalize($results);
         }
     }
 
