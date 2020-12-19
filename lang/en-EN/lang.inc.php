@@ -17,6 +17,7 @@ $LNG = [
     'L_ADD' => 'Add',
     'L_ADDED_SUCCESSFUL' => 'Added Successful',
     'L_COLUMNS' => 'Columnss',
+    'L_CONFIG' => 'Config',
     'L_CATEGORY' => 'Categories',
     'L_CLEAR' => 'Clear',
     'L_COMPLETED' => 'Completed',

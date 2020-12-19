@@ -14,6 +14,12 @@ function index_page() {
 
     $titems = [];
 
+    // Config
+    $tdata = [];
+    $tdata['title'] = '';
+    $tdata['content'] = '<a class="action_link" href="index.php?page=config">' . $LNG['L_CONFIG'] . '</a>';
+    $titems['col1'][] = getTpl('home-item', $tdata);
+
     // General Info
     $tdata = [];
     $tdata['title'] = $LNG['L_IDENTIFIED'] . ': ' . strtoupper($user['username']);
@@ -383,6 +389,16 @@ function page_transmission() {
     }
 
     $page .= getTpl('transmission-body', array_merge($tdata, $LNG));
+
+    return $page;
+}
+
+function page_config() {
+    global $cfg;
+    $page = '';
+    $config = new Config();
+
+    $page .= $config->display($cfg);
 
     return $page;
 }

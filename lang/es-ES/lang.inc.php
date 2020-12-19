@@ -20,6 +20,7 @@ $LNG = [
     'L_CATEGORY' => 'Categorias',
     'L_CLEAR' => 'Limpiar',
     'L_COMPLETED' => 'Completado',
+    'L_CONFIG' => 'Configuración',
     'L_CHECKED' => 'Comprobado',
     'L_CHECKING_FILES' => 'Comprobando archivos',
     'L_CHECKDAY' => 'CheckDay',

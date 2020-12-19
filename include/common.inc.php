@@ -17,6 +17,7 @@ if (!file_exists('/etc/trackerm.conf')) {
 require('/etc/trackerm.conf');
 
 require_once('config/config.priv.php');
+require_once('include/config.class.php');
 
 setlocale(LC_ALL, $cfg['LOCALE']);
 

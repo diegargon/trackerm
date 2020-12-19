@@ -54,6 +54,8 @@ if (!isset($req_page) || $req_page == '' || $req_page == 'index') {
     page_download();
 } else if ($req_page == 'transmission') {
     $body .= page_transmission();
+} else if ($req_page == 'config') {
+    $body .= page_config();
 } else {
     $box_msg = ['title' => $LNG['L_ERROR'] . ' : ' . $LNG['L_NOEXISTS'], 'body' => $LNG['L_PAGE_NOEXISTS']];
     $body .= msg_box($box_msg);
