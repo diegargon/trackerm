@@ -20,7 +20,7 @@ function create_db() {
 
     $query = [
         "app_name" => 'trackerm',
-        "version" => 3,
+        "version" => 4,
     ];
 
     $db->insert('db_info', $query);
@@ -54,6 +54,7 @@ function create_db() {
                     "cfg_value" VARCHAR NOT NULL,
                     "cfg_perms" VARCHAR NULL,
                     "cfg_desc" VARCHAR NULL,
+                    "type" VARCHAR NULL,
                     "modify" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                     UNIQUE (cfg_key)
@@ -62,9 +63,10 @@ function create_db() {
     // TMDB_SEARCH
     $db->query('CREATE TABLE IF NOT EXISTS "tmdb_search" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                    "themoviedb_id" INTEGER NOT NULL UNIQUE,
+                    "themoviedb_id" INTEGER NOT NULL,
                     "ilink" VARCHAR NULL,
                     "title" VARCHAR NOT NULL,
+                    "clean_title" VARCHAR NULL,
                     "original_title" VARCHAR NULL,
                     "media_type" VARCHAR NULL,
                     "rating" REAL NULL,
@@ -78,7 +80,8 @@ function create_db() {
                     "release" VARCHAR NULL,
                     "in_library" INT NULL,
                     "updated" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-                    "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+                    "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                    UNIQUE(themoviedb_id, media_type)
                 )');
 
     // LOG MSGS
@@ -94,6 +97,7 @@ function create_db() {
     $db->query('CREATE TABLE IF NOT EXISTS "library_movies" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                     "title" VARCHAR NULL,
+                    "clean_title" VARCHAR NULL,
                     "themoviedb_id" INTEGER NULL UNIQUE,
                     "file_name" VARCHAR NOT NULL UNIQUE,
                     "predictible_title" VARCHAR NULL,
@@ -123,6 +127,7 @@ function create_db() {
     $db->query('CREATE TABLE IF NOT EXISTS "library_shows" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                     "title" VARCHAR NULL,
+                    "clean_title" VARCHAR NULL,
                     "themoviedb_id" INTEGER NULL,
                     "file_name" VARCHAR NOT NULL UNIQUE,
                     "predictible_title" VARCHAR NULL,
@@ -154,6 +159,7 @@ function create_db() {
     $db->query('CREATE TABLE IF NOT EXISTS "library_history" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                     "title" VARCHAR NULL,
+                    "clean_title" VARCHAR NULL,
                     "themoviedb_id" INTEGER NULL,
                     "media_type" VARCHAR NULL,
                     "file_name" VARCHAR NOT NULL,
@@ -169,6 +175,7 @@ function create_db() {
     $db->query('CREATE TABLE IF NOT EXISTS "jackett_movies" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                     "title" VARCHAR NOT NULL,
+                    "clean_title" VARCHAR NULL,
                     "guid" VARCHAR NOT NULL UNIQUE,
                     "download" VARCHAR NOT NULL,
                     "ilink" VARCHAR NULL,
@@ -188,6 +195,7 @@ function create_db() {
     $db->query('CREATE TABLE IF NOT EXISTS "jackett_shows" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                     "title" VARCHAR NOT NULL,
+                    "clean_title" VARCHAR NULL,
                     "guid" VARCHAR NOT NULL UNIQUE,
                     "download" VARCHAR NOT NULL,
                     "ilink" VARCHAR NULL,
@@ -228,6 +236,7 @@ function create_db() {
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                     "themoviedb_id" INTEGER NULL,
                     "title" VARCHAR NULL,
+                    "clean_title" VARCHAR NULL,
                     "season" INTEGER  NULL,
                     "episode" INTEGER NULL,
                     "quality" INTEGER NULL,
@@ -260,6 +269,7 @@ function create_db() {
                     "episode" INTEGER NOT NULL,
                     "episode_release" INTEGER NULL,
                     "title" VARCHAR NULL,
+                    "clean_title" VARCHAR NULL,
                     "plot" VARCHAR NULL,
                     "updated" INTEGER NULL,
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
@@ -335,15 +345,53 @@ function update_db($from) {
         $set['version'] = 3;
         $db->update('db_info', $set);
     }
+
+    if ($from < 4) {
+        // TMDB_SEARCH
+        $db->query('DROP TABLE "tmdb_search"');
+        $db->query('CREATE TABLE IF NOT EXISTS "tmdb_search" (
+                    "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                    "themoviedb_id" INTEGER NOT NULL,
+                    "ilink" VARCHAR NULL,
+                    "title" VARCHAR NOT NULL,
+                    "clean_title" VARCHAR NULL,
+                    "original_title" VARCHAR NULL,
+                    "media_type" VARCHAR NULL,
+                    "rating" REAL NULL,
+                    "popularity" REAL NULL,
+                    "elink" VARCHAR NULL,
+                    "poster" VARCHAR NULL,
+                    "scene" VARCHAR NULL,
+                    "trailer" VARCHAR NULL,
+                    "lang" VARCHAR NULL,
+                    "plot" VARCHAR NULL,
+                    "release" VARCHAR NULL,
+                    "in_library" INT NULL,
+                    "updated" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                    "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                    UNIQUE(themoviedb_id, media_type)
+                )');
+
+        $db->query('ALTER TABLE wanted add column clean_title VARCHAR NULL');
+        $db->query('ALTER TABLE shows_details add column clean_title VARCHAR NULL');
+        $db->query('ALTER TABLE jackett_shows add column clean_title VARCHAR NULL');
+        $db->query('ALTER TABLE jackett_movies add column clean_title VARCHAR NULL');
+        $db->query('ALTER TABLE library_history add column clean_title VARCHAR NULL');
+        $db->query('ALTER TABLE library_shows add column clean_title VARCHAR NULL');
+        $db->query('ALTER TABLE library_movies add column clean_title VARCHAR NULL');
+        $db->query('ALTER TABLE config add column  type VARCHAR NULL');
+        $set['version'] = 4;
+        $db->update('db_info', $set);
+    }
     /*
       NEXT UPDATES:
       remove from wanted ignore field, not need
-      tmdb_search: add normalize_title and add the title without accents,_:.,tolower?; check iconv func
-      perhaps add in all tables with title the normalize, then modify the search in database title for use normalize_title.
+
      */
     /*
-      if ($from < 4) {
-      $set['version'] = 4;
+      if ($from < 5) {
+
+      $set['version'] = 5;
       $db->update('db_info', $set);
       }
      */
