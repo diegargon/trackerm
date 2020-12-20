@@ -476,7 +476,7 @@ function wanted_work() {
             $results = search_media_torrents($media_type, $search, null, true);
             if (!empty($results) && count($results) > 0) {
                 $results_pass_flags = wanted_check_flags($results);
-                $valid_results = wanted_check_title($search, $results_pass_flags); //exact title
+                !empty($results_pass_flags) ? $valid_results = wanted_check_title($search, $results_pass_flags) : null;
             } else {
                 $log->debug('No results founds for ' . $title);
             }
@@ -490,7 +490,7 @@ function wanted_work() {
             $results = search_media_torrents($media_type, $search, null, true);
             if (!empty($results) && count($results) > 0) {
                 $results_pass_flags = wanted_check_flags($results);
-                $valid_results = wanted_check_title($search, $results_pass_flags); //exact title
+                !empty($results_pass_flags) ? $valid_results = wanted_check_title($search, $results_pass_flags) : null;
             } else {
                 $log->debug('No results founds for ' . $title . ' ' . $s_episode);
             }
