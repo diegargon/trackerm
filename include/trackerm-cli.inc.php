@@ -523,11 +523,11 @@ function wanted_check_title($search, $results) {
     foreach ($results as $item) {
         $title = trim(getFileTitle($item['title']));
 
-        if (strtolower($title) == strtolower($words)) {
+        if (strcmp(strtolower($title), strtolower($words))) {
             $log->debug('Wanted: Valid title found ' . $item['title']);
             $valid[] = $item;
         } else {
-            $log->debug('Wanted: Title discarded since not exact ' . $title);
+            $log->debug('Wanted: Title discarded since not exact *' . strtolower($title) . '*:*' . strtolower($title) . '*');
         }
     }
 
