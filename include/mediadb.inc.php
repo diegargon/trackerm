@@ -70,17 +70,15 @@ function mediadb_guessFieldGet($item, $field) {
     }
 
     /*
-      getFileTitle can return 'ángela', if title is 'Ángela' like/nocase/noaccent not work with accents
-      fixed replacing accents by %
 
-      now the problem its if we search for angela and in databse the field is Ángela we have again a problem.
+      if we search for angela and in database the field is Ángela we have a a problem.
+      testing adding and using clean_title column
      */
     $title = trim(getFileTitle($item['title']));
-    $replace = ['Á', 'á', 'É', 'é', 'Í', 'í', 'Ó', 'ó', 'Ú', 'ú'];
-    $c_title = str_replace($replace, '%', $title);
+    $c_title = clean_title($title);
 
     $media_type = $item['media_type'];
-    $query = "SELECT $field FROM tmdb_search WHERE media_type='$media_type' AND title LIKE '$c_title'  COLLATE NOCASE OR original_title LIKE '$c_title'  COLLATE NOCASE ORDER BY release DESC";
+    $query = "SELECT $field FROM tmdb_search WHERE media_type='$media_type' AND title LIKE '$title'  COLLATE NOCASE OR clean_title LIKE '$c_title' OR original_title LIKE '$title'  COLLATE NOCASE ORDER BY release DESC";
     $results = $db->query($query);
     $tmdb_item = $db->fetch($results);
     if (is_array($tmdb_item) && count($tmdb_item) > 0) {
@@ -90,7 +88,7 @@ function mediadb_guessFieldGet($item, $field) {
 
     $db->finalize($results);
 
-    $query = "SELECT $field FROM tmdb_search WHERE media_type='$media_type' AND title LIKE '%$c_title%' OR original_title LIKE '$c_title'  COLLATE NOCASE COLLATE NOCASE  ORDER BY release DESC";
+    $query = "SELECT $field FROM tmdb_search WHERE media_type='$media_type' AND title LIKE '%$title%' OR clean_title LIKE '%$c_title%' OR original_title LIKE '%$c_title%'  COLLATE NOCASE COLLATE NOCASE  ORDER BY release DESC";
     $results = $db->query($query);
     $tmdb_item = $db->fetch($results);
     if (is_array($tmdb_item) && count($tmdb_item) > 0) {
