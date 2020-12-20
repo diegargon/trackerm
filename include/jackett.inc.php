@@ -148,6 +148,7 @@ function jackett_prep_media($media_type, $media_results) {
                 'category' => $item['category'],
                 'source' => $item['jackettindexer'],
                 'poster' => $poster,
+                'clean_title' => clean_title($item['title'])
             ];
             //More than one
         } else if (isset($indexer['channel']['item'])) {
@@ -173,6 +174,7 @@ function jackett_prep_media($media_type, $media_results) {
                     'category' => $item['category'],
                     'source' => $item['jackettindexer'],
                     'poster' => $poster,
+                    'clean_title' => clean_title($item['title'])
                 ];
             }
         }

@@ -25,7 +25,7 @@ function clean_title($title) {
     $title = preg_replace('/\(.*\)/', '', $title);
     $title = preg_replace('/\s+/', ' ', $title);
 
-    return $title;
+    return trim($title);
 }
 
 function set_clean() {

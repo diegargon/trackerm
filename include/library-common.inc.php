@@ -81,6 +81,7 @@ function rebuild($media_type, $path) {
                     ) {
                         $items[$i]['themoviedb_id'] = $id_item['themoviedb_id'];
                         $items[$i]['title'] = $id_item['title'];
+                        $items[$i]['clean_title'] = clean_title($id_item['title']);
                         $items[$i]['poster'] = $id_item['poster'];
                         $items[$i]['rating'] = $id_item['rating'];
                         $items[$i]['popularity'] = $id_item['popularity'];
@@ -108,6 +109,7 @@ function clean_database($media_type, $files, $media) {
             if (isset($item['themoviedb_id'])) {
                 $values['title'] = $item['title'];
                 $values['themoviedb_id'] = $item['themoviedb_id'];
+                $values['clean_title'] = clean_title($item['title']);
                 $values['media_type'] = $media_type;
                 $values['file_name'] = $item['file_name'];
                 $values['size'] = $item['size'];
@@ -190,7 +192,8 @@ function submit_ident($type, $items) {
     foreach ($items as $my_id => $db_id) {
         if (!empty($db_id)) {
             $db_item = mediadb_getByLocalId($db_id);
-            !empty($db_item['title']) ? $update_fields['title'] = $db_item['title'] : null;
+            $update_fields['title'] = $db_item['title'];
+            $update_fields['clean_title'] = clean_title($db_item['title']);
             !empty($db_item['name']) ? $update_fields['title'] = $db_item['name'] : null;
             $update_fields['themoviedb_id'] = $db_item['themoviedb_id'];
             !empty($db_item['poster']) ? $update_fields['poster'] = $db_item['poster'] : null;

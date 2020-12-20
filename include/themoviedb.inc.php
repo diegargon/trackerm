@@ -92,6 +92,7 @@ function themoviedb_MediaPrep($media_type, $items) {
             'themoviedb_id' => $item['id'],
             'title' => $title,
             'original_title' => $original_title,
+            'clean_title' => clean_title($title),
             'rating' => $item['vote_average'],
             'popularity' => isset($item['popularity']) ? $item['popularity'] : 0,
             'elink' => $link,
@@ -208,6 +209,7 @@ function themoviedb_showsDetailsPrep($id, $seasons_data, $episodes_data) {
                     'season' => $i,
                     'episode' => $episode['episode_number'],
                     'title' => $episode_title,
+                    'clean_title' => clean_title($episode_title),
                     'episode_release' => $episode_release,
                     'plot' => $episode_plot
                 ];
