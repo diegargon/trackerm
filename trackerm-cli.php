@@ -33,8 +33,11 @@ wanted_work();
 
 rebuild('movies', $cfg['MOVIES_PATH']);
 rebuild('shows', $cfg['SHOWS_PATH']);
+
 update_trailers();
-hash_missing();
+//UPGRADE
+hash_missing(); //3
+set_clean(); //4
 
 $log->info("trackerm automatic service finish...");
 

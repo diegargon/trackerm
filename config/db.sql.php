@@ -236,7 +236,6 @@ function create_db() {
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                     "themoviedb_id" INTEGER NULL,
                     "title" VARCHAR NULL,
-                    "clean_title" VARCHAR NULL,
                     "season" INTEGER  NULL,
                     "episode" INTEGER NULL,
                     "quality" INTEGER NULL,
@@ -372,7 +371,6 @@ function update_db($from) {
                     UNIQUE(themoviedb_id, media_type)
                 )');
 
-        $db->query('ALTER TABLE wanted add column clean_title VARCHAR NULL');
         $db->query('ALTER TABLE shows_details add column clean_title VARCHAR NULL');
         $db->query('ALTER TABLE jackett_shows add column clean_title VARCHAR NULL');
         $db->query('ALTER TABLE jackett_movies add column clean_title VARCHAR NULL');
