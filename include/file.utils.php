@@ -54,7 +54,9 @@ function save_to_file_json($file, $path, $data) {
 
 function load_from_file_json($file) {
     if (file_exists($file)) {
-        return json_decode(file_get_contents($file), true);
+        $file_content = file_get_contents($file);
+
+        return !empty($file_content) ? json_decode($file_content, true) : false;
     }
 
     return false;
@@ -134,7 +136,7 @@ function getfile($filename) {
     if (file_exists($filename)) {
         $data = file_get_contents($filename);
     }
-    return $data;
+    return !empty($data) ? $data : false;
 }
 
 function check_file_encrypt($type, $file) {
