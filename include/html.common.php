@@ -128,7 +128,7 @@ function buildTable($head, $db_ary, $topt = null) {
 }
 
 function build_item($item, $detail = null) {
-    global $cfg, $LNG;
+    global $cfg, $LNG, $db;
 
     !isset($detail) ? $details = $cfg['tresults_details'] : $details = $detail;
     $page = '';
@@ -140,7 +140,11 @@ function build_item($item, $detail = null) {
 
             $item['poster'] = $cfg['img_url'] . '/not_available.jpg';
             if (!isset($item['themoviedb_id'])) {
-                $poster = mediadb_guessPoster($item);
+                if (!empty($item['guessed_poster']) && $item['guessed_poster'] != -1) {
+                    $poster = $item['guessed_poster'];
+                } else if (empty($item['guessed_poster'])) {
+                    $poster = mediadb_guessPoster($item);
+                }
                 if (!empty($poster)) {
                     if ($cfg['CACHE_IMAGES']) {
                         $cache_img_response = cacheImg($poster);
@@ -149,6 +153,14 @@ function build_item($item, $detail = null) {
                         }
                     }
                     $item['guessed_poster'] = 1;
+                    $values['guessed_poster'] = $poster;
+                } else {
+                    $values['guessed_poster'] = -1;
+                }
+                if ($item['ilink'] == 'movies_torrent') {
+                    $db->updateItemById('jackett_movies', $item['id'], $values);
+                } else if ($item['ilink'] == 'shows_torrent') {
+                    $db->updateItemById('jackett_shows', $item['id'], $values);
                 }
             }
         } else {
@@ -161,9 +173,22 @@ function build_item($item, $detail = null) {
         }
 
         if (!isset($item['themoviedb_id']) && empty($item['trailer'])) {
-            $trailer = mediadb_guessTrailer($item);
+            if (!empty($item['guessed_trailer']) && $item['guessed_trailer'] != -1) {
+                $poster = $item['guessed_trailer'];
+            } else if (empty($item['guessed_trailer'])) {
+                $trailer = mediadb_guessTrailer($item);
+            }
+
             if (!empty($trailer)) {
                 $item['trailer'] = $trailer;
+                $values['guessed_trailer'] = $trailer;
+            } else {
+                $values['guessed_trailer'] = -1;
+            }
+            if ($item['ilink'] == 'movies_torrent') {
+                $db->updateItemById('jackett_movies', $item['id'], $values);
+            } else if ($item['ilink'] == 'shows_torrent') {
+                $db->updateItemById('jackett_shows', $item['id'], $values);
             }
         }
 
