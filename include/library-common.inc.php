@@ -36,6 +36,7 @@ function rebuild($media_type, $path) {
                 array_search($file, array_column($media, 'path')) === false
         ) {
 
+
             $file_name = trim(basename($file));
             $predictible_title = getFileTitle($file_name);
             $year = getFileYear($file_name);
@@ -88,6 +89,7 @@ function rebuild($media_type, $path) {
                         $items[$i]['scene'] = $id_item['scene'];
                         $items[$i]['lang'] = $id_item['lang'];
                         $items[$i]['plot'] = $id_item['plot'];
+                        isset($id_item['trailer']) ? $items[$i]['trailer'] = $id_item['trailer'] : null;
                         $items[$i]['original_title'] = $id_item['original_title'];
                     }
                 }
@@ -95,7 +97,12 @@ function rebuild($media_type, $path) {
         }
         $i++;
     }
-    isset($items) ? $db->addItems($library_table, $items) : null;
+    if (isset($items)) {
+        $insert_ids = $db->addItems($library_table, $items);
+        if (!empty($insert_ids) && (count($insert_ids) > 0)) {
+            check_history($media_type, $insert_ids);
+        }
+    }
 
     return true;
 }
@@ -116,7 +123,12 @@ function clean_database($media_type, $files, $media) {
                 $values['file_hash'] = $item['file_hash'];
                 isset($item['season']) ? $values['season'] = $item['season'] : null;
                 isset($item['episode']) ? $values['episode'] = $item['episode'] : null;
-                $db->insert('library_history', $values);
+                $item_hist_id = $db->getIdByField('library_history', 'file_hash', $item['file_hash']);
+                if (!$item_hist_id) {
+                    $db->insert('library_history', $values);
+                } else {
+                    $db->update('library_history', $item_hist_id, $values);
+                }
             }
             if ($media_type == 'movies') {
                 $db->deleteItemById('library_movies', $item['id']);
@@ -127,7 +139,7 @@ function clean_database($media_type, $files, $media) {
     }
 }
 
-function identify_media($type, $media) {
+function identify_media($media_type, $media) {
     global $LNG, $cfg;
 
     $titles = '';
@@ -143,9 +155,9 @@ function identify_media($type, $media) {
             if ($i >= $cfg['max_identify_items']) {
                 break;
             }
-            if ($type == 'movies') {
+            if ($media_type == 'movies') {
                 $db_media = mediadb_searchMovies($item['predictible_title']);
-            } else if ($type == 'shows') {
+            } else if ($media_type == 'shows') {
                 //var_dump($item);
                 if ((array_search($item['predictible_title'], $uniq_shows)) === false) {
                     $db_media = mediadb_searchShows($item['predictible_title']);
@@ -167,9 +179,9 @@ function identify_media($type, $media) {
                     $title_tdata['results_opt'] .= '</option>';
                 }
             }
-            $title_tdata['del_iurl'] = $iurl . '&media_type=' . $type . '&ident_delete=' . $item['id'];
-            $title_tdata['more_iurl'] = '?page=identify&media_type=' . $type . '&identify=' . $item['id'];
-            $title_tdata['media_type'] = $type;
+            $title_tdata['del_iurl'] = $iurl . '&media_type=' . $media_type . '&ident_delete=' . $item['id'];
+            $title_tdata['more_iurl'] = '?page=identify&media_type=' . $media_type . '&identify=' . $item['id'];
+            $title_tdata['media_type'] = $media_type;
             $titles .= $table = getTpl('identify_item', array_merge($LNG, $item, $title_tdata));
             $i++;
         }
@@ -177,7 +189,7 @@ function identify_media($type, $media) {
 
     if (!empty($titles)) {
         $tdata['titles'] = $titles;
-        $tdata['head'] = $LNG['L_IDENT_' . strtoupper($type) . ''];
+        $tdata['head'] = $LNG['L_IDENT_' . strtoupper($media_type) . ''];
 
         $table = getTpl('identify', array_merge($LNG, $tdata));
 
@@ -192,9 +204,14 @@ function submit_ident($type, $items) {
     foreach ($items as $my_id => $db_id) {
         if (!empty($db_id)) {
             $db_item = mediadb_getByLocalId($db_id);
-            $update_fields['title'] = $db_item['title'];
-            $update_fields['clean_title'] = clean_title($db_item['title']);
-            !empty($db_item['name']) ? $update_fields['title'] = $db_item['name'] : null;
+            if (!empty($db_item['title'])) {
+                $update_fields['title'] = $db_item['title'];
+                $update_fields['clean_title'] = clean_title($db_item['title']);
+            }
+            if (!empty($db_item['name'])) {
+                $update_fields['name'] = $db_item['name'];
+                $update_fields['clean_title'] = clean_title($db_item['name']);
+            }
             $update_fields['themoviedb_id'] = $db_item['themoviedb_id'];
             !empty($db_item['poster']) ? $update_fields['poster'] = $db_item['poster'] : null;
             !empty($db_item['original_title']) ? $update_fields['original_title'] = $db_item['original_title'] : null;
@@ -215,6 +232,70 @@ function submit_ident($type, $items) {
             }
         }
     }
+}
+
+function check_history($media_type, $ids) {
+    global $db;
+
+    if ($media_type == 'movies') {
+        $library = 'library_movies';
+    } else {
+        $library = 'library_shows';
+    }
+    foreach ($ids as $id) {
+        if (!is_numeric($id)) {
+            continue;
+        }
+        $item = $db->getItemById($library, $id);
+
+        if (empty($item['themoviedb_id'])) {
+            $where = [
+                'media_type' => ['value' => $media_type],
+                'file_hash' => ['value' => $item['file_hash']],
+            ];
+
+            $results = $db->select('library_history', 'themoviedb_id', $where, 'LIMIT 1');
+            $item_history = $db->fetch($results);
+            $db->finalize($results);
+            if (!empty($item_history) && !empty($item_history['themoviedb_id'])) {
+
+                auto_ident($media_type, $item_history['themoviedb_id'], $id);
+            }
+        }
+    }
+}
+
+function auto_ident($media_type, $online_db_id, $id) {
+    global $db;
+
+    if ($media_type == 'movies') {
+        $library = 'library_movies';
+    } else {
+        $library = 'library_shows';
+    }
+
+    $db_item = mediadb_getByDbId($media_type, $online_db_id);
+
+    if (!empty($db_item['title'])) {
+        $update_fields['title'] = $db_item['title'];
+        $update_fields['clean_title'] = clean_title($db_item['title']);
+    }
+    if (!empty($db_item['name'])) {
+        $update_fields['name'] = $db_item['name'];
+        $update_fields['clean_title'] = clean_title($db_item['name']);
+    }
+    $update_fields['themoviedb_id'] = $db_item['themoviedb_id'];
+    !empty($db_item['poster']) ? $update_fields['poster'] = $db_item['poster'] : null;
+    !empty($db_item['original_title']) ? $update_fields['original_title'] = $db_item['original_title'] : null;
+    !empty($db_item['rating']) ? $update_fields['rating'] = $db_item['rating'] : null;
+    !empty($db_item['popularity']) ? $update_fields['popularity'] = $db_item['popularity'] : null;
+    !empty($db_item['scene']) ? $update_fields['scene'] = $db_item['scene'] : null;
+    !empty($db_item['lang']) ? $update_fields['lang'] = $db_item['lang'] : null;
+    !empty($db_item['trailer']) ? $update_fields['trailer'] = $db_item['trailer'] : null;
+    !empty($db_item['plot']) ? $update_fields['plot'] = $db_item['plot'] : null;
+    !empty($db_item['release']) ? $update_fields['release'] = $db_item['release'] : null;
+
+    $db->updateItemById($library, $id, $update_fields);
 }
 
 function getLibraryStats() {
