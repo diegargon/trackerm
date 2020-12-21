@@ -59,12 +59,16 @@ class DB {
 
     public function addItem($table, $item) {
         $this->insert($table, $item);
+        return $this->getLastId();
     }
 
     public function addItems($table, $items) {
+        $ids = [];
         foreach ($items as $item) {
             $this->insert($table, $item);
+            $ids[] = $this->getLastId();
         }
+        return $ids;
     }
 
     public function addItemUniqField($table, $item, $field) {
@@ -105,7 +109,7 @@ class DB {
         $row = $this->fetch($result);
         $this->finalize($result);
 
-        return $row;
+        return (!empty($row) && (count($row) > 0)) ? $row : false;
     }
 
     public function getItemByField($table, $field, $value) {
@@ -113,7 +117,7 @@ class DB {
         $result = $this->select($table, null, $where, 'LIMIT 1');
         $row = $this->fetch($result);
         $this->finalize($result);
-        return $row;
+        return (!empty($row) && (count($row) > 0)) ? $row : false;
     }
 
     public function getItemsByField($table, $field, $value) {
@@ -121,7 +125,7 @@ class DB {
         $result = $this->select($table, null, $where);
         $rows = $this->fetchAll($result);
         $this->finalize($result);
-        return $rows;
+        return (!empty($rows) && (count($rows) > 0)) ? $rows : false;
     }
 
     public function getIdByField($table, $field, $value) {
@@ -130,7 +134,7 @@ class DB {
         $row = $this->fetch($result);
         $this->finalize($result);
 
-        return ($row) ? $row['id'] : false;
+        return (!empty($row) && (count($row) > 0)) ? $row['id'] : false;
     }
 
     public function updateItemById($table, $id, $values) {
