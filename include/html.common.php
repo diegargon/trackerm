@@ -174,14 +174,14 @@ function build_item($item, $detail = null) {
 
         if (!isset($item['themoviedb_id']) && empty($item['trailer'])) {
             if (!empty($item['guessed_trailer']) && $item['guessed_trailer'] != -1) {
-                $poster = $item['guessed_trailer'];
+                $trailer = $item['guessed_trailer'];
             } else if (empty($item['guessed_trailer'])) {
                 $trailer = mediadb_guessTrailer($item);
             }
 
             if (!empty($trailer)) {
                 $item['trailer'] = $trailer;
-                $values['guessed_trailer'] = $trailer;
+                $values['guessed_trailer'] = str_replace('http', 'https', $trailer);
             } else {
                 $values['guessed_trailer'] = -1;
             }
