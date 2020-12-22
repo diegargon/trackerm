@@ -98,6 +98,16 @@
                         <a onClick="show_loading()" class="submit_link" href="<?= basename($_SERVER['REQUEST_URI']) . '&download=' . rawurlencode($tdata['download']) ?>"><?= $tdata['L_DOWNLOAD'] ?></a>
                     </div>
                 <?php } ?>
+                <?php
+                if (!empty($tdata['trailer'] || !empty($tdata['guessed_trailer']))) {
+                    !empty($tdata['trailer']) ? $trailer = $tdata['trailer'] : $trailer = $tdata['guessed_trailer'];
+                    $trailer = str_replace('http', 'https', $trailer);
+                    ?>
+                    <iframe frameborder="0" scrolling="no" marginheight="0" marginwidth="0"width="788" height="443" type="text/html"
+                            src="<?= $trailer ?>?autoplay=0&fs=1&iv_load_policy=0&rel=0&cc_load_policy=0"
+                            frameborder="0"/></iframe>
+                        <?php } ?>
+
                 <div class="view_extra">
                     <?= $tdata['extra'] ?>
                 </div>
