@@ -32,6 +32,7 @@ $log->debug("Wanted work...");
 wanted_work();
 
 rebuild('movies', $cfg['MOVIES_PATH']);
+sleep(1);
 rebuild('shows', $cfg['SHOWS_PATH']);
 
 update_trailers();

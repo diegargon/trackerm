@@ -28,8 +28,16 @@ $cfg['WANT_MOVIES'] = 1;
 $cfg['WANT_SHOWS'] = 1;
 
 // Your Movies and Shows  paths
-$cfg['MOVIES_PATH'] = '';
-$cfg['SHOWS_PATH'] = '';
+$cfg['MOVIES_PATH'] = [
+    1 => '',
+];
+//In case of more path select where we move your new download content (index)
+$cfg['MOVIES_PATH_NEW'] = 1;
+
+$cfg['SHOWS_PATH'] = [
+    1 => '',
+];
+$cfg['SHOWS_PATH_NEW'] = 1;
 
 // Where transmission put download files (you must separete from temporal file directory
 $cfg['TORRENT_FINISH_PATH'] = '';

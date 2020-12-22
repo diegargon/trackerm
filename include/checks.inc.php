@@ -32,11 +32,11 @@ function do_checks() {
         echo "ERROR: You must set in /config/config.inc.php LANG (only supported languages es-ES/en-En) \n";
         exit();
     }
-    if ($cfg['WANT_MOVIES'] && empty($cfg['MOVIES_PATH']) || !is_dir($cfg['MOVIES_PATH'])) {
+    if ($cfg['WANT_MOVIES'] && empty($cfg['MOVIES_PATH'])) {
         echo "ERROR: You must set in /config/config.inc.php MOVIES_PATH where your movies reside \n";
         exit();
     }
-    if ($cfg['WANT_SHOWS'] && empty($cfg['SHOWS_PATH']) || !is_dir($cfg['MOVIES_PATH'])) {
+    if ($cfg['WANT_SHOWS'] && empty($cfg['SHOWS_PATH'])) {
         echo "ERROR: You must set in /config/config.inc.php SHOWS_PATH where your shows reside \n";
         exit();
     }
@@ -67,10 +67,10 @@ function do_checks() {
     if (!is_writable($cfg['TORRENT_FINISH_PATH'])) {
         echo "ERROR: Your \"torrent finish path\" directory must be writable: {$cfg['TORRENT_FINISH_PATH']} \n";
     }
-    if (!is_writable($cfg['MOVIES_PATH'])) {
+    if (!is_array($cfg['MOVIES_PATH']) && !is_writable($cfg['MOVIES_PATH'])) {
         echo "ERROR: Your \"MOVIES_PATH \" directory must be writable: {$cfg['MOVIES_PATH']} \n";
     }
-    if (!is_writable($cfg['SHOWS_PATH'])) {
+    if (!is_array($cfg['MOVIES_PATH']) && !is_writable($cfg['SHOWS_PATH'])) {
         echo "ERROR: Your \"SHOWS_PATH \" directory must be writable: {$cfg['SHOWS_PATH'] }\n";
     }
     if (empty($cfg['trans_hostname'])) {

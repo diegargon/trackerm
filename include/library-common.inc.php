@@ -10,6 +10,16 @@
 !defined('IN_WEB') ? exit : true;
 
 function rebuild($media_type, $path) {
+    if (is_array($path)) {
+        foreach ($path as $item) {
+            _rebuild($media_type, $item);
+        }
+    } else {
+        _rebuild($media_type, $path);
+    }
+}
+
+function _rebuild($media_type, $path) {
     global $cfg, $db, $log;
 
     $items = [];

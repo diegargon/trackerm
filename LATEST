@@ -1,5 +1,6 @@
 ## Latest / News (Relevant)
 
+[22/12] Now trackerm support multiple MOVIES_PATH/SHOWS_PATH check config examples
 [18/12] Add mix new indexers releases for avoid display all new releases per indexer consecutively  
         Fix bug not working pager on view extra torrents.
 [18/12] Fixed recursive directory bug that prevent do automatically file scan

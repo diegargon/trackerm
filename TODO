@@ -16,6 +16,7 @@ TODO
     [IMPROVE]trackerm-cli coge otra vez el titulo del archivo, puede estar mal así que solo hacerlo si hay varios archivos para episodios
         si no hay más posibilidades que este bien el nombre del archivo. O buscar otro modo.
      [COMPLETE] Filters
+
 [VERY LOW]  
     [IMPROVE] Pagination actually get all results and do a array_slice, now with SQL database when use cache we can  do that better.    
     [FIX/IMPROVE] fechas normalizar a formato comun        
@@ -32,6 +33,7 @@ TODO
     [NEW] Config UI && integrate all config in database, ride config files    
         Added config table, to improve the config with tables and config ui   
     [IMPROVE] When reescan files check agains library_history (deleted items) for autoidentify items that came back to library.
+    [IMPROVE] Add multiple library and media paths support
 
 [BACKLOG]
     [NEW] mediainfo (read file metadata)

@@ -145,7 +145,11 @@ function MovieJob($item, $linked = false) {
     if ($valid_files && count($valid_files) >= 1) {
 
         if ($cfg['CREATE_MOVIE_FOLDERS']) {
-            $dest_path = $cfg['MOVIES_PATH'] . '/' . ucwords($item['title']);
+            if (is_array($cfg['MOVIES_PATH'])) {
+                $dest_path = $cfg['MOVIES_PATH'][$cfg['MOVIES_PATH_NEW']] . '/' . ucwords($item['title']);
+            } else {
+                $dest_path = $cfg['MOVIES_PATH'] . '/' . ucwords($item['title']);
+            }
             if (!file_exists($dest_path)) {
                 umask(0);
                 if (!mkdir($dest_path, $cfg['DIR_PERMS'], true)) {
@@ -154,7 +158,11 @@ function MovieJob($item, $linked = false) {
                 (!empty($cfg['FILES_USERGROUP'])) ? chgrp($dest_path, $cfg['FILES_USERGROUP']) : null;
             }
         } else {
-            $dest_path = $cfg['MOVIES_PATH'];
+            if (!is_array($cfg['MOVIES_PATH'])) {
+                $dest_path = $cfg['MOVIES_PATH'];
+            } else {
+                $dest_path = $cfg['MOVIES_PATH'][$cfg['MOVIES_PATH_NEW']];
+            }
         }
 
         $i = 1;
@@ -236,10 +244,19 @@ function ShowJob($item, $linked = false) {
             $title = getFileTitle(basename($valid_file));
             if ($cfg['CREATE_SHOWS_SEASON_FOLDER'] && !empty($_season)) {
                 ($_season != "xx") ? $_season = (int) $_season : null; // 01 to 1 for directory
-                $dest_path = $cfg['SHOWS_PATH'] . '/' . ucwords($title . '/' . $LNG['L_SEASON'] . ' ' . $_season);
-                $dest_path_father = $cfg['SHOWS_PATH'] . '/' . ucwords($title);
+                if (is_array($cfg['SHOWS_PATH'])) {
+                    $dest_path = $cfg['SHOWS_PATH'][$cfg['SHOWS_PATH_NEW']] . '/' . ucwords($title . '/' . $LNG['L_SEASON'] . ' ' . $_season);
+                    $dest_path_father = $cfg['SHOWS_PATH'][$cfg['SHOWS_PATH_NEW']] . '/' . ucwords($title);
+                } else {
+                    $dest_path = $cfg['SHOWS_PATH'] . '/' . ucwords($title . '/' . $LNG['L_SEASON'] . ' ' . $_season);
+                    $dest_path_father = $cfg['SHOWS_PATH'] . '/' . ucwords($title);
+                }
             } else {
-                $dest_path = $cfg['SHOWS_PATH'] . '/' . ucwords($title);
+                if (is_array($cfg['SHOWS_PATH'])) {
+                    $dest_path = $cfg['SHOWS_PATH'][$cfg['SHOWS_PATH_NEW']] . '/' . ucwords($title);
+                } else {
+                    $dest_path = $cfg['SHOWS_PATH'] . '/' . ucwords($title);
+                }
             }
             //END CREATE PATHS
             //CREATE FOLDERS

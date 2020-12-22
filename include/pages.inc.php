@@ -48,8 +48,26 @@ function index_page() {
     $tdata['content'] .= "<span>{$LNG['L_MOVIES']} : " . $lib_stats['movies_size'] . '</span><br/>';
     $tdata['content'] .= "<span>{$LNG['L_SHOWS']} : " . $lib_stats['shows_size'] . '</span><br/>';
     $tdata['content'] .= "<h3>{$LNG['L_HARDDISK']}</h3>";
-    $tdata['content'] .= "<span>{$LNG['L_FREE_TOTAL']} {$LNG['L_ON']} {$LNG['L_MOVIES']} : " . human_filesize(disk_free_space($cfg['MOVIES_PATH'])) . ' / ' . human_filesize(disk_total_space($cfg['MOVIES_PATH'])) . '</span><br/>';
-    $tdata['content'] .= "<span>{$LNG['L_FREE_TOTAL']} {$LNG['L_ON']} {$LNG['L_SHOWS']} : " . human_filesize(disk_free_space($cfg['SHOWS_PATH'])) . ' / ' . human_filesize(disk_total_space($cfg['SHOWS_PATH'])) . '</span><br/>';
+    if (is_array($cfg['MOVIES_PATH'])) {
+        foreach ($cfg['MOVIES_PATH'] as $movies_path) {
+            $movies_path_name = basename($movies_path);
+            $movies_free_space = human_filesize(disk_free_space($movies_path));
+            $movies_total_space = human_filesize(disk_total_space($movies_path));
+            $tdata['content'] .= "<span>{$LNG['L_FREE_TOTAL']} {$LNG['L_ON']} {$movies_path_name} : {$movies_free_space} / {$movies_total_space} </span><br/>";
+        }
+    } else {
+        $tdata['content'] .= "<span>{$LNG['L_FREE_TOTAL']} {$LNG['L_ON']} {$LNG['L_MOVIES']} : " . human_filesize(disk_free_space($cfg['MOVIES_PATH'])) . ' / ' . human_filesize(disk_total_space($cfg['MOVIES_PATH'])) . '</span><br/>';
+    }
+    if (is_array($cfg['SHOWS_PATH'])) {
+        foreach ($cfg['SHOWS_PATH'] as $shows_path) {
+            $shows_path_name = basename($shows_path);
+            $shows_free_space = human_filesize(disk_free_space($shows_path));
+            $shows_total_space = human_filesize(disk_total_space($shows_path));
+            $tdata['content'] .= "<span>{$LNG['L_FREE_TOTAL']} {$LNG['L_ON']} {$shows_path_name} : {$shows_free_space} / {$shows_total_space} </span><br/>";
+        }
+    } else {
+        $tdata['content'] .= "<span>{$LNG['L_FREE_TOTAL']} {$LNG['L_ON']} {$LNG['L_SHOWS']} : " . human_filesize(disk_free_space($cfg['SHOWS_PATH'])) . ' / ' . human_filesize(disk_total_space($cfg['SHOWS_PATH'])) . '</span><br/>';
+    }
     $titems['col1'][] = getTpl('home-item', $tdata);
 
     // Database
