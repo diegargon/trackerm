@@ -664,7 +664,7 @@ function update_trailers() {
         $trailer = mediadb_getTrailer('movies', $item['themoviedb_id']);
         if (!empty($trailer)) {
             $log->debug("Update movie trailer on tmdb_id {$item['themoviedb_id']} trailer $trailer");
-            $update['trailer'] = $trailer;
+            $update['trailer'] = str_replace('http', 'https', $trailer);
         } else {
             $update['trailer'] = NULL;
         }

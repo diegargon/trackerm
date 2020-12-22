@@ -99,7 +99,7 @@
                     </div>
                 <?php } ?>
                 <?php
-                if (!empty($tdata['trailer'] || !empty($tdata['guessed_trailer']))) {
+                if (!empty($tdata['trailer'] || (!empty($tdata['guessed_trailer'])) && $tdata['guessed_trailer'] != -1)) {
                     !empty($tdata['trailer']) ? $trailer = $tdata['trailer'] : $trailer = $tdata['guessed_trailer'];
                     $trailer = str_replace('http', 'https', $trailer);
                     ?>
