@@ -101,7 +101,9 @@
                 <?php
                 if (!empty($tdata['trailer'] || (!empty($tdata['guessed_trailer'])) && $tdata['guessed_trailer'] != -1)) {
                     !empty($tdata['trailer']) ? $trailer = $tdata['trailer'] : $trailer = $tdata['guessed_trailer'];
-                    $trailer = str_replace('http', 'https', $trailer);
+                    if (substr($trailer, 0, 5) != 'https') {
+                        $trailer = str_replace('http', 'https', $trailer);
+                    }
                     ?>
                     <iframe frameborder="0" scrolling="no" marginheight="0" marginwidth="0"width="788" height="443" type="text/html"
                             src="<?= $trailer ?>?autoplay=0&fs=1&iv_load_policy=0&rel=0&cc_load_policy=0"
