@@ -61,5 +61,5 @@ $cfg['CHECK_DAYS'] = [
 ];
 
 $cfg['categories'] = $cfg['movies_categories'] + $cfg['shows_categories'];
-$cfg['VERSION'] = 'A75';
+$cfg['VERSION'] = 'A76';
 
