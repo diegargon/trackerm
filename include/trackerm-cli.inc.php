@@ -405,7 +405,7 @@ function get_valid_files($item) {
         }
     }
 
-    return $valid_files;
+    return !empty($valid_files) ? $valid_files : false;
 }
 
 function move_media($valid_file, $final_dest_path) {
