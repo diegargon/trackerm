@@ -71,7 +71,7 @@ $cfg['DIR_PERMS'] = 0775;
 $cfg['jackett_srv'] = 'http://192.168.X.X:9117';
 $cfg['jackett_key'] = '';
 /* MAX jacket i think its 1000  */
-$cfg['jackett_results'] = 500;
+$cfg['jackett_results'] = 200;
 
 // To avoid search for every language in titles for tags, give here what languages want tag.
 // Leave blank for avoid languages tag in files. This tags are case sensitive for avoid
