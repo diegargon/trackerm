@@ -100,7 +100,7 @@ function jackett_search_media($media_type, $words, $indexer, $categories, $limit
 
     empty($limit) ? $limit = $cfg['jackett_results'] : null;
 
-    $jackett_url = $cfg['jackett_srv'] . $cfg['jackett_api'] . '/indexers/' . $indexer . '/results/torznab/';
+    $jackett_url = $cfg['jackett_srv'] . $cfg['jackett_api_path'] . '/indexers/' . $indexer . '/results/torznab/';
     $words = rawurlencode($words);
 
     ($media_type == 'movies') ? $jkt_cat_first_digit = 2 : $jkt_cat_first_digit = 5;
@@ -197,7 +197,7 @@ function jackett_get($indexer, $limit = null) {
 
     (empty($limit)) ? $limit = $cfg['jackett_results'] : null;
 
-    $jackett_url = $cfg['jackett_srv'] . $cfg['jackett_api'] . '/indexers/' . $indexer . '/results/torznab/';
+    $jackett_url = $cfg['jackett_srv'] . $cfg['jackett_api_path'] . '/indexers/' . $indexer . '/results/torznab/';
     $params = 'api?t=search&extended=1&apikey=' . $cfg['jackett_key'] . '&limit=' . $limit;
 
     return curl_get_jackett($jackett_url, $params);
@@ -207,7 +207,7 @@ function jackett_get_caps($indexer) {
     global $cfg;
     $params = '';
 
-    $jackett_url = $cfg['jackett_srv'] . $cfg['jackett_api'] . '/indexers/' . $indexer . '/results/torznab/';
+    $jackett_url = $cfg['jackett_srv'] . $cfg['jackett_api_path'] . '/indexers/' . $indexer . '/results/torznab/';
     $params = 'api?apikey=' . $cfg['jackett_key'] . '&t=caps';
     return curl_get_jackett($jackett_url, $params);
 }
