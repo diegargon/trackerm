@@ -137,7 +137,7 @@ function clean_database($media_type, $files, $media) {
                 if (!$item_hist_id) {
                     $db->insert('library_history', $values);
                 } else {
-                    $db->update('library_history', $item_hist_id, $values);
+                    $db->update('library_history', $values, ['id' => ['value' => $item_hist_id]], 'LIMIT 1');
                 }
             }
             if ($media_type == 'movies') {
