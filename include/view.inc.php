@@ -96,7 +96,7 @@ function view() {
 
 
 
-    if (!empty($item['poster']) && $cfg['CACHE_IMAGES']) {
+    if (!empty($item['poster']) && $cfg['cache_images']) {
         $cache_img_response = cacheImg($item['poster']);
         if ($cache_img_response !== false) {
             $item['poster'] = $cache_img_response;
@@ -109,7 +109,7 @@ function view() {
 
         $poster = mediadb_guessPoster($item);
         if (!empty($poster)) {
-            if ($cfg['CACHE_IMAGES']) {
+            if ($cfg['cache_images']) {
                 $cache_img_response = cacheImg($poster);
                 if ($cache_img_response !== false) {
                     $item['poster'] = $cache_img_response;
