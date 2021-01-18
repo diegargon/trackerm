@@ -136,18 +136,18 @@ button {
     top: 50%;
 }
 
-.divTable{
+.divTable {
     display: table;
     width: 100%;
     border-collapse: collapse;
 }
 
-.divTableWanted{
+.divTableWanted, .catTable{
     display: table;
     border-collapse: collapse;
 }
 
-.divTableRow {
+.divTableRow, .catRow {
     display: table-row;
 }
 
@@ -190,7 +190,7 @@ button {
     display: table-row-group;
 }
 
-.divTableCellEpisodes {
+.divTableCellEpisodes, .catCell {
     border:0px solid #ff5b5b;
     display: table-cell;
     padding-left: 10px;
@@ -209,7 +209,9 @@ button {
     text-align: right;
     padding:0px;
 }
-
+.catCell:first-of-type {
+    text-align: right;
+}
 .divTableCellEpisodes {
     width:100%;
 }
@@ -629,4 +631,9 @@ button {
   font-weight: bold;
   transform: rotate(-45deg);
   color: chartreuse;
+}
+
+.cats {
+    text-align: center;
+    margin-bottom: 5px;
 }
