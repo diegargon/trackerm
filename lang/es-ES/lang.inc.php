@@ -188,5 +188,5 @@ $LNG = [
     'L_CFG_TORRENT_QUALITY_PREFS' => 'trackerm buscara las siguientes calidades en orden, si no encuentra y ANY esta puesto descargar lo que encuentre (coma separado)',
     'L_CFG_TORRENT_IGNORE_PREFS' => 'trackerm  ignorara estos tags (coma separado)',
     'L_CFG_EXTRA_TAGS' => 'Si quieres indicar algun tag extra para las busquedas añadelo aquí, coma separado',
-    'L_CFG_MEDIA_LANGUAGE_TAGS' => 'Especifica aquí que lenguaje buscar tag para marcarlo, comma separado, sensible a mayusculas',
+    'L_CFG_MEDIA_LANGUAGE_TAGS' => 'Especifica aquí que lenguaje buscar tag para marcarlo, comma separado',
 ];

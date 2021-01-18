@@ -188,5 +188,5 @@ $LNG = [
     'L_CFG_TORRENT_QUALITY_PREFS' => 'trackerm will search for this specific quality words in preference order, if not found and ANY is set get any (comma separated)',
     'L_CFG_TORRENT_IGNORE_PREFS' => 'trackerm will ignore all this tags (comma separated)',
     'L_CFG_EXTRA_TAGS' => 'If you want trackerm search for any extra tag in titles add the key here, comma separated',
-    'L_CFG_MEDIA_LANGUAGE_TAGS' => 'Specify here what languages want tag, comma seperated, case sensitive',
+    'L_CFG_MEDIA_LANGUAGE_TAGS' => 'Specify here what languages want tag, comma seperated',
 ];
