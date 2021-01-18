@@ -127,10 +127,9 @@ function buildTable($head, $db_ary, $topt = null) {
     return $page;
 }
 
-function build_item($item, $detail = null) {
+function build_item($item, $details = 1) {
     global $cfg, $LNG, $db;
 
-    !isset($detail) ? $details = $cfg['tresults_details'] : $details = $detail;
     $page = '';
 
     if ($details == 0) {
@@ -146,7 +145,7 @@ function build_item($item, $detail = null) {
                     $poster = mediadb_guessPoster($item);
                 }
                 if (!empty($poster)) {
-                    if ($cfg['CACHE_IMAGES']) {
+                    if ($cfg['cache_images']) {
                         $cache_img_response = cacheImg($poster);
                         if ($cache_img_response !== false) {
                             $item['poster'] = $cache_img_response;
@@ -164,7 +163,7 @@ function build_item($item, $detail = null) {
                 }
             }
         } else {
-            if ($cfg['CACHE_IMAGES']) {
+            if ($cfg['cache_images']) {
                 $cache_img_response = cacheImg($item['poster']);
                 if ($cache_img_response !== false) {
                     $item['poster'] = $cache_img_response;
