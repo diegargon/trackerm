@@ -152,7 +152,7 @@ function MovieJob($item, $linked = false) {
             }
             if (!file_exists($dest_path)) {
                 umask(0);
-                if (!mkdir($dest_path, $cfg['dir_perms'], true)) {
+                if (!mkdir($dest_path, octdec("0" . $cfg['dir_perms']), true)) {
                     leave('Failed to create folders... ' . $dest_path);
                 }
                 (!empty($cfg['files_usergroup'])) ? chgrp($dest_path, $cfg['files_usergroup']) : null;
@@ -262,7 +262,7 @@ function ShowJob($item, $linked = false) {
             //CREATE FOLDERS
             if (!file_exists($dest_path)) {
                 umask(0);
-                if (!mkdir($dest_path, $cfg['dir_perms'], true)) {
+                if (!mkdir($dest_path, octdec("0" . $cfg['dir_perms']), true)) {
                     leave('Failed to create folders... ' . $dest_path);
                 }
                 if (!empty($cfg['files_usergroup'])) {
@@ -413,7 +413,8 @@ function move_media($valid_file, $final_dest_path) {
 
     if (rename($valid_file, $final_dest_path)) {
         (!empty($cfg['files_usergroup'])) ? chgrp($final_dest_path, $cfg['files_usergroup']) : null;
-        (!empty($cfg['files_perms'])) ? chmod($final_dest_path, $cfg['files_perms']) : null;
+        umask(0);
+        (!empty($cfg['files_perms'])) ? chmod($final_dest_path, octdec("0" . $cfg['files_perms'])) : null;
         $log->info(" Rename sucessful: $valid_file : $final_dest_path");
         $log->addStateMsg(basename($final_dest_path) . ' ' . $LNG['L_MOVED_TO_LIBRARY']);
         return true;
@@ -428,7 +429,8 @@ function linking_media($valid_file, $final_dest_path) {
 
     if (symlink($valid_file, $final_dest_path)) {
         (!empty($cfg['files_usergroup'])) ? chgrp($valid_file, $cfg['files_usergroup']) : null;
-        (!empty($cfg['files_perms'])) ? chmod($valid_file, $cfg['files_perms']) : null;
+        umask(0);
+        (!empty($cfg['files_perms'])) ? chmod($valid_file, octdec("0" . $cfg['files_perms'])) : null;
         $log->info(" Linking sucessful: $valid_file : $final_dest_path");
         $log->addStateMsg(basename($final_dest_path) . ' ' . $LNG['L_LINKED_TO_LIBRARY']);
         return true;
