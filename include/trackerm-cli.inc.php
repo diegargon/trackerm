@@ -86,7 +86,7 @@ function getRightTorrents() {
 
     $wanted_db = $db->getTableData('wanted');
 
-    if ($cfg['MOVE_ONLY_INAPP'] && empty($wanted_db)) {
+    if ($cfg['move_only_inapp'] && empty($wanted_db)) {
         $log->debug(" No Torrents (INAPP set)");
         return false;
     }
@@ -103,7 +103,7 @@ function getRightTorrents() {
 
     // FINISHED TORS
     if (count($finished_list) >= 1) {
-        if ($cfg['MOVE_ONLY_INAPP']) {
+        if ($cfg['move_only_inapp']) {
             foreach ($finished_list as $finished) {
                 foreach ($wanted_db as $wanted_item) {
                     if ($wanted_item['hashString'] == $finished['hashString']) {
@@ -118,7 +118,7 @@ function getRightTorrents() {
 
     //SEEDING TORS
     if (count($seeding_list) >= 1) {
-        if ($cfg['MOVE_ONLY_INAPP']) {
+        if ($cfg['move_only_inapp']) {
             foreach ($seeding_list as $seeding) {
                 foreach ($wanted_db as $wanted_item) {
                     if ($wanted_item['hashString'] == $seeding['hashString']) {
@@ -144,7 +144,7 @@ function MovieJob($item, $linked = false) {
 
     if ($valid_files && count($valid_files) >= 1) {
 
-        if ($cfg['CREATE_MOVIE_FOLDERS']) {
+        if ($cfg['create_movie_folders']) {
             if (is_array($cfg['MOVIES_PATH'])) {
                 $dest_path = $cfg['MOVIES_PATH'][$cfg['MOVIES_PATH_NEW']] . '/' . ucwords($item['title']);
             } else {
@@ -152,10 +152,10 @@ function MovieJob($item, $linked = false) {
             }
             if (!file_exists($dest_path)) {
                 umask(0);
-                if (!mkdir($dest_path, $cfg['DIR_PERMS'], true)) {
+                if (!mkdir($dest_path, $cfg['dir_perms'], true)) {
                     leave('Failed to create folders... ' . $dest_path);
                 }
-                (!empty($cfg['FILES_USERGROUP'])) ? chgrp($dest_path, $cfg['FILES_USERGROUP']) : null;
+                (!empty($cfg['files_usergroup'])) ? chgrp($dest_path, $cfg['files_usergroup']) : null;
             }
         } else {
             if (!is_array($cfg['MOVIES_PATH'])) {
@@ -242,7 +242,7 @@ function ShowJob($item, $linked = false) {
             //CREATE PATHS
             //get again title from indiviual files instead of directory
             $title = getFileTitle(basename($valid_file));
-            if ($cfg['CREATE_SHOWS_SEASON_FOLDER'] && !empty($_season)) {
+            if ($cfg['create_shows_season_folder'] && !empty($_season)) {
                 ($_season != "xx") ? $_season = (int) $_season : null; // 01 to 1 for directory
                 if (is_array($cfg['SHOWS_PATH'])) {
                     $dest_path = $cfg['SHOWS_PATH'][$cfg['SHOWS_PATH_NEW']] . '/' . ucwords($title . '/' . $LNG['L_SEASON'] . ' ' . $_season);
@@ -262,12 +262,12 @@ function ShowJob($item, $linked = false) {
             //CREATE FOLDERS
             if (!file_exists($dest_path)) {
                 umask(0);
-                if (!mkdir($dest_path, $cfg['DIR_PERMS'], true)) {
+                if (!mkdir($dest_path, $cfg['dir_perms'], true)) {
                     leave('Failed to create folders... ' . $dest_path);
                 }
-                if (!empty($cfg['FILES_USERGROUP'])) {
-                    chgrp($dest_path, $cfg['FILES_USERGROUP']);
-                    isset($dest_path_father) ? chgrp($dest_path_father, $cfg['FILES_USERGROUP']) : null;
+                if (!empty($cfg['files_usergroup'])) {
+                    chgrp($dest_path, $cfg['files_usergroup']);
+                    isset($dest_path_father) ? chgrp($dest_path_father, $cfg['files_usergroup']) : null;
                 }
             }
             //END CREATE FOLDERS
@@ -326,7 +326,7 @@ function get_valid_files($item) {
             $ext_check = substr($file, -3);
 
             if ($ext_check == 'rar' || $ext_check == 'RAR') {
-                if (file_exists($cfg['UNRAR_PATH'])) {
+                if (file_exists($cfg['unrar_path'])) {
                     $unrar_check = dirname($file) . '/trackerm-unrar';
                     if (!file_exists($unrar_check)) {
                         if (check_file_encrypt('rar', $file)) {
@@ -334,8 +334,8 @@ function get_valid_files($item) {
                             // we continue and try since the function need test and TODO.
                         }
                         touch($unrar_check);
-                        !empty($cfg['FILES_USERGROUP']) ? chgrp($unrar_check, $cfg['FILES_USERGROUP']) : null;
-                        $unrar = $cfg['UNRAR_PATH'] . ' x -p- -y "' . $file . '" "' . dirname($file) . '"';
+                        !empty($cfg['files_usergroup']) ? chgrp($unrar_check, $cfg['files_usergroup']) : null;
+                        $unrar = $cfg['unrar_path'] . ' x -p- -y "' . $file . '" "' . dirname($file) . '"';
                         $log->info("Need unrar $file");
                         exec($unrar);
                         break;
@@ -354,7 +354,7 @@ function get_valid_files($item) {
         $valid_files = [];
 
         foreach ($files_dir as $file) {
-            if (preg_match($cfg['TORRENT_MEDIA_REGEX'], $file)) {
+            if (preg_match($cfg['torrent_media_regex'], $file)) {
                 $valid_files[] = $file;
             }
         }
@@ -367,7 +367,7 @@ function get_valid_files($item) {
             if (!file_exists($work_path)) {
                 mkdir($work_path);
             }
-            if (file_exists($cfg['UNRAR_PATH'])) {
+            if (file_exists($cfg['unrar_path'])) {
 
                 $unrar_check = $orig_path . '.unrar';
                 if (!file_exists($unrar_check)) {
@@ -375,7 +375,7 @@ function get_valid_files($item) {
                         $log->addStateMsg(" {$LNG['L_ERR_FILE_ENCRYPT_MANUAL']} ($file)");
                         // we continue and try since the function need test and TODO.
                     }
-                    $unrar = $cfg['UNRAR_PATH'] . ' e -p- -y "' . $orig_path . '" "' . $work_path . '"';
+                    $unrar = $cfg['unrar_path'] . ' e -p- -y "' . $orig_path . '" "' . $work_path . '"';
                     exec($unrar);
                     touch($unrar_check);
                 }
@@ -386,7 +386,7 @@ function get_valid_files($item) {
                     $log->debug("Work path is empty");
                 }
                 foreach ($files_dir as $file) {
-                    if (preg_match($cfg['TORRENT_MEDIA_REGEX'], $file)) {
+                    if (preg_match($cfg['torrent_media_regex'], $file)) {
                         $valid_files[] = $file;
                     } else {
                         if (!is_dir($file)) {
@@ -397,7 +397,7 @@ function get_valid_files($item) {
             }
         } else {
             foreach ($item['files'] as $file) {
-                if (preg_match($cfg['TORRENT_MEDIA_REGEX'], $file['name'])) {
+                if (preg_match($cfg['torrent_media_regex'], $file['name'])) {
                     $file_full_path = $cfg['TORRENT_FINISH_PATH'] . '/' . $file['name'];
                     $valid_files[] = $file_full_path;
                 }
@@ -412,8 +412,8 @@ function move_media($valid_file, $final_dest_path) {
     global $cfg, $log, $LNG;
 
     if (rename($valid_file, $final_dest_path)) {
-        (!empty($cfg['FILES_USERGROUP'])) ? chgrp($final_dest_path, $cfg['FILES_USERGROUP']) : null;
-        (!empty($cfg['FILES_PERMS'])) ? chmod($final_dest_path, $cfg['FILES_PERMS']) : null;
+        (!empty($cfg['files_usergroup'])) ? chgrp($final_dest_path, $cfg['files_usergroup']) : null;
+        (!empty($cfg['files_perms'])) ? chmod($final_dest_path, $cfg['files_perms']) : null;
         $log->info(" Rename sucessful: $valid_file : $final_dest_path");
         $log->addStateMsg(basename($final_dest_path) . ' ' . $LNG['L_MOVED_TO_LIBRARY']);
         return true;
@@ -427,8 +427,8 @@ function linking_media($valid_file, $final_dest_path) {
     global $cfg, $log, $LNG;
 
     if (symlink($valid_file, $final_dest_path)) {
-        (!empty($cfg['FILES_USERGROUP'])) ? chgrp($valid_file, $cfg['FILES_USERGROUP']) : null;
-        (!empty($cfg['FILES_PERMS'])) ? chmod($valid_file, $cfg['FILES_PERMS']) : null;
+        (!empty($cfg['files_usergroup'])) ? chgrp($valid_file, $cfg['files_usergroup']) : null;
+        (!empty($cfg['files_perms'])) ? chmod($valid_file, $cfg['files_perms']) : null;
         $log->info(" Linking sucessful: $valid_file : $final_dest_path");
         $log->addStateMsg(basename($final_dest_path) . ' ' . $LNG['L_LINKED_TO_LIBRARY']);
         return true;
@@ -475,7 +475,7 @@ function wanted_work() {
         $last_check = $wanted['last_check'];
 
         if (!empty($last_check)) {
-            $next_check = $last_check + $cfg['WANTED_DAY_DELAY'];
+            $next_check = $last_check + $cfg['wanted_day_delay'];
             if ($next_check > time()) {
                 $next_check = $next_check - time();
                 $log->debug("Jumping wanted {$wanted['title']} check by delay, next check in $next_check seconds");
@@ -555,11 +555,11 @@ function wanted_check_flags($results) {
     global $cfg, $log;
     $noignore = [];
 
-    if (count($cfg['TORRENT_IGNORES_PREFS']) > 0) {
+    if (count($cfg['torrent_ignore_prefs']) > 0) {
         foreach ($results as $result) {
             $ignore_flag = 0;
 
-            foreach ($cfg['TORRENT_IGNORES_PREFS'] as $ignore) {
+            foreach ($cfg['torrent_ignore_prefs'] as $ignore) {
                 if (stripos($result['title'], $ignore)) {
                     $ignore_flag = 1;
                     $log->debug('Wanted: Ignored coincidence for item ' . $result['title'] . ' by ignore key ' . $ignore);
@@ -573,11 +573,11 @@ function wanted_check_flags($results) {
         $noignore = $results;
     }
 
-    if (count($cfg['TORRENT_QUALITYS_PREFS']) > 0) {
+    if (count($cfg['torrent_quality_prefs']) > 0) {
 
         //build quality array with PROPER and without PROPER
         $_order = 0;
-        foreach ($cfg['TORRENT_QUALITYS_PREFS'] as $quality) {
+        foreach ($cfg['torrent_quality_prefs'] as $quality) {
             if ($quality == 'ANY') {
                 $TORRENT_QUALITYS_PREFS_PROPER[$_order] = 'PROPER';
                 $TORRENT_QUALITYS_PREFS_PROPER[$_order + 1] = $quality;
@@ -614,14 +614,14 @@ function send_transmission($results) {
 
         $d_link = $result['download'];
 
-        ($cfg['WANTED_PAUSED']) ? $trans_opt['paused'] = true : $trans_opt = [];
+        ($cfg['wanted_paused']) ? $trans_opt['paused'] = true : $trans_opt = [];
 
         $trans_response = $trans->addUrl($d_link, null, $trans_opt);
         foreach ($trans_response as $rkey => $rval) {
             $trans_db[0][$rkey] = $rval;
         }
         //UPDATE WANTED.DB
-        if ($cfg['WANTED_PAUSED']) {
+        if ($cfg['wanted_paused']) {
             $update_ary['wanted_status'] = 0;
         } else {
             $update_ary['wanted_status'] = 1;
@@ -654,7 +654,7 @@ function update_trailers() {
     $update = [];
 
     $update['updated'] = $time_now = time();
-    $next_update = time() - $cfg['DB_UPD_MISSING_DELAY'];
+    $next_update = time() - $cfg['db_upd_missing_delay'];
     $query = "SELECT DISTINCT themoviedb_id FROM library_movies WHERE trailer IS NULL AND updated < $next_update LIMIT $limit";
     $stmt = $db->query($query);
     $results = $db->fetchAll($stmt);
@@ -676,7 +676,7 @@ function update_trailers() {
     //SHOWS_LIBRARY EMPTY TRAILER
     $update = [];
     $update['updated'] = $time_now = time();
-    $next_update = time() - $cfg['DB_UPD_MISSING_DELAY'];
+    $next_update = time() - $cfg['db_upd_missing_delay'];
     $query = "SELECT DISTINCT themoviedb_id FROM library_shows WHERE trailer IS NULL AND updated < $next_update LIMIT $limit";
     $stmt = $db->query($query);
     $results = $db->fetchAll($stmt);
@@ -697,7 +697,7 @@ function update_trailers() {
     //MOVIES_LIBRARY LONG DELAY UPDATE TRAILER
     $update = [];
     $update['updated'] = $time_now = time();
-    $next_update = time() - $cfg['DB_UPD_LONG_DELAY'];
+    $next_update = time() - $cfg['db_upd_long_delay'];
     $query = "SELECT themoviedb_id FROM library_movies WHERE trailer IS NOT NULL AND updated < $next_update LIMIT $limit";
     $stmt = $db->query($query);
     $results = $db->fetchAll($stmt);
@@ -718,7 +718,7 @@ function update_trailers() {
     //SHOWS_LIBRARY LONG UPDATE TRAILER
     $update = [];
     $update['updated'] = $time_now = time();
-    $next_update = time() - $cfg['DB_UPD_LONG_DELAY'];
+    $next_update = time() - $cfg['db_upd_long_delay'];
     $query = "SELECT DISTINCT themoviedb_id FROM library_shows WHERE trailer IS NOT NULL AND updated < $next_update LIMIT $limit";
     $stmt = $db->query($query);
     $results = $db->fetchAll($stmt);
@@ -737,7 +737,9 @@ function update_trailers() {
     }
 }
 
-/* That function will be not necesary in the future, since new movies already hashed on rebuild */
+/* That function will be not necesary in the future, since new movies already hashed on rebuild
+  edit: Perhaps is need, when link instead of move we can't hash
+ *  */
 
 function hash_missing() {
     global $db;
