@@ -52,7 +52,7 @@ function _rebuild($media_type, $path) {
             $year = getFileYear($file_name);
             $tags = getFileTags($file_name);
             $ext = substr($file_name, -3);
-            $hash = file_hash($file);
+            (is_link($file)) ? $hash = '' : $hash = file_hash($file);
 
             $items[$i] = [
                 'ilink' => $ilink,
