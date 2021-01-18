@@ -14,7 +14,7 @@ function findFiles($directory, $extensions = []) {
     $content = getDirContents($directory);
     $files = [];
     foreach ($content as $file) {
-        $ext = substr($file, -3);
+        $ext = strtolower(substr($file, -3));
         if (in_array($ext, $extensions)) {
             $files[] = $file;
         }
@@ -65,18 +65,18 @@ function load_from_file_json($file) {
 function cacheImg($img_url) {
     global $cfg;
 
-    if (!is_writeable($_SERVER['DOCUMENT_ROOT'] . $cfg['REL_PATH'] . $cfg['CACHE_IMAGES_PATH'])) {
+    if (!is_writeable($_SERVER['DOCUMENT_ROOT'] . $cfg['REL_PATH'] . $cfg['cache_images_path'])) {
         return false;
     }
 
     $file_name = basename($img_url);
-    $img_path = $_SERVER['DOCUMENT_ROOT'] . $cfg['REL_PATH'] . $cfg['CACHE_IMAGES_PATH'] . '/' . $file_name;
+    $img_path = $_SERVER['DOCUMENT_ROOT'] . $cfg['REL_PATH'] . $cfg['cache_images_path'] . '/' . $file_name;
 
     if (
             file_exists($img_path) ||
             file_put_contents($img_path, file_get_contents($img_url)) !== false
     ) {
-        return $cfg['REL_PATH'] . $cfg['CACHE_IMAGES_PATH'] . '/' . $file_name;
+        return $cfg['REL_PATH'] . $cfg['cache_images_path'] . '/' . $file_name;
     }
     return false;
 }
