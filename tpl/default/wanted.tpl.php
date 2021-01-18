@@ -14,12 +14,12 @@
         <div class="wanted_opt_global">
             <div class="global_title"><?= $tdata['L_GLOBAL_TAGS'] ?></div>
             <?php
-            foreach ($cfg['TORRENT_QUALITYS_PREFS'] as $quality) {
+            foreach ($cfg['torrent_quality_prefs'] as $quality) {
                 ?>
                 <span class="tag_quality"><?= $quality ?></span>
                 <?php
             }
-            foreach ($cfg['TORRENT_IGNORES_PREFS'] as $ignores) {
+            foreach ($cfg['torrent_ignore_prefs'] as $ignores) {
                 ?>
                 <span class="tag_ignore"><?= $ignores ?></span>
             <?php } ?>
