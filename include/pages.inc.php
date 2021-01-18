@@ -164,12 +164,14 @@ function page_view() {
 }
 
 function page_library() {
+    global $cfg;
+
     $page = '';
 
-    if ($_GET['page'] == 'library' || $_GET['page'] == 'library_movies') {
+    if (($cfg['want_movies']) && ( $_GET['page'] == 'library' || $_GET['page'] == 'library_movies')) {
         $page .= show_my_movies();
     }
-    if ($_GET['page'] == 'library' || $_GET['page'] == 'library_shows') {
+    if (($cfg['want_shows']) && ($_GET['page'] == 'library' || $_GET['page'] == 'library_shows')) {
         $page .= show_my_shows();
     }
 
@@ -180,10 +182,10 @@ function page_news() {
     global $cfg;
 
     $page_news = '';
-    if ($cfg['want_movies'] && ($_GET['page'] == 'news' || $_GET['page'] == 'new_movies')) {
+    if (($cfg['want_movies']) && ($_GET['page'] == 'news' || $_GET['page'] == 'new_movies')) {
         $page_news .= page_new_media('movies');
     }
-    if ($cfg['want_shows'] && ($_GET['page'] == 'news' || $_GET['page'] == 'new_shows')) {
+    if (($cfg['want_shows']) && ($_GET['page'] == 'news' || $_GET['page'] == 'new_shows')) {
         $page_news .= page_new_media('shows');
     }
     return $page_news;
@@ -199,7 +201,7 @@ function page_tmdb() {
     $tdata['search_movies_word'] = $search_movies;
     $tdata['search_shows_word'] = $search_shows;
 
-    $page = getTpl('page_tmdb', array_merge($LNG, $tdata));
+    $page = getTpl('page_tmdb', array_merge($LNG, $tdata, $cfg));
 
     if (!empty($search_movies)) {
         $movies = mediadb_searchMovies(trim($search_movies));
@@ -222,7 +224,7 @@ function page_tmdb() {
 }
 
 function page_torrents() {
-    global $LNG, $filter;
+    global $LNG, $filter, $cfg;
 
     (!empty($_GET['search_movies_torrents'])) ? $search_movies_torrents = $filter->getUtf8('search_movies_torrents') : $search_movies_torrents = '';
     (!empty($_GET['search_shows_torrents'])) ? $search_shows_torrents = $filter->getUtf8('search_shows_torrents') : $search_shows_torrents = '';
@@ -230,7 +232,7 @@ function page_torrents() {
     $tdata['search_movies_word'] = $search_movies_torrents;
     $tdata['search_shows_word'] = $search_shows_torrents;
 
-    $page = getTpl('page_torrents', array_merge($tdata, $LNG));
+    $page = getTpl('page_torrents', array_merge($tdata, $LNG, $cfg));
 
     if (!empty($search_movies_torrents)) {
         $search['words'] = trim($search_movies_torrents);

@@ -5,8 +5,7 @@ TODO
     [IMPROVE] fix all messy code due fast coding
     [FIX] Clean wanted.db/direct torrents that was delete outside app
 
-[MED]
-    [FIX] WantMovies/Shows not work on library and the menu (hidde p/s if any is off)
+[MED]    
     [ADD] Cache themoviedb searchs
     [NEW] Escaneo de directorios a más para avi sin ser torrents. $cfg['SCAN_MEDIA_DIR'] = 1;
     [NEW/IMPROVE] actualizacion automatica cada semana de titulos de episodio a excepcion de que el show sea "ended"
