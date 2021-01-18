@@ -280,11 +280,11 @@ function themoviedb_getTrending() {
 
     $movies_url = 'https://api.themoviedb.org/3/trending/movie/day?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['LANG'];
     $shows_url = 'https://api.themoviedb.org/3/trending/tv/day?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['LANG'];
-    if ($cfg['WANT_MOVIES']) {
+    if ($cfg['want_movies']) {
         $response_items = curl_get_tmdb($movies_url);
         $results['movies'] = themoviedb_MediaPrep('movies', $response_items['results']);
     }
-    if ($cfg['WANT_SHOWS']) {
+    if ($cfg['want_shows']) {
         $response_items = curl_get_tmdb($shows_url);
         $results['shows'] = themoviedb_MediaPrep('shows', $response_items['results']);
     }
