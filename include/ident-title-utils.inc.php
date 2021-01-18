@@ -18,8 +18,8 @@ function getFileTitle($file) {
     $regex_cs = '/^(?:';
     $regex_cs .= '(?!SPANISH)';
     $regex_cs .= '(?!ENGLISH)';
-    if (!empty($cfg['MEDIA_LANGUAGE_TAG']) && count($cfg['MEDIA_LANGUAGE_TAG']) > 0) {
-        foreach ($cfg['MEDIA_LANGUAGE_TAG'] as $custom_media_tag) {
+    if (!empty($cfg['media_language_tag']) && count($cfg['media_language_tag']) > 0) {
+        foreach ($cfg['media_language_tag'] as $custom_media_tag) {
             $regex_cs .= '(?!' . strtoupper($custom_media_tag) . ')';
         }
     }
@@ -70,8 +70,8 @@ function getFileTitle($file) {
     $regex .= '(?!\.avi)'; //.avi
     $regex .= '(?!\.mp4)'; //.mp4
 
-    if (!empty($cfg['MEDIA_LANGUAGE_TAG']) && count($cfg['MEDIA_LANGUAGE_TAG']) > 0) {
-        foreach ($cfg['MEDIA_LANGUAGE_TAG'] as $custom_media_tag) {
+    if (!empty($cfg['media_language_tag']) && count($cfg['media_language_tag']) > 0) {
+        foreach ($cfg['media_language_tag'] as $custom_media_tag) {
             $regex .= '(?!\[' . strtoupper($custom_media_tag) . '\])';
         }
     }
@@ -204,8 +204,8 @@ function getFileTags($file_name) {
     if (!empty($year)) {
         $tags .= '[' . $year . ']';
     }
-    if (isset($cfg['MEDIA_LANGUAGE_TAG']) && count($cfg['MEDIA_LANGUAGE_TAG']) > 0) {
-        foreach ($cfg['MEDIA_LANGUAGE_TAG'] as $lang_tag) {
+    if (isset($cfg['media_language_tag']) && count($cfg['media_language_tag']) > 0) {
+        foreach ($cfg['media_language_tag'] as $lang_tag) {
             if (stripos($file_name, $lang_tag) !== false) {
                 $tags .= '[' . $lang_tag . ']';
             }
@@ -298,8 +298,8 @@ function getFileTags($file_name) {
         }
         $tags .= "UHD]";
     }
-    if (isset($cfg['EXTRA_TAG']) && count($cfg['EXTRA_TAG']) > 0) {
-        foreach ($cfg['EXTRA_TAG'] as $extra_tag) {
+    if (isset($cfg['extra_tag']) && count($cfg['extra_tag']) > 0) {
+        foreach ($cfg['extra_tags']as $extra_tag) {
             if (stripos($file_name, $extra_tag) !== false) {
                 $tags .= '[' . $extra_tag . ']';
             }
