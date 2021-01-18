@@ -11,28 +11,29 @@ if (1) {
 require_once('config/config.inc.php');
 
 if (!file_exists('/etc/trackerm.conf')) {
-    echo '<br> The config file /etc/trackerm.conf is missed, please copy the default file in config.min.php directory to /etc  and rename it as trackerm.conf and configure the settings';
+    echo '<br> The config file /etc/trackerm.conf is missed, please copy the default file (config/config.min.php) to /etc directory and rename it as trackerm.conf and configure the settings';
     exit();
 }
 require('/etc/trackerm.conf');
 
 require_once('config/config.priv.php');
-require_once('include/config.class.php');
-
-setlocale(LC_ALL, $cfg['LOCALE']);
 
 require_once('include/checks.inc.php');
-
 do_checks();
+
+require_once('include/db.class.php');
+global $db;
+$db = new DB($cfg['DB_FILE']);
+$db->connect();
+
+require_once('include/config.class.php');
+$config = new Config();
+
+setlocale(LC_ALL, $cfg['locale']);
 
 require_once('include/logging.class.php');
 global $log;
 $log = new Log($cfg);
-
-require_once('include/db.class.php');
-global $db;
-$db = new DB($cfg['DB_FILE'], $log);
-$db->connect();
 
 require_once('lang/' . $cfg['LANG'] . '/lang.inc.php');
 require_once('include/filters.class.php');

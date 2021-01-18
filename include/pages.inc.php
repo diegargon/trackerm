@@ -180,10 +180,10 @@ function page_news() {
     global $cfg;
 
     $page_news = '';
-    if ($cfg['WANT_MOVIES'] && ($_GET['page'] == 'news' || $_GET['page'] == 'new_movies')) {
+    if ($cfg['want_movies'] && ($_GET['page'] == 'news' || $_GET['page'] == 'new_movies')) {
         $page_news .= page_new_media('movies');
     }
-    if ($cfg['WANT_SHOWS'] && ($_GET['page'] == 'news' || $_GET['page'] == 'new_shows')) {
+    if ($cfg['want_shows'] && ($_GET['page'] == 'news' || $_GET['page'] == 'new_shows')) {
         $page_news .= page_new_media('shows');
     }
     return $page_news;
@@ -215,8 +215,8 @@ function page_tmdb() {
     if (!isset($_GET['search_movies']) && !isset($_GET['search_shows'])) {
         $topt['no_pages'] = 1;
         $results = mediadb_getTrending();
-        ($cfg['WANT_MOVIES']) ? $page .= buildTable('L_TRENDING_MOVIES', $results['movies'], $topt) : null;
-        ($cfg['WANT_SHOWS']) ? $page .= buildTable('L_TRENDING_SHOWS', $results['shows'], $topt) : null;
+        ($cfg['want_movies']) ? $page .= buildTable('L_TRENDING_MOVIES', $results['movies'], $topt) : null;
+        ($cfg['want_shows']) ? $page .= buildTable('L_TRENDING_SHOWS', $results['shows'], $topt) : null;
     }
     return $page;
 }
@@ -412,11 +412,17 @@ function page_transmission() {
 }
 
 function page_config() {
-    global $cfg;
-    $page = '';
-    $config = new Config();
+    global $filter, $config;
 
-    $page .= $config->display($cfg);
+    $page = '';
+    if (isset($_POST['submit_config'])) {
+
+        $config_keys = $filter->postString('config_keys');
+        if (!empty($config_keys) && is_array($config_keys) && count($config_keys) > 0) {
+            $config->save($config_keys);
+        }
+    }
+    $page .= $config->display($filter->getString('category'));
 
     return $page;
 }

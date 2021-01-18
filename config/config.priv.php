@@ -10,22 +10,9 @@
 /* * ********************************** */
 /* PROBABLY NOT NEED CONFIG ANYTHING HERE */
 /* * ********************************** */
-!defined('IN_WEB') ? exit : true;
-
-$cfg['app_name'] = 'trackerm';
-$cfg['tresults_details'] = 1;
-$cfg['max_identify_items'] = 5;
-$cfg['tresults_rows'] = 2;
-$cfg['tresults_columns'] = 8;
-$cfg['profile'] = 0;
-$cfg['jackett_api'] = '/api/v2.0';
-$cfg['img_url'] = $cfg['REL_PATH'] . '/img';
-$cfg['LOG_TO_SYSLOG'] = 1;
-$cfg['LOG_TO_FILE'] = 1;
-$cfg['CHARSET'] = 'UTF-8';
-$cfg['LOCALE'] = str_replace('-', '_', $cfg['LANG']) . '.' . $cfg['CHARSET'];
 
 $cfg['DB_FILE'] = $cfg['ROOT_PATH'] . '/cache/trackerm.db';
+$cfg['img_url'] = $cfg['REL_PATH'] . '/img';
 $cfg['movies_categories'] = [
     2000 => 'Movies',
     2010 => 'Movies/Foreign',
@@ -61,5 +48,3 @@ $cfg['CHECK_DAYS'] = [
 ];
 
 $cfg['categories'] = $cfg['movies_categories'] + $cfg['shows_categories'];
-$cfg['VERSION'] = 'A76';
-
