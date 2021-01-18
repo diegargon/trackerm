@@ -76,12 +76,20 @@ Class Filter {
         return $this->varString($_POST[$val], $size);
     }
 
+    //TODO FILTER
     function varString($val, $size = null) {
-        if (empty($val) || (!empty($size) && (strlen($val) > $size))) {
+        if (empty($val)) {
             return false;
         }
 
-//TODO FILTER
+        if (is_array($val)) {
+
+        } else {
+            if ((!empty($size) && (strlen($val) > $size))) {
+                return false;
+            }
+        }
+
         return $val;
     }
 
