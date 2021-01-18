@@ -33,7 +33,7 @@ Class Log {
             'LOG_DEBUG' => 7, //	debug-level message
         ];
 
-        if ($LOG_TYPE[$type] <= $LOG_TYPE[$this->cfg['SYSLOG_LEVEL']]) {
+        if ($LOG_TYPE[$type] <= $LOG_TYPE[$this->cfg['syslog_level']]) {
 
             if ($this->console) {
                 if (is_array($msg)) {
@@ -42,7 +42,7 @@ Class Log {
                 echo $this->cfg['app_name'] . " : [" . $type . '] ' . $msg . "\n";
             }
 
-            if ($cfg['LOG_TO_FILE']) {
+            if ($cfg['log_to_file']) {
                 $log_file = 'cache/log/trackerm.log';
                 if (is_array($msg)) {
                     $msg = print_r($msg, true);
@@ -50,8 +50,8 @@ Class Log {
                 $content = '[' . strftime("%d %h %X", time()) . ']' . $this->cfg['app_name'] . " : [" . $type . '] ' . $msg . "\n";
                 file_put_contents($log_file, $content, FILE_APPEND);
             }
-            if ($cfg['LOG_TO_SYSLOG']) {
-                openlog($this->cfg['app_name'] . ' ' . $this->cfg['VERSION'], LOG_NDELAY, LOG_SYSLOG);
+            if ($cfg['log_to_syslog']) {
+                openlog($this->cfg['app_name'] . ' ' . $this->cfg['version'], LOG_NDELAY, LOG_SYSLOG);
                 if (is_array($msg)) {
                     $msg = print_r($msg, true);
                     isset($this->console) ? $this->cfg['app_name'] . " : [" . $type . '] ' . $msg . "\n" : null;
