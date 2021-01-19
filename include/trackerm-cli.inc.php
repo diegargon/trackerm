@@ -146,7 +146,7 @@ function MovieJob($item, $linked = false) {
 
         if ($cfg['create_movie_folders']) {
             if (is_array($cfg['MOVIES_PATH'])) {
-                $dest_path = $cfg['MOVIES_PATH'][$cfg['MOVIES_PATH_NEW']] . '/' . ucwords($item['title']);
+                $dest_path = $cfg['MOVIES_PATH'][0] . '/' . ucwords($item['title']);
             } else {
                 $dest_path = $cfg['MOVIES_PATH'] . '/' . ucwords($item['title']);
             }
@@ -161,7 +161,7 @@ function MovieJob($item, $linked = false) {
             if (!is_array($cfg['MOVIES_PATH'])) {
                 $dest_path = $cfg['MOVIES_PATH'];
             } else {
-                $dest_path = $cfg['MOVIES_PATH'][$cfg['MOVIES_PATH_NEW']];
+                $dest_path = $cfg['MOVIES_PATH'][0];
             }
         }
 
@@ -245,15 +245,15 @@ function ShowJob($item, $linked = false) {
             if ($cfg['create_shows_season_folder'] && !empty($_season)) {
                 ($_season != "xx") ? $_season = (int) $_season : null; // 01 to 1 for directory
                 if (is_array($cfg['SHOWS_PATH'])) {
-                    $dest_path = $cfg['SHOWS_PATH'][$cfg['SHOWS_PATH_NEW']] . '/' . ucwords($title . '/' . $LNG['L_SEASON'] . ' ' . $_season);
-                    $dest_path_father = $cfg['SHOWS_PATH'][$cfg['SHOWS_PATH_NEW']] . '/' . ucwords($title);
+                    $dest_path = $cfg['SHOWS_PATH'][0] . '/' . ucwords($title . '/' . $LNG['L_SEASON'] . ' ' . $_season);
+                    $dest_path_father = $cfg['SHOWS_PATH'][0] . '/' . ucwords($title);
                 } else {
                     $dest_path = $cfg['SHOWS_PATH'] . '/' . ucwords($title . '/' . $LNG['L_SEASON'] . ' ' . $_season);
                     $dest_path_father = $cfg['SHOWS_PATH'] . '/' . ucwords($title);
                 }
             } else {
                 if (is_array($cfg['SHOWS_PATH'])) {
-                    $dest_path = $cfg['SHOWS_PATH'][$cfg['SHOWS_PATH_NEW']] . '/' . ucwords($title);
+                    $dest_path = $cfg['SHOWS_PATH'][0] . '/' . ucwords($title);
                 } else {
                     $dest_path = $cfg['SHOWS_PATH'] . '/' . ucwords($title);
                 }

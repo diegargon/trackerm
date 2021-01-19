@@ -8,8 +8,6 @@ if (1) {
     ini_set("display_errors", 1);
 }
 
-require_once('config/config.inc.php');
-
 if (!file_exists('/etc/trackerm.conf')) {
     echo '<br> The config file /etc/trackerm.conf is missed, please copy the default file (config/config.min.php) to /etc directory and rename it as trackerm.conf and configure the settings';
     exit();
