@@ -22,6 +22,7 @@ function create_db() {
 
     // USERS
     //"sid" varchar NULL,
+    //"isAdmin" INT NOT NULL,
     $db->query('CREATE TABLE IF NOT EXISTS "users" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                     "username" varchar NOT NULL UNIQUE,
