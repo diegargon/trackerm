@@ -21,6 +21,7 @@ function create_db() {
     $db->insert('db_info', ["app_name" => 'trackerm', "version" => 5]);
 
     // USERS
+    //"sid" varchar NULL,
     $db->query('CREATE TABLE IF NOT EXISTS "users" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                     "username" varchar NOT NULL UNIQUE,
