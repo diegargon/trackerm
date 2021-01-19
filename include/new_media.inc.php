@@ -31,6 +31,9 @@ function page_new_media($media_type) {
             $cache_media_expire = 1;
         } else {
             $log->debug("News: $media_type using cache " . ( ($media_cache_check['updated'] + $cfg['new_cache_expire']) - time()));
+            if (empty($media_cache_check['ids'])) {
+                return false;
+            }
             $ids = explode(',', $media_cache_check['ids']);
             if (empty($ids) || count($ids) <= 0) {
                 return false;
