@@ -20,19 +20,17 @@
  */
 class DB {
 
-    private $version = 4;
+    private $version = 5;
     private $db;
     private $db_path;
-    private $log;
     private $querys = [];
 
-    public function __construct($db_path, $log) {
+    public function __construct($db_path) {
         $this->db_path = $db_path;
-        $this->log = $log;
     }
 
     public function connect() {
-        $debug_msg = '';
+
         $response = $this->checkInstall();
         $this->db = new SQLite3($this->db_path, SQLITE3_OPEN_CREATE | SQLITE3_OPEN_READWRITE);
         $this->db->busyTimeout(5000);
@@ -47,12 +45,8 @@ class DB {
 
         $version = $this->getDbVersion();
         if ($version < $this->version) {
-            $debug_msg .= ("DbV:NeedUp->");
-            ($this->upgradeDb($version)) ? $debug_msg .= 'ok' : $debug_msg .= 'fail';
-        } else if ($version > $this->version) {
-            $debug_msg .= ("DbV:NewerDBThanApiProblem");
+            $this->upgradeDb($version);
         }
-        !empty($debug_msg) ? $this->log->debug($debug_msg) : null;
     }
 
     /* Common / Helpers */
@@ -424,31 +418,23 @@ class DB {
 
     private function checkInstall() {
         if (file_exists($this->db_path)) {
-            //$this->log->debug('db file exists');
-            //check if exist tables
             return true;
         } else {
-            $this->log->err('Db file not exists: ' . $this->db_path);
             return false;
         }
     }
 
     private function fail() {
-        $this->log->debug(" FAIL ");
-        $err_msg = print_r($this->querys, true);
-        $this->log->err($err_msg);
         return false;
     }
 
     private function createTables() {
-        $this->log->debug("exec:createTables");
         require_once('config/db.sql.php');
 
         return create_db();
     }
 
     private function upgradeDb($from) {
-        $this->log->debug("exec:upgradeDB from $from ");
         require_once('config/db.sql.php');
 
         return update_db($from);

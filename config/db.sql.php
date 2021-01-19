@@ -18,12 +18,7 @@ function create_db() {
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
                 )');
 
-    $query = [
-        "app_name" => 'trackerm',
-        "version" => 4,
-    ];
-
-    $db->insert('db_info', $query);
+    $db->insert('db_info', ["app_name" => 'trackerm', "version" => 5]);
 
     // USERS
     $db->query('CREATE TABLE IF NOT EXISTS "users" (
@@ -33,10 +28,7 @@ function create_db() {
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
        )');
 
-    $query = [
-        'username' => 'default'
-    ];
-    $db->insert('users', $query);
+    $db->insert('users', ["username" => "default"]);
 
     // PREFERENCES
     $db->query('CREATE TABLE IF NOT EXISTS "preferences" (
@@ -46,18 +38,6 @@ function create_db() {
                     "pref_value" VARCHAR NOT NULL,
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                     UNIQUE (uid, pref_name)
-                )');
-    // CONFIG
-    $db->query('CREATE TABLE IF NOT EXISTS "config" (
-                    "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                    "cfg_key" VARCHAR NOT NULL,
-                    "cfg_value" VARCHAR NOT NULL,
-                    "cfg_perms" VARCHAR NULL,
-                    "cfg_desc" VARCHAR NULL,
-                    "type" VARCHAR NULL,
-                    "modify" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-                    "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-                    UNIQUE (cfg_key)
                 )');
 
     // TMDB_SEARCH
@@ -187,6 +167,9 @@ function create_db() {
                     "category" INTEGER NULL,
                     "source" VARCHAR NULL,
                     "poster" VARCHAR NULL,
+                    "guessed_poster" VARCHAR NULL,
+                    "trailer" VARCHAR NULL,
+                    "guessed_trailer" VARCHAR NULL,
                     "added" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
                 )');
@@ -207,6 +190,9 @@ function create_db() {
                     "category" INTEGER NULL,
                     "source" VARCHAR NULL,
                     "poster" VARCHAR NULL,
+                    "guessed_poster" VARCHAR NULL,
+                    "trailer" VARCHAR NULL,
+                    "guessed_trailer" VARCHAR NULL,
                     "added" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
                 )');
@@ -274,6 +260,62 @@ function create_db() {
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                     UNIQUE (themoviedb_id, season, episode)
                 )');
+
+    // CONFIG
+    // type: 1 string, 2 int, 3 bool, 4 reserve, 5 reserve 6 reserve  7 mixedarray, 8 stringarray, 9 intarray,
+    $db->query('CREATE TABLE IF NOT EXISTS "config" (
+                    "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                    "cfg_key" VARCHAR NOT NULL,
+                    "cfg_value" VARCHAR NOT NULL,
+                    "cfg_perms" VARCHAR NULL,
+                    "cfg_desc" VARCHAR NULL,
+                    "type" VARCHAR NOT NULL,
+                    "category" VARCHAR NOT NULL,
+                    "public" INT NULL,
+                    "modify" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                    "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                    UNIQUE (cfg_key)
+                )');
+
+    $db->insert('config', ['cfg_key' => 'version', 'cfg_value' => 'A77', 'cfg_desc' => '', 'type' => 2, 'category' => '', 'public' => 0]);
+    $db->insert('config', ['cfg_key' => 'profile', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => '', 'public' => 0]);
+    $db->insert('config', ['cfg_key' => 'max_identify_items', 'cfg_value' => 5, 'cfg_desc' => 'L_CFG_MAXID_ITEMS', 'type' => 2, 'category' => '', 'public' => 0]);
+    $db->insert('config', ['cfg_key' => 'app_name', 'cfg_value' => 'trackerm', 'cfg_desc' => '', 'type' => 1, 'category' => '', 'public' => 0]);
+    $db->insert('config', ['cfg_key' => 'tresults_rows', 'cfg_value' => 2, 'cfg_desc' => 'L_CFG_ROWS', 'type' => 2, 'category' => 'L_DISPLAY', 'public' => 0]);
+    $db->insert('config', ['cfg_key' => 'new_cache_expire', 'cfg_value' => 3600, 'cfg_desc' => 'L_CFG_NEW_CACHE_EXPIRE', 'type' => 2, 'category' => 'L_MAIN', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'torrent_media_regex', 'cfg_value' => '/(\.avi|\.mp4|\.mkv)/i', 'cfg_desc' => 'L_CFG_TORRENT_MEDIA_REGEX', 'type' => 1, 'category' => 'L_MAIN', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'db_upd_missing_delay', 'cfg_value' => 864000, 'cfg_desc' => 'L_CFG_UPD_MISSING_DELAY', 'type' => 2, 'category' => 'L_MAIN', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'db_upd_long_delay', 'cfg_value' => 2592000, 'cfg_desc' => 'L_CFG_UPD_LONG_DELAY', 'type' => 2, 'category' => 'L_MAIN', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'want_movies', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_WANT_MOVIES', 'type' => 3, 'category' => 'L_MAIN', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'want_shows', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_WANT_SHOWS', 'type' => 3, 'category' => 'L_MAIN', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'wanted_day_delay', 'cfg_value' => 3000, 'cfg_desc' => 'L_CFG_WANT_DAY_DELAY', 'type' => 2, 'category' => 'L_MAIN', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'charset', 'cfg_value' => 'UTF-8', 'cfg_desc' => 'L_CFG_CHARSET', 'type' => 1, 'category' => 'L_LANG', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'locale', 'cfg_value' => 'en_EN@UTF-8', 'cfg_desc' => 'L_CFG_LOCALE', 'type' => 1, 'category' => 'L_LANG', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'theme', 'cfg_value' => 'default', 'cfg_desc' => 'L_CFG_THEME', 'type' => 1, 'category' => 'L_DISPLAY', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'tresults_columns', 'cfg_value' => 8, 'cfg_desc' => 'L_CFG_COLUMNS', 'type' => 2, 'category' => 'L_DISPLAY', 'public' => 0]);
+    $db->insert('config', ['cfg_key' => 'jackett_api_path', 'cfg_value' => '/api/v2.0', 'cfg_desc' => 'L_CFG_JACKETT_API_PATH', 'type' => 2, 'category' => 'L_JACKETT', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'jackett_results', 'cfg_value' => 50, 'cfg_desc' => 'L_CFG_JACKETT_RESULTS', 'type' => 2, 'category' => 'L_JACKETT', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'log_to_syslog', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_LOG_TO_SYSLOG', 'type' => 3, 'category' => 'L_LOGGING', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'log_to_file', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_LOG_TO_FILE', 'type' => 3, 'category' => 'L_LOGGING', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'syslog_level', 'cfg_value' => 'LOG_DEBUG', 'cfg_desc' => 'L_CFG_SYSLOG_LEVEL', 'type' => 1, 'category' => 'L_LOGGING', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'search_cache', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_SEARCH_CACHE', 'type' => 3, 'category' => 'L_SEARCH', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'search_cache_expire', 'cfg_value' => 3600, 'cfg_desc' => 'L_CFG_SEARCH_CACHE_EXPIRE', 'type' => 2, 'category' => 'L_SEARCH', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'wanted_paused', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_WANTED_PAUSED', 'type' => 3, 'category' => 'L_WANTED', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'cache_images', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_CACHE_IMAGES', 'type' => 3, 'category' => 'L_IMAGES', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'cache_images_path', 'cfg_value' => '/cache/images', 'cfg_desc' => 'L_CFG_CACHE_IMAGES_PATH', 'type' => 1, 'category' => 'L_IMAGES', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'unrar_path', 'cfg_value' => '/usr/bin/unrar', 'cfg_desc' => 'L_CFG_UNRAR_PATH', 'type' => 1, 'category' => 'L_FILES', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'create_movie_folders', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_CREATE_MOVIE_FOLDERS', 'type' => 3, 'category' => 'L_FILES', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'create_shows_season_folder', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_CREATE_SHOWS_SEASON_FOLDER', 'type' => 3, 'category' => 'L_FILES', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'files_usergroup', 'cfg_value' => '', 'cfg_desc' => 'L_CFG_FILES_USERGROUP', 'type' => 1, 'category' => 'L_FILES', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'files_perms', 'cfg_value' => '664', 'cfg_desc' => 'L_CFG_FILES_PERMS', 'type' => 1, 'category' => 'L_FILES', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'dir_perms', 'cfg_value' => '775', 'cfg_desc' => 'L_CFG_DIR_PERMS', 'type' => 1, 'category' => 'L_FILES', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'media_ext', 'cfg_value' => 'mkv,avi,mp4', 'cfg_desc' => 'L_CFG_MEDIA_EXT', 'type' => 8, 'category' => 'L_FILES', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'move_only_inapp', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_MOVE_ONLY_INAPP', 'type' => 3, 'category' => 'TRANSMISSION', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'move_transmission_orphan', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_MOVE_TRANSMISSION_ORPHAN', 'type' => 3, 'category' => 'TRANSMISSION', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'torrent_quality_prefs', 'cfg_value' => '720p,1080p,ANY', 'cfg_desc' => 'L_CFG_TORRENT_QUALITY_PREFS', 'type' => 8, 'category' => 'L_TORRENT', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'torrent_ignore_prefs', 'cfg_value' => 'LATINO,SCREENER', 'cfg_desc' => 'L_CFG_TORRENT_IGNORE_PREFS', 'type' => 8, 'category' => 'L_TORRENT', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'extra_tags', 'cfg_value' => '', 'cfg_desc' => 'L_CFG_EXTRA_TAGS', 'type' => 8, 'category' => 'L_TORRENT', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'media_language_tag', 'cfg_value' => 'SPANISH,ENGLISH,CASTELLANO,ESPAÑOL', 'cfg_desc' => 'L_CFG_media_language_tag', 'type' => 8, 'category' => 'L_TORRENT', 'public' => 1]);
 
     return true;
 }
@@ -377,19 +419,74 @@ function update_db($from) {
         $db->query('ALTER TABLE library_history add column clean_title VARCHAR NULL');
         $db->query('ALTER TABLE library_shows add column clean_title VARCHAR NULL');
         $db->query('ALTER TABLE library_movies add column clean_title VARCHAR NULL');
-        $db->query('ALTER TABLE config add column  type VARCHAR NULL');
+        $db->query('ALTER TABLE config add column type VARCHAR NULL');
         $set['version'] = 4;
         $db->update('db_info', $set);
     }
+
+    if ($from < 5) {
+        $db->query('ALTER TABLE jackett_shows add column trailer VARCHAR NULL');
+        $db->query('ALTER TABLE jackett_movies add column trailer VARCHAR NULL');
+        $db->query('ALTER TABLE jackett_shows add column guessed_trailer VARCHAR NULL');
+        $db->query('ALTER TABLE jackett_movies add column guessed_trailer VARCHAR NULL');
+        $db->query('ALTER TABLE jackett_shows add column guessed_poster VARCHAR NULL');
+        $db->query('ALTER TABLE jackett_movies add column guessed_poster VARCHAR NULL');
+        $db->query('ALTER TABLE jackett_movies add column guessed_poster VARCHAR NULL');
+        $db->query('ALTER TABLE config add column category VARCHAR NULL');
+        $db->query('ALTER TABLE config add column public INT NULL');
+
+        $db->insert('config', ['cfg_key' => 'version', 'cfg_value' => 'A77', 'cfg_desc' => '', 'type' => 2, 'category' => '', 'public' => 0]);
+        $db->insert('config', ['cfg_key' => 'profile', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => '', 'public' => 0]);
+        $db->insert('config', ['cfg_key' => 'max_identify_items', 'cfg_value' => 5, 'cfg_desc' => 'L_CFG_MAXID_ITEMS', 'type' => 2, 'category' => '', 'public' => 0]);
+        $db->insert('config', ['cfg_key' => 'app_name', 'cfg_value' => 'trackerm', 'cfg_desc' => '', 'type' => 1, 'category' => '', 'public' => 0]);
+        $db->insert('config', ['cfg_key' => 'tresults_rows', 'cfg_value' => 2, 'cfg_desc' => 'L_CFG_ROWS', 'type' => 2, 'category' => 'L_DISPLAY', 'public' => 0]);
+        $db->insert('config', ['cfg_key' => 'new_cache_expire', 'cfg_value' => 3600, 'cfg_desc' => 'L_CFG_NEW_CACHE_EXPIRE', 'type' => 2, 'category' => 'L_MAIN', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'torrent_media_regex', 'cfg_value' => '/(\.avi|\.mp4|\.mkv)/i', 'cfg_desc' => 'L_CFG_TORRENT_MEDIA_REGEX', 'type' => 1, 'category' => 'L_MAIN', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'db_upd_missing_delay', 'cfg_value' => 864000, 'cfg_desc' => 'L_CFG_UPD_MISSING_DELAY', 'type' => 2, 'category' => 'L_MAIN', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'db_upd_long_delay', 'cfg_value' => 2592000, 'cfg_desc' => 'L_CFG_UPD_LONG_DELAY', 'type' => 2, 'category' => 'L_MAIN', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'want_movies', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_WANT_MOVIES', 'type' => 3, 'category' => 'L_MAIN', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'want_shows', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_WANT_SHOWS', 'type' => 3, 'category' => 'L_MAIN', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'wanted_day_delay', 'cfg_value' => 3000, 'cfg_desc' => 'L_CFG_WANT_DAY_DELAY', 'type' => 2, 'category' => 'L_MAIN', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'charset', 'cfg_value' => 'UTF-8', 'cfg_desc' => 'L_CFG_CHARSET', 'type' => 1, 'category' => 'L_LANG', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'locale', 'cfg_value' => 'en_EN@UTF-8', 'cfg_desc' => 'L_CFG_LOCALE', 'type' => 1, 'category' => 'L_LANG', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'theme', 'cfg_value' => 'default', 'cfg_desc' => 'L_CFG_THEME', 'type' => 1, 'category' => 'L_DISPLAY', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'tresults_columns', 'cfg_value' => 8, 'cfg_desc' => 'L_CFG_COLUMNS', 'type' => 2, 'category' => 'L_DISPLAY', 'public' => 0]);
+        $db->insert('config', ['cfg_key' => 'jackett_api_path', 'cfg_value' => '/api/v2.0', 'cfg_desc' => 'L_CFG_JACKETT_API_PATH', 'type' => 2, 'category' => 'L_JACKETT', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'jackett_results', 'cfg_value' => 50, 'cfg_desc' => 'L_CFG_JACKETT_RESULTS', 'type' => 2, 'category' => 'L_JACKETT', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'log_to_syslog', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_LOG_TO_SYSLOG', 'type' => 3, 'category' => 'L_LOGGING', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'log_to_file', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_LOG_TO_FILE', 'type' => 3, 'category' => 'L_LOGGING', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'syslog_level', 'cfg_value' => 'LOG_DEBUG', 'cfg_desc' => 'L_CFG_SYSLOG_LEVEL', 'type' => 1, 'category' => 'L_LOGGING', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'search_cache', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_SEARCH_CACHE', 'type' => 3, 'category' => 'L_SEARCH', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'search_cache_expire', 'cfg_value' => 3600, 'cfg_desc' => 'L_CFG_SEARCH_CACHE_EXPIRE', 'type' => 2, 'category' => 'L_SEARCH', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'wanted_paused', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_WANTED_PAUSED', 'type' => 3, 'category' => 'L_WANTED', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'cache_images', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_CACHE_IMAGES', 'type' => 3, 'category' => 'L_IMAGES', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'cache_images_path', 'cfg_value' => '/cache/images', 'cfg_desc' => 'L_CFG_CACHE_IMAGES_PATH', 'type' => 1, 'category' => 'L_IMAGES', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'unrar_path', 'cfg_value' => '/usr/bin/unrar', 'cfg_desc' => 'L_CFG_UNRAR_PATH', 'type' => 1, 'category' => 'L_FILES', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'create_movie_folders', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_CREATE_MOVIE_FOLDERS', 'type' => 3, 'category' => 'L_FILES', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'create_shows_season_folder', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_CREATE_SHOWS_SEASON_FOLDER', 'type' => 3, 'category' => 'L_FILES', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'files_usergroup', 'cfg_value' => '', 'cfg_desc' => 'L_CFG_FILES_USERGROUP', 'type' => 1, 'category' => 'L_FILES', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'files_perms', 'cfg_value' => '664', 'cfg_desc' => 'L_CFG_FILES_PERMS', 'type' => 1, 'category' => 'L_FILES', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'dir_perms', 'cfg_value' => '775', 'cfg_desc' => 'L_CFG_DIR_PERMS', 'type' => 1, 'category' => 'L_FILES', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'media_ext', 'cfg_value' => 'mkv,avi,mp4', 'cfg_desc' => 'L_CFG_MEDIA_EXT', 'type' => 8, 'category' => 'L_FILES', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'move_only_inapp', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_MOVE_ONLY_INAPP', 'type' => 3, 'category' => 'TRANSMISSION', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'move_transmission_orphan', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_MOVE_TRANSMISSION_ORPHAN', 'type' => 3, 'category' => 'TRANSMISSION', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'torrent_quality_prefs', 'cfg_value' => '720p,1080p,ANY', 'cfg_desc' => 'L_CFG_TORRENT_QUALITY_PREFS', 'type' => 8, 'category' => 'L_TORRENT', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'torrent_ignore_prefs', 'cfg_value' => 'LATINO,SCREENER', 'cfg_desc' => 'L_CFG_TORRENT_IGNORE_PREFS', 'type' => 8, 'category' => 'L_TORRENT', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'extra_tags', 'cfg_value' => '', 'cfg_desc' => 'L_CFG_EXTRA_TAGS', 'type' => 8, 'category' => 'L_TORRENT', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'media_language_tag', 'cfg_value' => 'SPANISH,ENGLISH,CASTELLANO,ESPAÑOL', 'cfg_desc' => 'L_CFG_media_language_tag', 'type' => 8, 'category' => 'L_TORRENT', 'public' => 1]);
+        $set['version'] = 5;
+        $db->update('db_info', $set);
+    }
+
     /*
       NEXT UPDATES:
       remove from wanted ignore field, not need
 
      */
     /*
-      if ($from < 5) {
+      if ($from < 6) {
 
-      $set['version'] = 5;
+      $set['version'] = 6;
       $db->update('db_info', $set);
       }
      */
