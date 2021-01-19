@@ -58,7 +58,7 @@ Apache+Php7+sqlite3 , Jacket, Transmission, Composer, cuenta+api key themoviedb.
 
         $ composer require irazasyed/php-transmission-sdk  php-http/httplug-pack  php-http/guzzle6-adapter
 
-    * sqlite3 normalmente viene instalada por defect en muchas distros, hay que activarla tambien para apache/php, en ubuntu
+    * sqlite3 normalmente viene instalada por defecto en muchas distros, hay que activarla tambien para apache/php, en ubuntu
     al instalarla se activa.
 
         $ apt-get install php-sqlite3
@@ -66,8 +66,6 @@ Apache+Php7+sqlite3 , Jacket, Transmission, Composer, cuenta+api key themoviedb.
 ## CONFIGURACION
     Toda las opciones personalizables de configuración van en /etc/trackerm.conf copie el archivo de la carpeta config/config.min.php 
     a /etc y renombrelo como trackerm.conf y configurelo.
-
-    La variables de configuración completas estan en config/config.inc.php , no edite ninguno de esos  archivo se sobreescribiran.
 
     Importante añadir, themoviedb api key, jacket server ip y key, los indexers  que queremos utilizar (previamente activados en jackett)
     y basicamente rellenar todo de config.min.php en /etc/trackerm.conf
@@ -79,9 +77,9 @@ Apache+Php7+sqlite3 , Jacket, Transmission, Composer, cuenta+api key themoviedb.
     tenga en cuenta que al actualizarlo tendra que moverlo otra vez y sobreescribir el antiguo.
 
     Como funcionara  :
-    * Automaticamente buscara torrentes en "seguimiento" los dias que configuraras, si encuentra coincidencias que satisfaga los filtros lo descargara.
+    * Automaticamente buscara torrentes en "seguimiento" el dia seleccionado, si encuentra coincidencias que satisfaga los filtros lo descargara.
     * Automaticamente movera todos los archivos descargados por transmission a tu libreria, opcionalmente puedes configurarlo para que mueva solo los
-    que descargastes pulsando dentro de la aplicación trackerm. Por defecto mueve todo los archivos multimedia (video) de transmission.
+    que descargastes pulsando dentro de la aplicación trackerm. Por defecto mueve todo los archivos multimedia (video) de transmission que encuentra..
     * (no disponible todavía) Automaticamente y activandolo podra mover todos los archivos multimedia de determinas carpetas que configuremos.
     * Automaticamente descomprime archivos rar, no soporta contraseñas hasta que Jackett las soporte. Si avisa.
 
@@ -92,14 +90,13 @@ Apache+Php7+sqlite3 , Jacket, Transmission, Composer, cuenta+api key themoviedb.
 
     La linea basica para ejecutar las tareas automaticas  (ejemplo cada 15 minutos) es la siguiente (/etc/crontab)
     */15 *   * * *   root    /usr/bin/php  /path/to/trackerm-cli.php
-    Puedes poner trackerm en el directorio que quieras y cambiar de usuario si este tiene los permisos necesarios para las carpetas relacionadas. Si lo mueve
+    Puedes poner trackerm-cli.php en el directorio que quieras y cambiar de usuario si este tiene los permisos necesarios para las carpetas relacionadas. Si lo mueve
     recuerde hacerlo siempre que actualice trackerm.
 
 ## VERSION
     Advertencia: Puedes comprobar la version en el archivo VERSION. Mientras este en alpha (0.0.X) hasta la versión 0.1, toda version es factible de romper
     la compatibilidad hacia atras. Aunque salvo fuerza mayor los hare compatibles. 
-    Si actualizas y hay errores posiblemente tengas que borrar los archivos de la base de datos cache/*.db y quizas
-    puedas tener algun problema con las variables nuevas del archivo de configuración, si algo falla despues de una instalación revisalo.
+    Si actualizas y hay errores posiblemente tengas que revisar las variables del archivo de configuración, si algo falla despues de una instalación revisalo.
 
 ## Lenguaje
     Php+Javascript (Más adelante probablemente Jquery)
@@ -126,6 +123,6 @@ Apache+Php7+sqlite3 , Jacket, Transmission, Composer, cuenta+api key themoviedb.
     * Utilizo una libreria externa para el dialogo con transmission que hay que instalar via composer (ver instalación) 
 
 * TheMovieDB.ORG    
-    Es importante para el correcto funcionamiento crearse una cuenta en dicha pagina, se utilizar para buscar peliculas/series, caratulas, identificar y demas.
-    Necesitais una clave api de un proveedor, actualmente solo soporta themoviedb.org (el api key va en config.inc.php)
+    Es importante y no opcional para el correcto funcionamiento crearse una cuenta en dicha pagina, se utilizar para buscar peliculas/series, caratulas, identificar y demas.
+    Necesitais una clave api de un proveedor, actualmente solo soporta themoviedb.org (el api key va en /etc/trackerm.php utilizando la plantilla config/config.min.php)
     Quizas en el futuro se añadan otras alternativas pero de momento solo hay esta y es imprescindible.
