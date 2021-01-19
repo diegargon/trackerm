@@ -302,7 +302,7 @@ function create_db() {
     $db->insert('config', ['cfg_key' => 'syslog_level', 'cfg_value' => 'LOG_DEBUG', 'cfg_desc' => 'L_CFG_SYSLOG_LEVEL', 'type' => 1, 'category' => 'L_LOGGING', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'search_cache', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_SEARCH_CACHE', 'type' => 3, 'category' => 'L_SEARCH', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'search_cache_expire', 'cfg_value' => 3600, 'cfg_desc' => 'L_CFG_SEARCH_CACHE_EXPIRE', 'type' => 2, 'category' => 'L_SEARCH', 'public' => 1]);
-    $db->insert('config', ['cfg_key' => 'wanted_paused', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_WANTED_PAUSED', 'type' => 3, 'category' => 'L_WANTED', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'wanted_paused', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_WANTED_PAUSED', 'type' => 3, 'category' => 'L_WANTED', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'cache_images', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_CACHE_IMAGES', 'type' => 3, 'category' => 'L_IMAGES', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'cache_images_path', 'cfg_value' => '/cache/images', 'cfg_desc' => 'L_CFG_CACHE_IMAGES_PATH', 'type' => 1, 'category' => 'L_IMAGES', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'unrar_path', 'cfg_value' => '/usr/bin/unrar', 'cfg_desc' => 'L_CFG_UNRAR_PATH', 'type' => 1, 'category' => 'L_FILES', 'public' => 1]);
@@ -460,7 +460,7 @@ function update_db($from) {
         $db->insert('config', ['cfg_key' => 'syslog_level', 'cfg_value' => 'LOG_DEBUG', 'cfg_desc' => 'L_CFG_SYSLOG_LEVEL', 'type' => 1, 'category' => 'L_LOGGING', 'public' => 1]);
         $db->insert('config', ['cfg_key' => 'search_cache', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_SEARCH_CACHE', 'type' => 3, 'category' => 'L_SEARCH', 'public' => 1]);
         $db->insert('config', ['cfg_key' => 'search_cache_expire', 'cfg_value' => 3600, 'cfg_desc' => 'L_CFG_SEARCH_CACHE_EXPIRE', 'type' => 2, 'category' => 'L_SEARCH', 'public' => 1]);
-        $db->insert('config', ['cfg_key' => 'wanted_paused', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_WANTED_PAUSED', 'type' => 3, 'category' => 'L_WANTED', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'wanted_paused', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_WANTED_PAUSED', 'type' => 3, 'category' => 'L_WANTED', 'public' => 1]);
         $db->insert('config', ['cfg_key' => 'cache_images', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_CACHE_IMAGES', 'type' => 3, 'category' => 'L_IMAGES', 'public' => 1]);
         $db->insert('config', ['cfg_key' => 'cache_images_path', 'cfg_value' => '/cache/images', 'cfg_desc' => 'L_CFG_CACHE_IMAGES_PATH', 'type' => 1, 'category' => 'L_IMAGES', 'public' => 1]);
         $db->insert('config', ['cfg_key' => 'unrar_path', 'cfg_value' => '/usr/bin/unrar', 'cfg_desc' => 'L_CFG_UNRAR_PATH', 'type' => 1, 'category' => 'L_FILES', 'public' => 1]);
