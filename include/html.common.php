@@ -177,10 +177,13 @@ function build_item($item, $details = 1) {
             } else if (empty($item['guessed_trailer'])) {
                 $trailer = mediadb_guessTrailer($item);
             }
-
             if (!empty($trailer)) {
-                $item['trailer'] = $trailer;
-                $values['guessed_trailer'] = str_replace('http', 'https', $trailer);
+                $item['trailer'] = trim($trailer);
+                if (substr($trailer, 0, 4) == 'http:') {
+                    $values['guessed_trailer'] = str_replace('http', 'https', $trailer);
+                } else {
+                    $values['guessed_trailer'] = $trailer;
+                }
             } else {
                 $values['guessed_trailer'] = -1;
             }

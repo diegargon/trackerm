@@ -136,6 +136,18 @@ function view() {
         $other['extra'] .= view_extra_shows($item, $opt);
     }
 
+    //TODO: To remove, fix a old databse bug than add too many sss
+    if (!empty($item['guessed_trailer']) && substr(trim($item['guessed_trailer']), 0, 6) == 'httpss') {
+        $item['guessed_trailer'] = preg_replace('/httpss(\w+):/', 'https:', $item['guessed_trailer']);
+        if (!empty($item['ilink'])) {
+            if ($item['ilink'] == 'movies_torrent') {
+                $db->update('jackett_movies', ['guessed_trailer' => $item['guessed_trailer']], ['id' => ['value' => $item['id']]]);
+            }
+            if ($item['ilink'] == 'shows_torrent') {
+                $db->update('jackett_shows', ['guessed_trailer' => $item['guessed_trailer']], ['id' => ['value' => $item['id']]]);
+            }
+        }
+    }
     $page = getTpl('view', array_merge($cfg, $LNG, $item, $other));
 
     return $page;
