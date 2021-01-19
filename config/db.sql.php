@@ -483,7 +483,7 @@ function update_db($from) {
     /*
       NEXT UPDATES:
       remove from wanted ignore field, not need
-
+      config: Download button Optional
      */
     /*
       if ($from < 6) {
