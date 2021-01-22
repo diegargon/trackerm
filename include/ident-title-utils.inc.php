@@ -64,6 +64,7 @@ function getFileTitle($file) {
     $regex .= '(?!\[english\])';
     $regex .= '(?!multi\senglish)'; // multi english
     $regex .= '(?!S\d{2}E\d{2})'; // SXXEXX
+    $regex .= '(?!S\d{2}\s+E\d{2})'; // SXX EXX
     $regex .= '(?!3D)'; // 3D
     $regex .= '(?!BRRip)'; // BRRIP
     $regex .= '(?!\.mkv)'; //.mkv
@@ -94,7 +95,6 @@ function getFileEpisode($file_name) {
     $SE = [];
 
     /* FORMAT S01E01 */
-
     if (preg_match('/S\d{2}E\d{2}/i', $file_name, $match) == 1) {
         $matched = $match[0];
         $SE['season'] = substr($matched, 1, stripos($matched, 'E'));
@@ -103,6 +103,13 @@ function getFileEpisode($file_name) {
         return $SE;
     }
 
+    /* FORMAT S01 E01 */
+    if (preg_match('/S\d{2}\s+E\d{2}/i', $file_name, $match) == 1) {
+        $matched = $match[0];
+        $SE['season'] = trim(substr($matched, 1, stripos($matched, ' ')));
+        $SE['episode'] = trim(substr($matched, stripos($matched, 'E') + 1));
+        return $SE;
+    }
 
     /* FORMAT Cap.101 */
     $match = [];
@@ -157,6 +164,10 @@ function getFileYear($file_name) {
 function getMediaType($file_name) {
     // S01E01
     if (preg_match('/S\d{2}E\d{2}/i', $file_name)) {
+        return 'shows';
+    }
+    // S01 E01
+    if (preg_match('/S\d{2}\s+E\d{2}/i', $file_name)) {
         return 'shows';
     }
     // 1x1 01x01
