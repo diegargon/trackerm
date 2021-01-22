@@ -13,7 +13,7 @@
 
 $cfg['search_db'] = 'themoviedb';
 
-$cfg['DB_FILE'] = $cfg['ROOT_PATH'] . '/cache/trackerm14.db';
+$cfg['DB_FILE'] = $cfg['ROOT_PATH'] . '/cache/trackerm.db';
 $cfg['img_url'] = $cfg['REL_PATH'] . '/img';
 $cfg['movies_categories'] = [
     2000 => 'Movies',
