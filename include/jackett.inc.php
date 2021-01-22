@@ -90,6 +90,7 @@ function search_media_torrents($media_type, $search, $head = null, $nohtml = fal
         return $media_db;
     }
 
+    $media_db = mix_media_res($media_db);
     $page .= buildTable($head, $media_db, $topt);
 
     return $page;

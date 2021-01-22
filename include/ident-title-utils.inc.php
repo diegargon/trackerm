@@ -45,7 +45,6 @@ function getFileTitle($file) {
     $regex .= '(?!_\d+x)';  // .digits and x (_1x)
     $regex .= '(?!-\s+Temporada)';  // - Temporada
     $regex .= '(?!-\s+Season)';  // - Season
-    $regex .= '(?!\d{4})'; // 4 digitos por fecha igual da problemas
     $regex .= '(?!720p)'; // 720p
     $regex .= '(?!1080p)'; // M1080p
     $regex .= '(?!M1080)'; // M1080
@@ -86,6 +85,17 @@ function getFileTitle($file) {
 
     $_title = str_replace('.', ' ', $_title);
     $_title = str_replace('_', ' ', $_title);
+
+    //Remove year, this can cause problems for titles if the year is a real part of title
+    //Here only check if remove year we get empty title, that avoid break media titles where the year is only
+    //word in the title like movie '1917', 1944, etc
+    $year_regex = '/^(?:';
+    $year_regex .= '(?!\d{4})';
+    $year_regex .= '.)*/i';
+    preg_match($regex, $_title, $matches);
+    $without_year_title = $matches[0];
+
+    (empty($without_year_title)) ? $_title = $without_year_title : $_title = $_title;
 
     return trim($_title);
 }
