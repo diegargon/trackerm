@@ -48,6 +48,9 @@ function page_new_media($media_type) {
 
         foreach ($cfg['jackett_indexers'] as $indexer) {
             $caps = jackett_get_caps($indexer);
+            if (empty($caps) || count($caps) < 1) {
+                return false;
+            }
             $categories = jackett_get_categories($caps['categories']['category']);
             $results = '';
             $results = jackett_search_media($media_type, '', $indexer, $categories);

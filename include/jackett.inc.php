@@ -104,6 +104,7 @@ function jackett_search_media($media_type, $words, $indexer, $categories, $limit
     $jackett_url = $cfg['jackett_srv'] . $cfg['jackett_api_path'] . '/indexers/' . $indexer . '/results/torznab/';
     $words = rawurlencode($words);
 
+    //Movie cat begin 2 or show 5
     ($media_type == 'movies') ? $jkt_cat_first_digit = 2 : $jkt_cat_first_digit = 5;
 
     foreach ($categories as $category) {
@@ -111,7 +112,9 @@ function jackett_search_media($media_type, $words, $indexer, $categories, $limit
             isset($cats) ? $cats .= ',' . $category : $cats = $category;
         }
     }
-
+    if (empty($cats)) {
+        return false;
+    }
     $params = 'api?apikey=' . $cfg['jackett_key'] . '&t=search&extended=1&cat=' . $cats . '&q=' . $words . '&limit=' . $limit;
 
     return curl_get_jackett($jackett_url, $params);
