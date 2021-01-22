@@ -4,6 +4,8 @@ TODO
     [FIX] security on the code
     [IMPROVE] fix all messy code due fast coding
     [FIX] Clean wanted.db/direct torrents that was delete outside app
+    [IMPROVE][NEED UP DB] File hash 4096bytes (fix 50 end), clean the databae file hash
+    [IMPROVE][NEED UP DB] User managament.
 
 [MED]    
     [ADD] Cache themoviedb searchs
@@ -14,15 +16,13 @@ TODO
     [IMPROVE] Si se borra manualmente un torrente bajado quedara el bd huerfanos. OPCION ORPHAN. 
         Buscar archivos multimedia en el TORRENT DIR y buscar la forma de determina si coincide con alguno en la base de datos
         si no coincide moverlo.     
-    [IMPROVE]trackerm-cli coge otra vez el titulo del archivo, puede estar mal así que solo hacerlo si hay varios archivos para episodios
-        si no hay más posibilidades que este bien el nombre del archivo. O buscar otro modo.
+    [IMPROVE]trackerm-cli coge el titulo del archivo en vez del directorio, puede estar mal así que solo hacerlo si hay varios archivos 
+        para episodios si no hay más posibilidades que este bien el nombre del archivo. O buscar otro modo.
      [COMPLETE] Filters
 
 [VERY LOW]  
     [IMPROVE] Pagination actually get all results and do a array_slice, now with SQL database when use cache we can  do that better.    
     [FIX/IMPROVE] fechas normalizar a formato comun        
-    [FIX] Actualmente en busquedas imdb filtramos años de los titulos por que suelen estar mal, el problema es cuando el titulo es un año
-        como 1917.    
     [IMPROVE/WANTED] Añadir la posibilidad de poner ignores y requerimientos aparte de los generales para evitar descargas no deseadas,
                         Added wanted fields custom_words_ignore and custom_words_requir
     [IMPROVE] Wanted Serie, poner en seguimiento "series" o sea nuevos capitulos de series.
@@ -30,9 +30,7 @@ TODO
     [FIX] A la hora de identificar las series siguientes capitulos los identifica por el predictible_title, si hubiera varias series con el mismo titulo habria problemas. 
     [IMPROVE][LIBRARY] Los shows deberian de tener un registro maestro con los datos y los demas, los capitulos ser registro secundarios.
             Quizas tener dos DBs una library_shows, library_episodes.
-    [NEW] Add optional user security for profiles      
-    [NEW] Config UI && integrate all config in database, ride config files    
-        Added config table, to improve the config with tables and config ui   
+    [NEW] Add optional user security for profiles
 
 [BACKLOG]
     [NEW] mediainfo (read file metadata)
