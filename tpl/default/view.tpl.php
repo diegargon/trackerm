@@ -29,7 +29,7 @@
             <div class="">
                 <span>IDs :</span><span>
                     <?= $tdata['id'] ?>
-                    <?= (isset($tdata['themoviedb_id'])) ? ' / ' . $tdata['themoviedb_id'] : null ?>
+                    <?= (!empty($tdata['themoviedb_id'])) ? ' / ' . $tdata['themoviedb_id'] : null ?>
                 </span><br/>
                 <?php if (!empty($tdata['added'])) { ?>
                     <span><?= $tdata['L_ADDED'] ?> :</span>
@@ -60,6 +60,11 @@
                     <span><?= $tdata['L_POPULARITY'] ?> :</span>
                     <span class="view_popularity"><?= $tdata['popularity'] ?></span>
                     <br/>
+                <?php } ?>
+                <?php if (!empty($tdata['themoviedb_id']) && ( $tdata['ilink'] == 'movies_db' || $tdata['ilink'] == 'movies_library' )) { ?>
+                    <span class="external_link"><a href="https://www.themoviedb.org/movie/<?= $tdata['themoviedb_id'] ?>" target=_blank>TheMovieDB</a></span>
+                <?php } else if (!empty($tdata['themoviedb_id']) && ($tdata['ilink'] == 'shows_db' || $tdata['ilink'] == 'movies_library' )) { ?>
+                    <span class="external_link"><a href="https://www.themoviedb.org/tv/<?= $tdata['themoviedb_id'] ?>" target=_blank>TheMovieDB</a></span>
                 <?php } ?>
                 <?php if (!empty($tdata['seasons_data'])) { ?>
                     <?= $tdata['seasons_data'] ?>
