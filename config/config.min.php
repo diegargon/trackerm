@@ -53,9 +53,3 @@ $cfg['trans_hostname'] = ''; //ex: 192.168.1.1
 $cfg['trans_port'] = '9091';
 $cfg['trans_username'] = '';
 $cfg['trans_passwd'] = '';
-
-// User profiles, at least default must exists
-$cfg['profiles'] = [
-    1 => 'default',
-];
-
