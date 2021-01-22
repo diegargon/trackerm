@@ -12,8 +12,14 @@ define('IN_WEB', true);
 require_once('include/usermode.inc.php');
 
 $req_page = $filter->getString('page');
-$body = getMenu();
+
 $footer = getFooter();
+
+if ($user['id'] < 1) {
+    $req_page = 'login';
+}
+
+$body = getMenu();
 
 if (!(empty($d_link = $filter->getUrl('download')))) {
 
@@ -56,9 +62,13 @@ if (!isset($req_page) || $req_page == '' || $req_page == 'index') {
     $body .= page_transmission();
 } else if ($req_page == 'config') {
     $body .= page_config();
+} else if ($req_page == 'login') {
+    $body = page_login();
+} else if ($req_page == 'logout') {
+    page_logout();
 } else {
     $box_msg = ['title' => $LNG['L_ERROR'] . ' : ' . $LNG['L_NOEXISTS'], 'body' => $LNG['L_PAGE_NOEXISTS']];
-    $body .= msg_box($box_msg);
+    $body = msg_box($box_msg);
 }
 
 $page = getTpl('html_mstruct', $tdata = ['body' => $body, 'footer' => $footer]);

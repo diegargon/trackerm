@@ -12,6 +12,9 @@
 function loadPrefs() {
     global $cfg, $db, $user;
 
+    if (empty($user) || empty($user['id'])) {
+        return false;
+    }
     $where['uid'] = ['value' => $user['id']];
     $results = $db->select('preferences', null, $where);
 

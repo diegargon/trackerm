@@ -10,7 +10,17 @@
 !defined('IN_WEB') ? exit : true;
 
 function index_page() {
-    global $cfg, $user, $LNG, $log;
+    global $cfg, $user, $LNG, $log, $filter, $db;
+
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        if (isset($_POST['new_user']) && !empty($new_user = $filter->postUsername('username'))) {
+            $user_create['username'] = $new_user;
+            $db->upsertItemByField('users', $user_create, 'username');
+        }
+        if (isset($_POST['delete_user']) && !empty($delete_user_id = $filter->postInt('delete_user_id'))) {
+            $db->delete('users', ['id' => ['value' => $delete_user_id]]);
+        }
+    }
 
     $titems = [];
 
@@ -23,20 +33,31 @@ function index_page() {
     // General Info
     $tdata = [];
     $tdata['title'] = $LNG['L_IDENTIFIED'] . ': ' . strtoupper($user['username']);
-    $tdata['content'] = $LNG['L_SEARCH_ENGINE'] . ': ' . '<a href="https://themoviedb.org" target=_blank>themoviedb.org</a>';
+    $tdata['content'] = '<a class="action_link" href="?page=logout">' . $LNG['L_LOGOUT'] . '</a>';
+    $tdata['content'] .= '<br/>';
+    $tdata['content'] .= $LNG['L_SEARCH_ENGINE'] . ': ' . '<a href="https://themoviedb.org" target=_blank>themoviedb.org</a>';
     $titems['col1'][] = getTpl('home-item', $tdata);
 
-    // Profiles
+    // User managament
     $tdata = [];
-    $tdata['title'] = $LNG['L_PROFILES'];
-    $tdata['content'] = '<div class="profiles">';
-
+    $tdata['title'] = $LNG['L_USERS'];
+    $tdata['content'] = '<form id="new_user" method="POST" >';
+    $tdata['content'] .= '<span>' . $LNG['L_USERNAME'] . '<span><input size="8" type="text" name="username" value=""/>';
+    //$tdata['content'] .= '<span>' . $LNG['L_PASSWORD'] . '<span><input size="8" type="password" name="password" value=""/>';
+    $tdata['content'] .= '<input class="submit_btn" type="submit" name="new_user" value="' . $LNG['L_CREATE'] . '"/>';
+    $tdata['content'] .= '</form>';
+    $tdata['content'] .= '<form id="delete_user" method="POST">';
     $users = get_profiles();
     foreach ($users as $user) {
-        $tdata['content'] .= '<a class="action_link" href="?userid=' . $user['id'] . '">' . strtoupper($user['username']) . '</a>';
+        if ($user['id'] > 1) {
+            $tdata['content'] .= '<span>' . $user['username'] . '<span>';
+            $tdata['content'] .= '<input type="hidden" name="delete_user_id" value="' . $user['id'] . '"/>';
+            $tdata['content'] .= '<input class="submit_btn" type="submit" name="delete_user" value="' . $LNG['L_DELETE'] . '"/>';
+        }
     }
 
-    $tdata['content'] .= '</div>';
+    $tdata['content'] .= '</form>';
+
     $titems['col1'][] = getTpl('home-item', $tdata);
 
     // Hard disk
@@ -427,4 +448,38 @@ function page_config() {
     $page .= $config->display($filter->getString('category'));
 
     return $page;
+}
+
+function page_login() {
+    global $cfg, $db, $filter;
+
+    $username = $filter->getString('username');
+
+    if (!empty($username)) {
+        $password = '';
+        $check_user = check_user($username, $password);
+        if ($check_user) {
+            set_user($check_user);
+            header("Location: {$cfg['REL_PATH']} ");
+        }
+    }
+    $tdata = [];
+    $result = $db->select('users');
+    $users = $db->fetchAll($result);
+    $page = '';
+    $tdata['profiles'] = '';
+    foreach ($users as $user) {
+        $tdata['profiles'] .= getTpl('profile_box', array_merge($tdata, $cfg, $user));
+    }
+    $page .= getTpl('login', array_merge($tdata));
+    return $page;
+}
+
+function page_logout() {
+    global $cfg;
+
+    $_SESSION['uid'] = 0;
+    ($_COOKIE) ? setcookie("uid", null, -1) : null;
+    header("Location: {$cfg['REL_PATH']} ");
+    exit(0);
 }

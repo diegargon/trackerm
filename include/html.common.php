@@ -12,6 +12,10 @@
 function getMenu() {
     global $cfg, $LNG, $user, $filter;
 
+    if (empty($user) || empty($user['username']) || empty($user['id'])) {
+        $user['id'] = 0;
+        $user['username'] = $LNG['L_ANONYMOUS'];
+    }
     if (isset($_GET['sw_opt'])) {
         $value = getPrefsItem('hide_opt');
         if ($value == 0) {

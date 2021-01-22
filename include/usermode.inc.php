@@ -10,13 +10,6 @@
 !defined('IN_WEB') ? exit : true;
 
 require_once('include/common.inc.php');
-
-//while we haven't ui for create users we check $cfg['profiles'] and add to database
-foreach ($cfg['profiles'] as $cfgprofile) {
-    $profiles['username'] = $cfgprofile;
-    $db->upsertItemByField('users', $profiles, 'username');
-}
-
 require_once('include/user.inc.php');
 
 require_once('include/session.inc.php');
