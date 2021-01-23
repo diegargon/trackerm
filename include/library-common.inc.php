@@ -52,7 +52,7 @@ function _rebuild($media_type, $path) {
             $year = getFileYear($file_name);
             $tags = getFileTags($file_name);
             $ext = substr($file_name, -3);
-            (is_link($file)) ? $hash = '' : $hash = file_hash($file);
+            $hash = file_hash($file);
 
             $items[$i] = [
                 'ilink' => $ilink,
@@ -257,7 +257,9 @@ function check_history($media_type, $ids) {
             continue;
         }
         $item = $db->getItemById($library, $id);
-
+        if (empty($item['file_hash'])) {
+            return false;
+        }
         if (empty($item['themoviedb_id'])) {
             $where = [
                 'media_type' => ['value' => $media_type],

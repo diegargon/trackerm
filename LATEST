@@ -1,6 +1,6 @@
 ## Latest / News (Relevant)
 
-[23/01] Fix Wanted not work because wrong title compare
+[23/01] Fix Wanted not work because wrong title compare, and file_hash func, update db with user fields for next changes
 [22/01] Add basic user/profiles support
 [18/01] Partially move config to db (check configuration menu in index/main page
 [22/12] Now trackerm support multiple MOVIES_PATH/SHOWS_PATH check config examples

@@ -740,29 +740,33 @@ function update_trailers() {
 }
 
 /* That function will be not necesary in the future, since new movies already hashed on rebuild
-  edit: Perhaps is need, when link instead of move we can't hash
+  edit: Perhaps is need
  *  */
 
 function hash_missing() {
-    global $db;
+    global $db, $log;
 
-    $query = $db->query('SELECT id,path FROM library_movies WHERE file_hash IS NULL LIMIT 50');
+    $hashlog = "Hashing: ";
+    $query = $db->query('SELECT id,path FROM library_movies WHERE file_hash IS \'\' LIMIT 50');
     $results = $db->fetchAll($query);
 
     foreach ($results as $item) {
         $hash = file_hash($item['path']);
         $update_query = "update library_movies SET file_hash='$hash' WHERE id='{$item['id']}' LIMIT 1";
+        $hashlog .= "*";
         $db->query($update_query);
     }
 
-    $query = $db->query('SELECT id,path FROM library_shows WHERE file_hash IS NULL LIMIT 50');
+    $query = $db->query('SELECT id,path FROM library_shows WHERE file_hash IS \'\' LIMIT 50');
     $results = $db->fetchAll($query);
 
     foreach ($results as $item) {
         $hash = file_hash($item['path']);
         $update_query = "update library_shows SET file_hash='$hash' WHERE id='{$item['id']}' LIMIT 1";
+        $hashlog .= "+";
         $db->query($update_query);
     }
+    $log->debug($hashlog);
 }
 
 function leave($msg = false) {
