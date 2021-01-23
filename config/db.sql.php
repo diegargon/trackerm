@@ -18,16 +18,16 @@ function create_db() {
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
                 )');
 
-    $db->insert('db_info', ["app_name" => 'trackerm', "version" => 5]);
+    $db->insert('db_info', ["app_name" => 'trackerm', "version" => 6]);
 
     // USERS
-    //"sid" varchar NULL,
-    //"isAdmin" INT NOT NULL,  (insert default with isAdmin=1
-    //profile image
     $db->query('CREATE TABLE IF NOT EXISTS "users" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                     "username" varchar NOT NULL UNIQUE,
                     "password" varchar NULL,
+                    "sid" varchar NULL,
+                    "isAdmin" INTEGER default 0,
+                    "profile_img" VARCHAR NULL,
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
        )');
 
@@ -280,7 +280,7 @@ function create_db() {
                     UNIQUE (cfg_key)
                 )');
 
-    $db->insert('config', ['cfg_key' => 'version', 'cfg_value' => 'A77', 'cfg_desc' => '', 'type' => 2, 'category' => '', 'public' => 0]);
+    $db->insert('config', ['cfg_key' => 'version', 'cfg_value' => 'A78', 'cfg_desc' => '', 'type' => 2, 'category' => '', 'public' => 0]);
     $db->insert('config', ['cfg_key' => 'profile', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => '', 'public' => 0]);
     $db->insert('config', ['cfg_key' => 'max_identify_items', 'cfg_value' => 5, 'cfg_desc' => 'L_CFG_MAXID_ITEMS', 'type' => 2, 'category' => '', 'public' => 0]);
     $db->insert('config', ['cfg_key' => 'app_name', 'cfg_value' => 'trackerm', 'cfg_desc' => '', 'type' => 1, 'category' => '', 'public' => 0]);
@@ -319,6 +319,7 @@ function create_db() {
     $db->insert('config', ['cfg_key' => 'torrent_ignore_prefs', 'cfg_value' => 'SCREENER', 'cfg_desc' => 'L_CFG_TORRENT_IGNORE_PREFS', 'type' => 8, 'category' => 'L_TORRENT', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'extra_tags', 'cfg_value' => '', 'cfg_desc' => 'L_CFG_EXTRA_TAGS', 'type' => 8, 'category' => 'L_TORRENT', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'media_language_tag', 'cfg_value' => 'SPANISH,ENGLISH,CASTELLANO,ESPAÑOL', 'cfg_desc' => 'L_CFG_media_language_tag', 'type' => 8, 'category' => 'L_TORRENT', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'download_button', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_DOWNLOAD_BUTTON', 'type' => 3, 'category' => 'L_DISPLAY', 'public' => 1]);
 
     return true;
 }
@@ -481,15 +482,26 @@ function update_db($from) {
         $db->update('db_info', $set);
     }
 
+    if ($from < 6) {
+        $db->query('ALTER TABLE users add column sid VARCHAR NULL');
+        $db->query('ALTER TABLE users add column isAdmin INTEGER NULL');
+        $db->query('ALTER TABLE users add column profile_img INTEGER NULL');
+        $db->query('DELETE FROM library_history');
+        $db->query('UPDATE library_shows SET file_hash=\'\'');
+        $db->query('UPDATE library_movies SET file_hash=\'\'');
+        $db->insert('config', ['cfg_key' => 'download_button', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_DOWNLOAD_BUTTON', 'type' => 3, 'category' => 'L_DISPLAY', 'public' => 1]);
+        $set['version'] = 6;
+        $db->update('db_info', $set);
+    }
+
     /*
       NEXT UPDATES:
       remove from wanted ignore field, not need
-      config: Download button Optional
      */
     /*
-      if ($from < 6) {
+      if ($from < 7) {
 
-      $set['version'] = 6;
+      $set['version'] = 7;
       $db->update('db_info', $set);
       }
      */
