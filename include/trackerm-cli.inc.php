@@ -536,13 +536,13 @@ function wanted_work() {
 function wanted_check_title($search, $results) {
     global $log;
 
-    $words = $search['words'];
+    $words = trim($search['words']);
     $valid = [];
 
     foreach ($results as $item) {
         $title = trim(getFileTitle($item['title']));
 
-        if (strcmp(strtolower($title), strtolower($words))) {
+        if (strcmp(strtolower($title), strtolower($words) == 0)) {
             $log->debug('Wanted: Valid title found ' . $item['title']);
             $valid[] = $item;
         } else {
