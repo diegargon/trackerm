@@ -316,7 +316,7 @@ function create_db() {
     $db->insert('config', ['cfg_key' => 'move_only_inapp', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_MOVE_ONLY_INAPP', 'type' => 3, 'category' => 'TRANSMISSION', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'move_transmission_orphan', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_MOVE_TRANSMISSION_ORPHAN', 'type' => 3, 'category' => 'TRANSMISSION', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'torrent_quality_prefs', 'cfg_value' => '720p,1080p,ANY', 'cfg_desc' => 'L_CFG_TORRENT_QUALITY_PREFS', 'type' => 8, 'category' => 'L_TORRENT', 'public' => 1]);
-    $db->insert('config', ['cfg_key' => 'torrent_ignore_prefs', 'cfg_value' => 'LATINO,SCREENER', 'cfg_desc' => 'L_CFG_TORRENT_IGNORE_PREFS', 'type' => 8, 'category' => 'L_TORRENT', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'torrent_ignore_prefs', 'cfg_value' => 'SCREENER', 'cfg_desc' => 'L_CFG_TORRENT_IGNORE_PREFS', 'type' => 8, 'category' => 'L_TORRENT', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'extra_tags', 'cfg_value' => '', 'cfg_desc' => 'L_CFG_EXTRA_TAGS', 'type' => 8, 'category' => 'L_TORRENT', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'media_language_tag', 'cfg_value' => 'SPANISH,ENGLISH,CASTELLANO,ESPAÑOL', 'cfg_desc' => 'L_CFG_media_language_tag', 'type' => 8, 'category' => 'L_TORRENT', 'public' => 1]);
 
@@ -474,7 +474,7 @@ function update_db($from) {
         $db->insert('config', ['cfg_key' => 'move_only_inapp', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_MOVE_ONLY_INAPP', 'type' => 3, 'category' => 'TRANSMISSION', 'public' => 1]);
         $db->insert('config', ['cfg_key' => 'move_transmission_orphan', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_MOVE_TRANSMISSION_ORPHAN', 'type' => 3, 'category' => 'TRANSMISSION', 'public' => 1]);
         $db->insert('config', ['cfg_key' => 'torrent_quality_prefs', 'cfg_value' => '720p,1080p,ANY', 'cfg_desc' => 'L_CFG_TORRENT_QUALITY_PREFS', 'type' => 8, 'category' => 'L_TORRENT', 'public' => 1]);
-        $db->insert('config', ['cfg_key' => 'torrent_ignore_prefs', 'cfg_value' => 'LATINO,SCREENER', 'cfg_desc' => 'L_CFG_TORRENT_IGNORE_PREFS', 'type' => 8, 'category' => 'L_TORRENT', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'torrent_ignore_prefs', 'cfg_value' => 'SCREENER', 'cfg_desc' => 'L_CFG_TORRENT_IGNORE_PREFS', 'type' => 8, 'category' => 'L_TORRENT', 'public' => 1]);
         $db->insert('config', ['cfg_key' => 'extra_tags', 'cfg_value' => '', 'cfg_desc' => 'L_CFG_EXTRA_TAGS', 'type' => 8, 'category' => 'L_TORRENT', 'public' => 1]);
         $db->insert('config', ['cfg_key' => 'media_language_tag', 'cfg_value' => 'SPANISH,ENGLISH,CASTELLANO,ESPAÑOL', 'cfg_desc' => 'L_CFG_media_language_tag', 'type' => 8, 'category' => 'L_TORRENT', 'public' => 1]);
         $set['version'] = 5;
