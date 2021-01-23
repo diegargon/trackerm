@@ -469,7 +469,7 @@ function wanted_work() {
             continue;
         }
 
-        if (($wanted['day_check'] > 0) && $wanted['day_check'] !== $day_of_week) {
+        if (($wanted['day_check'] > 0) && $wanted['day_check'] != $day_of_week) {
             $log->debug("Jumping wanted {$wanted['title']} check by date, today is not {$LNG[$cfg['CHECK_DAYS'][$wanted['day_check']]]}");
             continue;
         }
