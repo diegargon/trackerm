@@ -197,4 +197,5 @@ $LNG = [
     'L_CFG_TORRENT_IGNORE_PREFS' => 'trackerm  ignorara estos tags (coma separado)',
     'L_CFG_EXTRA_TAGS' => 'Si quieres indicar algun tag extra para las busquedas añadelo aquí, coma separado',
     'L_CFG_MEDIA_LANGUAGE_TAGS' => 'Especifica aquí que lenguaje buscar tag para marcarlo, comma separado',
+    'L_CFG_DOWNLOAD_BUTTON' => 'Mostrar boton de descarga local',
 ];
