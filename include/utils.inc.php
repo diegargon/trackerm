@@ -46,8 +46,12 @@ function set_clean() {
     }
 }
 
+function get_user_ip() {
+    return $_SERVER['REMOVE_ADDR'];
+}
+
 function check_ip_local() {
-    $ip = $_SERVER['REMOTE_ADDR'];
+    $ip = get_user_ip();
 
     if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
         return true;
