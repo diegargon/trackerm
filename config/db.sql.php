@@ -497,6 +497,8 @@ function update_db($from) {
     /*
       NEXT UPDATES:
       remove from wanted ignore field, not need
+      Config: force_use_passwords L_SECURITY (obliga a utilizar contraseñas si no un usuario puede tenerla en blanco)
+      Config: only_local_net L_SECURITY (permite solo acceso desde ip redes locales 10. 192. 172.
      */
     /*
       if ($from < 7) {
