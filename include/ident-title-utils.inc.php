@@ -196,6 +196,10 @@ function getMediaType($file_name) {
     if (preg_match('/season\s+\d{1,2}/i', $file_name)) {
         return 'shows';
     }
+    //Seasons 1
+    if (preg_match('/seasons\s+\d{1,2}/i', $file_name)) {
+        return 'shows';
+    }
     //Temporada 1
     if (preg_match('/Temporada\s+\d{1,2}/i', $file_name)) {
         return 'shows';
