@@ -501,8 +501,8 @@ function update_db($from) {
     /*
       if ($from < 7) {
 
-      $set['version'] = 7;
-      $db->update('db_info', $set);
+      $db->update('config', ['version' = 79]);
+      $db->update('db_info', ['version' = 7]);
       }
      */
     return true;
