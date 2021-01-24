@@ -503,6 +503,12 @@ function update_db($from) {
     /*
       if ($from < 7) {
       $db->query('ALTER TABLE wanted add column jacket_filename VARCHAR NULL');
+      $db->query('ALTER TABLE users add column email VARCHAR NULL');
+      $db->query('ALTER TABLE tmdb_search add column genre VARCHAR NULL');
+      $db->query('ALTER TABLE library_shows add column genre VARCHAR NULL');
+      $db->query('ALTER TABLE library_movies add column genre VARCHAR NULL');
+      $db->query('ALTER TABLE jackett_shows add column genre VARCHAR NULL');
+      $db->query('ALTER TABLE jackett_movies add column genre VARCHAR NULL');
       $db->insert('config', ['cfg_key' => 'force_use_passwords', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_FORCE_USE_PASSWORDS', 'type' => 3, 'category' => 'L_SECURITY', 'public' => 1]);
       $db->insert('config', ['cfg_key' => 'only_local_net', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_ONLY_LOCAL_NET', 'type' => 3, 'category' => 'L_SECURITY', 'public' => 1]);
       $db->update('config', ['version' = 79]);
