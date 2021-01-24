@@ -96,6 +96,10 @@ function mix_media_res($res_media_db) {
     $indexers = [];
     $media = [];
 
+    if (empty($res_media_db) && count($res_media_db <= 1)) {
+        return $res_media_db;
+    }
+
     foreach ($res_media_db as $item) {
         $indexers[$item['source']][] = $item;
     }
