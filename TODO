@@ -3,12 +3,10 @@ TODO
 [HIGH]
     [FIX] security on the code
     [IMPROVE] fix all messy code due fast coding
-    [FIX] Clean wanted.db/direct torrents that was delete outside app
-    [IMPROVE][NEED UP DB] File hash 4096bytes (fix 50 end), clean the databae file hash
-    [IMPROVE][NEED UP DB] User managament.
+    [FIX] Clean wanted.db/direct torrents that was delete outside app    
+    [IMPROVE][NEED UP DB] User managament. (missing config options)
 
-[MED]    
-    [ADD] Cache themoviedb searchs
+[MED]        
     [NEW] Escaneo de directorios a más para avi sin ser torrents. $cfg['SCAN_MEDIA_DIR'] = 1;
     [NEW/IMPROVE] actualizacion automatica cada semana de titulos de episodio a excepcion de que el show sea "ended"
     [NEW] Biblio: buscador en nuestra libreria o enlace a una pagina buscador más facil de implementar.
@@ -22,8 +20,7 @@ TODO
      [CHANGE?] Clean title: remove words <=2 chars?
      [ADD] Restrict local ips
      
-[VERY LOW]  
-    [ADD] Log loggins
+[VERY LOW]      
     [IMPROVE] Pagination actually get all results and do a array_slice, now with SQL database when use cache we can  do that better.    
     [FIX/IMPROVE] fechas normalizar a formato comun        
     [IMPROVE/WANTED] Añadir la posibilidad de poner ignores y requerimientos aparte de los generales para evitar descargas no deseadas,
@@ -34,7 +31,8 @@ TODO
     [IMPROVE][LIBRARY] Los shows deberian de tener un registro maestro con los datos y los demas, los capitulos ser registro secundarios.
             Quizas tener dos DBs una library_shows, library_episodes.
     [NEW] Add optional user security for profiles
-
+    [ADD] Cache themoviedb search (need new table tmdb_search_cache)
+    [ADD] Log loggins
 [BACKLOG]
     [NEW] mediainfo (read file metadata)
     [CHANGE] Change actual Transmission rpc api to something basic, since some basic is enough and the actual have alot of deps 
