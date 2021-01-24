@@ -25,7 +25,7 @@ if (!(empty($d_link = $filter->getUrl('download')))) {
 
     if (($pos = strpos($d_link, "file=")) !== FALSE) {
         $jackett_file_name = substr($d_link, $pos + 5);
-        $jackett_file_name = trim(str_replace('+', ' ', $file_name));
+        $jackett_file_name = trim(str_replace('+', ' ', $jackett_file_name));
     }
     $trans_response = $trans->addUrl($d_link);
 
