@@ -133,6 +133,7 @@ $LNG = [
     'L_SEASON' => 'Season',
     'L_SEASON_MIN' => 'T',
     'L_SEASONS' => 'Seasons',
+    'L_SECURITY' => 'Security',
     'L_SUBMIT' => 'Submit',
     'L_SUCCESS' => 'Success',
     'L_START' => 'Start',
@@ -198,4 +199,6 @@ $LNG = [
     'L_CFG_EXTRA_TAGS' => 'If you want trackerm search for any extra tag in titles add the key here, comma separated',
     'L_CFG_MEDIA_LANGUAGE_TAGS' => 'Specify here what languages want tag, comma seperated',
     'L_CFG_DOWNLOAD_BUTTON' => 'Show local download button',
+    'L_CFG_ONLY_LOCAL_NET' => 'Allow only local ips',
+    'L_CFG_FORCE_USE_PASSWORDS' => 'Force useers use passwords',
 ];

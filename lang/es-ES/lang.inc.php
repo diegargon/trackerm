@@ -133,6 +133,7 @@ $LNG = [
     'L_SEASON' => 'Temporada',
     'L_SEASON_MIN' => 'T',
     'L_SEASONS' => 'Temporadas',
+    'L_SECURITY' => 'Seguridad',
     'L_SUBMIT' => 'Enviar',
     'L_SUCCESS' => 'Exito',
     'L_START' => 'Comenzar',
@@ -198,4 +199,6 @@ $LNG = [
     'L_CFG_EXTRA_TAGS' => 'Si quieres indicar algun tag extra para las busquedas añadelo aquí, coma separado',
     'L_CFG_MEDIA_LANGUAGE_TAGS' => 'Especifica aquí que lenguaje buscar tag para marcarlo, comma separado',
     'L_CFG_DOWNLOAD_BUTTON' => 'Mostrar boton de descarga local',
+    'L_CFG_ONLY_LOCAL_NET' => 'Permitir solo accesso a ips locales',
+    'L_CFG_FORCE_USE_PASSWORDS' => 'Forzar a los usuarios a utilizar contraseñas',
 ];

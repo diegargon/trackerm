@@ -502,7 +502,8 @@ function update_db($from) {
      */
     /*
       if ($from < 7) {
-
+      $db->insert('config', ['cfg_key' => 'force_use_passwords', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_FORCE_USE_PASSWORDS', 'type' => 3, 'category' => 'L_SECURITY', 'public' => 1]);
+      $db->insert('config', ['cfg_key' => 'only_local_net', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_ONLY_LOCAL_NET', 'type' => 3, 'category' => 'L_SECURITY', 'public' => 1]);
       $db->update('config', ['version' = 79]);
       $db->update('db_info', ['version' = 7]);
       }
