@@ -20,8 +20,10 @@ TODO
         para episodios si no hay más posibilidades que este bien el nombre del archivo. O buscar otro modo.
      [COMPLETE] Filters
      [CHANGE?] Clean title: remove words <=2 chars?
-
+     [ADD] Restrict local ips
+     
 [VERY LOW]  
+    [ADD] Log loggins
     [IMPROVE] Pagination actually get all results and do a array_slice, now with SQL database when use cache we can  do that better.    
     [FIX/IMPROVE] fechas normalizar a formato comun        
     [IMPROVE/WANTED] Añadir la posibilidad de poner ignores y requerimientos aparte de los generales para evitar descargas no deseadas,
