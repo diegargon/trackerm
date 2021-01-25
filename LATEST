@@ -1,6 +1,6 @@
 ## Latest / News (Relevant)
 
-[25/01] Add to wanted custom ignore/require keywords. Comma separe
+[25/01] Add to wanted custom ignore/require keywords per item. Multiple tags must comma separated
 [23/01] Fix Wanted not work because wrong title compare, fix file_hash func, update db with user fields for next changes, fix wanted day check
 [22/01] Add basic user/profiles support
 [18/01] Partially move config to db (check configuration menu in index/main page
