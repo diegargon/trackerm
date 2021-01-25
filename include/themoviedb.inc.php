@@ -269,10 +269,19 @@ function themoviedb_getByDbId($media_type, $id) {
 }
 
 function themoviedb_getPopular() {
-    /*
-      https://api.themoviedb.org/3/movie/popular?api_key=<<api_key>>&language=en-US&page=1
-      https://api.themoviedb.org/3/tv/popular?api_key=<<api_key>>&language=en-US&page=1
-     */
+    global $cfg;
+
+    $movies_url = 'https://api.themoviedb.org/3/movie/popular?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['LANG'];
+    $shows_url = 'https://api.themoviedb.org/3/tv/popular?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['LANG'];
+    if ($cfg['want_movies']) {
+        $response_items = curl_get_tmdb($movies_url);
+        $results['movies'] = themoviedb_MediaPrep('movies', $response_items['results']);
+    }
+    if ($cfg['want_shows']) {
+        $response_items = curl_get_tmdb($shows_url);
+        $results['shows'] = themoviedb_MediaPrep('shows', $response_items['results']);
+    }
+    return $results;
 }
 
 function themoviedb_getTrending() {

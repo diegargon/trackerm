@@ -218,6 +218,27 @@ function page_tmdb() {
     (!empty($_GET['search_movies'])) ? $search_movies = $filter->getUtf8('search_movies') : $search_movies = '';
     (!empty($_GET['search_shows'])) ? $search_shows = $filter->getUtf8('search_shows') : $search_shows = '';
 
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        if (isset($_POST['show_trending'])) {
+            $show_trending = $filter->postInt('show_trending');
+            if (!empty($show_trending)) {
+                setPrefsItem('show_trending', 1);
+            } else {
+                setPrefsItem('show_trending', 0);
+            }
+        }
+
+        if (isset($_POST['show_popular'])) {
+            $show_popular = $filter->postInt('show_popular');
+            if (!empty($show_popular)) {
+                setPrefsItem('show_popular', 1);
+            } else {
+                setPrefsItem('show_popular', 0);
+            }
+        }
+    }
+    !empty(getPrefsItem('show_trending')) ? $tdata['TRENDING_CHECKED'] = 'checked' : $tdata['TRENDING_CHECKED'] = '';
+    !empty(getPrefsItem('show_popular')) ? $tdata['POPULAR_CHECKED'] = 'checked' : $tdata['POPULAR_CHECKED'] = '';
 
     $tdata['search_movies_word'] = $search_movies;
     $tdata['search_shows_word'] = $search_shows;
@@ -235,12 +256,20 @@ function page_tmdb() {
         $topt['search_type'] = 'shows';
         !empty($shows) ? $page .= buildTable('L_DB', $shows, $topt) : null;
     }
-    if (!isset($_GET['search_movies']) && !isset($_GET['search_shows'])) {
+    if (!isset($_GET['search_movies']) && !isset($_GET['search_shows']) && !empty(getPrefsItem('show_trending'))) {
         $topt['no_pages'] = 1;
         $results = mediadb_getTrending();
         ($cfg['want_movies']) ? $page .= buildTable('L_TRENDING_MOVIES', $results['movies'], $topt) : null;
         ($cfg['want_shows']) ? $page .= buildTable('L_TRENDING_SHOWS', $results['shows'], $topt) : null;
     }
+
+    if (!isset($_GET['search_movies']) && !isset($_GET['search_shows']) && !empty(getPrefsItem('show_popular'))) {
+        $topt['no_pages'] = 1;
+        $results = mediadb_getPopular();
+        ($cfg['want_movies']) ? $page .= buildTable('L_POPULAR_MOVIES', $results['movies'], $topt) : null;
+        ($cfg['want_shows']) ? $page .= buildTable('L_POPULAR_SHOWS', $results['shows'], $topt) : null;
+    }
+
     return $page;
 }
 
