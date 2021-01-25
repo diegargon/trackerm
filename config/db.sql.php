@@ -505,6 +505,7 @@ function update_db($from) {
       $db->query('ALTER TABLE wanted add column jacket_filename VARCHAR NULL');
       $db->query('ALTER TABLE wanted add column force_proper INTEGER NULL');
       $db->query('ALTER TABLE users add column email VARCHAR NULL');
+      $db->query('ALTER TABLE users add column ip VARCHAR NULL');
       $db->query('ALTER TABLE tmdb_search add column genre VARCHAR NULL');
       $db->query('ALTER TABLE library_shows add column genre VARCHAR NULL');
       $db->query('ALTER TABLE library_movies add column genre VARCHAR NULL');
