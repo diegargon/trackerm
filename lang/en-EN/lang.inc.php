@@ -110,6 +110,7 @@ $LNG = [
     'L_REESCAN_MOVIES' => 'Reescan Peliculas',
     'L_REESCAN_SHOWS' => 'Reescan Series',
     'L_RELEASE' => 'Release',
+    'L_REQUIRE' => 'Requiere',
     'L_RATING' => 'Rating',
     'L_RATING_MIN' => 'R',
     'L_RESULTS' => 'Results',

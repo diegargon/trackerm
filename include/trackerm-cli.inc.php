@@ -494,7 +494,7 @@ function wanted_work() {
             $search['words'] = $title;
             $results = search_media_torrents($media_type, $search, null, true);
             if (!empty($results) && count($results) > 0) {
-                $results_pass_flags = wanted_check_flags($results);
+                $results_pass_flags = wanted_check_flags($wanted, $results);
                 !empty($results_pass_flags) ? $valid_results = wanted_check_title($search, $results_pass_flags) : null;
             } else {
                 $log->debug('No results founds for ' . $title);
@@ -508,7 +508,7 @@ function wanted_work() {
             $log->debug(' Search for : ' . $title . " $s_episode [ $media_type ]");
             $results = search_media_torrents($media_type, $search, null, true);
             if (!empty($results) && count($results) > 0) {
-                $results_pass_flags = wanted_check_flags($results);
+                $results_pass_flags = wanted_check_flags($wanted, $results);
                 !empty($results_pass_flags) ? $valid_results = wanted_check_title($search, $results_pass_flags) : null;
             } else {
                 $log->debug('No results founds for ' . $title . ' ' . $s_episode);
@@ -553,16 +553,29 @@ function wanted_check_title($search, $results) {
     return (count($valid) > 0) ? $valid : false;
 }
 
-function wanted_check_flags($results) {
+function wanted_check_flags($wanted, $results) {
     global $cfg, $log;
     $noignore = [];
+    $torrent_ignore_prefs = [];
+    $custom_words_ignore = [];
+    $custom_words_require = [];
+    $valid_results = [];
 
+    if (!empty($wanted['custom_words_ignore'])) {
+        $custom_words_ignore = explode(',', $wanted['custom_words_ignore']);
+    }
     if (count($cfg['torrent_ignore_prefs']) > 0) {
+        $torrent_ignore_prefs = $cfg['torrent_ignore_prefs'];
+    }
+    if (count($custom_words_ignore) > 0) {
+        $torrent_ignore_prefs = array_merge($custom_words_ignore, $torrent_ignore_prefs);
+    }
+    if (count($torrent_ignore_prefs) > 0) {
         foreach ($results as $result) {
             $ignore_flag = 0;
 
             foreach ($cfg['torrent_ignore_prefs'] as $ignore) {
-                if (stripos($result['title'], $ignore)) {
+                if (stripos($result['title'], trim($ignore))) {
                     $ignore_flag = 1;
                     $log->debug('Wanted: Ignored coincidence for item ' . $result['title'] . ' by ignore key ' . $ignore);
                 }
@@ -603,7 +616,19 @@ function wanted_check_flags($results) {
         $valid_results = $noignore;
     }
 
-    return !empty($valid_results) ? $valid_results : false;
+    if (!empty($wanted['custom_words_require']) && !empty($valid_results) && (count($valid_results) > 0)) {
+        $custom_words_require = explode(',', $wanted['custom_words_require']);
+        foreach ($valid_results as $valid_key => $valid_result) {
+            foreach ($custom_words_require as $word_require) {
+                if (!(stripos($valid_result['title'], $word_require))) {
+                    $log->debug('Wanted: Drop valid item by custom require words ' . $valid_result['title'] . ' required word ' . $word_require);
+                    unset($valid_results[$valid_key]);
+                }
+            }
+        }
+    }
+
+    return count($valid_results) > 0 ? $valid_results : false;
 }
 
 function send_transmission($results) {

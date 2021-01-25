@@ -23,8 +23,6 @@ TODO
 [VERY LOW]      
     [IMPROVE] Pagination actually get all results and do a array_slice, now with SQL database when use cache we can  do that better.    
     [FIX/IMPROVE] fechas normalizar a formato comun        
-    [IMPROVE/WANTED] Añadir la posibilidad de poner ignores y requerimientos aparte de los generales para evitar descargas no deseadas,
-                        Added wanted fields custom_words_ignore and custom_words_requir
     [IMPROVE] Wanted Serie, poner en seguimiento "series" o sea nuevos capitulos de series.
             Added wanted field track_show for add and keep track of show (automatically download current episodes of a show each week)
     [FIX] A la hora de identificar las series siguientes capitulos los identifica por el predictible_title, si hubiera varias series con el mismo titulo habria problemas. 
