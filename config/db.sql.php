@@ -320,7 +320,7 @@ function create_db() {
     $db->insert('config', ['cfg_key' => 'extra_tags', 'cfg_value' => '', 'cfg_desc' => 'L_CFG_EXTRA_TAGS', 'type' => 8, 'category' => 'L_TORRENT', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'media_language_tag', 'cfg_value' => 'SPANISH,ENGLISH,CASTELLANO,ESPAÑOL', 'cfg_desc' => 'L_CFG_media_language_tag', 'type' => 8, 'category' => 'L_TORRENT', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'download_button', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_DOWNLOAD_BUTTON', 'type' => 3, 'category' => 'L_DISPLAY', 'public' => 1]);
-
+    $db->insert('config', ['cfg_key' => 'css', 'cfg_value' => 'default', 'cfg_desc' => 'L_CFG_CSS', 'type' => 1, 'category' => 'L_DISPLAY', 'public' => 1]);
     return true;
 }
 
