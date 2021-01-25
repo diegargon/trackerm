@@ -24,8 +24,8 @@ $body = getMenu();
 if (!(empty($d_link = $filter->getUrl('download')))) {
 
     if (($pos = strpos($d_link, "file=")) !== FALSE) {
-        $jackett_file_name = substr($d_link, $pos + 5);
-        $jackett_file_name = trim(str_replace('+', ' ', $jackett_file_name));
+        $jackett_filename = substr($d_link, $pos + 5);
+        $jackett_filename = trim(str_replace('+', ' ', $jackett_filename));
     }
     $trans_response = $trans->addUrl($d_link);
 
@@ -36,7 +36,7 @@ if (!(empty($d_link = $filter->getUrl('download')))) {
     $wanted_db = [
         'tid' => $trans_db[0]['id'],
         'wanted_status' => 1,
-        //'jackett_filename' => !empty($jackett_file_name) ? $jackett_file_name : null,
+        'jackett_filename' => !empty($jackett_filename) ? $jackett_filename : null,
         'hashString' => $trans_db[0]['hashString'],
         'themoviedb_id' => !empty($themoviedb_id) ? $wanted_db[0]['themoviedb_id'] = $themoviedb_id : null,
         'direct' => 1,
