@@ -27,6 +27,11 @@ function check_user($username, $password) {
     $user = $db->getItemByField('users', 'username', $username);
 
     if ($user && !empty($user['id'])) {
+
+        $ip = get_user_ip();
+        if ($user['ip'] != $ip) {
+            $db->updateItemById('users', $user['id'], ['ip' => $ip]);
+        }
         return $user['id'];
     } else {
         return false;
