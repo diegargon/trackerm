@@ -335,8 +335,7 @@ function update_db($from) {
     if ($from < 2) {
         $query = 'ALTER TABLE wanted add column hashstring VARCHAR NULL';
         $db->query($query);
-        $set['version'] = 2;
-        $db->update('db_info', $set);
+        $db->update('db_info', ['version' => 2]);
     }
 
     if ($from < 3) {
@@ -387,8 +386,7 @@ function update_db($from) {
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
                 )');
 
-        $set['version'] = 3;
-        $db->update('db_info', $set);
+        $db->update('db_info', ['version' => 3]);
     }
 
     if ($from < 4) {
@@ -424,8 +422,7 @@ function update_db($from) {
         $db->query('ALTER TABLE library_shows add column clean_title VARCHAR NULL');
         $db->query('ALTER TABLE library_movies add column clean_title VARCHAR NULL');
         $db->query('ALTER TABLE config add column type VARCHAR NULL');
-        $set['version'] = 4;
-        $db->update('db_info', $set);
+        $db->update('db_info', ['version' => 4]);
     }
 
     if ($from < 5) {
@@ -478,8 +475,7 @@ function update_db($from) {
         $db->insert('config', ['cfg_key' => 'torrent_ignore_prefs', 'cfg_value' => 'SCREENER', 'cfg_desc' => 'L_CFG_TORRENT_IGNORE_PREFS', 'type' => 8, 'category' => 'L_TORRENT', 'public' => 1]);
         $db->insert('config', ['cfg_key' => 'extra_tags', 'cfg_value' => '', 'cfg_desc' => 'L_CFG_EXTRA_TAGS', 'type' => 8, 'category' => 'L_TORRENT', 'public' => 1]);
         $db->insert('config', ['cfg_key' => 'media_language_tag', 'cfg_value' => 'SPANISH,ENGLISH,CASTELLANO,ESPAÑOL', 'cfg_desc' => 'L_CFG_media_language_tag', 'type' => 8, 'category' => 'L_TORRENT', 'public' => 1]);
-        $set['version'] = 5;
-        $db->update('db_info', $set);
+        $db->update('db_info', ['version' => 5]);
     }
 
     if ($from < 6) {
@@ -490,8 +486,7 @@ function update_db($from) {
         $db->query('UPDATE library_shows SET file_hash=\'\'');
         $db->query('UPDATE library_movies SET file_hash=\'\'');
         $db->insert('config', ['cfg_key' => 'download_button', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_DOWNLOAD_BUTTON', 'type' => 3, 'category' => 'L_DISPLAY', 'public' => 1]);
-        $set['version'] = 6;
-        $db->update('db_info', $set);
+        $db->update('db_info', ['version' => 6]);
     }
 
     /*
@@ -513,8 +508,8 @@ function update_db($from) {
       $db->query('ALTER TABLE jackett_movies add column genre VARCHAR NULL');
       $db->insert('config', ['cfg_key' => 'force_use_passwords', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_FORCE_USE_PASSWORDS', 'type' => 3, 'category' => 'L_SECURITY', 'public' => 1]);
       $db->insert('config', ['cfg_key' => 'only_local_net', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_ONLY_LOCAL_NET', 'type' => 3, 'category' => 'L_SECURITY', 'public' => 1]);
-      $db->update('config', ['version' = 79]);
-      $db->update('db_info', ['version' = 7]);
+      $db->update('config', ['version' => 79]);
+      $db->update('db_info', ['version' => 7]);
       }
      */
     return true;
