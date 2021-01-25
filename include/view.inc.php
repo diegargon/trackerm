@@ -251,7 +251,7 @@ function view_extra_shows($item, $opt) {
 
 function view_seasons($id, $update = false) {
     //FIX REBUILD/MESSY
-    global $db, $LNG, $filter;
+    global $db, $LNG, $filter, $cfg;
 
     $seasons_data = '';
     $episode_data = '';
@@ -329,10 +329,12 @@ function view_seasons($id, $update = false) {
                 if ($have !== false) {
                     $have_episodes[] = $item['episode'];
                     $episode_data .= '<div class="divTableCellEpisodes" style="color:yellow;">' . $item['title'] . '</div>';
-                    $episode_data .= '<div class="divTableCellEpisodes">';
-                    $episode_data .= '<a class="episode_link" href="?page=download&type=shows_library&id=' . $have['id'] . '">';
-                    $episode_data .= $LNG['L_DOWNLOAD'];
-                    $episode_data .= '</a></div>';
+                    if (!empty($cfg['download_button'])) {
+                        $episode_data .= '<div class="divTableCellEpisodes">';
+                        $episode_data .= '<a class="episode_link" href="?page=download&type=shows_library&id=' . $have['id'] . '">';
+                        $episode_data .= $LNG['L_DOWNLOAD'];
+                        $episode_data .= '</a></div>';
+                    }
                 } else {
                     $episode_data .= '<div class="divTableCellEpisodes">' . $item['title'] . '</div>';
                     $episode_data .= '<div class="divTableCellEpisodes">';

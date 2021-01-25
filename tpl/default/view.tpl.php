@@ -96,7 +96,7 @@
                     <?php if ($tdata['ilink'] == 'shows_library') { ?>
                         <a class="action_link" href="?page=view&id=<?= $tdata['id'] ?>&type=shows_library&update=1"><?= $tdata['L_UPDATE_EPISODES'] ?></a>
                     <?php } ?>
-                    <?php if ($tdata['ilink'] == 'movies_library') { ?>
+                    <?php if ($tdata['ilink'] == 'movies_library' && ($tdata['download_button'])) { ?>
                         <a class="action_link" href="?page=download&id=<?= $tdata['id'] ?>&type=movies_library" target=_blank><?= $tdata['L_DOWNLOAD'] ?></a>
                     <?php } ?>
                 </div>
