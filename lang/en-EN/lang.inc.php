@@ -177,8 +177,8 @@ $LNG = [
     'L_CFG_LOCALE' => 'Locale',
     'L_CFG_WANT_SHOWS' => 'Do you want shows?',
     'L_CFG_WANT_MOVIES' => 'Do you want movies?',
-    'L_CFG_THEME' => 'Theme',
-    'L_CFG_CSS' => 'CSS',
+    'L_CFG_THEME' => 'Default Theme',
+    'L_CFG_CSS' => 'Default CSS',
     'L_CFG_WANT_DAY_DELAY' => 'Delay between wanted search',
     'L_CFG_SYSLOG_LEVEL' => 'Syslog level',
     'L_CFG_UNRAR_PATH' => 'Path to unrar',
@@ -206,5 +206,5 @@ $LNG = [
     'L_CFG_MEDIA_LANGUAGE_TAGS' => 'Specify here what languages want tag (Comma seperated)',
     'L_CFG_DOWNLOAD_BUTTON' => 'Show local download button',
     'L_CFG_ONLY_LOCAL_NET' => 'Allow only local ips',
-    'L_CFG_FORCE_USE_PASSWORDS' => 'Force users use passwords',
+    'L_CFG_FORCE_USE_PASSWORDS' => 'Force users use passwords (sin uso de momento)',
 ];
