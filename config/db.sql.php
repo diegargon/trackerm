@@ -18,7 +18,7 @@ function create_db() {
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
                 )');
 
-    $db->insert('db_info', ["app_name" => 'trackerm', "version" => 6]);
+    $db->insert('db_info', ["app_name" => 'trackerm', "version" => 7]);
 
     // USERS
     $db->query('CREATE TABLE IF NOT EXISTS "users" (
@@ -27,6 +27,8 @@ function create_db() {
                     "password" varchar NULL,
                     "sid" varchar NULL,
                     "isAdmin" INTEGER default 0,
+                    "email" VARCHAR NULL,
+                    "ip" VARCHAR NULL,
                     "profile_img" VARCHAR NULL,
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
        )');
@@ -62,6 +64,7 @@ function create_db() {
                     "plot" VARCHAR NULL,
                     "release" VARCHAR NULL,
                     "in_library" INT NULL,
+                    "genre" VARCHAR NULL,
                     "updated" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                     UNIQUE(themoviedb_id, media_type)
@@ -101,6 +104,7 @@ function create_db() {
                     "poster" VARCHAR NULL,
                     "release" VARCHAR NULL,
                     "master" INTEGER NULL,
+                    "genre" VARCHAR NULL,
                     "updated" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                     "added" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
@@ -133,6 +137,7 @@ function create_db() {
                     "poster" VARCHAR NULL,
                     "release" VARCHAR NULL,
                     "master" INTEGER NULL,
+                    "genre" VARCHAR NULL,
                     "updated" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                     "added" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
@@ -171,6 +176,7 @@ function create_db() {
                     "source" VARCHAR NULL,
                     "poster" VARCHAR NULL,
                     "guessed_poster" VARCHAR NULL,
+                    "genre" VARCHAR NULL,
                     "trailer" VARCHAR NULL,
                     "guessed_trailer" VARCHAR NULL,
                     "added" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
@@ -194,6 +200,7 @@ function create_db() {
                     "source" VARCHAR NULL,
                     "poster" VARCHAR NULL,
                     "guessed_poster" VARCHAR NULL,
+                    "genre" VARCHAR NULL,
                     "trailer" VARCHAR NULL,
                     "guessed_trailer" VARCHAR NULL,
                     "added" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
@@ -243,6 +250,8 @@ function create_db() {
                     "track_show" INTEGER NULL,
                     "media_type" VARCHAR NULL,
                     "profile" INTEGER NULL,
+                    "jackett_filename" VARCHAR NULL,
+                    "force_proper" INTEGER NULL,
                     "added" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
         )');
@@ -321,12 +330,14 @@ function create_db() {
     $db->insert('config', ['cfg_key' => 'media_language_tag', 'cfg_value' => 'SPANISH,ENGLISH,CASTELLANO,ESPAÑOL', 'cfg_desc' => 'L_CFG_media_language_tag', 'type' => 8, 'category' => 'L_TORRENT', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'download_button', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_DOWNLOAD_BUTTON', 'type' => 3, 'category' => 'L_DISPLAY', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'css', 'cfg_value' => 'default', 'cfg_desc' => 'L_CFG_CSS', 'type' => 1, 'category' => 'L_DISPLAY', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'force_use_passwords', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_FORCE_USE_PASSWORDS', 'type' => 3, 'category' => 'L_SECURITY', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'only_local_net', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_ONLY_LOCAL_NET', 'type' => 3, 'category' => 'L_SECURITY', 'public' => 1]);
     return true;
 }
 
-/* QUEDAN shows_detauls
+/*
  *
- *  */
+ */
 
 function update_db($from) {
     global $db;
@@ -436,7 +447,7 @@ function update_db($from) {
         $db->query('ALTER TABLE config add column category VARCHAR NULL');
         $db->query('ALTER TABLE config add column public INT NULL');
 
-        $db->insert('config', ['cfg_key' => 'version', 'cfg_value' => 'A77', 'cfg_desc' => '', 'type' => 2, 'category' => '', 'public' => 0]);
+        $db->insert('config', ['cfg_key' => 'version', 'cfg_value' => 'A80', 'cfg_desc' => '', 'type' => 2, 'category' => '', 'public' => 0]);
         $db->insert('config', ['cfg_key' => 'profile', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => '', 'public' => 0]);
         $db->insert('config', ['cfg_key' => 'max_identify_items', 'cfg_value' => 5, 'cfg_desc' => 'L_CFG_MAXID_ITEMS', 'type' => 2, 'category' => '', 'public' => 0]);
         $db->insert('config', ['cfg_key' => 'app_name', 'cfg_value' => 'trackerm', 'cfg_desc' => '', 'type' => 1, 'category' => '', 'public' => 0]);
@@ -486,30 +497,35 @@ function update_db($from) {
         $db->query('UPDATE library_shows SET file_hash=\'\'');
         $db->query('UPDATE library_movies SET file_hash=\'\'');
         $db->insert('config', ['cfg_key' => 'download_button', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_DOWNLOAD_BUTTON', 'type' => 3, 'category' => 'L_DISPLAY', 'public' => 1]);
+        $db->query('UPDATE config SET cfg_value=\'79\' WHERE cfg_key=\'version\'');
         $db->update('db_info', ['version' => 6]);
+    }
+
+    if ($from < 7) {
+        $db->query('ALTER TABLE wanted add column jackett_filename VARCHAR NULL');
+        $db->query('ALTER TABLE wanted add column force_proper INTEGER NULL');
+        $db->query('ALTER TABLE users add column email VARCHAR NULL');
+        $db->query('ALTER TABLE users add column ip VARCHAR NULL');
+        $db->query('ALTER TABLE tmdb_search add column genre VARCHAR NULL');
+        $db->query('ALTER TABLE library_shows add column genre VARCHAR NULL');
+        $db->query('ALTER TABLE library_movies add column genre VARCHAR NULL');
+        $db->query('ALTER TABLE jackett_shows add column genre VARCHAR NULL');
+        $db->query('ALTER TABLE jackett_movies add column genre VARCHAR NULL');
+        $db->insert('config', ['cfg_key' => 'css', 'cfg_value' => 'default', 'cfg_desc' => 'L_CFG_CSS', 'type' => 1, 'category' => 'L_DISPLAY', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'force_use_passwords', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_FORCE_USE_PASSWORDS', 'type' => 3, 'category' => 'L_SECURITY', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'only_local_net', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_ONLY_LOCAL_NET', 'type' => 3, 'category' => 'L_SECURITY', 'public' => 1]);
+        $db->query('UPDATE config SET cfg_value=\'80\' WHERE cfg_key=\'version\'');
+        $db->update('db_info', ['version' => 7]);
     }
 
     /*
       NEXT UPDATES:
       remove from wanted ignore field, not need
-      Config: force_use_passwords L_SECURITY (obliga a utilizar contraseñas si no un usuario puede tenerla en blanco)
-      Config: only_local_net L_SECURITY (permite solo acceso desde ip redes locales 10. 192. 172.
      */
     /*
-      if ($from < 7) {
-      $db->query('ALTER TABLE wanted add column jacket_filename VARCHAR NULL');
-      $db->query('ALTER TABLE wanted add column force_proper INTEGER NULL');
-      $db->query('ALTER TABLE users add column email VARCHAR NULL');
-      $db->query('ALTER TABLE users add column ip VARCHAR NULL');
-      $db->query('ALTER TABLE tmdb_search add column genre VARCHAR NULL');
-      $db->query('ALTER TABLE library_shows add column genre VARCHAR NULL');
-      $db->query('ALTER TABLE library_movies add column genre VARCHAR NULL');
-      $db->query('ALTER TABLE jackett_shows add column genre VARCHAR NULL');
-      $db->query('ALTER TABLE jackett_movies add column genre VARCHAR NULL');
-      $db->insert('config', ['cfg_key' => 'force_use_passwords', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_FORCE_USE_PASSWORDS', 'type' => 3, 'category' => 'L_SECURITY', 'public' => 1]);
-      $db->insert('config', ['cfg_key' => 'only_local_net', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_ONLY_LOCAL_NET', 'type' => 3, 'category' => 'L_SECURITY', 'public' => 1]);
-      $db->update('config', ['version' => 79]);
-      $db->update('db_info', ['version' => 7]);
+      if ($from < 8) {
+      $db->query('UPDATE config SET cfg_value=\'81\' WHERE cfg_key=\'version\'');
+      $db->update('db_info', ['version' => 8]);
       }
      */
     return true;

@@ -18,7 +18,6 @@ TODO
         para episodios si no hay más posibilidades que este bien el nombre del archivo. O buscar otro modo.
      [COMPLETE] Filters
      [CHANGE?] Clean title: remove words <=2 chars?
-     [ADD] Restrict local ips
      [IMPROVE]On torrent new/search get release data from tmdb and show it, get local database if not request database
 [VERY LOW]      
     [IMPROVE] Pagination actually get all results and do a array_slice, now with SQL database when use cache we can  do that better.    
