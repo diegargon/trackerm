@@ -101,6 +101,7 @@ Seguridad y mejor codigo vendra mucho mas despacio.
     Php 7.4 (php7 is necessary)
     Sqlite 3.31.1
 
+    Phone Testing: Android 9
 ## INSTALL
 
 in INSTALL.es (Spanish) or in INSTALL.en, (bad english and probably not update).
