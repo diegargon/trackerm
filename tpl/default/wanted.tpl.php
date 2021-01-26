@@ -45,3 +45,8 @@
         </div>
     </div>
 </div>
+<div class="wanted_help">
+    <div><?= $tdata['L_HELP_PROPER'] ?></div>
+    <div><?= $tdata['L_HELP_IGNORE_TAGS'] ?></div>
+    <div><?= $tdata['L_HELP_REQUIRE_TAGS'] ?></div>
+</div>
