@@ -10,6 +10,7 @@
 /* * ********************************** */
 /* PROBABLY NOT NEED CHANGE ANYTHING HERE */
 /* * ********************************** */
+!defined('IN_WEB') ? exit : true;
 
 $cfg['search_db'] = 'themoviedb';
 

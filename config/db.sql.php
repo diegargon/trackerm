@@ -7,6 +7,8 @@
  *  @subpackage
  *  @copyright Copyright @ 2020 Diego Garcia (diego/@/envigo.net)
  */
+!defined('IN_WEB') ? exit : true;
+
 function create_db() {
     global $db;
 
