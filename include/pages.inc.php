@@ -329,7 +329,7 @@ function page_wanted() {
 
     $want['wanted_list'] = wanted_list();
 
-    return getTpl('wanted', array_merge($want, $LNG, $cfg));
+    return !empty($want['wanted_list']) ? getTpl('wanted', array_merge($want, $LNG, $cfg)) : false;
 }
 
 function page_identify() {
