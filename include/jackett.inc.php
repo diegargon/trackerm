@@ -34,6 +34,8 @@ function search_media_torrents($media_type, $search, $head = null, $nohtml = fal
     $results_count = 0;
     $cache_media_expire = 0;
 
+    $search_words = strtolower($search_words);
+
     if ($cfg['search_cache']) {
         $media_cache_check = $db->getItemByField($jackett_search_media_cache, 'words', $search_words);
         !isset($media_cache_check['updated']) ? $media_cache_check['updated'] = 0 : null;
