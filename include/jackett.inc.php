@@ -49,7 +49,8 @@ function search_media_torrents($media_type, $search, $head = null, $nohtml = fal
                 return false;
             }
             foreach ($ids as $cache_id) {
-                $media_db[] = $db->getItemById($jackett_db, trim($cache_id));
+                $db_item = $db->getItemById($jackett_db, trim($cache_id));
+                !empty($db_item) ? $media_db[] = $db_item : null;
             }
         }
     }
@@ -86,6 +87,10 @@ function search_media_torrents($media_type, $search, $head = null, $nohtml = fal
     }
 
     $topt['search_type'] = $media_type;
+    if (empty($media_db)) {
+        return false;
+    }
+
     if ($nohtml) {
         return $media_db;
     }
