@@ -454,6 +454,7 @@ button {
 
 .tag_quality, .tag_type, .tag_day, .tag_id, .tag_added, .tag_state {
     border: 3px solid green;
+    text-align: center;
 }
 
 .global_title {

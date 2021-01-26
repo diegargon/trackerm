@@ -34,6 +34,7 @@
                     <div class="divTableCellWanted"><?= $tdata['L_ADDED'] ?></div>
                     <div class="divTableCellWanted"><?= $tdata['L_CHECKED'] ?></div>
                     <div class="divTableCellWanted"><?= $tdata['L_TYPE'] ?></div>
+                    <div class="divTableCellWanted"><?= $tdata['L_ONLY_PROPER'] ?></div>
                     <div class="divTableCellWanted"><?= $tdata['L_IGNORE'] ?></div>
                     <div class="divTableCellWanted"><?= $tdata['L_REQUIRE'] ?></div>
                     <div class="divTableCellWanted">TMDB</div>

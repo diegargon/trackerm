@@ -13,14 +13,23 @@ function wanted_list() {
     global $db, $cfg, $LNG, $trans;
     $iurl = '?page=wanted';
 
-    if (isset($_POST['ignore_tags']) && count($_POST['ignore_tags']) > 0) {
-        foreach ($_POST['ignore_tags'] as $ignore_key => $ignore_value) {
-            $db->updateItemById('wanted', $ignore_key, ['custom_words_ignore' => $ignore_value]);
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        if (isset($_POST['ignore_tags']) && count($_POST['ignore_tags']) > 0) {
+            foreach ($_POST['ignore_tags'] as $ignore_key => $ignore_value) {
+                $db->updateItemById('wanted', $ignore_key, ['custom_words_ignore' => $ignore_value]);
+            }
         }
-    }
-    if (isset($_POST['require_tags']) && count($_POST['require_tags']) > 0) {
-        foreach ($_POST['require_tags'] as $require_key => $require_value) {
-            $db->updateItemById('wanted', $require_key, ['custom_words_require' => $require_value]);
+        if (isset($_POST['require_tags']) && count($_POST['require_tags']) > 0) {
+            foreach ($_POST['require_tags'] as $require_key => $require_value) {
+                $db->updateItemById('wanted', $require_key, ['custom_words_require' => $require_value]);
+            }
+        }
+
+        if (isset($_POST['only_proper'])) {
+            $id_only_proper = array_key_first($_POST['only_proper']);
+            $_POST['only_proper'][$id_only_proper] == 0 ? $only_proper = 0 : $only_proper = 1;
+
+            $db->updateItemById('wanted', $id_only_proper, ['only_proper' => $only_proper]);
         }
     }
     //update wanted agains transmission-daemon

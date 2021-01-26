@@ -95,6 +95,7 @@ $LNG = [
     'L_NONE' => 'Nada',
     'L_NEED_UNRAR' => 'Fichero unrar detectado pero no localizo donde encontrar unrar',
     'L_ON' => 'en',
+    'L_ONLY_PROPER' => 'Proper',
     'L_PAGE_NOEXISTS' => 'La pagina solicitada no existe',
     'L_PATH' => 'Ruta',
     'L_PASSWORD' => 'Contraseña',

@@ -95,6 +95,7 @@ $LNG = [
     'L_NONE' => 'None',
     'L_NEED_UNRAR' => 'Unrar file detected but can\'t found unrar',
     'L_ON' => 'On',
+    'L_ONLY_PROPER' => 'Proper',
     'L_PAGE_NOEXISTS' => 'The page required not exists',
     'L_PATH' => 'Path',
     'L_PASSWORD' => 'Password',

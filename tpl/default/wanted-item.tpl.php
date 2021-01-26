@@ -34,6 +34,14 @@
         <div class="tag_type"><?= $tdata['lang_media_type'] ?></div>
     </div>
     <div class="divTableCellWanted">
+        <div class="tag_type">
+            <form class="form_inline" method="POST" action="">
+                <input type="hidden" name="only_proper[<?= $tdata['id'] ?>]" value="0">
+                <input  <?= !empty($tdata['only_proper']) ? "checked" : null ?> onchange="this.form.submit()" type="checkbox" name="only_proper[<?= $tdata['id'] ?>]]" value="1">
+            </form>
+        </div>
+    </div>
+    <div class="divTableCellWanted">
         <div class="tag_type"><form class="form_inline" method="post" action=""><input class="wanted_input" name="ignore_tags[<?= $tdata['id'] ?>]" type="text" onchange="this.form.submit()" value="<?= !empty($tdata['custom_words_ignore']) ? $tdata['custom_words_ignore'] : null ?>"/></form></div>
     </div>
     <div class="divTableCellWanted">

@@ -595,12 +595,20 @@ function wanted_check_flags($wanted, $results) {
         foreach ($cfg['torrent_quality_prefs'] as $quality) {
             if ($quality == 'ANY') {
                 $TORRENT_QUALITYS_PREFS_PROPER[$_order] = 'PROPER';
-                $TORRENT_QUALITYS_PREFS_PROPER[$_order + 1] = $quality;
-                $_order = $_order + 2;
+                if (empty($wanted['only_proper'])) {
+                    $TORRENT_QUALITYS_PREFS_PROPER[$_order + 1] = $quality;
+                    $_order = $_order + 2;
+                } else {
+                    $_order = $_order + 1;
+                }
             } else {
                 $TORRENT_QUALITYS_PREFS_PROPER[$_order] = $quality . ' PROPER';
-                $TORRENT_QUALITYS_PREFS_PROPER[$_order + 1] = $quality;
-                $_order = $_order + 2;
+                if (empty($wanted['only_proper'])) {
+                    $TORRENT_QUALITYS_PREFS_PROPER[$_order + 1] = $quality;
+                    $_order = $_order + 2;
+                } else {
+                    $_order = $_order + 1;
+                }
             }
         }
 
@@ -615,6 +623,7 @@ function wanted_check_flags($wanted, $results) {
     } else {
         $valid_results = $noignore;
     }
+
 
     if (!empty($wanted['custom_words_require']) && !empty($valid_results) && (count($valid_results) > 0)) {
         $custom_words_require = explode(',', $wanted['custom_words_require']);

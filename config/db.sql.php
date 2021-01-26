@@ -251,7 +251,7 @@ function create_db() {
                     "media_type" VARCHAR NULL,
                     "profile" INTEGER NULL,
                     "jackett_filename" VARCHAR NULL,
-                    "force_proper" INTEGER NULL,
+                    "only_proper" INTEGER NULL,
                     "added" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
         )');
@@ -503,7 +503,7 @@ function update_db($from) {
 
     if ($from < 7) {
         $db->query('ALTER TABLE wanted add column jackett_filename VARCHAR NULL');
-        $db->query('ALTER TABLE wanted add column force_proper INTEGER NULL');
+        $db->query('ALTER TABLE wanted add column only_proper INTEGER NULL');
         $db->query('ALTER TABLE users add column email VARCHAR NULL');
         $db->query('ALTER TABLE users add column ip VARCHAR NULL');
         $db->query('ALTER TABLE tmdb_search add column genre VARCHAR NULL');
