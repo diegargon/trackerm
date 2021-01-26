@@ -1,6 +1,7 @@
 ## Latest / News (Relevant)
 
 [26/01] Wanted: add "proper" will search only for PROPER if checked
+        Added .htaccess for block trackerm-cli.php, beware if you already have one will we rewrited
 [25/01] Add popular to tmdb, Made show trending/popular optional, config option to allow access only local ips.
 [25/01] Add to wanted custom ignore/require keywords per item. Multiple tags must comma separated
 [23/01] Fix Wanted not work because wrong title compare, fix file_hash func, update db with user fields for next changes, fix wanted day check

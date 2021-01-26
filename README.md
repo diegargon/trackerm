@@ -97,6 +97,7 @@ Seguridad y mejor codigo vendra mucho mas despacio.
 
     Version Compatibility? it's not the momment. I working on:
     Ubuntu 20.04
+    Apache >=2.4
     Php 7.4 (php7 is necessary)
     Sqlite 3.31.1
 
