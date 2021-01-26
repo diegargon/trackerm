@@ -55,13 +55,9 @@ function get_user_ip() {
 function is_local_ip() {
     $ip = get_user_ip();
 
-    if (filter_var($ip, FILTER_VALIDATE_IP)) {
-        if (filter_var($ip, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
-            return false;
-        } else {
-            return true;
-        }
-    } else {
+    if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
         return false;
+    } else {
+        return true;
     }
 }
