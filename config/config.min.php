@@ -20,18 +20,19 @@ $cfg['LANG'] = 'en-EN';
 // Full path where trackerm reside ex: /var/www/html
 $cfg['ROOT_PATH'] = '';
 
-// Relative path (Webserver) where trackerm reside // /trackerm for http://mydomain.com/trackerm
+// Relative path (Webserver) where trackerm reside ex: /trackerm for http://mydomain.com/trackerm
 $cfg['REL_PATH'] = '/trackerm';
 
-// Your Movies and Shows  paths (the first element (0) is when drop new content)
+// Your library path (the first element (0) is where trackerm drop the new content)
+//Movies
 $cfg['MOVIES_PATH'] = [
     0 => '', //ex: 0 => '/home/mylib/movies',
 ];
-
+//Shows
 $cfg['SHOWS_PATH'] = [
     0 => '',
 ];
-// Where transmission put download files (you must separete from temporal file directory
+// Where transmission put download files (you must separated finish torrents directory  and the temporal file directory)
 $cfg['TORRENT_FINISH_PATH'] = '';
 
 //Jacket Server ex: http://192.168.1.1:9117
@@ -39,7 +40,7 @@ $cfg['jackett_srv'] = '';
 //Jacket Key: ex: a long line of characters and number check Jackett
 $cfg['jackett_key'] = '';
 
-// What Jacket indexer will use, check link in "Actions" the name ex:  http://192.168.X.XX:9117/api/v2.0/indexers/NAME/results/
+// What Jacket indexer will use, check link in "Actions" the NAME ex:  http://192.168.X.XX:9117/api/v2.0/indexers/NAME/results/
 $cfg['jackett_indexers'] = [
 //    1 => 'newpct',
 //    2 => 'divxtotal',
