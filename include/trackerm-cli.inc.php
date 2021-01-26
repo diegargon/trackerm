@@ -491,11 +491,8 @@ function wanted_work() {
 
         if ($media_type == 'movies') {
             $log->debug(' Search for : ' . $title . "[ $media_type ]");
-            //Remove year from title some jackett indexers hack year because on radarr/sonnarr
-            //we check year later in wanted_check_title
-            $search['words'] = trim(preg_replace('/\s+\d{4}/', '', $title));
-            empty($search['words']) ? $search['words'] = $title : null; //year is the title
 
+            $search['words'] = $title;
             $results = search_media_torrents($media_type, $search, null, true);
             if (!empty($results) && count($results) > 0) {
                 $results_pass_flags = wanted_check_flags($wanted, $results);
@@ -540,22 +537,11 @@ function wanted_work() {
 function wanted_check_title($title, $results) {
     global $log;
     $valid = [];
-    $match = [];
-    $year = '';
 
-    if (preg_match('/\s+\d{4}/i', $title, $match) == 1) {
-        $year = trim($match[0]);
-        $words = trim(preg_replace('/\s+\d{4}/', '', $title));
-    } else {
-        $words = trim($title);
-    }
+    $words = trim($title);
     foreach ($results as $item) {
         $title = trim(getFileTitle($item['title']));
 
-        if (!empty($year) && !(strpos($title, $year))) {
-            $log->debug('Wanted: Invalid title found since not year ' . $year . ' in title ' . $item['title']);
-            continue;
-        }
         if (strcmp(strtolower($title), strtolower($words) == 0)) {
             $log->debug('Wanted: Valid title found ' . $item['title']);
             $valid[] = $item;
@@ -643,7 +629,7 @@ function wanted_check_flags($wanted, $results) {
         $custom_words_require = explode(',', $wanted['custom_words_require']);
         foreach ($valid_results as $valid_key => $valid_result) {
             foreach ($custom_words_require as $word_require) {
-                if (!(stripos($valid_result['title'], $word_require))) {
+                if (!(stripos($valid_result['title'], trim($word_require)))) {
                     $log->debug('Wanted: Drop valid item by custom require words ' . $valid_result['title'] . ' required word ' . $word_require);
                     unset($valid_results[$valid_key]);
                 }
@@ -656,7 +642,7 @@ function wanted_check_flags($wanted, $results) {
         foreach ($valid_results as $valid_key => $valid_result) {
             foreach ($custom_words_ignore as $word_ignore) {
                 if ((stripos($valid_result['title'], $word_ignore))) {
-                    $log->debug('Wanted: Drop valid item by custom ignore words ' . $valid_result['title'] . ' ignore word ' . $word_ignore);
+                    $log->debug('Wanted: Drop valid item by custom ignore words ' . $valid_result['title'] . ' ignore word ' . trim($word_ignore));
                     unset($valid_results[$valid_key]);
                 }
             }

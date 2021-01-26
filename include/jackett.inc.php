@@ -64,7 +64,14 @@ function search_media_torrents($media_type, $search, $head = null, $nohtml = fal
 
             ($media_type) == 'movies' ? $jackett_media_key = 'movie-search' : $jackett_media_key = 'tv-search';
             if ($caps['searching'][$jackett_media_key]['@attributes']['available'] == "yes") {
-                $result[$indexer] = jackett_search_media($media_type, $search_words, $indexer, $categories);
+                //some indexer jackett return the query year added to title (hack for radarr) we query without year and filter later
+                if (preg_match('/\s+\d{4}/i', $search_words, $match) == 1) {
+                    $words_noyear = trim(preg_replace('/\s+\d{4}/', '', $search_words));
+                    $indexer_results = jackett_search_media($media_type, $words_noyear, $indexer, $categories);
+                } else {
+                    $indexer_results = jackett_search_media($media_type, $search_words, $indexer, $categories);
+                }
+                $result[$indexer] = $indexer_results;
             }
             isset($result[$indexer]['channel']['item']) ? $results_count = count($result[$indexer]['channel']['item']) + $results_count : null;
         }
@@ -91,6 +98,17 @@ function search_media_torrents($media_type, $search, $head = null, $nohtml = fal
     $topt['search_type'] = $media_type;
     if (empty($media_db)) {
         return false;
+    }
+
+    if (preg_match('/\s+\d{4}/i', $search_words, $match) == 1) {
+        $year = trim($match[0]);
+
+        foreach ($media_db as $item_key => $item) {
+            $item_title = $item['title'];
+            if (!(strpos($item_title, $year))) {
+                unset($media_db[$item_key]);
+            }
+        }
     }
 
     if ($nohtml) {
