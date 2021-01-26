@@ -18,6 +18,8 @@
   y luego el select * o lo que sea;
 
  */
+!defined('IN_WEB') ? exit : true;
+
 class DB {
 
     private $version = 7;
