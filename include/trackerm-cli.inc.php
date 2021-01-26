@@ -491,11 +491,15 @@ function wanted_work() {
 
         if ($media_type == 'movies') {
             $log->debug(' Search for : ' . $title . "[ $media_type ]");
-            $search['words'] = $title;
+            //Remove year from title some jackett indexers hack year because on radarr/sonnarr
+            //we check year later in wanted_check_title
+            $search['words'] = trim(preg_replace('/\s+\d{4}/', '', $title));
+            empty($search['words']) ? $search['words'] = $title : null; //year is the title
+
             $results = search_media_torrents($media_type, $search, null, true);
             if (!empty($results) && count($results) > 0) {
                 $results_pass_flags = wanted_check_flags($wanted, $results);
-                !empty($results_pass_flags) ? $valid_results = wanted_check_title($search, $results_pass_flags) : null;
+                !empty($results_pass_flags) ? $valid_results = wanted_check_title($title, $results_pass_flags) : null;
             } else {
                 $log->debug('No results founds for ' . $title);
             }
@@ -509,7 +513,7 @@ function wanted_work() {
             $results = search_media_torrents($media_type, $search, null, true);
             if (!empty($results) && count($results) > 0) {
                 $results_pass_flags = wanted_check_flags($wanted, $results);
-                !empty($results_pass_flags) ? $valid_results = wanted_check_title($search, $results_pass_flags) : null;
+                !empty($results_pass_flags) ? $valid_results = wanted_check_title($title, $results_pass_flags) : null;
             } else {
                 $log->debug('No results founds for ' . $title . ' ' . $s_episode);
             }
@@ -533,15 +537,25 @@ function wanted_work() {
     }
 }
 
-function wanted_check_title($search, $results) {
+function wanted_check_title($title, $results) {
     global $log;
-
-    $words = trim($search['words']);
     $valid = [];
+    $match = [];
+    $year = '';
 
+    if (preg_match('/\s+\d{4}/i', $title, $match) == 1) {
+        $year = trim($match[0]);
+        $words = trim(preg_replace('/\s+\d{4}/', '', $title));
+    } else {
+        $words = trim($title);
+    }
     foreach ($results as $item) {
         $title = trim(getFileTitle($item['title']));
 
+        if (!empty($year) && !(strpos($title, $year))) {
+            $log->debug('Wanted: Invalid title found since not year ' . $year . ' in title ' . $item['title']);
+            continue;
+        }
         if (strcmp(strtolower($title), strtolower($words) == 0)) {
             $log->debug('Wanted: Valid title found ' . $item['title']);
             $valid[] = $item;

@@ -84,13 +84,9 @@ function wanted_movies($wanted_id) {
         return false;
     }
 
-    //Remove year from title jackett indexers hack year because on radarr/sonnarr
-    $title = trim(preg_replace('/\s+\d{4}/', '', $item['title']));
-    empty($title) ? $title = $item['title'] : null; //year is the title
-
     $wanted_item = [
         'themoviedb_id' => $item['themoviedb_id'],
-        'title' => $title,
+        'title' => $item['title'],
         'day_check' => 0,
         'last_check' => '',
         'direct' => 0,

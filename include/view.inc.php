@@ -182,11 +182,6 @@ function view_extra_movies($item, $opt = null) {
     $extra .= '<input type="text" name="search_movie_db" value="' . $stitle . '">';
     $extra .= '</form>';
 
-    //Remove year from title jackett indexers hack year because on radarr/sonnarr
-    $_stitle = trim(preg_replace('/\s+\d{4}/', '', $stitle));
-    !empty($_stitle) ? $stitle = $_stitle : null; //year is the title
-
-
     if (
             isset($_GET['more_movies']) || (!empty($opt['auto_show_db']) && !isset($_GET['more_torrents']))
     ) {
