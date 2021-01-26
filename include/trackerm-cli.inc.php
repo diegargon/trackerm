@@ -637,6 +637,18 @@ function wanted_check_flags($wanted, $results) {
         }
     }
 
+    if (!empty($wanted['custom_words_ignore']) && !empty($valid_results) && (count($valid_results) > 0)) {
+        $custom_words_ignore = explode(',', $wanted['custom_words_ignore']);
+        foreach ($valid_results as $valid_key => $valid_result) {
+            foreach ($custom_words_ignore as $word_ignore) {
+                if ((stripos($valid_result['title'], $word_ignore))) {
+                    $log->debug('Wanted: Drop valid item by custom ignore words ' . $valid_result['title'] . ' ignore word ' . $word_ignore);
+                    unset($valid_results[$valid_key]);
+                }
+            }
+        }
+    }
+
     return count($valid_results) > 0 ? $valid_results : false;
 }
 
