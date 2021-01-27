@@ -35,7 +35,7 @@ function create_db() {
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
        )');
 
-    $db->insert('users', ["username" => "default"]);
+    $db->insert('users', ["username" => "default", "isAdmin" => 1]);
 
     // PREFERENCES
     $db->query('CREATE TABLE IF NOT EXISTS "preferences" (
@@ -525,6 +525,9 @@ function update_db($from) {
       remove from wanted ignore field, not need
      */
     /*
+     *
+      $db->query('UPDATE users SET isAdmin=\'1\' WHERE username=\'default\'');
+      $db->query('ALTER TABLE users add column disable INTEGER NULL');
       if ($from < 8) {
       $db->query('UPDATE config SET cfg_value=\'81\' WHERE cfg_key=\'version\'');
       $db->update('db_info', ['version' => 8]);

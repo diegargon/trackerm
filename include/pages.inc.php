@@ -10,17 +10,7 @@
 !defined('IN_WEB') ? exit : true;
 
 function index_page() {
-    global $cfg, $user, $LNG, $log, $filter, $db;
-
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        if (isset($_POST['new_user']) && !empty($new_user = $filter->postUsername('username'))) {
-            $user_create['username'] = $new_user;
-            $db->upsertItemByField('users', $user_create, 'username');
-        }
-        if (isset($_POST['delete_user']) && !empty($delete_user_id = $filter->postInt('delete_user_id'))) {
-            $db->delete('users', ['id' => ['value' => $delete_user_id]]);
-        }
-    }
+    global $cfg, $user, $LNG, $log;
 
     $titems = [];
 
@@ -40,24 +30,7 @@ function index_page() {
 
     // User managament
     $tdata = [];
-    $tdata['title'] = $LNG['L_USERS'];
-    $tdata['content'] = '<form id="new_user" method="POST" >';
-    $tdata['content'] .= '<span>' . $LNG['L_USERNAME'] . '<span><input size="8" type="text" name="username" value=""/>';
-    //$tdata['content'] .= '<span>' . $LNG['L_PASSWORD'] . '<span><input size="8" type="password" name="password" value=""/>';
-    $tdata['content'] .= '<input class="submit_btn" type="submit" name="new_user" value="' . $LNG['L_CREATE'] . '"/>';
-    $tdata['content'] .= '</form>';
-    $tdata['content'] .= '<form id="delete_user" method="POST">';
-    $users = get_profiles();
-    foreach ($users as $user) {
-        if ($user['id'] > 1) {
-            $tdata['content'] .= '<span>' . $user['username'] . '<span>';
-            $tdata['content'] .= '<input type="hidden" name="delete_user_id" value="' . $user['id'] . '"/>';
-            $tdata['content'] .= '<input class="submit_btn" type="submit" name="delete_user" value="' . $LNG['L_DELETE'] . '"/>';
-        }
-    }
-
-    $tdata['content'] .= '</form>';
-
+    $tdata = user_management();
     $titems['col1'][] = getTpl('home-item', $tdata);
 
     // Hard disk
