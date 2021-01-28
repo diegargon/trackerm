@@ -283,6 +283,7 @@ button {
     background-color: #FFFFFF;
 }
 .footer {
+    margin-top: 10px;
     border:0px solid black;
     padding: 4px;
     text-align: right;
@@ -648,14 +649,12 @@ button {
 .profile_box {
     margin: auto;
     border:0px solid yellow;
-    width: 15%;
-    text-align: end;
+    text-align: center;
 }
 
-.profile_image img{
+.profile_box img{
     border:0px solid red;
-    max-width: 100%;
-    max-height: 100%;
+    max-width: 180px;
 }
 
 .profile_name {}
