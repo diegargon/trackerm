@@ -330,7 +330,7 @@ function get_valid_files($item) {
                     $unrar_check = dirname($file) . '/trackerm-unrar';
                     if (!file_exists($unrar_check)) {
                         if (check_file_encrypt('rar', $file)) {
-                            $log->addStateMsg(" {$LNG['L_ERR_FILE_ENCRYPT_MANUAL']} ($file)");
+                            $log->addStateMsg("[{$LNG['L_ERROR']}] {$LNG['L_ERR_FILE_ENCRYPT_MANUAL']} ($file)");
                             // we continue and try since the function need test and TODO.
                         }
                         touch($unrar_check);
@@ -344,7 +344,7 @@ function get_valid_files($item) {
                         break;
                     }
                 } else {
-                    $log->addStateMsg($LNG['L_NEED_UNRAR']);
+                    $log->addStateMsg('[' . $LNG['L_NOTE'] . '] ' . $LNG['L_NEED_UNRAR']);
                 }
             }
         }
@@ -372,7 +372,7 @@ function get_valid_files($item) {
                 $unrar_check = $orig_path . '.unrar';
                 if (!file_exists($unrar_check)) {
                     if (check_file_encrypt('rar', $file)) {
-                        $log->addStateMsg(" {$LNG['L_ERR_FILE_ENCRYPT_MANUAL']} ($file)");
+                        $log->addStateMsg("[{$LNG['L_ERROR']}]{$LNG['L_ERR_FILE_ENCRYPT_MANUAL']} ($file)");
                         // we continue and try since the function need test and TODO.
                     }
                     $unrar = $cfg['unrar_path'] . ' e -p- -y "' . $orig_path . '" "' . $work_path . '"';
@@ -416,7 +416,7 @@ function move_media($valid_file, $final_dest_path) {
         umask(0);
         (!empty($cfg['files_perms'])) ? chmod($final_dest_path, octdec("0" . $cfg['files_perms'])) : null;
         $log->info(" Rename sucessful: $valid_file : $final_dest_path");
-        $log->addStateMsg(basename($final_dest_path) . ' ' . $LNG['L_MOVED_TO_LIBRARY']);
+        $log->addStateMsg('[' . $LNG['L_MOVED'] . '] ' . basename($final_dest_path));
         return true;
     }
 
@@ -432,7 +432,7 @@ function linking_media($valid_file, $final_dest_path) {
         umask(0);
         (!empty($cfg['files_perms'])) ? chmod($valid_file, octdec("0" . $cfg['files_perms'])) : null;
         $log->info(" Linking sucessful: $valid_file : $final_dest_path");
-        $log->addStateMsg(basename($final_dest_path) . ' ' . $LNG['L_LINKED_TO_LIBRARY']);
+        $log->addStateMsg('[' . $LNG['L_LINKED'] . '] ' . basename($final_dest_path));
         return true;
     }
 
@@ -522,7 +522,13 @@ function wanted_work() {
             $valid_results[0]['wanted_id'] = $wanted_id;
             $first_valid[] = $valid_results[0];
             if (send_transmission($first_valid)) {
-                $log->addStateMsg($LNG['L_WANTED_FOUND'] . ':(' . $title . ') ' . $LNG['L_DOWNLOADING']);
+                $state_msg = '[' . $LNG['L_DOWNLOADING'] . '] ';
+                if (!empty($s_episode)) {
+                    $state_msg = $title . ' ' . $s_episode;
+                } else {
+                    $state_msg = $title;
+                }
+                $log->addStateMsg($state_msg);
             }
         } else {
             $update_ary['last_check'] = time();

@@ -54,7 +54,8 @@ function user_management() {
 function new_user() {
     global $LNG;
 
-    $html = '<form id = "new_user" method = "POST" >';
+    $html = '<div class="new_user_box">';
+    $html .= '<form id = "new_user" method = "POST" >';
     $html .= '<span>' . $LNG['L_USERNAME'] . '<span><input size="8" type="text" name="username" value=""/>';
     $html .= '<span>' . $LNG['L_PASSWORD'] . '<span><input size="8" type="password" name="password" value=""/>';
     $html .= '<input type = "hidden" name = "is_admin" value = "0">';
@@ -62,23 +63,26 @@ function new_user() {
     //$html .= '<input id = "is_admin" type = "checkbox" name = "is_admin" value = "1">';
     $html .= '<input class = "submit_btn" type = "submit" name = "new_user" value = "' . $LNG['L_CREATE'] . '/' . $LNG['L_MODIFY'] . '"/>';
     $html .= '</form>';
+    $html .= '</div>';
 
     return $html;
 }
 
 function show_users() {
     global $LNG;
-    $html = '<form id = "delete_user" method = "POST">';
+
+    $html = '<div class="delete_user_box">';
+    $html .= '<form id = "delete_user" method = "POST">';
     $users = get_profiles();
     foreach ($users as $user) {
         if ($user['id'] > 1) {
-            $html .= '<span>' . $user['username'] . '<span>';
-            $html .= '<input type="hidden" name="delete_user_id" value="' . $user['id'] . '"/>';
+            $html .= '<div class="delete_user"><input type="hidden" name="delete_user_id" value="' . $user['id'] . '"/>';
             $html .= '<input class="submit_btn" type="submit" name="delete_user" value="' . $LNG['L_DELETE'] . '"/>';
+            $html .= '<span>' . $user['username'] . '<span></div>';
         }
     }
-
     $html .= '</form>';
+    $html .= '</div>';
 
     return $html;
 }

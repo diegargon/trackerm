@@ -20,7 +20,7 @@ function rebuild($media_type, $path) {
 }
 
 function _rebuild($media_type, $path) {
-    global $cfg, $db, $log;
+    global $cfg, $db, $log, $LNG;
 
     $items = [];
     $files = findfiles($path, $cfg['media_ext']);
@@ -75,7 +75,7 @@ function _rebuild($media_type, $path) {
                     $items[$i]['season'] = $season;
                     $items[$i]['episode'] = $episode;
                 } else {
-                    $msg_log = 'Can\'t determine SE for this file: ' . $items[$i]['file_name'];
+                    $msg_log = '[' . $LNG['L_ERROR'] . '] ' . $LNG['L_ERR_SE'] . ' ' . $items[$i]['file_name'];
                     $log->addStateMsg($msg_log);
                     $log->warning($msg_log);
                     $items[$i]['season'] = 'X';
@@ -118,11 +118,11 @@ function _rebuild($media_type, $path) {
 }
 
 function clean_database($media_type, $files, $media) {
-    global $log, $db;
+    global $log, $db, $LNG;
 
     foreach ($media as $item) {
         if (!in_array($item['path'], $files)) {
-            $log->addStateMsg('Media ' . $item['title'] . ' seems moved or deleted removing from db');
+            $log->addStateMsg('[' . $LNG['L_NOTE'] . '] ' . $item['title'] . $LNG['LN_NOTE_MOVDEL']);
             if (isset($item['themoviedb_id'])) {
                 $values['title'] = $item['title'];
                 $values['themoviedb_id'] = $item['themoviedb_id'];

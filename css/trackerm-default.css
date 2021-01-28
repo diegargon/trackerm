@@ -10,6 +10,7 @@ body {
 
 input {
     color:green;
+    border: 0.1em solid #5B5B5B;
     background: #000;
     font-size: 1.2em;
     padding: 4px;
@@ -168,6 +169,7 @@ button {
     display: table-header-group;
     font-weight: bold;
     text-align:center;
+    border: 2px inset black;
 }
 
 .divTableFoot {
@@ -268,7 +270,7 @@ button {
 
 .submit_btn {
     display: inline-block;
-    border: 0.1em solid #FFFFFF;
+    border: 0.1em solid #5B5B5B;
     box-sizing: border-box;
     text-decoration: none;
     text-align: center;
@@ -453,7 +455,7 @@ button {
 }
 
 .tag_quality, .tag_type, .tag_day, .tag_id, .tag_added, .tag_state {
-    border: 3px solid green;
+    border: 1px solid green;
     text-align: center;
 }
 
@@ -476,6 +478,7 @@ button {
     /* margin: 1px 2px 1px 2px; */
     padding: 6px 10px 6px 10px;
     margin-right: 4px;
+    padding:3px;
 }
 
 .season_link {
@@ -565,7 +568,7 @@ button {
 }
 
 .home_state_msg {
-    height: 20%;
+    height: 35%;
     overflow:auto;
     resize: vertical;  
     line-height: 1;
@@ -655,12 +658,17 @@ button {
     max-height: 100%;
 }
 
-.profile_name {
-    
-}
+.profile_name {}
 
-.wanted_input {
+.wanted_input, .wanted_input_red{
+    border:1px outset;
     width: 100px;
+    height: 21px;
+    margin:0;
+    padding:0;
+}
+.wanted_input_red {
+    border:1px outset solid red;
 }
 
 .login_button {
@@ -674,4 +682,44 @@ button {
 }
 .login_username, .login_password {
     text-align: center;
+}
+
+.state_msg_block {
+    display: inline-flex;
+    width: 99%;
+    border:0px solid blue;
+}
+.state_time {
+    background-color: #000;
+    border: 2px outset #555;
+    padding: 5px;
+    min-width: 132px;
+    margin-bottom: 2px;
+}
+.state_msg {       
+    background-color: #000;
+    border: 2px outset #555;
+    padding: 5px;
+    margin-bottom: 2px;
+    color:darkgreen;
+}
+
+.clear_btn{
+    float:right;
+}
+
+.delete_user {
+    display:inline;
+    border:1px solid red;
+    margin-right: 3px;
+    padding: 10px;
+}
+.delete_user input {
+    padding:5px;
+    margin-top:5px;
+    margin-bottom:7px;
+}
+
+.new_user_box {
+    margin-bottom: 5px;
 }

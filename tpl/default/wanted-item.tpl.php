@@ -42,7 +42,7 @@
         </div>
     </div>
     <div class="divTableCellWanted">
-        <div class="tag_type"><form class="form_inline" method="post" action=""><input class="wanted_input" name="ignore_tags[<?= $tdata['id'] ?>]" type="text" onchange="this.form.submit()" value="<?= !empty($tdata['custom_words_ignore']) ? $tdata['custom_words_ignore'] : null ?>"/></form></div>
+        <div class="tag_type"><form class="form_inline" method="post" action=""><input class="wanted_input_red" name="ignore_tags[<?= $tdata['id'] ?>]" type="text" onchange="this.form.submit()" value="<?= !empty($tdata['custom_words_ignore']) ? $tdata['custom_words_ignore'] : null ?>"/></form></div>
     </div>
     <div class="divTableCellWanted">
         <div class="tag_type"><form class="form_inline" method="post" action=""><input class="wanted_input" name="require_tags[<?= $tdata['id'] ?>]"  type="text" onchange="this.form.submit()" value="<?= !empty($tdata['custom_words_require']) ? $tdata['custom_words_require'] : null ?>"/></form></div>

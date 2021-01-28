@@ -92,13 +92,15 @@ function index_page() {
     isset($_POST['clear_state']) ? $log->clearStateMsgs() : null;
     $tdata = [];
     $tdata['title'] = $LNG['L_STATE_MSG'];
-    $tdata['content'] = '<form method="POST"><input type="submit" class="submit_btn" name="clear_state" value="' . $LNG['L_CLEAR'] . '" />';
+    $tdata['content'] = '<form method="POST"><input type="submit" class="submit_btn clear_btn" name="clear_state" value="' . $LNG['L_CLEAR'] . '" /></form>';
     $state_msgs = $log->getStateMsgs();
 
     if (!empty($state_msgs) && (count($state_msgs) > 0)) {
         foreach ($state_msgs as $state_msg) {
-            $date = '[' . strftime("%d %h %X", strtotime($state_msg['created'])) . ']';
-            $tdata['content'] .= '<div class="state_msg">' . $date . $state_msg['msg'] . '</div>';
+            $tdata['content'] .= '<div class="state_msg_block">';
+            $tdata['content'] .= '<div class="state_time">[' . strftime("%d %h %X", strtotime($state_msg['created'])) . ']</div>';
+            $tdata['content'] .= '<div class="state_msg">' . $state_msg['msg'] . '</div>';
+            $tdata['content'] .= '</div>';
         }
     }
     $tdata['main_class'] = 'home_state_msg';
@@ -122,7 +124,7 @@ function index_page() {
     isset($_POST['clear_log']) ? file_put_contents('cache/log/trackerm.log', '') : null;
     $tdata = [];
     $tdata['title'] = $LNG['L_LOGS'];
-    $tdata['content'] = '<form method="POST"><input type="submit" class="submit_btn" name="clear_log" value="' . $LNG['L_CLEAR'] . '" />';
+    $tdata['content'] = '<form method="POST"><input type="submit" class="submit_btn clear_btn" name="clear_log" value="' . $LNG['L_CLEAR'] . '" /></form>';
     $latest_ary = getfile_ary('cache/log/trackerm.log');
     if (!empty($latest_ary)) {
         foreach (array_reverse($latest_ary) as $latest) {
