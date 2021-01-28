@@ -263,8 +263,8 @@ function pager($npage, $nitems, &$topt) {
 function getOptions() {
     global $cfg, $filter, $LNG, $log;
 
-    (isset($_POST['rebuild_movies'])) ? rebuild('movies', $cfg['MOVIES_PATH']) . $log->addStateMsg('Rebuild movies called') : null;
-    (isset($_POST['rebuild_shows'])) ? rebuild('shows', $cfg['SHOWS_PATH']) . $log->addStateMsg('Rebuild shows called') : null;
+    (isset($_POST['rebuild_movies'])) ? rebuild('movies', $cfg['MOVIES_PATH']) . $log->debug('Rebuild movies called') : null;
+    (isset($_POST['rebuild_shows'])) ? rebuild('shows', $cfg['SHOWS_PATH']) . $log->debug('Rebuild shows called') : null;
 
     $tdata['page'] = $filter->getString('page');
 

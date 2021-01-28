@@ -30,7 +30,7 @@ function page_new_media($media_type) {
             $log->debug("News: $media_type cache expire, Requesting");
             $cache_media_expire = 1;
         } else {
-            $log->debug("News: $media_type using cache " . ( ($media_cache_check['updated'] + $cfg['new_cache_expire']) - time()));
+            //$log->debug("News: $media_type using cache " . ( ($media_cache_check['updated'] + $cfg['new_cache_expire']) - time()));
             if (empty($media_cache_check['ids'])) {
                 return false;
             }
