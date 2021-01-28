@@ -528,6 +528,7 @@ function update_db($from) {
      *
       $db->query('UPDATE users SET isAdmin=\'1\' WHERE username=\'default\'');
       $db->query('ALTER TABLE users add column disable INTEGER NULL');
+      $db->query('ALTER TABLE users add column sid_expire INTEGER NULL');
       if ($from < 8) {
       $db->query('UPDATE config SET cfg_value=\'81\' WHERE cfg_key=\'version\'');
       $db->update('db_info', ['version' => 8]);

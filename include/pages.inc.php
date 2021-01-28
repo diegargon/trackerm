@@ -455,14 +455,25 @@ function page_config() {
 function page_login() {
     global $cfg, $db, $filter;
 
-    $username = $filter->getString('username');
 
-    if (!empty($username)) {
-        $password = '';
-        $check_user = check_user($username, $password);
-        if ($check_user) {
-            set_user($check_user);
-            header("Location: {$cfg['REL_PATH']} ");
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $dologin = 0;
+
+        $username = $filter->postUsername('username');
+        $password = $filter->postUsername('password');
+        if (!empty($username)) {
+            if ($cfg['force_use_passwords'] && !empty($password)) {
+                $dologin = 1;
+            } else if (!$cfg['force_use_passwords']) {
+                $dologin = 1;
+            }
+            if ($dologin) {
+                $userid = check_user($username, $password);
+                if ($userid) {
+                    set_user($userid);
+                    header("Location: {$cfg['REL_PATH']} ");
+                }
+            }
         }
     }
     $tdata = [];
@@ -482,6 +493,8 @@ function page_logout() {
 
     $_SESSION['uid'] = 0;
     ($_COOKIE) ? setcookie("uid", null, -1) : null;
+    session_regenerate_id();
+    session_destroy();
     header("Location: {$cfg['REL_PATH']} ");
     exit(0);
 }

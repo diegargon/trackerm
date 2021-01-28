@@ -662,3 +662,16 @@ button {
 .wanted_input {
     width: 100px;
 }
+
+.login_button {
+    border:0;
+    background-color: transparent;
+}
+
+.login_username {
+    border:0;
+    background-color: transparent;
+}
+.login_username, .login_password {
+    text-align: center;
+}

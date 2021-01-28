@@ -29,12 +29,17 @@ function check_user($username, $password) {
     $user = $db->getItemByField('users', 'username', $username);
 
     if ($user && !empty($user['id'])) {
+        !empty($password) ? $password_hashed = encrypt_password($password) : $password_hashed = '';
 
-        $ip = get_user_ip();
-        if ($user['ip'] != $ip) {
-            $db->updateItemById('users', $user['id'], ['ip' => $ip]);
+        if ($user['password'] == $password_hashed) {
+            $ip = get_user_ip();
+            if ($user['ip'] != $ip) {
+                $db->updateItemById('users', $user['id'], ['ip' => $ip]);
+            }
+            return $user['id'];
+        } else {
+            return false;
         }
-        return $user['id'];
     } else {
         return false;
     }
@@ -44,7 +49,15 @@ function set_user($user_id) {
     global $user;
 
     $user['id'] = $user_id;
-
     $_SESSION['uid'] = $user['id'];
     setcookie("uid", $user['id'], time() + 3600000);
+    setcookie("sid", session_id(), time() + 3600000);
+    update_session_id();
+}
+
+function update_session_id() {
+    global $db, $user;
+
+    setcookie("sid", session_id(), time() + 3600000);
+    $db->updateItemById('users', $user['id'], ['sid' => session_id()]);
 }

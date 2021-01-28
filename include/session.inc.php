@@ -13,22 +13,20 @@ session_start();
 
 global $user;
 
-if (isset($_GET['userid'])) {
-    $user['id'] = $filter->getInt('userid');
-    $_SESSION['uid'] = $user['id'];
-    setcookie("uid", $user['id'], time() + 3600000);
-} else if (isset($_SESSION['uid'])) {
-    $user['id'] = $_SESSION['uid'];
-} else if (isset($_COOKIE['uid'])) {
-    $user['id'] = $_COOKIE['uid'];
-    $_SESSION["uid"] = $user['id'];
+if (isset($_SESSION['uid']) && $_SESSION['uid'] > 0) {
+    $user = get_profile($_SESSION['uid']);
+    if ($user['sid'] != session_id()) {
+        $user['id'] = -1;
+    }
+} else if (!empty($_COOKIE['uid']) && !empty($_COOKIE['sid'])) {
+    $user = get_profile($_COOKIE['uid']);
+    if ($user['sid'] != $_COOKIE['sid']) {
+        $user = [];
+        $user['id'] = -1;
+    } else {
+        update_session_id();
+    }
 } else {
-    $user['id'] = 0;
-    $user['username'] = $LNG['L_ANONYMOUS'];
+    $user['id'] = -1;
 }
-
-$user_ = get_profile($user['id']);
-
-($user_) ? $user = $user_ : null;
-
 
