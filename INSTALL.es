@@ -1,12 +1,7 @@
 
 ## Como funcionara
 
-Este proyecto esta muy muy verde todavia, cambiara bastante entre commits y no estara asegurada la compatibilidad entre versiones anteriores de momento.
-Si lo instalas y utilizas puede que tengas que recrear (borrar y volver a crear) las base de datos y estar al tanto de los cambios en los archivos 
-de configuración, principalmente config.min.php  y compararlo con tu /etc/tracker.conf
-
-De todos modos el trabajo a realizar para tener todo OK otra vez desde 0 no es mucho (salvo que tenga miles de archivos multimedia), y seria "pinchar en los botones 
-de REESCAN" y volver a identificar los archivos multimedia.
+Este proyecto esta algo verde todavia, cambiara entre commits.
 
 Para usarlo renombre el archivo config.min.php  a /etc/trackerm.conf y rellene lo que se pide. Todos los datos ahí indicados son obligatorios.
 Luego pinche en escanear la libreria y identifique sus archivos multimedia actuales.
@@ -24,9 +19,7 @@ es mejor que todo lo hagas desde trackerm.
 
 El sistema de seguimiento automatico (aun alpha) aunque funciona con los torrents al menos en español (otras lenguages personalmente no probe) y
 se activa metiendo el archivo trackerm-cli.php en el cron y poner que se ejecute cada poco tiempo (hay otros mecanismos en el archivo de config que evitan
-sobrecargar el sistema si lo pones cada poco, 15 minutos, 30 minutos o o 1 hora estan bien si quieres que esten  todas las tareas bien actualizadas, 
-o dias si tampoco tienes prisa.
-
+sobrecargar el sistema si lo pones cada poco, 15 minutos, 30 minutos o o 1 hora estan bien si quieres que esten  todas las tareas bien actualizadas
 
 ## Permisos de directorio
     Your www server must have this permissions:
@@ -71,7 +64,7 @@ Apache+Php7+sqlite3 , Jacket, Transmission, Composer, cuenta+api key themoviedb.
     y basicamente rellenar todo de config.min.php en /etc/trackerm.conf
 
 ## Tareas automaticas: Seguimiento y mover a la libreria.
-    En estos momentos todos los mecanismos automaticos estan en desarrollo y contendran fallos.
+    En estos momentos todos los mecanismos automaticos estan en pruebas y puede contener errores.
     
     Para usarlo hay que añadir trackerm-cli.php a CRON. Posiblemente seria recomendable moverlo fuera del ROOT_PATH. Si lo moviera
     tenga en cuenta que al actualizarlo tendra que moverlo otra vez y sobreescribir el antiguo.
@@ -79,24 +72,20 @@ Apache+Php7+sqlite3 , Jacket, Transmission, Composer, cuenta+api key themoviedb.
     Como funcionara  :
     * Automaticamente buscara torrentes en "seguimiento" el dia seleccionado, si encuentra coincidencias que satisfaga los filtros lo descargara.
     * Automaticamente movera todos los archivos descargados por transmission a tu libreria, opcionalmente puedes configurarlo para que mueva solo los
-    que descargastes pulsando dentro de la aplicación trackerm. Por defecto mueve todo los archivos multimedia (video) de transmission que encuentra..
+    que descargastes pulsando dentro de la aplicación trackerm. Por defecto mueve todo los archivos multimedia (video) que encuentra en la ruta de
+    transmission.
     * (no disponible todavía) Automaticamente y activandolo podra mover todos los archivos multimedia de determinas carpetas que configuremos.
     * Automaticamente descomprime archivos rar, no soporta contraseñas hasta que Jackett las soporte. Si avisa.
 
     El funcionamiento para que automaticamente se muevan los archivos bajados por transmission es el siguiente:
         Primero busca los archivos que indicamos descargar con trackerm, si los encuentra mira si esta parado/pausa o sirviendo(seeding) si es así en el primer caso
-        parado, lo movera y borrar el torrent, en el segundo caso, creara un enlace simbolico para poder acceder al archivo desde tu libreria
-        hasta que sea parado o pare de "servirse" el archivo, en cuyo caso se movera.
+        parado, lo movera y borrar el torrent y otros archivos residuales de la descarga, en el segundo caso, creara un enlace simbolico para poder acceder al archivo 
+        desde tu libreria hasta que sea parado o pare de "servirse" el archivo, en cuyo caso se movera.
 
     La linea basica para ejecutar las tareas automaticas  (ejemplo cada 15 minutos) es la siguiente (/etc/crontab)
     */15 *   * * *   root    /usr/bin/php  /path/to/trackerm-cli.php
     Puedes poner trackerm-cli.php en el directorio que quieras y cambiar de usuario si este tiene los permisos necesarios para las carpetas relacionadas. Si lo mueve
     recuerde hacerlo siempre que actualice trackerm.
-
-## VERSION
-    Advertencia: Puedes comprobar la version en el archivo VERSION. Mientras este en alpha (0.0.X) hasta la versión 0.1, toda version es factible de romper
-    la compatibilidad hacia atras. Aunque salvo fuerza mayor los hare compatibles. 
-    Si actualizas y hay errores posiblemente tengas que revisar las variables del archivo de configuración, si algo falla despues de una instalación revisalo.
 
 ## Lenguaje
     Php+Javascript (Más adelante probablemente Jquery)
@@ -111,7 +100,7 @@ Apache+Php7+sqlite3 , Jacket, Transmission, Composer, cuenta+api key themoviedb.
 
 * Jackett
     Instalado y configurado añadiendo algunos indexers de peliculas/series.
-    Necesitas la clave api para conectarse al servidor jackett, esta ira en config.inc.php
+    Necesitas la clave api para conectarse al servidor jackett, esta ira en /etc/trackerm.conf
 
 * Transmission-daemon
     Instalado/configurado y permitiendo las conexiones RPC a la ip del servidor

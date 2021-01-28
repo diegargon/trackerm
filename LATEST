@@ -1,5 +1,6 @@
 ## Latest / News (Relevant)
 
+[27/01] Users: Adding password protection and basic user management
 [26/01] Wanted: add "proper" will search only for PROPER if checked
         Added .htaccess for block trackerm-cli.php, beware if you already have one will we rewrited
 [25/01] Add popular to tmdb, Made show trending/popular optional, config option to allow access only local ips.

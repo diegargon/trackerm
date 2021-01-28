@@ -16,7 +16,7 @@ With a single click trackerm will send it if it is correctly configured to trans
 trackerm will automatically search and download the movies/series you want as soon as they are
 available. You can also change how often you want search for them. Whichever option you
 you choose trackerm will look for it along a certain day or every day. The day will do a check several 
-times (configurable in the configuration file.
+times.
 <br/>
 <b> Torrents: </b> It is a torrent search engine that use Jackett provided links
 <br/>
