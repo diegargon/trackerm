@@ -10,7 +10,7 @@
 !defined('IN_WEB') ? exit : true;
 
 function index_page() {
-    global $cfg, $user, $LNG, $log;
+    global $cfg, $user, $LNG, $log, $filter;
 
     $titems = [];
 
@@ -22,10 +22,25 @@ function index_page() {
 
     // General Info
     $tdata = [];
+    $tdata['content'] = '';
     $tdata['title'] = $LNG['L_IDENTIFIED'] . ': ' . strtoupper($user['username']);
-    $tdata['content'] = '<a class="action_link" href="?page=logout">' . $LNG['L_LOGOUT'] . '</a>';
+
+    if ($filter->getInt('edit_profile')) {
+        if (isset($_POST['cur_password']) && isset($_POST['new_password'])) {
+            $status_msg = user_change_password();
+        }
+
+        $tdata['content'] = user_edit_profile();
+        $tdata['content'] .= '<button class="action_link" href="?page=index&edit_profile=1">' . $LNG['L_SEND'] . '</button>';
+    } else {
+
+        $tdata['content'] .= '<a class="action_link" href="?page=index&edit_profile=1">' . $LNG['L_EDIT'] . '</a>';
+    }
+
+    $tdata['content'] .= '<a class="action_link" href="?page=logout">' . $LNG['L_LOGOUT'] . '</a>';
     $tdata['content'] .= '<br/>';
-    $tdata['content'] .= $LNG['L_SEARCH_ENGINE'] . ': ' . '<a href="https://themoviedb.org" target=_blank>themoviedb.org</a>';
+    empty($status_msg) ? $status_msg = $LNG['L_SEARCH_ENGINE'] . ': ' . '<a href="https://themoviedb.org" target=_blank>themoviedb.org</a>' : null;
+    $tdata['content'] .= $status_msg;
     $titems['col1'][] = getTpl('home-item', $tdata);
 
     // User managament

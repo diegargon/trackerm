@@ -55,8 +55,8 @@ function new_user() {
     global $LNG;
 
     $html = '<form id = "new_user" method = "POST" >';
-    $html .= '<span>' . $LNG['L_USERNAME'] . '<span><input size = "8" type = "text" name = "username" value = ""/>';
-    $html .= '<span>' . $LNG['L_PASSWORD'] . '<span><input size = "8" type = "password" name = "password" value = ""/>';
+    $html .= '<span>' . $LNG['L_USERNAME'] . '<span><input size="8" type="text" name="username" value=""/>';
+    $html .= '<span>' . $LNG['L_PASSWORD'] . '<span><input size="8" type="password" name="password" value=""/>';
     $html .= '<input type = "hidden" name = "is_admin" value = "0">';
     //$html .= '<label for = "is_admin">' . $LNG['L_ADMIN'] . ' </label>';
     //$html .= '<input id = "is_admin" type = "checkbox" name = "is_admin" value = "1">';
@@ -73,14 +73,12 @@ function show_users() {
     foreach ($users as $user) {
         if ($user['id'] > 1) {
             $html .= '<span>' . $user['username'] . '<span>';
-            $html .= '<input type = "hidden" name = "delete_user_id" value = "' . $user['id'] . '"/>';
-            $html .= '<input class = "submit_btn" type = "submit" name = "delete_user" value = "' . $LNG['L_DELETE'] . '"/>';
+            $html .= '<input type="hidden" name="delete_user_id" value="' . $user['id'] . '"/>';
+            $html .= '<input class="submit_btn" type="submit" name="delete_user" value="' . $LNG['L_DELETE'] . '"/>';
         }
     }
 
-    $html .= '</form>
-
-    ';
+    $html .= '</form>';
 
     return $html;
 }
@@ -88,4 +86,59 @@ function show_users() {
 function encrypt_password($password) {
 
     return sha1($password);
+}
+
+function user_edit_profile() {
+    global $LNG;
+
+    $html = '<form method="POST" action="">';
+
+    $html .= '<span>' . $LNG['L_PASSWORD'] . '<span><input size="8" type="text" name= "cur_password" value=""/>';
+    $html .= '<span>' . $LNG['L_NEW_PASSWORD'] . '<span><input size="8" type="text" name= "new_password" value=""/>';
+    $html .= '</form>';
+
+    return $html . '<br/>';
+}
+
+function user_change_password() {
+    global $cfg, $user, $LNG, $filter, $db;
+
+    if (isset($_POST['cur_password'])) {
+        !empty($filter->postPassword('cur_password')) ? $cur_password = $filter->postPassword('cur_password') : $cur_password = '';
+    }
+    if (isset($_POST['new_password'])) {
+        !empty($filter->postPassword('new_password')) ? $new_password = $filter->postPassword('new_password') : $new_password = '';
+    }
+
+    if ($cfg['force_use_passwords'] && empty($new_password)) {
+        return $LNG['L_PASSWORD_CANT_EMPTY'];
+    }
+
+    if (!empty($user['password']) && empty($cur_password)) {
+        return $LNG['L_PASSWORD_INCORRECT'];
+    }
+
+    if (empty($user['password']) && empty($new_password)) {
+        return $LNG['L_PASSWORD_EQUAL'];
+    }
+    if (!empty($user['password']) && (encrypt_password($new_password) == $user['password'])) {
+        return $LNG['L_PASSWORD_EQUAL'];
+    }
+    if (empty($user['password']) && empty($cur_password) && !empty($new_password)) {
+        !empty($new_password) ? $new_encrypted_password = encrypt_password($new_password) : $new_encrypted_password = '';
+        $db->updateItemById('users', $user['id'], ['password' => $new_encrypted_password]);
+        return $LNG['L_PASSWORD_CHANGE_SUCESS'];
+    }
+    if (!empty($user['password'])) {
+        $old_encrypted_password = encrypt_password($cur_password);
+        if ($user['password'] == $old_encrypted_password) {
+            !empty($new_password) ? $new_encrypted_password = encrypt_password($new_password) : $new_encrypted_password = '';
+            $db->updateItemById('users', $user['id'], ['password' => $new_encrypted_password]);
+            return $LNG['L_PASSWORD_CHANGE_SUCESS'];
+        } else {
+            return $LNG['L_PASSWORD_INCORRECT'];
+        }
+    }
+
+    return $LNG['L_PASSWORD_UNKNOWN_ERROR'];
 }
