@@ -423,17 +423,18 @@ function page_download() {
 function page_transmission() {
     global $trans, $LNG, $filter;
 
-    $tid = $filter->postInt('tid');
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $tid = $filter->postInt('tid');
 
-    isset($_POST['start_all']) ? $trans->startAll() . sleep(1) : null;
-    isset($_POST['stop_all']) ? $trans->stopAll() . sleep(1) : null;
+        isset($_POST['start_all']) ? $trans->startAll() . sleep(1) : null;
+        isset($_POST['stop_all']) ? $trans->stopAll() . sleep(1) : null;
 
-    if (!empty($tid)) {
-        isset($_POST['start']) ? $trans->start($tid) . usleep(500000) : null;
-        isset($_POST['stop']) ? $trans->stop($tid) . usleep(500000) : null;
-        isset($_POST['delete']) ? $trans->delete($tid) . usleep(500000) : null;
+        if (!empty($tid)) {
+            isset($_POST['start']) ? $trans->start($tid) . usleep(500000) : null;
+            isset($_POST['stop']) ? $trans->stop($tid) . usleep(500000) : null;
+            isset($_POST['delete']) ? $trans->delete($tid) . usleep(500000) : null;
+        }
     }
-
     $transfers = $trans->getAll();
 
     $page = '';
@@ -457,7 +458,7 @@ function page_config() {
     global $filter, $config;
 
     $page = '';
-    if (isset($_POST['submit_config'])) {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_config'])) {
 
         $config_keys = $filter->postString('config_keys');
         if (!empty($config_keys) && is_array($config_keys) && count($config_keys) > 0) {
