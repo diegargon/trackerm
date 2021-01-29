@@ -19,6 +19,7 @@ $cfg['LANG'] = 'en-EN';
 
 //IMDB supported language.
 //Not UI in your language yet? you can still get the TMDB results in your language. Format en-EN.
+//Check themovidedb.org top bar to check languages supported
 //If you upgrade pre-this you must delete trackerm.db and start again since the local registers not going to be upgraded.
 $cfg['TMDB_LANG'] = 'en-EN';
 // Full path where trackerm reside ex: /var/www/html
