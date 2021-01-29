@@ -14,9 +14,13 @@
 
 // themoviedb.org api key: https://www.themoviedb.org/documentation/api
 $cfg['db_api_token'] = '';
-// Lang es-ES or en-EN
+//UI Lang Supported only: es-ES or en-EN
 $cfg['LANG'] = 'en-EN';
 
+//IMDB supported language.
+//Not UI in your language yet? you can still get the TMDB results in your language. Format en-EN.
+//If you upgrade pre-this you must delete trackerm.db and start again since the local registers not going to be upgraded.
+$cfg['TMDB_LANG'] = 'en-EN';
 // Full path where trackerm reside ex: /var/www/html
 $cfg['ROOT_PATH'] = '';
 

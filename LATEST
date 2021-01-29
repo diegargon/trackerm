@@ -1,5 +1,6 @@
 ## Latest / News (Relevant)
 
+[28/01] Added $cfg['TMDB_LANG'] to config.min.php/tracker.conf . To get tmdb results in your language regardless of limited trackerm UI languages.
 [27/01] Users: Adding password protection and basic user management
 [26/01] Wanted: add "proper" will search only for PROPER if checked
         Added .htaccess for block trackerm-cli.php, beware if you already have one will we rewrited

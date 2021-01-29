@@ -12,10 +12,11 @@
 function themoviedb_searchMovies($search) {
     global $cfg;
 
+    !isset($cfg['TMDB_LANG']) ? $cfg['TMDB_LANG'] = $cfg['LANG'] : null;
     //$search = preg_replace('/\d{4}/', '', $search); //moviedb no encuentra con año si va en el titulo lo quitamos
     $query = str_replace(' ', '+', trim($search));
 
-    $url = 'https://api.themoviedb.org/3/search/movie?api_key=' . $cfg['db_api_token'] . '&query=' . $query . '&language=' . $cfg['LANG'];
+    $url = 'https://api.themoviedb.org/3/search/movie?api_key=' . $cfg['db_api_token'] . '&query=' . $query . '&language=' . $cfg['TMDB_LANG'];
 
     $data = curl_get_tmdb($url);
 
@@ -27,10 +28,12 @@ function themoviedb_searchMovies($search) {
 function themoviedb_searchShows($search) {
     global $cfg;
 
+    !isset($cfg['TMDB_LANG']) ? $cfg['TMDB_LANG'] = $cfg['LANG'] : null;
+
     //$search = preg_replace('/\d{4}/', '', $search); //moviedb no encuentra con año si va en el titulo lo quitamos
     $query = str_replace(' ', '+', trim($search));
 
-    $url = 'https://api.themoviedb.org/3/search/tv?api_key=' . $cfg['db_api_token'] . '&query=' . $query . '&language=' . $cfg['LANG'];
+    $url = 'https://api.themoviedb.org/3/search/tv?api_key=' . $cfg['db_api_token'] . '&query=' . $query . '&language=' . $cfg['TMDB_LANG'];
 
     $data = curl_get_tmdb($url);
 
@@ -132,7 +135,9 @@ function themoviedb_MediaPrep($media_type, $items) {
 function themoviedb_getSeasons($id) {
     global $cfg, $db;
 
-    $seasons_url = 'https://api.themoviedb.org/3/tv/' . $id . '?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['LANG'];
+    !isset($cfg['TMDB_LANG']) ? $cfg['TMDB_LANG'] = $cfg['LANG'] : null;
+
+    $seasons_url = 'https://api.themoviedb.org/3/tv/' . $id . '?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['TMDB_LANG'];
 
     $seasons_data = curl_get_tmdb($seasons_url);
 
@@ -141,7 +146,7 @@ function themoviedb_getSeasons($id) {
         $episodes_data = [];
 
         for ($i = 1; $i <= $nseasons; $i++) {
-            $seasons_url = 'https://api.themoviedb.org/3/tv/' . $id . '/season/' . $i . '?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['LANG'];
+            $seasons_url = 'https://api.themoviedb.org/3/tv/' . $id . '/season/' . $i . '?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['TMDB_LANG'];
             $episodes_data[$i] = curl_get_tmdb($seasons_url);
         }
 
@@ -174,7 +179,6 @@ function themoviedb_getSeasons($id) {
 function themoviedb_showsDetailsPrep($id, $seasons_data, $episodes_data) {
     global $db;
 
-
     $item_seasons = [
         'themoviedb_id' => $id,
         'n_seasons' => $seasons_data['number_of_seasons'],
@@ -185,8 +189,6 @@ function themoviedb_showsDetailsPrep($id, $seasons_data, $episodes_data) {
         'plot' => !empty($seasons_data['overview']) ? $seasons_data['overview'] : null,
         'status' => $seasons_data['status'] ? $seasons_data['status'] : null,
     ];
-
-
 
     $item_episodes = [];
 
@@ -231,6 +233,8 @@ function themoviedb_getByLocalId($id) {
 function themoviedb_getByDbId($media_type, $id) {
     global $db, $cfg, $log;
 
+    !isset($cfg['TMDB_LANG']) ? $cfg['TMDB_LANG'] = $cfg['LANG'] : null;
+
     $item = $db->getItemByField('tmdb_search', 'themoviedb_id', $id);
     if ($item) {
         return $item;
@@ -244,9 +248,9 @@ function themoviedb_getByDbId($media_type, $id) {
     }
 
     if ($media_type == 'movies') {
-        $url = 'https://api.themoviedb.org/3/movie/' . $id . '?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['LANG'];
+        $url = 'https://api.themoviedb.org/3/movie/' . $id . '?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['TMDB_LANG'];
     } else if ($media_type == 'shows') {
-        $url = 'https://api.themoviedb.org/3/tv/' . $id . '?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['LANG'];
+        $url = 'https://api.themoviedb.org/3/tv/' . $id . '?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['TMDB_LANG'];
     } else {
         return false;
     }
@@ -271,8 +275,10 @@ function themoviedb_getByDbId($media_type, $id) {
 function themoviedb_getPopular() {
     global $cfg;
 
-    $movies_url = 'https://api.themoviedb.org/3/movie/popular?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['LANG'];
-    $shows_url = 'https://api.themoviedb.org/3/tv/popular?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['LANG'];
+    !isset($cfg['TMDB_LANG']) ? $cfg['TMDB_LANG'] = $cfg['LANG'] : null;
+
+    $movies_url = 'https://api.themoviedb.org/3/movie/popular?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['TMDB_LANG'];
+    $shows_url = 'https://api.themoviedb.org/3/tv/popular?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['TMDB_LANG'];
     if ($cfg['want_movies']) {
         $response_items = curl_get_tmdb($movies_url);
         $results['movies'] = themoviedb_MediaPrep('movies', $response_items['results']);
@@ -287,8 +293,10 @@ function themoviedb_getPopular() {
 function themoviedb_getTrending() {
     global $cfg;
 
-    $movies_url = 'https://api.themoviedb.org/3/trending/movie/day?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['LANG'];
-    $shows_url = 'https://api.themoviedb.org/3/trending/tv/day?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['LANG'];
+    !isset($cfg['TMDB_LANG']) ? $cfg['TMDB_LANG'] = $cfg['LANG'] : null;
+
+    $movies_url = 'https://api.themoviedb.org/3/trending/movie/day?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['TMDB_LANG'];
+    $shows_url = 'https://api.themoviedb.org/3/trending/tv/day?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['TMDB_LANG'];
     if ($cfg['want_movies']) {
         $response_items = curl_get_tmdb($movies_url);
         $results['movies'] = themoviedb_MediaPrep('movies', $response_items['results']);
@@ -303,6 +311,8 @@ function themoviedb_getTrending() {
 function themoviedb_getTrailer($media_type, $id) {
     global $cfg, $log;
 
+    !isset($cfg['TMDB_LANG']) ? $cfg['TMDB_LANG'] = $cfg['LANG'] : null;
+
     if (empty($media_type) || empty($id)) {
         return false;
     }
@@ -315,7 +325,7 @@ function themoviedb_getTrailer($media_type, $id) {
         return false;
     }
 
-    $url = "http://api.themoviedb.org/3/{$tmdb_type}/{$id}/videos?api_key=" . $cfg['db_api_token'] . '&language=' . $cfg['LANG'];
+    $url = "http://api.themoviedb.org/3/{$tmdb_type}/{$id}/videos?api_key=" . $cfg['db_api_token'] . '&language=' . $cfg['TMDB_LANG'];
 
     $curl_data = curl_get_tmdb($url);
     if (!empty($curl_data['results']) && count($curl_data['results']) > 0) {

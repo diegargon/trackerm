@@ -53,11 +53,13 @@ function curl_get_jackett($url, $params) {
 function curl_get_tmdb($url) {
     global $cfg;
 
+    !isset($cfg['TMDB_LANG']) ? $cfg['TMDB_LANG'] = $cfg['LANG'] : null;
+
     $curl_opt['headers'] = [
         'Content-Type: application/json;charset=utf-8',
         'Accept: text/html,application/xhtml+xml,application/xml,application/json;q=0.9,*/*;q=0.8',
         'Accept-Charset: utf-8;q=0.7,*;q=0.3',
-        'Accept-Language:' . $cfg['LANG'] . ';q=0.6,' . substr($cfg['LANG'], 0, 2) . ';q=0.4'
+        'Accept-Language:' . $cfg['TMDB_LANG'] . ';q=0.6,' . substr($cfg['TMDB_LANG'], 0, 2) . ';q=0.4'
     ];
 
     $response = curl_get($url, $curl_opt['headers']);
