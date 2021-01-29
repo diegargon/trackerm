@@ -111,6 +111,9 @@ function _rebuild($media_type, $path) {
         $insert_ids = $db->addItems($library_table, $items);
         if (!empty($insert_ids) && (count($insert_ids) > 0)) {
             check_history($media_type, $insert_ids);
+            if (!empty($cfg['auto_identify'])) {
+                auto_ident_by_search($media_type, $insert_ids);
+            }
         }
     }
 
@@ -275,6 +278,11 @@ function check_history($media_type, $ids) {
             }
         }
     }
+}
+
+function auto_ident_by_search($media_type, $ids) {
+    //TODO: search tmdb if found result identify with the first result
+    return true;
 }
 
 function auto_ident($media_type, $online_db_id, $id) {

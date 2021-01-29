@@ -521,18 +521,25 @@ function update_db($from) {
     }
 
     /*
-      NEXT UPDATES:
-      remove from wanted ignore field, not need
-     */
-    /*
-     *
+      if ($from < 8) {
       $db->query('UPDATE users SET isAdmin=\'1\' WHERE username=\'default\'');
       $db->query('ALTER TABLE users add column disable INTEGER NULL');
       $db->query('ALTER TABLE users add column hide_login INTEGER NULL');
       $db->query('ALTER TABLE users add column sid_expire INTEGER NULL');
-      if ($from < 8) {
+      $db->insert('config', ['cfg_key' => 'auto_identify', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_AUTO_IDENTIFY', 'type' => 3, 'category' => 'L_MAIN', 'public' => 1]);
       $db->query('UPDATE config SET cfg_value=\'81\' WHERE cfg_key=\'version\'');
       $db->update('db_info', ['version' => 8]);
+      }
+     */
+
+    /*
+      NEXT UPDATES:
+      remove from wanted ignore field, not need
+     */
+    /*
+      if ($from < 9) {
+      $db->query('UPDATE config SET cfg_value=\'81\' WHERE cfg_key=\'version\'');
+      $db->update('db_info', ['version' => 9]);
       }
      */
     return true;
