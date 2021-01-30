@@ -1,6 +1,8 @@
-# trackerm
+<p align="center">
+<img src="https://github.com/diegargon/trackerm/blob/master/screenshots/library-screenshot.png?raw=true" width="100%">
+</p>
 
-![alt text](https://github.com/diegargon/trackerm/blob/master/screenshots/library-screenshot.png?raw=true)
+# trackerm
 
 ## Description: 
 
