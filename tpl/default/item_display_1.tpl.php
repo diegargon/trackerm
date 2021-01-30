@@ -21,7 +21,6 @@
     </div>
     <div class="item_details">
         <div class="item_title"><?= $tdata['title'] ?>
-            <?= isset($tdata['release']) ? ' (' . strftime("%Y", strtotime($tdata['release'])) . ')' : null ?>
         </div>
         <hr/>
         <div class="item_desc">
