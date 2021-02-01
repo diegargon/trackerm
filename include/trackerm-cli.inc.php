@@ -524,9 +524,9 @@ function wanted_work() {
             if (send_transmission($first_valid)) {
                 $state_msg = '[' . $LNG['L_DOWNLOADING'] . '] ';
                 if (!empty($s_episode)) {
-                    $state_msg = $title . ' ' . $s_episode;
+                    $state_msg .= $title . ' ' . $s_episode;
                 } else {
-                    $state_msg = $title;
+                    $state_msg .= $title;
                 }
                 $log->addStateMsg($state_msg);
             }
