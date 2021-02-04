@@ -20,7 +20,7 @@ function create_db() {
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
                 )');
 
-    $db->insert('db_info', ["app_name" => 'trackerm', "version" => 7]);
+    $db->insert('db_info', ["app_name" => 'trackerm', "version" => 8]);
 
     // USERS
     $db->query('CREATE TABLE IF NOT EXISTS "users" (
@@ -28,12 +28,16 @@ function create_db() {
                     "username" varchar NOT NULL UNIQUE,
                     "password" varchar NULL,
                     "sid" varchar NULL,
+                    "sid_expire" INTEGER default 0,
                     "isAdmin" INTEGER default 0,
                     "email" VARCHAR NULL,
                     "ip" VARCHAR NULL,
                     "profile_img" VARCHAR NULL,
+                    "disable" INTEGER default 0,
+                    "hide_login INTEGER default 0,
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
        )');
+
 
     $db->insert('users', ["username" => "default", "isAdmin" => 1]);
 
@@ -291,7 +295,7 @@ function create_db() {
                     UNIQUE (cfg_key)
                 )');
 
-    $db->insert('config', ['cfg_key' => 'version', 'cfg_value' => 'A78', 'cfg_desc' => '', 'type' => 2, 'category' => '', 'public' => 0]);
+    $db->insert('config', ['cfg_key' => 'version', 'cfg_value' => '81', 'cfg_desc' => '', 'type' => 2, 'category' => '', 'public' => 0]);
     $db->insert('config', ['cfg_key' => 'profile', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => '', 'public' => 0]);
     $db->insert('config', ['cfg_key' => 'max_identify_items', 'cfg_value' => 5, 'cfg_desc' => 'L_CFG_MAXID_ITEMS', 'type' => 2, 'category' => '', 'public' => 0]);
     $db->insert('config', ['cfg_key' => 'app_name', 'cfg_value' => 'trackerm', 'cfg_desc' => '', 'type' => 1, 'category' => '', 'public' => 0]);
@@ -334,6 +338,9 @@ function create_db() {
     $db->insert('config', ['cfg_key' => 'css', 'cfg_value' => 'default', 'cfg_desc' => 'L_CFG_CSS', 'type' => 1, 'category' => 'L_DISPLAY', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'force_use_passwords', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_FORCE_USE_PASSWORDS', 'type' => 3, 'category' => 'L_SECURITY', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'only_local_net', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_ONLY_LOCAL_NET', 'type' => 3, 'category' => 'L_SECURITY', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'slow_flow', 'cfg_value' => 6, 'cfg_desc' => 'L_CFG_SLOW_FLOW', 'type' => 2, 'category' => 'L_MAIN', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'auto_identify', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_AUTO_IDENTIFY', 'type' => 3, 'category' => 'L_MAIN', 'public' => 1]);
+
     return true;
 }
 
@@ -520,18 +527,17 @@ function update_db($from) {
         $db->update('db_info', ['version' => 7]);
     }
 
-    /*
-      if ($from < 8) {
-      $db->query('UPDATE users SET isAdmin=\'1\' WHERE username=\'default\'');
-      $db->query('ALTER TABLE users add column disable INTEGER NULL');
-      $db->query('ALTER TABLE users add column hide_login INTEGER NULL');
-      $db->query('ALTER TABLE users add column sid_expire INTEGER NULL');
-      $db->insert('config', ['cfg_key' => 'slow_flow', 'cfg_value' => 5, 'cfg_desc' => 'L_CFG_SLOW_FLOW', 'type' => 2, 'category' => 'L_MAIN', 'public' => 1]);
-      $db->insert('config', ['cfg_key' => 'auto_identify', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_AUTO_IDENTIFY', 'type' => 3, 'category' => 'L_MAIN', 'public' => 1]);
-      $db->query('UPDATE config SET cfg_value=\'81\' WHERE cfg_key=\'version\'');
-      $db->update('db_info', ['version' => 8]);
-      }
-     */
+
+    if ($from < 8) {
+        $db->query('UPDATE users SET isAdmin=\'1\' WHERE username=\'default\'');
+        $db->query('ALTER TABLE users add column disable INTEGER NULL');
+        $db->query('ALTER TABLE users add column hide_login INTEGER NULL');
+        $db->query('ALTER TABLE users add column sid_expire INTEGER NULL');
+        $db->query('UPDATE config SET cfg_value=\'81\' WHERE cfg_key=\'version\'');
+        $db->insert('config', ['cfg_key' => 'slow_flow', 'cfg_value' => 5, 'cfg_desc' => 'L_CFG_SLOW_FLOW', 'type' => 2, 'category' => 'L_MAIN', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'auto_identify', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_AUTO_IDENTIFY', 'type' => 3, 'category' => 'L_MAIN', 'public' => 1]);
+        $db->update('db_info', ['version' => 8]);
+    }
 
     /*
       NEXT UPDATES:

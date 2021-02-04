@@ -145,7 +145,7 @@ function jackett_search_media($media_type, $words, $indexer, $categories, $limit
 
     $result = curl_get_jackett($jackett_url, $params);
     $timediff = getPerfTime() - $starttime;
-    if (formatPerfTime($timediff) > 5) { //5s (TODO: to conf)
+    if (formatPerfTime($timediff) > $cfg['slow_flow']) { //5s
         $log->addStateMsg("[{$LNG['L_NOTICE']}] $indexer  {$LNG['L_SLOW_THE_FLOW']} " . formatPerfTime($timediff) . " {$LNG['L_SECONDS']}");
     }
     return $result;

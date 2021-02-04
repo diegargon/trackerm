@@ -10,17 +10,19 @@
 !defined('IN_WEB') ? exit : true;
 
 function user_management() {
-    global $LNG, $filter, $db, $cfg;
+    global $LNG, $filter, $db, $cfg, $user;
 
     $status_msg = $LNG['L_USERS_MNGT_HELP'];
 
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST' && $user['isAdmin']) {
         if (isset($_POST['new_user']) && !empty($new_user = $filter->postUsername('username'))) {
             if ($cfg['force_use_passwords']) {
                 if (!empty($password = $filter->postPassword('password'))) {
                     $user_create['username'] = $new_user;
                     $user_create['password'] = encrypt_password($password);
-                    //$_POST['is_admin'] == 1 ? $user_create['is_admin'] = 1 : $user_create['us_admin'] = 0;
+                    $_POST['is_admin'] == 1 ? $user_create['isAdmin'] = 1 : $user_create['isAdmin'] = 0;
+                    $_POST['disable'] == 1 ? $user_create['disable'] = 1 : $user_create['disable'] = 0;
+                    $_POST['hide_login'] == 1 ? $user_create['hide_login'] = 1 : $user_create['hide_login'] = 0;
                     $db->upsertItemByField('users', $user_create, 'username');
                     $status_msg = $LNG['L_USER_CREATE_SUCCESS'];
                 } else {
@@ -30,7 +32,9 @@ function user_management() {
                 if (!empty($password = $filter->postPassword('password'))) {
                     $user_create['password'] = encrypt_password($password);
                 }
-                //$_POST['is_admin'] == 1 ? $user_create['is_admin'] = 1 : $user_create['us_admin'] = 0;
+                $_POST['is_admin'] == 1 ? $user_create['isAdmin'] = 1 : $user_create['isAdmin'] = 0;
+                $_POST['disable'] == 1 ? $user_create['disable'] = 1 : $user_create['disable'] = 0;
+                $_POST['hide_login'] == 1 ? $user_create['hide_login'] = 1 : $user_create['hide_login'] = 0;
                 $user_create['username'] = $new_user;
                 $db->upsertItemByField('users', $user_create, 'username');
                 $status_msg = $LNG['L_USER_CREATE_SUCCESS'];
@@ -55,13 +59,24 @@ function new_user() {
     global $LNG;
 
     $html = '<div class="new_user_box">';
-    $html .= '<form id = "new_user" method = "POST" >';
+    $html .= '<form id="new_user" method="POST" >';
     $html .= '<span>' . $LNG['L_USERNAME'] . '<span><input size="8" type="text" name="username" value=""/>';
     $html .= '<span>' . $LNG['L_PASSWORD'] . '<span><input size="8" type="password" name="password" value=""/>';
-    $html .= '<input type = "hidden" name = "is_admin" value = "0">';
-    //$html .= '<label for = "is_admin">' . $LNG['L_ADMIN'] . ' </label>';
-    //$html .= '<input id = "is_admin" type = "checkbox" name = "is_admin" value = "1">';
-    $html .= '<input class = "submit_btn" type = "submit" name = "new_user" value = "' . $LNG['L_CREATE'] . '/' . $LNG['L_MODIFY'] . '"/>';
+    //Admin
+    $html .= '<input type="hidden" name="is_admin" value="0">';
+    $html .= '<label for="is_admin">' . $LNG['L_ADMIN'] . ' </label>';
+    $html .= '<input id="is_admin" type="checkbox" name="is_admin" value="1">';
+    //disable
+    $html .= '<input type="hidden" name="disable" value = "0">';
+    $html .= '<label for="disable">' . $LNG['L_DISABLED'] . ' </label>';
+    $html .= '<input id="disable" type="checkbox" name="disable" value="1">';
+    //hide login
+    $html .= '<input type="hidden" name="hide_login" value="0">';
+    $html .= '<label for="hide_login">' . $LNG['L_HIDE_LOGIN'] . ' </label>';
+    $html .= '<input id="hide_login" type="checkbox" name="hide_login" value="1">';
+
+    //Submit
+    $html .= '<input class="submit_btn" type="submit" name="new_user" value="' . $LNG['L_CREATE'] . '/' . $LNG['L_MODIFY'] . '"/>';
     $html .= '</form>';
     $html .= '</div>';
 

@@ -15,11 +15,12 @@ function index_page() {
     $titems = [];
 
     // Config
-    $tdata = [];
-    $tdata['title'] = '';
-    $tdata['content'] = '<a class="action_link" href="index.php?page=config">' . $LNG['L_CONFIG'] . '</a>';
-    $titems['col1'][] = getTpl('home-item', $tdata);
-
+    if (!empty($user['isAdmin'])) {
+        $tdata = [];
+        $tdata['title'] = '';
+        $tdata['content'] = '<a class="action_link" href="index.php?page=config">' . $LNG['L_CONFIG'] . '</a>';
+        $titems['col1'][] = getTpl('home-item', $tdata);
+    }
     // General Info
     $tdata = [];
     $tdata['content'] = '';
@@ -44,10 +45,11 @@ function index_page() {
     $titems['col1'][] = getTpl('home-item', $tdata);
 
     // User managament
-    $tdata = [];
-    $tdata = user_management();
-    $titems['col1'][] = getTpl('home-item', $tdata);
-
+    if (!empty($user['isAdmin'])) {
+        $tdata = [];
+        $tdata = user_management();
+        $titems['col1'][] = getTpl('home-item', $tdata);
+    }
     // Hard disk
     $tdata = [];
     $tdata['title'] = '';
@@ -500,7 +502,9 @@ function page_login() {
     $page = '';
     $tdata['profiles'] = '';
     foreach ($users as $user) {
-        $tdata['profiles'] .= getTpl('profile_box', array_merge($tdata, $cfg, $user));
+        if ($user['disable'] != 1 && $user['hide_login'] != 1) {
+            $tdata['profiles'] .= getTpl('profile_box', array_merge($tdata, $cfg, $user));
+        }
     }
     $page .= getTpl('login', array_merge($tdata));
     return $page;

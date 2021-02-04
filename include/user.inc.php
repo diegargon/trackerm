@@ -28,6 +28,9 @@ function check_user($username, $password) {
 
     $user = $db->getItemByField('users', 'username', $username);
 
+    if ($user['disable'] == 1) {
+        return false;
+    }
     if ($user && !empty($user['id'])) {
         !empty($password) ? $password_hashed = encrypt_password($password) : $password_hashed = '';
 

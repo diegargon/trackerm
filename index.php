@@ -65,7 +65,7 @@ if (!isset($req_page) || $req_page == '' || $req_page == 'index') {
     page_download();
 } else if ($req_page == 'transmission') {
     $body .= page_transmission();
-} else if ($req_page == 'config') {
+} else if ($req_page == 'config' && $user['isAdmin']) {
     $body .= page_config();
 } else if ($req_page == 'login') {
     $body = page_login();

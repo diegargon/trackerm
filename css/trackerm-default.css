@@ -667,7 +667,7 @@ button {
     padding:0;
 }
 .wanted_input_red {
-    border:1px outset solid red;
+    border:1px outset red;
 }
 
 .login_button {
@@ -676,7 +676,7 @@ button {
 }
 
 .login_username {
-    border:0;
+    border: 0px solid black;
     background-color: transparent;
 }
 .login_username, .login_password {
@@ -720,5 +720,7 @@ button {
 }
 
 .new_user_box {
+    padding: 4px;
+    border: 1px solid #ff5b5b;
     margin-bottom: 5px;
 }
