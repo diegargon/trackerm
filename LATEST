@@ -1,6 +1,6 @@
 ## Latest / News (Relevant)
 
-[04/02] Add check/warn to status message windows about slow indexers
+[04/02] Added check/warn to status message window when detect slow indexers
 [28/01] Added $cfg['TMDB_LANG'] to config.min.php/tracker.conf . To get tmdb results in your language regardless of limited trackerm UI languages.
 [27/01] Users: Adding password protection and basic user management
 [26/01] Wanted: add "proper" will search only for PROPER if checked
