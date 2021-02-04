@@ -122,8 +122,9 @@ function search_media_torrents($media_type, $search, $head = null, $nohtml = fal
 }
 
 function jackett_search_media($media_type, $words, $indexer, $categories, $limit = null) {
-    global $cfg;
+    global $cfg, $log, $LNG;
 
+    $starttime = getPerfTime();
     empty($limit) ? $limit = $cfg['jackett_results'] : null;
 
     $jackett_url = $cfg['jackett_srv'] . $cfg['jackett_api_path'] . '/indexers/' . $indexer . '/results/torznab/';
@@ -142,7 +143,12 @@ function jackett_search_media($media_type, $words, $indexer, $categories, $limit
     }
     $params = 'api?apikey=' . $cfg['jackett_key'] . '&t=search&extended=1&cat=' . $cats . '&q=' . $words . '&limit=' . $limit;
 
-    return curl_get_jackett($jackett_url, $params);
+    $result = curl_get_jackett($jackett_url, $params);
+    $timediff = getPerfTime() - $starttime;
+    if (formatPerfTime($timediff) > 5) { //5s (TODO: to conf)
+        $log->addStateMsg("[{$LNG['L_NOTICE']}] $indexer  {$LNG['L_SLOW_THE_FLOW']} " . formatPerfTime($timediff) . " {$LNG['L_SECONDS']}");
+    }
+    return $result;
 }
 
 function jackett_prep_media($media_type, $media_results) {

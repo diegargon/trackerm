@@ -61,3 +61,11 @@ function is_local_ip() {
         return true;
     }
 }
+
+function getPerfTime() {
+    return hrtime(true);
+}
+
+function formatPerfTime($time) {
+    return round($time / 1e+9, 2);
+}
