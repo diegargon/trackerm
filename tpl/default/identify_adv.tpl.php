@@ -45,6 +45,11 @@
     </div>
     <input type="text" name="submit_title" value="<?= $tdata['search_title'] ?>" />
     <input class="submit_btn" type="submit" name="search" value="<?= $tdata['L_SEARCH'] ?>"/>
+    <?php
+    if (!empty($tdata['select'])) {
+        ?>
+        <input class="submit_btn" type="submit" name="identify" value="<?= $tdata['L_IDENTIFY'] ?>"/>
+    <?php } ?>
     <div>
         <?= !empty($tdata['select']) ? $tdata['select'] : null ?>
     </div>
@@ -57,10 +62,7 @@
         if (!empty($tdata['selected_plot'])) {
             print '<p>' . $tdata['selected_plot'] . '</p>';
         }
-        if (!empty($tdata['select'])) {
-            ?>
-            <p><input class="submit_btn" type="submit" name="identify" value="<?= $tdata['L_IDENTIFY'] ?>"/></p>
-            <?php } ?>
+        ?>
     </div>
     <div>
 
