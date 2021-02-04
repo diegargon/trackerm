@@ -127,13 +127,13 @@ function mix_media_res($res_media_db) {
     $indexer_pointer = 0;
     $i = 0;
 
-    //testing func: must break when all arrays are empty, for safe while testing break after 10000 too
+    //testing func
     //That walk throught indexers arrays for mix results, and if in the same indexers (next entry) the  result have same title
     //its added too, if not change to another indexer for mix results.
     //Probably must be a better way of doing this. And probably tomorrow i don't
     //known how works this messy... and is better rewrite again than found a maybe in the future bug.
 
-    while ($i != 10000) {
+    while (1) {
         if (isset($indexers[$indexers_names[$indexer_pointer]][0])) {
             $item = $indexers[$indexers_names[$indexer_pointer]][0];
             if (!isset($last_item['title'])) {
