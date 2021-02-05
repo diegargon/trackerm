@@ -58,6 +58,19 @@ class Config {
                     $data_row .= '<option ' . $select_no . ' value="0">' . $LNG['L_NO'] . '</option>';
                     $data_row .= '<option ' . $select_yes . ' value="1">' . $LNG['L_YES'] . '</option>';
                     $data_row .= '</select>';
+                    /* TODO: CONFIGSELECT
+                      } else if ($config['type'] == 8) {
+                      $values = array_map('trim', explode(',', $config['cfg_value']));
+                      $data_row .= '<select name="config_keys[' . $config['cfg_key'] . ']">';
+                      foreach ($values as $value_key => $value) {
+                      $data_row .= '<option value="' . $value_key . '">' . $value . '</option>';
+                      }
+                      $data_row .= '</select>';
+                      $data_row .= '<input class="action_btn" type="submit" name="remove" value="' . $LNG['L_DELETE'] . '" />';
+                      $data_row .= '<br/><input size="10" type="text" name="config_keys[' . $config['cfg_key'] . ']" value="" />';
+                      $data_row .= '<input class="action_btn" type="submit" name="add" value="' . $LNG['L_ADD'] . '" />';
+                     *
+                     */
                 } else {
                     $data_row .= '<input type="text" name="config_keys[' . $config['cfg_key'] . ']" value="' . $config['cfg_value'] . '" />';
                 }
