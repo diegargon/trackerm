@@ -535,6 +535,7 @@ function update_db($from) {
         $db->query('ALTER TABLE users add column sid_expire INTEGER NULL');
         $db->query('UPDATE config SET cfg_value=\'81\' WHERE cfg_key=\'version\'');
         $db->insert('config', ['cfg_key' => 'slow_flow', 'cfg_value' => 5, 'cfg_desc' => 'L_CFG_SLOW_FLOW', 'type' => 2, 'category' => 'L_MAIN', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'sid_expire', 'cfg_value' => 604800, 'cfg_desc' => 'L_CFG_SID_EXPIRE', 'type' => 2, 'category' => 'L_SECURITY', 'public' => 1]);
         $db->insert('config', ['cfg_key' => 'auto_identify', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_AUTO_IDENTIFY', 'type' => 3, 'category' => 'L_MAIN', 'public' => 1]);
         $db->update('db_info', ['version' => 8]);
     }
