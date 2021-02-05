@@ -46,7 +46,7 @@ function create_db() {
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                     "uid" INTEGER NOT NULL,
                     "pref_name" VARCHAR NOT NULL,
-                    "pref_value" VARCHAR NOT NULL,
+                    "pref_value" VARCHAR NULL,
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                     UNIQUE (uid, pref_name)
                 )');
@@ -306,7 +306,7 @@ function create_db() {
     $db->insert('config', ['cfg_key' => 'db_upd_long_delay', 'cfg_value' => 2592000, 'cfg_desc' => 'L_CFG_UPD_LONG_DELAY', 'type' => 2, 'category' => 'L_MAIN', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'want_movies', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_WANT_MOVIES', 'type' => 3, 'category' => 'L_MAIN', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'want_shows', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_WANT_SHOWS', 'type' => 3, 'category' => 'L_MAIN', 'public' => 1]);
-    $db->insert('config', ['cfg_key' => 'wanted_day_delay', 'cfg_value' => 3000, 'cfg_desc' => 'L_CFG_WANT_DAY_DELAY', 'type' => 2, 'category' => 'L_MAIN', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'wanted_day_delay', 'cfg_value' => 3600, 'cfg_desc' => 'L_CFG_WANT_DAY_DELAY', 'type' => 2, 'category' => 'L_MAIN', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'charset', 'cfg_value' => 'UTF-8', 'cfg_desc' => 'L_CFG_CHARSET', 'type' => 1, 'category' => 'L_LANG', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'locale', 'cfg_value' => 'en_EN.UTF-8', 'cfg_desc' => 'L_CFG_LOCALE', 'type' => 1, 'category' => 'L_LANG', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'theme', 'cfg_value' => 'default', 'cfg_desc' => 'L_CFG_THEME', 'type' => 1, 'category' => 'L_DISPLAY', 'public' => 1]);
@@ -338,7 +338,7 @@ function create_db() {
     $db->insert('config', ['cfg_key' => 'css', 'cfg_value' => 'default', 'cfg_desc' => 'L_CFG_CSS', 'type' => 1, 'category' => 'L_DISPLAY', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'force_use_passwords', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_FORCE_USE_PASSWORDS', 'type' => 3, 'category' => 'L_SECURITY', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'only_local_net', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_ONLY_LOCAL_NET', 'type' => 3, 'category' => 'L_SECURITY', 'public' => 1]);
-    $db->insert('config', ['cfg_key' => 'slow_flow', 'cfg_value' => 6, 'cfg_desc' => 'L_CFG_SLOW_FLOW', 'type' => 2, 'category' => 'L_MAIN', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'slow_flow', 'cfg_value' => 7, 'cfg_desc' => 'L_CFG_SLOW_FLOW', 'type' => 2, 'category' => 'L_MAIN', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'auto_identify', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_AUTO_IDENTIFY', 'type' => 3, 'category' => 'L_MAIN', 'public' => 1]);
 
     return true;

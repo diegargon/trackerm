@@ -277,6 +277,21 @@ function getOptions() {
         setPrefsItem('max_identify_items', $num_ident_toshow);
     }
 
+    if (isset($_POST['new_ignore_keywords'])) {
+        $cfg['new_ignore_keywords'] = $filter->postString('new_ignore_keywords');
+        setPrefsItem('new_ignore_keywords', $cfg['new_ignore_keywords']);
+    }
+
+    if (isset($_POST['new_ignore_enable'])) {
+        $cfg['new_ignore_enable'] = $filter->postString('new_ignore_enable');
+        setPrefsItem('new_ignore_enable', $cfg['new_ignore_enable']);
+    }
+
+    if (isset($_POST['sel_indexer'])) {
+        $cfg['sel_indexer'] = $filter->postString('sel_indexer');
+        setPrefsItem('sel_indexer', $cfg['sel_indexer']);
+    }
+
     ($cfg['max_identify_items'] == 0) ? $max_id_sel_0 = 'selected' : $max_id_sel_0 = '';
     ($cfg['max_identify_items'] == 5) ? $max_id_sel_5 = 'selected' : $max_id_sel_5 = '';
     ($cfg['max_identify_items'] == 10) ? $max_id_sel_10 = 'selected' : $max_id_sel_10 = '';
@@ -331,6 +346,17 @@ function getOptions() {
     ($cfg['tresults_columns'] == 8) ? $tdata['max_columns_sel_8'] = 'selected' : $tdata['max_columns_sel_8'] = '';
     ($cfg['tresults_columns'] == 10) ? $tdata['max_columns_sel_10'] = 'selected' : $tdata['max_columns_sel_10'] = '';
     $tdata['max_columns_sel_none'] = $max_columns_sel_none;
+
+    //new filters
+    (!empty($cfg['sel_indexer']) && $cfg['sel_indexer'] == 'sel_indexer_none') ? $selected_idx_none = 'selected' : $selected_idx_none = '';
+
+    $tdata['sel_indexers'] = '<option ' . $selected_idx_none . ' value="sel_indexer_none">' . $LNG['L_ALL'] . '</option>';
+
+    foreach ($cfg['jackett_indexers'] as $indexer) {
+        (isset($cfg['sel_indexer']) && $cfg['sel_indexer'] == $indexer) ? $selected_indexer = 'selected' : $selected_indexer = '';
+        $tdata['sel_indexers'] .= '<option ' . $selected_indexer . ' value="' . $indexer . '">' . $indexer . '</option>';
+    }
+
     /* FIN */
 
     return getTpl('menu_options', array_merge($tdata, $LNG, $cfg));

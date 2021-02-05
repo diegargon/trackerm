@@ -4,6 +4,7 @@
     admin: can add/modify/delete users
     hidde login: not show on login screen
     disable: disable user, can't login
+[05/02] Added filters to new torrents (submenu)
 [05/02] Add config var for time to warn about slow indexers
 [04/02] Added check/warn to status message window when detect slow indexers
 [28/01] Added $cfg['TMDB_LANG'] to config.min.php/tracker.conf . To get tmdb results in your language regardless of limited trackerm UI languages.

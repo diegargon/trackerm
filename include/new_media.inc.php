@@ -60,14 +60,25 @@ function page_new_media($media_type) {
 
     ($cache_media_expire == 1) || !$cfg['search_cache'] ? $res_media_db = jackett_prep_media($media_type, $media_res) : null;
 
+    $final_res_media_db = $res_media_db; //res_ unfilter need to cache
+    if (!empty($cfg['new_ignore_enable']) && !empty($cfg['new_ignore_keywords'])) {
+        $ignore_keywords = array_map('trim', explode(',', $cfg['new_ignore_keywords']));
+        foreach ($final_res_media_db as $key => $item) {
+            $match = str_ireplace($ignore_keywords, '', $item['title']);
+            if (trim($match) != trim($item['title'])) {
+                unset($final_res_media_db[$key]);
+                //echo "Dropping " . $item['title'] . "<br>";
+            }
+        }
+    }
     /* BUILD PAGE */
     $page_news = '';
 
-    if (!empty($res_media_db)) {
+    if (!empty($final_res_media_db)) {
         $topt['search_type'] = $media_type;
         ($media_type == 'movies') ? $head = 'L_MOVIES' : $head = 'L_SHOWS';
-        $res_media_db = mix_media_res($res_media_db);
-        $page_news_media = buildTable($head, $res_media_db, $topt);
+        $res_media_db = mix_media_res($final_res_media_db);
+        $page_news_media = buildTable($head, $final_res_media_db, $topt);
         $page_news .= $page_news_media;
     }
 
@@ -93,6 +104,8 @@ function page_new_media($media_type) {
 }
 
 function mix_media_res($res_media_db) {
+    global $cfg;
+
     $indexers = [];
     $media = [];
 
@@ -104,15 +117,17 @@ function mix_media_res($res_media_db) {
         $indexers[$item['source']][] = $item;
     }
     $max_items_by_indexer = 0;
-    $total_indexers = count($indexers);
     $indexers_names = [];
-    foreach ($indexers as $key => $indexer) {
-        $indexers_names[] = $key;
-        $total_indexer = count($indexer);
-        if ($total_indexer > $max_items_by_indexer) {
-            $max_items_by_indexer = $total_indexer;
+    foreach ($indexers as $name_key => $indexer) {
+        if (empty($cfg['sel_indexer']) || strtolower($cfg['sel_indexer']) == strtolower($name_key) || $cfg['sel_indexer'] == 'sel_indexer_none') {
+            $indexers_names[] = $name_key;
+            $total_indexer = count($indexer);
+            if ($total_indexer > $max_items_by_indexer) {
+                $max_items_by_indexer = $total_indexer;
+            }
         }
     }
+    $total_indexers = count($indexers_names);
     /*  order two by indexer
       for ($i = 0; $i <= ($max_items_by_indexer) / 2; $i++) {
       foreach ($indexers as $indexer) {
@@ -134,7 +149,7 @@ function mix_media_res($res_media_db) {
     //known how works this messy... and is better rewrite again than found a maybe in the future bug.
 
     while (1) {
-        if (isset($indexers[$indexers_names[$indexer_pointer]][0])) {
+        if (isset($indexers_names[$indexer_pointer]) && isset($indexers[$indexers_names[$indexer_pointer]][0])) {
             $item = $indexers[$indexers_names[$indexer_pointer]][0];
             if (!isset($last_item['title'])) {
                 $media[] = array_shift($indexers[$indexers_names[$indexer_pointer]]);

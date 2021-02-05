@@ -52,6 +52,7 @@ $LNG = [
     'L_DESTINATION' => 'Destination',
     'L_DISPLAY' => 'Aspect',
     'L_EDIT' => 'Edit',
+    'L_ENABLE' => 'Enabled',
     'L_ERROR' => 'Error',
     'L_EPISODES' => 'Episodes',
     'L_EPISODE' => 'Episode',
@@ -65,6 +66,7 @@ $LNG = [
     'L_FILENAME' => 'Filename',
     'L_FINISHED' => 'Finished',
     'L_FREE_TOTAL' => 'Free/Total',
+    'L_FILTER_INDEXER' => 'Limit',
     'L_GLOBAL_TAGS' => 'Global Tags',
     'L_HOME' => 'Home',
     'L_HARDDISK' => 'Hard Disk',
@@ -236,4 +238,6 @@ $LNG = [
     'L_CFG_ONLY_LOCAL_NET' => 'Allow only local ips',
     'L_CFG_FORCE_USE_PASSWORDS' => 'Force users use passwords',
     'L_CFG_SLOW_FLOW' => 'Time for warn about slow indexers (default 5s)',
+    //TOOLTIP
+    'L_TIP_COMMA' => 'Palabras separadas por coma',
 ];

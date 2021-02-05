@@ -54,5 +54,17 @@
                 <input class="submit_btn" type="submit" name="rebuild_shows" value="<?= $tdata['L_REESCAN_SHOWS'] ?>"/>
             <?php } ?>
         <?php } ?>
+        <?php if (stristr('news/new_movies/new_shows', (string) $tdata['page'])) { ?>
+            <span> <?= $tdata['L_FILTER_INDEXER'] ?>:</span>
+            <select name="sel_indexer" onchange="this.form.submit()">
+                <?= $tdata['sel_indexers'] ?>
+            </select>
+            <span><?= $tdata['L_ENABLE'] . ' ' . $tdata['L_IGNORE'] ?></span>
+            <input type="hidden" name="new_ignore_enable" value="0"/>
+            <input type="checkbox" <?= !empty($tdata['new_ignore_enable']) ? 'checked' : null ?> name="new_ignore_enable" onchange="this.form.submit()" value="1"/>
+            <div class="inline" data-tip="<?= $tdata['L_TIP_COMMA'] ?>">
+                <input type="text" size="15" name="new_ignore_keywords" onchange="this.form.submit()" value="<?= !empty($tdata['new_ignore_keywords']) ? $tdata['new_ignore_keywords'] : null ?>"/>
+            </div>
+        <?php } ?>
     </form>
 </div>
