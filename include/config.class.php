@@ -22,9 +22,9 @@ class Config {
             if ($config['type'] <= 6) {
                 $cfg[$config['cfg_key']] = $config['cfg_value'];
             } else {
-                $split_values = explode(',', trim($config['cfg_value']));
+                $split_values = $this->commaToArray($config['cfg_value']);
                 foreach ($split_values as $split_value) {
-                    $cfg[$config['cfg_key']][] = trim($split_value);
+                    $cfg[$config['cfg_key']][] = $split_value;
                 }
             }
         }
@@ -60,14 +60,14 @@ class Config {
                     $data_row .= '</select>';
                     /* TODO: CONFIGSELECT
                       } else if ($config['type'] == 8) {
-                      $values = array_map('trim', explode(',', $config['cfg_value']));
-                      $data_row .= '<select name="config_keys[' . $config['cfg_key'] . ']">';
+                      $values = $this->commaToArray($config['cfg_value']);
+                      $data_row .= '<select name="config_del[' . $config['cfg_key'] . ']">';
                       foreach ($values as $value_key => $value) {
                       $data_row .= '<option value="' . $value_key . '">' . $value . '</option>';
                       }
                       $data_row .= '</select>';
                       $data_row .= '<input class="action_btn" type="submit" name="remove" value="' . $LNG['L_DELETE'] . '" />';
-                      $data_row .= '<br/><input size="10" type="text" name="config_keys[' . $config['cfg_key'] . ']" value="" />';
+                      $data_row .= '<br/><input size="10" type="text" name="config_add[' . $config['cfg_key'] . ']" value="" />';
                       $data_row .= '<input class="action_btn" type="submit" name="add" value="' . $LNG['L_ADD'] . '" />';
                      *
                      */
@@ -97,6 +97,8 @@ class Config {
     public function save($config_keys) {
         global $db, $cfg;
 
+        //var_dump($config_keys);
+        return;
         foreach ($config_keys as $key => $value) {
             $value = trim($value);
             foreach ($this->config as $key_id => $config) {
@@ -107,6 +109,19 @@ class Config {
                 }
             }
         }
+    }
+
+    private function commaToArray($string) {
+        return array_map('trim', explode(',', $string));
+    }
+
+    private function arrayToComma($array) {
+        $string = '';
+        foreach ($array as $element) {
+            $element = trim($element);
+            empty($string) ? $string = $element : $string .= ',' . $element;
+        }
+        return $string;
     }
 
 }

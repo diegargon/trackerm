@@ -461,7 +461,7 @@ function page_config() {
 
     $page = '';
     if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_config'])) {
-
+        //var_dump($_POST);
         $config_keys = $filter->postString('config_keys');
         if (!empty($config_keys) && is_array($config_keys) && count($config_keys) > 0) {
             $config->save($config_keys);
