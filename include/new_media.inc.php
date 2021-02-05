@@ -89,7 +89,7 @@ function page_new_media($media_type) {
     if (!empty($final_res_media_db)) {
         $topt['search_type'] = $media_type;
         ($media_type == 'movies') ? $head = 'L_MOVIES' : $head = 'L_SHOWS';
-        $res_media_db = mix_media_res($final_res_media_db);
+        $final_res_media_db = mix_media_res($final_res_media_db);
         $page_news_media = buildTable($head, $final_res_media_db, $topt);
         $page_news .= $page_news_media;
     }
