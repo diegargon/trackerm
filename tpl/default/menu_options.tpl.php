@@ -59,11 +59,22 @@
             <select name="sel_indexer" onchange="this.form.submit()">
                 <?= $tdata['sel_indexers'] ?>
             </select>
-            <span><?= $tdata['L_ENABLE'] . ' ' . $tdata['L_IGNORE'] ?></span>
-            <input type="hidden" name="new_ignore_enable" value="0"/>
-            <input type="checkbox" <?= !empty($tdata['new_ignore_enable']) ? 'checked' : null ?> name="new_ignore_enable" onchange="this.form.submit()" value="1"/>
-            <div class="inline" data-tip="<?= $tdata['L_TIP_COMMA'] ?>">
-                <input type="text" size="15" name="new_ignore_keywords" onchange="this.form.submit()" value="<?= !empty($tdata['new_ignore_keywords']) ? $tdata['new_ignore_keywords'] : null ?>"/>
+            <div class="ignore_search">
+                <!-- ignore words -->
+                <span><?= $tdata['L_IGNORE'] ?></span>
+                <input type="hidden" name="new_ignore_words_enable" value="0"/>
+                <input type="checkbox" <?= !empty($tdata['new_ignore_words_enable']) ? 'checked' : null ?> name="new_ignore_words_enable" onchange="this.form.submit()" value="1"/>
+
+                <div class="inline" data-tip="<?= $tdata['L_TIP_COMMA'] ?>">
+                    <input type="text" size="15" name="new_ignore_keywords" onchange="this.form.submit()" value="<?= !empty($tdata['new_ignore_keywords']) ? $tdata['new_ignore_keywords'] : null ?>"/>
+                </div>
+                <!-- ignore size -->
+                <span><?= $tdata['L_SIZE'] ?></span>
+                <input type="hidden" name="new_ignore_size_enable" value="0"/>
+                <input type="checkbox" <?= !empty($tdata['new_ignore_size_enable']) ? 'checked' : null ?> name="new_ignore_size_enable" onchange="this.form.submit()" value="1"/>
+                <div class="inline" data-tip="<?= $tdata['L_TIP_IGNORE_SIZE'] ?>">
+                    <input type="text" size="2"  name="new_ignore_size" onchange="this.form.submit()" value="<?= !empty($tdata['new_ignore_size']) ? $tdata['new_ignore_size'] : null ?>"/>
+                </div>
             </div>
         <?php } ?>
     </form>

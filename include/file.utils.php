@@ -38,12 +38,6 @@ function getDirContents($dir, &$results = []) {
     return $results;
 }
 
-function human_filesize($bytes, $decimals = 2) {
-    $sz = 'BKMGTP';
-    $factor = floor((strlen($bytes) - 1) / 3);
-    return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . @$sz[$factor];
-}
-
 function save_to_file_json($file, $path, $data) {
     if (is_writable($path)) {
         file_put_contents($file, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));

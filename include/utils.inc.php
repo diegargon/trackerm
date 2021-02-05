@@ -69,3 +69,13 @@ function getPerfTime() {
 function formatPerfTime($time) {
     return round($time / 1e+9, 2);
 }
+
+function bytesToGB($bytes) {
+    return $bytes / round(pow(1024, 3), 2);
+}
+
+function human_filesize($bytes, $decimals = 2) {
+    $sz = 'BKMGTP';
+    $factor = floor((strlen($bytes) - 1) / 3);
+    return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . @$sz[$factor];
+}

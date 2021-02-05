@@ -282,9 +282,19 @@ function getOptions() {
         setPrefsItem('new_ignore_keywords', $cfg['new_ignore_keywords']);
     }
 
-    if (isset($_POST['new_ignore_enable'])) {
-        $cfg['new_ignore_enable'] = $filter->postString('new_ignore_enable');
-        setPrefsItem('new_ignore_enable', $cfg['new_ignore_enable']);
+    if (isset($_POST['new_ignore_size'])) {
+        $cfg['new_ignore_size'] = $filter->postString('new_ignore_size');
+        setPrefsItem('new_ignore_size', $cfg['new_ignore_size']);
+    }
+
+    if (isset($_POST['new_ignore_words_enable'])) {
+        $cfg['new_ignore_words_enable'] = $filter->postString('new_ignore_words_enable');
+        setPrefsItem('new_ignore_words_enable', $cfg['new_ignore_words_enable']);
+    }
+
+    if (isset($_POST['new_ignore_size_enable'])) {
+        $cfg['new_ignore_size_enable'] = $filter->postString('new_ignore_size_enable');
+        setPrefsItem('new_ignore_size_enable', $cfg['new_ignore_size_enable']);
     }
 
     if (isset($_POST['sel_indexer'])) {

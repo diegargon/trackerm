@@ -61,13 +61,25 @@ function page_new_media($media_type) {
     ($cache_media_expire == 1) || !$cfg['search_cache'] ? $res_media_db = jackett_prep_media($media_type, $media_res) : null;
 
     $final_res_media_db = $res_media_db; //res_ unfilter need to cache
-    if (!empty($cfg['new_ignore_enable']) && !empty($cfg['new_ignore_keywords'])) {
+    //ignore words
+    if (!empty($cfg['new_ignore_words_enable']) && !empty($cfg['new_ignore_keywords'])) {
         $ignore_keywords = array_map('trim', explode(',', $cfg['new_ignore_keywords']));
         foreach ($final_res_media_db as $key => $item) {
             $match = str_ireplace($ignore_keywords, '', $item['title']);
             if (trim($match) != trim($item['title'])) {
                 unset($final_res_media_db[$key]);
-                //echo "Dropping " . $item['title'] . "<br>";
+                //echo "Dropping by word " . $item['title'] . "<br>";
+            }
+        }
+    }
+
+    //ignore_size
+    if (!empty($cfg['new_ignore_size_enable']) && !empty($cfg['new_ignore_size'])) {
+        foreach ($final_res_media_db as $key => $item) {
+            $gbytes = round(bytesToGB($item['size']), 2);
+            if ($gbytes > trim($cfg['new_ignore_size'])) {
+                unset($final_res_media_db[$key]);
+                //echo "Dropping by size" . $item['title'] . ":$gbytes<br>";
             }
         }
     }

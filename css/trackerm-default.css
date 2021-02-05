@@ -782,3 +782,12 @@ button {
 .inline {
     display: inline;
 }
+.ignore_search {    
+    display: inline;
+    border: 1px solid #ff5b5b;
+    overflow:auto;
+    padding: 10px;
+}
+.border_green {
+    border: 1px solid green;
+}

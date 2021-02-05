@@ -240,4 +240,5 @@ $LNG = [
     'L_CFG_SLOW_FLOW' => 'Time for warn about slow indexers (default 5s)',
     //TOOLTIP
     'L_TIP_COMMA' => 'Palabras separadas por coma',
+    'L_TIP_IGNORE_SIZE' => 'Digit in GB',
 ];
