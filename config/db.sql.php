@@ -540,13 +540,20 @@ function update_db($from) {
     }
 
     /*
+      if ($from < 9) {
+      $db->query('UPDATE config SET cfg_value=\'81\' WHERE cfg_key=\'version\'');
+      $db->update('db_info', ['version' => 9]);
+      }
+     */
+
+    /*
       NEXT UPDATES:
       remove from wanted ignore field, not need
      */
     /*
-      if ($from < 9) {
+      if ($from < 10) {
       $db->query('UPDATE config SET cfg_value=\'81\' WHERE cfg_key=\'version\'');
-      $db->update('db_info', ['version' => 9]);
+      $db->update('db_info', ['version' => 10]);
       }
      */
     return true;

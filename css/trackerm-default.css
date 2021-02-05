@@ -559,7 +559,7 @@ button {
 .home_news {
     overflow:auto;
     resize: vertical;
-    height: 10%;
+    height: 20%;
 }
 
 .home_starting {
