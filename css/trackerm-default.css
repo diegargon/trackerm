@@ -187,6 +187,9 @@ button {
     display: table-cell;
     padding-left: 10px;
 }
+.catCell {
+    padding: 5px;
+}
 .divTableCellWanted {
     border:0px solid #ff5b5b;
     display: table-cell;    
@@ -787,6 +790,12 @@ button {
     border: 1px solid #ff5b5b;
     overflow:auto;
     padding: 10px;
+}
+.border_red {
+    border: 1px solid #ff5b5b;
+}
+.border_blue {
+    border: 1px solid  rgb(160,160,255);
 }
 .border_green {
     border: 1px solid green;

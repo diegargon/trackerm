@@ -44,7 +44,7 @@ class Config {
                 }
             }
             if ($config['public'] == 1 && $config['category'] == $display_cat) {
-                $data_row .= '<div class = "catRow">';
+                $data_row .= '<div class = "catRow border_blue">';
                 $data_row .= '<div class = "catCell">';
                 if ($config['type'] == 3) {
                     if ($config['cfg_value'] == 0) {
@@ -58,19 +58,19 @@ class Config {
                     $data_row .= '<option ' . $select_no . ' value="0">' . $LNG['L_NO'] . '</option>';
                     $data_row .= '<option ' . $select_yes . ' value="1">' . $LNG['L_YES'] . '</option>';
                     $data_row .= '</select>';
-                    /* TODO: CONFIGSELECT
-                      } else if ($config['type'] == 8) {
-                      $values = $this->commaToArray($config['cfg_value']);
-                      $data_row .= '<select name="config_del[' . $config['cfg_key'] . ']">';
-                      foreach ($values as $value_key => $value) {
-                      $data_row .= '<option value="' . $value_key . '">' . $value . '</option>';
-                      }
-                      $data_row .= '</select>';
-                      $data_row .= '<input class="action_btn" type="submit" name="remove" value="' . $LNG['L_DELETE'] . '" />';
-                      $data_row .= '<br/><input size="10" type="text" name="config_add[' . $config['cfg_key'] . ']" value="" />';
-                      $data_row .= '<input class="action_btn" type="submit" name="add" value="' . $LNG['L_ADD'] . '" />';
-                     *
-                     */
+                    /* TODO: CONFIGSELECT */
+                } else if ($config['type'] == 8) {
+                    $values = $this->commaToArray($config['cfg_value']);
+                    $data_row .= '<select name="config_id[' . $config['cfg_key'] . ']">';
+                    foreach ($values as $value_key => $value) {
+                        $data_row .= '<option value="' . $value_key . '">' . $value . '</option>';
+                    }
+                    $data_row .= '</select>';
+                    $data_row .= '<input class="action_btn" type="submit" name="config_remove[' . $config['cfg_key'] . ']" value="' . $LNG['L_DELETE'] . '" />';
+                    $data_row .= '<br/><input size="10" type="text" name="add_item[' . $config['cfg_key'] . ']" value="" />';
+                    $data_row .= '<input class="action_btn" type="submit" name="config_add[' . $config['cfg_key'] . ']" value="' . $LNG['L_ADD'] . '" />';
+                    $data_row .= '<input type="hidden" name="add_before[' . $config['cfg_key'] . '] value="0" />';
+                    $data_row .= '<div class="inline" data-tip="' . $LNG['L_ADD_BEFORE'] . '"><input type="checkbox" name="add_before[' . $config['cfg_key'] . '] value="1" /></div>';
                 } else {
                     $data_row .= '<input type="text" name="config_keys[' . $config['cfg_key'] . ']" value="' . $config['cfg_value'] . '" />';
                 }
@@ -94,11 +94,9 @@ class Config {
         return $data_result;
     }
 
-    public function save($config_keys) {
+    public function saveKeys($config_keys) {
         global $db, $cfg;
 
-        //var_dump($config_keys);
-        return;
         foreach ($config_keys as $key => $value) {
             $value = trim($value);
             foreach ($this->config as $key_id => $config) {
@@ -109,6 +107,52 @@ class Config {
                 }
             }
         }
+    }
+
+    public function removeCommaElement($key, $id) {
+
+        $elements = $this->config;
+        foreach ($elements as $element) {
+            if ($element['cfg_key'] == $key) {
+                $element_value = $element['cfg_value'];
+                break;
+            }
+        }
+        if (!empty($element_value)) {
+            $elements_array = $this->commaToArray($element_value);
+            unset($elements_array[$id]);
+            $comma_elements = $this->arrayToComma($elements_array);
+            $toSave[$key] = $comma_elements;
+            $this->saveKeys($toSave);
+        }
+    }
+
+    public function addCommaElement($key, $value, $id, $before = 0) {
+
+        if (empty($value)) {
+            return false;
+        }
+        $elements = $this->config;
+        foreach ($elements as $element) {
+            if ($element['cfg_key'] == $key) {
+                $element_value = $element['cfg_value'];
+                break;
+            }
+        }
+        if (isset($element_value)) {
+            $elements_array = $this->commaToArray($element_value);
+            if ($before) {
+                $where_id = $id - 1;
+                $where_id < 0 ? $where_id = 0 : null;
+            } else {
+                $where_id = $id + 1;
+            }
+            array_splice($elements_array, $where_id, 0, $value);
+        }
+        $comma_elements = $this->arrayToComma($elements_array);
+
+        $toSave[$key] = $comma_elements;
+        $this->saveKeys($toSave);
     }
 
     private function commaToArray($string) {

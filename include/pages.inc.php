@@ -460,11 +460,27 @@ function page_config() {
     global $filter, $config;
 
     $page = '';
-    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_config'])) {
-        //var_dump($_POST);
-        $config_keys = $filter->postString('config_keys');
-        if (!empty($config_keys) && is_array($config_keys) && count($config_keys) > 0) {
-            $config->save($config_keys);
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        if (isset($_POST['submit_config'])) {
+
+            $config_keys = $filter->postString('config_keys');
+            if (!empty($config_keys) && is_array($config_keys) && count($config_keys) > 0) {
+                $config->saveKeys($config_keys);
+            }
+        }
+        //FIXME: This way for handle is messy
+        if (isset($_POST['config_remove']) && isset($_POST['config_id'][array_key_first($_POST['config_remove'])])) {
+            $key = array_key_first($_POST['config_remove']);
+            $id = $_POST['config_id'][array_key_first($_POST['config_remove'])];
+            $config->removeCommaElement($key, $id);
+        }
+        if (isset($_POST['config_add']) && !empty($_POST['add_item'][array_key_first($_POST['config_add'])])) {
+            $key = array_key_first($_POST['config_add']);
+            $value = $_POST['add_item'][array_key_first($_POST['config_add'])];
+            $value = $filter->varString($value);
+            $id = $_POST['config_id'][array_key_first($_POST['config_add'])];
+            empty($_POST['add_before'][array_key_first($_POST['config_add'])]) ? $before = 0 : $before = 1;
+            $config->addCommaElement($key, trim($value), $id, $before);
         }
     }
     $page .= $config->display($filter->getString('category'));

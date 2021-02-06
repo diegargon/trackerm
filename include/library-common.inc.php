@@ -125,7 +125,7 @@ function clean_database($media_type, $files, $media) {
 
     foreach ($media as $item) {
         if (!in_array($item['path'], $files)) {
-            $log->addStateMsg('[' . $LNG['L_NOTE'] . '] ' . $item['title'] . $LNG['LN_NOTE_MOVDEL']);
+            $log->addStateMsg('[' . $LNG['L_NOTE'] . '] ' . $item['title'] . $LNG['L_NOTE_MOVDEL']);
             if (isset($item['themoviedb_id'])) {
                 $values['title'] = $item['title'];
                 $values['themoviedb_id'] = $item['themoviedb_id'];
