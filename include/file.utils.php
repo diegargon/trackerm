@@ -14,12 +14,16 @@ function findFiles($directory, $extensions = []) {
     $content = getDirContents($directory);
     $files = [];
     foreach ($content as $file) {
-        $ext = strtolower(substr($file, -3));
+        $ext = getFileExt($file);
         if (in_array($ext, $extensions)) {
             $files[] = $file;
         }
     }
     return $files;
+}
+
+function getFileExt($file) {
+    return strtolower(substr($file, -3));
 }
 
 function getDirContents($dir, &$results = []) {
