@@ -188,6 +188,7 @@ $LNG = [
     'L_USERS_MANAGEMENT' => 'Administración usuarios',
     'L_USERS_MNGT_HELP' => '<br/>Para modificar un usuario simplemente asegurese de que el nombre de usuario existe, en vez de crearlo lo modificara',
     'L_USER_INCORRECT_USERNAME' => 'Nombre de usuario incorrecto',
+    'L_USER_DELETED' => 'Usuario borrado',
     'L_USERNAME' => 'Nombre',
     'L_UPDATE' => 'Actualizar',
     'L_UPDATE_EPISODES' => 'Actualizar ep.',

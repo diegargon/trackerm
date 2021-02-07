@@ -39,11 +39,11 @@ function user_management() {
                 $db->upsertItemByField('users', $user_create, 'username');
                 $status_msg = $LNG['L_USER_CREATE_SUCCESS'];
             }
+        } else if (isset($_POST['delete_user']) && !empty($delete_user_id = $filter->postInt('delete_user_id'))) {
+            $db->delete('users', ['id' => ['value' => $delete_user_id]]);
+            $status_msg = $LNG['L_USER_DELETED'];
         } else {
             $status_msg = $LNG['L_USER_INCORRECT_USERNAME'];
-        }
-        if (isset($_POST['delete_user']) && !empty($delete_user_id = $filter->postInt('delete_user_id'))) {
-            $db->delete('users', ['id' => ['value' => $delete_user_id]]);
         }
     }
 
@@ -92,7 +92,7 @@ function show_users() {
     foreach ($users as $user) {
         if ($user['id'] > 1) {
             $html .= '<div class="delete_user"><input type="hidden" name="delete_user_id" value="' . $user['id'] . '"/>';
-            $html .= '<input class="submit_btn" type="submit" name="delete_user" value="' . $LNG['L_DELETE'] . '"/>';
+            $html .= '<input class="submit_btn" onclick="return confirm(\'Are you sure?\')" type="submit" name="delete_user" value="' . $LNG['L_DELETE'] . '"/>';
             $html .= '<span>' . $user['username'] . '<span></div>';
         }
     }
