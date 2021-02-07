@@ -1,7 +1,7 @@
 ## Latest / News (Relevant)
 
 [05/02] Add user/admin options, the only default admin profile is 'default' you must login and modify your users if you want another be admin
-    admin: can add/modify/delete users
+    admin: can add/modify/delete users, view/change config options
     hidde login: not show on login screen
     disable: disable user, can't login
 [05/02] Added filters to new torrents (submenu)
