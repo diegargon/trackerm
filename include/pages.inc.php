@@ -55,10 +55,15 @@ function index_page() {
     $tdata['title'] = '';
 
     $lib_stats = getLibraryStats();
+
     $tdata['content'] = "<h3>{$LNG['L_LIBRARY']}</h3>";
+    $tdata['content'] .= "<span> {$LNG['L_MOVIES']} : {$lib_stats['num_movies']} </span><br/>";
+    $tdata['content'] .= "<span> {$LNG['L_SHOWS']} : {$lib_stats['num_shows']} </span><br/>";
+    $tdata['content'] .= "<span> {$LNG['L_EPISODES']} : {$lib_stats['num_episodes']} </span><br/>";
+    $tdata['content'] .= "<h3>{$LNG['L_HARDDISK']}</h3>";
     $tdata['content'] .= "<span>{$LNG['L_MOVIES']} : " . $lib_stats['movies_size'] . '</span><br/>';
     $tdata['content'] .= "<span>{$LNG['L_SHOWS']} : " . $lib_stats['shows_size'] . '</span><br/>';
-    $tdata['content'] .= "<h3>{$LNG['L_HARDDISK']}</h3>";
+
     if (is_array($cfg['MOVIES_PATH'])) {
         foreach ($cfg['MOVIES_PATH'] as $movies_path) {
             $movies_path_name = basename($movies_path);
@@ -79,15 +84,10 @@ function index_page() {
     } else {
         $tdata['content'] .= "<span>{$LNG['L_FREE_TOTAL']} {$LNG['L_ON']} {$LNG['L_SHOWS']} : " . human_filesize(disk_free_space($cfg['SHOWS_PATH'])) . ' / ' . human_filesize(disk_total_space($cfg['SHOWS_PATH'])) . '</span><br/>';
     }
-    $titems['col1'][] = getTpl('home-item', $tdata);
 
-    // Database
-    $tdata = [];
-    $tdata['title'] = $LNG['L_DATABASE'];
-    $tdata['content'] = "<span> {$LNG['L_SIZE']} : {$lib_stats['db_size']} </span><br/>";
-    $tdata['content'] .= "<span> {$LNG['L_MOVIES']} : {$lib_stats['num_movies']} </span><br/>";
-    $tdata['content'] .= "<span> {$LNG['L_SHOWS']} : {$lib_stats['num_shows']} </span><br/>";
-    $tdata['content'] .= "<span> {$LNG['L_EPISODES']} : {$lib_stats['num_episodes']} </span>";
+    $tdata['content'] .= "<h3>{$LNG['L_DATABASE']}</h3>";
+    $tdata['content'] .= "<span> {$LNG['L_SIZE']} : {$lib_stats['db_size']} </span><br/>";
+
     $titems['col1'][] = getTpl('home-item', $tdata);
 
     // States Messages
