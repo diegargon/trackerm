@@ -58,8 +58,8 @@ function index_page() {
 
     $tdata['content'] = "<h3>{$LNG['L_LIBRARY']}</h3>";
     $tdata['content'] .= "<span> {$LNG['L_MOVIES']} : {$lib_stats['num_movies']} </span><br/>";
-    $tdata['content'] .= "<span> {$LNG['L_SHOWS']} : {$lib_stats['num_shows']} </span><br/>";
-    $tdata['content'] .= "<span> {$LNG['L_EPISODES']} : {$lib_stats['num_episodes']} </span><br/>";
+    $tdata['content'] .= "<span> {$LNG['L_SHOWS']} : {$lib_stats['num_shows']} </span>";
+    $tdata['content'] .= "<span> ({$LNG['L_EPISODES']} : {$lib_stats['num_episodes']}) </span><br/>";
     $tdata['content'] .= "<h3>{$LNG['L_HARDDISK']}</h3>";
     $tdata['content'] .= "<span>{$LNG['L_MOVIES']} : " . $lib_stats['movies_size'] . '</span><br/>';
     $tdata['content'] .= "<span>{$LNG['L_SHOWS']} : " . $lib_stats['shows_size'] . '</span><br/>';
