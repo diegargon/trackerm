@@ -342,6 +342,15 @@ function create_db() {
     $db->insert('config', ['cfg_key' => 'sid_expire', 'cfg_value' => 604800, 'cfg_desc' => 'L_CFG_SID_EXPIRE', 'type' => 2, 'category' => 'L_SECURITY', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'auto_identify', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_AUTO_IDENTIFY', 'type' => 3, 'category' => 'L_MAIN', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'curl_conntimeout', 'cfg_value' => 10, 'cfg_desc' => 'L_CFG_CURL_CONNTIMEOUT', 'type' => 2, 'category' => 'L_MAIN', 'public' => 1]);
+    /*
+      $db->insert('config', ['cfg_key' => 'transcoder_player', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_TRANSCODER_PLAYER', 'type' => 3, 'category' => 'L_PLAY', 'public' => 1]);
+      $db->insert('config', ['cfg_key' => 'transcoder_path', 'cfg_value' => '/usr/bin/ffmpeg', 'cfg_desc' => 'L_CFG_TRANSCODER_PATH', 'type' => 1, 'category' => 'L_PLAY', 'public' => 1]);
+      $db->insert('config', ['cfg_key' => 'transcoder_arguments', 'cfg_value' => ' -preset ultrafast -c:v libx264 -c:a aac -b:a 128k -ac 2 -f ssegment -hls_flags delete_segments -segment_list_type hls -segment_list_size 0 ', 'cfg_desc' => 'L_CFG_TRANSCODER_ARGUMENTS', 'type' => 1, 'category' => 'L_PLAY', 'public' => 1]);
+      $db->insert('config', ['cfg_key' => 'transcoder_cache', 'cfg_value' => './cache/video', 'cfg_desc' => 'L_CFG_TRANSCODER_CACHE', 'type' => 1, 'category' => 'L_PLAY', 'public' => 1]);
+      $db->insert('config', ['cfg_key' => 'videojs_class', 'cfg_value' => 'vjs-default-skin  vjs-16-9 vjs-big-play-centered', 'cfg_desc' => 'L_CFG_VIDEOJS_CLASS', 'type' => 1, 'category' => 'L_PLAY', 'public' => 1]);
+      $db->insert('config', ['cfg_key' => 'videojs_liveui', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_VIDEOJS_LIVEUI', 'type' => 3, 'category' => 'L_PLAY', 'public' => 1]);
+      $db->insert('config', ['cfg_key' => 'videojs_autoplay', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 3, 'category' => 'L_PLAY', 'public' => 1]);
+     */
 
     return true;
 }
