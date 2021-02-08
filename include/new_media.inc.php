@@ -58,7 +58,7 @@ function page_new_media($media_type) {
         }
     }
 
-    ($cache_media_expire == 1) || !$cfg['search_cache'] ? $res_media_db = jackett_prep_media($media_type, $media_res) : null;
+    ($cache_media_expire == 1) || !$cfg['search_cache'] && !empty($media_res) ? $res_media_db = jackett_prep_media($media_type, $media_res) : null;
 
     $final_res_media_db = $res_media_db; //res_ unfilter need to cache
     //ignore words
