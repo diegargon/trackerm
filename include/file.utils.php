@@ -96,8 +96,12 @@ function send_file($path) {
     flush();
 
     while (!feof($fd)) {
-        $buffer = fread($fd, 2048);
-        print $buffer;
+        /*
+          $buffer = fread($fd, 2048);
+          print $buffer;
+         *
+         */
+        print stream_get_contents($fd, 1024 * 1024);
     }
 
     fclose($fd);

@@ -4,6 +4,7 @@ TODO
     [FIX] Clean wanted.db/direct torrents that was delete outside app   
     [FIX] If we delete a complete torrent and CLI create the link to library, we got a problem , must check/remove the link
     [IMPROVE] Indexers to config
+    [IMPROVE] Select home page
 [MED
     [NEW] Escaneo de directorios a más para avi sin ser torrents. $cfg['SCAN_MEDIA_DIR'] = 1;
     [NEW/IMPROVE] actualizacion automatica cada semana de titulos de episodio a excepcion de que el show sea "ended"
