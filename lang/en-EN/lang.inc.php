@@ -241,6 +241,7 @@ $LNG = [
     'L_CFG_FORCE_USE_PASSWORDS' => 'Force users use passwords',
     'L_CFG_SLOW_FLOW' => 'Time for warn about slow indexers (default 5s)',
     'L_CFG_SID_EXPIRE' => 'Session expire time',
+    'L_CFG_CURL_CONNTIMEOUT' => 'Time waiting for accepted the connection',
     //TOOLTIP
     'L_TIP_COMMA' => 'Palabras separadas por coma',
     'L_TIP_IGNORE_SIZE' => 'Max size in GB (ex:1 for 1gb )',
