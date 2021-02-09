@@ -14,6 +14,9 @@ require_once('include/common.inc.php');
 if (!empty($cfg['only_local_net']) && !is_local_ip()) {
     exit("ip not allowed");
 }
+
+isMobile() ? $cfg['isMobile'] = 1 : null;
+
 require_once('include/user.inc.php');
 
 require_once('include/session.inc.php');
