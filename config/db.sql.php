@@ -34,7 +34,7 @@ function create_db() {
                     "ip" VARCHAR NULL,
                     "profile_img" VARCHAR NULL,
                     "disable" INTEGER default 0,
-                    "hide_login INTEGER default 0,
+                    "hide_login" INTEGER default 0,
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
        )');
 

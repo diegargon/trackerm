@@ -20,7 +20,7 @@ if (isset($_SESSION['uid']) && $_SESSION['uid'] > 0) {
     }
 } else if (!empty($_COOKIE['uid']) && !empty($_COOKIE['sid'])) {
     $user = get_profile($_COOKIE['uid']);
-    if ($user['sid'] != $_COOKIE['sid']) {
+    if (empty($user['sid']) || $user['sid'] != $_COOKIE['sid']) {
         $user = [];
         $user['id'] = -1;
     } else {
