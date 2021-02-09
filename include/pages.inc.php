@@ -27,14 +27,13 @@ function index_page() {
     $tdata['title'] = $LNG['L_IDENTIFIED'] . ': ' . strtoupper($user['username']);
 
     if ($filter->getInt('edit_profile')) {
-        if (isset($_POST['cur_password']) && isset($_POST['new_password'])) {
-            $status_msg = user_change_password();
-        }
+        $status_msg = '';
+        (isset($_POST['cur_password']) && isset($_POST['new_password'])) ? $status_msg .= user_change_password() . '<br/>' : null;
+        (isset($_POST['email'])) ? $status_msg .= user_change_email() : null;
 
         $tdata['content'] = user_edit_profile();
         $tdata['content'] .= '<button class="action_link" href="?page=index&edit_profile=1">' . $LNG['L_SEND'] . '</button>';
     } else {
-
         $tdata['content'] .= '<a class="action_link" href="?page=index&edit_profile=1">' . $LNG['L_EDIT'] . '</a>';
     }
 

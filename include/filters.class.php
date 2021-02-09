@@ -234,6 +234,33 @@ Class Filter {
         return $var;
     }
 
+    //EMAIL
+    function postEmail($val, $size = null) {
+        if (empty($_POST[$val])) {
+            return false;
+        }
+
+        return $this->varEmail($_POST[$val], $size);
+    }
+
+    function getEmail($val, $size = null) {
+        if (empty($_GET[$val])) {
+            return false;
+        }
+
+        return $this->varEmail($_GET[$val], $size);
+    }
+
+    function varEmail($var, $max_size = null, $min_size = null) {
+
+        if ((empty($var) ) || (!empty($max_size) && (strlen($var) > $max_size) ) || (!empty($min_size) && (strlen($var) < $min_size))) {
+            return false;
+        }
+        //TODO
+
+        return $var;
+    }
+
     //Strict Chars: at least [A-z][0-9] _
 
     function postStrict($val, $size = null) {

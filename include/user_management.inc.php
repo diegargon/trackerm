@@ -108,15 +108,32 @@ function encrypt_password($password) {
 }
 
 function user_edit_profile() {
-    global $LNG;
+    global $LNG, $user;
 
     $html = '<form method="POST" action="">';
 
     $html .= '<span>' . $LNG['L_PASSWORD'] . '<span><input size="8" type="text" name= "cur_password" value=""/>';
     $html .= '<span>' . $LNG['L_NEW_PASSWORD'] . '<span><input size="8" type="text" name= "new_password" value=""/>';
+    $html .= '<span>' . $LNG['L_EMAIL'] . '<span><input size="15" type="text" name= "email" value="' . $user['email'] . '"/>';
     $html .= '</form>';
 
     return $html . '<br/>';
+}
+
+function user_change_email() {
+    global $filter, $user, $db, $LNG;
+
+    if (empty($_POST['email'])) {
+        $user['email'] = '';
+        $db->updateItemById('users', $user['id'], ['email' => '']);
+    } else if (($email = $filter->postEmail('email'))) {
+        if ($email && ($email != $user['email'])) {
+            $user['email'] = $email;
+            $db->updateItemById('users', $user['id'], ['email' => $email]);
+        } else if ($email != $user['email']) {
+            return $LNG['L_EMAIL_INVALID'];
+        }
+    }
 }
 
 function user_change_password() {
@@ -138,7 +155,7 @@ function user_change_password() {
     }
 
     if (empty($user['password']) && empty($new_password)) {
-        return $LNG['L_PASSWORD_EQUAL'];
+        return false;
     }
     if (!empty($user['password']) && (encrypt_password($new_password) == $user['password'])) {
         return $LNG['L_PASSWORD_EQUAL'];
