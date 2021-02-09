@@ -110,30 +110,60 @@ function encrypt_password($password) {
 function user_edit_profile() {
     global $LNG, $user;
 
-    $html = '<form method="POST" action="">';
 
-    $html .= '<span>' . $LNG['L_PASSWORD'] . '<span><input size="8" type="text" name= "cur_password" value=""/>';
-    $html .= '<span>' . $LNG['L_NEW_PASSWORD'] . '<span><input size="8" type="text" name= "new_password" value=""/>';
-    $html .= '<span>' . $LNG['L_EMAIL'] . '<span><input size="15" type="text" name= "email" value="' . $user['email'] . '"/>';
-    $html .= '</form>';
+    $index_pref = getPrefsItem('index_page');
+    (empty($index_pref) || $index_pref == 'index') ? $index_selected = 'selected' : $index_selected = '';
+    (!empty($index_pref) && $index_pref == 'library') ? $library_selected = 'selected' : $library_selected = '';
+    (!empty($index_pref) && $index_pref == 'news') ? $news_selected = 'selected' : $news_selected = '';
+    (!empty($index_pref) && $index_pref == 'wanted') ? $wanted_selected = 'selected' : $wanted_selected = '';
+    (!empty($index_pref) && $index_pref == 'torrents') ? $torrents_selected = 'selected' : $torrents_selected = '';
+    (!empty($index_pref) && $index_pref == 'tmdb') ? $tmdb_selected = 'selected' : $tmdb_selected = '';
+    (!empty($index_pref) && $index_pref == 'transmission') ? $transmission_selected = 'selected' : $transmission_selected = '';
+    //(!empty($index_pref) && $index_pref == '') ? $_selected = 'selected' : $_selected ='';
+    //$html = '<form method="POST" action="">';
+
+    $html = '<span>' . $LNG['L_PASSWORD'] . '</span><input size="8" type="text" name= "cur_password" value=""/>';
+    $html .= '<span>' . $LNG['L_NEW_PASSWORD'] . '</span><input size="8" type="text" name= "new_password" value=""/>';
+    $html .= '<span>' . $LNG['L_EMAIL'] . '</span><input size="15" type="text" name= "email" value="' . $user['email'] . '"/>';
+    $html .= '<br/><span>' . $LNG['L_INDEX_SELECT'] . '</span>';
+    $html .= '<select name="index_page">';
+    $html .= '<option ' . $index_selected . ' value="index">index</option>';
+    $html .= '<option ' . $library_selected . ' value="library">' . $LNG['L_LIBRARY'] . '</option>';
+    $html .= '<option ' . $news_selected . ' value="news">' . $LNG['L_NEWS'] . '</option>';
+    $html .= '<option ' . $wanted_selected . ' value="wanted">' . $LNG['L_WANTED'] . '</option>';
+    $html .= '<option ' . $torrents_selected . ' value="torrents">' . $LNG['L_TORRENTS'] . '</option>';
+    $html .= '<option ' . $tmdb_selected . ' value="tmdb">tmdb</option>';
+    $html .= '<option ' . $transmission_selected . ' value="transmission">Transmission</option>';
+    $html .= '</select>';
+    //$html .= '</form>';
 
     return $html . '<br/>';
 }
 
-function user_change_email() {
+function user_change_prefs() {
     global $filter, $user, $db, $LNG;
 
-    if (empty($_POST['email'])) {
+    $status_msg = null;
+
+    if (empty($_POST['email']) && !empty($user['email'])) {
         $user['email'] = '';
         $db->updateItemById('users', $user['id'], ['email' => '']);
+        $status_msg .= $LNG['L_EMAIL_CHANGE_SUCESS'];
     } else if (($email = $filter->postEmail('email'))) {
         if ($email && ($email != $user['email'])) {
             $user['email'] = $email;
             $db->updateItemById('users', $user['id'], ['email' => $email]);
+            $status_msg .= $LNG['L_EMAIL_CHANGE_SUCESS'];
         } else if ($email != $user['email']) {
-            return $LNG['L_EMAIL_INVALID'];
+            $status_msg .= $LNG['L_EMAIL_INVALID'];
         }
     }
+    $index_page = getPrefsItem('index_page');
+    if (!empty($_POST['index_page']) && ($_POST['index_page'] != $index_page)) {
+        setPrefsItem('index_page', $filter->postString('index_page'));
+    }
+
+    return $status_msg;
 }
 
 function user_change_password() {

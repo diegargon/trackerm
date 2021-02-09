@@ -13,6 +13,7 @@ function index_page() {
     global $cfg, $user, $LNG, $log, $filter;
 
     $titems = [];
+    $status_msg = '';
 
     // Config
     if (!empty($user['isAdmin'])) {
@@ -27,12 +28,14 @@ function index_page() {
     $tdata['title'] = $LNG['L_IDENTIFIED'] . ': ' . strtoupper($user['username']);
 
     if ($filter->getInt('edit_profile')) {
-        $status_msg = '';
-        (isset($_POST['cur_password']) && isset($_POST['new_password'])) ? $status_msg .= user_change_password() . '<br/>' : null;
-        (isset($_POST['email'])) ? $status_msg .= user_change_email() : null;
-
-        $tdata['content'] = user_edit_profile();
-        $tdata['content'] .= '<button class="action_link" href="?page=index&edit_profile=1">' . $LNG['L_SEND'] . '</button>';
+        $tdata['content'] .= '<form method="POST" id="form_user_prefs" action="?page=index&edit_profile=1">';
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            (isset($_POST['cur_password']) && isset($_POST['new_password'])) ? $status_msg .= user_change_password() . '<br/>' : null;
+            $status_msg .= user_change_prefs();
+        }
+        $tdata['content'] .= user_edit_profile();
+        $tdata['content'] .= '<input type="submit" class="action_link inline" value="' . $LNG['L_SEND'] . '"/>';
+        $tdata['content'] .= '</form>';
     } else {
         $tdata['content'] .= '<a class="action_link" href="?page=index&edit_profile=1">' . $LNG['L_EDIT'] . '</a>';
     }
@@ -507,6 +510,7 @@ function page_login() {
                 if ($userid) {
                     set_user($userid);
                     header("Location: {$cfg['REL_PATH']} ");
+                    exit();
                 }
             }
         }

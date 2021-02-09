@@ -37,7 +37,7 @@ select {
     font-size: 1.1em;
     margin: 4px;
     background-color: transparent;
-    border:0px solid grey; 
+    border: 0.1em solid gray; 
     color:  #ff5b5b;
 }
 

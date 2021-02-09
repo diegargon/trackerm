@@ -13,11 +13,20 @@ require_once('include/usermode.inc.php');
 
 $req_page = $filter->getString('page');
 
+
 $footer = getFooter();
 
-if ($user['id'] < 1) {
-    $req_page = 'login';
+($user['id'] < 1) ? $req_page = 'login' : null;
+
+if (empty($req_page) && $user['id'] > 0) {
+    $index_page = trim(getPrefsItem('index_page'));
+    if (!empty($index_page) && $index_page != "index") {
+        //echo "MAINHEADER<br>;";
+        header("Location: {$cfg['REL_PATH']}/?page=$index_page");
+        exit();
+    }
 }
+
 
 $body = getMenu();
 
