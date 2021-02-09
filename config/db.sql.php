@@ -553,8 +553,11 @@ function update_db($from) {
     }
 
     /*
+      $db->query('ALTER TABLE library_shows add column mediainfo VARCHAR NULL');
+      $db->query('ALTER TABLE library_movies add column mediainfo VARCHAR NULL');
+
       if ($from < 9) {
-      $db->query('UPDATE config SET cfg_value=\'81\' WHERE cfg_key=\'version\'');
+      $db->query('UPDATE config SET cfg_value=\'82\' WHERE cfg_key=\'version\'');
       $db->update('db_info', ['version' => 9]);
       }
      */
@@ -565,7 +568,7 @@ function update_db($from) {
      */
     /*
       if ($from < 10) {
-      $db->query('UPDATE config SET cfg_value=\'81\' WHERE cfg_key=\'version\'');
+      $db->query('UPDATE config SET cfg_value=\'83\' WHERE cfg_key=\'version\'');
       $db->update('db_info', ['version' => 10]);
       }
      */

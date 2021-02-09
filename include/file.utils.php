@@ -101,7 +101,7 @@ function send_file($path) {
           print $buffer;
          *
          */
-        print stream_get_contents($fd, 1024 * 1024);
+        print stream_get_contents($fd, 32 * 1024);
     }
 
     fclose($fd);
