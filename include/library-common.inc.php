@@ -121,6 +121,11 @@ function _rebuild($media_type, $path) {
     return true;
 }
 
+function auto_ident_by_search($media_type, $ids) {
+    //TODO: search tmdb if found result identify with the first result
+    return true;
+}
+
 function clean_database($media_type, $files, $media) {
     global $log, $db, $LNG;
 
@@ -279,11 +284,6 @@ function check_history($media_type, $ids) {
             }
         }
     }
-}
-
-function auto_ident_by_search($media_type, $ids) {
-    //TODO: search tmdb if found result identify with the first result
-    return true;
 }
 
 function auto_ident($media_type, $online_db_id, $id) {
