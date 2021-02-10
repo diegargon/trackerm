@@ -22,7 +22,7 @@
 
 class DB {
 
-    private $version = 8;
+    private $version = 9;
     private $db;
     private $db_path;
     private $querys = [];
@@ -400,6 +400,7 @@ class DB {
     }
 
     public function getDbVersion() {
+        //TODO: get from cfg['db_version'] and remove db_info table;
         $query = $this->select('db_info');
         $result = $this->fetch($query);
         return $result['version'];

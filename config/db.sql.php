@@ -20,7 +20,7 @@ function create_db() {
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
                 )');
 
-    $db->insert('db_info', ["app_name" => 'trackerm', "version" => 8]);
+    $db->insert('db_info', ["app_name" => 'trackerm', "version" => 9]);
 
     // USERS
     $db->query('CREATE TABLE IF NOT EXISTS "users" (
@@ -111,6 +111,7 @@ function create_db() {
                     "release" VARCHAR NULL,
                     "master" INTEGER NULL,
                     "genre" VARCHAR NULL,
+                    "mediainfo" VARCHAR  NULL,
                     "updated" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                     "added" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
@@ -144,6 +145,7 @@ function create_db() {
                     "release" VARCHAR NULL,
                     "master" INTEGER NULL,
                     "genre" VARCHAR NULL,
+                    "mediainfo" VARCHAR NULL,
                     "updated" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                     "added" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
@@ -295,11 +297,13 @@ function create_db() {
                     UNIQUE (cfg_key)
                 )');
 
-    $db->insert('config', ['cfg_key' => 'version', 'cfg_value' => '81', 'cfg_desc' => '', 'type' => 2, 'category' => '', 'public' => 0]);
-    $db->insert('config', ['cfg_key' => 'profile', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => '', 'public' => 0]);
-    $db->insert('config', ['cfg_key' => 'max_identify_items', 'cfg_value' => 5, 'cfg_desc' => 'L_CFG_MAXID_ITEMS', 'type' => 2, 'category' => '', 'public' => 0]);
-    $db->insert('config', ['cfg_key' => 'app_name', 'cfg_value' => 'trackerm', 'cfg_desc' => '', 'type' => 1, 'category' => '', 'public' => 0]);
-    $db->insert('config', ['cfg_key' => 'tresults_rows', 'cfg_value' => 2, 'cfg_desc' => 'L_CFG_ROWS', 'type' => 2, 'category' => 'L_DISPLAY', 'public' => 0]);
+    $db->insert('config', ['cfg_key' => 'db_version', 'cfg_value' => 9, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
+    $db->insert('config', ['cfg_key' => 'version', 'cfg_value' => '81', 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
+    $db->insert('config', ['cfg_key' => 'profile', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
+    $db->insert('config', ['cfg_key' => 'max_identify_items', 'cfg_value' => 5, 'cfg_desc' => 'L_CFG_MAXID_ITEMS', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
+    $db->insert('config', ['cfg_key' => 'app_name', 'cfg_value' => 'trackerm', 'cfg_desc' => '', 'type' => 1, 'category' => 'L_PRIV', 'public' => 0]);
+    $db->insert('config', ['cfg_key' => 'tresults_rows', 'cfg_value' => 2, 'cfg_desc' => 'L_CFG_ROWS', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
+    $db->insert('config', ['cfg_key' => 'tresults_columns', 'cfg_value' => 8, 'cfg_desc' => 'L_CFG_COLUMNS', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
     $db->insert('config', ['cfg_key' => 'new_cache_expire', 'cfg_value' => 3600, 'cfg_desc' => 'L_CFG_NEW_CACHE_EXPIRE', 'type' => 2, 'category' => 'L_MAIN', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'torrent_media_regex', 'cfg_value' => '/(\.avi|\.mp4|\.mkv)/i', 'cfg_desc' => 'L_CFG_TORRENT_MEDIA_REGEX', 'type' => 1, 'category' => 'L_MAIN', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'db_upd_missing_delay', 'cfg_value' => 864000, 'cfg_desc' => 'L_CFG_UPD_MISSING_DELAY', 'type' => 2, 'category' => 'L_MAIN', 'public' => 1]);
@@ -310,7 +314,6 @@ function create_db() {
     $db->insert('config', ['cfg_key' => 'charset', 'cfg_value' => 'UTF-8', 'cfg_desc' => 'L_CFG_CHARSET', 'type' => 1, 'category' => 'L_LANG', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'locale', 'cfg_value' => 'en_EN.UTF-8', 'cfg_desc' => 'L_CFG_LOCALE', 'type' => 1, 'category' => 'L_LANG', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'theme', 'cfg_value' => 'default', 'cfg_desc' => 'L_CFG_THEME', 'type' => 1, 'category' => 'L_DISPLAY', 'public' => 1]);
-    $db->insert('config', ['cfg_key' => 'tresults_columns', 'cfg_value' => 8, 'cfg_desc' => 'L_CFG_COLUMNS', 'type' => 2, 'category' => 'L_DISPLAY', 'public' => 0]);
     $db->insert('config', ['cfg_key' => 'jackett_api_path', 'cfg_value' => '/api/v2.0', 'cfg_desc' => 'L_CFG_JACKETT_API_PATH', 'type' => 2, 'category' => 'L_JACKETT', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'jackett_results', 'cfg_value' => 50, 'cfg_desc' => 'L_CFG_JACKETT_RESULTS', 'type' => 2, 'category' => 'L_JACKETT', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'log_to_syslog', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_LOG_TO_SYSLOG', 'type' => 3, 'category' => 'L_LOGGING', 'public' => 1]);
@@ -342,6 +345,10 @@ function create_db() {
     $db->insert('config', ['cfg_key' => 'sid_expire', 'cfg_value' => 604800, 'cfg_desc' => 'L_CFG_SID_EXPIRE', 'type' => 2, 'category' => 'L_SECURITY', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'auto_identify', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_AUTO_IDENTIFY', 'type' => 3, 'category' => 'L_MAIN', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'curl_conntimeout', 'cfg_value' => 10, 'cfg_desc' => 'L_CFG_CURL_CONNTIMEOUT', 'type' => 2, 'category' => 'L_MAIN', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'localplayer', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_LOCALPLAYER', 'type' => 3, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'playlocal_root_path', 'cfg_value' => '/home', 'cfg_desc' => 'L_CFG_PLAYLOCAL_ROOT_PATH', 'type' => 1, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'playlocal_share_path', 'cfg_value' => 'file://///192.168.1.1', 'cfg_desc' => 'L_CFG_PLAYLOCAL_SHARE_PATH', 'type' => 1, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'playlocal_share_path', 'cfg_value' => 'smb://192.168.1.1', 'cfg_desc' => 'L_CFG_PLAYLOCAL_SHARE_MOBILE_PATH', 'type' => 1, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
     /*
       $db->insert('config', ['cfg_key' => 'transcoder_player', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_TRANSCODER_PLAYER', 'type' => 3, 'category' => 'L_PLAY', 'public' => 1]);
       $db->insert('config', ['cfg_key' => 'transcoder_path', 'cfg_value' => '/usr/bin/ffmpeg', 'cfg_desc' => 'L_CFG_TRANSCODER_PATH', 'type' => 1, 'category' => 'L_PLAY', 'public' => 1]);
@@ -552,18 +559,21 @@ function update_db($from) {
         $db->update('db_info', ['version' => 8]);
     }
 
-    /*
-      if ($from < 9) {
-      $db->query('ALTER TABLE library_shows add column mediainfo VARCHAR NULL');
-      $db->query('ALTER TABLE library_movies add column mediainfo VARCHAR NULL');
-      //$db->insert('config', ['cfg_key' => 'localplayer', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_LOCALPLAYER', 'type' => 3, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
-      //$db->insert('config', ['cfg_key' => 'playlocal_root_path', 'cfg_value' => '/home', 'cfg_desc' => 'L_CFG_PLAYLOCAL_ROOT_PATH', 'type' => 1, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
-      //$db->insert('config', ['cfg_key' => 'playlocal_share_path', 'cfg_value' => 'file://///192.168.1.1', 'cfg_desc' => 'L_CFG_PLAYLOCAL_SHARE_PATH', 'type' => 1, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
-      //$db->insert('config', ['cfg_key' => 'playlocal_share_path', 'cfg_value' => 'smb://192.168.1.1', 'cfg_desc' => 'L_CFG_PLAYLOCAL_SHARE_MOBILE_PATH', 'type' => 1, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
-      $db->query('UPDATE config SET cfg_value=\'82\' WHERE cfg_key=\'version\'');
-      $db->update('db_info', ['version' => 9]);
-      }
-     */
+
+    if ($from < 9) {
+        /*
+          $db->query('ALTER TABLE library_shows add column mediainfo VARCHAR NULL');
+          $db->query('ALTER TABLE library_movies add column mediainfo VARCHAR NULL');
+          $db->insert('config', ['cfg_key' => 'localplayer', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_LOCALPLAYER', 'type' => 3, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
+          $db->insert('config', ['cfg_key' => 'playlocal_root_path', 'cfg_value' => '/home', 'cfg_desc' => 'L_CFG_PLAYLOCAL_ROOT_PATH', 'type' => 1, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
+          $db->insert('config', ['cfg_key' => 'playlocal_share_path', 'cfg_value' => 'file://///192.168.1.1', 'cfg_desc' => 'L_CFG_PLAYLOCAL_SHARE_PATH', 'type' => 1, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
+          $db->insert('config', ['cfg_key' => 'playlocal_share_path', 'cfg_value' => 'smb://192.168.1.1', 'cfg_desc' => 'L_CFG_PLAYLOCAL_SHARE_MOBILE_PATH', 'type' => 1, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
+          $db->insert('config', ['cfg_key' => 'db_version', 'cfg_value' => 9, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
+          $db->query('UPDATE config SET cfg_value=\'0.0.82\' WHERE cfg_key=\'version\'');
+         */
+        $db->update('db_info', ['version' => 9]);
+    }
+
 
     /*
       NEXT UPDATES:
