@@ -580,7 +580,7 @@ function update_db($from) {
           $db->insert('config', ['cfg_key' => 'stats_total_movies_size', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
           $db->insert('config', ['cfg_key' => 'stats_total_shows_size', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
          */
-        $db->query('UPDATE config SET cfg_value=\'0.0.82\' WHERE cfg_key=\'version\'');
+        $db->query('UPDATE config SET cfg_value=\'0.0.82\' WHERE cfg_key=\'version\' LIMIT 1');
         $db->update('db_info', ['version' => 9]);
     }
 
@@ -591,8 +591,8 @@ function update_db($from) {
      */
     /*
       if ($from < 10) {
-      $db->query('UPDATE db_version  SET cfg_value=\'10\' WHERE cfg_key=\'version\'' LIMIT 1);
-      $db->query('UPDATE config SET cfg_value=\'83\' WHERE cfg_key=\'version\'' LIMIT 1);
+      $db->query('UPDATE db_version  SET cfg_value=\'10\' WHERE cfg_key=\'version\' LIMIT 1');
+      $db->query('UPDATE config SET cfg_value=\'83\' WHERE cfg_key=\'version\' LIMIT 1');
       $db->update('db_info', ['version' => 10]);
       }
      */
