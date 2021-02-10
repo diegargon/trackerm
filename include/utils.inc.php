@@ -30,7 +30,7 @@ function clean_title($title) {
     return trim($title);
 }
 
-function set_clean_title() {
+function set_clean_titles() {
     global $db;
 
     $tables = ['tmdb_search', 'jackett_movies', 'jackett_shows', 'library_history', 'library_shows', 'library_movies', 'shows_details'];
