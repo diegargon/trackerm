@@ -17,7 +17,6 @@ function rebuild($media_type, $path) {
         }
     } else {
         _rebuild($media_type, $path);
-        sleep(1);
     }
 }
 
