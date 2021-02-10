@@ -37,6 +37,8 @@ rebuild('shows', $cfg['SHOWS_PATH']);
 
 update_trailers();
 hash_missing();
+update_stats();
+
 //UPGRADE
 set_clean(); //4
 

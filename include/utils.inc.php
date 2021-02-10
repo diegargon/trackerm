@@ -83,3 +83,51 @@ function human_filesize($bytes, $decimals = 2) {
 function isMobile() {
     return preg_match("/(android|avantgo|blackberry|bolt|boost|cricket|docomo|fone|hiptop|mini|mobi|palm|phone|pie|tablet|up\.browser|up\.link|webos|wos)/i", $_SERVER["HTTP_USER_AGENT"]);
 }
+
+function update_stats() {
+    global $db;
+
+    $movies_size = 0;
+    $shows_size = 0;
+
+    $movies_db = $db->getTableData('library_movies');
+    $num_movies = count($movies_db);
+
+    if (!empty($movies_db)) {
+        foreach ($movies_db as $db_movie) {
+            if (isset($db_movie['size'])) {
+                $movies_size = $movies_size + $db_movie['size'];
+            }
+        }
+        $movies_size = human_filesize($movies_size);
+    }
+
+    $shows_db = $db->getTableData('library_shows');
+    $num_episodes = count($shows_db);
+    $count_shows = [];
+
+    if (!empty($shows_db)) {
+        foreach ($shows_db as $db_show) {
+            if (isset($db_show['size'])) {
+                $shows_size = $shows_size + $db_show['size'];
+            }
+
+            if (!empty($db_show['themoviedb_id'])) {
+                $tmdb_id = $db_show['themoviedb_id'];
+                if (!isset($count_shows[$tmdb_id])) {
+                    $count_shows[$tmdb_id] = 1;
+                }
+            }
+        }
+        $shows_size = human_filesize($shows_size);
+    }
+
+    $num_shows = count($count_shows);
+
+
+    $db->query("UPDATE config SET cfg_value='$num_movies' WHERE cfg_key='stats_movies' LIMIT 1");
+    $db->query("UPDATE config SET cfg_value='$num_shows' WHERE cfg_key='stats_shows' LIMIT 1");
+    $db->query("UPDATE config SET cfg_value='$num_episodes' WHERE cfg_key='stats_shows_episodes' LIMIT 1");
+    $db->query("UPDATE config SET cfg_value='$movies_size' WHERE cfg_key='stats_total_movies_size' LIMIT 1");
+    $db->query("UPDATE config SET cfg_value='$shows_size' WHERE cfg_key='stats_total_shows_size' LIMIT 1");
+}

@@ -319,45 +319,16 @@ function auto_ident($media_type, $online_db_id, $id) {
 }
 
 function getLibraryStats() {
-    global $db, $cfg;
+    global $cfg;
 
-    $stats['movies_size'] = 0;
-    $stats['shows_size'] = 0;
+    $stats['num_movies'] = $cfg['stats_movies'];
+    $stats['num_shows'] = $cfg['stats_shows'];
+    $stats['num_episodes'] = $cfg['stats_shows_episodes'];
+    $stats['movies_size'] = $cfg['stats_total_movies_size'];
+    $stats['shows_size'] = $cfg['stats_total_shows_size'];
 
-    $movies_db = $db->getTableData('library_movies');
-    $stats['num_movies'] = count($movies_db);
-
-    if (!empty($movies_db)) {
-        foreach ($movies_db as $db_movie) {
-            if (isset($db_movie['size'])) {
-                $stats['movies_size'] = $stats['movies_size'] + $db_movie['size'];
-            }
-        }
-        $stats['movies_size'] = human_filesize($stats['movies_size']);
-    }
-
-    $shows_db = $db->getTableData('library_shows');
-    $stats['num_episodes'] = count($shows_db);
-    $count_shows = [];
-
-    if (!empty($shows_db)) {
-        foreach ($shows_db as $db_show) {
-            if (isset($db_show['size'])) {
-                $stats['shows_size'] = $stats['shows_size'] + $db_show['size'];
-            }
-
-            if (!empty($db_show['themoviedb_id'])) {
-                $tmdb_id = $db_show['themoviedb_id'];
-                if (!isset($count_shows[$tmdb_id])) {
-                    $count_shows[$tmdb_id] = 1;
-                }
-            }
-        }
-        $stats['shows_size'] = human_filesize($stats['shows_size']);
-    }
-
-    $stats['num_shows'] = count($count_shows);
 
     $stats['db_size'] = file_exists($cfg['DB_FILE']) ? human_filesize(filesize($cfg['DB_FILE'])) : 0;
+
     return $stats;
 }
