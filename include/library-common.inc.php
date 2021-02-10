@@ -13,9 +13,11 @@ function rebuild($media_type, $path) {
     if (is_array($path)) {
         foreach ($path as $item) {
             _rebuild($media_type, $item);
+            sleep(1);
         }
     } else {
         _rebuild($media_type, $path);
+        sleep(1);
     }
 }
 
