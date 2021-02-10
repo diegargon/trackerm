@@ -33,6 +33,7 @@ class Config {
     public function display($display_cat = null) {
         global $LNG;
         $categories = [];
+        $selected_cat_title = '';
 
         empty($display_cat) ? $display_cat = 'L_MAIN' : null;
 
@@ -44,6 +45,7 @@ class Config {
                 }
             }
             if ($config['public'] == 1 && $config['category'] == $display_cat) {
+                empty($selected_cat_title) ? $selected_cat_title = '<h2>' . $LNG[$config['category']] . '</h2>' : null;
                 $data_row .= '<div class = "catRow border_blue">';
                 $data_row .= '<div class = "catCell">';
                 if ($config['type'] == 3) {
@@ -80,16 +82,15 @@ class Config {
             }
         }
 
-        $cat_head = '<div class="cats">';
+        $cat_head = '<div class="config_cats">';
         foreach ($categories as $category) {
             isset($LNG[$category]) ? $cat_desc = ucfirst($LNG[$category]) : $cat_desc = $category;
             $cat_head .= '<a href = "index.php?page=config&category=' . $category . '">' . $cat_desc . '</a> ';
         }
         $cat_head .= '</div>';
-
-
         $data_result = '<form method = "POST"><input class="submit_btn" type="submit" name="submit_config" value="' . $LNG['L_SUBMIT'] . '"/>';
-        $data_result .= $cat_head . '<div class = "catTable">' . $data_row . '</div></form>';
+        $data_result .= $cat_head . $selected_cat_title;
+        $data_result .= '<div class = "catTable">' . $data_row . '</div></form>';
 
         return $data_result;
     }
