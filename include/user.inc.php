@@ -49,18 +49,18 @@ function check_user($username, $password) {
 }
 
 function set_user($user_id) {
-    global $user;
+    global $user, $cfg;
 
     $user['id'] = $user_id;
     $_SESSION['uid'] = $user['id'];
-    setcookie("uid", $user['id'], time() + 3600000);
-    setcookie("sid", session_id(), time() + 3600000);
+    setcookie("uid", $user['id'], time() + $cfg['sid_expire']);
+    setcookie("sid", session_id(), time() + $cfg['sid_expire']);
     update_session_id();
 }
 
 function update_session_id() {
-    global $db, $user;
+    global $db, $user, $cfg;
 
-    setcookie("sid", session_id(), time() + 3600000);
+    setcookie("sid", session_id(), time() + $cfg['sid_expire']);
     $db->updateItemById('users', $user['id'], ['sid' => session_id()]);
 }
