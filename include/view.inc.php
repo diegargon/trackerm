@@ -332,9 +332,11 @@ function view_seasons($id, $update = false) {
                     $episode_data .= '<div class="divTableCellEpisodes" style="color:yellow;">' . $item['title'] . '</div>';
                     if (!empty($cfg['download_button'])) {
                         $episode_data .= '<div class="divTableCellEpisodes">';
-                        $episode_data .= '<a class="episode_link" href="?page=download&type=shows_library&id=' . $have['id'] . '">';
-                        $episode_data .= $LNG['L_DOWNLOAD'];
-                        $episode_data .= '</a></div>';
+                        $episode_data .= '<a class="episode_link" href="?page=download&type=shows_library&id=' . $have['id'] . '">' . $LNG['L_DOWNLOAD'] . '</a>';
+                        if ($cfg['localplayer']) {
+                            $episode_data .= '<a class="episode_link inline"  target=_blank href="?page=localplayer&id=' . $have['id'] . '&media_type=shows">' . $LNG['L_LOCALPLAYER'] . '</a>';
+                        }
+                        $episode_data .= '</div>';
                     }
                 } else {
                     $episode_data .= '<div class="divTableCellEpisodes">' . $item['title'] . '</div>';

@@ -1,5 +1,8 @@
 ## Latest / News (Relevant)
 
+[0X/02] Add localplayer button (must activate in configuration)
+        LocalPlayer will add a button in your library for load locally a playlist with the media link to your server share directory (samba) for open with vlc
+        and play it without need download. Your system must have access to the samba folder in the server.
 [08/02] Add user/admin options, the only default admin profile is 'default' you must login and modify your users if you want another be admin
     admin: can add/modify/delete users, view/change config options
     hidde login: not show on login screen

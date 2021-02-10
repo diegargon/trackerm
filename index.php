@@ -72,6 +72,8 @@ if (!isset($req_page) || $req_page == '' || $req_page == 'index') {
     $body .= page_identify();
 } else if ($req_page == 'download') {
     page_download();
+} else if ($req_page == 'localplayer') {
+    page_localplayer();
 } else if ($req_page == 'transmission') {
     $body .= page_transmission();
 } else if ($req_page == 'config' && $user['isAdmin']) {

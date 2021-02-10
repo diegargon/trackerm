@@ -553,10 +553,13 @@ function update_db($from) {
     }
 
     /*
+      if ($from < 9) {
       $db->query('ALTER TABLE library_shows add column mediainfo VARCHAR NULL');
       $db->query('ALTER TABLE library_movies add column mediainfo VARCHAR NULL');
-
-      if ($from < 9) {
+      //$db->insert('config', ['cfg_key' => 'localplayer', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_LOCALPLAYER', 'type' => 3, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
+      //$db->insert('config', ['cfg_key' => 'playlocal_root_path', 'cfg_value' => '/home', 'cfg_desc' => 'L_CFG_PLAYLOCAL_ROOT_PATH', 'type' => 1, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
+      //$db->insert('config', ['cfg_key' => 'playlocal_share_path', 'cfg_value' => 'file://///192.168.1.1', 'cfg_desc' => 'L_CFG_PLAYLOCAL_SHARE_PATH', 'type' => 1, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
+      //$db->insert('config', ['cfg_key' => 'playlocal_share_path', 'cfg_value' => 'smb://192.168.1.1', 'cfg_desc' => 'L_CFG_PLAYLOCAL_SHARE_MOBILE_PATH', 'type' => 1, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
       $db->query('UPDATE config SET cfg_value=\'82\' WHERE cfg_key=\'version\'');
       $db->update('db_info', ['version' => 9]);
       }

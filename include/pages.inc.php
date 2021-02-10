@@ -539,3 +539,40 @@ function page_logout() {
     header("Location: {$cfg['REL_PATH']} ");
     exit(0);
 }
+
+function page_localplayer() {
+    global $cfg, $filter, $db;
+
+    $id = $filter->getInt('id');
+    $media_type = $filter->getString('media_type');
+
+    if (empty($id) || empty($media_type)) {
+        exit();
+    }
+    if ($media_type == 'movies') {
+        $item = $db->getItemById('library_movies', $id);
+    } else {
+
+        $item = $db->getItemById('library_shows', $id);
+    }
+
+    if (empty($item)) {
+        exit();
+    }
+
+    $path = str_replace($cfg['playlocal_root_path'], '', $item['path']);
+
+    header("Content-Type: video/mpegurl");
+    header("Content-Disposition: attachment; filename={$item['title']}.m3u8");
+    header("Pragma: no-cache");
+    header("Expires: 0");
+    print "#EXTM3U\r\n";
+    print "#EXTINF:123, {$item['title']}\r\n";
+    if (isMobile()) {
+        print $cfg['playlocal_share_mobile_path'] . $path . "\r\n";
+    } else {
+        print $cfg['playlocal_share_path'] . $path . "\r\n";
+    }
+    print "#EXT-X-ENDLIST";
+    exit(0);
+}

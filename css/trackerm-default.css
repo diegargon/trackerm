@@ -207,9 +207,7 @@ button {
 .catCell:first-of-type {
     text-align: right;
 }
-.divTableCellEpisodes {
-    width:100%;
-}
+.divTableCellEpisodes {}
 
 .divTableID {
     display: table;  
