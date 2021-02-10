@@ -5,7 +5,7 @@
  *  @author diego/@/envigo.net
  *  @package
  *  @subpackage
- *  @copyright Copyright @ 2020 Diego Garcia (diego/@/envigo.net)
+ *  @copyright Copyright @ 2020 - 2021 Diego Garcia (diego/@/envigo.net)
  */
 define('IN_WEB', true);
 

@@ -4,7 +4,7 @@
  *  @author diego/@/envigo.net
  *  @package
  *  @subpackage
- *  @copyright Copyright @ 2020 Diego Garcia (diego/@/envigo.net)
+ *  @copyright Copyright @ 2020 - 2021 Diego Garcia (diego/@/envigo.net)
  */
 ?>
 <div class="home_item_container <?= isset($tdata['main_class']) ? $tdata['main_class'] : null ?>">
