@@ -38,7 +38,7 @@ class Config {
 
         $data_row = '';
         foreach ($this->config as $config) {
-            if (!empty($config['category'])) {
+            if (!empty($config['category']) && $config['category'] != 'L_PRIV') {
                 if (!in_array($config['category'], $categories)) {
                     $categories[] = $config['category'];
                 }
