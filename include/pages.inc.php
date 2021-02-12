@@ -9,7 +9,7 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-function index_page() {
+function page_index() {
     global $cfg, $user, $LNG, $log, $filter;
 
     $titems = [];

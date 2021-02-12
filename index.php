@@ -56,7 +56,7 @@ if (!(empty($d_link = $filter->getUrl('download')))) {
 
 $body = '';
 if (!isset($req_page) || $req_page == '' || $req_page == 'index') {
-    $body .= index_page();
+    $body .= page_index();
 } else if (in_array($req_page, ['library', 'library_movies', 'library_shows'])) {
     $body .= page_library();
 } else if (in_array($req_page, ['news', 'new_movies', 'new_shows'])) {
