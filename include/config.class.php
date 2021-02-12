@@ -163,7 +163,9 @@ class Config {
     }
 
     private function commaToArray($string) {
-        return array_map('trim', explode(',', $string));
+        $array = array_map('trim', explode(',', $string));
+
+        return (count($array) > 0) ? $array : null;
     }
 
     private function arrayToComma($array) {
