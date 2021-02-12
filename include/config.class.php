@@ -45,7 +45,13 @@ class Config {
                 }
             }
             if ($config['public'] == 1 && $config['category'] == $display_cat) {
-                empty($selected_cat_title) ? $selected_cat_title = '<h2>' . $LNG[$config['category']] . '</h2>' : null;
+                if (empty($selected_cat_title)) {
+                    if (substr($config['category'], 0, 2) == 'L_') {
+                        $selected_cat_title = '<h2>' . $LNG[$config['category']] . '</h2>';
+                    } else {
+                        $selected_cat_title = '<h2>' . $config['category'] . '</h2>';
+                    }
+                }
                 $data_row .= '<div class = "catRow border_blue">';
                 $data_row .= '<div class = "catCell">';
                 if ($config['type'] == 3) {

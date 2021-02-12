@@ -336,8 +336,8 @@ function create_db() {
     $db->insert('config', ['cfg_key' => 'files_perms', 'cfg_value' => '664', 'cfg_desc' => 'L_CFG_FILES_PERMS', 'type' => 1, 'category' => 'L_FILES', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'dir_perms', 'cfg_value' => '775', 'cfg_desc' => 'L_CFG_DIR_PERMS', 'type' => 1, 'category' => 'L_FILES', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'media_ext', 'cfg_value' => 'mkv,avi,mp4', 'cfg_desc' => 'L_CFG_MEDIA_EXT', 'type' => 8, 'category' => 'L_FILES', 'public' => 1]);
-    $db->insert('config', ['cfg_key' => 'move_only_inapp', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_MOVE_ONLY_INAPP', 'type' => 3, 'category' => 'TRANSMISSION', 'public' => 1]);
-    $db->insert('config', ['cfg_key' => 'move_transmission_orphan', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_MOVE_TRANSMISSION_ORPHAN', 'type' => 3, 'category' => 'TRANSMISSION', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'move_only_inapp', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_MOVE_ONLY_INAPP', 'type' => 3, 'category' => 'L_TRANSMISSION', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'move_transmission_orphan', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_MOVE_TRANSMISSION_ORPHAN', 'type' => 3, 'category' => 'L_TRANSMISSION', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'torrent_quality_prefs', 'cfg_value' => '720p,1080p,ANY', 'cfg_desc' => 'L_CFG_TORRENT_QUALITY_PREFS', 'type' => 8, 'category' => 'L_TORRENT', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'torrent_ignore_prefs', 'cfg_value' => 'SCREENER', 'cfg_desc' => 'L_CFG_TORRENT_IGNORE_PREFS', 'type' => 8, 'category' => 'L_TORRENT', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'extra_tags', 'cfg_value' => '', 'cfg_desc' => 'L_CFG_EXTRA_TAGS', 'type' => 8, 'category' => 'L_TORRENT', 'public' => 1]);
@@ -353,7 +353,7 @@ function create_db() {
     $db->insert('config', ['cfg_key' => 'localplayer', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_LOCALPLAYER', 'type' => 3, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'playlocal_root_path', 'cfg_value' => '/home', 'cfg_desc' => 'L_CFG_PLAYLOCAL_ROOT_PATH', 'type' => 1, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'playlocal_share_path', 'cfg_value' => 'file://///192.168.1.1', 'cfg_desc' => 'L_CFG_PLAYLOCAL_SHARE_PATH', 'type' => 1, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
-    $db->insert('config', ['cfg_key' => 'playlocal_share_path', 'cfg_value' => 'smb://192.168.1.1', 'cfg_desc' => 'L_CFG_PLAYLOCAL_SHARE_MOBILE_PATH', 'type' => 1, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'playlocal_share_mobile_path', 'cfg_value' => 'smb://192.168.1.1', 'cfg_desc' => 'L_CFG_PLAYLOCAL_SHARE_MOBILE_PATH', 'type' => 1, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
     /*
       $db->insert('config', ['cfg_key' => 'transcoder_player', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_TRANSCODER_PLAYER', 'type' => 3, 'category' => 'L_PLAY', 'public' => 1]);
       $db->insert('config', ['cfg_key' => 'transcoder_path', 'cfg_value' => '/usr/bin/ffmpeg', 'cfg_desc' => 'L_CFG_TRANSCODER_PATH', 'type' => 1, 'category' => 'L_PLAY', 'public' => 1]);
@@ -512,8 +512,8 @@ function update_db($from) {
         $db->insert('config', ['cfg_key' => 'files_perms', 'cfg_value' => '664', 'cfg_desc' => 'L_CFG_FILES_PERMS', 'type' => 1, 'category' => 'L_FILES', 'public' => 1]);
         $db->insert('config', ['cfg_key' => 'dir_perms', 'cfg_value' => '775', 'cfg_desc' => 'L_CFG_DIR_PERMS', 'type' => 1, 'category' => 'L_FILES', 'public' => 1]);
         $db->insert('config', ['cfg_key' => 'media_ext', 'cfg_value' => 'mkv,avi,mp4', 'cfg_desc' => 'L_CFG_MEDIA_EXT', 'type' => 8, 'category' => 'L_FILES', 'public' => 1]);
-        $db->insert('config', ['cfg_key' => 'move_only_inapp', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_MOVE_ONLY_INAPP', 'type' => 3, 'category' => 'TRANSMISSION', 'public' => 1]);
-        $db->insert('config', ['cfg_key' => 'move_transmission_orphan', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_MOVE_TRANSMISSION_ORPHAN', 'type' => 3, 'category' => 'TRANSMISSION', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'move_only_inapp', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_MOVE_ONLY_INAPP', 'type' => 3, 'category' => 'L_TRANSMISSION', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'move_transmission_orphan', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_MOVE_TRANSMISSION_ORPHAN', 'type' => 3, 'category' => 'L_TRANSMISSION', 'public' => 1]);
         $db->insert('config', ['cfg_key' => 'torrent_quality_prefs', 'cfg_value' => '720p,1080p,ANY', 'cfg_desc' => 'L_CFG_TORRENT_QUALITY_PREFS', 'type' => 8, 'category' => 'L_TORRENT', 'public' => 1]);
         $db->insert('config', ['cfg_key' => 'torrent_ignore_prefs', 'cfg_value' => 'SCREENER', 'cfg_desc' => 'L_CFG_TORRENT_IGNORE_PREFS', 'type' => 8, 'category' => 'L_TORRENT', 'public' => 1]);
         $db->insert('config', ['cfg_key' => 'extra_tags', 'cfg_value' => '', 'cfg_desc' => 'L_CFG_EXTRA_TAGS', 'type' => 8, 'category' => 'L_TORRENT', 'public' => 1]);
@@ -566,34 +566,42 @@ function update_db($from) {
 
 
     if ($from < 9) {
-        /*
-          $db->query('ALTER TABLE library_shows add column mediainfo VARCHAR NULL');
-          $db->query('ALTER TABLE library_movies add column mediainfo VARCHAR NULL');
-          $db->insert('config', ['cfg_key' => 'localplayer', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_LOCALPLAYER', 'type' => 3, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
-          $db->insert('config', ['cfg_key' => 'playlocal_root_path', 'cfg_value' => '/home', 'cfg_desc' => 'L_CFG_PLAYLOCAL_ROOT_PATH', 'type' => 1, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
-          $db->insert('config', ['cfg_key' => 'playlocal_share_path', 'cfg_value' => 'file://///192.168.1.1', 'cfg_desc' => 'L_CFG_PLAYLOCAL_SHARE_PATH', 'type' => 1, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
-          $db->insert('config', ['cfg_key' => 'playlocal_share_path', 'cfg_value' => 'smb://192.168.1.1', 'cfg_desc' => 'L_CFG_PLAYLOCAL_SHARE_MOBILE_PATH', 'type' => 1, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
-          $db->insert('config', ['cfg_key' => 'db_version', 'cfg_value' => 9, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
-          $db->insert('config', ['cfg_key' => 'stats_movies', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
-          $db->insert('config', ['cfg_key' => 'stats_shows', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
-          $db->insert('config', ['cfg_key' => 'stats_shows_episodes', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
-          $db->insert('config', ['cfg_key' => 'stats_total_movies_size', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
-          $db->insert('config', ['cfg_key' => 'stats_total_shows_size', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
-         */
+
+        $db->query('ALTER TABLE library_shows add column mediainfo VARCHAR NULL');
+        $db->query('ALTER TABLE library_movies add column mediainfo VARCHAR NULL');
+        $db->insert('config', ['cfg_key' => 'localplayer', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_LOCALPLAYER', 'type' => 3, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'playlocal_root_path', 'cfg_value' => '/home', 'cfg_desc' => 'L_CFG_PLAYLOCAL_ROOT_PATH', 'type' => 1, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'playlocal_share_path', 'cfg_value' => 'file://///192.168.1.1', 'cfg_desc' => 'L_CFG_PLAYLOCAL_SHARE_PATH', 'type' => 1, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'playlocal_share_mobile_path', 'cfg_value' => 'smb://192.168.1.1', 'cfg_desc' => 'L_CFG_PLAYLOCAL_SHARE_MOBILE_PATH', 'type' => 1, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'db_version', 'cfg_value' => 9, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
+        $db->insert('config', ['cfg_key' => 'stats_movies', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
+        $db->insert('config', ['cfg_key' => 'stats_shows', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
+        $db->insert('config', ['cfg_key' => 'stats_shows_episodes', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
+        $db->insert('config', ['cfg_key' => 'stats_total_movies_size', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
+        $db->insert('config', ['cfg_key' => 'stats_total_shows_size', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
+
         $db->query('UPDATE config SET cfg_value=\'0.0.82\' WHERE cfg_key=\'version\' LIMIT 1');
         $db->update('db_info', ['version' => 9]);
     }
 
 
     /*
-      NEXT UPDATES:
-      remove from wanted ignore field, not need
-     */
-    /*
       if ($from < 10) {
       $db->query('UPDATE db_version  SET cfg_value=\'10\' WHERE cfg_key=\'version\' LIMIT 1');
       $db->query('UPDATE config SET cfg_value=\'83\' WHERE cfg_key=\'version\' LIMIT 1');
       $db->update('db_info', ['version' => 10]);
+      }
+     */
+
+    /*
+      NEXT UPDATES:
+      remove from wanted ignore field, not need
+     */
+    /*
+      if ($from < 11) {
+      $db->query('UPDATE db_version  SET cfg_value=\'11\' WHERE cfg_key=\'version\' LIMIT 1');
+      $db->query('UPDATE config SET cfg_value=\'84\' WHERE cfg_key=\'version\' LIMIT 1');
+      $db->update('db_info', ['version' => 11]);
       }
      */
     return true;

@@ -179,6 +179,7 @@ $LNG = [
     'L_START_ALL' => 'Start All',
     'L_STOP_ALL' => 'Stop All',
     'L_SLOW_THE_FLOW' => 'Slow the flow',
+    'L_TRANSMISSION' => 'Transmission',
     'L_TITLE' => 'Title',
     'L_TORRENT' => 'Torrent',
     'L_TORRENTS' => 'Torrents',
