@@ -32,6 +32,7 @@
     <body>
         <div id="loading_wrap" class="loading"></div>
         <div class="page">
+            <?= $tdata['menu'] ?>
             <?= $tdata['body'] ?>
             <footer>
                 <?= $tdata['footer'] ?>

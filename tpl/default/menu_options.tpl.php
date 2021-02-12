@@ -54,7 +54,7 @@
                 <input class="submit_btn" type="submit" name="rebuild_shows" value="<?= $tdata['L_REESCAN_SHOWS'] ?>"/>
             <?php } ?>
         <?php } ?>
-        <?php if (!empty($tdata['page']) && stristr('news/new_movies/new_shows', $tdata['page'])) { ?>
+        <?php if (!empty($tdata['page']) && in_array($tdata['page'], ['news', 'new_movies', 'new_shows'])) { ?>
             <span> <?= $tdata['L_FILTER_INDEXER'] ?>:</span>
             <select name="sel_indexer" onchange="this.form.submit()">
                 <?= $tdata['sel_indexers'] ?>

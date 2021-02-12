@@ -28,7 +28,7 @@ if (empty($req_page) && $user['id'] > 0) {
 }
 
 
-$body = getMenu();
+$menu = getMenu();
 
 if (!(empty($d_link = $filter->getUrl('download')))) {
 
@@ -54,11 +54,12 @@ if (!(empty($d_link = $filter->getUrl('download')))) {
     $db->addItemUniqField('wanted', $wanted_db, 'hashString');
 }
 
+$body = '';
 if (!isset($req_page) || $req_page == '' || $req_page == 'index') {
     $body .= index_page();
-} else if ($req_page == 'library' || $req_page == 'library_movies' || $req_page == 'library_shows') {
+} else if (in_array($req_page, ['library', 'library_movies', 'library_shows'])) {
     $body .= page_library();
-} else if ($req_page == 'news' || $req_page == 'new_movies' || $req_page == 'new_shows') {
+} else if (in_array($req_page, ['news', 'new_movies', 'new_shows'])) {
     $body .= page_news();
 } else if ($req_page == 'tmdb') {
     $body .= page_tmdb();
@@ -87,7 +88,7 @@ if (!isset($req_page) || $req_page == '' || $req_page == 'index') {
     $body = msg_box($box_msg);
 }
 
-$page = getTpl('html_mstruct', $tdata = ['body' => $body, 'footer' => $footer]);
+$page = getTpl('html_mstruct', $tdata = ['menu' => $menu, 'body' => $body, 'footer' => $footer]);
 $db->close();
 
 echo $page;
