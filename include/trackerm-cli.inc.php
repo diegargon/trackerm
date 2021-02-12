@@ -552,7 +552,7 @@ function wanted_check_title($title, $results) {
             $log->debug('Wanted: Valid title found ' . $item['title']);
             $valid[] = $item;
         } else {
-            $log->debug('Wanted: Title discarded since not exact *' . strtolower($title) . '*:*' . strtolower($title) . '*');
+            $log->debug('Wanted: Title discarded since is not exact *' . strtolower($title) . '*:*' . strtolower($title) . '*');
         }
     }
 
@@ -643,7 +643,7 @@ function wanted_check_flags($wanted, $results) {
         }
     }
 
-    if (!empty($wanted['custom_words_ignore']) && !empty($valid_results) && (count($valid_results) > 0)) {
+    if (!empty($wanted['custom_words_ignore']) && count($valid_results) > 0) {
         $custom_words_ignore = explode(',', $wanted['custom_words_ignore']);
         foreach ($valid_results as $valid_key => $valid_result) {
             foreach ($custom_words_ignore as $word_ignore) {
@@ -691,8 +691,8 @@ function send_transmission($results) {
 }
 
 /*
-  First check empty movies/shows with empty trailer a try update if not update in DB_UPD_MISSING_DELAY
-  Second check no empty trailers movie/shows and update trailer link width DB_UPD_LONG_DELAY
+  1º check movies/shows with empty trailer and update if we already not update in DB_UPD_MISSING_DELAY
+  2º check no empty trailers movie/shows and update trailer link after DB_UPD_LONG_DELAY
  */
 
 function update_trailers() {
@@ -792,7 +792,7 @@ function update_trailers() {
 }
 
 /* That function will be not necesary in the future, since new movies already hashed on rebuild
-  edit: Perhaps is need
+  edit: Perhaps we need it
  *  */
 
 function hash_missing() {
