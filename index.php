@@ -21,7 +21,6 @@ $footer = getFooter();
 if (empty($req_page) && $user['id'] > 0) {
     $index_page = trim(getPrefsItem('index_page'));
     if (!empty($index_page) && $index_page != "index") {
-        //echo "MAINHEADER<br>;";
         header("Location: {$cfg['REL_PATH']}/?page=$index_page");
         exit();
     }
