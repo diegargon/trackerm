@@ -341,7 +341,7 @@ function create_db() {
     $db->insert('config', ['cfg_key' => 'torrent_quality_prefs', 'cfg_value' => '720p,1080p,ANY', 'cfg_desc' => 'L_CFG_TORRENT_QUALITY_PREFS', 'type' => 8, 'category' => 'L_TORRENT', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'torrent_ignore_prefs', 'cfg_value' => 'SCREENER', 'cfg_desc' => 'L_CFG_TORRENT_IGNORE_PREFS', 'type' => 8, 'category' => 'L_TORRENT', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'extra_tags', 'cfg_value' => '', 'cfg_desc' => 'L_CFG_EXTRA_TAGS', 'type' => 8, 'category' => 'L_TORRENT', 'public' => 1]);
-    $db->insert('config', ['cfg_key' => 'media_language_tag', 'cfg_value' => 'SPANISH,ENGLISH,CASTELLANO,ESPAÑOL', 'cfg_desc' => 'L_CFG_media_language_tag', 'type' => 8, 'category' => 'L_TORRENT', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'media_language_tag', 'cfg_value' => 'SPANISH,ENGLISH,CASTELLANO,ESPAÑOL', 'cfg_desc' => 'L_CFG_MEDIA_LANGUAGE_TAG', 'type' => 8, 'category' => 'L_TORRENT', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'download_button', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_DOWNLOAD_BUTTON', 'type' => 3, 'category' => 'L_DISPLAY', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'css', 'cfg_value' => 'default', 'cfg_desc' => 'L_CFG_CSS', 'type' => 1, 'category' => 'L_DISPLAY', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'force_use_passwords', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_FORCE_USE_PASSWORDS', 'type' => 3, 'category' => 'L_SECURITY', 'public' => 1]);
@@ -368,7 +368,7 @@ function create_db() {
 }
 
 /*
- *
+ *  UPDATE PROCESS
  */
 
 function update_db($from) {
@@ -517,7 +517,7 @@ function update_db($from) {
         $db->insert('config', ['cfg_key' => 'torrent_quality_prefs', 'cfg_value' => '720p,1080p,ANY', 'cfg_desc' => 'L_CFG_TORRENT_QUALITY_PREFS', 'type' => 8, 'category' => 'L_TORRENT', 'public' => 1]);
         $db->insert('config', ['cfg_key' => 'torrent_ignore_prefs', 'cfg_value' => 'SCREENER', 'cfg_desc' => 'L_CFG_TORRENT_IGNORE_PREFS', 'type' => 8, 'category' => 'L_TORRENT', 'public' => 1]);
         $db->insert('config', ['cfg_key' => 'extra_tags', 'cfg_value' => '', 'cfg_desc' => 'L_CFG_EXTRA_TAGS', 'type' => 8, 'category' => 'L_TORRENT', 'public' => 1]);
-        $db->insert('config', ['cfg_key' => 'media_language_tag', 'cfg_value' => 'SPANISH,ENGLISH,CASTELLANO,ESPAÑOL', 'cfg_desc' => 'L_CFG_media_language_tag', 'type' => 8, 'category' => 'L_TORRENT', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'media_language_tag', 'cfg_value' => 'SPANISH,ENGLISH,CASTELLANO,ESPAÑOL', 'cfg_desc' => 'L_CFG_MEDIA_LANGUAGE_TAG', 'type' => 8, 'category' => 'L_TORRENT', 'public' => 1]);
         $db->update('db_info', ['version' => 5]);
     }
 
@@ -550,7 +550,6 @@ function update_db($from) {
         $db->update('db_info', ['version' => 7]);
     }
 
-
     if ($from < 8) {
         $db->query('UPDATE users SET isAdmin=\'1\' WHERE username=\'default\'');
         $db->query('ALTER TABLE users add column disable INTEGER NULL');
@@ -564,9 +563,7 @@ function update_db($from) {
         $db->update('db_info', ['version' => 8]);
     }
 
-
     if ($from < 9) {
-
         $db->query('ALTER TABLE library_shows add column mediainfo VARCHAR NULL');
         $db->query('ALTER TABLE library_movies add column mediainfo VARCHAR NULL');
         $db->insert('config', ['cfg_key' => 'localplayer', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_LOCALPLAYER', 'type' => 3, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
@@ -579,6 +576,9 @@ function update_db($from) {
         $db->insert('config', ['cfg_key' => 'stats_shows_episodes', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
         $db->insert('config', ['cfg_key' => 'stats_total_movies_size', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
         $db->insert('config', ['cfg_key' => 'stats_total_shows_size', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
+        $db->update('config', ['cfg_desc' => 'L_CFG_MEDIA_LANGUAGE_TAG'], ['cfg_key' => ['value' => 'media_language_tag']], 'LIMIT 1');
+        $db->update('config', ['category' => 'L_TRANSMISSION'], ['cfg_key' => ['value' => 'move_only_inapp']]);
+        $db->update('config', ['category' => 'L_TRANSMISSION'], ['cfg_key' => ['value' => 'move_transmission_orphan']]);
 
         $db->query('UPDATE config SET cfg_value=\'0.0.82\' WHERE cfg_key=\'version\' LIMIT 1');
         $db->update('db_info', ['version' => 9]);
