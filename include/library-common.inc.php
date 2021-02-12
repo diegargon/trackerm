@@ -221,6 +221,8 @@ function submit_ident($type, $items) {
     global $db;
 
     foreach ($items as $my_id => $db_id) {
+        $update_fields = [];
+
         if (!empty($db_id)) {
             $db_item = mediadb_getByLocalId($db_id);
             if (!empty($db_item['title'])) {
