@@ -353,7 +353,7 @@ function create_db() {
     $db->insert('config', ['cfg_key' => 'localplayer', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_LOCALPLAYER', 'type' => 3, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'playlocal_root_path', 'cfg_value' => '/home', 'cfg_desc' => 'L_CFG_PLAYLOCAL_ROOT_PATH', 'type' => 1, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'playlocal_share_path', 'cfg_value' => 'file://///192.168.1.1', 'cfg_desc' => 'L_CFG_PLAYLOCAL_SHARE_WINDOWS_PATH', 'type' => 1, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
-    $db->insert('config', ['cfg_key' => 'playlocal_share_linux_path', 'cfg_value' => 'smb://192.168.1.1', 'cfg_desc' => 'L_CFG_playlocal_share_linux_path', 'type' => 1, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'playlocal_share_linux_path', 'cfg_value' => 'smb://192.168.1.1', 'cfg_desc' => 'L_CFG_PLAYLOCAL_SHARE_LINUX_PATH', 'type' => 1, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
     /*
       $db->insert('config', ['cfg_key' => 'transcoder_player', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_TRANSCODER_PLAYER', 'type' => 3, 'category' => 'L_PLAY', 'public' => 1]);
       $db->insert('config', ['cfg_key' => 'transcoder_path', 'cfg_value' => '/usr/bin/ffmpeg', 'cfg_desc' => 'L_CFG_TRANSCODER_PATH', 'type' => 1, 'category' => 'L_PLAY', 'public' => 1]);
@@ -572,7 +572,7 @@ function update_db($from) {
         $db->insert('config', ['cfg_key' => 'localplayer', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_LOCALPLAYER', 'type' => 3, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
         $db->insert('config', ['cfg_key' => 'playlocal_root_path', 'cfg_value' => '/home', 'cfg_desc' => 'L_CFG_PLAYLOCAL_ROOT_PATH', 'type' => 1, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
         $db->insert('config', ['cfg_key' => 'playlocal_share_path', 'cfg_value' => 'file://///192.168.1.1', 'cfg_desc' => 'L_CFG_PLAYLOCAL_SHARE_WINDOWS_PATH', 'type' => 1, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
-        $db->insert('config', ['cfg_key' => 'playlocal_share_linux_path', 'cfg_value' => 'smb://192.168.1.1', 'cfg_desc' => 'L_CFG_playlocal_share_linux_path', 'type' => 1, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'playlocal_share_linux_path', 'cfg_value' => 'smb://192.168.1.1', 'cfg_desc' => 'L_CFG_PLAYLOCAL_SHARE_LINUX_PATH', 'type' => 1, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
         $db->insert('config', ['cfg_key' => 'db_version', 'cfg_value' => 9, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
         $db->insert('config', ['cfg_key' => 'stats_movies', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
         $db->insert('config', ['cfg_key' => 'stats_shows', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);

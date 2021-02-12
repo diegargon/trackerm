@@ -15,7 +15,7 @@ global $user;
 
 if (isset($_SESSION['uid']) && $_SESSION['uid'] > 0) {
     $user = get_profile($_SESSION['uid']);
-    if ($user['sid'] != session_id()) {
+    if (empty($user['sid']) || $user['sid'] != session_id()) {
         $user['id'] = -1;
     }
 } else if (!empty($_COOKIE['uid']) && !empty($_COOKIE['sid'])) {
