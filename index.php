@@ -55,37 +55,18 @@ if (!(empty($d_link = $filter->getUrl('download')))) {
 }
 
 $body = '';
-if (!isset($req_page) || $req_page == '' || $req_page == 'index') {
-    $body .= page_index();
-} else if (in_array($req_page, ['library', 'library_movies', 'library_shows'])) {
-    $body .= page_library();
-} else if (in_array($req_page, ['news', 'new_movies', 'new_shows'])) {
-    $body .= page_news();
-} else if ($req_page == 'tmdb') {
-    $body .= page_tmdb();
-} else if ($req_page == 'torrents') {
-    $body .= page_torrents();
-} else if ($req_page == 'view') {
-    $body .= page_view();
-} else if ($req_page == 'wanted') {
-    $body .= page_wanted();
-} else if ($req_page == 'identify') {
-    $body .= page_identify();
-} else if ($req_page == 'download') {
-    page_download();
-} else if ($req_page == 'localplayer') {
-    page_localplayer();
-} else if ($req_page == 'transmission') {
-    $body .= page_transmission();
-} else if ($req_page == 'config' && $user['isAdmin']) {
-    $body .= page_config();
-} else if ($req_page == 'login') {
-    $body = page_login();
-} else if ($req_page == 'logout') {
-    page_logout();
-} else {
-    $box_msg = ['title' => $LNG['L_ERROR'] . ' : ' . $LNG['L_NOEXISTS'], 'body' => $LNG['L_PAGE_NOEXISTS']];
-    $body = msg_box($box_msg);
+$valid_pages = ['index', 'library', 'news', 'tmdb', 'torrents', 'view', 'wanted', 'identify',
+    'download', 'localplayer', 'identify', 'download', 'transmission', 'config', 'login', 'logout'];
+
+(!isset($req_page) || $req_page == '') ? $req_page = 'index' : null;
+(in_array($req_page, ['library_movies', 'library_shows'])) ? $req_page = 'library' : null;
+(in_array($req_page, ['new_movies', 'new_shows'])) ? $req_page = 'news' : null;
+($req_page == 'config' && $user['isAdmin'] != 1) ? $req_page = 'index' : null;
+($req_page == 'localplayer' && !$cfg['localplayer']) ? $req_page = 'index' : null;
+
+if (in_array($req_page, $valid_pages)) {
+    $page_func = 'page_' . $req_page;
+    $body .= $page_func();
 }
 
 $page = getTpl('html_mstruct', $tdata = ['menu' => $menu, 'body' => $body, 'footer' => $footer]);
