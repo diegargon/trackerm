@@ -568,10 +568,10 @@ function page_localplayer() {
     header("Expires: 0");
     print "#EXTM3U\r\n";
     print "#EXTINF:123, {$item['title']}\r\n";
-    if (isMobile()) {
-        print $cfg['playlocal_share_mobile_path'] . $path . "\r\n";
+    if (isMobile() || isLinux()) {
+        print $cfg['playlocal_share_linux_path'] . $path . "\r\n";
     } else {
-        print $cfg['playlocal_share_path'] . $path . "\r\n";
+        print $cfg['playlocal_share_windows_path'] . $path . "\r\n";
     }
     print "#EXT-X-ENDLIST";
     exit(0);
