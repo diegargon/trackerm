@@ -177,6 +177,9 @@ function check_file_encrypt($type, $file) {
 
 function file_hash($file) {
 
+    if (!file_exists($file)) {
+        return false;
+    }
     $length = 4096;
 
     $fp = fopen($file, 'rb');
