@@ -630,6 +630,25 @@ function wanted_check_flags($wanted, $results) {
         $valid_results = $noignore;
     }
 
+    if (!empty($cfg['torrent_require_or_prefs']) && (count($cfg['torrent_require_or_prefs']) > 0) && !empty($valid_results) && (count($valid_results) > 0)) {
+
+        foreach ($valid_results as $valid_key => $valid_result) {
+            $match = 0;
+            $words_checked = '';
+            foreach ($cfg['torrent_require_or_prefs'] as $or_prefs) {
+                if (strpos($valid_result['title'], $or_prefs)) {
+                    $match = 1;
+                    break;
+                } else {
+                    empty($words_checked) ? $words_checked = $or_prefs : $words_checked .= ',' . $or_prefs;
+                }
+            }
+            if ($match === 0) {
+                $log->debug('Wanted: Drop valid item by global OR ' . $valid_result['title'] . ' any required words ' . $words_checked);
+                unset($valid_results[$valid_key]);
+            }
+        }
+    }
 
     if (!empty($wanted['custom_words_require']) && !empty($valid_results) && (count($valid_results) > 0)) {
         $custom_words_require = explode(',', $wanted['custom_words_require']);

@@ -12,17 +12,45 @@
     <div class="wanted_list">
         <h2><?= $tdata['L_WANTED'] ?></h2>
         <div class="wanted_opt_global">
-            <div class="global_title"><?= $tdata['L_GLOBAL_TAGS'] ?></div>
+            <span class="global_title"><?= $tdata['L_GLOBAL_QUALITY_TAGS'] ?></span>
             <?php
-            foreach ($cfg['torrent_quality_prefs'] as $quality) {
-                ?>
-                <span class="tag_quality"><?= $quality ?></span>
-                <?php
+            if (!empty($tdata['torrent_quality_prefs'])) {
+                foreach ($tdata['torrent_quality_prefs'] as $quality) {
+                    ?>
+                    <span class="tag_quality"><?= $quality ?></span>
+                    <?php
+                }
             }
-            foreach ($cfg['torrent_ignore_prefs'] as $ignores) {
+            ?>
+
+            <span class="global_title"><?= $tdata['L_GLOBAL_TAGS'] ?></span>
+            <?php
+            if (!empty($tdata['torrent_ignore_prefs'])) {
+                foreach ($tdata['torrent_ignore_prefs'] as $ignores) {
+                    ?>
+                    <span class="tag_ignore"><?= $ignores ?></span>
+                    <?php
+                }
+            }
+            if (!empty($tdata['torrent_require_prefs'])) {
+                foreach ($tdata['torrent_require_prefs'] as $require) {
+                    ?>
+                    <span class="tag_require"><?= $require ?></span>
+                    <?php
+                }
+            }
+
+            if (!empty($tdata['torrent_require_or_prefs'])) {
                 ?>
-                <span class="tag_ignore"><?= $ignores ?></span>
-            <?php } ?>
+                <span class="global_title"><?= $tdata['L_ANY_TAG'] ?></span>
+                <?php
+                foreach ($tdata['torrent_require_or_prefs'] as $or_require) {
+                    ?>
+                    <span class="tag_require"><?= $or_require ?></span>
+                    <?php
+                }
+            }
+            ?>
         </div>
         <div class="wanted_list_container">
             <div class="divTableWanted">
@@ -40,7 +68,7 @@
                     <div class="divTableCellWanted">TMDB</div>
                     <div class="divTableCellWanted"><?= $tdata['L_TITLE'] ?></div>
                 </div>
-                <?= isset($tdata['wanted_list']) ? $tdata['wanted_list'] : null ?>
+<?= isset($tdata['wanted_list']) ? $tdata['wanted_list'] : null ?>
             </div>
         </div>
     </div>

@@ -1,13 +1,30 @@
 ## Latest / News (Relevant)
 
-[0X/02] Add localplayer button (must activate in configuration)
+[13/02] Added Global search Tags for Wanted
+        Rewrite partially Global tags, configuration are under Wanted and are relative a wanted and his searchs.
+        These are:
+        "Global Quality" (old), no change, when trackerm search for a wanted item get the preferer quality 
+or ANY if is set and  not found a specific quality (order matters).
+        "Global Ignore Keywords" (old). Without changes too. If found any of this keywords in the title will not download
+        "Global Require Keywords" (new). Title must have ALL the keywords if not, not will download (caution).
+        "Global Require OR" (new). Title must have at least ONE of this keywords. if not, not will
+download. Usefull (perhaps) for language like force only download files that have in the title the words ENGLISH or ENG.  SPANISH or ESPAÑOL or CASTELLANO.
+Remeber: if you set this, at least one keyword need match for download.
+
+[13/02] DROP the option for language tagging, you can use "Extra Keywords" for tag only languages or  "Global Require OR" if you want 'wanted items' with
+any of selected  language keywords in the title (or both).
+[13/02] Fixed: "Tag Extra Keywords" (in main configuration). trackerm when rename to your library miss any word  you
+ want in the title, add here the keywords, will search in the title and tag (this config option not affect searchs just tag). 
+Beware: if you have a temporaly linked avi and add/remove a keyword will create another link again (duplicate). 
+[12/02] Forget warn: i adding weeks ago lots of config fields without a submit button (ex: in submenu or wanted), for save the input you need press tab or click out.
+[11/02] Add localplayer button (must activate in configuration)
         LocalPlayer will add a button in your library for load locally a playlist with the media link to your server share directory (samba) for open with vlc
-        and play it without need download. Your system must have access to the samba folder in the server.
-        Ubuntu: if you have a error check on input/codecs Stream filters -> prefetch -> Read size = 16384
+and play it without need download. Your system must have access to the samba folder in the server.
+Ubuntu: if you have a error check on input/codecs Stream filters -> prefetch -> Read size = 16384
 [08/02] Add user/admin options, the only default admin profile is 'default' you must login and modify your users if you want another be admin
-    admin: can add/modify/delete users, view/change config options
-    hidde login: not show on login screen
-    disable: disable user, can't login
+admin: can add/modify/delete users, view/change config options
+hidde login: not show on login screen
+disable: disable user, can't login
 [08/02] Added filters to new torrents (submenu)
 [05/02] Add config var for specify warn time slow indexers
 [04/02] Added check/warn to status message window when detect slow indexers
@@ -25,19 +42,3 @@
         Fix bug not working pager on view extra torrents.
 [18/12] Fixed recursive directory bug that prevent do automatically file scan
         Now trackerm-cli autoscan the library for new items when exec
-[18/12] Improve wanted, now search for exact title  to avoid wrong downloads
-[17/12] Important! trackerm change how handle wanted shows downloads for improve in next releases, you must remove manually the 
-        shows/episodes in your wanted list and add again. If not the Automatic download service can't find your wanted shows.
-        Wanted Movies are ok.
-[17/12] Wanted: Removed ignore button, now for ignore select "never" on day check
-[16/12] Some fixed, upgrade the db, and add trailers to movies
-[08/12] Fixed bug when moving files if the completed torrent not use a directory (need fix when this file is rar, rar only works
-        it container in a directory
-[05/12] Fixed bug transmission id
-[04/12] Bug: I programming  the wanted tool using  the transmission id, but if we restart transmission-daemon the ids change. 
-        and would tangle all, there will be a fix in 1/2 days.
-[04/12] Next 1/2 weeks probably only fix and rewrite the messy code
-[04/12] Data now is save to sqllite, you need rebuild your library
-[02/12] Finnally begin working (slow) for use a real database, the winner was sqlite3. That going to take some weeks.
-[02/12] Begin working too in some basic security checks
-[01/12] Change and simplify messy wanted code. You must remove cache/wanted.db (you lost all wanted items)

@@ -480,7 +480,11 @@ function page_config() {
             $key = array_key_first($_POST['config_add']);
             $value = $_POST['add_item'][array_key_first($_POST['config_add'])];
             $value = $filter->varString($value);
-            $id = $_POST['config_id'][array_key_first($_POST['config_add'])];
+            if (isset($_POST['config_id'][array_key_first($_POST['config_add'])])) {
+                $id = $_POST['config_id'][array_key_first($_POST['config_add'])];
+            } else {
+                $id = null;
+            }
             empty($_POST['add_before'][array_key_first($_POST['config_add'])]) ? $before = 0 : $before = 1;
             $config->addCommaElement($key, trim($value), $id, $before);
         }

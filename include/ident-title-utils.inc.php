@@ -10,7 +10,6 @@
 !defined('IN_WEB') ? exit : true;
 
 function getFileTitle($file) {
-    global $cfg;
 
     /* Better way? */
 
@@ -18,11 +17,9 @@ function getFileTitle($file) {
     $regex_cs = '/^(?:';
     $regex_cs .= '(?!SPANISH)';
     $regex_cs .= '(?!ENGLISH)';
-    if (!empty($cfg['media_language_tag']) && count($cfg['media_language_tag']) > 0) {
-        foreach ($cfg['media_language_tag'] as $custom_media_tag) {
-            $regex_cs .= '(?!' . strtoupper($custom_media_tag) . ')';
-        }
-    }
+    $regex_cs .= '(?!CASTELLANO)';
+    $regex_cs .= '(?!ESPAÑOL)';
+    $regex_cs .= '(?!LATINO)';
     $regex_cs .= '.)*/';
     $matches = [];
     preg_match($regex_cs, $file, $matches);
@@ -60,8 +57,6 @@ function getFileTitle($file) {
     $regex .= '(?!HDRip)'; //HDRip
     $regex .= '(?!WEBRip)'; //WebRip
     $regex .= '(?!Bluray)'; //Bluray
-    $regex .= '(?!\[spanish\])';
-    $regex .= '(?!\[english\])';
     $regex .= '(?!multi\senglish)'; // multi english
     $regex .= '(?!S\d{2}E\d{2})'; // SXXEXX
     $regex .= '(?!S\d{2}\s+E\d{2})'; // SXX EXX
@@ -70,12 +65,6 @@ function getFileTitle($file) {
     $regex .= '(?!\.mkv)'; //.mkv
     $regex .= '(?!\.avi)'; //.avi
     $regex .= '(?!\.mp4)'; //.mp4
-
-    if (!empty($cfg['media_language_tag']) && count($cfg['media_language_tag']) > 0) {
-        foreach ($cfg['media_language_tag'] as $custom_media_tag) {
-            $regex .= '(?!\[' . strtoupper($custom_media_tag) . '\])';
-        }
-    }
 
     /* REGEX TERMINATION */
     $regex .= '.)*/i';
@@ -224,19 +213,20 @@ function getFileTags($file_name) {
     global $cfg;
     $tags = '';
 
+    if (isset($cfg['extra_tags']) && count($cfg['extra_tags']) > 0) {
+        foreach ($cfg['extra_tags']as $extra_tag) {
+            if (stripos($file_name, $extra_tag) !== false) {
+                $tags .= '[' . $extra_tag . ']';
+            }
+        }
+    }
     //Would tag wrong in media where year is part of title and not a tag
     //tag wrong when Season/Episode its something like 1501
     $year = getFileYear($file_name);
     if (!empty($year)) {
         $tags .= '[' . $year . ']';
     }
-    if (isset($cfg['media_language_tag']) && count($cfg['media_language_tag']) > 0) {
-        foreach ($cfg['media_language_tag'] as $lang_tag) {
-            if (stripos($file_name, $lang_tag) !== false) {
-                $tags .= '[' . $lang_tag . ']';
-            }
-        }
-    }
+
     if (stripos($file_name, 'vose') !== false) {
         $tags .= "[VOSE]";
     }
@@ -323,13 +313,6 @@ function getFileTags($file_name) {
             $tags .= "4K ";
         }
         $tags .= "UHD]";
-    }
-    if (isset($cfg['extra_tag']) && count($cfg['extra_tag']) > 0) {
-        foreach ($cfg['extra_tags']as $extra_tag) {
-            if (stripos($file_name, $extra_tag) !== false) {
-                $tags .= '[' . $extra_tag . ']';
-            }
-        }
     }
 
     return $tags;

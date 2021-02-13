@@ -4,6 +4,7 @@ TODO
     [FIX] Clean wanted.db/direct torrents that was delete outside app   
     [FIX] If we delete a complete torrent and CLI create the link to library, we got a problem , must check/remove the link
     [IMPROVE] Indexers to config
+    [FIX/CHECK] do not contemplate yet what to do if tmdb not found any results.
 [MED
     [NEW] Escaneo de directorios a más para avi sin ser torrents. $cfg['SCAN_MEDIA_DIR'] = 1;
     [NEW/IMPROVE] actualizacion automatica cada semana de titulos de episodio a excepcion de que el show sea "ended"
@@ -18,8 +19,9 @@ TODO
      [CHANGE?] Clean title: remove words <=2 chars?
      [IMPROVE]On torrent new/search get release data from tmdb and show it, get local database if not request database
     [FIX] Security
+    [IMPROVE] get mediainfo and show time at least
 [VERY LOW]      
-    [IMPROVE] Pagination actually we get all results and do a array_slice, now with SQL database we can  do that better.    
+    [IMPROVE] Pagination: actually we get all results and do a array_slice, now with SQL database we can  do that better.    
     [FIX/IMPROVE] Normalize dates        
     [IMPROVE] Wanted Serie, poner en seguimiento "series" o sea nuevos capitulos de series.
             Added wanted field track_show for add and keep track of show (automatically download current episodes of a show each week)
@@ -30,7 +32,6 @@ TODO
     [IMPROVE] Too much messy code...
 [BACKLOG]
 
-    [NEW] mediainfo (read file metadata)
     [CHANGE] Change actual Transmission rpc api to something basic, since some basic is enough and the actual have alot of deps 
     [NEW/IMPROVE] En el select de identificar estaria bien mostrar las caractulas al poner encima
     [NEW] opcional: mostrar otros ratigns, filmaffinity, imdb

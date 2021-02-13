@@ -196,7 +196,7 @@ button {
 }
 
 .divTableCellWanted select{
-    height:19px;
+    height:24px;
 }
 
 .divTableCellEpisodes:first-of-type, .divTableCellWanted:first-of-type {
@@ -430,14 +430,15 @@ button {
 
 .wanted_page {
     width: 100%;
-    line-height: 2;
 }
 
 .wanted_title {
     font-weight: bold;
 }
 
-.wanted_list_container {}
+.wanted_list_container {
+    line-height: 2;    
+}
 
 .wanted_list_row {
     padding: 10px 1px 10px 1px;
@@ -462,9 +463,7 @@ button {
 }
 
 .global_title {
-    float:left;
     font-weight: bold;
-    /* margin-right: 5px; */
 }
 
 .tag_title {
@@ -475,8 +474,11 @@ button {
 .tag_ignore {
     border: 3px solid #ff5b5b;
 }
+.tag_require {
+    border: 3px solid green;
+}
 
-.tag_quality, .tag_ignore, .tag_type, .tag_day, .tag_id, .tag_added, .tag_title, .tag_state {
+.tag_quality, .tag_require, .tag_ignore, .tag_type, .tag_day, .tag_id, .tag_added, .tag_title, .tag_state {
     /* margin: 1px 2px 1px 2px; */
     padding: 6px 10px 6px 10px;
     margin-right: 4px;
