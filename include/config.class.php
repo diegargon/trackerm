@@ -163,8 +163,10 @@ class Config {
     }
 
     private function commaToArray($string) {
+        if (empty($string)) {
+            return null;
+        }
         $array = array_map('trim', explode(',', $string));
-
         return (count($array) > 0) ? $array : null;
     }
 
