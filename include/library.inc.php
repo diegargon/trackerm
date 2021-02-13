@@ -10,7 +10,7 @@
 !defined('IN_WEB') ? exit : true;
 
 function show_my_movies() {
-    global $db, $cfg;
+    global $db;
 
     $page = '';
 
@@ -45,7 +45,7 @@ function show_my_movies() {
 }
 
 function show_my_shows() {
-    global $db, $cfg;
+    global $db;
 
     $page = '';
     $topt = [];
