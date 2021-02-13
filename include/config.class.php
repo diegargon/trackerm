@@ -23,8 +23,10 @@ class Config {
                 $cfg[$config['cfg_key']] = $config['cfg_value'];
             } else {
                 $split_values = $this->commaToArray($config['cfg_value']);
-                foreach ($split_values as $split_value) {
-                    $cfg[$config['cfg_key']][] = $split_value;
+                if ($split_values) {
+                    foreach ($split_values as $split_value) {
+                        $cfg[$config['cfg_key']][] = $split_value;
+                    }
                 }
             }
         }
