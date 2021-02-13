@@ -150,7 +150,7 @@ class Config {
                 break;
             }
         }
-        if (isset($element_value)) {
+        if ($id != null && !empty($element_value)) {
             $elements_array = $this->commaToArray($element_value);
             if ($before) {
                 $where_id = $id - 1;
@@ -159,8 +159,10 @@ class Config {
                 $where_id = $id + 1;
             }
             array_splice($elements_array, $where_id, 0, $value);
+            $comma_elements = $this->arrayToComma($elements_array);
+        } else {
+            $comma_elements = $value;
         }
-        $comma_elements = $this->arrayToComma($elements_array);
 
         $toSave[$key] = $comma_elements;
         $this->saveKeys($toSave);
