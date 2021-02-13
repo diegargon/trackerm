@@ -2,7 +2,7 @@ TODO
 
 [HIGH]   
     [FIX] Clean wanted.db/direct torrents that was delete outside app   
-    [FIX] If we delete a complete torrent and CLI create the link to library, we got a problem , must check/remove the link
+    [FIX] If we delete a complete torrent and CLI create the link to library, we got a problem , trackerm-cli must check/remove the links in the llbrary paths
     [IMPROVE] Indexers to config
     [FIX/CHECK] do not contemplate yet what to do if tmdb not found any results.
 [MED
