@@ -2,4 +2,5 @@
 /E
 /old/
 /nbproject/
-/include/frontend.class.php
+/include/Tfrontend.class.php
+/include/Thtml.class.php
