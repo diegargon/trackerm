@@ -31,6 +31,8 @@ transmission_scan();
 $log->debug("Wanted work...");
 wanted_work();
 
+check_broken_files_linked();
+
 rebuild('movies', $cfg['MOVIES_PATH']);
 sleep(1);
 rebuild('shows', $cfg['SHOWS_PATH']);

@@ -836,6 +836,24 @@ function hash_missing() {
     $log->debug($hashlog);
 }
 
+function check_broken_files_linked() {
+    global $cfg;
+    $paths = [];
+
+    if (is_array($cfg['MOVIES_PATH'])) {
+        $paths = array_merge($paths, $cfg['MOVIES_PATH']);
+    } else {
+        $paths[] = $cfg['MOVIES_PATH'];
+    }
+
+    if (is_array($cfg['SHOWS_PATH'])) {
+        $paths = array_merge($paths, $cfg['SHOWS_PATH']);
+    } else {
+        $paths[] = $cfg['SHOWS_PATH'];
+    }
+    RemoveBrokenMedialinks($paths, $cfg['media_ext']);
+}
+
 function leave($msg = false) {
     global $log;
 

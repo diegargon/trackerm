@@ -10,7 +10,7 @@
 // https://www.php.net/manual/en/function.glob.php#111217
 !defined('IN_WEB') ? exit : true;
 
-function findFiles($directory, $extensions = []) {
+function findMediaFiles($directory, $extensions = []) {
     $content = getDirContents($directory);
     $files = [];
     foreach ($content as $file) {
@@ -20,6 +20,22 @@ function findFiles($directory, $extensions = []) {
         }
     }
     return $files;
+}
+
+function RemoveBrokenMedialinks($paths, $extensions = []) {
+    $links = [];
+    $files = [];
+
+    foreach ($paths as $path) {
+        $files = array_merge($files, findMediaFiles($path, $extensions));
+    }
+
+    foreach ($files as $file) {
+        if (is_link($file) && !file_exists($file)) {
+            unlink($file);
+        }
+    }
+    return $links;
 }
 
 function getFileExt($file) {

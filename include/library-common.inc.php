@@ -26,7 +26,7 @@ function _rebuild($media_type, $path) {
     $log->debug("Rebuild $media_type called");
 
     $items = [];
-    $files = findfiles($path, $cfg['media_ext']);
+    $files = findMediaFiles($path, $cfg['media_ext']);
 
     if ($media_type == 'movies') {
         $library_table = 'library_movies';
