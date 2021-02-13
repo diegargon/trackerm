@@ -15,7 +15,7 @@ function show_my_movies() {
     $page = '';
 
     if (!empty($_POST['mult_movies_select'])) {
-        user_submit_ident('movies', $_POST['mult_movies_select']);
+        submit_ident('movies', $_POST['mult_movies_select']);
     }
     if (!empty($_GET['ident_delete']) && ($_GET['media_type'] == 'movies')) {
         $db->deleteItemById('library_movies', $_GET['ident_delete']);
@@ -63,7 +63,7 @@ function show_my_shows() {
 
     if ($shows != false) {
 
-        $page .= identify_media('shows', $shows);
+        $page .= show_identify_media('shows', $shows);
 
         $shows_identifyed = [];
 
