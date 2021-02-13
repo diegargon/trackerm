@@ -80,7 +80,7 @@ function wanted_movies($wanted_id) {
     $item = mediadb_getByDbId('movies', $wanted_id);
 
     if ($item === false) {
-        $log->debug('Wanted, seems that movie id not exists in the db ');
+        $log->debug('Wanted, seems the movie id not exists in the db ');
         return false;
     }
 
