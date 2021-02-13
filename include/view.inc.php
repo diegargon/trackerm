@@ -292,6 +292,9 @@ function view_seasons($id, $update = false) {
             $items = mediadb_getSeasons($id);
         }
     }
+    if (empty($item) && empty($items)) {
+        return false;
+    }
     !empty($item) ? $seasons = $item['seasons'] : $seasons = $items[0]['seasons'];
     !empty($item) ? $episodes = $item['episodes'] : $episodes = $items[0]['episodes'];
 
