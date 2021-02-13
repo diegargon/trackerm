@@ -13,7 +13,7 @@ function themoviedb_searchMovies($search) {
     global $cfg;
 
     !isset($cfg['TMDB_LANG']) ? $cfg['TMDB_LANG'] = $cfg['LANG'] : null;
-    //$search = preg_replace('/\d{4}/', '', $search); //moviedb no encuentra con año si va en el titulo lo quitamos
+
     $query = str_replace(' ', '+', trim($search));
 
     $url = 'https://api.themoviedb.org/3/search/movie?api_key=' . $cfg['db_api_token'] . '&query=' . $query . '&language=' . $cfg['TMDB_LANG'];
@@ -30,7 +30,6 @@ function themoviedb_searchShows($search) {
 
     !isset($cfg['TMDB_LANG']) ? $cfg['TMDB_LANG'] = $cfg['LANG'] : null;
 
-    //$search = preg_replace('/\d{4}/', '', $search); //moviedb no encuentra con año si va en el titulo lo quitamos
     $query = str_replace(' ', '+', trim($search));
 
     $url = 'https://api.themoviedb.org/3/search/tv?api_key=' . $cfg['db_api_token'] . '&query=' . $query . '&language=' . $cfg['TMDB_LANG'];
@@ -230,7 +229,7 @@ function themoviedb_getByLocalId($id) {
     return $item ? $item : false;
 }
 
-function themoviedb_getByDbId($media_type, $id) {
+function themoviedb_getFromCache($media_type, $id) {
     global $db, $cfg, $log;
 
     !isset($cfg['TMDB_LANG']) ? $cfg['TMDB_LANG'] = $cfg['LANG'] : null;
