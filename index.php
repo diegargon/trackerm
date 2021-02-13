@@ -26,8 +26,7 @@ if (empty($req_page) && $user['id'] > 0) {
     }
 }
 
-
-$menu = getMenu();
+$req_page != 'login' ? $menu = getMenu() : $menu = '';
 
 if (!(empty($d_link = $filter->getUrl('download')))) {
 
