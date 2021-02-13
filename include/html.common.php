@@ -232,7 +232,7 @@ function pager($npage, $nitems, &$topt) {
         (!empty($_GET['more_torrents'])) ? $iurl .= '&more_torrents=1' : null;
         (!empty($filter->getUtf8('search_movie_db'))) ? $iurl .= '&search_movie_db=' . $filter->getUtf8('search_movie_db') : null;
         (!empty($filter->getUtf8('search_movies'))) ? $iurl .= '&search_movies=' . $filter->getUtf8('search_movies') : null;
-        (!empty($filter->getUtf8('search_shows'))) ? $iurl .= '&search_shows=' . $filter->getUtf8('search_movies') : null;
+        (!empty($filter->getUtf8('search_shows'))) ? $iurl .= '&search_shows=' . $filter->getUtf8('search_shows') : null;
 
         for ($i = 1; $i <= ceil($num_pages); $i++) {
             if (($i == 1 || $i == $num_pages || $i == $npage) ||
