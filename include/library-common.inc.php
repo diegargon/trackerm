@@ -128,6 +128,11 @@ function auto_ident_by_search($media_type, $ids) {
 
     $log->debug("Entro en auto_ident");
     //TODO: search tmdb if found result identify with the first result
+
+    foreach ($ids as $id) {
+
+    }
+    //auto_ident($media_type, $item_history['themoviedb_id'], $id);
     return true;
 }
 
@@ -293,6 +298,7 @@ function check_history($media_type, $ids) {
     }
 }
 
+//TODO: check if we can merge auto_ident and submit_ident
 function auto_ident($media_type, $online_db_id, $id) {
     global $db;
 
