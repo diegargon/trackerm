@@ -347,9 +347,7 @@ function page_identify() {
     }
 
     if (isset($_POST['identify']) && $filter->postInt('selected')) {
-
-        submit_ident($media_type, $filter->postInt('selected'));
-
+        ident_by_idpairs($media_type, $filter->postInt('selected'));
         return msg_box($msg = ['title' => $LNG['L_SUCCESS'], 'body' => $LNG['L_ADDED_SUCCESSFUL']]);
     }
     !empty($_POST['submit_title']) ? $submit_title = $filter->postUtf8('submit_title') : $submit_title = $item['predictible_title'];
@@ -367,14 +365,14 @@ function page_identify() {
 
             foreach ($db_media as $db_item) {
                 //var_dump($db_item);
-                if (!empty($filter->postInt('selected')) && ($db_item['id'] == current($filter->postInt('selected')))) {
+                if (!empty($filter->postInt('selected')) && ($db_item['themoviedb_id'] == current($filter->postInt('selected')))) {
                     $selected = 'selected';
                     $item_selected = $db_item;
                 } else {
                     $selected = '';
                 }
                 $year = trim(substr($db_item['release'], 0, 4));
-                $results_opt .= '<option ' . $selected . ' value="' . $db_item['id'] . '">';
+                $results_opt .= '<option ' . $selected . ' value="' . $db_item['themoviedb_id'] . '">';
                 $results_opt .= $db_item['title'];
                 !empty($year) ? $results_opt .= ' (' . $year . ')' : null;
                 $results_opt .= '</option>';

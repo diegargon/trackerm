@@ -1,5 +1,6 @@
 ## Latest / News (Relevant)
 
+[13/02] Added auto identify (default:off)
 [13/02] Added Global search Tags for Wanted
         Rewrite partially Global tags, configuration are under Wanted and are relative a wanted and his searchs.
         These are:
