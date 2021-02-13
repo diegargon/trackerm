@@ -108,6 +108,7 @@ function create_db() {
                     "title_year" VARCHAR NULL,
                     "trailer" VARCHAR NULL,
                     "poster" VARCHAR NULL,
+                    "custom_poster" VARCHAR NULL,
                     "release" VARCHAR NULL,
                     "master" INTEGER NULL,
                     "genre" VARCHAR NULL,
@@ -142,6 +143,7 @@ function create_db() {
                     "title_year" VARCHAR NULL,
                     "trailer" VARCHAR NULL,
                     "poster" VARCHAR NULL,
+                    "custom_poster" VARCHAR NULL,
                     "release" VARCHAR NULL,
                     "master" INTEGER NULL,
                     "genre" VARCHAR NULL,
@@ -163,6 +165,7 @@ function create_db() {
                     "file_hash" VARCHAR NULL,
                     "season" INTEGER NULL,
                     "episode" INTEGER NULL,
+                    "custom_poster" VARCHAR NULL,
                     "added" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
                 )');
@@ -354,6 +357,7 @@ function create_db() {
     $db->insert('config', ['cfg_key' => 'playlocal_root_path', 'cfg_value' => '/home', 'cfg_desc' => 'L_CFG_PLAYLOCAL_ROOT_PATH', 'type' => 1, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'playlocal_share_windows_path', 'cfg_value' => 'file://///192.168.1.1', 'cfg_desc' => 'L_CFG_PLAYLOCAL_SHARE_WINDOWS_PATH', 'type' => 1, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'playlocal_share_linux_path', 'cfg_value' => 'smb://192.168.1.1', 'cfg_desc' => 'L_CFG_PLAYLOCAL_SHARE_LINUX_PATH', 'type' => 1, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'show_noid_inlibrary', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_SHOW_NOID_INLIBRARY', 'type' => 2, 'category' => 'L_MAIN', 'public' => 0]);
     /*
       $db->insert('config', ['cfg_key' => 'transcoder_player', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_TRANSCODER_PLAYER', 'type' => 3, 'category' => 'L_PLAY', 'public' => 1]);
       $db->insert('config', ['cfg_key' => 'transcoder_path', 'cfg_value' => '/usr/bin/ffmpeg', 'cfg_desc' => 'L_CFG_TRANSCODER_PATH', 'type' => 1, 'category' => 'L_PLAY', 'public' => 1]);
@@ -585,6 +589,11 @@ function update_db($from) {
     if ($from < 10) {
         $db->insert('config', ['cfg_key' => 'torrent_require_prefs', 'cfg_value' => '', 'cfg_desc' => 'L_CFG_TORRENT_REQUIRE_PREFS', 'type' => 8, 'category' => 'L_WANTED', 'public' => 1]);
         $db->insert('config', ['cfg_key' => 'torrent_require_or_prefs', 'cfg_value' => '', 'cfg_desc' => 'L_CFG_TORRENT_REQUIRE_OR_PREFS', 'type' => 8, 'category' => 'L_WANTED', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'show_noid_inlibrary', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_SHOW_NOID_INLIBRARY', 'type' => 2, 'category' => 'L_MAIN', 'public' => 0]);
+        $db->query('ALTER TABLE library_movies add column custom_poster VARCHAR NULL');
+        $db->query('ALTER TABLE library_shows add column custom_poster VARCHAR NULL');
+        $db->query('ALTER TABLE library_history add column custom_poster VARCHAR NULL');
+        //
         $db->update('config', ['category' => 'L_WANTED'], ['cfg_key' => ['value' => 'torrent_require_prefs']]);
         $db->update('config', ['category' => 'L_WANTED'], ['cfg_key' => ['value' => 'torrent_quality_prefs']]);
         $db->update('config', ['category' => 'L_WANTED'], ['cfg_key' => ['value' => 'torrent_ignore_prefs']]);
