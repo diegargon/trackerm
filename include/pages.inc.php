@@ -348,7 +348,7 @@ function page_identify() {
 
     if (isset($_POST['identify']) && $filter->postInt('selected')) {
 
-        submit_ident($media_type, $filter->postInt('selected'));
+        user_submit_ident($media_type, $filter->postInt('selected'));
 
         return msg_box($msg = ['title' => $LNG['L_SUCCESS'], 'body' => $LNG['L_ADDED_SUCCESSFUL']]);
     }

@@ -163,7 +163,7 @@ function clean_database($media_type, $files, $media) {
     }
 }
 
-function identify_media($media_type, $media) {
+function show_identify_media($media_type, $media) {
     global $LNG, $cfg;
 
     $titles = '';
@@ -222,10 +222,10 @@ function identify_media($media_type, $media) {
     return false;
 }
 
-function submit_ident($type, $items) {
+function submit_ident($type, $id_pairs) {
     global $db;
 
-    foreach ($items as $my_id => $db_id) {
+    foreach ($id_pairs as $my_id => $db_id) {
         $update_fields = [];
 
         if (!empty($db_id)) {
