@@ -72,8 +72,10 @@ class Config {
                 } else if ($config['type'] == 8) {
                     $values = $this->commaToArray($config['cfg_value']);
                     $data_row .= '<select name="config_id[' . $config['cfg_key'] . ']">';
-                    foreach ($values as $value_key => $value) {
-                        $data_row .= '<option value="' . $value_key . '">' . $value . '</option>';
+                    if ($values) {
+                        foreach ($values as $value_key => $value) {
+                            $data_row .= '<option value="' . $value_key . '">' . $value . '</option>';
+                        }
                     }
                     $data_row .= '</select>';
                     $data_row .= '<input class="action_btn" type="submit" name="config_remove[' . $config['cfg_key'] . ']" value="' . $LNG['L_DELETE'] . '" />';
