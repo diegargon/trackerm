@@ -810,10 +810,6 @@ function update_trailers() {
     }
 }
 
-/* That function will be not necesary in the future, since new movies already hashed on rebuild
-  edit: Perhaps we need it
- *  */
-
 function hash_missing() {
     global $db, $log;
 
