@@ -258,6 +258,7 @@ $LNG = [
     'L_CFG_PLAYLOCAL_ROOT_PATH' => 'Root path of the share folder in the server, ex:/home if you share /home/library',
     'L_CFG_TORRENT_REQUIRE_OR_PREFS' => 'Trackerm when search a wanted item will require at least one of the tag specified here (Global)',
     'L_CFG_SHOW_NOID_INLIBRARY' => 'Show no identified files in library',
+    'L_CFG_TMDB_SEARCH_CACHE_EXPIRE' => 'Tmdb cache expire',
     /*
       'L_CFG_TRANSCODER_PLAY' => '(unused p1)',
       'L_CFG_TRANSCODER_PATH' => '(unused p2)',

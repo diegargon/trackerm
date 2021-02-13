@@ -258,6 +258,7 @@ $LNG = [
     'L_CFG_PLAYLOCAL_ROOT_PATH' => 'Ruta raiz the tu directorio compartido en el servidor, ej:/home si compartes /home/library',
     'L_CFG_TORRENT_REQUIRE_OR_PREFS' => 'Trackerm cuando busca un elemento (seguimiento) requerira al menos uno de los tags que hay aquí (Global)',
     'L_CFG_SHOW_NOID_INLIBRARY' => 'Mostrar archivos no identificados en la libreria',
+    'L_CFG_TMDB_SEARCH_CACHE_EXPIRE' => 'Tmdb expiración del cache',
     /*
       'L_CFG_TRANSCODER_PLAY' => '(unused p1)',
       'L_CFG_TRANSCODER_PATH' => '(unused p2)',

@@ -12,6 +12,14 @@
 function themoviedb_searchMovies($search) {
     global $cfg;
 
+    $cache_data = [];
+
+    $search = trim($search);
+
+    $cache_data = themoviedb_searchCache($search, 'movies');
+    if (!empty($cache_data) && count($cache_data) > 0) {
+        return $cache_data;
+    }
     !isset($cfg['TMDB_LANG']) ? $cfg['TMDB_LANG'] = $cfg['LANG'] : null;
 
     $query = str_replace(' ', '+', trim($search));
@@ -20,6 +28,7 @@ function themoviedb_searchMovies($search) {
 
     $data = curl_get_tmdb($url);
 
+    themoviedb_updateCache($search, $data, 'movies');
     (isset($data['results'])) ? $movies = themoviedb_MediaPrep('movies', $data['results']) : null;
 
     return isset($movies) ? $movies : null;
@@ -28,6 +37,14 @@ function themoviedb_searchMovies($search) {
 function themoviedb_searchShows($search) {
     global $cfg;
 
+    $cache_data = [];
+
+    $search = trim($search);
+
+    $cache_data = themoviedb_searchCache($search, 'shows');
+    if (!empty($cache_data) && count($cache_data) > 0) {
+        return $cache_data;
+    }
     !isset($cfg['TMDB_LANG']) ? $cfg['TMDB_LANG'] = $cfg['LANG'] : null;
 
     $query = str_replace(' ', '+', trim($search));
@@ -36,9 +53,55 @@ function themoviedb_searchShows($search) {
 
     $data = curl_get_tmdb($url);
 
+    themoviedb_updateCache($search, $data, 'shows');
     (isset($data['results'])) ? $shows = themoviedb_MediaPrep('shows', $data['results']) : null;
 
     return isset($shows) ? $shows : null;
+}
+
+function themoviedb_updateCache($words, $results, $media_type) {
+    global $db;
+
+    $tmdb_cache_table = 'search_' . $media_type . '_cache';
+    $ids = '';
+    $results = $results['results'];
+
+    foreach ($results as $result) {
+        empty($ids) ? $ids = $result['id'] : $ids .= ',' . $result['id'];
+    }
+    $set['ids'] = $ids;
+    $set['engine'] = 'tmdb';
+    $set['updated'] = time();
+    $set['words'] = $words;
+    $db->upsertItemByField($tmdb_cache_table, $set, 'words');
+}
+
+function themoviedb_searchCache($search_words, $media_type) {
+    global $db, $cfg;
+
+    $tmdb_cache_table = 'search_' . $media_type . '_cache';
+
+    $results = [];
+
+    $where['words'] = ['value' => $search_words];
+    $where['engine'] = ['value' => 'tmdb'];
+
+    $query_results = $db->select($tmdb_cache_table, '*', $where, 'LIMIT 1');
+    $cached_results = $db->fetchAll($query_results);
+    if (empty($cached_results[0])) {
+        return false;
+    }
+
+    $cached_results = $cached_results[0];
+    if (empty($cached_results['updated']) || empty($cached_results['ids']) || (time() > ($cached_results['updated'] + $cfg['tmdb_search_cache_expire']))) {
+        return false;
+    } else {
+        $ids = explode(',', $cached_results['ids']);
+        foreach ($ids as $id) {
+            $results[] = themoviedb_getFromCache($media_type, $id);
+        }
+    }
+    return (count($results) > 0) ? $results : false;
 }
 
 function themoviedb_MediaPrep($media_type, $items) {
