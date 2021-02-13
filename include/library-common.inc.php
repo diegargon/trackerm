@@ -23,6 +23,8 @@ function rebuild($media_type, $path) {
 function _rebuild($media_type, $path) {
     global $cfg, $db, $log, $LNG;
 
+    $log->debug("Rebuild $media_type called");
+
     $items = [];
     $files = findfiles($path, $cfg['media_ext']);
 
@@ -122,6 +124,9 @@ function _rebuild($media_type, $path) {
 }
 
 function auto_ident_by_search($media_type, $ids) {
+    global $log;
+
+    $log->debug("Entro en auto_ident");
     //TODO: search tmdb if found result identify with the first result
     return true;
 }
