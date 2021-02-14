@@ -231,8 +231,8 @@ function page_tmdb() {
             }
         }
     }
-    !empty(getUserPrefsItem('show_trending')) ? $tdata['TRENDING_CHECKED'] = 'checked' : $tdata['TRENDING_CHECKED'] = '';
-    !empty(getUserPrefsItem('show_popular')) ? $tdata['POPULAR_CHECKED'] = 'checked' : $tdata['POPULAR_CHECKED'] = '';
+    !empty(getPrefsItem('show_trending')) ? $tdata['TRENDING_CHECKED'] = 'checked' : $tdata['TRENDING_CHECKED'] = '';
+    !empty(getPrefsItem('show_popular')) ? $tdata['POPULAR_CHECKED'] = 'checked' : $tdata['POPULAR_CHECKED'] = '';
 
     $tdata['search_movies_word'] = $search_movies;
     $tdata['search_shows_word'] = $search_shows;
@@ -250,14 +250,14 @@ function page_tmdb() {
         $topt['search_type'] = 'shows';
         !empty($shows) ? $page .= buildTable('L_DB', $shows, $topt) : null;
     }
-    if (!isset($_GET['search_movies']) && !isset($_GET['search_shows']) && !empty(getUserPrefsItem('show_trending'))) {
+    if (!isset($_GET['search_movies']) && !isset($_GET['search_shows']) && !empty(getPrefsItem('show_trending'))) {
         $topt['no_pages'] = 1;
         $results = mediadb_getTrending();
         ($cfg['want_movies']) ? $page .= buildTable('L_TRENDING_MOVIES', $results['movies'], $topt) : null;
         ($cfg['want_shows']) ? $page .= buildTable('L_TRENDING_SHOWS', $results['shows'], $topt) : null;
     }
 
-    if (!isset($_GET['search_movies']) && !isset($_GET['search_shows']) && !empty(getUserPrefsItem('show_popular'))) {
+    if (!isset($_GET['search_movies']) && !isset($_GET['search_shows']) && !empty(getPrefsItem('show_popular'))) {
         $topt['no_pages'] = 1;
         $results = mediadb_getPopular();
         ($cfg['want_movies']) ? $page .= buildTable('L_POPULAR_MOVIES', $results['movies'], $topt) : null;
