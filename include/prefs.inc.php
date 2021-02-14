@@ -43,6 +43,31 @@ function getPrefsItem($r_key, $system = false) {
     return false;
 }
 
+function getUidWithPref($r_key, $r_value) {
+    global $db;
+
+    $where['pref_name'] = $r_key;
+    $where['pref_value'] = $r_value;
+
+    $results = $db->select('preferences', 'id', $where);
+
+    return $results ? $db->fetchAll($results) : false;
+}
+
+function getPrefValueByUid($id, $r_key) {
+    global $db;
+
+    echo $id . $r_key;
+    $where = ['pref_name' => ['value' => $r_key], 'uid' => ['value' => $id]];
+
+    $results = $db->select('preferences', null, $where, 'LIMIT 1');
+    $user_prefs = $db->fetchAll($results);
+    if (valid_array($user_prefs)) {
+        return $user_prefs[0]['pref_value'];
+    }
+    return false;
+}
+
 function setPrefsItem($key, $value, $system = false) {
     global $db, $user;
 
