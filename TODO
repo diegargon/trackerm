@@ -1,7 +1,7 @@
 TODO
 
 [HIGH]   
-    [FIX] Clean wanted.db/direct torrents that was delete outside app       
+    [FIX] Clean wanted.db/direct torrents that was delete outside app        
     [IMPROVE] Indexers to config
     [FIX/CHECK] do not contemplate yet what to do if tmdb not found any results.
     [FIX] No es posible buscar "Exact match" en tmdb, coger los resultados y filtrarlos, si queda alguno presentar ese si no presentar los resultados originales.

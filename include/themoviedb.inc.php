@@ -337,16 +337,23 @@ function themoviedb_getFromCache($media_type, $id) {
 function themoviedb_getPopular() {
     global $cfg;
 
+    $cache_data['movies'] = themoviedb_searchCache('_POPULAR_', 'movies');
+    $cache_data['shows'] = themoviedb_searchCache('_POPULAR_', 'shows');
+    if (!empty($cache_data['movies']) && !empty($cache_data['shows'])) {
+        return $cache_data;
+    }
     !isset($cfg['TMDB_LANG']) ? $cfg['TMDB_LANG'] = $cfg['LANG'] : null;
 
     $movies_url = 'https://api.themoviedb.org/3/movie/popular?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['TMDB_LANG'];
     $shows_url = 'https://api.themoviedb.org/3/tv/popular?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['TMDB_LANG'];
     if ($cfg['want_movies']) {
         $response_items = curl_get_tmdb($movies_url);
+        themoviedb_updateCache('_POPULAR_', $response_items, 'movies');
         $results['movies'] = themoviedb_MediaPrep('movies', $response_items['results']);
     }
     if ($cfg['want_shows']) {
         $response_items = curl_get_tmdb($shows_url);
+        themoviedb_updateCache('_POPULAR_', $response_items, 'shows');
         $results['shows'] = themoviedb_MediaPrep('shows', $response_items['results']);
     }
     return $results;
@@ -355,16 +362,23 @@ function themoviedb_getPopular() {
 function themoviedb_getTrending() {
     global $cfg;
 
+    $cache_data['movies'] = themoviedb_searchCache('_TRENDING_', 'movies');
+    $cache_data['shows'] = themoviedb_searchCache('_TRENDING_', 'shows');
+    if (!empty($cache_data['movies']) && !empty($cache_data['shows'])) {
+        return $cache_data;
+    }
     !isset($cfg['TMDB_LANG']) ? $cfg['TMDB_LANG'] = $cfg['LANG'] : null;
 
     $movies_url = 'https://api.themoviedb.org/3/trending/movie/day?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['TMDB_LANG'];
     $shows_url = 'https://api.themoviedb.org/3/trending/tv/day?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['TMDB_LANG'];
     if ($cfg['want_movies']) {
         $response_items = curl_get_tmdb($movies_url);
+        themoviedb_updateCache('_TRENDING_', $response_items, 'movies');
         $results['movies'] = themoviedb_MediaPrep('movies', $response_items['results']);
     }
     if ($cfg['want_shows']) {
         $response_items = curl_get_tmdb($shows_url);
+        themoviedb_updateCache('_TRENDING_', $response_items, 'shows');
         $results['shows'] = themoviedb_MediaPrep('shows', $response_items['results']);
     }
     return $results;
