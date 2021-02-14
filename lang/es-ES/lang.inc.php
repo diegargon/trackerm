@@ -183,6 +183,7 @@ $LNG = [
     'L_SLOW_THE_FLOW' => 'Ralentizo el flujo',
     'L_TRANSMISSION' => 'Transmission',
     'L_TITLE' => 'Titulo',
+    'L_TODAY_SHOWS' => 'Series hoy',
     'L_TORRENT' => 'Torrent',
     'L_TORRENTS' => 'Torrents',
     'L_TOR_MAN_DEL' => 'Parece que este torrent fue borrado manualmente',

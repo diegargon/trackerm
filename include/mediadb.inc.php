@@ -45,6 +45,10 @@ function mediadb_getTrending() {
     return themoviedb_getTrending();
 }
 
+function mediadb_getTodayShows() {
+    return themoviedb_getTodayShows();
+}
+
 function mediadb_getTrailer($media_type, $id) {
     return themoviedb_getTrailer($media_type, $id);
 }

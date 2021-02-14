@@ -391,6 +391,23 @@ function themoviedb_getTrending() {
     return $results;
 }
 
+function themoviedb_getTodayShows() {
+    global $cfg;
+
+    $cache_data['shows'] = themoviedb_searchCache('_TODAY_SHOWS_', 'shows');
+    if (!empty($cache_data['shows'])) {
+        return $cache_data;
+    }
+    !isset($cfg['TMDB_LANG']) ? $cfg['TMDB_LANG'] = $cfg['LANG'] : null;
+
+    $shows_url = 'https://api.themoviedb.org/3/tv/airing_today?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['TMDB_LANG'];
+    $response_items = curl_get_tmdb($shows_url);
+    themoviedb_updateCache('_TODAY_SHOWS_', $response_items, 'shows');
+    $results['shows'] = themoviedb_MediaPrep('shows', $response_items['results']);
+
+    return $results;
+}
+
 function themoviedb_getTrailer($media_type, $id) {
     global $cfg, $log;
 

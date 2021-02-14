@@ -230,10 +230,18 @@ function page_tmdb() {
                 setPrefsItem('show_popular', 0);
             }
         }
+        if (isset($_POST['show_today_shows'])) {
+            $show_today_shows = $filter->postInt('show_today_shows');
+            if (!empty($show_today_shows)) {
+                setPrefsItem('show_today_shows', 1);
+            } else {
+                setPrefsItem('show_today_shows', 0);
+            }
+        }
     }
     !empty(getPrefsItem('show_trending')) ? $tdata['TRENDING_CHECKED'] = 'checked' : $tdata['TRENDING_CHECKED'] = '';
     !empty(getPrefsItem('show_popular')) ? $tdata['POPULAR_CHECKED'] = 'checked' : $tdata['POPULAR_CHECKED'] = '';
-
+    !empty(getPrefsItem('show_today_shows')) ? $tdata['TODAYSHOWS_CHECKED'] = 'checked' : $tdata['TODAYSHOWS_CHECKED'] = '';
     $tdata['search_movies_word'] = $search_movies;
     $tdata['search_shows_word'] = $search_shows;
 
@@ -264,6 +272,11 @@ function page_tmdb() {
         ($cfg['want_shows']) ? $page .= buildTable('L_POPULAR_SHOWS', $results['shows'], $topt) : null;
     }
 
+    if (!isset($_GET['search_movies']) && !isset($_GET['search_shows']) && !empty(getPrefsItem('show_today_shows'))) {
+        $topt['no_pages'] = 1;
+        $results = mediadb_getTodayShows();
+        $page .= buildTable('L_TODAY_SHOWS', $results['shows'], $topt);
+    }
     return $page;
 }
 

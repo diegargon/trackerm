@@ -33,5 +33,10 @@
             <input  type="hidden" name="show_popular" value="0"/>
             <input id="show_popular" <?= $tdata['POPULAR_CHECKED'] ?> onchange="this.form.submit()" type="checkbox" name="show_popular" value="1"/>
         </form>
+        <form class="form_inline" method="POST" action="">
+            <label for="show_today_shows"><?= $tdata['L_TODAY_SHOWS'] ?> </label>
+            <input  type="hidden" name="show_today_shows" value="0"/>
+            <input id="show_today_shows" <?= $tdata['TODAYSHOWS_CHECKED'] ?> onchange="this.form.submit()" type="checkbox" name="show_today_shows" value="1"/>
+        </form>
     </div>
 </div>
