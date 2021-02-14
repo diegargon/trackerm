@@ -166,3 +166,11 @@ function update_stats() {
     $db->query("UPDATE config SET cfg_value='$movies_size' WHERE cfg_key='stats_total_movies_size' LIMIT 1");
     $db->query("UPDATE config SET cfg_value='$shows_size' WHERE cfg_key='stats_total_shows_size' LIMIT 1");
 }
+
+function valid_array($array) {
+    if (!empty($array) && is_array($array) && count($array) > 0) {
+        return true;
+    }
+
+    return false;
+}

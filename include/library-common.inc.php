@@ -15,7 +15,7 @@ function rebuild($media_type, $path) {
     }
     setPrefsItem('rebuild_blocker', 1, true);
 
-    if (is_array($path)) {
+    if (valid_array($path)) {
         foreach ($path as $item) {
             _rebuild($media_type, $item);
             sleep(1);
@@ -47,16 +47,14 @@ function _rebuild($media_type, $path) {
 
     $i = 0;
 
-    //check if each media path it in $files if not proably delete, then delete db entry
+    //check if each media path it in $files if not probably delete, then delete db entry
     //this avoid problems if the file was moved
-    (isset($media) && count($media) > 0) ? clean_database($media_type, $files, $media) : null;
+    (valid_array($media)) ? clean_database($media_type, $files, $media) : null;
 
     foreach ($files as $file) {
-        if ($media === false ||
+        if (!valid_array($media) ||
                 array_search($file, array_column($media, 'path')) === false
         ) {
-
-
             $file_name = trim(basename($file));
             $predictible_title = getFileTitle($file_name);
             $year = getFileYear($file_name);
@@ -99,7 +97,7 @@ function _rebuild($media_type, $path) {
                 }
             }
 
-            // auto identify episodes already identified
+            // auto identify episodes froms shows already identified
             if ($media_type == 'shows') {
                 foreach ($media as $id_item) {
 
@@ -125,10 +123,10 @@ function _rebuild($media_type, $path) {
     }
     if (isset($items)) {
         $insert_ids = $db->addItems($library_table, $items);
-        if (!empty($insert_ids) && (count($insert_ids) > 0)) {
+        if (valid_array($insert_ids)) {
             $insert_ids = check_history($media_type, $insert_ids);
             if (!empty($cfg['auto_identify'])) {
-                (isset($insert_ids) && count($insert_ids) > 0 ) ? auto_ident_exact($media_type, $insert_ids) : null;
+                (!empty($insert_ids) && count($insert_ids) > 0 ) ? auto_ident_exact($media_type, $insert_ids) : null;
             }
         }
     }
@@ -137,17 +135,17 @@ function _rebuild($media_type, $path) {
 }
 
 function show_identify_media($media_type) {
-    global $LNG, $cfg, $db;
+    global $LNG, $cfg, $db, $filter;
 
     $titles = '';
     $i = 0;
     $uniq_shows = [];
 
-    $iurl = '?page=' . $_GET['page'];
+    $iurl = '?page=' . $filter->getString('page');
 
     $result = $db->query("SELECT * FROM library_$media_type WHERE title = '' OR themoviedb_id = ''");
     $media = $db->fetchAll($result);
-    if (empty($media)) {
+    if (!valid_array($media)) {
         return false;
     }
 
@@ -200,7 +198,7 @@ function show_identify_media($media_type) {
                 return false;
             }
 
-            if (!empty($db_media)) {
+            if (valid_array($db_media)) {
 
                 foreach ($db_media as $db_item) {
                     $year = trim(substr($db_item['release'], 0, 4));
@@ -231,6 +229,10 @@ function show_identify_media($media_type) {
 
 function auto_ident_exact($media_type, $ids) {
     global $log, $db, $cfg;
+
+    if (!valid_array($ids) || empty($media_type)) {
+        return false;
+    }
 
     $uniq_shows = [];
 
@@ -274,6 +276,9 @@ function auto_ident_exact($media_type, $ids) {
 }
 
 function ident_by_idpairs($media_type, $id_pairs) {
+    if (!valid_array($id_pairs)) {
+        return false;
+    }
     foreach ($id_pairs as $my_id => $tmdb_id) {
         ident_by_id($media_type, $tmdb_id, $my_id);
     }
@@ -311,8 +316,6 @@ function submit_ident($media_type, $item_data, $id) {
         $db->updateItemById('library_movies', $id, $update_fields);
     } else if ($media_type == 'shows') {
         $mylib_shows = $db->getItemById('library_shows', $id);
-        //$update_fields['predictible_title'] = $mylib_shows['predictible_title'];
-        //$db->updateItemsByField('library_shows', $update_fields, 'predictible_title');
         $where['predictible_title'] = ['value' => $mylib_shows['predictible_title']];
         $db->update('library_shows', $update_fields, $where);
     }
@@ -321,11 +324,11 @@ function submit_ident($media_type, $item_data, $id) {
 function check_history($media_type, $ids) {
     global $db, $log;
 
-    if ($media_type == 'movies') {
-        $library = 'library_movies';
-    } else {
-        $library = 'library_shows';
+    if (!valid_array($ids)) {
+        return false;
     }
+    ($media_type == 'movies') ? $library = 'library_movies' : $library = 'library_shows';
+
     foreach ($ids as $id_key => $id) {
         if (!is_numeric($id)) {
             continue;
