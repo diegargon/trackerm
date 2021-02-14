@@ -365,6 +365,35 @@ function getLibraryStats() {
     $stats['movies_size'] = $cfg['stats_total_movies_size'];
     $stats['shows_size'] = $cfg['stats_total_shows_size'];
 
+    if (is_array($cfg['MOVIES_PATH'])) {
+        foreach ($cfg['MOVIES_PATH'] as $movies_path) {
+            $movies_path_name = basename($movies_path);
+            $movies_free_space = human_filesize(disk_free_space($movies_path));
+            $movies_total_space = human_filesize(disk_total_space($movies_path));
+            $stats['movies_paths'][$movies_path]['free'] = $movies_free_space;
+            $stats['movies_paths'][$movies_path]['total'] = $movies_total_space;
+            $stats['movies_paths'][$movies_path]['basename'] = $movies_path_name;
+        }
+    } else {
+        $stats['movies_paths'][$cfg['MOVIES_PATH']]['free'] = human_filesize(disk_free_space($cfg['MOVIES_PATH']));
+        $stats['movies_paths'][$cfg['MOVIES_PATH']]['total'] = human_filesize(disk_total_space($cfg['MOVIES_PATH']));
+        $stats['movies_paths'][$cfg['MOVIES_PATH']]['basename'] = basename($cfg['MOVIES_PATH']);
+    }
+
+    if (is_array($cfg['SHOWS_PATH'])) {
+        foreach ($cfg['SHOWS_PATH'] as $shows_path) {
+            $shows_path_name = basename($shows_path);
+            $shows_free_space = human_filesize(disk_free_space($shows_path));
+            $shows_total_space = human_filesize(disk_total_space($shows_path));
+            $stats['shows_paths'][$shows_path]['free'] = $shows_free_space;
+            $stats['shows_paths'][$shows_path]['total'] = $shows_total_space;
+            $stats['shows_paths'][$shows_path]['basename'] = $shows_path_name;
+        }
+    } else {
+        $stats['movies_paths'][$cfg['SHOWS_PATH']]['free'] = human_filesize(disk_free_space($cfg['SHOWS_PATH']));
+        $stats['movies_paths'][$cfg['SHOWS_PATH']]['total'] = human_filesize(disk_total_space($cfg['SHOWS_PATH']));
+        $stats['movies_paths'][$cfg['SHOWS_PATH']]['basename'] = basename($cfg['SHOWS_PATH']);
+    }
 
     $stats['db_size'] = file_exists($cfg['DB_FILE']) ? human_filesize(filesize($cfg['DB_FILE'])) : 0;
 
