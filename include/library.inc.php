@@ -10,15 +10,15 @@
 !defined('IN_WEB') ? exit : true;
 
 function show_my_movies() {
-    global $db;
+    global $db, $filter;
 
     $page = '';
 
     if (!empty($_POST['mult_movies_select'])) {
         ident_by_idpairs('movies', $_POST['mult_movies_select']);
     }
-    if (!empty($_GET['ident_delete']) && ($_GET['media_type'] == 'movies')) {
-        $db->deleteItemById('library_movies', $_GET['ident_delete']);
+    if (!empty(($ident_delete = $filter->getInt('ident_delete'))) && ($_GET['media_type'] == 'movies')) {
+        $db->deleteItemById('library_movies', $ident_delete);
     }
 
     $page .= show_identify_media('movies');

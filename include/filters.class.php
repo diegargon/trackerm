@@ -53,6 +53,9 @@ Class Filter {
                 if (!is_numeric($val) || $val > $size) {
                     return false;
                 }
+                if (!is_numeric($key)) {
+                    return false;
+                }
             }
         }
 
