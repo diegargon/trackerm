@@ -110,8 +110,9 @@ function encrypt_password($password) {
 function user_edit_profile() {
     global $LNG, $user;
 
-
     $index_pref = getPrefsItem('index_page');
+    $email_notify = getPrefsItem('email_notify');
+
     (empty($index_pref) || $index_pref == 'index') ? $index_selected = 'selected' : $index_selected = '';
     (!empty($index_pref) && $index_pref == 'library') ? $library_selected = 'selected' : $library_selected = '';
     (!empty($index_pref) && $index_pref == 'news') ? $news_selected = 'selected' : $news_selected = '';
@@ -119,12 +120,14 @@ function user_edit_profile() {
     (!empty($index_pref) && $index_pref == 'torrents') ? $torrents_selected = 'selected' : $torrents_selected = '';
     (!empty($index_pref) && $index_pref == 'tmdb') ? $tmdb_selected = 'selected' : $tmdb_selected = '';
     (!empty($index_pref) && $index_pref == 'transmission') ? $transmission_selected = 'selected' : $transmission_selected = '';
-    //(!empty($index_pref) && $index_pref == '') ? $_selected = 'selected' : $_selected ='';
-    //$html = '<form method="POST" action="">';
+    ($email_notify) ? $email_checked = 'checked' : $email_checked = '';
 
-    $html = '<span>' . $LNG['L_PASSWORD'] . '</span><input size="8" type="text" name= "cur_password" value=""/>';
-    $html .= '<span>' . $LNG['L_NEW_PASSWORD'] . '</span><input size="8" type="text" name= "new_password" value=""/>';
-    $html .= '<span>' . $LNG['L_EMAIL'] . '</span><input size="15" type="text" name= "email" value="' . $user['email'] . '"/>';
+    $html = '<span>' . $LNG['L_PASSWORD'] . '</span><input size="8" type="text" name="cur_password" value=""/>';
+    $html .= '<span>' . $LNG['L_NEW_PASSWORD'] . '</span><input size="8" type="text" name="new_password" value=""/>';
+    $html .= '<span>' . $LNG['L_EMAIL_NOTIFY'] . ' </span>';
+    $html .= '<input type="hidden" name="email_notify" value="0"/>';
+    $html .= '<input type="checkbox" ' . $email_checked . ' name="email_notify" value="1"/>';
+    $html .= '<span>' . $LNG['L_EMAIL'] . '</span><input size="15" type="text" name="email" value="' . $user['email'] . '"/>';
     $html .= '<br/><span>' . $LNG['L_INDEX_SELECT'] . '</span>';
     $html .= '<select name="index_page">';
     $html .= '<option ' . $index_selected . ' value="index">index</option>';
@@ -162,6 +165,8 @@ function user_change_prefs() {
     if (!empty($_POST['index_page']) && ($_POST['index_page'] != $index_page)) {
         setPrefsItem('index_page', $filter->postString('index_page'));
     }
+
+    (!empty($_POST['email_notify'])) ? setPrefsItem('email_notify', 1) : setPrefsItem('email_notify', 0);
 
     return $status_msg;
 }

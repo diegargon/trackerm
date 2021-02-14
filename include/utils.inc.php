@@ -174,3 +174,18 @@ function valid_array($array) {
 
     return false;
 }
+
+function notify_mail($msg) {
+    global $db;
+    $tag = "[TRACKERM] ";
+    $subject = $tag . $msg['subject'];
+
+    $results = $db->query("SELECT id,email FROM users WHERE email IS NOT NULL");
+    $users = $db->fetchAll($results);
+
+    foreach ($users as $user) {
+        if (getPrefValueByUid($user['id'], 'email_notify')) {
+            mail($user['email'], $subject, $msg['msg'], "From: no@reply \r\n");
+        }
+    }
+}

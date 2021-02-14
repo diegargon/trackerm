@@ -136,7 +136,7 @@ function getRightTorrents() {
 }
 
 function MovieJob($item, $linked = false) {
-    global $cfg, $log, $trans, $db;
+    global $cfg, $log, $trans, $db, $LNG;
 
     $valid_files = [];
 
@@ -166,6 +166,8 @@ function MovieJob($item, $linked = false) {
         }
 
         $i = 1;
+        $new_media = '';
+
         foreach ($valid_files as $valid_file) {
             $file_tags = getFileTags($valid_file);
             $ext = substr($valid_file, -4);
@@ -204,8 +206,10 @@ function MovieJob($item, $linked = false) {
             } else {
                 $log->debug(" Link Seeding: {$item['tid']} : {$item['hashString']}");
                 linking_media($valid_file, $final_dest_path);
+                $new_media .= basename($final_dest_path) . '\n';
             }
         }
+        !empty($new_media) ? notify_mail(['subject' => $LNG['L_NEW_MEDIA_AVAILABLE'], 'msg' => $new_media]) : null;
     } else {
         $log->info(" No valid files found on torrent with transmission id: {$item['tid']} : {$item['hashString']} ");
     }
@@ -220,6 +224,7 @@ function ShowJob($item, $linked = false) {
 
     if ($valid_files && count($valid_files) >= 1) {
         $i = 1;
+        $new_media = '';
         foreach ($valid_files as $valid_file) {
             $many = '';
             $file_tags = getFileTags($valid_file);
@@ -306,8 +311,10 @@ function ShowJob($item, $linked = false) {
             } else {
                 $log->debug(" Link Seeding: {$item['tid']} : {$item['hashString']}");
                 linking_media($valid_file, $final_dest_path);
+                $new_media .= basename($final_dest_path) . '\n';
             }
         }
+        !empty($new_media) ? notify_mail(['subject' => $LNG['L_NEW_MEDIA_AVAILABLE'], 'msg' => $new_media]) : null;
     } else {
         $log->info("No valid files found on torrent with {$item['tid']} : {$item['hashString']}");
     }
@@ -373,6 +380,7 @@ function get_valid_files($item) {
                 if (!file_exists($unrar_check)) {
                     if (check_file_encrypt('rar', $file)) {
                         $log->addStateMsg("[{$LNG['L_ERROR']}]{$LNG['L_ERR_FILE_ENCRYPT_MANUAL']} ($file)");
+                        notify_mail(['subject' => $LNG['L_ERR_FILE_ENCRYPT_MANUAL'], 'msg' => $file]);
                         // we continue and try since the function need test and TODO.
                     }
                     $unrar = $cfg['unrar_path'] . ' e -p- -y "' . $orig_path . '" "' . $work_path . '"';
