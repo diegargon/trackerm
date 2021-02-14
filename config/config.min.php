@@ -13,8 +13,9 @@
 /* * ******************************************************************************* */
 
 // themoviedb.org api key: https://www.themoviedb.org/documentation/api
-// You must register a account go to "edit profile" and ask for api key
-$cfg['db_api_token'] = '';
+// This is the app default API, you can ask for a api key for your personal use
+// since i don't known if they blocked API tokens perhaps is better register a account go to "edit profile" and ask for api key.
+$cfg['db_api_token'] = '9dce7699c72bcf016a6362cf4ed48c8f';
 //UI Lang Supported only: es-ES or en-EN
 $cfg['LANG'] = 'en-EN';
 
