@@ -18,9 +18,11 @@ function in_range($number, $min, $max, $inclusive = FALSE) {
 }
 
 function clean_title($title) {
+    global $cfg;
+
     $title = getFileTitle($title);
     $title = strtolower($title);
-    $title = iconv("UTF-8", "ASCII//TRANSLIT", $title);
+    $title = iconv($cfg['charset'], "ASCII//TRANSLIT", $title);
 
     $from_replace_signs = [':', ';', '.', ',', '?', '¿', '@', '#', '$', '-', '_', '{', '}', '[', ']', '!', '¡', '+', '^', '`', '*', '/', '|', 'º', 'ª', '%', '=', '<', '>', '\''];
     $title = str_replace($from_replace_signs, '', $title);
