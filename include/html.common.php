@@ -17,7 +17,7 @@ function getMenu() {
         $user['username'] = $LNG['L_ANONYMOUS'];
     }
     if (isset($_GET['sw_opt'])) {
-        $value = getPrefsItem('hide_opt');
+        $value = getUserPrefsItem('hide_opt');
         if ($value == 0) {
             setPrefsItem('hide_opt', 1);
             $cfg['hide_opt'] = 1;

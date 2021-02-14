@@ -19,7 +19,7 @@ require_once('include/user.inc.php');
 
 require_once('include/session.inc.php');
 require_once('include/prefs.inc.php');
-loadPrefs();
+loadUserPrefs();
 
 require_once('include/pages.inc.php');
 require_once('include/html.common.php');

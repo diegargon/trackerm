@@ -9,7 +9,7 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-function loadPrefs() {
+function loadUserPrefs() {
     global $cfg, $db, $user;
 
     if (empty($user) || empty($user['id'])) {
@@ -27,7 +27,7 @@ function loadPrefs() {
     }
 }
 
-function getPrefsItem($r_key) {
+function getUserPrefsItem($r_key) {
     global $db, $user;
 
     $where['uid'] = ['value' => $user['id']];

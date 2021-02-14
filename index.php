@@ -19,7 +19,7 @@ $footer = getFooter();
 ($user['id'] < 1) ? $req_page = 'login' : null;
 
 if (empty($req_page) && $user['id'] > 0) {
-    $index_page = trim(getPrefsItem('index_page'));
+    $index_page = trim(getUserPrefsItem('index_page'));
     if (!empty($index_page) && $index_page != "index") {
         header("Location: {$cfg['REL_PATH']}/?page=$index_page");
         exit();

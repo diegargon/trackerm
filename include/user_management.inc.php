@@ -111,7 +111,7 @@ function user_edit_profile() {
     global $LNG, $user;
 
 
-    $index_pref = getPrefsItem('index_page');
+    $index_pref = getUserPrefsItem('index_page');
     (empty($index_pref) || $index_pref == 'index') ? $index_selected = 'selected' : $index_selected = '';
     (!empty($index_pref) && $index_pref == 'library') ? $library_selected = 'selected' : $library_selected = '';
     (!empty($index_pref) && $index_pref == 'news') ? $news_selected = 'selected' : $news_selected = '';
@@ -158,7 +158,7 @@ function user_change_prefs() {
             $status_msg .= $LNG['L_EMAIL_INVALID'];
         }
     }
-    $index_page = getPrefsItem('index_page');
+    $index_page = getUserPrefsItem('index_page');
     if (!empty($_POST['index_page']) && ($_POST['index_page'] != $index_page)) {
         setPrefsItem('index_page', $filter->postString('index_page'));
     }
