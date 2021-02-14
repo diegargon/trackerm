@@ -20,7 +20,7 @@ $LNG = [
     'L_ANY_TAG' => 'At least one',
     'L_ADDED_SUCCESSFUL' => 'Added Successful',
     'L_ADD_BEFORE' => 'Añadir antes',
-    'L_CFG_AUTO_IDENTIFY' => 'Auto identify with first result',
+    'L_CFG_AUTO_IDENTIFY' => 'Try auto identify new content',
     'L_CACHE' => 'Cache',
     'L_CATEGORY' => 'Categories',
     'L_COLUMNS' => 'Columns',
@@ -259,6 +259,7 @@ $LNG = [
     'L_CFG_TORRENT_REQUIRE_OR_PREFS' => 'Trackerm when search a wanted item will require at least one of the tag specified here (Global)',
     'L_CFG_SHOW_NOID_INLIBRARY' => 'Show no identified files in library',
     'L_CFG_TMDB_SEARCH_CACHE_EXPIRE' => 'Tmdb cache expire',
+    'L_CFG_AUTO_IDENT_STRICT' => 'Strict Auto identify?',
     /*
       'L_CFG_TRANSCODER_PLAY' => '(unused p1)',
       'L_CFG_TRANSCODER_PATH' => '(unused p2)',
