@@ -6,6 +6,7 @@ TODO
     [IMPROVE] Indexers to config
     [FIX/CHECK] do not contemplate yet what to do if tmdb not found any results.    
 [MED]
+    [IMPROVE] OPT to notify: notify by mail new content / rar password
     [IMPROVE][VIEW]Add delete media button
     [NEW] Escaneo de directorios a más para avi sin ser torrents. $cfg['SCAN_MEDIA_DIR'] = 1;
     [NEW/IMPROVE] actualizacion automatica cada semana de titulos de episodio a excepcion de que el show sea "ended"
