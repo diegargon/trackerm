@@ -369,7 +369,7 @@ function create_db() {
     $db->insert('config', ['cfg_key' => 'only_local_net', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_ONLY_LOCAL_NET', 'type' => 3, 'category' => 'L_SECURITY', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'slow_flow', 'cfg_value' => 10, 'cfg_desc' => 'L_CFG_SLOW_FLOW', 'type' => 2, 'category' => 'L_MAIN', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'sid_expire', 'cfg_value' => 604800, 'cfg_desc' => 'L_CFG_SID_EXPIRE', 'type' => 2, 'category' => 'L_SECURITY', 'public' => 1]);
-    $db->insert('config', ['cfg_key' => 'auto_identify', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_AUTO_IDENTIFY', 'type' => 3, 'category' => 'L_MAIN', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'auto_identify', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_AUTO_IDENTIFY', 'type' => 3, 'category' => 'L_MAIN', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'curl_conntimeout', 'cfg_value' => 10, 'cfg_desc' => 'L_CFG_CURL_CONNTIMEOUT', 'type' => 2, 'category' => 'L_MAIN', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'localplayer', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_LOCALPLAYER', 'type' => 3, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'playlocal_root_path', 'cfg_value' => '/home', 'cfg_desc' => 'L_CFG_PLAYLOCAL_ROOT_PATH', 'type' => 1, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
@@ -377,6 +377,7 @@ function create_db() {
     $db->insert('config', ['cfg_key' => 'playlocal_share_linux_path', 'cfg_value' => 'smb://192.168.1.1', 'cfg_desc' => 'L_CFG_PLAYLOCAL_SHARE_LINUX_PATH', 'type' => 1, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'show_noid_inlibrary', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_SHOW_NOID_INLIBRARY', 'type' => 3, 'category' => 'L_MAIN', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'tmdb_search_cache_expire', 'cfg_value' => 172800, 'cfg_desc' => 'L_CFG_TMDB_SEARCH_CACHE_EXPIRE', 'type' => 2, 'category' => 'L_SEARCH', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'auto_ident_strict', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_AUTO_IDENT_STRICT', 'type' => 3, 'category' => 'L_MAIN', 'public' => 1]);
     /*
       $db->insert('config', ['cfg_key' => 'transcoder_player', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_TRANSCODER_PLAYER', 'type' => 3, 'category' => 'L_PLAY', 'public' => 1]);
       $db->insert('config', ['cfg_key' => 'transcoder_path', 'cfg_value' => '/usr/bin/ffmpeg', 'cfg_desc' => 'L_CFG_TRANSCODER_PATH', 'type' => 1, 'category' => 'L_PLAY', 'public' => 1]);
@@ -611,6 +612,7 @@ function update_db($from) {
         $db->insert('config', ['cfg_key' => 'torrent_require_or_prefs', 'cfg_value' => '', 'cfg_desc' => 'L_CFG_TORRENT_REQUIRE_OR_PREFS', 'type' => 8, 'category' => 'L_WANTED', 'public' => 1]);
         $db->insert('config', ['cfg_key' => 'show_noid_inlibrary', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_SHOW_NOID_INLIBRARY', 'type' => 3, 'category' => 'L_MAIN', 'public' => 1]);
         $db->insert('config', ['cfg_key' => 'tmdb_search_cache_expire', 'cfg_value' => 172800, 'cfg_desc' => 'L_CFG_TMDB_SEARCH_CACHE_EXPIRE', 'type' => 2, 'category' => 'L_SEARCH', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'auto_ident_strict', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_AUTO_IDENT_STRICT', 'type' => 3, 'category' => 'L_MAIN', 'public' => 1]);
         $db->query('ALTER TABLE library_movies add column custom_poster VARCHAR NULL');
         $db->query('ALTER TABLE library_shows add column custom_poster VARCHAR NULL');
         $db->query('ALTER TABLE library_history add column custom_poster VARCHAR NULL');
