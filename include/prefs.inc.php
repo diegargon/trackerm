@@ -27,10 +27,14 @@ function loadUserPrefs() {
     }
 }
 
-function getUserPrefsItem($r_key) {
+function getPrefsItem($r_key, $system = false) {
     global $db, $user;
 
-    $where['uid'] = ['value' => $user['id']];
+    if ($system) {
+        $where['uid'] = ['value' => 0];
+    } else {
+        $where['uid'] = ['value' => $user['id']];
+    }
     $results = $db->select('preferences', null, $where);
     $user_prefs = $db->fetchAll($results);
 
@@ -42,16 +46,22 @@ function getUserPrefsItem($r_key) {
     return false;
 }
 
-function setPrefsItem($key, $value) {
+function setPrefsItem($key, $value, $system = false) {
     global $db, $user;
 
+    if ($system) {
+        $uid = 0;
+    } else {
+        $uid = $user['id'];
+    }
+
     $newitem = [
-        'uid' => $user['id'],
+        'uid' => $uid,
         'pref_name' => $key,
         'pref_value' => $value,
     ];
 
-    $where['uid'] = ['value' => $user['id']];
+    $where['uid'] = ['value' => $uid];
     $where['pref_name'] = ['value' => $key];
 
     $result = $db->select('preferences', null, $where, 'LIMIT 1');
