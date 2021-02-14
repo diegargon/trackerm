@@ -363,7 +363,7 @@ function getOptions() {
     $tdata['sel_indexers'] = '<option ' . $selected_idx_none . ' value="sel_indexer_none">' . $LNG['L_ALL'] . '</option>';
 
     foreach ($cfg['jackett_indexers'] as $indexer) {
-        (isset($cfg['sel_indexer']) && $cfg['sel_indexer'] == $indexer) ? $selected_indexer = 'selected' : $selected_indexer = '';
+        (isset($cfg['sel_indexer']) && $cfg['sel_indexer'] == $indexer) ? $selected_indexer = 'selected="selected"' : $selected_indexer = '';
         $tdata['sel_indexers'] .= '<option ' . $selected_indexer . ' value="' . $indexer . '">' . $indexer . '</option>';
     }
 
