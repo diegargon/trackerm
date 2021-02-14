@@ -57,7 +57,7 @@ function show_my_shows() {
     if (!empty($_GET['ident_delete']) && ($_GET['media_type'] == 'shows')) {
         $delete_ident_item = $db->getItemById('library_shows', $_GET['ident_delete']);
         $delete_ptitle_match = $delete_ident_item['predictible_title'];
-        $db->deleteItemByField('library_shows', 'predictible_title', $delete_ptitle_match);
+        $db->deleteItemsByField('library_shows', 'predictible_title', $delete_ptitle_match);
     }
 
     $page .= show_identify_media('shows');
