@@ -10,6 +10,11 @@
 !defined('IN_WEB') ? exit : true;
 
 function rebuild($media_type, $path) {
+    if (getPrefsItem('rebuild_blocker', true)) {
+        return false;
+    }
+    setPrefsItem('rebuild_blocker', 1, true);
+
     if (is_array($path)) {
         foreach ($path as $item) {
             _rebuild($media_type, $item);
@@ -18,6 +23,8 @@ function rebuild($media_type, $path) {
     } else {
         _rebuild($media_type, $path);
     }
+
+    setPrefsItem('rebuild_blocker', 0, true);
 }
 
 function _rebuild($media_type, $path) {
