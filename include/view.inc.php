@@ -38,9 +38,9 @@ function view() {
     } else if ($type == 'movies_db') {
         $media_type = 'movies';
         $other['wanted'] = 1;
-        $t_type = 'tmdb_search';
+        $t_type = 'tmdb_search_movies';
     } else if ($type == 'shows_db') {
-        $t_type = 'tmdb_search';
+        $t_type = 'tmdb_search_shows';
         $media_type = 'shows';
     } else {
         return false;

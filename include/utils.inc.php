@@ -35,7 +35,7 @@ function clean_title($title) {
 function set_clean_titles() {
     global $db;
 
-    $tables = ['tmdb_search', 'jackett_movies', 'jackett_shows', 'library_history', 'library_shows', 'library_movies', 'shows_details'];
+    $tables = ['tmdb_search_movies', 'tmdb_search_shows', 'jackett_movies', 'jackett_shows', 'library_history', 'library_shows', 'library_movies', 'shows_details'];
 
     foreach ($tables as $table) {
         $query = "SELECT * FROM $table WHERE clean_title IS NULL";

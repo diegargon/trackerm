@@ -658,50 +658,52 @@ function update_db($from) {
 
         // TMDB_SEARCH MOVIES
         $db->query('CREATE TABLE IF NOT EXISTS "tmdb_search_movies" (
-                    "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                    "themoviedb_id" INTEGER NOT NULL,
-                    "ilink" VARCHAR NULL,
-                    "title" VARCHAR NOT NULL,
-                    "clean_title" VARCHAR NULL,
-                    "original_title" VARCHAR NULL,
-                    "rating" REAL NULL,
-                    "popularity" REAL NULL,
-                    "elink" VARCHAR NULL,
-                    "poster" VARCHAR NULL,
-                    "scene" VARCHAR NULL,
-                    "trailer" VARCHAR NULL,
-                    "lang" VARCHAR NULL,
-                    "plot" VARCHAR NULL,
-                    "release" VARCHAR NULL,
-                    "in_library" INT NULL,
-                    "genre" VARCHAR NULL,
-                    "updated" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-                    "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-                    UNIQUE(themoviedb_id)
-                )');
+          "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+          "themoviedb_id" INTEGER NOT NULL,
+          "ilink" VARCHAR NULL,
+          "title" VARCHAR NOT NULL,
+          "clean_title" VARCHAR NULL,
+          "original_title" VARCHAR NULL,
+          "rating" REAL NULL,
+          "popularity" REAL NULL,
+          "elink" VARCHAR NULL,
+          "poster" VARCHAR NULL,
+          "scene" VARCHAR NULL,
+          "trailer" VARCHAR NULL,
+          "lang" VARCHAR NULL,
+          "plot" VARCHAR NULL,
+          "release" VARCHAR NULL,
+          "in_library" INT NULL,
+          "genre" VARCHAR NULL,
+          "updated" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+          "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+          UNIQUE(themoviedb_id)
+          )');
         // TMDB_SEARCH MOVIES
         $db->query('CREATE TABLE IF NOT EXISTS "tmdb_search_shows" (
-                    "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                    "themoviedb_id" INTEGER NOT NULL,
-                    "ilink" VARCHAR NULL,
-                    "title" VARCHAR NOT NULL,
-                    "clean_title" VARCHAR NULL,
-                    "original_title" VARCHAR NULL,
-                    "rating" REAL NULL,
-                    "popularity" REAL NULL,
-                    "elink" VARCHAR NULL,
-                    "poster" VARCHAR NULL,
-                    "scene" VARCHAR NULL,
-                    "trailer" VARCHAR NULL,
-                    "lang" VARCHAR NULL,
-                    "plot" VARCHAR NULL,
-                    "release" VARCHAR NULL,
-                    "in_library" INT NULL,
-                    "genre" VARCHAR NULL,
-                    "updated" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-                    "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-                    UNIQUE(themoviedb_id)
-                )');
+          "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+          "themoviedb_id" INTEGER NOT NULL,
+          "ilink" VARCHAR NULL,
+          "title" VARCHAR NOT NULL,
+          "clean_title" VARCHAR NULL,
+          "original_title" VARCHAR NULL,
+          "rating" REAL NULL,
+          "popularity" REAL NULL,
+          "elink" VARCHAR NULL,
+          "poster" VARCHAR NULL,
+          "scene" VARCHAR NULL,
+          "trailer" VARCHAR NULL,
+          "lang" VARCHAR NULL,
+          "plot" VARCHAR NULL,
+          "release" VARCHAR NULL,
+          "in_library" INT NULL,
+          "genre" VARCHAR NULL,
+          "updated" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+          "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+          UNIQUE(themoviedb_id)
+          )');
+
+        $db->query('DROP TABLE IF EXISTS tmdb_search');
         $db->update('config', ['category' => 'L_WANTED'], ['cfg_key' => ['value' => 'torrent_require_prefs']]);
         $db->update('config', ['category' => 'L_WANTED'], ['cfg_key' => ['value' => 'torrent_quality_prefs']]);
         $db->update('config', ['category' => 'L_WANTED'], ['cfg_key' => ['value' => 'torrent_ignore_prefs']]);

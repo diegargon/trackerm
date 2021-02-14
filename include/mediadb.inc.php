@@ -29,8 +29,8 @@ function mediadb_showsDetailsPrep($id, $seasons_data, $episodes_data) {
     return themoviedb_showsDetailPrep($id, $seasons_data, $episodes_data);
 }
 
-function mediadb_getByLocalId($id) {
-    return themoviedb_getByLocalId($id);
+function mediadb_getByLocalId($media_type, $id) {
+    return themoviedb_getByLocalId($media_type, $id);
 }
 
 function mediadb_getFromCache($media_type, $id) {
@@ -78,7 +78,8 @@ function mediadb_guessFieldGet($item, $field) {
     $c_title = clean_title($title);
 
     $media_type = $item['media_type'];
-    $query = "SELECT $field FROM tmdb_search WHERE media_type='$media_type' AND title LIKE '$title'  COLLATE NOCASE OR clean_title LIKE '$c_title' OR original_title LIKE '$title'  COLLATE NOCASE ORDER BY release DESC";
+    $table = 'tmdb_search_' . $media_type;
+    $query = "SELECT $field FROM $table WHERE title LIKE '$title'  COLLATE NOCASE OR clean_title LIKE '$c_title' OR original_title LIKE '$title'  COLLATE NOCASE ORDER BY release DESC";
     $results = $db->query($query);
     $tmdb_item = $db->fetch($results);
     if (is_array($tmdb_item) && count($tmdb_item) > 0) {
@@ -88,7 +89,7 @@ function mediadb_guessFieldGet($item, $field) {
 
     $db->finalize($results);
 
-    $query = "SELECT $field FROM tmdb_search WHERE media_type='$media_type' AND title LIKE '%$title%' OR clean_title LIKE '%$c_title%' OR original_title LIKE '%$c_title%'  COLLATE NOCASE COLLATE NOCASE  ORDER BY release DESC";
+    $query = "SELECT $field FROM $table WHERE  title LIKE '%$title%' OR clean_title LIKE '%$c_title%' OR original_title LIKE '%$c_title%'  COLLATE NOCASE COLLATE NOCASE  ORDER BY release DESC";
     $results = $db->query($query);
     $tmdb_item = $db->fetch($results);
     if (is_array($tmdb_item) && count($tmdb_item) > 0) {

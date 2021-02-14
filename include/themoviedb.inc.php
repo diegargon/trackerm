@@ -32,7 +32,7 @@ function themoviedb_searchMovies($search) {
         return null;
     }
 
-    if (!empty($data['results']) && is_array($data['results']) && count($data['results'] > 1)) {
+    if (!empty($data['results']) && is_array($data['results']) && count($data['results']) > 0) {
         themoviedb_updateCache($search, $data, 'movies');
         $movies = themoviedb_MediaPrep('movies', $data['results']);
     }
@@ -62,7 +62,7 @@ function themoviedb_searchShows($search) {
     if (!$data) {
         return null;
     }
-    if (!empty($data['results']) && count($data['results'] > 1)) {
+    if (!empty($data['results']) && count($data['results']) > 0) {
         themoviedb_updateCache($search, $data, 'shows');
         $shows = themoviedb_MediaPrep('shows', $data['results']);
     }
@@ -163,7 +163,6 @@ function themoviedb_MediaPrep($media_type, $items) {
 
         $fitems[] = [
             'ilink' => $media_type . '_db',
-            'media_type' => $media_type,
             'themoviedb_id' => $item['id'],
             'title' => $title,
             'original_title' => $original_title,
@@ -184,17 +183,16 @@ function themoviedb_MediaPrep($media_type, $items) {
     if (!empty($fitems)) {
 
         foreach ($fitems as $key => $fitem) {
-            $where_select['media_type'] = ['value' => $fitem['media_type']];
             $where_select['themoviedb_id'] = ['value' => $fitem['themoviedb_id']];
-            $results = $db->select('tmdb_search', 'id', $where_select, 'LIMIT 1');
+            $results = $db->select('tmdb_search_' . $media_type, 'id', $where_select, 'LIMIT 1');
             $res_item = $db->fetch($results);
             if (empty($res_item) || count($res_item) < 1) {
-                $db->insert('tmdb_search', $fitem);
+                $db->insert('tmdb_search_' . $media_type, $fitem);
                 $fitems[$key]['id'] = $db->getLastId();
             } else {
                 if (!empty($res_item)) {
                     $fitems[$key]['id'] = $res_item['id'];
-                    $db->update('tmdb_search', $fitem, ['id' => ['value' => $res_item['id']]]);
+                    $db->update('tmdb_search_' . $media_type, $fitem, ['id' => ['value' => $res_item['id']]]);
                 }
             }
             $db->finalize($results);
@@ -294,10 +292,10 @@ function themoviedb_showsDetailsPrep($id, $seasons_data, $episodes_data) {
     return $item_episodes;
 }
 
-function themoviedb_getByLocalId($id) {
+function themoviedb_getByLocalId($media_type, $id) {
     global $db;
 
-    $item = $db->getItemById('tmdb_search', $id);
+    $item = $db->getItemById('tmdb_search_' . $media_type, $id);
 
     return $item ? $item : false;
 }
@@ -307,7 +305,7 @@ function themoviedb_getFromCache($media_type, $id) {
 
     !isset($cfg['TMDB_LANG']) ? $cfg['TMDB_LANG'] = $cfg['LANG'] : null;
 
-    $item = $db->getItemByField('tmdb_search', 'themoviedb_id', $id);
+    $item = $db->getItemByField('tmdb_search_' . $media_type, 'themoviedb_id', $id);
     if ($item) {
         return $item;
     }
