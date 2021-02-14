@@ -51,15 +51,14 @@ function create_db() {
                     UNIQUE (uid, pref_name)
                 )');
 
-    // TMDB_SEARCH
-    $db->query('CREATE TABLE IF NOT EXISTS "tmdb_search" (
+    // TMDB_SEARCH MOVIES
+    $db->query('CREATE TABLE IF NOT EXISTS "tmdb_search_movies" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                     "themoviedb_id" INTEGER NOT NULL,
                     "ilink" VARCHAR NULL,
                     "title" VARCHAR NOT NULL,
                     "clean_title" VARCHAR NULL,
                     "original_title" VARCHAR NULL,
-                    "media_type" VARCHAR NULL,
                     "rating" REAL NULL,
                     "popularity" REAL NULL,
                     "elink" VARCHAR NULL,
@@ -73,9 +72,31 @@ function create_db() {
                     "genre" VARCHAR NULL,
                     "updated" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-                    UNIQUE(themoviedb_id, media_type)
+                    UNIQUE(themoviedb_id)
                 )');
-
+    // TMDB_SEARCH MOVIES
+    $db->query('CREATE TABLE IF NOT EXISTS "tmdb_search_shows" (
+                    "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                    "themoviedb_id" INTEGER NOT NULL,
+                    "ilink" VARCHAR NULL,
+                    "title" VARCHAR NOT NULL,
+                    "clean_title" VARCHAR NULL,
+                    "original_title" VARCHAR NULL,
+                    "rating" REAL NULL,
+                    "popularity" REAL NULL,
+                    "elink" VARCHAR NULL,
+                    "poster" VARCHAR NULL,
+                    "scene" VARCHAR NULL,
+                    "trailer" VARCHAR NULL,
+                    "lang" VARCHAR NULL,
+                    "plot" VARCHAR NULL,
+                    "release" VARCHAR NULL,
+                    "in_library" INT NULL,
+                    "genre" VARCHAR NULL,
+                    "updated" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                    "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                    UNIQUE(themoviedb_id)
+                )');
     // LOG MSGS
     $db->query('CREATE TABLE IF NOT EXISTS "log_msgs" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -298,6 +319,7 @@ function create_db() {
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                     UNIQUE (cfg_key)
                 )');
+
     //SEARCH MOVIES CACHE
     $db->query('CREATE TABLE IF NOT EXISTS "search_movies_cache" (
           "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -634,7 +656,52 @@ function update_db($from) {
           "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
           )');
 
-
+        // TMDB_SEARCH MOVIES
+        $db->query('CREATE TABLE IF NOT EXISTS "tmdb_search_movies" (
+                    "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                    "themoviedb_id" INTEGER NOT NULL,
+                    "ilink" VARCHAR NULL,
+                    "title" VARCHAR NOT NULL,
+                    "clean_title" VARCHAR NULL,
+                    "original_title" VARCHAR NULL,
+                    "rating" REAL NULL,
+                    "popularity" REAL NULL,
+                    "elink" VARCHAR NULL,
+                    "poster" VARCHAR NULL,
+                    "scene" VARCHAR NULL,
+                    "trailer" VARCHAR NULL,
+                    "lang" VARCHAR NULL,
+                    "plot" VARCHAR NULL,
+                    "release" VARCHAR NULL,
+                    "in_library" INT NULL,
+                    "genre" VARCHAR NULL,
+                    "updated" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                    "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                    UNIQUE(themoviedb_id)
+                )');
+        // TMDB_SEARCH MOVIES
+        $db->query('CREATE TABLE IF NOT EXISTS "tmdb_search_shows" (
+                    "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                    "themoviedb_id" INTEGER NOT NULL,
+                    "ilink" VARCHAR NULL,
+                    "title" VARCHAR NOT NULL,
+                    "clean_title" VARCHAR NULL,
+                    "original_title" VARCHAR NULL,
+                    "rating" REAL NULL,
+                    "popularity" REAL NULL,
+                    "elink" VARCHAR NULL,
+                    "poster" VARCHAR NULL,
+                    "scene" VARCHAR NULL,
+                    "trailer" VARCHAR NULL,
+                    "lang" VARCHAR NULL,
+                    "plot" VARCHAR NULL,
+                    "release" VARCHAR NULL,
+                    "in_library" INT NULL,
+                    "genre" VARCHAR NULL,
+                    "updated" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                    "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                    UNIQUE(themoviedb_id)
+                )');
         $db->update('config', ['category' => 'L_WANTED'], ['cfg_key' => ['value' => 'torrent_require_prefs']]);
         $db->update('config', ['category' => 'L_WANTED'], ['cfg_key' => ['value' => 'torrent_quality_prefs']]);
         $db->update('config', ['category' => 'L_WANTED'], ['cfg_key' => ['value' => 'torrent_ignore_prefs']]);
