@@ -177,6 +177,7 @@ $LNG = [
     'L_SECONDS' => 'Segundos',
     'L_SUBMIT' => 'Enviar',
     'L_SUCCESS' => 'Exito',
+    'L_STATS' => 'Stats',
     'L_START' => 'Comenzar',
     'L_STATE_MSG' => 'Mensajes de estado',
     'L_STOP' => 'Parar',

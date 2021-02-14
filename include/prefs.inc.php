@@ -57,7 +57,6 @@ function getUidWithPref($r_key, $r_value) {
 function getPrefValueByUid($id, $r_key) {
     global $db;
 
-    echo $id . $r_key;
     $where = ['pref_name' => ['value' => $r_key], 'uid' => ['value' => $id]];
 
     $results = $db->select('preferences', null, $where, 'LIMIT 1');

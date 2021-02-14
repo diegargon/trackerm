@@ -176,12 +176,26 @@ function valid_array($array) {
 }
 
 function notify_mail($msg) {
-    global $db;
+    global $db, $LNG;
     $tag = "[TRACKERM] ";
     $subject = $tag . $msg['subject'];
 
+    $lib_stats = getLibraryStats();
+    $footer = "\n\n -- \n {$LNG['L_STATS']} \n";
+    if (valid_array($lib_stats['movies_paths'])) {
+        foreach ($lib_stats['movies_paths'] as $path_key => $path) {
+            $footer .= $path_key . '(' . $path['basename'] . ') ' . $path['free'] . '/' . $path['total'] . "\n";
+        }
+    }
+    if (valid_array($lib_stats['shows_paths'])) {
+        foreach ($lib_stats['shows_paths'] as $path_key => $path) {
+            $footer .= $path_key . '(' . $path['basename'] . ') ' . $path['free'] . '/' . $path['total'] . "\n";
+        }
+    }
+    $msg['msg'] .= $footer;
     $results = $db->query("SELECT id,email FROM users WHERE email IS NOT NULL");
     $users = $db->fetchAll($results);
+
 
     foreach ($users as $user) {
         if (getPrefValueByUid($user['id'], 'email_notify')) {

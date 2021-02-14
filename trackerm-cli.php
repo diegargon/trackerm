@@ -43,6 +43,6 @@ update_stats();
 
 //UPGRADE
 set_clean_titles(); // (upgrading v4 change how clean works, must empty the field and redo )
-
+notify_mail(['subject' => "test", 'msg' => "test"]);
 $log->info("trackerm automatic service finish...");
 
