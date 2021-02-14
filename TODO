@@ -5,9 +5,8 @@ TODO
     [FIX] Clean wanted.db/direct torrents that was delete outside app        
     [IMPROVE] Indexers to config
     [FIX/CHECK] do not contemplate yet what to do if tmdb not found any results.    
+
 [MED]
-    [IMPROVE] OPT to notify: notify by mail new content / rar password
-    [IMPROVE][VIEW]Add delete media button
     [NEW] Escaneo de directorios a más para avi sin ser torrents. $cfg['SCAN_MEDIA_DIR'] = 1;
     [NEW/IMPROVE] actualizacion automatica cada semana de titulos de episodio a excepcion de que el show sea "ended"
     [NEW] Biblio: buscador en nuestra libreria o enlace a una pagina buscador más facil de implementar.
@@ -22,6 +21,7 @@ TODO
      [IMPROVE]On torrent new/search get release data from tmdb and show it, get local database if not request database
     [FIX] Security
     [IMPROVE] get mediainfo and show time at least
+
 [VERY LOW]      
     [IMPROVE] Pagination: actually we get all results and do a array_slice, now with SQL database we can  do that better.    
     [FIX/IMPROVE] Normalize dates        
@@ -31,6 +31,8 @@ TODO
     [IMPROVE][LIBRARY] Los shows deberian de tener un registro maestro con los datos y los demas, los capitulos ser registro secundarios.
             Quizas tener dos DBs una library_shows, library_episodes.    
     [IMPROVE] Too much messy code...
+    [IMPROVE][VIEW]Add delete media button
+
 [BACKLOG]
 
     [CHANGE] Change actual Transmission rpc api to something basic, since some basic is enough and the actual have alot of deps 
