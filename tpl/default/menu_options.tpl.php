@@ -15,7 +15,7 @@
         <input class="submit_btn"  type="submit" value="<?= $tdata['L_SEARCH'] ?>"/>
     </form>
     -->
-    <form method="post" action="<?= str_replace('&sw_opt=1', '', basename($_SERVER['REQUEST_URI'])) ?>">
+    <form method="post" action="?page=<?= $tdata['page'] ?>">
         <?php if ($tdata['page'] != 'wanted') { ?>
             <?= $tdata['L_IDENTIFY'] ?>:
             <select name="num_ident_toshow" onchange="this.form.submit()">
