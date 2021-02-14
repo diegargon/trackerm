@@ -28,8 +28,14 @@ function themoviedb_searchMovies($search) {
 
     $data = curl_get_tmdb($url);
 
-    themoviedb_updateCache($search, $data, 'movies');
-    (isset($data['results'])) ? $movies = themoviedb_MediaPrep('movies', $data['results']) : null;
+    if (!$data) {
+        return null;
+    }
+
+    if (!empty($data['results']) && is_array($data['results']) && count($data['results'] > 1)) {
+        themoviedb_updateCache($search, $data, 'movies');
+        $movies = themoviedb_MediaPrep('movies', $data['results']);
+    }
 
     return isset($movies) ? $movies : null;
 }
@@ -53,8 +59,13 @@ function themoviedb_searchShows($search) {
 
     $data = curl_get_tmdb($url);
 
-    themoviedb_updateCache($search, $data, 'shows');
-    (isset($data['results'])) ? $shows = themoviedb_MediaPrep('shows', $data['results']) : null;
+    if (!$data) {
+        return null;
+    }
+    if (!empty($data['results']) && count($data['results'] > 1)) {
+        themoviedb_updateCache($search, $data, 'shows');
+        $shows = themoviedb_MediaPrep('shows', $data['results']);
+    }
 
     return isset($shows) ? $shows : null;
 }
@@ -98,7 +109,7 @@ function themoviedb_searchCache($search_words, $media_type) {
     } else {
         $ids = explode(',', $cached_results['ids']);
         foreach ($ids as $id) {
-            $results[] = themoviedb_getFromCache($media_type, $id);
+            !empty($id) ? $results[] = themoviedb_getFromCache($media_type, $id) : null;
         }
     }
     return (count($results) > 0) ? $results : false;
@@ -121,7 +132,6 @@ function themoviedb_MediaPrep($media_type, $items) {
     $fitems = [];
 
     foreach ($items as $item) {
-
         if ($media_type == 'movies') {
             $title = $item['title'];
             $original_title = $item['original_title'];
@@ -319,8 +329,7 @@ function themoviedb_getFromCache($media_type, $id) {
 
     $response_item[] = curl_get_tmdb($url);
 
-
-    if (count($response_item) <= 0) {
+    if (empty($response_item[0]) || count($response_item) <= 0) {
         $log->err('getByDbId: Request id=' . $id . ' to remote databse fail');
         return false;
     }

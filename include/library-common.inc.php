@@ -121,7 +121,7 @@ function _rebuild($media_type, $path) {
         if (!empty($insert_ids) && (count($insert_ids) > 0)) {
             $insert_ids = check_history($media_type, $insert_ids);
             if (!empty($cfg['auto_identify'])) {
-                (isset($insert_ids) && count($insert_ids) > 0 ) ? auto_ident_by_search($media_type, $insert_ids) : null;
+                (isset($insert_ids) && count($insert_ids) > 0 ) ? auto_ident_exact($media_type, $insert_ids) : null;
             }
         }
     }
@@ -161,7 +161,7 @@ function show_identify_media($media_type) {
             }
         }
 
-        (isset($auto_id_ids) && count($auto_id_ids) > 0 ) ? auto_ident_by_search($media_type, $auto_id_ids) : null;
+        (isset($auto_id_ids) && count($auto_id_ids) > 0 ) ? auto_ident_exact($media_type, $auto_id_ids) : null;
         //Need requery for failed automate ident
         $result = $db->query("SELECT * FROM library_$media_type WHERE title = '' OR themoviedb_id = ''");
         $media = $db->fetchAll($result);
@@ -222,8 +222,8 @@ function show_identify_media($media_type) {
     return false;
 }
 
-function auto_ident_by_search($media_type, $ids) {
-    global $log, $db;
+function auto_ident_exact($media_type, $ids) {
+    global $log, $db, $cfg;
 
     $uniq_shows = [];
 
@@ -241,11 +241,26 @@ function auto_ident_by_search($media_type, $ids) {
         } else {
             return false;
         }
+
         if (!empty($search_media[0]['themoviedb_id'])) {
-            submit_ident($media_type, $search_media[0], $id);
+            $found = 0;
+            foreach ($search_media as $coincidence) {
+                $coincidence_title = clean_title($coincidence['title']);
+                $db_item_title = clean_title($db_item['predictible_title']);
+                if ($coincidence_title == $db_item_title) {
+                    submit_ident($media_type, $coincidence, $id);
+                    $found = 1;
+                    break;
+                }
+            }
+            if (!$found && !$cfg['auto_ident_strict']) {
+                $found = 1;
+                submit_ident($media_type, $search_media[0], $id);
+            }
         } else {
-            $log->debug("Auto ident is set but can found any result in themoviedb");
+            continue;
         }
+        !$found ? $log->debug("Auto ident is set but titles not match $db_item_title") : null;
     }
 
     return true;
@@ -259,7 +274,7 @@ function ident_by_idpairs($media_type, $id_pairs) {
 
 function ident_by_id($media_type, $tmdb_id, $id) {
     $db_data = mediadb_getFromCache($media_type, $tmdb_id);
-    submit_ident($media_type, $db_data, $id);
+    ($db_data) ? submit_ident($media_type, $db_data, $id) : null;
 }
 
 function submit_ident($media_type, $item_data, $id) {
@@ -284,7 +299,7 @@ function submit_ident($media_type, $item_data, $id) {
     !empty($item_data['plot']) ? $update_fields['plot'] = $item_data['plot'] : null;
     !empty($item_data['release']) ? $update_fields['release'] = $item_data['release'] : null;
 
-
+    //TODO CHECK IF EXIST themovie_id  since is UNIQUE
     if ($media_type == 'movies') {
         $db->updateItemById('library_movies', $id, $update_fields);
     } else if ($media_type == 'shows') {

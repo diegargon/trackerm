@@ -76,6 +76,9 @@ function curl_get_tmdb($url) {
     } else {
         return false;
     }
+    if (isset($array['success']) && !$array['success']) {
+        return false;
+    }
     //var_dump($array);
 
     return $array;
