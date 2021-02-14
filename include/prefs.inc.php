@@ -30,11 +30,8 @@ function loadUserPrefs() {
 function getPrefsItem($r_key, $system = false) {
     global $db, $user;
 
-    if ($system) {
-        $where['uid'] = ['value' => 0];
-    } else {
-        $where['uid'] = ['value' => $user['id']];
-    }
+    ($system) ? $where['uid'] = ['value' => 0] : $where['uid'] = ['value' => $user['id']];
+
     $results = $db->select('preferences', null, $where);
     $user_prefs = $db->fetchAll($results);
 
@@ -49,11 +46,7 @@ function getPrefsItem($r_key, $system = false) {
 function setPrefsItem($key, $value, $system = false) {
     global $db, $user;
 
-    if ($system) {
-        $uid = 0;
-    } else {
-        $uid = $user['id'];
-    }
+    ($system) ? $uid = 0 : $uid = $user['id'];
 
     $newitem = [
         'uid' => $uid,
@@ -69,7 +62,6 @@ function setPrefsItem($key, $value, $system = false) {
     $prefs = $db->fetch($result);
 
     if ($prefs) {
-
         if ($prefs['pref_value'] != $value) {
             $set['pref_value'] = $value;
             $db->update('preferences', $set, $where, 'LIMIT 1');
