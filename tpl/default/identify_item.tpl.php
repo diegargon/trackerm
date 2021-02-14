@@ -22,7 +22,7 @@
         <?php } ?>
     </div>
     <div class="divTableCellID">
-        <span><a class="action_link" href="<?= $tdata['del_iurl'] ?>"><?= $tdata['L_DELETE'] ?></a></span>
+        <span><a class="action_link" href="<?= $tdata['del_iurl'] ?>"><?= $tdata['L_DELETE_REGISTER'] ?></a></span>
         <span><a class="action_link" href="<?= $tdata['more_iurl'] ?>"><?= $tdata['L_MORE_SIGN'] ?></a></span>
     </div>
 </div>
