@@ -1,6 +1,8 @@
 TODO
 
-[HIGH]   
+[HIGH]
+    [IMPROVE] añadir tabla view_movies, view=0 not view 1 partial 2 , 3 view.
+    [FIX] Bloquear boton de rebuild cuando se ejecute hasta terminar
     [FIX] Clean wanted.db/direct torrents that was delete outside app        
     [IMPROVE] Indexers to config
     [FIX/CHECK] do not contemplate yet what to do if tmdb not found any results.    
