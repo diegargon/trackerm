@@ -103,8 +103,14 @@ function themoviedb_searchCache($search_words, $media_type) {
         return false;
     }
 
+    if ($search_words == '_TODAY_SHOWS_' || $search_words == '_POPULAR_' || $search_words == '_TRENDING_') {
+        $cache_expire = $cfg['tmdb_opt_cache_expire'];
+    } else {
+        $cache_expire = $cfg['tmdb_search_cache_expire'];
+    }
     $cached_results = $cached_results[0];
-    if (empty($cached_results['updated']) || empty($cached_results['ids']) || (time() > ($cached_results['updated'] + $cfg['tmdb_search_cache_expire']))) {
+
+    if (empty($cached_results['updated']) || empty($cached_results['ids']) || (time() > ($cached_results['updated'] + $cache_expire))) {
         return false;
     } else {
         $ids = explode(',', $cached_results['ids']);
