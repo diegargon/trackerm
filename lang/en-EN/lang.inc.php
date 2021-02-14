@@ -230,7 +230,6 @@ $LNG = [
     'L_CFG_SEARCH_CACHE' => 'Search cache',
     'L_CFG_SEARCH_CACHE_EXPIRE' => 'Expire search cache',
     'L_CFG_NEW_CACHE_EXPIRE' => 'Expire cache news',
-    'L_CFG_TORRENT_MEDIA_REGEX' => 'Media search Regex',
     'L_CFG_UPD_MISSING_DELAY' => 'When missing a field from ex:tmdb we try after few days check if added',
     'L_CFG_UPD_LONG_DELAY' => 'Check if there are any change in tmdb entry for update our entry',
     'L_CFG_WANTED_PAUSED' => 'Add wanted in pause',
@@ -264,6 +263,7 @@ $LNG = [
     'L_CFG_SHOW_NOID_INLIBRARY' => 'Show no identified files in library',
     'L_CFG_TMDB_SEARCH_CACHE_EXPIRE' => 'Tmdb cache expire',
     'L_CFG_AUTO_IDENT_STRICT' => 'Strict Auto identify?',
+    'L_CFG_TMDB_OPT_CACHE_EXPIRE' => 'Tmdb popular/trending and similar cache expire recommend 24h (86400)',
     /*
       'L_CFG_TRANSCODER_PLAY' => '(unused p1)',
       'L_CFG_TRANSCODER_PATH' => '(unused p2)',
@@ -273,7 +273,7 @@ $LNG = [
       'L_CFG_VIDEOJS_LIVEUI' => '(unused p6)',
       'L_CFG_VIDEOJS_AUTOPLAY' => '(unused p7)',
      */
-    //TOOLTIP
+//TOOLTIP
     'L_TIP_COMMA' => 'Palabras separadas por coma',
     'L_TIP_IGNORE_SIZE' => 'Max size in GB (ex:1 for 1gb )',
 ];

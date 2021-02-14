@@ -230,7 +230,6 @@ $LNG = [
     'L_CFG_SEARCH_CACHE' => 'Activar el cache de busqueda',
     'L_CFG_SEARCH_CACHE_EXPIRE' => 'Tiempo de expiracion del cache de busqueda',
     'L_CFG_NEW_CACHE_EXPIRE' => 'Tiempo de expiracion del cache de novedades',
-    'L_CFG_TORRENT_MEDIA_REGEX' => 'Regex busqueda multimedia',
     'L_CFG_UPD_MISSING_DELAY' => 'Cuando falta un dato de la bd ex:tmdb intentarlo despues de varios dias',
     'L_CFG_UPD_LONG_DELAY' => 'Actualizar datos despues de un tiempo para cambios ex:tmdb',
     'L_CFG_WANTED_PAUSED' => 'Añadir wanted en pausa',
@@ -264,6 +263,7 @@ $LNG = [
     'L_CFG_SHOW_NOID_INLIBRARY' => 'Mostrar archivos no identificados en la libreria',
     'L_CFG_TMDB_SEARCH_CACHE_EXPIRE' => 'Tmdb expiración del cache',
     'L_CFG_AUTO_IDENT_STRICT' => '¿Auto identificación estricta?',
+    'L_CFG_TMDB_OPT_CACHE_EXPIRE' => 'Tmdb expiración del cache de popular/trending y similar recommend 24h (86400)',
     /*
       'L_CFG_TRANSCODER_PLAY' => '(unused p1)',
       'L_CFG_TRANSCODER_PATH' => '(unused p2)',

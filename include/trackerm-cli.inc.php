@@ -361,7 +361,7 @@ function get_valid_files($item) {
         $valid_files = [];
 
         foreach ($files_dir as $file) {
-            if (preg_match($cfg['torrent_media_regex'], $file)) {
+            if (is_media_file($file)) {
                 $valid_files[] = $file;
             }
         }
@@ -394,7 +394,7 @@ function get_valid_files($item) {
                     $log->debug("Work path is empty");
                 }
                 foreach ($files_dir as $file) {
-                    if (preg_match($cfg['torrent_media_regex'], $file)) {
+                    if (is_media_file($file)) {
                         $valid_files[] = $file;
                     } else {
                         if (!is_dir($file)) {
@@ -405,7 +405,7 @@ function get_valid_files($item) {
             }
         } else {
             foreach ($item['files'] as $file) {
-                if (preg_match($cfg['torrent_media_regex'], $file['name'])) {
+                if (is_media_file($file['name'])) {
                     $file_full_path = $cfg['TORRENT_FINISH_PATH'] . '/' . $file['name'];
                     $valid_files[] = $file_full_path;
                 }

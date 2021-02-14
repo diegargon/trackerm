@@ -22,6 +22,16 @@ function findMediaFiles($directory, $extensions = []) {
     return $files;
 }
 
+function is_media_file($file) {
+    global $cfg;
+
+    $ext = getFileExt($file);
+    if (in_array($ext, $cfg['media_ext'])) {
+        return true;
+    }
+    return false;
+}
+
 function RemoveBrokenMedialinks($paths, $extensions = []) {
     $links = [];
     $files = [];
