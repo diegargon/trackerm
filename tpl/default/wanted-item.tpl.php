@@ -25,7 +25,7 @@
         <div class="tag_day"><?= $tdata['day_check'] ?></div>
     </div>
     <div class="divTableCellWanted">
-        <div class="tag_added"><?= $tdata['added'] ?></div>
+        <div class="tag_added"><?= $tdata['created'] ?></div>
     </div>
     <div class="divTableCellWanted">
         <div class="tag_day"><?= $tdata['last_check'] ?></div>

@@ -38,7 +38,7 @@
                 <?php } else if (!empty($tdata['themoviedb_id']) && ($tdata['ilink'] == 'shows_db' || $tdata['ilink'] == 'shows_library' )) { ?>
                     <span class="external_link"><a href="https://www.themoviedb.org/tv/<?= $tdata['themoviedb_id'] ?>" target=_blank>TheMovieDB</a></span><br/>
                 <?php } ?>
-                <?php if (!empty($tdata['added'])) {
+                <?php if (!empty($tdata['created'])) {
                     ?>
                     <span><?= $tdata['L_ADDED'] ?> :</span>
                     <span class="view_added"><?= strftime("%d %h", strtotime($tdata['created'])) ?></span>
