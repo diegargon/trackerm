@@ -292,14 +292,18 @@ function view_seasons($id, $update = false) {
             $items = mediadb_getSeasons($id);
         }
     }
+
     if (empty($item) && empty($items)) {
         return false;
     }
-    !empty($item) ? $seasons = $item['seasons'] : $seasons = $items[0]['seasons'];
-    !empty($item) ? $episodes = $item['episodes'] : $episodes = $items[0]['episodes'];
-
-    $seasons_data .= '<span>Tº' . $LNG['L_SEASONS'] . ': ' . $seasons . '</span><br/>';
-    $seasons_data .= '<span>Tº' . $LNG['L_EPISODES'] . ': ' . $episodes . '</span><br/>';
+    if (!empty($item)) {
+        $seasons = $item['seasons'];
+        $episodes = $item['episodes'];
+    } else {
+        $seasons = $items[0]['seasons'];
+        $episodes = $items[0]['episodes'];
+    }
+    $seasons_data .= '<span>' . $LNG['L_SEASONS'] . ': ' . $seasons . ' ' . $LNG['L_EPISODES'] . ': ' . $episodes . '</span><br/>';
 
     $iurl = basename($_SERVER['REQUEST_URI']);
     $iurl = preg_replace('/&season=\d{1,4}/', '', $iurl);
@@ -318,6 +322,7 @@ function view_seasons($id, $update = false) {
 
         $item_counter = 0;
         foreach ($items as $item) {
+            //TODO MOVE TO TPL
             if ($item['season'] == $season) {
                 if ($item_counter == 12) {
                     $episode_data .= '</div>'; //Table
@@ -390,7 +395,6 @@ function check_if_have_show($id, $season, $episode) {
     $where['season'] = ['value' => $season];
     $results = $db->select('library_shows', null, $where);
     $season_episodes = $db->fetchAll($results);
-
 
     foreach ($season_episodes as $s_episode) {
 

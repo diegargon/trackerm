@@ -14,12 +14,12 @@ function wanted_list() {
     $iurl = '?page=wanted';
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        if (isset($_POST['ignore_tags']) && count($_POST['ignore_tags']) > 0) {
+        if (valid_array($_POST['ignore_tags'])) {
             foreach ($_POST['ignore_tags'] as $ignore_key => $ignore_value) {
                 $db->updateItemById('wanted', $ignore_key, ['custom_words_ignore' => $ignore_value]);
             }
         }
-        if (isset($_POST['require_tags']) && count($_POST['require_tags']) > 0) {
+        if (valid_array($_POST['require_tags'])) {
             foreach ($_POST['require_tags'] as $require_key => $require_value) {
                 $db->updateItemById('wanted', $require_key, ['custom_words_require' => $require_value]);
             }
@@ -58,11 +58,22 @@ function wanted_list() {
                 (strlen($wanted_item['season']) == 1) ? $season = '0' . $wanted_item['season'] : $season = $wanted_item['season'];
                 (strlen($wanted_item['episode']) == 1) ? $episode = '0' . $wanted_item['episode'] : $episode = $wanted_item['episode'];
                 $s_episode = 'S' . $season . 'E' . $episode;
-                $wanted_item['shown_title'] = $wanted_item['title'] . ' ' . $s_episode;
+                $wanted_item['show_title'] = $wanted_item['title'] . ' ' . $s_episode;
             }
             $mediadb_item = mediadb_getFromCache($wanted_item['media_type'], $wanted_item['themoviedb_id']);
-            !empty($mediadb_item) ? $tdata['elink'] = $mediadb_item['elink'] : null;
+            $tdata['elink'] = $mediadb_item['elink'];
+
+            ($wanted_item['media_type'] == 'movies') ? $type = 'movies_db' : $type = 'shows_db';
+            $tdata['ilink'] = '<a class="wanted_link" href="?page=view&id=' . $mediadb_item['id'] . '&type=' . $type . '">';
+            if (!empty($wanted_item['show_title'])) {
+                $tdata['ilink'] .= $wanted_item['show_title'] . '</a>';
+            } else {
+                $tdata['ilink'] .= $wanted_item['title'] . '</a>';
+            }
+
             $wanted_item['media_type'] == 'movies' ? $tdata['lang_media_type'] = $LNG['L_MOVIES'] : $tdata['lang_media_type'] = $LNG['L_SHOWS'];
+
+
             $wanted_list_data .= getTpl('wanted-item', array_merge($wanted_item, $tdata, $LNG, $cfg));
         }
         return $wanted_list_data;
@@ -102,18 +113,17 @@ function wanted_episode($id, $season, $episodes) {
     global $db, $cfg;
 
     if (strlen($season) == 1) {
-        $season = "0" . $season;
+        $season = '0' . $season;
     }
     $episodes = explode(',', $episodes);
 
     foreach ($episodes as $episode) {
         $episode = trim($episode);
         if (strlen($episode) == 1) {
-            $episode = "0" . $episode;
+            $episode = '0' . $episode;
         }
 
         $item = mediadb_getFromCache('shows', $id);
-        //$title_search = $item['title'] . ' S' . $season . 'E' . $episode;
 
         $wanted_item = [
             'themoviedb_id' => $item['themoviedb_id'],

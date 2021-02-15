@@ -21,7 +21,7 @@ TODO
      [IMPROVE]On torrent new/search get release data from tmdb and show it, get local database if not request database
     [FIX] Security
     [IMPROVE] get mediainfo and show time at least
-
+    [IMPROBE][CLI] Clean old query search caches entrys
 [VERY LOW]      
     [IMPROVE] Pagination: actually we get all results and do a array_slice, now with SQL database we can  do that better.    
     [FIX/IMPROVE] Normalize dates        

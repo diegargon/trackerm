@@ -13,38 +13,31 @@ function themoviedb_searchMovies($search) {
     global $cfg;
 
     $cache_data = [];
-
     $search = trim($search);
 
     $cache_data = themoviedb_searchCache($search, 'movies');
-    if (!empty($cache_data) && count($cache_data) > 0) {
+    if (valid_array($cache_data)) {
         return $cache_data;
     }
     !isset($cfg['TMDB_LANG']) ? $cfg['TMDB_LANG'] = $cfg['LANG'] : null;
-
-    $query = str_replace(' ', '+', trim($search));
-
-    $url = 'https://api.themoviedb.org/3/search/movie?api_key=' . $cfg['db_api_token'] . '&query=' . $query . '&language=' . $cfg['TMDB_LANG'];
-
+    $search_query = str_replace(' ', '+', trim($search));
+    $url = 'https://api.themoviedb.org/3/search/movie?api_key=' . $cfg['db_api_token'] . '&query=' . $search_query . '&language=' . $cfg['TMDB_LANG'];
     $data = curl_get_tmdb($url);
 
-    if (!$data) {
-        return null;
-    }
-
-    if (!empty($data['results']) && is_array($data['results']) && count($data['results']) > 0) {
+    if (valid_array($data['results'])) {
         themoviedb_updateCache($search, $data, 'movies');
         $movies = themoviedb_MediaPrep('movies', $data['results']);
+    } else {
+        return false;
     }
 
-    return isset($movies) ? $movies : null;
+    return valid_array($movies) ? $movies : null;
 }
 
 function themoviedb_searchShows($search) {
     global $cfg;
 
     $cache_data = [];
-
     $search = trim($search);
 
     $cache_data = themoviedb_searchCache($search, 'shows');
@@ -52,22 +45,18 @@ function themoviedb_searchShows($search) {
         return $cache_data;
     }
     !isset($cfg['TMDB_LANG']) ? $cfg['TMDB_LANG'] = $cfg['LANG'] : null;
-
-    $query = str_replace(' ', '+', trim($search));
-
-    $url = 'https://api.themoviedb.org/3/search/tv?api_key=' . $cfg['db_api_token'] . '&query=' . $query . '&language=' . $cfg['TMDB_LANG'];
-
+    $search_query = str_replace(' ', '+', trim($search));
+    $url = 'https://api.themoviedb.org/3/search/tv?api_key=' . $cfg['db_api_token'] . '&query=' . $search_query . '&language=' . $cfg['TMDB_LANG'];
     $data = curl_get_tmdb($url);
 
-    if (!$data) {
-        return null;
-    }
-    if (!empty($data['results']) && count($data['results']) > 0) {
+    if (valid_array($data['results'])) {
         themoviedb_updateCache($search, $data, 'shows');
         $shows = themoviedb_MediaPrep('shows', $data['results']);
+    } else {
+        return false;
     }
 
-    return isset($shows) ? $shows : null;
+    return valid_array($shows) ? $shows : null;
 }
 
 function themoviedb_updateCache($words, $results, $media_type) {
@@ -91,15 +80,13 @@ function themoviedb_searchCache($search_words, $media_type) {
     global $db, $cfg;
 
     $tmdb_cache_table = 'search_' . $media_type . '_cache';
-
     $results = [];
 
     $where['words'] = ['value' => $search_words];
     $where['engine'] = ['value' => 'tmdb'];
-
     $query_results = $db->select($tmdb_cache_table, '*', $where, 'LIMIT 1');
     $cached_results = $db->fetchAll($query_results);
-    if (empty($cached_results[0])) {
+    if (!valid_array($cached_results)) {
         return false;
     }
 
@@ -114,11 +101,13 @@ function themoviedb_searchCache($search_words, $media_type) {
         return false;
     } else {
         $ids = explode(',', $cached_results['ids']);
-        foreach ($ids as $id) {
-            !empty($id) ? $results[] = themoviedb_getFromCache($media_type, $id) : null;
+        if (valid_array($ids)) {
+            foreach ($ids as $id) {
+                !empty($id) ? $results[] = themoviedb_getFromCache($media_type, $id) : null;
+            }
         }
     }
-    return (count($results) > 0) ? $results : false;
+    return (valid_array($results)) ? $results : false;
 }
 
 function themoviedb_MediaPrep($media_type, $items) {
@@ -186,8 +175,7 @@ function themoviedb_MediaPrep($media_type, $items) {
         ];
     }
 
-    if (!empty($fitems)) {
-
+    if (valid_array($fitems)) {
         foreach ($fitems as $key => $fitem) {
             $where_select['themoviedb_id'] = ['value' => $fitem['themoviedb_id']];
             $results = $db->select('tmdb_search_' . $media_type, 'id', $where_select, 'LIMIT 1');
@@ -195,11 +183,9 @@ function themoviedb_MediaPrep($media_type, $items) {
             if (empty($res_item) || count($res_item) < 1) {
                 $db->insert('tmdb_search_' . $media_type, $fitem);
                 $fitems[$key]['id'] = $db->getLastId();
-            } else {
-                if (!empty($res_item)) {
-                    $fitems[$key]['id'] = $res_item['id'];
-                    $db->update('tmdb_search_' . $media_type, $fitem, ['id' => ['value' => $res_item['id']]]);
-                }
+            } else if (!empty($res_item)) {
+                $fitems[$key]['id'] = $res_item['id'];
+                $db->update('tmdb_search_' . $media_type, $fitem, ['id' => ['value' => $res_item['id']]]);
             }
             $db->finalize($results);
         }
@@ -212,29 +198,27 @@ function themoviedb_getSeasons($id) {
     global $cfg, $db;
 
     !isset($cfg['TMDB_LANG']) ? $cfg['TMDB_LANG'] = $cfg['LANG'] : null;
-
     $seasons_url = 'https://api.themoviedb.org/3/tv/' . $id . '?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['TMDB_LANG'];
-
     $seasons_data = curl_get_tmdb($seasons_url);
 
-    if (isset($seasons_data['number_of_seasons'])) {
-        $nseasons = $seasons_data['number_of_seasons'];
-        $episodes_data = [];
+    if (!isset($seasons_data['number_of_seasons'])) {
+        return false;
+    }
+    $nseasons = $seasons_data['number_of_seasons'];
+    $episodes_data = [];
 
-        for ($i = 1; $i <= $nseasons; $i++) {
-            $seasons_url = 'https://api.themoviedb.org/3/tv/' . $id . '/season/' . $i . '?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['TMDB_LANG'];
-            $episodes_data[$i] = curl_get_tmdb($seasons_url);
-        }
+    for ($i = 1; $i <= $nseasons; $i++) {
+        $seasons_url = 'https://api.themoviedb.org/3/tv/' . $id . '/season/' . $i . '?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['TMDB_LANG'];
+        $episodes_data[$i] = curl_get_tmdb($seasons_url);
+    }
 
-        $items = themoviedb_showsDetailsPrep($id, $seasons_data, $episodes_data);
-
+    $items = themoviedb_showsDetailsPrep($id, $seasons_data, $episodes_data);
+    if (valid_array($items)) {
         foreach ($items as $item) {
             $where = [];
-
             $where['themoviedb_id'] = ['value' => $id];
             $where['season'] = ['value' => $item['season']];
             $where['episode'] = ['value' => $item['episode']];
-
             $results = $db->select('shows_details', null, $where, 'LIMIT 1');
             $result_row = $db->fetch($results);
             $db->finalize($results);
@@ -246,32 +230,31 @@ function themoviedb_getSeasons($id) {
                 $db->insert('shows_details', $item);
             }
         }
-
-        return $items;
+    } else {
+        return false;
     }
-    return false;
+    return $items;
 }
 
 function themoviedb_showsDetailsPrep($id, $seasons_data, $episodes_data) {
-    global $db;
-
-    $item_seasons = [
-        'themoviedb_id' => $id,
-        'n_seasons' => $seasons_data['number_of_seasons'],
-        'n_episodes' => $seasons_data['number_of_episodes'],
-        'release' => !empty($seasons_data['first_air_date']) ? $seasons_data['first_air_date'] : null,
-        'homepage' => !empty($seasons_data['homepage']) ? $seasons_data['homepage'] : null,
-        'in_production' => !empty($seasons_data['in_production']) ? $seasons_data['in_production'] : null,
-        'plot' => !empty($seasons_data['overview']) ? $seasons_data['overview'] : null,
-        'status' => $seasons_data['status'] ? $seasons_data['status'] : null,
-    ];
-
+    /*
+      $item_seasons = [
+      'themoviedb_id' => $id,
+      'n_seasons' => $seasons_data['number_of_seasons'],
+      'n_episodes' => $seasons_data['number_of_episodes'],
+      'release' => !empty($seasons_data['first_air_date']) ? $seasons_data['first_air_date'] : null,
+      'homepage' => !empty($seasons_data['homepage']) ? $seasons_data['homepage'] : null,
+      'in_production' => !empty($seasons_data['in_production']) ? $seasons_data['in_production'] : null,
+      'plot' => !empty($seasons_data['overview']) ? $seasons_data['overview'] : null,
+      'status' => $seasons_data['status'] ? $seasons_data['status'] : null,
+      ];
+     */
     $item_episodes = [];
 
     for ($i = 1; $i <= $seasons_data['number_of_seasons']; $i++) {
         $episodes = $episodes_data[$i]['episodes'];
 
-        $episodes_number = count($episodes);
+        //$episodes_number = count($episodes);
 
         foreach ($episodes as $episode) {
             if (isset($episode['episode_number'])) {
@@ -312,7 +295,7 @@ function themoviedb_getFromCache($media_type, $id) {
     !isset($cfg['TMDB_LANG']) ? $cfg['TMDB_LANG'] = $cfg['LANG'] : null;
 
     $item = $db->getItemByField('tmdb_search_' . $media_type, 'themoviedb_id', $id);
-    if ($item) {
+    if (valid_array($item)) {
         return $item;
     }
 
@@ -333,13 +316,13 @@ function themoviedb_getFromCache($media_type, $id) {
 
     $response_item[] = curl_get_tmdb($url);
 
-    if (empty($response_item[0]) || count($response_item) <= 0) {
+    if (!valid_array($response_item)) {
         $log->err('getByDbId: Request id=' . $id . ' to remote databse fail');
         return false;
     }
 
     $result = themoviedb_MediaPrep($media_type, $response_item);
-    if (empty($result)) {
+    if (!valid_array($result)) {
         $log->err('getByDbId: mediaPrep return empty/false');
         return false;
     }
@@ -434,16 +417,18 @@ function themoviedb_getTrailer($media_type, $id) {
     $url = "http://api.themoviedb.org/3/{$tmdb_type}/{$id}/videos?api_key=" . $cfg['db_api_token'] . '&language=' . $cfg['TMDB_LANG'];
 
     $curl_data = curl_get_tmdb($url);
-    if (!empty($curl_data['results']) && count($curl_data['results']) > 0) {
+    if (valid_array($curl_data['results'])) {
         $results = array_pop($curl_data['results']);
     } else {
         return false;
     }
-    if (isset($results['site']) && $results['site'] == 'YouTube') {
+    if (!empty($results['site']) && $results['site'] == 'YouTube') {
         $video = 'http://www.youtube.com/embed/' . $results['key'];
+    } else if (!empty($results['site']) && $results['site'] == 'Vimeo') {
+        $video = 'https://player.vimeo.com/video/' . $results['key'];
     } else if (!empty($results['site'])) {
-        $log->warning('Video trailer site not implemented ' . $results['site']);
-        $video = false;
+        $log->warning('Video trailer site not implemented \"' . $results['site'] . '\"');
+        return false;
     } else {
         $log->debug("Get $media_type trailer seems got nothing on id: $id");
         return false;

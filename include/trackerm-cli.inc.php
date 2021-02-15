@@ -206,7 +206,7 @@ function MovieJob($item, $linked = false) {
             } else {
                 $log->debug(" Link Seeding: {$item['tid']} : {$item['hashString']}");
                 linking_media($valid_file, $final_dest_path);
-                $new_media .= basename($final_dest_path) . '\n';
+                $new_media .= basename($final_dest_path) . "\n";
             }
         }
         !empty($new_media) ? notify_mail(['subject' => $LNG['L_NEW_MEDIA_AVAILABLE'], 'msg' => $new_media]) : null;
@@ -311,7 +311,7 @@ function ShowJob($item, $linked = false) {
             } else {
                 $log->debug(" Link Seeding: {$item['tid']} : {$item['hashString']}");
                 linking_media($valid_file, $final_dest_path);
-                $new_media .= basename($final_dest_path) . '\n';
+                $new_media .= basename($final_dest_path) . "\n";
             }
         }
         !empty($new_media) ? notify_mail(['subject' => $LNG['L_NEW_MEDIA_AVAILABLE'], 'msg' => $new_media]) : null;

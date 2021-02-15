@@ -68,7 +68,7 @@
                     <div class="divTableCellWanted">TMDB</div>
                     <div class="divTableCellWanted"><?= $tdata['L_TITLE'] ?></div>
                 </div>
-<?= isset($tdata['wanted_list']) ? $tdata['wanted_list'] : null ?>
+                <?= isset($tdata['wanted_list']) ? $tdata['wanted_list'] : null ?>
             </div>
         </div>
     </div>

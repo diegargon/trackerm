@@ -54,15 +54,13 @@
     <div class="divTableCellWanted">
         <div class="tag_id">
             <?php if (!empty($tdata['elink'])) { ?>
-                <a href="<?= $tdata['elink'] ?>" target="_blank"><?= $tdata['themoviedb_id'] ?></a>
+                <a href="<?= $tdata['elink'] ?>" target="_blank">TMDB</a>
                 <?php
-            } else {
-                print $tdata['themoviedb_id'];
             }
             ?>
         </div>
     </div>
     <div class="divTableCellWanted">
-        <div class="tag_title"><?= !empty($tdata['shown_title']) ? $tdata['shown_title'] : $tdata['title'] ?></div>
+        <div class="tag_title"><?= $tdata['ilink'] ?></div>
     </div>
 </div>

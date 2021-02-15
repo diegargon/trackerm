@@ -467,7 +467,7 @@ button {
 }
 
 .tag_title {
-    border: 3px solid #2fb78a;
+    border: 2px solid #2fb78a;
     background: black;
 }
 
@@ -509,7 +509,7 @@ button {
     width:300px;  
 }
 
-.action_link {
+.action_link  {
     display: inline-block;
     background: #ff5b5b;
     padding: 5px;
@@ -800,4 +800,14 @@ button {
 }
 .border_green {
     border: 1px solid green;
+}
+
+.wanted_link  {
+    display: inline-block;
+    width: 100%;
+    padding: 0;
+    text-decoration: none;
+    color: black;
+    border-radius: 0.12em;
+    margin: 0;
 }

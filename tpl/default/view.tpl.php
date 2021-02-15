@@ -41,17 +41,12 @@
                 <?php if (!empty($tdata['added'])) {
                     ?>
                     <span><?= $tdata['L_ADDED'] ?> :</span>
-                    <span class="view_added"><?= strftime("%d %h %X", strtotime($tdata['created'])) ?></span>
+                    <span class="view_added"><?= strftime("%d %h", strtotime($tdata['created'])) ?></span>
                     <br/>
                 <?php } ?>
                 <?php if (!empty($tdata['release'])) { ?>
                     <span><?= $tdata['L_RELEASE'] ?> :</span>
                     <span class="view_release"><?= $tdata['release'] ?></span>
-                    <br/>
-                <?php } ?>
-                <?php if (!empty($tdata['have_episodes'])) { ?>
-                    <span>Nº<?= $tdata['L_EPISODES'] ?> :</span>
-                    <span class="view_have_episodes"><?= $tdata['have_episodes'] ?></span>
                     <br/>
                 <?php } ?>
                 <?php if (!empty($tdata['size'])) { ?>
@@ -64,9 +59,9 @@
                     <span class="view_rating"><?= $tdata['rating'] ?></span>
                     <br/>
                 <?php } ?>
-                <?php if (!empty($tdata['popularity'])) { ?>
-                    <span><?= $tdata['L_POPULARITY'] ?> :</span>
-                    <span class="view_popularity"><?= $tdata['popularity'] ?></span>
+                <?php if (!empty($tdata['have_episodes'])) { ?>
+                    <span><?= $tdata['L_EPISODES_HAVE'] ?> :</span>
+                    <span class="view_have_episodes"><?= $tdata['have_episodes'] ?></span>
                     <br/>
                 <?php } ?>
                 <?php if (!empty($tdata['seasons_data'])) { ?>
