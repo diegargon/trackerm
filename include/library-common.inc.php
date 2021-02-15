@@ -420,6 +420,7 @@ function clean_database($media_type, $files, $media) {
                 $values['clean_title'] = clean_title($item['title']);
                 $values['media_type'] = $media_type;
                 $values['file_name'] = $item['file_name'];
+                $values['custom_poster'] = $item['custom_poster'];
                 $values['size'] = $item['size'];
                 $values['file_hash'] = $item['file_hash'];
                 isset($item['season']) ? $values['season'] = $item['season'] : null;
