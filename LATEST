@@ -17,7 +17,7 @@ any of selected  language keywords in the title (or both).
 [13/02] Fixed: "Tag Extra Keywords" (in main configuration). trackerm when rename to your library miss any word  you
  want in the title, add here the keywords, will search in the title and tag (this config option not affect searchs just tag). 
 Beware: if you have a temporaly linked avi and add/remove a keyword will create another link again (duplicate). 
-[********** NOT SO LATEST **********]
+[********** COMMIT **********]
 [12/02] Forget warn: i adding weeks ago lots of config fields without a submit button (ex: in submenu or wanted), for save the input you need press tab or click out.
 [11/02] Add localplayer button (must activate in configuration)
         LocalPlayer will add a button in your library for load locally a playlist with the media link to your server share directory (samba) for open with vlc
