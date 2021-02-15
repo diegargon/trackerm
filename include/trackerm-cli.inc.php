@@ -9,16 +9,6 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-function scanAppMedia() {
-    /*
-      global $db, $cfg;
-
-      $log->debug(" [out] Cheking media files in " . $cfg['TORRENT_FINISH_PATH'];
-
-
-     */
-}
-
 function transmission_scan() {
     global $log;
 
@@ -860,6 +850,24 @@ function check_broken_files_linked() {
         $paths[] = $cfg['SHOWS_PATH'];
     }
     RemoveBrokenMedialinks($paths, $cfg['media_ext']);
+}
+
+function update_things() {
+    global $cfg;
+
+
+    check_broken_files_linked();
+
+    rebuild('movies', $cfg['MOVIES_PATH']);
+    sleep(1);
+    rebuild('shows', $cfg['SHOWS_PATH']);
+
+    update_trailers();
+    hash_missing();
+    update_stats();
+
+//UPGRADE
+    set_clean_titles(); // (upgrading v4 change how clean works, must empty the field and redo )
 }
 
 function leave($msg = false) {
