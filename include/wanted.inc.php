@@ -103,9 +103,7 @@ function wanted_movies($wanted_id) {
     global $db, $cfg, $log;
 
     $item = [];
-
     $wanted_type = 'movies';
-
     $item = mediadb_getFromCache('movies', $wanted_id);
 
     if ($item === false) {
@@ -123,16 +121,22 @@ function wanted_movies($wanted_id) {
         'media_type' => $wanted_type,
         'profile' => (int) $cfg['profile'],
     ];
-    //FIXME Can be two equal tmdb ids, movie and show change this
-    $db->addItemUniqField('wanted', $wanted_item, 'themoviedb_id');
+
+    $where_check = [
+        'themoviedb_id' => ['value' => $item['themoviedb_id']],
+        'media_type' => ['value' => $wanted_type],
+    ];
+    $result = $db->select('wanted', 'id', $where_check, 'LIMIT 1');
+    $dup_item = $db->fetch($result);
+    $db->finalize($result);
+
+    (!$dup_item) ? $db->insert('wanted', $wanted_item) : null;
 }
 
 function wanted_episode($id, $season, $episodes) {
     global $db, $cfg;
 
-    if (strlen($season) == 1) {
-        $season = '0' . $season;
-    }
+    (strlen($season) == 1) ? $season = '0' . $season : null;
     $episodes = explode(',', $episodes);
 
     foreach ($episodes as $episode) {
@@ -163,9 +167,7 @@ function wanted_episode($id, $season, $episodes) {
         $result = $db->select('wanted', 'id', $where_check, 'LIMIT 1');
         $item = $db->fetch($result);
         $db->finalize($result);
-        if (!$item) {
-            $db->insert('wanted', $wanted_item);
-        }
+        (!$item) ? $db->insert('wanted', $wanted_item) : null;
     }
 }
 
