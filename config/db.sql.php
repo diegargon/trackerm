@@ -629,7 +629,6 @@ function update_db($from) {
     }
 
     if ($from < 10) {
-
         $db->insert('config', ['cfg_key' => 'torrent_require_prefs', 'cfg_value' => '', 'cfg_desc' => 'L_CFG_TORRENT_REQUIRE_PREFS', 'type' => 8, 'category' => 'L_WANTED', 'public' => 1]);
         $db->insert('config', ['cfg_key' => 'torrent_require_or_prefs', 'cfg_value' => '', 'cfg_desc' => 'L_CFG_TORRENT_REQUIRE_OR_PREFS', 'type' => 8, 'category' => 'L_WANTED', 'public' => 1]);
         $db->insert('config', ['cfg_key' => 'show_noid_inlibrary', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_SHOW_NOID_INLIBRARY', 'type' => 3, 'category' => 'L_MAIN', 'public' => 1]);
@@ -715,6 +714,7 @@ function update_db($from) {
         $db->query('UPDATE config SET cfg_value=\'10\' WHERE cfg_key=\'db_version\' LIMIT 1');
         $db->query('UPDATE config SET cfg_value=\'83\' WHERE cfg_key=\'version\' LIMIT 1');
         $db->update('db_info', ['version' => 10]);
+        $db->query('VACUUM;');
     }
 
     /*
