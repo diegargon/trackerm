@@ -1,22 +1,25 @@
 ## Latest / News (Relevant)
 
 [14/02] Added notify to email (new media/encrypted file found)
-[13/02] Added auto identify (default:off) and tmdb cache
+[13/02] Added config:auto identify  config:auto identify strict and tmdb cache
+        auto identify with strict: title will match exact.
+        auto identify without strict: if not match exact try first suggestions.
 [13/02] Added Global search Tags for Wanted
         Rewrite partially Global tags, configuration are under Configuration/Wanted and are relative only to wanted and how  search.
+and affet globally to all wanted searchs.
         These are:
         "Global Quality" (old), no change, when trackerm search for a wanted item get the preferer quality 
 or ANY if is set and  not found a specific quality (order matters).
         "Global Ignore Keywords" (old). Without changes too. If found any of this keywords in the title will not download
         "Global Require Keywords" (new). Title must have ALL the keywords if not, not will download (caution).
-        "Global Require OR" (new). Title must have at least ONE of this keywords. if not, not will
-download. Usefull (perhaps) for language like force only download files that have in the title the words ENGLISH or ENG.  SPANISH or ESPAÑOL or CASTELLANO.
-Remeber: if you set this, at least one keyword need match for download.
-[13/02] DROP the option for language tagging, you can use "Extra Keywords" for tag only languages or  "Global Require OR" if you want 'wanted items' with
+        "Global Require OR" (new). Title must have at least ONE of this keywords. if not, not will download. Usefull (perhaps) 
+for languages match like force only download files that have in the title the words ENGLISH or ENG.  SPANISH or ESPAÑOL or CASTELLANO.
+Remeber: if you set this, at least one keyword need match in the title for download.
+[13/02] DROP the option for language tagging, you can use "Extra Keywords" for add languages tags or  "Global Require OR" if you want 'wanted items' with
 any of selected  language keywords in the title (or both).
-[13/02] Fixed: "Tag Extra Keywords" (in main configuration). trackerm when rename to your library miss any word  you
- want in the title, add here the keywords, will search in the title and tag (this config option not affect searchs just tag). 
-Beware: if you have a temporaly linked avi and add/remove a keyword will create another link again (duplicate). 
+[13/02] Fixed: "Tag Extra Keywords" (in main configuration).  trackerm will search these keywords in the title and tag (this config option not affect 
+searchs just tag). Beware: if you have a temporaly linked avi and add/remove a keyword. This will create another valid link again and appears as 
+duplicate when scanning. (when move will delete this link)
 [********** COMMIT **********]
 [12/02] Forget warn: i adding weeks ago lots of config fields without a submit button (ex: in submenu or wanted), for save the input you need press tab or click out.
 [11/02] Add localplayer button (must activate in configuration)
