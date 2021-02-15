@@ -808,6 +808,6 @@ button {
     padding: 0;
     text-decoration: none;
     color: black;
-    border-radius: 0.12em;
     margin: 0;
+    text-align: center;
 }
