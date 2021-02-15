@@ -25,13 +25,13 @@ duplicate when scanning. (when move will delete this link)
 [11/02] Add localplayer button (must activate in configuration)
         LocalPlayer will add a button in your library for load locally a playlist with the media link to your server share directory (samba) for open with vlc
 and play it without need download. Your system must have access to the samba folder in the server.
-Ubuntu: if you have a error check on input/codecs Stream filters -> prefetch -> Read size = 16384
+Ubuntu/Linux with VLC: if you have a error in VLC check in preferences (all) is set input/codecs Stream filters -> prefetch -> Read size = 16384
 [08/02] Add user/admin options, the only default admin profile is 'default' you must login and modify your users if you want another be admin
 admin: can add/modify/delete users, view/change config options
 hidde login: not show on login screen
 disable: disable user, can't login
-[08/02] Added filters to new torrents (submenu)
-[05/02] Add config var for specify warn time slow indexers
+[08/02] Added filters to new torrents display (submenu)
+[05/02] Add config var for specify warn time for slow indexers
 [04/02] Added check/warn to status message window when detect slow indexers
 [28/01] Added $cfg['TMDB_LANG'] to config.min.php/tracker.conf . To get tmdb results in your language regardless of limited trackerm UI languages.
 [27/01] Users: Adding password protection and basic user management
