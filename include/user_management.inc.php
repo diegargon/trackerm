@@ -15,38 +15,41 @@ function user_management() {
     $status_msg = $LNG['L_USERS_MNGT_HELP'];
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST' && $user['isAdmin']) {
-        if (isset($_POST['new_user']) && !empty($new_user = $filter->postUsername('username'))) {
-            if ($cfg['force_use_passwords']) {
-                if (!empty($password = $filter->postPassword('password'))) {
-                    $user_create['username'] = $new_user;
-                    $user_create['password'] = encrypt_password($password);
+        if (isset($_POST['new_user'])) {
+            if (!empty($new_user = $filter->postUsername('username'))) {
+                if ($cfg['force_use_passwords']) {
+                    if (!empty($password = $filter->postPassword('password'))) {
+                        $user_create['username'] = $new_user;
+                        $user_create['password'] = encrypt_password($password);
+                        $_POST['is_admin'] == 1 ? $user_create['isAdmin'] = 1 : $user_create['isAdmin'] = 0;
+                        $_POST['disable'] == 1 ? $user_create['disable'] = 1 : $user_create['disable'] = 0;
+                        $_POST['hide_login'] == 1 ? $user_create['hide_login'] = 1 : $user_create['hide_login'] = 0;
+                        $db->upsertItemByField('users', $user_create, 'username');
+                        $status_msg = $LNG['L_USER_CREATE_SUCCESS'];
+                    } else {
+                        $status_msg = $LNG['L_USER_INCORRECT_PASSWORD'];
+                    }
+                } else {
+                    if (!empty($password = $filter->postPassword('password'))) {
+                        $user_create['password'] = encrypt_password($password);
+                    }
                     $_POST['is_admin'] == 1 ? $user_create['isAdmin'] = 1 : $user_create['isAdmin'] = 0;
                     $_POST['disable'] == 1 ? $user_create['disable'] = 1 : $user_create['disable'] = 0;
                     $_POST['hide_login'] == 1 ? $user_create['hide_login'] = 1 : $user_create['hide_login'] = 0;
+                    $user_create['username'] = $new_user;
                     $db->upsertItemByField('users', $user_create, 'username');
                     $status_msg = $LNG['L_USER_CREATE_SUCCESS'];
-                } else {
-                    $status_msg = $LNG['L_USER_INCORRECT_PASSWORD'];
                 }
             } else {
-                if (!empty($password = $filter->postPassword('password'))) {
-                    $user_create['password'] = encrypt_password($password);
-                }
-                $_POST['is_admin'] == 1 ? $user_create['isAdmin'] = 1 : $user_create['isAdmin'] = 0;
-                $_POST['disable'] == 1 ? $user_create['disable'] = 1 : $user_create['disable'] = 0;
-                $_POST['hide_login'] == 1 ? $user_create['hide_login'] = 1 : $user_create['hide_login'] = 0;
-                $user_create['username'] = $new_user;
-                $db->upsertItemByField('users', $user_create, 'username');
-                $status_msg = $LNG['L_USER_CREATE_SUCCESS'];
+                $status_msg = $LNG['L_USER_INCORRECT_USERNAME'];
             }
-        } else if (isset($_POST['delete_user']) && !empty($delete_user_id = $filter->postInt('delete_user_id'))) {
+        }
+
+        if (isset($_POST['delete_user']) && !empty($delete_user_id = $filter->postInt('delete_user_id'))) {
             $db->delete('users', ['id' => ['value' => $delete_user_id]]);
             $status_msg = $LNG['L_USER_DELETED'];
-        } else {
-            $status_msg = $LNG['L_USER_INCORRECT_USERNAME'];
         }
     }
-
     $html['title'] = $LNG['L_USERS_MANAGEMENT'];
     $html['content'] = new_user();
     $html['content'] .= show_users();
@@ -148,11 +151,11 @@ function user_change_prefs() {
 
     $status_msg = null;
 
-    if (empty($_POST['email']) && !empty($user['email'])) {
+    if (isset($_POST['email']) && empty($_POST['email']) && !empty($user['email'])) {
         $user['email'] = '';
         $db->updateItemById('users', $user['id'], ['email' => '']);
         $status_msg .= $LNG['L_EMAIL_CHANGE_SUCESS'];
-    } else if (($email = $filter->postEmail('email'))) {
+    } else if (!empty($_POST['email']) && ($email = $filter->postEmail('email'))) {
         if ($email && ($email != $user['email'])) {
             $user['email'] = $email;
             $db->updateItemById('users', $user['id'], ['email' => $email]);
@@ -162,11 +165,13 @@ function user_change_prefs() {
         }
     }
     $index_page = getPrefsItem('index_page');
-    if (!empty($_POST['index_page']) && ($_POST['index_page'] != $index_page)) {
+
+    if (isset($_POST['index_page']) && !empty($_POST['index_page']) && ($_POST['index_page'] != $index_page)) {
         setPrefsItem('index_page', $filter->postString('index_page'));
     }
-
-    (!empty($_POST['email_notify'])) ? setPrefsItem('email_notify', 1) : setPrefsItem('email_notify', 0);
+    if (isset($_POST['email_notify'])) {
+        (!empty($_POST['email_notify'])) ? setPrefsItem('email_notify', 1) : setPrefsItem('email_notify', 0);
+    }
 
     return $status_msg;
 }
