@@ -38,7 +38,8 @@ function wanted_list() {
     $wanted_list = $db->getTableData('wanted');
 
     if (!empty($wanted_list)) {
-        $wanted_list_data = '';
+        $wanted_list_data = false;
+        $wanted_list_tmp_data = [];
 
         foreach ($wanted_list as $wanted_item) {
             $tdata = [];
@@ -73,8 +74,25 @@ function wanted_list() {
 
             $wanted_item['media_type'] == 'movies' ? $tdata['lang_media_type'] = $LNG['L_MOVIES'] : $tdata['lang_media_type'] = $LNG['L_SHOWS'];
 
-
-            $wanted_list_data .= getTpl('wanted-item', array_merge($wanted_item, $tdata, $LNG, $cfg));
+            if ($wanted_item['wanted_status'] == -1) {
+                !isset($wanted_list_tmp_data['L_SEARCHING']) ? $wanted_list_tmp_data['L_SEARCHING'] = '' : null;
+                $wanted_list_tmp_data['L_SEARCHING'] .= getTpl('wanted-item', array_merge($wanted_item, $tdata, $LNG, $cfg));
+            } else {
+                !isset($wanted_list_tmp_data[$wanted_item['wanted_status']]) ? $wanted_list_tmp_data[$wanted_item['wanted_status']] = '' : null;
+                $wanted_list_tmp_data[$wanted_item['wanted_status']] .= getTpl('wanted-item', array_merge($wanted_item, $tdata, $LNG, $cfg));
+            }
+        }
+        //IMPROVE: Sorting: do better way
+        if (valid_array($wanted_list_tmp_data)) {
+            $sort_array = [];
+            !empty($wanted_list_data['L_MOVED']) ? $sort_array = array_pop($wanted_list_tmp_data['L_MOVED']) : null;
+            !empty($wanted_list_data['L_DOWNLOADING']) ? $sort_array = array_pop($wanted_list_tmp_data['L_DOWNLOADING']) : null;
+            !empty($wanted_list_data['L_SEEDING']) ? $sort_array = array_pop($wanted_list_tmp_data['L_SEEDING']) : null;
+            !empty($wanted_list_data['L_SEARCHING']) ? $sort_array = array_pop($wanted_list_tmp_data['L_SEARCHING']) : null;
+            $sort_array = array_merge($sort_array, $wanted_list_tmp_data);
+            foreach ($wanted_list_tmp_data as $item) {
+                $wanted_list_data .= $item;
+            }
         }
         return $wanted_list_data;
     }
