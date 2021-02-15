@@ -49,7 +49,7 @@ function getUidWithPref($r_key, $r_value) {
     $where['pref_name'] = $r_key;
     $where['pref_value'] = $r_value;
 
-    $results = $db->select('preferences', 'id', $where);
+    $results = $db->select('preferences', 'uid', $where);
 
     return $results ? $db->fetchAll($results) : false;
 }
