@@ -728,7 +728,7 @@ function update_db($from) {
       if ($from < 12) {
       $db->query('UPDATE config SET cfg_value=\'12\' WHERE cfg_key=\'db_version\' LIMIT 1');
       $db->query('UPDATE config SET cfg_value=\'85\' WHERE cfg_key=\'version\' LIMIT 1');
-      $db->update('db_info', ['version' => 11]);
+      $db->update('db_info', ['version' => 12]);
       }
      */
     return true;
