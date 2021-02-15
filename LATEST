@@ -2,11 +2,11 @@
 
 [14/02] Added notify to email (new media/encrypted file found)
 [13/02] Added config:auto identify  config:auto identify strict and tmdb cache
-        auto identify with strict: title will match exact.
-        auto identify without strict: if not match exact try first suggestions.
+        auto identify with strict: title must match exact.
+        auto identify without strict: if title not match exact identify with first suggestions (if any).
 [13/02] Added Global search Tags for Wanted
-        Rewrite partially Global tags, configuration are under Configuration/Wanted and are relative only to wanted and how  search.
-and affet globally to all wanted searchs.
+        Rewrite partially Global tags, configuration is located under Configuration/Wanted and are relative only to wanted and how will search.
+and this values affect globally to all wanted searchs.
         These are:
         "Global Quality" (old), no change, when trackerm search for a wanted item get the preferer quality 
 or ANY if is set and  not found a specific quality (order matters).
