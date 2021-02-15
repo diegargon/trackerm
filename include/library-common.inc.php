@@ -290,8 +290,15 @@ function ident_by_id($media_type, $tmdb_id, $id) {
 }
 
 function submit_ident($media_type, $item_data, $id) {
-    global $db;
+    global $db, $log;
 
+
+    $q_results = $db->select('library_' . $media_type, '*', ['themoviedb_id' => ['value' => $item_data['themoviedb_id']]], 'LIMIT 1');
+    $dup_result = $db->fetchAll($q_results);
+    if (valid_array($dup_result)) {
+        $log->debug('Discarding item duplicate ' . $item_data['title']);
+        return false;
+    }
     if (!empty($item_data['title'])) {
         $update_fields['title'] = $item_data['title'];
         $update_fields['clean_title'] = clean_title($item_data['title']);
