@@ -279,8 +279,9 @@ function ident_by_idpairs($media_type, $id_pairs) {
     if (!valid_array($id_pairs)) {
         return false;
     }
+
     foreach ($id_pairs as $my_id => $tmdb_id) {
-        ident_by_id($media_type, $tmdb_id, $my_id);
+        (!empty($my_id) && !emptY($tmdb_id)) ? ident_by_id($media_type, $tmdb_id, $my_id) : null;
     }
 }
 
