@@ -1,6 +1,6 @@
 ## Latest / News (Relevant)
 
-[14/02] Added notify to email (new media/encrypted file found)
+[14/02] Added notify to email (new media/password prorected file found)
 [13/02] Added config:auto identify  config:auto identify strict and tmdb cache
         auto identify with strict: title must match exact.
         auto identify without strict: if title not match exact identify with first suggestions (if any).

@@ -719,6 +719,7 @@ function update_db($from) {
 
     /*
       if ($from < 11) {
+      //CREATE TABLE new_table SELECT * FROM original_table;
       $db->query('UPDATE config SET cfg_value=\'11\' WHERE cfg_key=\'db_version\' LIMIT 1');
       $db->query('UPDATE config SET cfg_value=\'84\' WHERE cfg_key=\'version\' LIMIT 1');
       $db->update('db_info', ['version' => 11]);
