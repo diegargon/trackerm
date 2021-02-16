@@ -182,12 +182,12 @@ function notify_mail($msg) {
 
     $lib_stats = getLibraryStats();
     $footer = "\n\n -- \n {$LNG['L_STATS']} \n";
-    if (valid_array($lib_stats['movies_paths'])) {
+    if (isset($lib_stats['movies_paths']) && valid_array($lib_stats['movies_paths'])) {
         foreach ($lib_stats['movies_paths'] as $path_key => $path) {
             $footer .= $path_key . '(' . $path['basename'] . ') ' . $path['free'] . '/' . $path['total'] . "\n";
         }
     }
-    if (valid_array($lib_stats['shows_paths'])) {
+    if (isset($lib_stats['shows_paths']) && valid_array($lib_stats['shows_paths'])) {
         foreach ($lib_stats['shows_paths'] as $path_key => $path) {
             $footer .= $path_key . '(' . $path['basename'] . ') ' . $path['free'] . '/' . $path['total'] . "\n";
         }

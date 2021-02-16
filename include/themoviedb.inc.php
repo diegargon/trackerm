@@ -49,7 +49,7 @@ function themoviedb_searchShows($search) {
     $url = 'https://api.themoviedb.org/3/search/tv?api_key=' . $cfg['db_api_token'] . '&query=' . $search_query . '&language=' . $cfg['TMDB_LANG'];
     $data = curl_get_tmdb($url);
 
-    if (valid_array($data['results'])) {
+    if (isset($data['results']) && valid_array($data['results'])) {
         themoviedb_updateCache($search, $data, 'shows');
         $shows = themoviedb_MediaPrep('shows', $data['results']);
     } else {
@@ -434,7 +434,7 @@ function themoviedb_getTrailer($media_type, $id) {
     $url = "http://api.themoviedb.org/3/{$tmdb_type}/{$id}/videos?api_key=" . $cfg['db_api_token'] . '&language=' . $cfg['TMDB_LANG'];
 
     $curl_data = curl_get_tmdb($url);
-    if (valid_array($curl_data['results'])) {
+    if (isset($curl_data['results']) && valid_array($curl_data['results'])) {
         $results = array_pop($curl_data['results']);
     } else {
         return false;

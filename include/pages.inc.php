@@ -66,13 +66,13 @@ function page_index() {
     $tdata['content'] .= "<span>{$LNG['L_MOVIES']} : " . $lib_stats['movies_size'] . '</span><br/>';
     $tdata['content'] .= "<span>{$LNG['L_SHOWS']} : " . $lib_stats['shows_size'] . '</span><br/>';
 
-    if (valid_array($lib_stats['movies_paths'])) {
+    if (isset($lib_stats['movies_paths']) && valid_array($lib_stats['movies_paths'])) {
         foreach ($lib_stats['movies_paths'] as $path) {
             $tdata['content'] .= "<span>{$LNG['L_FREE_TOTAL']} {$LNG['L_ON']} {$path['basename']} : {$path['free']} / {$path['total']} </span><br/>";
         }
     }
 
-    if (valid_array($lib_stats['shows_paths'])) {
+    if (isset($lib_stats['shows_paths']) && valid_array($lib_stats['shows_paths'])) {
         foreach ($lib_stats['shows_paths'] as $path) {
             $tdata['content'] .= "<span>{$LNG['L_FREE_TOTAL']} {$LNG['L_ON']} {$path['basename']} : {$path['free']} / {$path['total']} </span><br/>";
         }

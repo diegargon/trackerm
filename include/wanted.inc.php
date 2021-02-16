@@ -14,12 +14,12 @@ function wanted_list() {
     $iurl = '?page=wanted';
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        if (valid_array($_POST['ignore_tags'])) {
+        if (isset($_POST['ignore_tags']) && valid_array($_POST['ignore_tags'])) {
             foreach ($_POST['ignore_tags'] as $ignore_key => $ignore_value) {
                 $db->updateItemById('wanted', $ignore_key, ['custom_words_ignore' => $ignore_value]);
             }
         }
-        if (valid_array($_POST['require_tags'])) {
+        if (isset($_POST['require_tags']) && valid_array($_POST['require_tags'])) {
             foreach ($_POST['require_tags'] as $require_key => $require_value) {
                 $db->updateItemById('wanted', $require_key, ['custom_words_require' => $require_value]);
             }
