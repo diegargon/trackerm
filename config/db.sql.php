@@ -399,6 +399,7 @@ function create_db() {
     $db->insert('config', ['cfg_key' => 'tmdb_search_cache_expire', 'cfg_value' => 604800, 'cfg_desc' => 'L_CFG_TMDB_SEARCH_CACHE_EXPIRE', 'type' => 2, 'category' => 'L_SEARCH', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'auto_ident_strict', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_AUTO_IDENT_STRICT', 'type' => 3, 'category' => 'L_MAIN', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'tmdb_opt_cache_expire', 'cfg_value' => 86400, 'cfg_desc' => 'L_CFG_TMDB_OPT_CACHE_EXPIRE', 'type' => 2, 'category' => 'L_SEARCH', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'mediainfo_path', 'cfg_value' => '/usr/bin/mediainfo', 'cfg_desc' => 'L_CFG_MEDIAINFO_PATH', 'type' => 1, 'category' => 'L_FILES', 'public' => 1]);
     /*
       $db->insert('config', ['cfg_key' => 'transcoder_player', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_TRANSCODER_PLAYER', 'type' => 3, 'category' => 'L_PLAY', 'public' => 1]);
       $db->insert('config', ['cfg_key' => 'transcoder_path', 'cfg_value' => '/usr/bin/ffmpeg', 'cfg_desc' => 'L_CFG_TRANSCODER_PATH', 'type' => 1, 'category' => 'L_PLAY', 'public' => 1]);
@@ -717,38 +718,39 @@ function update_db($from) {
     }
 
     if ($from < 11) {
+        $db->insert('config', ['cfg_key' => 'mediainfo_path', 'cfg_value' => '/usr/bin/mediainfo', 'cfg_desc' => 'L_CFG_MEDIAINFO_PATH', 'type' => 1, 'category' => 'L_FILES', 'public' => 1]);
         $db->query('ALTER TABLE `library_movies` RENAME TO `library_movies_tmp`');
         $db->query('DROP TABLE IF EXISTS library_movies');
         $db->query('CREATE TABLE IF NOT EXISTS "library_movies" (
-                    "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                    "title" VARCHAR NULL,
-                    "clean_title" VARCHAR NULL,
-                    "themoviedb_id" INTEGER NULL,
-                    "file_name" VARCHAR NOT NULL UNIQUE,
-                    "predictible_title" VARCHAR NULL,
-                    "original_title" VARCHAR NULL,
-                    "ilink" VARCHAR NULL,
-                    "size" INTEGER NULL,
-                    "path" VARCHAR NULL,
-                    "file_hash" VARCHAR NULL,
-                    "tags" VARCHAR NULL,
-                    "ext" VARCHAR NULL,
-                    "rating" REAL NULL,
-                    "popularity" REAL NULL,
-                    "scene" VARCHAR NULL,
-                    "lang" VARCHAR NULL,
-                    "plot" VARCHAR NULL,
-                    "title_year" VARCHAR NULL,
-                    "trailer" VARCHAR NULL,
-                    "poster" VARCHAR NULL,
-                    "custom_poster" VARCHAR NULL,
-                    "release" VARCHAR NULL,
-                    "master" INTEGER NULL,
-                    "genre" VARCHAR NULL,
-                    "mediainfo" VARCHAR  NULL,
-                    "updated" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-                    "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
-                )');
+          "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+          "title" VARCHAR NULL,
+          "clean_title" VARCHAR NULL,
+          "themoviedb_id" INTEGER NULL,
+          "file_name" VARCHAR NOT NULL UNIQUE,
+          "predictible_title" VARCHAR NULL,
+          "original_title" VARCHAR NULL,
+          "ilink" VARCHAR NULL,
+          "size" INTEGER NULL,
+          "path" VARCHAR NULL,
+          "file_hash" VARCHAR NULL,
+          "tags" VARCHAR NULL,
+          "ext" VARCHAR NULL,
+          "rating" REAL NULL,
+          "popularity" REAL NULL,
+          "scene" VARCHAR NULL,
+          "lang" VARCHAR NULL,
+          "plot" VARCHAR NULL,
+          "title_year" VARCHAR NULL,
+          "trailer" VARCHAR NULL,
+          "poster" VARCHAR NULL,
+          "custom_poster" VARCHAR NULL,
+          "release" VARCHAR NULL,
+          "master" INTEGER NULL,
+          "genre" VARCHAR NULL,
+          "mediainfo" VARCHAR  NULL,
+          "updated" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+          "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+          )');
 
         $db->query('INSERT INTO library_movies SELECT id,title,clean_title,themoviedb_id,file_name,predictible_title,original_title,ilink,size,path,'
                 . 'file_hash,tags,ext,rating,popularity,scene,lang,plot,title_year,trailer,poster,custom_poster,release,master,genre,mediainfo,'
