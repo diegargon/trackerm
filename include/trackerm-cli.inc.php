@@ -715,96 +715,70 @@ function send_transmission($results) {
 function update_trailers() {
     global $db, $cfg, $log;
 
-    //TODO: need a code rewrite
 
-    $log->debug('Entering on update trailers');
-    $limit = 20;
+    $log->debug('Executing update trailers');
+    $limit = 15;
 
+    $tables = ['library_movies', 'library_shows', 'tmdb_search_movies', 'tmdb_search_shows'];
 
-    //MOVIES_LIBRARY EMPTY TRAILER
-    $update = [];
+    //IMPROVE: This can be done in one query per table
+    // Update missing trailers and never try get trailer
+    foreach ($tables as $table) {
+        $update = [];
 
-    $update['updated'] = $time_now = time();
-    $next_update = time() - $cfg['db_upd_missing_delay'];
-    $query = "SELECT DISTINCT themoviedb_id FROM library_movies WHERE trailer IS NULL AND updated < $next_update LIMIT $limit";
-    $stmt = $db->query($query);
-    $results = $db->fetchAll($stmt);
-
-    foreach ($results as $item) {
-
-        $trailer = mediadb_getTrailer('movies', $item['themoviedb_id']);
-        if (!empty($trailer)) {
-            $log->debug("Update movie trailer on tmdb_id {$item['themoviedb_id']} trailer $trailer");
-            $update['trailer'] = str_replace('http', 'https', $trailer);
+        if ($table == 'library_movies' || $table == 'tmdb_search_movies') {
+            $media_type = 'movies';
         } else {
-            $update['trailer'] = NULL;
+            $media_type = 'shows';
         }
-        $where_upd = ['themoviedb_id' => ['value' => $item['themoviedb_id']]];
 
-        $db->update('library_movies', $update, $where_upd, 'LIMIT 1');
-    }
+        $update['updated'] = $time_now = time();
+        $next_update = time() - $cfg['db_upd_missing_delay'];
 
-    //SHOWS_LIBRARY EMPTY TRAILER
-    $update = [];
-    $update['updated'] = $time_now = time();
-    $next_update = time() - $cfg['db_upd_missing_delay'];
-    $query = "SELECT DISTINCT themoviedb_id FROM library_shows WHERE trailer IS NULL AND updated < $next_update LIMIT $limit";
-    $stmt = $db->query($query);
-    $results = $db->fetchAll($stmt);
+        $query = "SELECT DISTINCT themoviedb_id FROM $table WHERE trailer = '' OR  (trailer = '0' AND updated < $next_update) LIMIT $limit";
+        $stmt = $db->query($query);
 
-    foreach ($results as $item) {
+        $results = $db->fetchAll($stmt);
 
-        $trailer = mediadb_getTrailer('shows', $item['themoviedb_id']);
-        if (!empty($trailer)) {
-            $log->debug("Update shows trailer on tmdb_id {$item['themoviedb_id']} trailer $trailer");
-            $update['trailer'] = $trailer;
-        } else {
-            $update['trailer'] = NULL;
+        foreach ($results as $item) {
+            $trailer = mediadb_getTrailer($media_type, $item['themoviedb_id']);
+            if (!empty($trailer)) {
+                if (substr(trim($trailer), 0, 5) != 'https') {
+                    $trailer = str_replace('http', 'https', $trailer);
+                }
+                $update['trailer'] = $trailer;
+                $log->debug("Update $media_type trailer on tmdb_id {$item['themoviedb_id']} trailer $trailer");
+            } else {
+                $update['trailer'] = 0;
+            }
+            $where_upd = ['themoviedb_id' => ['value' => $item['themoviedb_id']]];
+
+            $db->update($table, $update, $where_upd, 'LIMIT 1');
         }
-        $where_upd = ['themoviedb_id' => ['value' => $item['themoviedb_id']]];
-        $db->update('library_shows', $update, $where_upd);
-    }
 
-    //MOVIES_LIBRARY LONG DELAY UPDATE TRAILER
-    $update = [];
-    $update['updated'] = $time_now = time();
-    $next_update = time() - $cfg['db_upd_long_delay'];
-    $query = "SELECT themoviedb_id FROM library_movies WHERE trailer IS NOT NULL AND updated < $next_update LIMIT $limit";
-    $stmt = $db->query($query);
-    $results = $db->fetchAll($stmt);
+        // LONG DELAY UPDATE TRAILER
+        $update = [];
+        $update['updated'] = $time_now = time();
+        $next_update = time() - $cfg['db_upd_long_delay'];
+        $query = "SELECT themoviedb_id FROM $table WHERE trailer IS NOT NULL AND updated < $next_update LIMIT $limit";
+        $stmt = $db->query($query);
+        $results = $db->fetchAll($stmt);
 
-    foreach ($results as $item) {
-        $trailer = mediadb_getTrailer('movies', $item['themoviedb_id']);
-        if (!empty($trailer)) {
-            $log->debug("Update movie trailer on tmdb_id {$item['themoviedb_id']} trailer $trailer");
-            $update['trailer'] = $trailer;
-        } else {
-            $update['trailer'] = NULL;
+        foreach ($results as $item) {
+            $trailer = mediadb_getTrailer($media_type, $item['themoviedb_id']);
+            if (!empty($trailer)) {
+                if (substr(trim($trailer), 0, 5) != 'https') {
+                    $trailer = str_replace('http', 'https', $trailer);
+                }
+                $update['trailer'] = $trailer;
+                $log->debug("Update $media_type trailer on tmdb_id {$item['themoviedb_id']} trailer $trailer");
+            } else {
+                $update['trailer'] = 0;
+            }
+            $where_upd = ['themoviedb_id' => ['value' => $item['themoviedb_id']]];
+
+            $db->update('library_movies', $update, $where_upd, 'LIMIT 1');
         }
-        $where_upd = ['themoviedb_id' => ['value' => $item['themoviedb_id']]];
-
-        $db->update('library_movies', $update, $where_upd, 'LIMIT 1');
-    }
-
-    //SHOWS_LIBRARY LONG UPDATE TRAILER
-    $update = [];
-    $update['updated'] = $time_now = time();
-    $next_update = time() - $cfg['db_upd_long_delay'];
-    $query = "SELECT DISTINCT themoviedb_id FROM library_shows WHERE trailer IS NOT NULL AND updated < $next_update LIMIT $limit";
-    $stmt = $db->query($query);
-    $results = $db->fetchAll($stmt);
-
-    foreach ($results as $item) {
-
-        $trailer = mediadb_getTrailer('shows', $item['themoviedb_id']);
-        if (!empty($trailer)) {
-            $log->debug("Update shows trailer on  tmdb_id {$item['themoviedb_id']} trailer $trailer");
-            $update['trailer'] = $trailer;
-        } else {
-            $update['trailer'] = NULL;
-        }
-        $where_upd = ['themoviedb_id' => ['value' => $item['themoviedb_id']]];
-        $db->update('library_shows', $update, $where_upd);
     }
 }
 

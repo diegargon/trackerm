@@ -154,7 +154,14 @@ function themoviedb_MediaPrep($media_type, $items) {
                 $in_library = $library_item['id'];
             }
         }
-        $trailer = mediadb_getTrailer($media_type, $item['id']);
+
+        //avoid get trailer if items > 15 for alleviate big querys tracker-cli would fix that
+        if (count($items) > 15) {
+            $trailer = '';
+        } else {
+            $trailer = mediadb_getTrailer($media_type, $item['id']);
+            empty($trailer) ? $trailer = 0 : null; //we use 0 for mark as not have trailer atm
+        }
 
         $fitems[] = [
             'ilink' => $media_type . '_db',
