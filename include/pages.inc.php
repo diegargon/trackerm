@@ -391,16 +391,17 @@ function page_identify() {
         }
     }
 
-    if (count($item_selected) > 1) {
+    if (valid_array($item_selected)) {
         isset($item_selected['poster']) ? $tdata['selected_poster'] = $item_selected['poster'] : null;
         isset($item_selected['plot']) ? $tdata['selected_plot'] = $item_selected['plot'] : null;
     } else {
-        if (isset($db_media) && count($db_media) > 1) {
+        if (valid_array($db_media)) {
             $first_item = current($db_media);
             isset($first_item['poster']) ? $tdata['selected_poster'] = $first_item['poster'] : null;
             isset($first_item['plot']) ? $tdata['selected_plot'] = $first_item['plot'] : null;
         }
     }
+
     return getTpl('identify_adv', array_merge($LNG, $item, $tdata));
 }
 
