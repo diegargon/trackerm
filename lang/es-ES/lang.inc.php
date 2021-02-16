@@ -76,6 +76,7 @@ $LNG = [
     'L_FILES' => 'Archivos',
     'L_FILENAME' => 'Nombre del archivo',
     'L_FINISHED' => 'Finalizado',
+    'L_FOLLOW_SHOW' => 'Seguir serie',
     'L_FREE_TOTAL' => 'HD Libre/Total',
     'L_FILTER_INDEXER' => 'Limitar',
     'L_GLOBAL_TAGS' => 'Tags Globales',
