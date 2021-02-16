@@ -1,6 +1,7 @@
 ## Latest / News (Relevant)
 
 [16/02] Automatic update seasons episode information, and fixes, minor desing/info changes
+[********** COMMIT **********]
 [14/02] Added notify to email (new media/password protected file found)
 [13/02] Added config:auto identify  config:auto identify strict and tmdb cache
         auto identify with strict: title must match exact.
