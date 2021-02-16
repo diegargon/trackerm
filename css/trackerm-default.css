@@ -339,7 +339,9 @@ button {
     border:0px solid black;
     width:100%;
 }
-
+.view_info {
+    line-height: 1.1em;
+}
 .menu_options {
     border:0px solid blueviolet;
     padding: 4px;
@@ -828,7 +830,7 @@ button {
     padding: 5px 9px 5px 9px;
     color: #FFD700;
     font-weight: bold;
-    cursor:pointer;
+    cursor:default;
     text-shadow: 0 0 5px #fff, 0 0 10px #ff4da6, 0 0 20px #ff4da6;;
 
 }

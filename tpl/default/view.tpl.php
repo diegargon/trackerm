@@ -26,13 +26,12 @@
                     <p><?= $tdata['plot'] ?></p>
                 </div>
             <?php } ?>
-            <div class="">
-                <!--
-                <span>IDs :</span><span>
-                <?= $tdata['id'] ?>
-                <?= (!empty($tdata['themoviedb_id'])) ? ' / ' . $tdata['themoviedb_id'] : null ?>
-                </span><br/>
-                -->
+            <div class="view_info">
+                <?php if (!empty($tdata['mediainfo_tags'])) {
+                    ?>
+                    <div class="mediainfo_container"><?= $tdata['mediainfo_tags'] ?></div>
+                <?php } ?>
+
                 <?php if (!empty($tdata['themoviedb_id']) && ( $tdata['ilink'] == 'movies_db' || $tdata['ilink'] == 'movies_library' )) { ?>
                     <span class="external_link"><a href="https://www.themoviedb.org/movie/<?= $tdata['themoviedb_id'] ?>" target=_blank>TheMovieDB</a></span><br/>
                 <?php } else if (!empty($tdata['themoviedb_id']) && ($tdata['ilink'] == 'shows_db' || $tdata['ilink'] == 'shows_library' )) { ?>
@@ -69,11 +68,6 @@
                     <span><?= $tdata['mediainfo']['General']['Duration'] ?></span>
                     <br/>
                 <?php } ?>
-                <?php if (!empty($tdata['mediainfo_tags'])) {
-                    ?>
-                    <div class="mediainfo_container"><?= $tdata['mediainfo_tags'] ?></div>
-                <?php } ?>
-
                 <?php if (!empty($tdata['seasons_data'])) { ?>
                     <?= $tdata['seasons_data'] ?>
                 <?php } ?>
