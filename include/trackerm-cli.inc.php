@@ -852,6 +852,29 @@ function check_broken_files_linked() {
   }
  */
 
+function update_seasons($force = false) {
+    global $db, $log;
+
+    $log->debug("Executing update_seasons");
+
+    $update['updated'] = $time_now = time();
+    $when_time = time() - 259200; //3 days
+    $query = "SELECT DISTINCT themoviedb_id FROM shows_details";
+    (!$force) ? $query .= " WHERE updated < $when_time" : " LIMIT 20";
+    $stmt = $db->query($query);
+    $shows = $db->fetchAll($stmt);
+    $i = 0;
+    if (valid_array($shows)) {
+        foreach ($shows as $show) {
+            mediadb_getSeasons($show['themoviedb_id']);
+            $where['themoviedb_id'] = ['value' => $show['themoviedb_id']];
+            $db->update('shows_details', $update, $where);
+            $i++;
+        }
+    }
+    $log->debug("Seasons updated: $i");
+}
+
 function update_things() {
     global $cfg;
 
@@ -863,6 +886,7 @@ function update_things() {
     rebuild('shows', $cfg['SHOWS_PATH']);
 
     update_trailers();
+    update_seasons();
     hash_missing();
     update_stats();
 

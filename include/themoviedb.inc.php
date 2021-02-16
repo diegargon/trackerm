@@ -278,6 +278,7 @@ function themoviedb_showsDetailsPrep($id, $seasons_data, $episodes_data) {
                     'episode' => $episode['episode_number'],
                     'title' => $episode_title,
                     'clean_title' => clean_title($episode_title),
+                    'update' => time(),
                     'episode_release' => $episode_release,
                     'plot' => $episode_plot
                 ];

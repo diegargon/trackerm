@@ -298,7 +298,7 @@ function create_db() {
                     "title" VARCHAR NULL,
                     "clean_title" VARCHAR NULL,
                     "plot" VARCHAR NULL,
-                    "updated" INTEGER NULL,
+                    "updated" INTEGER default 0,
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                     UNIQUE (themoviedb_id, season, episode)
                 )');
