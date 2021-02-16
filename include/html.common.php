@@ -371,3 +371,59 @@ function getOptions() {
 
     return getTpl('menu_options', array_merge($tdata, $LNG, $cfg));
 }
+
+function html_mediainfo_tags($mediainfo, $tags = null) {
+    global $LNG;
+
+    $general_tags = $video_tags = $audio_tags = $text_tags = '';
+    $tags = [
+        'General' => ['Format', 'FrameRate', 'AudioCount', 'VideoCount', 'TextCount'],
+        'Video' => ['FrameRate_Mode', 'ColorSpace', 'Encoded_Library_Name'],
+        'Audio' => ['Format', 'BitRate_Mode', 'Format_Commercial_IfAny', 'Channels', 'BitRate', 'Compression_Mode'],
+//        'Text' => '',
+    ];
+    foreach ($tags as $tag_ary_key => $tag_ary) {
+        if ($tag_ary_key == 'General') {
+            foreach ($tag_ary as $tag_value) {
+                isset($mediainfo[$tag_ary_key][$tag_value]) ? $general_tags .= '<span  title="' . $tag_value . '" class="mediainfo_tag">' . $mediainfo[$tag_ary_key][$tag_value] . '</span>' : null;
+            }
+        }
+        if ($tag_ary_key == 'Video') {
+            foreach ($tag_ary as $tag_value) {
+                isset($mediainfo[$tag_ary_key][0][$tag_value]) ? $video_tags .= '<span  title="' . $tag_value . '" class="mediainfo_tag">' . $mediainfo[$tag_ary_key][0][$tag_value] . '</span>' : null;
+            }
+        }
+        if ($tag_ary_key == 'Audio') {
+            foreach ($tag_ary as $tag_value) {
+                isset($mediainfo[$tag_ary_key][1][$tag_value]) ? $audio_tags .= '<span title="' . $tag_value . '" class="mediainfo_tag">' . $mediainfo[$tag_ary_key][1][$tag_value] . '</span>' : null;
+            }
+        }
+        if ($tag_ary_key == 'Text') {
+            foreach ($tag_ary as $tag_value) {
+                isset($mediainfo[$tag_ary_key][1][$tag_value]) ? $text_tags .= '<span  title="' . $tag_value . '" class="mediainfo_tag">' . $mediainfo[$tag_ary_key][1][$tag_value] . '</span>' : null;
+            }
+        }
+    }
+
+    if (($mediainfo['Video'][0]['Width']) && isset($mediainfo['Video'][0]['Height'])) {
+        $video_tags .= '<span class="mediainfo_tag">' . $mediainfo['Video'][0]['Width'] . 'x' . $mediainfo['Video'][0]['Height'] . 'p</span>';
+    }
+    if (isset($mediainfo['Audio'])) {
+        foreach ($mediainfo['Audio'] as $audio) {
+            isset($audio['Language']) ? $audio_tags .= '<span title="' . $LNG['L_AUDIO'] . '" class="mediainfo_tag">' . $audio['Language'] . '</span>' : null;
+        }
+    }
+    /*
+      if (isset($mediainfo['Text'])) {
+      $subs_langs = '';
+      foreach ($mediainfo['Text'] as $text) {
+      if (isset($text['Language'])) {
+      empty($subs_langs) ? $subs_langs .= $text['Language'] : $subs_langs .= ':' . $text['Language'];
+      }
+      }
+      !empty($subs_langs) ? $text_tags .= '<span title="' . $LNG['L_SUBS'] . '" class="mediainfo_tag">' . $subs_langs . '</span>' : null;
+      }
+     *
+     */
+    return $general_tags . $video_tags . $audio_tags . $text_tags;
+}

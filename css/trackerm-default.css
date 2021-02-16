@@ -84,7 +84,7 @@ select {
     display:inline-block;
     padding: 10px;
     margin: 5px;
-    background: darkcyan;
+    background:  #068276;
     font-size:1.5em;
     font-weight:bold;
 }
@@ -489,7 +489,7 @@ button {
     display: inline-flex;
     padding: 10px;
     border: 1px solid black;
-    background: #3ea5ff;
+    background:  #068276;
     margin: 5px 5px 5px 1px;
     font-weight: bold;
     text-decoration: none;
@@ -810,4 +810,25 @@ button {
     color: black;
     margin: 0;
     text-align: center;
+}
+
+.mediainfo_container {
+    display:flex;
+    align-items: center;
+    overflow: auto;
+    border:0px solid red;
+    height: 45px;
+
+}
+
+.mediainfo_tag {
+    border: 1px outset  #068276;
+    background-color: black;
+    margin:2px;
+    padding: 5px 9px 5px 9px;
+    color: #FFD700;
+    font-weight: bold;
+    cursor:pointer;
+    text-shadow: 0 0 5px #fff, 0 0 10px #ff4da6, 0 0 20px #ff4da6;;
+
 }

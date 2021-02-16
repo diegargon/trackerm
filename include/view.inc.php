@@ -148,6 +148,14 @@ function view() {
             }
         }
     }
+
+    if (!empty($item['path'])) {
+        $other['mediainfo'] = mediainfo_formated($item['path']);
+        isset($other['mediainfo']['General']['Duration']) ? $other['mediainfo']['General']['Duration'] = format_seconds($other['mediainfo']['General']['Duration']) : null;
+        isset($other['mediainfo']['General']['FrameRate']) ? $other['mediainfo']['General']['FrameRate'] = round($other['mediainfo']['General']['FrameRate']) . 'fps' : null;
+        isset($other['mediainfo']['Audio'][1]['BitRate']) ? $other['mediainfo']['Audio'][1]['BitRate'] = substr($other['mediainfo']['Audio'][1]['BitRate'], 0, 2) . 'hz' : null;
+        !empty($other['mediainfo']) ? $other['mediainfo_tags'] = html_mediainfo_tags($other['mediainfo']) : null;
+    }
     $page = getTpl('view', array_merge($cfg, $LNG, $item, $other));
 
     return $page;

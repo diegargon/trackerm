@@ -64,6 +64,16 @@
                     <span class="view_have_episodes"><?= $tdata['have_episodes'] ?></span>
                     <br/>
                 <?php } ?>
+                <?php if (!empty($tdata['mediainfo']['General']['Duration'])) { ?>
+                    <span><?= $tdata['L_DURATION'] ?> :</span>
+                    <span><?= $tdata['mediainfo']['General']['Duration'] ?></span>
+                    <br/>
+                <?php } ?>
+                <?php if (!empty($tdata['mediainfo_tags'])) {
+                    ?>
+                    <div class="mediainfo_container"><?= $tdata['mediainfo_tags'] ?></div>
+                <?php } ?>
+
                 <?php if (!empty($tdata['seasons_data'])) { ?>
                     <?= $tdata['seasons_data'] ?>
                 <?php } ?>

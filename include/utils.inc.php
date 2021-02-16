@@ -202,3 +202,7 @@ function notify_mail($msg) {
         }
     }
 }
+
+function format_seconds($s) {
+    return gmdate("H:i:s", (int) $s);
+}

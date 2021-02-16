@@ -235,7 +235,46 @@ function mediainfo_json($file) {
     $file = '"' . $file . '"';
     $mediainfo_exec = $mediainfo . $mediainfo_opts . $file;
     $mediainfo_json = shell_exec($mediainfo_exec);
-    $response_ary = json_decode($mediainfo_json, true);
 
-    return valid_array($response_ary) ? $response_ary : false;
+    return $mediainfo_json;
+}
+
+function mediainfo($file) {
+    $json = mediainfo_json($file);
+    if ($json) {
+        $mediainfo_ary = json_decode($json, true);
+    } else {
+        return false;
+    }
+
+    return isset($mediainfo_ary['media']['track']) ? $mediainfo_ary['media']['track'] : false;
+}
+
+function mediainfo_formated($file) {
+    $mediainfo = mediainfo($file);
+    if (!$mediainfo) {
+        return false;
+    }
+    $mediainfo_tags = [];
+
+    foreach ($mediainfo as $media_item) {
+        $type = $media_item['@type'];
+        if ($type == 'General') {
+            foreach ($media_item as $item_key => $item_value) {
+                $mediainfo_tags[$type][$item_key] = $item_value;
+            }
+        } else {
+            if (isset($media_item['StreamOrder'])) {
+                $order = $media_item['StreamOrder'];
+            } else if (isset($media_item['ID'])) {
+                $order = $media_item['ID'];
+            } else {
+                continue;
+            }
+            foreach ($media_item as $item_key => $item_value) {
+                $mediainfo_tags[$type][$order][$item_key] = $item_value;
+            }
+        }
+    }
+    return $mediainfo_tags;
 }
