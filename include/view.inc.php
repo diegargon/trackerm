@@ -46,8 +46,6 @@ function view() {
         return false;
     }
     $other['page_type'] = $type;
-
-
     $item = $db->getItemById($t_type, $id);
 
     empty($item) ? msg_box($msg = ['title' => $LNG['L_ERROR'], 'body' => $LNG['L_ITEM_NOT_FOUND'] . '1A1003']) : null;
@@ -93,8 +91,6 @@ function view() {
         $item['have_episodes'] = $i;
         $item['size'] = human_filesize($tsize);
     }
-
-
 
     if (!empty($item['poster']) && $cfg['cache_images']) {
         $cache_img_response = cacheImg($item['poster']);
@@ -311,7 +307,6 @@ function view_seasons($id, $update = false) {
         $seasons = $items[0]['seasons'];
         $episodes = $items[0]['episodes'];
     }
-    $seasons_data .= '<span>' . $LNG['L_SEASONS'] . ': ' . $seasons . ' ' . $LNG['L_EPISODES'] . ': ' . $episodes . '</span><br/>';
 
     $iurl = basename($_SERVER['REQUEST_URI']);
     $iurl = preg_replace('/&season=\d{1,4}/', '', $iurl);
@@ -321,7 +316,7 @@ function view_seasons($id, $update = false) {
     for ($i = 1; $i <= $seasons; $i++) {
         $seasons_data .= '<a class="season_link" href="' . $iurl . '&season=' . $i . '">' . $LNG['L_SEASON'] . ': ' . $i . '</a>';
     }
-
+    $seasons_data .= '<br/><span>' . $LNG['L_SEASONS'] . ': ' . $seasons . ' ' . $LNG['L_EPISODES'] . ': ' . $episodes . '</span><br/>';
     $episode_data = '';
     if ($season) {
         $episode_data .= '<div class="episode_container">';

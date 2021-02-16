@@ -66,10 +66,7 @@
                 <?php if (!empty($tdata['mediainfo']['General']['Duration'])) { ?>
                     <span><?= $tdata['L_DURATION'] ?> :</span>
                     <span><?= $tdata['mediainfo']['General']['Duration'] ?></span>
-                    <br/>
-                <?php } ?>
-                <?php if (!empty($tdata['seasons_data'])) { ?>
-                    <?= $tdata['seasons_data'] ?>
+                    <hr/>
                 <?php } ?>
                 <div class="view_actions">
                     <?php
@@ -102,11 +99,13 @@
                         <a class="action_link" href="?page=download&id=<?= $tdata['id'] ?>&type=movies_library" target=_blank><?= $tdata['L_DOWNLOAD'] ?></a>
                     <?php } ?>
                 </div>
-                <hr/>
                 <?php if (!empty($tdata['download'])) { ?>
                     <div class="view_download">
                         <a onClick="show_loading()" class="submit_link" href="<?= basename($_SERVER['REQUEST_URI']) . '&download=' . rawurlencode($tdata['download']) ?>"><?= $tdata['L_DOWNLOAD'] ?></a>
                     </div>
+                <?php } ?>
+                <?php if (!empty($tdata['seasons_data'])) { ?>
+                    <?= $tdata['seasons_data'] ?>
                 <?php } ?>
                 <?php
                 if (!empty($tdata['trailer'] || (!empty($tdata['guessed_trailer'])) && $tdata['guessed_trailer'] != -1)) {
