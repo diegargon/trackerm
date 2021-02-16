@@ -7,7 +7,6 @@ TODO
     [IMPROVE] Wanted Serie, poner en seguimiento "series" o sea nuevos capitulos de series.
             Added wanted field track_show for add and keep track of show (automatically download current episodes of a show each week)
             Mostrar en view
-    [NEW/IMPROVE] actualizacion automatica cada semana de titulos de episodio a excepcion de que el show sea "ended"
 
 [MED]
     [NEW] Escaneo de directorios a más para avi sin ser torrents. $cfg['SCAN_MEDIA_DIR'] = 1;
