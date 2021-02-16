@@ -29,8 +29,8 @@ TODO
     [IMPROVE] Pagination: actually we get all results and do a array_slice, now with SQL database we can  do that better.    
     [FIX/IMPROVE] Normalize dates        
     [FIX] A la hora de identificar las series siguientes capitulos los identifica por el predictible_title, si hubiera varias series con el mismo titulo habria problemas. 
-    [IMPROVE][LIBRARY] Los shows deberian de tener un registro maestro con los datos y los demas, los capitulos ser registro secundarios.
-            Quizas tener dos DBs una library_shows, library_episodes.    
+    [IMPROVE][LIBRARY] Los shows(y posiblemente las movies si aceptamos diferentes calidades) deberian de tener un registro maestro con los datos y los demas, los capitulos 
+    ser registro secundarios. ¿añadir una tabla library_shows|movies_master?
     [IMPROVE] Too much messy code...
     [IMPROVE][VIEW]Add delete media button
     [IMPROVE][VIEW] add edit custom poster.
