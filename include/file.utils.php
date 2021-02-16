@@ -218,3 +218,24 @@ function file_hash($file) {
 
     return (!empty($data)) ? hash('md5', $data) : null;
 }
+
+function mediainfo_json($file) {
+    global $cfg, $log;
+    if (!file_exists($cfg['mediainfo_path'])) {
+        $log->err("Wrong mediainfo path");
+        return false;
+    }
+    if (!file_exists(($file))) {
+        $log->warn("Mediainfo: Media file not exists: $file");
+        return false;
+    }
+
+    $mediainfo = $cfg['mediainfo_path'];
+    $mediainfo_opts = ' --Output=JSON ';
+    $file = '"' . $file . '"';
+    $mediainfo_exec = $mediainfo . $mediainfo_opts . $file;
+    $mediainfo_json = shell_exec($mediainfo_exec);
+    $response_ary = json_decode($mediainfo_json, true);
+
+    return valid_array($response_ary) ? $response_ary : false;
+}
