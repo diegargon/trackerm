@@ -26,6 +26,7 @@ TODO
     [IMPROBE][CLI] Clean old query search caches entrys
 
 [VERY LOW]      
+    [IMPROVE] Add to library sub menu a switch to player mode.
     [IMPROVE] añadir tabla view_movies, view=0 not view 1 partial 2 , 3 view.    
     [IMPROVE] Pagination: actually we get all results and do a array_slice, now with SQL database we can  do that better.    
     [FIX/IMPROVE] Normalize dates        
