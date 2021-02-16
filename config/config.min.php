@@ -13,7 +13,7 @@
 /* * ******************************************************************************* */
 
 // themoviedb.org api key: https://www.themoviedb.org/documentation/api
-// This is the app default API key, you can ask for a api key for your personal use or use this.
+// This is the app default API key, you can register in themoviedb and request a api key for your personal use or use this.
 $cfg['db_api_token'] = '9dce7699c72bcf016a6362cf4ed48c8f';
 //UI Lang Supported only: es-ES or en-EN
 $cfg['LANG'] = 'en-EN';
