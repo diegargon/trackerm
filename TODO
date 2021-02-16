@@ -8,7 +8,6 @@ TODO
             Added wanted field track_show for add and keep track of show (automatically download current episodes of a show each week)
             Mostrar en view
     [NEW/IMPROVE] actualizacion automatica cada semana de titulos de episodio a excepcion de que el show sea "ended"
-    [IMPROVE] get mediainfo and show time at least
 
 [MED]
     [NEW] Escaneo de directorios a más para avi sin ser torrents. $cfg['SCAN_MEDIA_DIR'] = 1;
