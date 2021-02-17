@@ -339,7 +339,6 @@ function create_db() {
           )');
 
     $db->insert('config', ['cfg_key' => 'db_version', 'cfg_value' => 11, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
-    $db->insert('config', ['cfg_key' => 'version', 'cfg_value' => '84', 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
     $db->insert('config', ['cfg_key' => 'profile', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
     $db->insert('config', ['cfg_key' => 'max_identify_items', 'cfg_value' => 5, 'cfg_desc' => 'L_CFG_MAXID_ITEMS', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
     $db->insert('config', ['cfg_key' => 'app_name', 'cfg_value' => 'trackerm', 'cfg_desc' => '', 'type' => 1, 'category' => 'L_PRIV', 'public' => 0]);
@@ -765,7 +764,7 @@ function update_db($from) {
     /*
       if ($from < 12) {
       $db->query('UPDATE config SET cfg_value=\'12\' WHERE cfg_key=\'db_version\' LIMIT 1');
-      $db->query('UPDATE config SET cfg_value=\'85\' WHERE cfg_key=\'version\' LIMIT 1');
+      $db->query('DELETE FROM config WHERE cfg_key=\'version\' LIMIT 1');
       $db->update('db_info', ['version' => 12]);
       $db->query('VACUUM;');
       }
@@ -774,7 +773,7 @@ function update_db($from) {
     /*
       if ($from < 13) {
       $db->query('UPDATE config SET cfg_value=\'13\' WHERE cfg_key=\'db_version\' LIMIT 1');
-      $db->query('UPDATE config SET cfg_value=\'86\' WHERE cfg_key=\'version\' LIMIT 1');
+
       $db->update('db_info', ['version' => 12]);
       $db->query('VACUUM;');
       }

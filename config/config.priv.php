@@ -13,6 +13,7 @@
 !defined('IN_WEB') ? exit : true;
 
 $cfg['search_db'] = 'themoviedb';
+$cfg['version'] = 'A85';
 
 $cfg['DB_FILE'] = $cfg['ROOT_PATH'] . '/cache/trackerm.db';
 $cfg['img_url'] = $cfg['REL_PATH'] . '/img';
