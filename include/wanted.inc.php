@@ -111,7 +111,7 @@ function wanted_list() {
         }
         //IMPROVE: Sorting: do better way
         if (valid_array($wanted_list_tmp_data)) {
-            isset($wanted_list_tmp_data['DELETED']) ? $wanted_list_data .= $wanted_list_tmp_data['DELETE'] : null;
+            isset($wanted_list_tmp_data['DELETED']) ? $wanted_list_data .= $wanted_list_tmp_data['DELETED'] : null;
             isset($wanted_list_tmp_data['MOVED']) ? $wanted_list_data .= $wanted_list_tmp_data['MOVED'] : null;
             isset($wanted_list_tmp_data['SEEDING']) ? $wanted_list_data .= $wanted_list_tmp_data['SEEDING'] : null;
             isset($wanted_list_tmp_data['SEARCHING']) ? $wanted_list_data .= $wanted_list_tmp_data['SEARCHING'] : null;
