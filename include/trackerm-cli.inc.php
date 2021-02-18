@@ -322,12 +322,13 @@ function get_valid_files($item) {
         foreach ($files_dir as $file) {
             $ext_check = substr($file, -3);
 
-            if ($ext_check == 'rar' || $ext_check == 'RAR') {
+            if (strtolower($ext_check) == 'rar') {
                 if (file_exists($cfg['unrar_path'])) {
                     $unrar_check = dirname($file) . '/trackerm-unrar';
                     if (!file_exists($unrar_check)) {
                         if (check_file_encrypt('rar', $file)) {
                             $log->addStateMsg("[{$LNG['L_ERROR']}] {$LNG['L_ERR_FILE_ENCRYPT_MANUAL']} ($file)");
+                            notify_mail(['subject' => $LNG['L_ERR_FILE_ENCRYPT_MANUAL'], 'msg' => $file]);
                             // we continue and try since the function need test and TODO.
                         }
                         touch($unrar_check);
@@ -356,16 +357,13 @@ function get_valid_files($item) {
             }
         }
     } else {
-        $log->debug("$orig_path is not a directory");
-
         $ext_check = substr($item['files_location'], -3);
         $work_path = $cfg['TORRENT_FINISH_PATH'] . '/' . substr($item['files_location'], 0, -4);
-        if ($ext_check == 'rar' || $ext_check == 'RAR') {
+        if (strtolower($ext_check) == 'rar') {
             if (!file_exists($work_path)) {
                 mkdir($work_path);
             }
             if (file_exists($cfg['unrar_path'])) {
-
                 $unrar_check = $orig_path . '.unrar';
                 if (!file_exists($unrar_check)) {
                     if (check_file_encrypt('rar', $file)) {
@@ -441,13 +439,12 @@ function linking_media($valid_file, $final_dest_path) {
 function wanted_work() {
     global $db, $cfg, $LNG, $log, $trans;
 
-    $day_of_week = date("w");
-
     $wanted_list = $db->getTableData('wanted');
-    if (empty($wanted_list) || $wanted_list < 1) {
+    if (!valid_array($wanted_list)) {
         $log->debug("Wanted list empty");
         return false;
     }
+    $day_of_week = date("w");
 
     foreach ($wanted_list as $wanted) {
         $valid_results = [];
@@ -457,7 +454,13 @@ function wanted_work() {
             continue;
         }
 
-        if (isset($wanted['wanted_status']) && $wanted['wanted_status'] > 0) {
+        if (!empty($wanted['track_show'])) {
+            $log->debug("Jumping wanted {$wanted['title']} by track_show");
+            tracker_shows($wanted);
+            continue;
+        }
+
+        if (isset($wanted['wanted_status']) && $wanted['wanted_status'] >= 0) {
             $log->debug("Jumping wanted {$wanted['title']} check by state " . $trans->getStatusName($wanted['wanted_status']));
             continue;
         }
@@ -673,6 +676,80 @@ function wanted_check_flags($wanted, $results) {
     }
 
     return count($valid_results) > 0 ? $valid_results : false;
+}
+
+function tracker_shows($wanted) {
+    global $db, $log;
+
+    $from_season = $wanted['season'];
+    $from_episode = $wanted['episode'];
+    $tmdb_id = $wanted['themoviedb_id'];
+
+    if (empty($tmdb_id) || empty($from_season) || empty($from_episode)) {
+        return false;
+    }
+
+    $seasons = [];
+    $stmt = $db->query('SELECT season,episode FROM shows_details WHERE themoviedb_id=' . $tmdb_id . '');
+    $items = $db->fetchAll($stmt);
+
+    foreach ($items as $item) {
+        (!isset($seasons[$item['season']]) || $seasons[$item['season']] < $item['episode']) ? $seasons[$item['season']] = $item['episode'] : null;
+    }
+
+    //Create list of array season/episodes and exclude what not meet the criteria from_season/episode
+    $list_episodes = [];
+    foreach ($seasons as $season => $episodes) {
+        if ($season < $from_season) {
+            continue;
+        }
+        for ($i = 1; $i <= $episodes; $i++) {
+            if (!($season == $from_season && $i < $from_episode)) {
+                $list_episodes[$season][] = $i;
+            }
+        }
+    }
+
+    //Get actual wanted list for tmdb id, we use later
+    $stmt = $db->query("SELECT * FROM wanted WHERE themoviedb_id = $tmdb_id AND media_type = 'shows' AND wanted_status < 4 AND track_show IS NULL");
+    $items_match = $db->fetchAll($stmt);
+    $items_match_count = count($items_match);
+
+    //From all the episode that meet the criteria check if already have that item
+    //or if already in wanted.
+    foreach ($list_episodes as $season => $episodes) {
+        foreach ($episodes as $key_episode => $episode) {
+            if (check_if_have_show($tmdb_id, $season, $episode)) {
+                unset($list_episodes[$season][$key_episode]);
+            }
+            if ($items_match_count > 0) {
+                foreach ($items_match as $item_match) {
+                    if (($item_match['season'] == $season) && ($item_match['episode'] == $episode)) {
+                        unset($list_episodes[$season][$key_episode]);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    $item = mediadb_getFromCache('shows', $tmdb_id);
+    $title = $item['title'];
+    $max_wanted_queue = 1; //TODO: TO CONFIG
+
+    $inherint_track = null;
+    !empty($wanted['custom_words_ignore']) ? $inherint_track['custom_words_ignore'] = $wanted['custom_words_ignore'] : null;
+    !empty($wanted['custom_words_require']) ? $inherint_track['custom_words_require'] = $wanted['custom_words_require'] : null;
+    !empty($wanted['day_check']) ? $inherint_track['day_check'] = $wanted['day_check'] : null;
+    foreach ($list_episodes as $season => $episodes) {
+        foreach ($episodes as $key_episode => $episode) {
+            if ($items_match_count < $max_wanted_queue) {
+                $log->debug("Sending to wanted tracker show episode: $title $season:$episode");
+                wanted_episode($tmdb_id, $season, $episode, null, $inherint_track);
+                $items_match_count++;
+            }
+        }
+    }
 }
 
 function send_transmission($results) {

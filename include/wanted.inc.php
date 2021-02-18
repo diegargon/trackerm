@@ -10,7 +10,7 @@
 !defined('IN_WEB') ? exit : true;
 
 function wanted_list() {
-    global $db, $cfg, $LNG, $trans;
+    global $db, $cfg, $LNG, $trans, $filter;
     $iurl = '?page=wanted';
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -31,27 +31,46 @@ function wanted_list() {
 
             $db->updateItemById('wanted', $id_only_proper, ['only_proper' => $only_proper]);
         }
+        if (!empty($_POST['track_show']) && !empty($_POST['id'])) {
+            $id = $filter->postInt('id');
+            $track_show = $filter->postString('track_show');
+            $track_show = ltrim($track_show, 'S');
+            $track_show = explode('E', $track_show);
+            $season = $track_show[0];
+            $episode = $track_show[1];
+            wanted_episode($id, $season, $episode, 1);
+        }
     }
     //update wanted agains transmission-daemon
     $trans->updateWanted();
 
     $wanted_list = $db->getTableData('wanted');
 
-    if (!empty($wanted_list)) {
-        $wanted_list_data = false;
-        $wanted_list_tmp_data = [];
+    if (valid_array($wanted_list)) {
+        $wanted_list_data = null;
+        $wanted_list_tmp_data['TRACKING'] = '';
+        $wanted_list_tmp_data['SEARCHING'] = '';
+        $wanted_list_tmp_data['MOVED'] = '';
+        $wanted_list_tmp_data['SEEDING'] = '';
+        $wanted_list_tmp_data['OTHER'] = '';
 
         foreach ($wanted_list as $wanted_item) {
             $tdata = [];
             $tdata['iurl'] = $iurl;
+            $tdata['want_separator'] = 0;
 
             if (empty($wanted_item['id']) || $wanted_item['direct'] == 1) {
                 continue;
             }
+
             $tdata['status_name'] = $LNG['L_SEARCHING'];
+            if (!empty($wanted_item['track_show'])) {
+                $tdata['status_name'] = $LNG['L_TRACKING'];
+            }
             if (isset($wanted_item['wanted_status']) && ($wanted_item['wanted_status'] >= 0)) {
                 $tdata['status_name'] = $trans->getStatusName($wanted_item['wanted_status']);
             }
+
             $wanted_item['day_check'] = day_check($wanted_item['id'], $wanted_item['day_check'], $wanted_item['wanted_status']);
             $wanted_item['created'] = strftime("%x", strtotime($wanted_item['created']));
             !empty($wanted_item['last_check']) ? $wanted_item['last_check'] = strftime("%A %H:%M", $wanted_item['last_check']) : $wanted_item['last_check'] = $LNG['L_NEVER'];
@@ -59,6 +78,7 @@ function wanted_list() {
                 (strlen($wanted_item['season']) == 1) ? $season = '0' . $wanted_item['season'] : $season = $wanted_item['season'];
                 (strlen($wanted_item['episode']) == 1) ? $episode = '0' . $wanted_item['episode'] : $episode = $wanted_item['episode'];
                 $s_episode = 'S' . $season . 'E' . $episode;
+                ($wanted_item['track_show'] == 1) ? $s_episode = '>=' . $s_episode : null;
                 $wanted_item['show_title'] = $wanted_item['title'] . ' ' . $s_episode;
             }
             $mediadb_item = mediadb_getFromCache($wanted_item['media_type'], $wanted_item['themoviedb_id']);
@@ -74,26 +94,34 @@ function wanted_list() {
 
             $wanted_item['media_type'] == 'movies' ? $tdata['lang_media_type'] = $LNG['L_MOVIES'] : $tdata['lang_media_type'] = $LNG['L_SHOWS'];
 
-            if ($wanted_item['wanted_status'] == -1) {
-                !isset($wanted_list_tmp_data['L_SEARCHING']) ? $wanted_list_tmp_data['L_SEARCHING'] = '' : null;
-                $wanted_list_tmp_data['L_SEARCHING'] .= getTpl('wanted-item', array_merge($wanted_item, $tdata, $LNG, $cfg));
+            if ($wanted_item['track_show'] == 1) {
+                $wanted_list_tmp_data['TRACKING'] .= getTpl('wanted-item', array_merge($wanted_item, $tdata, $LNG, $cfg));
+            } else if ($wanted_item['wanted_status'] == -1) {
+                $wanted_list_tmp_data['SEARCHING'] .= getTpl('wanted-item', array_merge($wanted_item, $tdata, $LNG, $cfg));
+            } else if ($wanted_item['wanted_status'] == 9) {
+                $wanted_list_tmp_data['MOVED'] .= getTpl('wanted-item', array_merge($wanted_item, $tdata, $LNG, $cfg));
+            } else if ($wanted_item['wanted_status'] == 6) {
+                $wanted_list_tmp_data['SEEDING'] .= getTpl('wanted-item', array_merge($wanted_item, $tdata, $LNG, $cfg));
+            } else if ($wanted_item['wanted_status'] == 10) {
+                $wanted_list_tmp_data['DELETED'] .= getTpl('wanted-item', array_merge($wanted_item, $tdata, $LNG, $cfg));
             } else {
-                !isset($wanted_list_tmp_data[$wanted_item['wanted_status']]) ? $wanted_list_tmp_data[$wanted_item['wanted_status']] = '' : null;
-                $wanted_list_tmp_data[$wanted_item['wanted_status']] .= getTpl('wanted-item', array_merge($wanted_item, $tdata, $LNG, $cfg));
+                $wanted_list_tmp_data['OTHER'] .= getTpl('wanted-item', array_merge($wanted_item, $tdata, $LNG, $cfg));
             }
         }
         //IMPROVE: Sorting: do better way
         if (valid_array($wanted_list_tmp_data)) {
-            $sort_array = [];
-            !empty($wanted_list_data['L_MOVED']) ? $sort_array = array_pop($wanted_list_tmp_data['L_MOVED']) : null;
-            !empty($wanted_list_data['L_DOWNLOADING']) ? $sort_array = array_pop($wanted_list_tmp_data['L_DOWNLOADING']) : null;
-            !empty($wanted_list_data['L_SEEDING']) ? $sort_array = array_pop($wanted_list_tmp_data['L_SEEDING']) : null;
-            !empty($wanted_list_data['L_SEARCHING']) ? $sort_array = array_pop($wanted_list_tmp_data['L_SEARCHING']) : null;
-            $sort_array = array_merge($sort_array, $wanted_list_tmp_data);
-            foreach ($wanted_list_tmp_data as $item) {
-                $wanted_list_data .= $item;
+            isset($wanted_list_tmp_data['DELETED']) ? $wanted_list_data .= $wanted_list_tmp_data['DELETE'] : null;
+            isset($wanted_list_tmp_data['MOVED']) ? $wanted_list_data .= $wanted_list_tmp_data['MOVED'] : null;
+            isset($wanted_list_tmp_data['SEEDING']) ? $wanted_list_data .= $wanted_list_tmp_data['SEEDING'] : null;
+            isset($wanted_list_tmp_data['SEARCHING']) ? $wanted_list_data .= $wanted_list_tmp_data['SEARCHING'] : null;
+            isset($wanted_list_tmp_data['OTHER']) ? $wanted_list_data .= $wanted_list_tmp_data['OTHER'] : null;
+            if ($wanted_list_tmp_data['TRACKING']) {
+                $wanted_list_data .= getTpl('wanted-item', ['want_separator' => 1]);
+                $wanted_list_data .= $wanted_list_tmp_data['TRACKING'];
             }
         }
+
+
         return $wanted_list_data;
     }
     return false;
@@ -133,11 +161,22 @@ function wanted_movies($wanted_id) {
     (!$dup_item) ? $db->insert('wanted', $wanted_item) : null;
 }
 
-function wanted_episode($id, $season, $episodes) {
-    global $db, $cfg;
+function wanted_episode($id, $season, $episodes, $track_show = null, $inherint_track = null) {
+    global $db, $user;
 
     (strlen($season) == 1) ? $season = '0' . $season : null;
     $episodes = explode(',', $episodes);
+    !empty($user['id']) ? $uid = $user['id'] : $uid = 0;
+
+    if (valid_array($inherint_track)) {
+        isset($inherint_track['day_check']) ? $day_check = $inherint_track['day_check'] : $day_check = null;
+        isset($inherint_track['custom_words_require']) ? $custom_words_require = $inherint_track['custom_words_require'] : $custom_words_require = null;
+        isset($inherint_track['custom_words_ignore']) ? $custom_words_ignore = $inherint_track['custom_words_ignore'] : $custom_words_ignore = null;
+    } else {
+        $day_check = null;
+        $custom_words_ignore = null;
+        $custom_words_require = null;
+    }
 
     foreach ($episodes as $episode) {
         $episode = trim($episode);
@@ -150,20 +189,32 @@ function wanted_episode($id, $season, $episodes) {
         $wanted_item = [
             'themoviedb_id' => $item['themoviedb_id'],
             'title' => $item['title'],
-            'day_check' => 0,
+            'day_check' => $day_check,
             'last_check' => '',
             'direct' => 0,
             'wanted_status' => -1,
             'media_type' => 'shows',
             'season' => $season,
             'episode' => $episode,
-            'profile' => (int) $cfg['profile'],
+            'profile' => $uid,
+            'track_show' => $track_show,
+            'custom_words_require' => $custom_words_require,
+            'custom_words_ignore' => $custom_words_ignore,
         ];
-        $where_check = [
-            'title' => ['value' => $wanted_item['title']],
-            'season' => ['value' => $season],
-            'episode' => ['value' => $episode],
-        ];
+
+        if ($track_show) {
+            $where_check = [
+                'themoviedb_id' => ['value' => $wanted_item['themoviedb_id']],
+                'track_show' => ['value' => '1'],
+            ];
+        } else {
+            $where_check = [
+                'themoviedb_id' => ['value' => $wanted_item['themoviedb_id']],
+                'season' => ['value' => $season],
+                'episode' => ['value' => $episode],
+                'track_show' => ['value' => ''],
+            ];
+        }
         $result = $db->select('wanted', 'id', $where_check, 'LIMIT 1');
         $item = $db->fetch($result);
         $db->finalize($result);

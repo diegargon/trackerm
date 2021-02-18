@@ -30,6 +30,7 @@
                 <?php if (!empty($tdata['mediainfo_tags'])) {
                     ?>
                     <div class="mediainfo_container"><?= $tdata['mediainfo_tags'] ?></div>
+                    <br/>
                 <?php } ?>
 
                 <?php if (!empty($tdata['themoviedb_id']) && ( $tdata['ilink'] == 'movies_db' || $tdata['ilink'] == 'movies_library' )) { ?>
@@ -98,6 +99,7 @@
                     <?php if ($tdata['ilink'] == 'movies_library' && ($tdata['download_button'])) { ?>
                         <a class="action_link" href="?page=download&id=<?= $tdata['id'] ?>&type=movies_library" target=_blank><?= $tdata['L_DOWNLOAD'] ?></a>
                     <?php } ?>
+                    <?php !empty($tdata['follow_show']) ? print $tdata['follow_show'] : null; ?>
                 </div>
                 <?php if (!empty($tdata['download'])) { ?>
                     <div class="view_download">
@@ -114,11 +116,12 @@
                         $trailer = str_replace('http', 'https', $trailer);
                     }
                     ?>
-                    <iframe frameborder="0" scrolling="no" marginheight="0" marginwidth="0"width="788" height="443" type="text/html"
-                            src="<?= $trailer ?>?autoplay=0&fs=1&iv_load_policy=0&rel=0&cc_load_policy=0"
-                            frameborder="0"/></iframe>
-                        <?php } ?>
-
+                    <div class="video_container">
+                        <iframe frameborder="0" scrolling="no" marginheight="0" marginwidth="0"  type="text/html"
+                                src="<?= $trailer ?>?autoplay=0&fs=1&iv_load_policy=0&rel=0&cc_load_policy=0"
+                                frameborder="0"/></iframe>
+                            <?php } ?>
+                </div>
                 <div class="view_extra">
                     <?= $tdata['extra'] ?>
                 </div>

@@ -48,7 +48,9 @@ function view() {
     $other['page_type'] = $type;
     $item = $db->getItemById($t_type, $id);
 
-    empty($item) ? msg_box($msg = ['title' => $LNG['L_ERROR'], 'body' => $LNG['L_ITEM_NOT_FOUND'] . '1A1003']) : null;
+    if (empty($item)) {
+        return msg_box($msg = ['title' => $LNG['L_ERROR'], 'body' => $LNG['L_ITEM_NOT_FOUND'] . ' 1A1003']);
+    }
 
     if ($type == 'movies_db') {
         $library_item = $db->getItemByField('library_movies', 'themoviedb_id', $item['themoviedb_id']);
@@ -132,7 +134,11 @@ function view() {
         $other['extra'] .= view_extra_shows($item, $opt);
     }
 
-    //TODO: To remove, fix a old databse bug than add too many sss
+    if ($type == 'shows_db' || $type == 'shows_library') {
+        //NEWFEATURE
+        //$other['follow_show'] = get_follow_show($item['themoviedb_id']);
+    }
+    //TODO: To remove, fix a old databse bug that add too many sss
     if (!empty($item['guessed_trailer']) && substr(trim($item['guessed_trailer']), 0, 6) == 'httpss') {
         $item['guessed_trailer'] = preg_replace('/httpss(\w+):/', 'https:', $item['guessed_trailer']);
         if (!empty($item['ilink'])) {
@@ -414,4 +420,36 @@ function check_if_have_show($id, $season, $episode) {
         }
     }
     return false;
+}
+
+function get_follow_show($id) {
+    global $LNG, $db;
+    $html = '';
+    $seasons = [];
+
+    $stmt = $db->query('SELECT season,episode FROM shows_details WHERE themoviedb_id=' . $id . '');
+    $items = $db->fetchAll($stmt);
+
+    foreach ($items as $item) {
+        (!isset($seasons[$item['season']]) || $seasons[$item['season']] < $item['episode']) ? $seasons[$item['season']] = $item['episode'] : null;
+    }
+    $options = [];
+    foreach ($seasons as $season => $episodes) {
+        for ($i = 1; $i <= $episodes; $i++) {
+            $s = 'S' . $season . 'E' . $i;
+            $options[] = $s;
+        }
+    }
+
+    $html = '<form class="inline" method="POST" action=?page=wanted>';
+    $html .= '<input type="hidden" name="id" value="' . $id . '" />';
+    $html .= '<input class="action_link" type="submit" name="track_show" value="' . $LNG['L_FOLLOW_SHOW'] . '"/>';
+    $html .= '<select name="track_show">';
+    foreach ($options as $option) {
+        $html .= '<option value="' . $option . '">>=' . $option . '</option>';
+    }
+    $html .= '</select>';
+    $html .= '</form>';
+
+    return $html;
 }
