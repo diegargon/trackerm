@@ -8,6 +8,7 @@
  *  @copyright Copyright @ 2020 - 2021 Diego Garcia (diego/@/envigo.net)
  */
 define('IN_WEB', true);
+define('IN_CLI', true);
 
 if (file_exists('/etc/trackerm.conf')) {
     require_once('/etc/trackerm.conf');
