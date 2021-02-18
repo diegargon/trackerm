@@ -32,6 +32,9 @@
     <body>
         <div id="loading_wrap" class="loading"></div>
         <div class="page">
+            <?php if (!empty($tdata['general_warn_msg'])) { ?>
+                <div class="red_warning"><?= $tdata['general_warn_msg'] ?></div>
+            <?php } ?>
             <?= $tdata['menu'] ?>
             <?= $tdata['body'] ?>
             <footer>
