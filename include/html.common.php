@@ -210,6 +210,15 @@ function msg_box($msg) {
     return getTpl('msgbox', array_merge($LNG, $msg));
 }
 
+function msg_page($msg) {
+    $footer = getFooter();
+    $menu = getMenu();
+    $body = msg_box($msg = ['title' => $msg['title'], 'body' => $msg['body']]);
+
+    echo getTpl('html_mstruct', $tdata = ['menu' => $menu, 'body' => $body, 'footer' => $footer]);
+    exit();
+}
+
 function pager($npage, $nitems, &$topt) {
     global $cfg, $filter;
 
