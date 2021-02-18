@@ -411,9 +411,13 @@ function getLibraryStats() {
 function clean_database($media_type, $files, $media) {
     global $log, $db, $LNG;
 
+    $last_id = 0;
     foreach ($media as $item) {
         if (!in_array($item['path'], $files)) {
-            $log->addStateMsg('[' . $LNG['L_NOTE'] . '] ' . $item['title'] . ' ' . $LNG['L_NOTE_MOVDEL']);
+            if ($last_id != $item['themoviedb_id']) { //avoid spam on shows deleted
+                $log->addStateMsg('[' . $LNG['L_NOTE'] . '] ' . $item['title'] . ' ' . $LNG['L_NOTE_MOVDEL']);
+                $last_id = $item['themoviedb_id'];
+            }
             if (isset($item['themoviedb_id'])) {
                 $values['title'] = $item['title'];
                 $values['themoviedb_id'] = $item['themoviedb_id'];
