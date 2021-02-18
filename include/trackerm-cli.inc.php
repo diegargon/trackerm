@@ -715,11 +715,10 @@ function tracker_shows($wanted) {
         }
     }
 
-    //Get actual wanted list for tmdb id, we use later
-    $stmt = $db->query("SELECT * FROM wanted WHERE themoviedb_id = $tmdb_id AND media_type = 'shows' AND wanted_status < 4 AND track_show IS NULL");
+    //Get actual wanted list (unfinished) for tmdb id, we use later
+    $stmt = $db->query("SELECT * FROM wanted WHERE themoviedb_id = $tmdb_id AND media_type = 'shows' AND wanted_status < 5 AND track_show IS NULL");
     $items_match = $db->fetchAll($stmt);
     $items_match_count = count($items_match);
-
     //From all the episode that meet the criteria check if already have that item
     //or if already in wanted.
     foreach ($list_episodes as $season => $episodes) {
