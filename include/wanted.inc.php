@@ -53,6 +53,7 @@ function wanted_list() {
         $wanted_list_tmp_data['MOVED'] = '';
         $wanted_list_tmp_data['SEEDING'] = '';
         $wanted_list_tmp_data['OTHER'] = '';
+        $wanted_list_tmp_data['DELETED'] = '';
 
         foreach ($wanted_list as $wanted_item) {
             $tdata = [];
