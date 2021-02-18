@@ -42,7 +42,7 @@ function wanted_list() {
         }
     }
     //update wanted agains transmission-daemon
-    $trans->updateWanted();
+    !empty($trans) ? $trans->updateWanted() : null;
 
     $wanted_list = $db->getTableData('wanted');
 
@@ -69,7 +69,7 @@ function wanted_list() {
                 $tdata['status_name'] = $LNG['L_TRACKING'];
             }
             if (isset($wanted_item['wanted_status']) && ($wanted_item['wanted_status'] >= 0)) {
-                $tdata['status_name'] = $trans->getStatusName($wanted_item['wanted_status']);
+                !empty($trans) ? $tdata['status_name'] = $trans->getStatusName($wanted_item['wanted_status']) : $tdata['status_name'] = $wanted_item['wanted_status'];
             }
 
             $wanted_item['day_check'] = day_check($wanted_item['id'], $wanted_item['day_check'], $wanted_item['wanted_status']);
