@@ -4,9 +4,6 @@ TODO
     [FIX] Clean wanted.db/direct torrents that was delete outside app        
     [IMPROVE] Indexers to config
     [FIX/CHECK] do not contemplate yet what to do if tmdb not found any results.    
-    [IMPROVE] Wanted Serie, poner en seguimiento "series" o sea nuevos capitulos de series.
-            Added wanted field track_show for add and keep track of show (automatically download current episodes of a show each week)
-            Mostrar en view
     [FIX] Asegurarse de que tracker-cli no esta corriendo antes de ejecutarse otra vez (si tarda mucho descomprimiendo..)
     [CHECK] Comprobar wanted clean moved work
 [MED]
@@ -37,6 +34,7 @@ TODO
     [IMPROVE][VIEW] add edit custom poster.
 
 [BACKLOG]
+    [IMPROVE] Catalog
     [CHANGE] Change actual Transmission rpc api to something basic, since some basic is enough and the actual have alot of deps 
     [NEW/IMPROVE] En el select de identificar estaria bien mostrar las caractulas al poner encima
     [NEW] opcional: mostrar otros ratigns, filmaffinity, imdb
