@@ -397,7 +397,7 @@ function create_db() {
     $db->insert('config', ['cfg_key' => 'show_noid_inlibrary', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_SHOW_NOID_INLIBRARY', 'type' => 3, 'category' => 'L_MAIN', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'tmdb_search_cache_expire', 'cfg_value' => 604800, 'cfg_desc' => 'L_CFG_TMDB_SEARCH_CACHE_EXPIRE', 'type' => 2, 'category' => 'L_SEARCH', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'auto_ident_strict', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_AUTO_IDENT_STRICT', 'type' => 3, 'category' => 'L_MAIN', 'public' => 1]);
-    $db->insert('config', ['cfg_key' => 'tmdb_opt_cache_expire', 'cfg_value' => 86400, 'cfg_desc' => 'L_CFG_TMDB_OPT_CACHE_EXPIRE', 'type' => 2, 'category' => 'L_SEARCH', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'tmdb_opt_cache_expire', 'cfg_value' => 43200, 'cfg_desc' => 'L_CFG_TMDB_OPT_CACHE_EXPIRE', 'type' => 2, 'category' => 'L_SEARCH', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'mediainfo_path', 'cfg_value' => '/usr/bin/mediainfo', 'cfg_desc' => 'L_CFG_MEDIAINFO_PATH', 'type' => 1, 'category' => 'L_FILES', 'public' => 1]);
     /*
       $db->insert('config', ['cfg_key' => 'transcoder_player', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_TRANSCODER_PLAYER', 'type' => 3, 'category' => 'L_PLAY', 'public' => 1]);
