@@ -13,7 +13,7 @@
 class TorrentServer {
 
     public $trans_conn;
-    public $status = [
+    private $status = [
         // Torrent Status
         0 => 'L_STOPPED',
         1 => 'L_VERIFYING',
@@ -30,12 +30,31 @@ class TorrentServer {
     ];
 
     public function __construct($cfg) {
-        return $this->trans_conn = new Transmission\Client($cfg['trans_hostname'], $cfg['trans_port'], $cfg['trans_username'], $cfg['trans_passwd'], $httpClientBuilder = null);
+        global $log;
+
+        $this->trans_conn = new Transmission\Client($cfg['trans_hostname'], $cfg['trans_port'], $cfg['trans_username'], $cfg['trans_passwd'], $httpClientBuilder = null);
+
+        //php-transmission-sdk instance not check if the connection can be estabilished we do a request here for check
+        try {
+            $this->trans_conn->portTest();
+        } catch (Exception $e) {
+            $log->err("trans __construct test fail: " . $e->getMessage());
+            $this->trans_conn = false;
+        }
+        return $this->trans_conn;
     }
 
     public function getAll() {
+        global $log;
+
         $array = [];
-        $transfers = $this->trans_conn->get();
+
+        try {
+            $transfers = $this->trans_conn->get();
+        } catch (Exception $e) {
+            $log->err("getAll fail: " . $e->getMessage());
+            return false;
+        }
         foreach ($transfers as $key => $transfer) {
             foreach ($transfer as $item_key => $item) {
                 $array[$key][$item_key] = $item;
@@ -45,8 +64,14 @@ class TorrentServer {
     }
 
     public function addUrl($url, $save_path = null, $options = []) {
-        $ret = $this->trans_conn->addUrl($url, $save_path, $options);
-        sleep(1);
+        global $log;
+
+        try {
+            $ret = $this->trans_conn->addUrl($url, $save_path, $options);
+        } catch (Exception $e) {
+            $log->err("addUrl fail: " . $e->getMessage());
+            return false;
+        }
         $this->updateWanted();
         return $ret;
     }
@@ -85,30 +110,58 @@ class TorrentServer {
     }
 
     public function stopAll() {
-        $ret = $this->trans_conn->stopAll();
+        global $log;
+
+        try {
+            $ret = $this->trans_conn->stopAll();
+        } catch (Exception $e) {
+            $log->err("stopAll fail: " . $e->getMessage());
+            return false;
+        }
         sleep(1);
         $this->updateWanted();
         return $ret;
     }
 
     public function stop($ids) {
-        $ret = $this->trans_conn->stop($ids);
-        sleep(1);
+        global $log;
+
+        try {
+            $ret = $this->trans_conn->stop($ids);
+        } catch (Exception $e) {
+            $log->err("stop fail: " . $e->getMessage());
+            return false;
+        }
+        usleep(500000);
         $this->updateWanted();
 
         return $ret;
     }
 
     public function startAll() {
-        $ret = $this->trans_conn->startAll();
+        global $log;
+
+        try {
+            $ret = $this->trans_conn->startAll();
+        } catch (Exception $e) {
+            $log->err("startAll fail: " . $e->getMessage());
+            return false;
+        }
         sleep(1);
         $this->updateWanted();
         return $ret;
     }
 
     public function start($ids) {
-        $ret = $this->trans_conn->startNow($ids);
-        sleep(1);
+        global $log;
+
+        try {
+            $ret = $this->trans_conn->startNow($ids);
+        } catch (Exception $e) {
+            $log->err("start fail: " . $e->getMessage());
+            return false;
+        }
+        usleep(500000);
         $this->updateWanted();
         return $ret;
     }
@@ -122,7 +175,9 @@ class TorrentServer {
         global $db;
 
         $trans = $this->getAll();
-
+        if ($trans == false) {
+            return false;
+        }
         $hashes = [];
         foreach ($trans as $item) {
 

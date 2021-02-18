@@ -307,7 +307,7 @@ function page_wanted() {
     global $LNG, $cfg, $db, $filter, $trans;
 
     $want = [];
-    $trans->updateWanted();
+    !empty($trans) ? $trans->updateWanted() : null;
 
     if (isset($_POST['check_day'])) {
         $wanted_mfy = $filter->postInt('check_day');
@@ -433,16 +433,18 @@ function page_transmission() {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $tid = $filter->postInt('tid');
 
-        isset($_POST['start_all']) ? $trans->startAll() . sleep(1) : null;
-        isset($_POST['stop_all']) ? $trans->stopAll() . sleep(1) : null;
+        isset($_POST['start_all']) && !empty($trans) ? $trans->startAll() : null;
+        isset($_POST['stop_all']) && !empty($trans) ? $trans->stopAll() : null;
 
         if (!empty($tid)) {
-            isset($_POST['start']) ? $trans->start($tid) . usleep(500000) : null;
-            isset($_POST['stop']) ? $trans->stop($tid) . usleep(500000) : null;
-            isset($_POST['delete']) ? $trans->delete($tid) . usleep(500000) : null;
+            isset($_POST['start']) && !empty($trans) ? $trans->start($tid) : null;
+            isset($_POST['stop']) && !empty($trans) ? $trans->stop($tid) : null;
+            isset($_POST['delete']) && !empty($trans) ? $trans->delete($tid) : null;
         }
     }
-    $transfers = $trans->getAll();
+    if (empty($trans) || !($transfers = $trans->getAll())) {
+        return msg_box(['title' => $LNG['L_ERROR'], 'body' => $LNG['L_SEE_ERROR_DETAILS']]);
+    }
 
     $page = '';
     $tdata['body'] = '';
@@ -522,6 +524,7 @@ function page_login() {
             }
         }
     }
+
     $tdata = [];
     $result = $db->select('users');
     $users = $db->fetchAll($result);

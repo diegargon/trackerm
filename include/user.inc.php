@@ -28,31 +28,25 @@ function check_user($username, $password) {
 
     $user = $db->getItemByField('users', 'username', $username);
 
-    if ($user['disable'] == 1) {
+    if (!valid_array($user) || empty($user['id']) || $user['disable'] == 1) {
         return false;
     }
-    if ($user && !empty($user['id'])) {
-        !empty($password) ? $password_hashed = encrypt_password($password) : $password_hashed = '';
+    !empty($password) ? $password_hashed = encrypt_password($password) : $password_hashed = '';
 
-        if ($user['password'] == $password_hashed) {
-            $ip = get_user_ip();
-            if ($user['ip'] != $ip) {
-                $db->updateItemById('users', $user['id'], ['ip' => $ip]);
-            }
-            return $user['id'];
-        } else {
-            return false;
+    if ($user['password'] == $password_hashed) {
+        $ip = get_user_ip();
+        if ($user['ip'] != $ip) {
+            $db->updateItemById('users', $user['id'], ['ip' => $ip]);
         }
-    } else {
-        return false;
+        return $user['id'];
     }
+    return false;
 }
 
 function set_user($user_id) {
     global $user, $cfg;
 
-    $user['id'] = $user_id;
-    $_SESSION['uid'] = $user['id'];
+    $_SESSION['uid'] = $user['id'] = $user_id;
     setcookie("uid", $user['id'], time() + $cfg['sid_expire']);
     setcookie("sid", session_id(), time() + $cfg['sid_expire']);
     update_session_id();

@@ -41,7 +41,9 @@ function search_media_torrents($media_type, $search, $head = null, $nohtml = fal
         !isset($media_cache_check['updated']) ? $media_cache_check['updated'] = 0 : null;
 
         if (time() > ($media_cache_check['updated'] + $cfg['search_cache_expire'])) {
-            $log->debug("New: Media cache expire ($media_type), Requesting");
+            $expire = $media_cache_check['updated'] + $cfg['search_cache_expire'];
+            $time_now = time();
+            $log->debug("New: Media cache expire ($media_type), Requesting $time_now:$expire");
             $cache_media_expire = 1;
         } else {
             //$log->debug("News:  Using media cache");

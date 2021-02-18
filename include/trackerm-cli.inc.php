@@ -72,8 +72,10 @@ function getRightTorrents() {
     $finished_list = [];
     $seeding_list = [];
 
-    $transfers = $trans->getAll();
-
+    !empty($trans) ? $transfers = $trans->getAll() : null;
+    if (empty($transfers)) {
+        return false;
+    }
     $wanted_db = $db->getTableData('wanted');
 
     if ($cfg['move_only_inapp'] && empty($wanted_db)) {
@@ -439,6 +441,9 @@ function linking_media($valid_file, $final_dest_path) {
 function wanted_work() {
     global $db, $cfg, $LNG, $log, $trans;
 
+    if (empty($trans)) {
+        return false;
+    }
     $wanted_list = $db->getTableData('wanted');
     if (!valid_array($wanted_list)) {
         $log->debug("Wanted list empty");
@@ -764,7 +769,11 @@ function send_transmission($results) {
 
         ($cfg['wanted_paused']) ? $trans_opt['paused'] = true : $trans_opt = [];
 
-        $trans_response = $trans->addUrl($d_link, null, $trans_opt);
+        !empty($trans) ? $trans_response = $trans->addUrl($d_link, null, $trans_opt) : null;
+        if (empty($trans) || empty($trans_response)) {
+            return false;
+        }
+
         foreach ($trans_response as $rkey => $rval) {
             $trans_db[0][$rkey] = $rval;
         }

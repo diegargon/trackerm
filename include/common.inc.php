@@ -62,4 +62,8 @@ require_once('include/utils.inc.php');
 require_once('include/prefs.inc.php');
 
 global $trans;
-$trans = new TorrentServer($cfg); //FIXME: Connections results checks
+$trans = new TorrentServer($cfg);
+if ($trans->trans_conn == false) {
+    $cfg['general_warn_msg'] = $LNG['L_ERR_TRANS_CONN'];
+    $trans = false;
+}
