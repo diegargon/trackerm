@@ -33,7 +33,7 @@ Class Log {
             'LOG_DEBUG' => 7, //	debug-level message
         ];
 
-        if ($LOG_TYPE[$type] <= $LOG_TYPE[$this->cfg['syslog_level']]) {
+        if (isset($LOG_TYPE[$this->cfg['syslog_level']]) && $LOG_TYPE[$type] <= $LOG_TYPE[$this->cfg['syslog_level']]) {
 
             if ($this->console) {
                 if (is_array($msg)) {
@@ -48,17 +48,20 @@ Class Log {
                     $msg = print_r($msg, true);
                 }
                 $content = '[' . strftime("%d %h %X", time()) . ']' . $this->cfg['app_name'] . " : [" . $type . '] ' . $msg . "\n";
-                file_put_contents($log_file, $content, FILE_APPEND);
+                if ((file_put_contents($log_file, $content, FILE_APPEND)) === false) {
+                    $this->err('Errror writing log to file');
+                }
             }
             if ($cfg['log_to_syslog']) {
-                openlog($this->cfg['app_name'] . ' ' . $this->cfg['version'], LOG_NDELAY, LOG_SYSLOG);
-                if (is_array($msg)) {
-                    $msg = print_r($msg, true);
-                    isset($this->console) ? $this->cfg['app_name'] . " : [" . $type . '] ' . $msg . "\n" : null;
-                    syslog($LOG_TYPE[$type], $msg);
-                } else {
-                    isset($this->console) ? $this->cfg['app_name'] . " : [" . $type . '] ' . $msg . "\n" : null;
-                    syslog($LOG_TYPE[$type], $msg);
+                if (openlog($this->cfg['app_name'] . ' ' . $this->cfg['version'], LOG_NDELAY, LOG_SYSLOG)) {
+                    if (is_array($msg)) {
+                        $msg = print_r($msg, true);
+                        isset($this->console) ? $this->cfg['app_name'] . " : [" . $type . '] ' . $msg . "\n" : null;
+                        syslog($LOG_TYPE[$type], $msg);
+                    } else {
+                        isset($this->console) ? $this->cfg['app_name'] . " : [" . $type . '] ' . $msg . "\n" : null;
+                        syslog($LOG_TYPE[$type], $msg);
+                    }
                 }
             }
         }
@@ -66,7 +69,7 @@ Class Log {
 
     public function setConsole($value) {
         if ($value === true || $value === false) {
-            $this->console = true;
+            $this->console = $value;
         } else {
             return false;
         }
