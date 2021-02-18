@@ -824,13 +824,13 @@ function update_trailers() {
                     $trailer = str_replace('http', 'https', $trailer);
                 }
                 $update['trailer'] = $trailer;
-                $log->debug("Update $media_type trailer on tmdb_id {$item['themoviedb_id']} trailer $trailer");
+                $log->debug("Update $table trailer on tmdb_id {$item['themoviedb_id']} trailer $trailer");
             } else {
                 $update['trailer'] = 0;
             }
             $where_upd = ['themoviedb_id' => ['value' => $item['themoviedb_id']]];
 
-            $db->update($table, $update, $where_upd, 'LIMIT 1');
+            $db->update($table, $update, $where_upd);
         }
 
         // LONG DELAY UPDATE TRAILER
@@ -848,13 +848,13 @@ function update_trailers() {
                     $trailer = str_replace('http', 'https', $trailer);
                 }
                 $update['trailer'] = $trailer;
-                $log->debug("Update $media_type trailer on tmdb_id {$item['themoviedb_id']} trailer $trailer");
+                $log->debug("Update $table trailer on tmdb_id {$item['themoviedb_id']} trailer $trailer");
             } else {
                 $update['trailer'] = 0;
             }
             $where_upd = ['themoviedb_id' => ['value' => $item['themoviedb_id']]];
 
-            $db->update('library_movies', $update, $where_upd, 'LIMIT 1');
+            $db->update($table, $update, $where_upd);
         }
     }
 }
