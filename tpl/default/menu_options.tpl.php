@@ -16,7 +16,7 @@
     </form>
     -->
     <form method="post" action="?page=<?= $tdata['page'] ?>">
-        <?php if ($tdata['page'] != 'wanted') { ?>
+        <?php if (in_array($tdata['page'], ['library', 'library_movies', 'library_shows'])) { ?>
             <?= $tdata['L_IDENTIFY'] ?>:
             <select name="num_ident_toshow" onchange="this.form.submit()">
                 <option <?= $tdata['max_id_sel_0'] ?> value="0">0</option>
@@ -25,6 +25,8 @@
                 <option <?= $tdata['max_id_sel_20'] ?> value="20">20</option>
                 <option <?= $tdata['max_id_sel_50'] ?> value="50">50</option>
             </select>
+        <?php } ?>
+        <?php if ($tdata['page'] != 'wanted') { ?>
             <?= $tdata['L_COLUMNS'] ?>:
             <select name="num_columns_results" onchange="this.form.submit()">
                 <option <?= $tdata['max_columns_sel_none'] ?> id="default"><?= $tdata['L_DEFAULT'] ?></option>
