@@ -7,7 +7,8 @@ TODO
     [IMPROVE] Wanted Serie, poner en seguimiento "series" o sea nuevos capitulos de series.
             Added wanted field track_show for add and keep track of show (automatically download current episodes of a show each week)
             Mostrar en view
-
+    [FIX] Asegurarse de que tracker-cli no esta corriendo antes de ejecutarse otra vez (si tarda mucho descomprimiendo..)
+    [CHECK] Comprobar wanted clean moved work
 [MED]
     [NEW] Escaneo de directorios a más para avi sin ser torrents. $cfg['SCAN_MEDIA_DIR'] = 1;
     [NEW] Biblio: buscador en nuestra libreria o enlace a una pagina buscador más facil de implementar.
