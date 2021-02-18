@@ -170,7 +170,8 @@ function getfile($filename) {
 function check_file_encrypt($type, $file) {
     global $log;
 
-    //TODO: Probably not doing this right.
+    //TODO: Probably not doing this right. The 04 seems work with some protected rar
+    // but not with all
     if ($type == 'rar') {
         $f = fopen($file, 'rb');
         $s = fread($f, 7);
@@ -182,12 +183,6 @@ function check_file_encrypt($type, $file) {
                 $log->debug('RAR5 protected found');
                 return true;
             }
-            fseek($f, 25);
-            $s = fread($f, 1);
-            if (bin2hex($s) == "80") {
-                $log->debug('RAR5 encrypted found');
-                return true;
-            }
         } else if (bin2hex($s) == '526172211a0700') {
             //FIX: Except signature all same as RAR5 probably not work
             $log->debug('RAR4 signature found (' . bin2hex($s) . ')');
@@ -195,12 +190,6 @@ function check_file_encrypt($type, $file) {
             $s = fread($f, 1);
             if (bin2hex($s) == "04") {
                 $log->debug('RAR4 protected found');
-                return true;
-            }
-            fseek($f, 25);
-            $s = fread($f, 1);
-            if (bin2hex($s) == "80") {
-                $log->debug('RAR4 encrypted found');
                 return true;
             }
         } else {
