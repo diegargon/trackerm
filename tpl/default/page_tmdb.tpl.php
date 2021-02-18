@@ -7,8 +7,7 @@
  *  @copyright Copyright @ 2020 - 2021 Diego Garcia (diego/@/envigo.net)
  */
 ?>
-<h2>TheMovieDb.org</h2>
-<a href="https://themoviedb.org" target=_blank>The Movie Database</a>
+<h2><a href="https://themoviedb.org" target=_blank>The Movie Database</a></h2>
 <div class="moviedb_container">
     <div class="search_container">
         <form method="GET" action="">
