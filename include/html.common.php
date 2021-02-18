@@ -211,11 +211,15 @@ function msg_box($msg) {
 }
 
 function msg_page($msg) {
+    global $cfg;
+
     $footer = getFooter();
     $menu = getMenu();
     $body = msg_box($msg = ['title' => $msg['title'], 'body' => $msg['body']]);
+    $tdata = ['menu' => $menu, 'body' => $body, 'footer' => $footer];
+    $tdata = array_merge($tdata, $cfg);
+    echo getTpl('html_mstruct', $tdata);
 
-    echo getTpl('html_mstruct', $tdata = ['menu' => $menu, 'body' => $body, 'footer' => $footer]);
     exit();
 }
 
