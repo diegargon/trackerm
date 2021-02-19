@@ -920,32 +920,6 @@ function check_broken_files_linked() {
     RemoveBrokenMedialinks($paths, $cfg['media_ext']);
 }
 
-/* need keep data in database?
-  function update_mediainfo() {
-  global $db, $log;
-
-  $log->debug('Doing mediafile');
-  $limit = 15;
-
-  $tables = ['library_movies', 'library_shows'];
-
-  foreach ($tables as $table) {
-  $update = [];
-
-  $update['updated'] = $time_now = time();
-
-  $query = "SELECT  * themoviedb_id FROM $table WHERE mediafile = '' LIMIT $limit";
-  $stmt = $db->query($query);
-
-  $results = $db->fetchAll($stmt);
-
-  foreach ($results as $item) {
-  //TODO
-  }
-  }
-  }
- */
-
 function update_seasons($force = false) {
     global $db, $log;
 
