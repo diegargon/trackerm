@@ -52,50 +52,33 @@ function view() {
         return msg_box($msg = ['title' => $LNG['L_ERROR'], 'body' => $LNG['L_ITEM_NOT_FOUND'] . ' 1A1003']);
     }
 
-    if ($view_type == 'movies_db') {
-        $library_item = $db->getItemByField('library_movies', 'themoviedb_id', $item['themoviedb_id']);
-        if ($library_item !== false) {
-            $item['in_library'] = $library_item['id'];
-        }
-    } else if ($view_type == 'shows_db') {
-        $library_item = $db->getItemByField('library_shows', 'themoviedb_id', $item['themoviedb_id']);
-        if ($library_item !== false) {
-            $item['in_library'] = $library_item['id'];
+    if ($view_type == 'movies_db' || $view_type == 'shows_db') {
+        $in_library = $db->getItemByField('library_' . $media_type, 'themoviedb_id', $item['themoviedb_id']);
+        if ($in_library !== false) {
+            $item['in_library'] = $in_library['id'];
         }
     }
 
     if ($view_type == 'shows_library' || $view_type == 'shows_db') {
-        if (isset($_GET['update'])) {
-            $other['seasons_data'] = view_seasons($item, true);
-        } else {
-            $other['seasons_data'] = view_seasons($item);
-        }
+        isset($_GET['update']) ? $update = true : $update = false;
+        $other['seasons_data'] = view_seasons($item, $update);
     }
 
     (isset($item['size'])) ? $item['size'] = human_filesize($item['size']) : null;
 
     if ($view_type == 'shows_library') {
-        $shows_library = $db->getTableData('library_shows');
-        $i = 0;
+        $shows_library = $db->getItemsByField('library_shows', 'themoviedb_id', $item['themoviedb_id']);
         $tsize = 0;
-
         foreach ($shows_library as $show_library) {
-            if (isset($show_library['themoviedb_id']) && $item['themoviedb_id'] &&
-                    ($show_library['themoviedb_id'] == $item['themoviedb_id'])
-            ) {
-                $tsize = $show_library['size'] + $tsize;
-                $i++;
-            }
+            $tsize = $show_library['size'] + $tsize;
         }
-        $item['have_episodes'] = $i;
+        $item['have_episodes'] = count($shows_library);
         $item['size'] = human_filesize($tsize);
     }
 
     if (!empty($item['poster']) && $cfg['cache_images']) {
         $cache_img_response = cacheImg($item['poster']);
-        if ($cache_img_response !== false) {
-            $item['poster'] = $cache_img_response;
-        }
+        $cache_img_response !== false ? $item['poster'] = $cache_img_response : null;
     }
 
     if (empty($item['poster'])) {
@@ -109,6 +92,8 @@ function view() {
                 if ($cache_img_response !== false) {
                     $item['poster'] = $cache_img_response;
                 }
+            } else {
+                $item['poster'] = $poster;
             }
             $item['guessed_poster'] = 1;
         }
@@ -121,12 +106,12 @@ function view() {
     ($view_type == 'movies_torrent' || $view_type == 'shows_torrent') ? $opt['auto_show_db'] = 1 : null;
 
     if ($view_type == 'movies_torrent' || $view_type == 'movies_db' || $view_type == 'movies_library') {
-        $item['media_type'] = 'movies';
+        empty($item['media_type']) ? $item['media_type'] = 'movies' : null;
         $other['extra'] .= view_extra_movies($item, $opt);
     }
 
     if ($view_type == 'shows_torrent' || $view_type == 'shows_db' || $view_type == 'shows_library') {
-        $item['media_type'] = 'shows';
+        empty($item['media_type']) ? $item['media_type'] = 'shows' : null;
         $other['extra'] .= view_extra_shows($item, $opt);
     }
 
@@ -149,6 +134,7 @@ function view() {
 
 function view_extra_movies($item, $opt = null) {
     global $LNG, $filter;
+
     $id = $filter->getInt('id');
     $page = $filter->getString('page');
     $view_type = $filter->getString('view_type');
@@ -234,29 +220,24 @@ function view_extra_shows($item, $opt) {
 function view_seasons($item, $update = false) {
     global $db, $LNG, $filter;
 
-    $seasons_data = '';
-    $episode_data = '';
     $id = $filter->getInt('id');
     $season = $filter->getInt('season');
     $view_type = $filter->getString('view_type');
+    $seasons_data = '';
+    $episode_data = '';
 
-    //SUBMIT WANTED (episode=1 || episode=1,2,3
-    if ($filter->getInt('wanted')) {
+    //SUBMITED WANTED (episode=1 || episode=1,2,3
+    if ($filter->getInt('wanted') && !empty($season)) {
         $episode = $filter->getInt('episode');
 
         if (empty($episode) && !empty($_GET['episode'])) {
             $episodes_check = explode(',', $_GET['episode']);
 
-            if (valid_array($episodes_check)) {
-                if ($filter->varInt($episodes_check)) {
-                    $episode = $_GET['episode'];
-                }
+            if (valid_array($episodes_check) && $filter->varInt($episodes_check)) {
+                $episode = $filter->getString('episode'); //episode string: "1,2,3..."
             }
         }
-
-        if (!empty($season) && !empty($episode)) {
-            wanted_episode($item['themoviedb_id'], $season, $episode);
-        }
+        !empty($episode) ? wanted_episode($item['themoviedb_id'], $season, $episode) : null;
     }
 
     if (empty($season)) {
