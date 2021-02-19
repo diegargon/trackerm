@@ -24,7 +24,7 @@ function show_my_movies() {
     $page .= show_identify_media('movies');
     $movies = $db->getTableData('library_movies');
 
-    if ($movies != false) {
+    if (valid_array($movies)) {
         $movies_identifyed = [];
 
         foreach ($movies as $key => $movie) {
@@ -64,7 +64,7 @@ function show_my_shows() {
 
     $shows = $db->getTableData('library_shows');
 
-    if ($shows != false) {
+    if (valid_array($shows)) {
 
         $shows_identifyed = [];
 
