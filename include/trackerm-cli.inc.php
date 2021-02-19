@@ -732,7 +732,7 @@ function tracker_shows($wanted) {
             // Get all wanted regarless or wanted_status for drop gump up the max_wanted_track, since > 5 must not count for send next show
             // How is running now: The dup show isn't added because dup but neither the next is and correct show on same cli run, must wait next cli
             // run when shows library is building and detect as a have_show.
-            if (check_if_have_show($tmdb_id, $season, $episode)) {
+            if (have_show($tmdb_id, $season, $episode)) {
                 unset($list_episodes[$season][$key_episode]);
             }
             if ($items_match_count > 0) {
