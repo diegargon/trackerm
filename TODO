@@ -4,25 +4,20 @@ TODO
     [FIX] Clean wanted.db/direct torrents that was delete outside app        
     [IMPROVE] Indexers to config
     [FIX/CHECK] do not contemplate yet what to do if tmdb not found any results.        
-    [CHECK] Comprobar wanted clean moved work
-[MED]
-    [NEW] Escaneo de directorios a más para avi sin ser torrents. $cfg['SCAN_MEDIA_DIR'] = 1;
-    [NEW] Biblio: buscador en nuestra libreria o enlace a una pagina buscador más facil de implementar.
-    [FIX] No hay ninguna comprobacion de que la conexion a transmission esta correctamente establecida.
+    [CHECK]  wanted  auto clean moved work
+[MED]  
     [IMPROVE] Si se borra manualmente un torrente bajado quedara el bd huerfanos. OPCION ORPHAN. 
         Buscar archivos multimedia en el TORRENT DIR y buscar la forma de determina si coincide con alguno en la base de datos
         si no coincide moverlo.     
     [IMPROVE]trackerm-cli coge el titulo del archivo en vez del directorio, puede estar mal así que solo hacerlo si hay varios archivos 
         para episodios si no hay más posibilidades que este bien el nombre del archivo. O buscar otro modo.
-     [COMPLETE] Finish Filters
-     [CHANGE?] Clean title: remove words <=2 chars?
-     [IMPROVE]On torrent new/search get release data from tmdb and show it, get local database if not request database
+     [COMPLETE] Finish Filters          
     [FIX] Security
     [IMPROBE][CLI] Clean old query search caches entrys
-
+    [IMPROVE][VIEW] add edit custom poster.
 [VERY LOW]      
     [IMPROVE] Add to library sub menu a switch to player mode.
-    [IMPROVE] añadir tabla view_movies, view=0 not view 1 partial 2 , 3 view.    
+    [IMPROVE] añadir tabla view_movies, view=0 not view 1 partial 2 , 3 view.     
     [IMPROVE] Pagination: actually we get all results and do a array_slice, now with SQL database we can  do that better.    
     [FIX/IMPROVE] Normalize dates        
     [FIX] A la hora de identificar las series siguientes capitulos los identifica por el predictible_title, si hubiera varias series con el mismo titulo habria problemas. 
@@ -30,8 +25,11 @@ TODO
     ser registro secundarios. ¿añadir una tabla library_shows|movies_master?
     [IMPROVE] Too much messy code...
     [IMPROVE][VIEW]Add delete media button
-    [IMPROVE][VIEW] add edit custom poster.
-
+    [NEW] Escaneo de directorios a más para avi sin ser torrents. $cfg['SCAN_MEDIA_DIR'] = 1;
+    [NEW] Biblio: buscador en nuestra libreria o enlace a una pagina buscador más facil de implementar.
+    [CHANGE?] Clean title: remove words <=2 chars?
+    [IMPROVE]On torrent new/search get release data from tmdb and show it, get local database if not request database
+    [IMPROVE][LocalPlayer] Investigate web interface for track time
 [BACKLOG]
     [IMPROVE] Catalog
     [CHANGE] Change actual Transmission rpc api to something basic, since some basic is enough and the actual have alot of deps 
