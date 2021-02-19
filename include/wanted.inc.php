@@ -162,12 +162,13 @@ function wanted_movies($wanted_id) {
     (!$dup_item) ? $db->insert('wanted', $wanted_item) : null;
 }
 
-function wanted_episode($id, $season, $episodes, $track_show = null, $inherint_track = null) {
+function wanted_episode($id, $season, $episodes, $track_show = 0, $inherint_track = null) {
     global $db, $user;
 
     (strlen($season) == 1) ? $season = '0' . $season : null;
     $episodes = explode(',', $episodes);
     !empty($user['id']) ? $uid = $user['id'] : $uid = 0;
+    $track_show == null ? $track_show = 0 : null;
 
     if (valid_array($inherint_track)) {
         isset($inherint_track['day_check']) ? $day_check = $inherint_track['day_check'] : $day_check = null;
@@ -206,14 +207,14 @@ function wanted_episode($id, $season, $episodes, $track_show = null, $inherint_t
         if ($track_show) {
             $where_check = [
                 'themoviedb_id' => ['value' => $wanted_item['themoviedb_id']],
-                'track_show' => ['value' => '1'],
+                'track_show' => ['value' => 1],
             ];
         } else {
             $where_check = [
                 'themoviedb_id' => ['value' => $wanted_item['themoviedb_id']],
                 'season' => ['value' => $season],
                 'episode' => ['value' => $episode],
-                'track_show' => ['value' => ''],
+                'track_show' => ['value' => 0],
             ];
         }
         $result = $db->select('wanted', 'id', $where_check, 'LIMIT 1');

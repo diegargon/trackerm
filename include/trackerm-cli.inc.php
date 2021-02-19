@@ -444,6 +444,7 @@ function wanted_work() {
     if (empty($trans)) {
         return false;
     }
+    $trans->updateWanted();
     $wanted_list = $db->getTableData('wanted');
     if (!valid_array($wanted_list)) {
         $log->debug("Wanted list empty");
@@ -461,6 +462,7 @@ function wanted_work() {
 
         if (!empty($wanted['track_show'])) {
             $log->debug("Jumping wanted {$wanted['title']} by track_show");
+            //TODO send wanted_list two avoid query again
             tracker_shows($wanted);
             continue;
         }
@@ -716,13 +718,20 @@ function tracker_shows($wanted) {
     }
 
     //Get actual wanted list (unfinished) for tmdb id, we use later
-    $stmt = $db->query("SELECT * FROM wanted WHERE themoviedb_id = $tmdb_id AND media_type = 'shows' AND wanted_status < 5 AND track_show IS NULL");
+    $stmt = $db->query("SELECT * FROM wanted WHERE themoviedb_id = $tmdb_id AND media_type = 'shows' AND wanted_status < 5 AND track_show = 0");
     $items_match = $db->fetchAll($stmt);
     $items_match_count = count($items_match);
     //From all the episode that meet the criteria check if already have that item
     //or if already in wanted.
     foreach ($list_episodes as $season => $episodes) {
         foreach ($episodes as $key_episode => $episode) {
+            //FIXME: When one episode on track show finish download, wanted state is > 5 but cli not linked the show yet (before track_show is called)
+            // neither update library shows. On check "that show not exists" then not drop and try send this chapter again.
+            // Next cli run the rescan process already is done and is ok.
+            // Fixing calling rebuild show here seems over kill.
+            // Get all wanted regarless or wanted_status for drop gump up the max_wanted_track, since > 5 must not count for send next show
+            // How is running now: The dup show isn't added because dup but neither the next is and correct show on same cli run, must wait next cli
+            // run when shows library is building and detect as a have_show.
             if (check_if_have_show($tmdb_id, $season, $episode)) {
                 unset($list_episodes[$season][$key_episode]);
             }
@@ -739,7 +748,7 @@ function tracker_shows($wanted) {
 
     $item = mediadb_getFromCache('shows', $tmdb_id);
     $title = $item['title'];
-    $max_wanted_queue = 1; //TODO: TO CONFIG
+    $max_wanted_track = 1; //TODO: TO CONFIG
 
     $inherint_track = null;
     !empty($wanted['custom_words_ignore']) ? $inherint_track['custom_words_ignore'] = $wanted['custom_words_ignore'] : null;
@@ -747,9 +756,9 @@ function tracker_shows($wanted) {
     !empty($wanted['day_check']) ? $inherint_track['day_check'] = $wanted['day_check'] : null;
     foreach ($list_episodes as $season => $episodes) {
         foreach ($episodes as $key_episode => $episode) {
-            if ($items_match_count < $max_wanted_queue) {
+            if ($items_match_count < $max_wanted_track) {
                 $log->debug("Sending to wanted tracker show episode: $title $season:$episode");
-                wanted_episode($tmdb_id, $season, $episode, null, $inherint_track);
+                wanted_episode($tmdb_id, $season, $episode, 0, $inherint_track);
                 $items_match_count++;
             }
         }
