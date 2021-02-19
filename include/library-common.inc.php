@@ -319,13 +319,16 @@ function submit_ident($media_type, $item_data, $id) {
     !empty($item_data['plot']) ? $update_fields['plot'] = $item_data['plot'] : null;
     !empty($item_data['release']) ? $update_fields['release'] = $item_data['release'] : null;
 
-    //TODO CHECK IF EXIST themovie_id  since is UNIQUE
     if ($media_type == 'movies') {
         $db->updateItemById('library_movies', $id, $update_fields);
     } else if ($media_type == 'shows') {
         $mylib_shows = $db->getItemById('library_shows', $id);
-        $where['predictible_title'] = ['value' => $mylib_shows['predictible_title']];
-        $db->update('library_shows', $update_fields, $where);
+        if (!valid_array($mylib_shows)) {
+            $where['predictible_title'] = ['value' => $mylib_shows['predictible_title']];
+            $db->update('library_shows', $update_fields, $where);
+        } else {
+            return false;
+        }
     }
 }
 
@@ -354,7 +357,7 @@ function check_history($media_type, $ids) {
             $results = $db->select('library_history', 'themoviedb_id', $where, 'LIMIT 1');
             $item_history = $db->fetch($results);
             $db->finalize($results);
-            if (!empty($item_history) && !empty($item_history['themoviedb_id'])) {
+            if (valid_item($item_history) && !empty($item_history['themoviedb_id'])) {
                 $log->debug("Identified item by history: tmdb id {$item_history['themoviedb_id']} ");
                 ident_by_id($media_type, $item_history['themoviedb_id'], $id);
                 unset($ids[$id_key]);
