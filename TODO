@@ -30,6 +30,7 @@ TODO
     [CHANGE?] Clean title: remove words <=2 chars?
     [IMPROVE]On torrent new/search get release data from tmdb and show it, get local database if not request database
     [IMPROVE][LocalPlayer] Investigate web interface for track time
+    [IMPROVE][Search] Si un tracker es lento en la busquedas desconectar (tiempo establecido por configuracion)
 [BACKLOG]
     [IMPROVE] Catalog
     [CHANGE] Change actual Transmission rpc api to something basic, since some basic is enough and the actual have alot of deps 
