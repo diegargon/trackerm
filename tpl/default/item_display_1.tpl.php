@@ -10,7 +10,7 @@
 
 <div class="display display_1">
     <div class="poster_preview">
-        <a href="?page=view&id=<?= $tdata['id'] ?>&type=<?= $tdata['ilink'] ?> ">
+        <a href="?page=view&id=<?= $tdata['id'] ?>&view_type=<?= $tdata['ilink'] ?> ">
             <img class="img_poster_preview"  alt="" src="<?= $tdata['poster'] ?>"/>
         </a>
         <?php
@@ -54,9 +54,9 @@
                 ?>
                 <span class="action_link">
                     <?php if ($tdata['ilink'] == 'movies_db') { ?>
-                        <a href="?page=view&id=<?= $tdata['in_library'] ?>&type=movies_library"><?= $tdata['L_HAVEIT'] ?></a>
+                        <a href="?page=view&id=<?= $tdata['in_library'] ?>&view_type=movies_library"><?= $tdata['L_HAVEIT'] ?></a>
                     <?php } else if ($tdata['ilink'] == 'shows_db') { ?>
-                        <a href="?page=view&id=<?= $tdata['in_library'] ?>&type=shows_library"><?= $tdata['L_HAVEIT'] ?></a>
+                        <a href="?page=view&id=<?= $tdata['in_library'] ?>&view_type=shows_library"><?= $tdata['L_HAVEIT'] ?></a>
                     <?php } ?>
                 </span>
                 <?php

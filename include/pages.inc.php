@@ -149,17 +149,17 @@ function page_view() {
 
     $id = $filter->getInt('id');
     $deletereg = $filter->getInt('deletereg', 1);
-    $type = $filter->getString('type');
+    $view_type = $filter->getString('view_type');
 
-    if (empty($id) || empty($type)) {
+    if (empty($id) || empty($view_type)) {
         return msg_box($msg = ['title' => $LNG['L_ERROR'], 'body' => '1A1001']);
     }
     if (!empty($deletereg)) {
-        if ($type == 'movies_library') {
+        if ($view_type == 'movies_library') {
             //TODO MULTIPLE: when allow multiple files and have master must delete like shows_library for rid all registers
             $db->deleteItemById('library_movies', $id);
         }
-        if ($type == 'shows_library') {
+        if ($view_type == 'shows_library') {
             $delete_item = $db->getItemById('library_shows', $id);
             $media_db_id = $delete_item['themoviedb_id'];
             $db->deleteItemsByField('library_shows', 'themoviedb_id', $media_db_id);
@@ -410,15 +410,15 @@ function page_download() {
     global $db, $filter;
 
     $id = $filter->getInt('id');
-    $type = $filter->getString('type');
+    $view_type = $filter->getString('view_type');
 
-    if (empty($id) || empty($type)) {
+    if (empty($id) || empty($view_type)) {
         exit();
     }
 
-    if ($type == 'movies_library') {
+    if ($view_type == 'movies_library') {
         $item = $db->getItemById('library_movies', $id);
-    } else if ($type == 'shows_library') {
+    } else if ($view_type == 'shows_library') {
         $item = $db->getItemById('library_shows', $id);
     } else {
         exit();

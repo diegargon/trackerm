@@ -11,7 +11,7 @@
 
 function view() {
     global $cfg, $LNG, $db, $filter;
-    $view_type = $filter->getString('type');
+    $view_type = $filter->getString('view_type');
     $id = $filter->getInt('id');
 
     empty($id) ? msg_box($msg = ['title' => $LNG['L_ERROR'], 'body' => $LNG['L_ERR_BAD_ID']]) : null;
@@ -45,7 +45,7 @@ function view() {
     } else {
         return false;
     }
-    $other['page_type'] = $view_type;
+    $other['view_type'] = $view_type;
     $item = $db->getItemById($table, $id);
 
     if (empty($item)) {
@@ -121,12 +121,12 @@ function view() {
     ($view_type == 'movies_torrent' || $view_type == 'shows_torrent') ? $opt['auto_show_db'] = 1 : null;
 
     if ($view_type == 'movies_torrent' || $view_type == 'movies_db' || $view_type == 'movies_library') {
-        $item['type'] = 'movies';
+        $item['media_type'] = 'movies';
         $other['extra'] .= view_extra_movies($item, $opt);
     }
 
     if ($view_type == 'shows_torrent' || $view_type == 'shows_db' || $view_type == 'shows_library') {
-        $item['type'] = 'shows';
+        $item['media_type'] = 'shows';
         $other['extra'] .= view_extra_shows($item, $opt);
     }
 
@@ -151,13 +151,13 @@ function view_extra_movies($item, $opt = null) {
     global $LNG, $filter;
     $id = $filter->getInt('id');
     $page = $filter->getString('page');
-    $view_type = $filter->getString('type');
+    $view_type = $filter->getString('view_type');
 
     $extra = '';
     $extra .= '<form method="GET" action="">';
     $extra .= '<input type="hidden" name="page" value="' . $page . '"/>';
     $extra .= '<input type="hidden" name="id" value="' . $id . '"/>';
-    $extra .= '<input type="hidden" name="type" value="' . $view_type . '"/>';
+    $extra .= '<input type="hidden" name="view_type" value="' . $view_type . '"/>';
     $extra .= '<input class="submit_btn" type="submit" name="more_movies" value="' . $LNG['L_SEARCH_MOVIES'] . '" >';
     $extra .= '<input class="submit_btn" type="submit" name="more_torrents" value="' . $LNG['L_SHOW_TORRENTS'] . '" >';
 
@@ -193,13 +193,13 @@ function view_extra_shows($item, $opt) {
 
     $id = $filter->getInt('id');
     $page = $filter->getString('page');
-    $view_type = $filter->getString('type');
+    $view_type = $filter->getString('view_type');
 
     $extra = '';
     $extra .= '<form method="GET">';
     $extra .= '<input type="hidden" name="page" value="' . $page . '"/>';
     $extra .= '<input type="hidden" name="id" value="' . $id . '"/>';
-    $extra .= '<input type="hidden" name="type" value="' . $view_type . '"/>';
+    $extra .= '<input type="hidden" name="view_type" value="' . $view_type . '"/>';
     $extra .= '<input class="submit_btn" type="submit" name="more_shows" value="' . $LNG['L_SEARCH_SHOWS'] . '" >';
     $extra .= '<input class="submit_btn" type="submit" name="more_torrents" value="' . $LNG['L_SHOW_TORRENTS'] . '" >';
 
@@ -238,7 +238,7 @@ function view_seasons($item, $update = false) {
     $episode_data = '';
     $id = $filter->getInt('id');
     $season = $filter->getInt('season');
-    $view_type = $filter->getString('type');
+    $view_type = $filter->getString('view_type');
 
     //SUBMIT WANTED (episode=1 || episode=1,2,3
     if ($filter->getInt('wanted')) {
@@ -284,7 +284,7 @@ function view_seasons($item, $update = false) {
         $episodes = $items_details[0]['episodes'];
     }
 
-    $iurl = '?page=view&id=' . $id . '&type=' . $view_type;
+    $iurl = '?page=view&id=' . $id . '&view_type=' . $view_type;
 
     for ($i = 1; $i <= $seasons; $i++) {
         $seasons_data .= '<a class="season_link" href="' . $iurl . '&season=' . $i . '">' . $LNG['L_SEASON'] . ': ' . $i . '</a>';
@@ -303,8 +303,8 @@ function view_season_detailed($season, $items_details) {
     global $cfg, $LNG, $filter;
 
     $id = $filter->getInt('id');
-    $view_type = $filter->getString('type');
-    $iurl = '?page=view&id=' . $id . '&type=' . $view_type;
+    $view_type = $filter->getString('view_type');
+    $iurl = '?page=view&id=' . $id . '&view_type=' . $view_type;
 
     $episode_data = '<div class="episode_container">';
     $episode_data .= '<hr/><div class="divTable">';

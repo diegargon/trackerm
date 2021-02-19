@@ -18,7 +18,7 @@
     <div class="divTableCellEpisodes">
         <?php if (!empty($tdata['have_show'])) { ?>
             <?php if (!empty($tdata['download_button'])) { ?>
-                <a class="episode_link" href="?page=download&type=shows_library&id=<?= $tdata['have_show']['id'] ?>"><?= $tdata['L_DOWNLOAD'] ?></a>
+                <a class="episode_link" href="?page=download&view_type=shows_library&id=<?= $tdata['have_show']['id'] ?>"><?= $tdata['L_DOWNLOAD'] ?></a>
             <?php } ?>
             <?php if (!empty($tdata['localplayer'])) { ?>
                 <a class="episode_link inline"  target=_blank href="?page=localplayer&id=<?= $tdata['have_show']['id'] ?>&media_type=shows"><?= $tdata['L_LOCALPLAYER'] ?></a>

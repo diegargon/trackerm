@@ -75,29 +75,29 @@
                         ?>
                         <span class="action_link">
                             <?php if ($tdata['ilink'] == 'movies_db') { ?>
-                                <a href="?page=view&id=<?= $tdata['in_library'] ?>&type=movies_library"><?= $tdata['L_HAVEIT'] ?></a>
+                                <a href="?page=view&id=<?= $tdata['in_library'] ?>&view_type=movies_library"><?= $tdata['L_HAVEIT'] ?></a>
                             <?php } else if ($tdata['ilink'] == 'shows_db') { ?>
-                                <a href="?page=view&id=<?= $tdata['in_library'] ?>&type=shows_library"><?= $tdata['L_HAVEIT'] ?></a>
+                                <a href="?page=view&id=<?= $tdata['in_library'] ?>&view_type=shows_library"><?= $tdata['L_HAVEIT'] ?></a>
                             <?php } ?>
                         </span>
                     <?php } ?>
                     <?php if (!empty($tdata['wanted']) && empty($tdata['in_library'])) { ?>
-                        <a class="action_link" href="?page=wanted&id=<?= $tdata['themoviedb_id'] ?>&media_type=<?= $tdata['type'] ?>"><?= $tdata['L_WANTED'] ?></a>
+                        <a class="action_link" href="?page=wanted&id=<?= $tdata['themoviedb_id'] ?>&media_type=<?= $tdata['media_type'] ?>"><?= $tdata['L_WANTED'] ?></a>
                     <?php } ?>
                     <?php if (!empty($tdata['reidentify'])) { ?>
-                        <a class="action_link" href="?page=identify&identify=<?= $tdata['id'] ?>&media_type=<?= $tdata['type'] ?>"><?= $tdata['L_IDENTIFY'] ?></a>
+                        <a class="action_link" href="?page=identify&identify=<?= $tdata['id'] ?>&media_type=<?= $tdata['media_type'] ?>"><?= $tdata['L_IDENTIFY'] ?></a>
                     <?php } ?>
                     <?php if (!empty($tdata['deletereg'])) { ?>
-                        <a class="action_link" href="?page=view&id=<?= $tdata['id'] ?>&type=<?= $tdata['page_type'] ?>&deletereg=1" onclick="return confirm('Are you sure?')" ><?= $tdata['L_DELETE_REGISTER'] ?></a>
+                        <a class="action_link" href="?page=view&id=<?= $tdata['id'] ?>&view_type=<?= $tdata['view_type'] ?>&deletereg=1" onclick="return confirm('Are you sure?')" ><?= $tdata['L_DELETE_REGISTER'] ?></a>
                     <?php } ?>
                     <?php if ($tdata['ilink'] == 'shows_library') { ?>
-                        <a class="action_link" href="?page=view&id=<?= $tdata['id'] ?>&type=shows_library&update=1"><?= $tdata['L_UPDATE_EPISODES'] ?></a>
+                        <a class="action_link" href="?page=view&id=<?= $tdata['id'] ?>&view_type=shows_library&update=1"><?= $tdata['L_UPDATE_EPISODES'] ?></a>
                     <?php } ?>
                     <?php if ($tdata['ilink'] == 'movies_library' && $tdata['localplayer']) { ?>
-                        <a class="action_link"  target=_blank href="?page=localplayer&id=<?= $tdata['id'] ?>&media_type=<?= $tdata['type'] ?>">LocalPlayer</a>
+                        <a class="action_link"  target=_blank href="?page=localplayer&id=<?= $tdata['id'] ?>&media_type=<?= $tdata['media_type'] ?>">LocalPlayer</a>
                     <?php } ?>
                     <?php if ($tdata['ilink'] == 'movies_library' && ($tdata['download_button'])) { ?>
-                        <a class="action_link" href="?page=download&id=<?= $tdata['id'] ?>&type=movies_library" target=_blank><?= $tdata['L_DOWNLOAD'] ?></a>
+                        <a class="action_link" href="?page=download&id=<?= $tdata['id'] ?>&view_type=movies_library" target=_blank><?= $tdata['L_DOWNLOAD'] ?></a>
                     <?php } ?>
                     <?php !empty($tdata['follow_show']) ? print $tdata['follow_show'] : null; ?>
                 </div>

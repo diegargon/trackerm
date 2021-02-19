@@ -85,8 +85,8 @@ function wanted_list() {
             $mediadb_item = mediadb_getFromCache($wanted_item['media_type'], $wanted_item['themoviedb_id']);
             $tdata['elink'] = $mediadb_item['elink'];
 
-            ($wanted_item['media_type'] == 'movies') ? $type = 'movies_db' : $type = 'shows_db';
-            $tdata['ilink'] = '<a class="wanted_link" href="?page=view&id=' . $mediadb_item['id'] . '&type=' . $type . '">';
+            ($wanted_item['media_type'] == 'movies') ? $view_type = 'movies_db' : $view_type = 'shows_db';
+            $tdata['ilink'] = '<a class="wanted_link" href="?page=view&id=' . $mediadb_item['id'] . '&view_type=' . $view_type . '">';
             if (!empty($wanted_item['show_title'])) {
                 $tdata['ilink'] .= $wanted_item['show_title'] . '</a>';
             } else {

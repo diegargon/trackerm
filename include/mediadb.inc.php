@@ -17,8 +17,8 @@ function mediadb_searchShows($search) {
     return themoviedb_searchShows($search);
 }
 
-function mediadb_Prep($type, $items) {
-    return themoviedb_MediaPrep($type, $items);
+function mediadb_Prep($media_type, $items) {
+    return themoviedb_MediaPrep($media_type, $items);
 }
 
 function mediadb_getSeasons($id) {

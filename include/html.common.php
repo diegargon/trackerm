@@ -137,7 +137,7 @@ function build_item($item, $details = 1) {
     $page = '';
 
     if ($details == 0) {
-        $page .= '<a href="?page=view&id=' . $item['id'] . '&type=' . $item['ilink'] . '">' . $item['title'] . '</a>';
+        $page .= '<a href="?page=view&id=' . $item['id'] . '&view_type=' . $item['ilink'] . '">' . $item['title'] . '</a>';
     } else if ($details == 1) {
         if (empty($item['poster'])) {
 
@@ -237,7 +237,7 @@ function pager($npage, $nitems, &$topt) {
     if ($num_pages > 1) {
         $iurl = '?page=' . $page;
 
-        (!empty($filter->getString('type'))) ? $iurl .= '&type=' . $filter->getString('type') : null;
+        (!empty($filter->getString('view_type'))) ? $iurl .= '&view_type=' . $filter->getString('view_type') : null;
         (!empty($filter->getInt('id'))) ? $iurl .= '&id=' . $filter->getInt('id') : null;
         (!empty($filter->getUtf8('search_shows_torrents'))) ? $iurl .= '&search_shows_torrents=' . $filter->getUtf8('search_shows_torrents') : null;
         (!empty($filter->getUtf8('search_movies_torrents'))) ? $iurl .= '&search_movies_torrents=' . $filter->getUtf8('search_movies_torrents') : null;
