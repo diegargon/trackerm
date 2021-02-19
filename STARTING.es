@@ -1,6 +1,5 @@
-
-Bienvenido.
-<br/>
+<p>Bienvenido.</p>
+<p>
 Este software fue concebido para llevar cuenta con apoyo del software Jackett
 de descargar archivos multimedia "legales" de tus sitios favoritos.
 <br/>
@@ -39,6 +38,7 @@ descargados y non necesarios.
 Para el más correcto y mejor funcionamiento de todo el proceso es aconsejable que todo el proceso
 se realice por medio de trackerm. Trackerm tambien incluye mecanismos para manejar archivos
 descargados de otras formas, lo más fiable es utilizar siempre la plataforma, para realizar las tareas.
+<br/>
 </p>
 <p>ATENCION: Este software se realizo para el mantenimiento de una biblioteca multimedia privada de archivos
 de los cuales tengas derechos de uso. El mal o ilegal uso de este programa es solo responsabilidad del
@@ -47,5 +47,6 @@ de terceros añadido por el usuario y es solo responsabilidad del usuario pincha
 es legal su uso.
 Esta herramienta es para uso privado, exponer esta herramienta a internet o a uso de terceros puede conllevar 
 un delito segun el pais y los derechos del material que expongas. Por favor informese de las leyes al respecto
-en su pais</p>
+en su pais
+</p>
 
