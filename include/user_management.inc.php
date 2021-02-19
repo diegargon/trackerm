@@ -61,42 +61,20 @@ function user_management() {
 function new_user() {
     global $LNG;
 
-    $html = '<div class="new_user_box">';
-    $html .= '<form id="new_user" method="POST" >';
-    $html .= '<span>' . $LNG['L_USERNAME'] . '<span><input size="8" type="text" name="username" value=""/>';
-    $html .= '<span>' . $LNG['L_PASSWORD'] . '<span><input size="8" type="password" name="password" value=""/>';
-    //Admin
-    $html .= '<input type="hidden" name="is_admin" value="0">';
-    $html .= '<label for="is_admin">' . $LNG['L_ADMIN'] . ' </label>';
-    $html .= '<input id="is_admin" type="checkbox" name="is_admin" value="1">';
-    //disable
-    $html .= '<input type="hidden" name="disable" value = "0">';
-    $html .= '<label for="disable">' . $LNG['L_DISABLED'] . ' </label>';
-    $html .= '<input id="disable" type="checkbox" name="disable" value="1">';
-    //hide login
-    $html .= '<input type="hidden" name="hide_login" value="0">';
-    $html .= '<label for="hide_login">' . $LNG['L_HIDE_LOGIN'] . ' </label>';
-    $html .= '<input id="hide_login" type="checkbox" name="hide_login" value="1">';
-
-    //Submit
-    $html .= '<input class="submit_btn" type="submit" name="new_user" value="' . $LNG['L_CREATE'] . '/' . $LNG['L_MODIFY'] . '"/>';
-    $html .= '</form>';
-    $html .= '</div>';
-
-    return $html;
+    return getTpl('new_user', $LNG);
 }
 
 function show_users() {
     global $LNG;
 
     $html = '<div class="delete_user_box">';
-    $html .= '<form id = "delete_user" method = "POST">';
+    $html .= '<form id="delete_user" method="POST">';
     $users = get_profiles();
+
     foreach ($users as $user) {
         if ($user['id'] > 1) {
-            $html .= '<div class="delete_user"><input type="hidden" name="delete_user_id" value="' . $user['id'] . '"/>';
-            $html .= '<input class="submit_btn" onclick="return confirm(\'Are you sure?\')" type="submit" name="delete_user" value="' . $LNG['L_DELETE'] . '"/>';
-            $html .= '<span>' . $user['username'] . '<span></div>';
+            $tdata = array_merge($user, $LNG);
+            $html .= getTpl('delete_user', $tdata);
         }
     }
     $html .= '</form>';
@@ -185,15 +163,12 @@ function user_change_password() {
     if (isset($_POST['new_password'])) {
         !empty($filter->postPassword('new_password')) ? $new_password = $filter->postPassword('new_password') : $new_password = '';
     }
-
     if ($cfg['force_use_passwords'] && empty($new_password)) {
         return $LNG['L_PASSWORD_CANT_EMPTY'];
     }
-
     if (!empty($user['password']) && empty($cur_password)) {
         return $LNG['L_PASSWORD_INCORRECT'];
     }
-
     if (empty($user['password']) && empty($new_password)) {
         return false;
     }
