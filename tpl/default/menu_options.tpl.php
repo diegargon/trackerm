@@ -8,13 +8,6 @@
  */
 ?>
 <div class="menu_options">
-    <!--
-    <form method="GET" action="">
-        <input type="text" name="search_text" value="TODO" />
-        <input type="hidden" name="page" value="<?= $_GET['page'] ?>">
-        <input class="submit_btn"  type="submit" value="<?= $tdata['L_SEARCH'] ?>"/>
-    </form>
-    -->
     <form method="post" action="?page=<?= $tdata['page'] ?>">
         <?php if (in_array($tdata['page'], ['library', 'library_movies', 'library_shows'])) { ?>
             <?= $tdata['L_IDENTIFY'] ?>:

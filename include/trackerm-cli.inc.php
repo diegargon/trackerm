@@ -462,7 +462,7 @@ function wanted_work() {
 
         if (!empty($wanted['track_show'])) {
             $log->debug("Jumping wanted {$wanted['title']} by track_show");
-            //TODO send wanted_list two avoid query again
+            //TODO send wanted_list to avoid query again
             tracker_shows($wanted);
             continue;
         }
@@ -748,7 +748,7 @@ function tracker_shows($wanted) {
 
     $item = mediadb_getFromCache('shows', $tmdb_id);
     $title = $item['title'];
-    $max_wanted_track = 1; //TODO: TO CONFIG
+    $max_wanted_track_downloads = 1; //TODO: TO CONFIG
 
     $inherint_track = null;
     !empty($wanted['custom_words_ignore']) ? $inherint_track['custom_words_ignore'] = $wanted['custom_words_ignore'] : null;
@@ -756,7 +756,7 @@ function tracker_shows($wanted) {
     !empty($wanted['day_check']) ? $inherint_track['day_check'] = $wanted['day_check'] : null;
     foreach ($list_episodes as $season => $episodes) {
         foreach ($episodes as $key_episode => $episode) {
-            if ($items_match_count < $max_wanted_track) {
+            if ($items_match_count < $max_wanted_track_downloads) {
                 $log->debug("Sending to wanted tracker show episode: $title $season:$episode");
                 wanted_episode($tmdb_id, $season, $episode, 0, $inherint_track);
                 $items_match_count++;

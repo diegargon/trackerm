@@ -60,7 +60,7 @@ function getTpl($tpl, $tdata) {
 
 function buildTable($head, $db_ary, $topt = null) {
     global $cfg, $LNG, $filter;
-    //TODO FILTERS
+
     $npage = $filter->getInt('npage');
 
     if (isset($_GET['search_type']) && isset($topt['search_type']) && ($_GET['search_type'] == $topt['search_type'])) {
