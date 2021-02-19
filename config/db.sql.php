@@ -277,7 +277,7 @@ function create_db() {
                     "last_check" INTEGER NULL,
                     "direct" INTEGER NULL,
                     "wanted_status" INTEGER NULL,
-                    "track_show" INTEGER NULL,
+                    "track_show" INTEGER default 0,
                     "media_type" VARCHAR NULL,
                     "profile" INTEGER NULL,
                     "jackett_filename" VARCHAR NULL,
@@ -763,6 +763,8 @@ function update_db($from) {
 
     /*
       if ($from < 12) {
+      $db->query('UPDATE "wanted" SET track_show = 0 WHERE track_show is NULL');
+      $db->insert('config', ['cfg_key' => 'max_wanted_track_downloads', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_MAX_WANTED_TRACK_DOWNLOADS', 'type' => 2, 'category' => 'L_WANTED', 'public' => 1]);
       $db->query('UPDATE config SET cfg_value=\'12\' WHERE cfg_key=\'db_version\' LIMIT 1');
       $db->query('DELETE FROM config WHERE cfg_key=\'version\' LIMIT 1');
       $db->update('db_info', ['version' => 12]);
