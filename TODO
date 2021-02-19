@@ -3,8 +3,7 @@ TODO
 [HIGH]
     [FIX] Clean wanted.db/direct torrents that was delete outside app        
     [IMPROVE] Indexers to config
-    [FIX/CHECK] do not contemplate yet what to do if tmdb not found any results.    
-    [FIX] Asegurarse de que tracker-cli no esta corriendo antes de ejecutarse otra vez (si tarda mucho descomprimiendo..)
+    [FIX/CHECK] do not contemplate yet what to do if tmdb not found any results.        
     [CHECK] Comprobar wanted clean moved work
 [MED]
     [NEW] Escaneo de directorios a más para avi sin ser torrents. $cfg['SCAN_MEDIA_DIR'] = 1;

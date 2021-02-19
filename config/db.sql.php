@@ -765,10 +765,10 @@ function update_db($from) {
       if ($from < 12) {
       $db->query('UPDATE "wanted" SET track_show = 0 WHERE track_show is NULL');
       $db->insert('config', ['cfg_key' => 'max_wanted_track_downloads', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_MAX_WANTED_TRACK_DOWNLOADS', 'type' => 2, 'category' => 'L_WANTED', 'public' => 1]);
+      $db->insert('config', ['cfg_key' => 'autoclean_moved_wanted', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_AUTOCLEAN_MOVED', 'type' => 3, 'category' => 'L_WANTED', 'public' => 1]);
       $db->query('UPDATE config SET cfg_value=\'12\' WHERE cfg_key=\'db_version\' LIMIT 1');
       $db->query('DELETE FROM config WHERE cfg_key=\'version\' LIMIT 1');
       $db->update('db_info', ['version' => 12]);
-      $db->query('VACUUM;');
       }
      */
 
@@ -777,6 +777,15 @@ function update_db($from) {
       $db->query('UPDATE config SET cfg_value=\'13\' WHERE cfg_key=\'db_version\' LIMIT 1');
 
       $db->update('db_info', ['version' => 12]);
+      $db->query('VACUUM;');
+      }
+     */
+
+    /*
+      if ($from < 14) {
+      $db->query('UPDATE config SET cfg_value=\'14\' WHERE cfg_key=\'db_version\' LIMIT 1');
+
+      $db->update('db_info', ['version' => 14]);
       $db->query('VACUUM;');
       }
      */
