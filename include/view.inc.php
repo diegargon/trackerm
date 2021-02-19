@@ -136,7 +136,7 @@ function view() {
 
     if ($type == 'shows_db' || $type == 'shows_library') {
         //NEWFEATURE
-        //$other['follow_show'] = get_follow_show($item['themoviedb_id']);
+        $other['follow_show'] = get_follow_show($item['themoviedb_id']);
     }
     //TODO: To remove, fix a old databse bug that add too many sss
     if (!empty($item['guessed_trailer']) && substr(trim($item['guessed_trailer']), 0, 6) == 'httpss') {
@@ -406,7 +406,7 @@ function check_if_have_show($id, $season, $episode) {
     $season_episodes = $db->fetchAll($results);
 
     foreach ($season_episodes as $s_episode) {
-
+        //TODO why return this? check that seems not necessary
         if (
                 isset($s_episode['themoviedb_id']) &&
                 isset($s_episode['season']) &&
