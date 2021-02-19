@@ -156,6 +156,7 @@ function page_view() {
     }
     if (!empty($deletereg)) {
         if ($type == 'movies_library') {
+            //TODO MULTIPLE: when allow multiple files and have master must delete like shows_library for rid all registers
             $db->deleteItemById('library_movies', $id);
         }
         if ($type == 'shows_library') {
