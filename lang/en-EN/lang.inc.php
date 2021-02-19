@@ -278,6 +278,7 @@ $LNG = [
     'L_CFG_AUTO_IDENT_STRICT' => 'Strict Auto identify?',
     'L_CFG_TMDB_OPT_CACHE_EXPIRE' => 'Tmdb popular/trending and similar cache expire recommend 24h (86400)',
     'L_CFG_MEDIAINFO_PATH' => 'Ruta a mediainfo',
+    'L_CFG_MAX_WANTED_TRACK_DOWNLOADS' => 'Max simultaneous files that track show send to search and downloading (by show)',
     /*
       'L_CFG_TRANSCODER_PLAY' => '(unused p1)',
       'L_CFG_TRANSCODER_PATH' => '(unused p2)',

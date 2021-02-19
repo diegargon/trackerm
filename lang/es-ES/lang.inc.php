@@ -278,6 +278,7 @@ $LNG = [
     'L_CFG_AUTO_IDENT_STRICT' => '¿Auto identificación estricta?',
     'L_CFG_TMDB_OPT_CACHE_EXPIRE' => 'Tmdb expiración del cache de popular/trending y similar recommend 24h (86400)',
     'L_CFG_MEDIAINFO_PATH' => 'Ruta a mediainfo',
+    'L_CFG_MAX_WANTED_TRACK_DOWNLOADS' => 'Numero maximo de archivos descargando que el seguimiento the series pondra a buscar y descargar (por serie)',
     /*
       'L_CFG_TRANSCODER_PLAY' => '(unused p1)',
       'L_CFG_TRANSCODER_PATH' => '(unused p2)',
