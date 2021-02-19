@@ -60,6 +60,7 @@ require_once('vendor/autoload.php');
 require_once('include/utils.inc.php');
 
 require_once('include/prefs.inc.php');
+!empty($cfg['localplayer']) ? require_once('include/localplayer.inc.php') : null;
 
 global $trans;
 $trans = new TorrentServer($cfg);

@@ -551,7 +551,7 @@ function page_logout() {
 }
 
 function page_localplayer() {
-    global $cfg, $filter, $db;
+    global $filter, $db;
 
     $id = $filter->getInt('id');
     $media_type = $filter->getString('media_type');
@@ -559,30 +559,24 @@ function page_localplayer() {
     if (empty($id) || empty($media_type)) {
         exit();
     }
-    if ($media_type == 'movies') {
-        $item = $db->getItemById('library_movies', $id);
-    } else {
-
-        $item = $db->getItemById('library_shows', $id);
-    }
-
-    if (empty($item)) {
+    $table = 'library_' . $media_type;
+    $item = $db->getItemById($table, $id);
+    if (!valid_array($item)) {
         exit();
     }
+    if ($media_type == 'movies') {
+        $m3u_playlist = get_pl_movies($item);
+    } else {
+        $m3u_playlist = get_pl_shows($item);
+    }
 
-    $path = str_replace($cfg['playlocal_root_path'], '', $item['path']);
-
+    $header_title = $item['title'];
     header("Content-Type: video/mpegurl");
-    header("Content-Disposition: attachment; filename={$item['title']}.m3u8");
+    header("Content-Disposition: attachment; filename=$header_title.m3u8");
     header("Pragma: no-cache");
     header("Expires: 0");
-    print "#EXTM3U\r\n";
-    print "#EXTINF:123, {$item['title']}\r\n";
-    if (isMobile() || isLinux()) {
-        print $cfg['playlocal_share_linux_path'] . $path . "\r\n";
-    } else {
-        print $cfg['playlocal_share_windows_path'] . $path . "\r\n";
-    }
-    print "#EXT-X-ENDLIST";
+    echo "#EXTM3U\r\n";
+    echo $m3u_playlist;
+    echo "#EXT-X-ENDLIST";
     exit(0);
 }
