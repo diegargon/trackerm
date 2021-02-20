@@ -48,7 +48,7 @@ function getFooter() {
 }
 
 function getTpl($tpl, $tdata = []) {
-    global $cfg, $LNG, $user;
+    global $cfg, $LNG, $user; //NO delete work for templates
     ob_start();
     include('tpl/' . $cfg['theme'] . '/' . $tpl . '.tpl.php');
 
@@ -87,7 +87,6 @@ function buildTable($head, $db_ary, $topt = null) {
             $npage == 1 ||
             (isset($topt['search_type']) && ($_GET['search_type'] != $topt['search_type']))
     ) {
-
         $db_ary_slice = $db_ary;
     } else {
         $npage_jump = ($max_items * $npage) - $max_items;

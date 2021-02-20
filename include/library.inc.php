@@ -13,9 +13,11 @@ function show_my_movies() {
     global $db, $filter, $cfg;
 
     $page = '';
-    $npage = $filter->getInt('npage');
-    empty($npage) ? $npage = 1 : null;
 
+    $npage = $filter->getInt('npage');
+    $search_type = $filter->getString('search_type');
+
+    empty($npage) || (!empty($search_type) && $search_type == 'shows') ? $npage = 1 : null;
 
     if (!empty($_POST['mult_movies_select'])) {
         ident_by_idpairs('movies', $_POST['mult_movies_select']);
