@@ -280,6 +280,8 @@ $LNG = [
     'L_CFG_MEDIAINFO_PATH' => 'Ruta a mediainfo',
     'L_CFG_MAX_WANTED_TRACK_DOWNLOADS' => 'Numero maximo de archivos descargando que el seguimiento the series pondra a buscar y descargar (por serie)',
     'L_CFG_AUTOCLEAN_MOVED' => '¿Limpiar automatica de la lista de seguimiento los objetos movidos? (unused yet)',
+    'L_CFG_LOCALPLAYER_TRACK' => 'Localplayer Track: Hace seguimiento del tiempo de lo que ves (necesita activo el servicio web y la contraseña (unused)',
+    'L_CFG_LOCALPLAYER_WEB_PASSWORD' => 'Localplayer Track: Contraseña del servicio web (unused)',
     /*
       'L_CFG_TRANSCODER_PLAY' => '(unused p1)',
       'L_CFG_TRANSCODER_PATH' => '(unused p2)',

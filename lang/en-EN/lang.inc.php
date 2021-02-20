@@ -280,6 +280,8 @@ $LNG = [
     'L_CFG_MEDIAINFO_PATH' => 'Ruta a mediainfo',
     'L_CFG_MAX_WANTED_TRACK_DOWNLOADS' => 'Max simultaneous files that track show send to search and downloading (by show)',
     'L_CFG_AUTOCLEAN_MOVED' => '¿Auto clean moved items from wanted list? (unused yet)',
+    'L_CFG_LOCALPLAYER_TRACK' => 'Localplayer Track: Track time of content view. Need activate the VLC Web Service and a password (unused)',
+    'L_CFG_LOCALPLAYER_WEB_PASSWORD' => 'Localplayer Track: Web service password (unused)',
     /*
       'L_CFG_TRANSCODER_PLAY' => '(unused p1)',
       'L_CFG_TRANSCODER_PATH' => '(unused p2)',
