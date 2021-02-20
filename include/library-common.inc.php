@@ -357,7 +357,7 @@ function check_history($media_type, $ids) {
             $results = $db->select('library_history', 'themoviedb_id', $where, 'LIMIT 1');
             $item_history = $db->fetch($results);
             $db->finalize($results);
-            if (valid_item($item_history) && !empty($item_history['themoviedb_id'])) {
+            if (valid_array($item_history) && !empty($item_history['themoviedb_id'])) {
                 $log->debug("Identified item by history: tmdb id {$item_history['themoviedb_id']} ");
                 ident_by_id($media_type, $item_history['themoviedb_id'], $id);
                 unset($ids[$id_key]);
