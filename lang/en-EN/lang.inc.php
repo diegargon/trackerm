@@ -279,7 +279,7 @@ $LNG = [
     'L_CFG_TMDB_OPT_CACHE_EXPIRE' => 'Tmdb popular/trending and similar cache expire recommend 24h (86400)',
     'L_CFG_MEDIAINFO_PATH' => 'Ruta a mediainfo',
     'L_CFG_MAX_WANTED_TRACK_DOWNLOADS' => 'Max simultaneous files that track show send to search and downloading (by show)',
-    'L_CFG_AUTOCLEAN_MOVED' => '¿Auto clean moved items from wanted list? (unused yet)',
+    'L_CFG_AUTOCLEAN_MOVED' => '¿Auto clean moved items from wanted list?',
     'L_CFG_LOCALPLAYER_TRACK' => 'Localplayer Track: Track time of content view. Need activate the VLC Web Service and a password (unused)',
     'L_CFG_LOCALPLAYER_WEB_PASSWORD' => 'Localplayer Track: Web service password (unused)',
     /*

@@ -279,7 +279,7 @@ $LNG = [
     'L_CFG_TMDB_OPT_CACHE_EXPIRE' => 'Tmdb expiración del cache de popular/trending y similar recommend 24h (86400)',
     'L_CFG_MEDIAINFO_PATH' => 'Ruta a mediainfo',
     'L_CFG_MAX_WANTED_TRACK_DOWNLOADS' => 'Numero maximo de archivos descargando que el seguimiento de series pondra a buscar y descargar (por serie)',
-    'L_CFG_AUTOCLEAN_MOVED' => '¿Limpiar automatica de la lista de seguimiento los objetos movidos? (unused yet)',
+    'L_CFG_AUTOCLEAN_MOVED' => '¿Limpiar automatica de la lista de seguimiento los objetos movidos?',
     'L_CFG_LOCALPLAYER_TRACK' => 'Localplayer Track: Hace seguimiento del tiempo de lo que ves (necesita activo el servicio web y la contraseña (unused)',
     'L_CFG_LOCALPLAYER_WEB_PASSWORD' => 'Localplayer Track: Contraseña del servicio web (unused)',
     /*
