@@ -413,9 +413,9 @@ button {
 
 .error_container {
     margin: 5% 15% 5% 15%;    
-    border: 1px solid blue;
+    border: 0px solid blue;
     text-align: center;
-    padding: 20% 0% 20% 0%;
+    padding: 5% 0% 20% 0%;
 }
 
 .error_title {
