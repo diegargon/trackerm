@@ -165,7 +165,7 @@ function view_extra_movies($item, $opt = null) {
         if ($torrent_results !== false) {
             $extra .= $torrent_results;
         } else {
-            $box_msg['title'] = $LNG['L_ERROR'] . ':' . $LNG['L_TORRENT'];
+            $box_msg['title'] = $LNG['L_TORRENT'];
             $box_msg['body'] = $LNG['L_NOTHING_FOUND'];
             $extra .= msg_box($box_msg);
         }

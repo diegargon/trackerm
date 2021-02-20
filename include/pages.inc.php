@@ -295,7 +295,7 @@ function page_torrents() {
         if ($torrent_results !== false) {
             $page .= $torrent_results;
         } else {
-            $box_msg['title'] = $LNG['L_ERROR'] . ':' . $LNG['L_TORRENT'];
+            $box_msg['title'] = $LNG['L_TORRENT'];
             $box_msg['body'] = $LNG['L_NOTHING_FOUND'];
             $page .= msg_box($box_msg);
         }
