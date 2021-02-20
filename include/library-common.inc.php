@@ -309,15 +309,15 @@ function submit_ident($media_type, $item_data, $id) {
         $update_fields['clean_title'] = clean_title($item_data['name']);
     }
     $update_fields['themoviedb_id'] = $item_data['themoviedb_id'];
-    !empty($item_data['poster']) ? $update_fields['poster'] = $item_data['poster'] : null;
-    !empty($item_data['original_title']) ? $update_fields['original_title'] = $item_data['original_title'] : null;
-    !empty($item_data['rating']) ? $update_fields['rating'] = $item_data['rating'] : null;
-    !empty($item_data['popularity']) ? $update_fields['popularity'] = $item_data['popularity'] : null;
-    !empty($item_data['scene']) ? $update_fields['scene'] = $item_data['scene'] : null;
-    !empty($item_data['lang']) ? $update_fields['lang'] = $item_data['lang'] : null;
-    !empty($item_data['trailer']) ? $update_fields['trailer'] = $item_data['trailer'] : null;
-    !empty($item_data['plot']) ? $update_fields['plot'] = $item_data['plot'] : null;
-    !empty($item_data['release']) ? $update_fields['release'] = $item_data['release'] : null;
+    !empty($item_data['poster']) ? $update_fields['poster'] = $item_data['poster'] : $update_fields['poster'] = '';
+    !empty($item_data['original_title']) ? $update_fields['original_title'] = $item_data['original_title'] : $update_fields['original_title'] = '';
+    !empty($item_data['rating']) ? $update_fields['rating'] = $item_data['rating'] : $update_fields['rating'] = '';
+    !empty($item_data['popularity']) ? $update_fields['popularity'] = $item_data['popularity'] : $update_fields['popularity'] = '';
+    !empty($item_data['scene']) ? $update_fields['scene'] = $item_data['scene'] : $update_fields['scene'] = '';
+    !empty($item_data['lang']) ? $update_fields['lang'] = $item_data['lang'] : $update_fields['lang'] = '';
+    !empty($item_data['trailer']) ? $update_fields['trailer'] = $item_data['trailer'] : $update_fields['trailer'] = '';
+    !empty($item_data['plot']) ? $update_fields['plot'] = $item_data['plot'] : $update_fields['plot'] = '';
+    !empty($item_data['release']) ? $update_fields['release'] = $item_data['release'] : $update_fields['release'] = '';
 
     if ($media_type == 'movies') {
         $db->updateItemById('library_movies', $id, $update_fields);
