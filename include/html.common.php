@@ -34,24 +34,21 @@ function getMenu() {
     }
 
     if (empty($cfg['hide_opt'])) {
-        $user['menu_opt'] = getOptions();
+        $tdata['menu_opt'] = getOptions();
         $tdata['arrow'] = '&uarr;';
     } else {
         $tdata['arrow'] = '&darr;';
     }
 
-
-    return getTpl('menu', array_merge($cfg, $LNG, $user, $tdata));
+    return getTpl('menu', $tdata);
 }
 
 function getFooter() {
-    global $cfg, $LNG;
-
-    return getTpl('footer', array_merge($cfg, $LNG));
+    return getTpl('footer');
 }
 
-function getTpl($tpl, $tdata) {
-    global $cfg;
+function getTpl($tpl, $tdata = []) {
+    global $cfg, $LNG, $user;
     ob_start();
     include('tpl/' . $cfg['theme'] . '/' . $tpl . '.tpl.php');
 
@@ -133,7 +130,7 @@ function buildTable($head, $db_ary, $topt = null) {
 }
 
 function build_item($item, $details = 1) {
-    global $cfg, $LNG, $db;
+    global $cfg, $db;
 
     $page = '';
 
@@ -199,26 +196,21 @@ function build_item($item, $details = 1) {
             }
         }
 
-        $page .= getTpl('item_display_1', array_merge($item, $LNG));
+        $page .= getTpl('item_display_1', $item);
     }
 
     return $page;
 }
 
 function msg_box($msg) {
-    global $LNG;
-
-    return getTpl('msgbox', array_merge($LNG, $msg));
+    return getTpl('msgbox', $msg);
 }
 
 function msg_page($msg) {
-    global $cfg;
-
     $footer = getFooter();
     $menu = getMenu();
     $body = msg_box($msg = ['title' => $msg['title'], 'body' => $msg['body']]);
     $tdata = ['menu' => $menu, 'body' => $body, 'footer' => $footer];
-    $tdata = array_merge($tdata, $cfg);
     echo getTpl('html_mstruct', $tdata);
 
     exit();
@@ -380,10 +372,9 @@ function getOptions() {
         (isset($cfg['sel_indexer']) && $cfg['sel_indexer'] == $indexer) ? $selected_indexer = 'selected="selected"' : $selected_indexer = '';
         $tdata['sel_indexers'] .= '<option ' . $selected_indexer . ' value="' . $indexer . '">' . $indexer . '</option>';
     }
-
     /* FIN */
 
-    return getTpl('menu_options', array_merge($tdata, $LNG, $cfg));
+    return getTpl('menu_options', $tdata);
 }
 
 function html_mediainfo_tags($mediainfo, $tags = null) {

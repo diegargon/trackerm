@@ -11,8 +11,8 @@
 <div class="tor_container">
     <form method="POST" action="">
         <div class="tor_general_options">
-            <input type="submit" class="submit_btn" name="start_all" value="<?= $tdata['L_START_ALL'] ?>">
-            <input type="submit" class="submit_btn" name="stop_all" value="<?= $tdata['L_STOP_ALL'] ?>">
+            <input type="submit" class="submit_btn" name="start_all" value="<?= $LNG['L_START_ALL'] ?>">
+            <input type="submit" class="submit_btn" name="stop_all" value="<?= $LNG['L_STOP_ALL'] ?>">
         </div>
     </form>
     <?= $tdata['body'] ?>

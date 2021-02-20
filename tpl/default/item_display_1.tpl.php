@@ -16,7 +16,7 @@
         <?php
         if (!empty($tdata['guessed_poster'])) {
             ?>
-            <div class="guessed_poster"><?= $tdata['L_POSTER_GUESSED'] ?></div>
+            <div class="guessed_poster"><?= $LNG['L_POSTER_GUESSED'] ?></div>
         <?php } ?>
     </div>
     <div class="item_details">
@@ -27,12 +27,12 @@
             <?php
             if (!empty($tdata['download'])) {
                 ?>
-                <span class="item_download"><a class="action_link" href="<?= basename($_SERVER['REQUEST_URI']) . '&download=' . rawurlencode($tdata['download']) ?>"><?= $tdata['L_DOWNLOAD_MIN'] ?></a></span>
+                <span class="item_download"><a class="action_link" href="<?= basename($_SERVER['REQUEST_URI']) . '&download=' . rawurlencode($tdata['download']) ?>"><?= $LNG['L_DOWNLOAD_MIN'] ?></a></span>
                 <?php
             }
             if (!empty($tdata['episode_count'])) {
                 ?>
-                <span class="item_episode_count">[<?= $tdata['L_EPISODE_MIN'] . $tdata['episode_count'] ?>]</span>
+                <span class="item_episode_count">[<?= $LNG['L_EPISODE_MIN'] . $tdata['episode_count'] ?>]</span>
                 <?php
             }
             if (!empty($tdata['size'])) {
@@ -42,7 +42,7 @@
             }
             if (!empty($tdata['rating'])) {
                 ?>
-                <span class="item_rating">[<?= $tdata['L_RATING_MIN'] . $tdata['rating'] ?>]</span>
+                <span class="item_rating">[<?= $LNG['L_RATING_MIN'] . $tdata['rating'] ?>]</span>
                 <?php
             }
             if (!empty($tdata['trailer'])) {
@@ -54,9 +54,9 @@
                 ?>
                 <span class="action_link">
                     <?php if ($tdata['ilink'] == 'movies_db') { ?>
-                        <a href="?page=view&id=<?= $tdata['in_library'] ?>&view_type=movies_library"><?= $tdata['L_HAVEIT'] ?></a>
+                        <a href="?page=view&id=<?= $tdata['in_library'] ?>&view_type=movies_library"><?= $LNG['L_HAVEIT'] ?></a>
                     <?php } else if ($tdata['ilink'] == 'shows_db') { ?>
-                        <a href="?page=view&id=<?= $tdata['in_library'] ?>&view_type=shows_library"><?= $tdata['L_HAVEIT'] ?></a>
+                        <a href="?page=view&id=<?= $tdata['in_library'] ?>&view_type=shows_library"><?= $LNG['L_HAVEIT'] ?></a>
                     <?php } ?>
                 </span>
                 <?php

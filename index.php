@@ -69,8 +69,6 @@ if (in_array($req_page, $valid_pages)) {
 }
 
 $tdata = ['menu' => $menu, 'body' => $body, 'footer' => $footer];
-$tdata = array_merge($tdata, $cfg);
-
 $page = getTpl('html_mstruct', $tdata);
 $db->close();
 

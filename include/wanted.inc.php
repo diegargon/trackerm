@@ -10,7 +10,7 @@
 !defined('IN_WEB') ? exit : true;
 
 function wanted_list() {
-    global $db, $cfg, $LNG, $trans, $filter;
+    global $db, $LNG, $trans, $filter;
     $iurl = '?page=wanted';
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -96,17 +96,17 @@ function wanted_list() {
             $wanted_item['media_type'] == 'movies' ? $tdata['lang_media_type'] = $LNG['L_MOVIES'] : $tdata['lang_media_type'] = $LNG['L_SHOWS'];
 
             if ($wanted_item['track_show'] == 1) {
-                $wanted_list_tmp_data['TRACKING'] .= getTpl('wanted-item', array_merge($wanted_item, $tdata, $LNG, $cfg));
+                $wanted_list_tmp_data['TRACKING'] .= getTpl('wanted-item', array_merge($wanted_item, $tdata));
             } else if ($wanted_item['wanted_status'] == -1) {
-                $wanted_list_tmp_data['SEARCHING'] .= getTpl('wanted-item', array_merge($wanted_item, $tdata, $LNG, $cfg));
+                $wanted_list_tmp_data['SEARCHING'] .= getTpl('wanted-item', array_merge($wanted_item, $tdata));
             } else if ($wanted_item['wanted_status'] == 9) {
-                $wanted_list_tmp_data['MOVED'] .= getTpl('wanted-item', array_merge($wanted_item, $tdata, $LNG, $cfg));
+                $wanted_list_tmp_data['MOVED'] .= getTpl('wanted-item', array_merge($wanted_item, $tdata));
             } else if ($wanted_item['wanted_status'] == 6) {
-                $wanted_list_tmp_data['SEEDING'] .= getTpl('wanted-item', array_merge($wanted_item, $tdata, $LNG, $cfg));
+                $wanted_list_tmp_data['SEEDING'] .= getTpl('wanted-item', array_merge($wanted_item, $tdata));
             } else if ($wanted_item['wanted_status'] == 10) {
-                $wanted_list_tmp_data['DELETED'] .= getTpl('wanted-item', array_merge($wanted_item, $tdata, $LNG, $cfg));
+                $wanted_list_tmp_data['DELETED'] .= getTpl('wanted-item', array_merge($wanted_item, $tdata));
             } else {
-                $wanted_list_tmp_data['OTHER'] .= getTpl('wanted-item', array_merge($wanted_item, $tdata, $LNG, $cfg));
+                $wanted_list_tmp_data['OTHER'] .= getTpl('wanted-item', array_merge($wanted_item, $tdata));
             }
         }
         //IMPROVE: Sorting: do better way

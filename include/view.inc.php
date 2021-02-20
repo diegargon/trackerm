@@ -127,7 +127,7 @@ function view() {
         isset($other['mediainfo']['Audio'][1]['BitRate']) ? $other['mediainfo']['Audio'][1]['BitRate'] = substr($other['mediainfo']['Audio'][1]['BitRate'], 0, 2) . 'hz' : null;
         !empty($other['mediainfo']) ? $other['mediainfo_tags'] = html_mediainfo_tags($other['mediainfo']) : null;
     }
-    $page = getTpl('view', array_merge($cfg, $LNG, $item, $other));
+    $page = getTpl('view', array_merge($item, $other));
 
     return $page;
 }
@@ -281,7 +281,7 @@ function view_seasons($item, $update = false) {
 }
 
 function view_season_detailed($season, $items_details) {
-    global $cfg, $LNG, $filter;
+    global $LNG, $filter;
 
     $id = $filter->getInt('id');
     $view_type = $filter->getString('view_type');
@@ -308,7 +308,7 @@ function view_season_detailed($season, $items_details) {
                 $tdata['have_show'] = $have_show;
                 $have_episodes[] = $item['episode'];
             }
-            $episode_data .= getTpl('episodes_rows', array_merge($item, $tdata, $LNG, $cfg));
+            $episode_data .= getTpl('episodes_rows', array_merge($item, $tdata));
 
             $item_counter++;
         }

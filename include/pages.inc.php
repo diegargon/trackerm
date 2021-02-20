@@ -237,7 +237,7 @@ function page_tmdb() {
     $tdata['search_movies_word'] = $search_movies;
     $tdata['search_shows_word'] = $search_shows;
 
-    $page = getTpl('page_tmdb', array_merge($LNG, $tdata, $cfg));
+    $page = getTpl('page_tmdb', $tdata);
 
     if (!empty($search_movies)) {
         $movies = mediadb_searchMovies(trim($search_movies));
@@ -281,7 +281,7 @@ function page_torrents() {
     $tdata['search_movies_word'] = $search_movies_torrents;
     $tdata['search_shows_word'] = $search_shows_torrents;
 
-    $page = getTpl('page_torrents', array_merge($tdata, $LNG, $cfg));
+    $page = getTpl('page_torrents', $tdata);
 
     if (!empty($search_movies_torrents)) {
         $search['words'] = trim($search_movies_torrents);
@@ -328,7 +328,7 @@ function page_wanted() {
 
     $want['wanted_list'] = wanted_list();
 
-    return !empty($want['wanted_list']) ? getTpl('wanted', array_merge($want, $LNG, $cfg)) : false;
+    return !empty($want['wanted_list']) ? getTpl('wanted', $want) : false;
 }
 
 function page_identify() {
@@ -403,7 +403,7 @@ function page_identify() {
         }
     }
 
-    return getTpl('identify_adv', array_merge($LNG, $item, $tdata));
+    return getTpl('identify_adv', array_merge($item, $tdata));
 }
 
 function page_download() {
@@ -456,10 +456,10 @@ function page_transmission() {
 
         $tdata['status_name'] = $trans->getStatusName($transfer['status']);
         $transfer['percentDone'] == 1 ? $tdata['percent'] = '100' : $tdata['percent'] = ((float) $transfer['percentDone']) * 100;
-        $tdata['body'] .= getTpl('transmission-row', array_merge($transfer, $tdata, $LNG));
+        $tdata['body'] .= getTpl('transmission-row', array_merge($transfer, $tdata));
     }
 
-    $page .= getTpl('transmission-body', array_merge($tdata, $LNG));
+    $page .= getTpl('transmission-body', $tdata);
 
     return $page;
 }
@@ -531,12 +531,12 @@ function page_login() {
     $users = $db->fetchAll($result);
     $page = '';
     $tdata['profiles'] = '';
-    foreach ($users as $user) {
-        if ($user['disable'] != 1 && $user['hide_login'] != 1) {
-            $tdata['profiles'] .= getTpl('profile_box', array_merge($tdata, $cfg, $user));
+    foreach ($users as $_user) {
+        if ($_user['disable'] != 1 && $_user['hide_login'] != 1) {
+            $tdata['profiles'] .= getTpl('profile_box', array_merge($tdata, $_user));
         }
     }
-    $page .= getTpl('login', array_merge($tdata));
+    $page .= getTpl('login', $tdata);
     return $page;
 }
 

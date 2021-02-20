@@ -211,7 +211,7 @@ function show_identify_media($media_type) {
             $title_tdata['del_iurl'] = $iurl . '&media_type=' . $media_type . '&ident_delete=' . $item['id'];
             $title_tdata['more_iurl'] = '?page=identify&media_type=' . $media_type . '&identify=' . $item['id'];
             $title_tdata['media_type'] = $media_type;
-            $titles .= $table = getTpl('identify_item', array_merge($LNG, $item, $title_tdata));
+            $titles .= $table = getTpl('identify_item', array_merge($item, $title_tdata));
             $i++;
         }
     }
@@ -220,7 +220,7 @@ function show_identify_media($media_type) {
         $tdata['titles'] = $titles;
         $tdata['head'] = $LNG['L_IDENT_' . strtoupper($media_type) . ''];
 
-        $table = getTpl('identify', array_merge($LNG, $tdata));
+        $table = getTpl('identify', $tdata);
 
         return $table;
     }

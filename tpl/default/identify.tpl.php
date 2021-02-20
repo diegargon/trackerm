@@ -13,6 +13,6 @@
     <div class="divTableID">
         <?= $tdata['titles'] ?>
     </div>
-    <input class="submit_btn" type="submit" value="<?= $tdata['L_IDENTIFY'] ?>"/>
+    <input class="submit_btn" type="submit" value="<?= $LNG['L_IDENTIFY'] ?>"/>
 </form>
 

@@ -59,22 +59,17 @@ function user_management() {
 }
 
 function new_user() {
-    global $LNG;
-
-    return getTpl('new_user', $LNG);
+    return getTpl('new_user');
 }
 
 function show_users() {
-    global $LNG;
-
     $html = '<div class="delete_user_box">';
     $html .= '<form id="delete_user" method="POST">';
     $users = get_profiles();
 
-    foreach ($users as $user) {
-        if ($user['id'] > 1) {
-            $tdata = array_merge($user, $LNG);
-            $html .= getTpl('delete_user', $tdata);
+    foreach ($users as $_user) {
+        if ($_user['id'] > 1) {
+            $html .= getTpl('delete_user', $_user);
         }
     }
     $html .= '</form>';
