@@ -117,7 +117,7 @@ function view() {
 
     if ($view_type == 'shows_db' || $view_type == 'shows_library') {
         //NEWFEATURE
-        $other['follow_show'] = get_follow_show($item['themoviedb_id']);
+        //$other['follow_show'] = get_follow_show($item['themoviedb_id']);
     }
 
     if (!empty($item['path'])) {
