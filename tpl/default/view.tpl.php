@@ -33,10 +33,10 @@
                     <br/>
                 <?php } ?>
 
-                <?php if (!empty($tdata['themoviedb_id']) && ( $tdata['ilink'] == 'movies_db' || $tdata['ilink'] == 'movies_library' )) { ?>
-                    <span class="external_link"><a href="https://www.themoviedb.org/movie/<?= $tdata['themoviedb_id'] ?>" target=_blank>TheMovieDB</a></span><br/>
-                <?php } else if (!empty($tdata['themoviedb_id']) && ($tdata['ilink'] == 'shows_db' || $tdata['ilink'] == 'shows_library' )) { ?>
-                    <span class="external_link"><a href="https://www.themoviedb.org/tv/<?= $tdata['themoviedb_id'] ?>" target=_blank>TheMovieDB</a></span><br/>
+                <?php if (!empty($tdata['themoviedb_id']) && $tdata['media_type'] == 'movies') { ?>
+                    <span class="external_link"><a href="<?= $cfg['odb_movies_link'] . $tdata['themoviedb_id'] ?>" target=_blank>TheMovieDB</a></span><br/>
+                <?php } else if (!empty($tdata['themoviedb_id']) && $tdata['media_type'] == 'shows') { ?>
+                    <span class="external_link"><a href="<?= $cfg['odb_movies_link'] . $tdata['themoviedb_id'] ?>" target=_blank>TheMovieDB</a></span><br/>
                 <?php } ?>
                 <?php if (!empty($tdata['created'])) {
                     ?>
