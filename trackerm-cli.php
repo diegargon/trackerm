@@ -23,8 +23,10 @@ require_once('include/trackerm-cli.inc.php');
 
 isset($argv[1]) && $argv[1] == '-console' ? $log->setConsole(true) : null;
 
-if (getPrefsItem('cli_blocker', true)) {
-    $log->warning("Fail starting TAS reason: blocked");
+if (($c_blocker = getPrefsItem('cli_blocker', true)) && $c_blocker <= 3) {
+    setPrefsItem('cli_blocker', ++$c_blocker, true);
+    $log->warning("Fail starting TAS reason: blocked ($c_blocker)");
+
     return false;
 }
 setPrefsItem('cli_blocker', 1, true);

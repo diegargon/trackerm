@@ -10,7 +10,11 @@
 !defined('IN_WEB') ? exit : true;
 
 function rebuild($media_type, $path) {
-    if (getPrefsItem('rebuild_blocker', true)) {
+    global $log;
+    //r_blocker prevent forever locks, if more than 3 consecutive locks (probably get stuck, resetting)
+    if (($r_blocker = getPrefsItem('rebuild_blocker', true)) && $r_blocker <= 3) {
+        setPrefsItem('rebuild_blocker', ++$r_blocker, true);
+        $log->warning("Rebuild: blocked ($r_blocker)");
         return false;
     }
     setPrefsItem('rebuild_blocker', 1, true);
