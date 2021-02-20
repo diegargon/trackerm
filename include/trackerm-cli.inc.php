@@ -697,7 +697,7 @@ function wanted_check_flags($wanted, $results) {
 }
 
 function tracker_shows($wanted) {
-    global $db, $log;
+    global $db, $cfg, $log;
 
     $from_season = $wanted['season'];
     $from_episode = $wanted['episode'];
@@ -759,7 +759,7 @@ function tracker_shows($wanted) {
 
     $item = mediadb_getFromCache('shows', $tmdb_id);
     $title = $item['title'];
-    $max_wanted_track_downloads = 1; //TODO: TO CONFIG
+    !empty($cfg['max_wanted_track_downloads']) ? $max_wanted_track_downloads = 1 : null;
 
     $inherint_track = null;
     !empty($wanted['custom_words_ignore']) ? $inherint_track['custom_words_ignore'] = $wanted['custom_words_ignore'] : null;
