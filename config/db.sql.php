@@ -763,10 +763,8 @@ function update_db($from) {
 
     /*
       if ($from < 12) {
-      $db->query('ALTER TABLE library_shows add column total_size VARCHAR NULL');
-      $db->query('ALTER TABLE library_shows add column total_shows INT default 1 ');
       $db->insert('config', ['cfg_key' => 'localplayer_track', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_LOCALPLAYER_TRACK', 'type' => 3, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
-      $db->insert('config', ['cfg_key' => 'localplayer_track', 'cfg_value' => '', 'cfg_desc' => 'L_CFG_LOCALPLAYER_WEB_PASSWORD', 'type' => 1, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
+      $db->insert('config', ['cfg_key' => 'localplayer_web_password', 'cfg_value' => '', 'cfg_desc' => 'L_CFG_LOCALPLAYER_WEB_PASSWORD', 'type' => 1, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
       $db->query('UPDATE "wanted" SET track_show = 0 WHERE track_show is NULL');
       $db->insert('config', ['cfg_key' => 'max_wanted_track_downloads', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_MAX_WANTED_TRACK_DOWNLOADS', 'type' => 2, 'category' => 'L_WANTED', 'public' => 1]);
       $db->insert('config', ['cfg_key' => 'autoclean_moved_wanted', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_AUTOCLEAN_MOVED', 'type' => 3, 'category' => 'L_WANTED', 'public' => 1]);
