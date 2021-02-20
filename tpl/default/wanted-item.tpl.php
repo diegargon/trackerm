@@ -65,7 +65,7 @@ if ($tdata['want_separator']) {
             </div>
         </div>
         <div class="divTableCellWanted">
-            <div class="tag_title"><?= $tdata['ilink'] ?></div>
+            <div class="tag_title"><a class="wanted_link" href="<?= $tdata['link'] ?>"><?= $tdata['link_name'] ?></a></div>
         </div>
     </div>
     <!-- END WANTED TABLEROW> -->

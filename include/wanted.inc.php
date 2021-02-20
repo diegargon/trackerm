@@ -86,11 +86,11 @@ function wanted_list() {
             $tdata['elink'] = $mediadb_item['elink'];
 
             ($wanted_item['media_type'] == 'movies') ? $view_type = 'movies_db' : $view_type = 'shows_db';
-            $tdata['ilink'] = '<a class="wanted_link" href="?page=view&id=' . $mediadb_item['id'] . '&view_type=' . $view_type . '">';
+            $tdata['link'] = '?page=view&id=' . $mediadb_item['id'] . '&view_type=' . $view_type;
             if (!empty($wanted_item['show_title'])) {
-                $tdata['ilink'] .= $wanted_item['show_title'] . '</a>';
+                $tdata['link_name'] = $wanted_item['show_title'];
             } else {
-                $tdata['ilink'] .= $wanted_item['title'] . '</a>';
+                $tdata['link_name'] = $wanted_item['title'];
             }
 
             $wanted_item['media_type'] == 'movies' ? $tdata['lang_media_type'] = $LNG['L_MOVIES'] : $tdata['lang_media_type'] = $LNG['L_SHOWS'];
