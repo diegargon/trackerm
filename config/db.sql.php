@@ -259,6 +259,9 @@ function create_db() {
         )');
 
     //WANTED
+    /* tid change between transmissions sessions not need keep in db, we must use hashString, d
+     * Drop tid when we need modify the table
+     */
     $db->query('CREATE TABLE IF NOT EXISTS "wanted" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                     "themoviedb_id" INTEGER NULL,
