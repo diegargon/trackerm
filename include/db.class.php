@@ -410,6 +410,10 @@ class DB {
         return $this->querys;
     }
 
+    public function qSingle($query) {
+        return $this->db->querySingle($query);
+    }
+
     public function query($query) {
         return $this->db->query($query);
     }

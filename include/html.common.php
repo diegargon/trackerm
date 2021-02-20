@@ -77,7 +77,8 @@ function buildTable($head, $db_ary, $topt = null) {
     !empty($head) ? $page .= '<div class="type_head"><h2>' . $LNG[$head] . '</h2></div>' : null;
 
     if (!isset($topt['no_pages'])) {
-        $page .= pager($npage, count($db_ary), $topt);
+        empty($topt['num_table_rows']) ? $npages = count($db_ary) : $npages = $topt['num_table_rows'];
+        $page .= pager($npage, $npages, $topt);
     }
     $page .= '</div>';
 
@@ -85,7 +86,7 @@ function buildTable($head, $db_ary, $topt = null) {
     $num_col_items = 0;
     $num_items = 0;
 
-    if (
+    if (isset($topt['num_table_rows']) ||
             $npage == 1 ||
             (isset($topt['search_type']) && ($_GET['search_type'] != $topt['search_type']))
     ) {

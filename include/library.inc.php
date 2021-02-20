@@ -10,9 +10,12 @@
 !defined('IN_WEB') ? exit : true;
 
 function show_my_movies() {
-    global $db, $filter;
+    global $db, $filter, $cfg;
 
     $page = '';
+    $npage = $filter->getInt('npage');
+    empty($npage) ? $npage = 1 : null;
+
 
     if (!empty($_POST['mult_movies_select'])) {
         ident_by_idpairs('movies', $_POST['mult_movies_select']);
@@ -20,27 +23,26 @@ function show_my_movies() {
     if (!empty(($ident_delete = $filter->getInt('ident_delete'))) && ($_GET['media_type'] == 'movies')) {
         $db->deleteItemById('library_movies', $ident_delete);
     }
-
     $page .= show_identify_media('movies');
-    $movies = $db->getTableData('library_movies');
+
+    $rows = getPrefsItem('tresult_rows');
+    empty($rows) ? $rows = $cfg['tresults_rows'] : null;
+    $columns = getPrefsItem('tresult_columns');
+    empty($columns) ? $columns = $cfg['tresults_columns'] : null;
+    $n_results = $rows * $columns;
+    $npage == 1 ? $end = $n_results : $end = $npage * $n_results;
+    $npage == 1 ? $start = 1 : $start = ($npage - 1) * $n_results;
+
+    $topt['num_table_rows'] = $db->qSingle("SELECT COUNT(*) FROM library_movies WHERE title IS NOT NULL OR title != ''");
+    $query = "SELECT * FROM library_movies WHERE title IS NOT NULL OR title != '' ORDER BY created DESC LIMIT $start,$end ";
+    $stmt = $db->query($query);
+    $movies = $db->fetchAll($stmt);
 
     if (valid_array($movies)) {
-        $movies_identifyed = [];
-
-        foreach ($movies as $key => $movie) {
-            if (!empty($movie['title'])) {
-                $movies_identifyed[$key] = $movie;
-            }
-        }
-
-        usort($movies_identifyed, function ($a, $b) {
-            return strcmp($a["created"], $b["created"]);
-        });
-        $movies_identifyed = array_reverse($movies_identifyed);
-
         $topt['search_type'] = 'movies';
-        $page .= buildTable('L_MOVIES', $movies_identifyed, $topt);
+        $page .= buildTable('L_MOVIES', $movies, $topt);
     }
+
     return $page;
 }
 
@@ -61,6 +63,10 @@ function show_my_shows() {
     }
 
     $page .= show_identify_media('shows');
+
+    //TODO: for improve and select only from table what we want show we need
+    //add a total_field size to library_shows and update with tracker-cli then i
+    //can show size without get all data.
 
     $shows = $db->getTableData('library_shows');
 
