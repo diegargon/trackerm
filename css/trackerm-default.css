@@ -837,7 +837,7 @@ button {
     overflow: hidden;
     position: relative;
     width:100%;
-    max-width:800px;
+    max-height: 40vh;
 }
 
 .video_container::after {
