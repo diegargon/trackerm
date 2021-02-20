@@ -38,6 +38,7 @@ function show_my_movies() {
     $stmt = $db->query($query);
     $movies = $db->fetchAll($stmt);
 
+    $topt['view_type'] = 'movies_library';
     if (valid_array($movies)) {
         $topt['search_type'] = 'movies';
         $page .= buildTable('L_MOVIES', $movies, $topt);
@@ -118,7 +119,9 @@ function show_my_shows() {
         count($sum_sizes) > 1 ? $topt['sizes'] = $sum_sizes : null;
         count($episode_count) > 1 ? $topt['episode_count'] = $episode_count : null;
 
+        $topt['view_type'] = 'shows_library';
         $topt['search_type'] = 'shows';
+
         $page .= buildTable('L_SHOWS', $uniq_shows, $topt);
     }
     return $page;

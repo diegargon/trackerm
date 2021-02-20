@@ -199,7 +199,7 @@ function page_news() {
 }
 
 function page_tmdb() {
-    global $LNG, $filter, $cfg;
+    global $filter, $cfg;
 
     (!empty($_GET['search_movies'])) ? $search_movies = $filter->getUtf8('search_movies') : $search_movies = '';
     (!empty($_GET['search_shows'])) ? $search_shows = $filter->getUtf8('search_shows') : $search_shows = '';
@@ -242,38 +242,54 @@ function page_tmdb() {
     if (!empty($search_movies)) {
         $movies = mediadb_searchMovies(trim($search_movies));
         $topt['search_type'] = 'movies';
+        $topt['view_type'] = 'movies_db';
         !empty($movies) ? $page .= buildTable('L_DB', $movies, $topt) : null;
     }
 
     if (!empty($search_shows)) {
         $shows = mediadb_searchShows(trim($search_shows));
         $topt['search_type'] = 'shows';
+        $topt['view_type'] = 'shows_db';
         !empty($shows) ? $page .= buildTable('L_DB', $shows, $topt) : null;
     }
     if (!isset($_GET['search_movies']) && !isset($_GET['search_shows']) && !empty(getPrefsItem('show_trending'))) {
         $topt['no_pages'] = 1;
         $results = mediadb_getTrending();
-        ($cfg['want_movies']) ? $page .= buildTable('L_TRENDING_MOVIES', $results['movies'], $topt) : null;
-        ($cfg['want_shows']) ? $page .= buildTable('L_TRENDING_SHOWS', $results['shows'], $topt) : null;
+
+        if ($cfg['want_movies']) {
+            $topt['view_type'] = 'movies_db';
+            $page .= buildTable('L_TRENDING_MOVIES', $results['movies'], $topt);
+        }
+        if ($cfg['want_shows']) {
+            $topt['view_type'] = 'shows_db';
+            $page .= buildTable('L_TRENDING_SHOWS', $results['shows'], $topt);
+        }
     }
 
     if (!isset($_GET['search_movies']) && !isset($_GET['search_shows']) && !empty(getPrefsItem('show_popular'))) {
         $topt['no_pages'] = 1;
         $results = mediadb_getPopular();
-        ($cfg['want_movies']) ? $page .= buildTable('L_POPULAR_MOVIES', $results['movies'], $topt) : null;
-        ($cfg['want_shows']) ? $page .= buildTable('L_POPULAR_SHOWS', $results['shows'], $topt) : null;
+        if ($cfg['want_movies']) {
+            $topt['view_type'] = 'movies_db';
+            $page .= buildTable('L_POPULAR_MOVIES', $results['movies'], $topt);
+        }
+        if ($cfg['want_shows']) {
+            $topt['view_type'] = 'shows_db';
+            $page .= buildTable('L_POPULAR_SHOWS', $results['shows'], $topt);
+        }
     }
 
     if (!isset($_GET['search_movies']) && !isset($_GET['search_shows']) && !empty(getPrefsItem('show_today_shows'))) {
         $topt['no_pages'] = 1;
         $results = mediadb_getTodayShows();
+        $topt['view_type'] = 'shows_db';
         $page .= buildTable('L_TODAY_SHOWS', $results['shows'], $topt);
     }
     return $page;
 }
 
 function page_torrents() {
-    global $LNG, $filter, $cfg;
+    global $LNG, $filter;
 
     (!empty($_GET['search_movies_torrents'])) ? $search_movies_torrents = $filter->getUtf8('search_movies_torrents') : $search_movies_torrents = '';
     (!empty($_GET['search_shows_torrents'])) ? $search_shows_torrents = $filter->getUtf8('search_shows_torrents') : $search_shows_torrents = '';
@@ -305,7 +321,7 @@ function page_torrents() {
 }
 
 function page_wanted() {
-    global $LNG, $cfg, $db, $filter, $trans;
+    global $db, $filter, $trans;
 
     $want = [];
     !empty($trans) ? $trans->updateWanted() : null;

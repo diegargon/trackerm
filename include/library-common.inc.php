@@ -41,10 +41,8 @@ function _rebuild($media_type, $path) {
 
     if ($media_type == 'movies') {
         $library_table = 'library_movies';
-        $ilink = 'movies_library';
     } else if ($media_type == 'shows') {
         $library_table = 'library_shows';
-        $ilink = 'shows_library';
     }
 
     $media = $db->getTableData($library_table);
@@ -73,7 +71,6 @@ function _rebuild($media_type, $path) {
             }
 
             $items[$i] = [
-                'ilink' => $ilink,
                 'file_name' => $file_name,
                 'size' => $filesize,
                 'predictible_title' => ucwords($predictible_title),

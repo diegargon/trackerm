@@ -10,7 +10,7 @@
 
 <div class="display display_1">
     <div class="poster_preview">
-        <a href="?page=view&id=<?= $tdata['id'] ?>&view_type=<?= $tdata['ilink'] ?> ">
+        <a href="?page=view&id=<?= $tdata['id'] ?>&view_type=<?= $tdata['view_type'] ?> ">
             <img class="img_poster_preview"  alt="" src="<?= $tdata['poster'] ?>"/>
         </a>
         <?php
@@ -30,9 +30,9 @@
                 <span class="item_download"><a class="action_link" href="<?= basename($_SERVER['REQUEST_URI']) . '&download=' . rawurlencode($tdata['download']) ?>"><?= $LNG['L_DOWNLOAD_MIN'] ?></a></span>
                 <?php
             }
-            if (!empty($tdata['episode_count'])) {
+            if (!empty($tdata['num_episodes'])) {
                 ?>
-                <span class="item_episode_count">[<?= $LNG['L_EPISODE_MIN'] . $tdata['episode_count'] ?>]</span>
+                <span class="item_num_episodes">[<?= $LNG['L_EPISODE_MIN'] . $tdata['num_episodes'] ?>]</span>
                 <?php
             }
             if (!empty($tdata['size'])) {
@@ -50,13 +50,13 @@
                 <span class="item_link"><a href="<?= $tdata['trailer'] ?>" target="_blank">[T]</a></span>
                 <?php
             }
-            if (!empty($tdata['in_library'])) {
+            if (!empty($tdata['movie_in_library']) || !empty($tdata['show_in_library'])) {
                 ?>
                 <span class="action_link">
-                    <?php if ($tdata['ilink'] == 'movies_db') { ?>
-                        <a href="?page=view&id=<?= $tdata['in_library'] ?>&view_type=movies_library"><?= $LNG['L_HAVEIT'] ?></a>
-                    <?php } else if ($tdata['ilink'] == 'shows_db') { ?>
-                        <a href="?page=view&id=<?= $tdata['in_library'] ?>&view_type=shows_library"><?= $LNG['L_HAVEIT'] ?></a>
+                    <?php if ($tdata['view_type'] == 'movies_db') { ?>
+                        <a href="?page=view&id=<?= $tdata['movie_in_library'] ?>&view_type=movies_library"><?= $LNG['L_HAVEIT'] ?></a>
+                    <?php } else if ($tdata['view_type'] == 'shows_db') { ?>
+                        <a href="?page=view&id=<?= $tdata['show_in_library'] ?>&view_type=shows_library"><?= $LNG['L_HAVEIT'] ?></a>
                     <?php } ?>
                 </span>
                 <?php

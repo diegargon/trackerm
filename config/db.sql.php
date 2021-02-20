@@ -52,6 +52,7 @@ function create_db() {
                 )');
 
     // TMDB_SEARCH MOVIES
+    // ilink unused, remove/rename
     $db->query('CREATE TABLE IF NOT EXISTS "tmdb_search_movies" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                     "themoviedb_id" INTEGER NOT NULL,
@@ -75,6 +76,7 @@ function create_db() {
                     UNIQUE(themoviedb_id)
                 )');
     // TMDB_SEARCH MOVIES
+    // ilink unused, remove/rename
     $db->query('CREATE TABLE IF NOT EXISTS "tmdb_search_shows" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                     "themoviedb_id" INTEGER NOT NULL,
@@ -107,6 +109,7 @@ function create_db() {
 
 
     // LIBRARY MOVIES
+    // ilink unused, remove/rename
     $db->query('CREATE TABLE IF NOT EXISTS "library_movies" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                     "title" VARCHAR NULL,
@@ -139,6 +142,7 @@ function create_db() {
                 )');
 
     //LIBRARY SHOWS
+    // ilink unused, remove/rename
     $db->query('CREATE TABLE IF NOT EXISTS "library_shows" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                     "title" VARCHAR NULL,
@@ -191,6 +195,7 @@ function create_db() {
                 )');
 
     //JACKET MOVIES
+    // ilink unused, remove/rename
     $db->query('CREATE TABLE IF NOT EXISTS "jackett_movies" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                     "title" VARCHAR NOT NULL,
@@ -215,6 +220,7 @@ function create_db() {
                 )');
 
     //JACKET SHOWS
+    // ilink unused, remove/rename
     $db->query('CREATE TABLE IF NOT EXISTS "jackett_shows" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                     "title" VARCHAR NOT NULL,
@@ -787,7 +793,6 @@ function update_db($from) {
       "themoviedb_id" INTEGER NULL,
       "predictible_title" VARCHAR NULL,
       "original_title" VARCHAR NULL,
-      "ilink" VARCHAR NULL,
       "size" INTEGER NULL,
       "rating" REAL NULL,
       "popularity" REAL NULL,

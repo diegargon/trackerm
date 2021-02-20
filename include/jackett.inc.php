@@ -98,6 +98,7 @@ function search_media_torrents($media_type, $search, $head = null, $nohtml = fal
     }
 
     $topt['search_type'] = $media_type;
+    $topt['view_type'] = $media_type . '_torrent';
     if (empty($media_db)) {
         return false;
     }
@@ -172,9 +173,7 @@ function jackett_prep_media($media_type, $media_results) {
             isset($item['coverurl']) ? $poster = $item['coverurl'] : $poster = '';
             !empty($item['description']) ? $description = $item['description'] : $description = '';
 
-            ($media_type == 'movies') ? $ilink = 'movies_torrent' : $ilink = 'shows_torrent';
             $media[] = [
-                'ilink' => $ilink,
                 'guid' => $item['guid'],
                 'title' => $item['title'],
                 'release' => $item['pubDate'],
@@ -198,9 +197,7 @@ function jackett_prep_media($media_type, $media_results) {
                 }
                 !empty($item['coverurl']) ? $poster = $item['coverurl'] : $poster = '';
                 !empty($item['description']) ? $description = $item['description'] : $description = '';
-                ($media_type == 'movies') ? $ilink = 'movies_torrent' : $ilink = 'shows_torrent';
                 $media[] = [
-                    'ilink' => $ilink,
                     'guid' => $item['guid'],
                     'title' => $item['title'],
                     'release' => $item['pubDate'],

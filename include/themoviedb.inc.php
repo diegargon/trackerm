@@ -163,7 +163,6 @@ function themoviedb_MediaPrep($media_type, $items) {
         }
 
         $fitems[$i] = [
-            'ilink' => $media_type . '_db',
             'themoviedb_id' => $item['id'],
             'title' => $title,
             'original_title' => $original_title,

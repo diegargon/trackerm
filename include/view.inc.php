@@ -55,7 +55,11 @@ function view() {
     if ($view_type == 'movies_db' || $view_type == 'shows_db') {
         $in_library = $db->getItemByField('library_' . $media_type, 'themoviedb_id', $item['themoviedb_id']);
         if ($in_library !== false) {
-            $item['in_library'] = $in_library['id'];
+            if ($media_type == 'movies') {
+                $item['movie_in_library'] = $in_library['id'];
+            } else if ($media_type == 'shows') {
+                $item['show_in_library'] = $in_library['id'];
+            }
         }
     }
 
@@ -156,6 +160,7 @@ function view_extra_movies($item, $opt = null) {
 
     if (isset($_GET['more_movies']) || (!empty($opt['auto_show_db']) && !isset($_GET['more_torrents']))) {
         $movies = mediadb_searchMovies($stitle);
+        $opt['view_type'] = 'movies_db';
         !empty($movies) ? $extra .= buildTable('L_DB', $movies, $opt) : null;
     }
 
@@ -204,6 +209,7 @@ function view_extra_shows($item, $opt) {
             isset($_GET['more_shows']) || (!empty($opt['auto_show_db']) && !isset($_GET['more_torrents']))
     ) {
         $shows = mediadb_searchShows($stitle);
+        $opt['view_type'] = 'shows_db';
         !empty($shows) ? $extra .= buildTable('L_DB', $shows, $opt) : null;
     }
 
