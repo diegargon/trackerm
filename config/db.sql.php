@@ -764,6 +764,7 @@ function update_db($from) {
     /*
       if ($from < 12) {
       $db->query('ALTER TABLE library_shows add column total_size VARCHAR NULL');
+      $db->query('ALTER TABLE library_shows add column total_shows INT default 1 ');
       $db->insert('config', ['cfg_key' => 'localplayer_track', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_LOCALPLAYER_TRACK', 'type' => 3, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
       $db->insert('config', ['cfg_key' => 'localplayer_track', 'cfg_value' => '', 'cfg_desc' => 'L_CFG_LOCALPLAYER_WEB_PASSWORD', 'type' => 1, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
       $db->query('UPDATE "wanted" SET track_show = 0 WHERE track_show is NULL');
@@ -777,9 +778,33 @@ function update_db($from) {
 
     /*
       if ($from < 13) {
+      $db->query('CREATE TABLE IF NOT EXISTS "library_master_movies" (
+      "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+      "title" VARCHAR NULL,
+      "clean_title" VARCHAR NULL,
+      "themoviedb_id" INTEGER NULL,
+      "predictible_title" VARCHAR NULL,
+      "original_title" VARCHAR NULL,
+      "ilink" VARCHAR NULL,
+      "size" INTEGER NULL,
+      "rating" REAL NULL,
+      "popularity" REAL NULL,
+      "scene" VARCHAR NULL,
+      "plot" VARCHAR NULL,
+      "title_year" VARCHAR NULL,
+      "trailer" VARCHAR NULL,
+      "poster" VARCHAR NULL,
+      "custom_poster" VARCHAR NULL,
+      "release" VARCHAR NULL,
+      "genre" VARCHAR NULL,
+      "total_size" INT default 0,
+      "total_items" INT default 0,
+      "childs_ids" VARCHAR NULL,
+      "updated" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+      "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+      )');
       $db->query('UPDATE config SET cfg_value=\'13\' WHERE cfg_key=\'db_version\' LIMIT 1');
-
-      $db->update('db_info', ['version' => 12]);
+      $db->update('db_info', ['version' => 13]);
       $db->query('VACUUM;');
       }
      */
