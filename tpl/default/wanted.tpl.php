@@ -56,7 +56,6 @@
             <div class="divTableWanted">
                 <div class="divTableHeadingWanted">
                     <div class="divTableCellWanted"></div>
-                    <!-- <div class="divTableCellWanted">ID</div> -->
                     <div class="divTableCellWanted"><?= $LNG['L_STATUS'] ?></div>
                     <div class="divTableCellWanted"><?= $LNG['L_CHECKDAY'] ?></div>
                     <div class="divTableCellWanted"><?= $LNG['L_ADDED'] ?></div>
