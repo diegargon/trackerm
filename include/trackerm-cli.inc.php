@@ -185,10 +185,15 @@ function MovieJob($item, $linked = false) {
 
                     $wanted_item = $db->getItemByField('wanted', 'hashString', $item['hashString']);
                     if (!empty($wanted_item)) {
-                        $log->debug(" Setting to moved wanted id: " . $wanted_item['id']);
-                        $update_ary['wanted_status'] = 9;
-                        $update_ary['id'] = $wanted_item['id'];
-                        $db->updateItemByField('wanted', $update_ary, 'id');
+                        if (!empty($cfg['autoclean_moved_wanted'])) {
+                            $log->debug("Removing wanted id by move: " . $wanted_item['id']);
+                            $db->deleteItemById('wanted', $wanted_item['id']);
+                        } else {
+                            $log->debug(" Setting to moved wanted id: " . $wanted_item['id']);
+                            $update_ary['wanted_status'] = 9;
+                            $update_ary['id'] = $wanted_item['id'];
+                            $db->updateItemByField('wanted', $update_ary, 'id');
+                        }
                     }
 
                     $trans->deleteHashes($hashes);
@@ -291,10 +296,16 @@ function ShowJob($item, $linked = false) {
 
                     $wanted_item = $db->getItemByField('wanted', 'hashString', $item['hashString']);
                     if (!empty($wanted_item)) {
-                        $log->debug(" Setting to moved wanted {$item['tid']} : {$item['hashString']}");
-                        $update_ary['wanted_status'] = 9;
-                        $update_ary['id'] = $wanted_item['id'];
-                        $db->updateItemByField('wanted', $update_ary, 'id');
+                        if (!empty($cfg['autoclean_moved_wanted'])) {
+                            $log->debug("Removing wanted id by move: " . $wanted_item['id']);
+                            $db->deleteItemById('wanted', $wanted_item['id']);
+                        } else {
+
+                            $log->debug(" Setting to moved wanted {$item['tid']} : {$item['hashString']}");
+                            $update_ary['wanted_status'] = 9;
+                            $update_ary['id'] = $wanted_item['id'];
+                            $db->updateItemByField('wanted', $update_ary, 'id');
+                        }
                     }
                     $trans->deleteHashes($hashes);
                     $work_path = dirname($valid_file);
