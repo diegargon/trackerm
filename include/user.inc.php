@@ -33,11 +33,9 @@ function check_user($username, $password) {
     }
     !empty($password) ? $password_hashed = encrypt_password($password) : $password_hashed = '';
 
-    if ($user['password'] == $password_hashed) {
-        $ip = get_user_ip();
-        if ($user['ip'] != $ip) {
-            $db->updateItemById('users', $user['id'], ['ip' => $ip]);
-        }
+    $ip = get_user_ip();
+    if (($user['password'] == $password_hashed) && ($user['ip'] != $ip)) {
+        $db->updateItemById('users', $user['id'], ['ip' => $ip]);
         return $user['id'];
     }
     return false;
@@ -47,14 +45,30 @@ function set_user($user_id) {
     global $user, $cfg;
 
     $_SESSION['uid'] = $user['id'] = $user_id;
-    setcookie("uid", $user['id'], time() + $cfg['sid_expire']);
-    setcookie("sid", session_id(), time() + $cfg['sid_expire']);
+
+    if (defined('PHP_VERSION_ID') && PHP_VERSION_ID >= 70300) {
+        setcookie('uid', $user['id'], [
+            'expires' => time() + $cfg['sid_expire'],
+            'secure' => true,
+            'samesite' => 'lax',
+        ]);
+    } else {
+        setcookie("uid", $user['id'], time() + $cfg['sid_expire']);
+    }
     update_session_id();
 }
 
 function update_session_id() {
     global $db, $user, $cfg;
 
-    setcookie("sid", session_id(), time() + $cfg['sid_expire']);
+    if (defined('PHP_VERSION_ID') && PHP_VERSION_ID >= 70300) {
+        setcookie('sid', session_id(), [
+            'expires' => time() + $cfg['sid_expire'],
+            'secure' => true,
+            'samesite' => 'lax',
+        ]);
+    } else {
+        setcookie("sid", session_id(), time() + $cfg['sid_expire']);
+    }
     $db->updateItemById('users', $user['id'], ['sid' => session_id()]);
 }
