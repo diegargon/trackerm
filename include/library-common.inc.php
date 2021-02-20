@@ -290,42 +290,42 @@ function ident_by_id($media_type, $tmdb_id, $id) {
     ($db_data) ? submit_ident($media_type, $db_data, $id) : null;
 }
 
-function submit_ident($media_type, $item_data, $id) {
+function submit_ident($media_type, $item, $id) {
     global $db, $log;
 
 
-    $q_results = $db->select('library_' . $media_type, '*', ['themoviedb_id' => ['value' => $item_data['themoviedb_id']]], 'LIMIT 1');
+    $q_results = $db->select('library_' . $media_type, '*', ['themoviedb_id' => ['value' => $item['themoviedb_id']]], 'LIMIT 1');
     $dup_result = $db->fetchAll($q_results);
     if (valid_array($dup_result)) {
-        $log->debug('Discarding item duplicate ' . $item_data['title']);
+        $log->debug('Discarding item duplicate ' . $item['title']);
         return false;
     }
-    if (!empty($item_data['title'])) {
-        $update_fields['title'] = $item_data['title'];
-        $update_fields['clean_title'] = clean_title($item_data['title']);
+    if (!empty($item['title'])) {
+        $upd_fields['title'] = $item['title'];
+        $upd_fields['clean_title'] = clean_title($item['title']);
     }
-    if (!empty($item_data['name'])) {
-        $update_fields['name'] = $item_data['name'];
-        $update_fields['clean_title'] = clean_title($item_data['name']);
+    if (!empty($item['name'])) {
+        $upd_fields['name'] = $item['name'];
+        $upd_fields['clean_title'] = clean_title($item['name']);
     }
-    $update_fields['themoviedb_id'] = $item_data['themoviedb_id'];
-    !empty($item_data['poster']) ? $update_fields['poster'] = $item_data['poster'] : $update_fields['poster'] = '';
-    !empty($item_data['original_title']) ? $update_fields['original_title'] = $item_data['original_title'] : $update_fields['original_title'] = '';
-    !empty($item_data['rating']) ? $update_fields['rating'] = $item_data['rating'] : $update_fields['rating'] = '';
-    !empty($item_data['popularity']) ? $update_fields['popularity'] = $item_data['popularity'] : $update_fields['popularity'] = '';
-    !empty($item_data['scene']) ? $update_fields['scene'] = $item_data['scene'] : $update_fields['scene'] = '';
-    !empty($item_data['lang']) ? $update_fields['lang'] = $item_data['lang'] : $update_fields['lang'] = '';
-    !empty($item_data['trailer']) ? $update_fields['trailer'] = $item_data['trailer'] : $update_fields['trailer'] = '';
-    !empty($item_data['plot']) ? $update_fields['plot'] = $item_data['plot'] : $update_fields['plot'] = '';
-    !empty($item_data['release']) ? $update_fields['release'] = $item_data['release'] : $update_fields['release'] = '';
+    $upd_fields['themoviedb_id'] = $item['themoviedb_id'];
+    !empty($item['poster']) ? $upd_fields['poster'] = $item['poster'] : $upd_fields['poster'] = '';
+    !empty($item['original_title']) ? $upd_fields['original_title'] = $item['original_title'] : $upd_fields['original_title'] = '';
+    !empty($item['rating']) ? $upd_fields['rating'] = $item['rating'] : $upd_fields['rating'] = '';
+    !empty($item['popularity']) ? $upd_fields['popularity'] = $item['popularity'] : $upd_fields['popularity'] = '';
+    !empty($item['scene']) ? $upd_fields['scene'] = $item['scene'] : $upd_fields['scene'] = '';
+    !empty($item['lang']) ? $upd_fields['lang'] = $item['lang'] : $upd_fields['lang'] = '';
+    !empty($item['trailer']) ? $upd_fields['trailer'] = $item['trailer'] : $upd_fields['trailer'] = '';
+    !empty($item['plot']) ? $upd_fields['plot'] = $item['plot'] : $upd_fields['plot'] = '';
+    !empty($item['release']) ? $upd_fields['release'] = $item['release'] : $upd_fields['release'] = '';
 
     if ($media_type == 'movies') {
-        $db->updateItemById('library_movies', $id, $update_fields);
+        $db->updateItemById('library_movies', $id, $upd_fields);
     } else if ($media_type == 'shows') {
         $mylib_shows = $db->getItemById('library_shows', $id);
         if (!valid_array($mylib_shows)) {
             $where['predictible_title'] = ['value' => $mylib_shows['predictible_title']];
-            $db->update('library_shows', $update_fields, $where);
+            $db->update('library_shows', $upd_fields, $where);
         } else {
             return false;
         }
