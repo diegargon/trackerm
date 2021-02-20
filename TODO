@@ -1,10 +1,9 @@
 TODO
 
-[HIGH]
-    [FIX] Clean wanted.db/direct torrents that was delete outside app        
+[HIGH]    
     [IMPROVE] Indexers to config
     [FIX/CHECK] do not contemplate yet what to do if tmdb not found any results.        
-    [CHECK]  wanted  auto clean moved work
+
 [MED]  
     [IMPROVE] Si se borra manualmente un torrente bajado quedara el bd huerfanos. OPCION ORPHAN. 
         Buscar archivos multimedia en el TORRENT DIR y buscar la forma de determina si coincide con alguno en la base de datos

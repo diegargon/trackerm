@@ -954,6 +954,26 @@ function update_seasons($force = false) {
     $log->debug("Seasons updated: $i");
 }
 
+function delete_direct_orphans() {
+    global $trans, $db;
+
+    $items = $db->getItemsByField('wanted', 'direct', 1);
+    $torrents = $trans->getAll();
+
+    foreach ($items as $item) {
+        $found = 0;
+        foreach ($torrents as $torrent) {
+            if ($item['hashString'] == $torrent['hashString']) {
+                $found = 1;
+                break;
+            }
+        }
+        if (!$found) {
+            $db->deleteItemById('wanted', $item['id']);
+        }
+    }
+}
+
 function update_things() {
     global $cfg;
 
@@ -968,6 +988,8 @@ function update_things() {
     update_seasons();
     hash_missing();
     update_stats();
+    //delete from wanted orphans (a orphans is create if user delete the torrent outside trackerm
+    delete_direct_orphans();
 
 //UPGRADE
     set_clean_titles(); // (upgrading v4 change how clean works, must empty the field and redo )
