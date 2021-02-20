@@ -156,9 +156,7 @@ function themoviedb_MediaPrep($media_type, $items) {
         }
 
         //avoid get trailer if items > 15 for alleviate big querys tracker-cli would fix that
-        if (count($items) > 15) {
-            $trailer = '';
-        } else {
+        if (count($items) <= 15) {
             $trailer = mediadb_getTrailer($media_type, $item['id']);
             empty($trailer) ? $trailer = 0 : null; //we use 0 for mark as not have trailer atm
         }
@@ -176,10 +174,10 @@ function themoviedb_MediaPrep($media_type, $items) {
             'scene' => !empty($item['backdrop_path']) ? $img_path . $item['backdrop_path'] : null,
             'lang' => $item['original_language'],
             'plot' => $item['overview'],
-            'trailer' => $trailer,
             'updated' => time(),
             'release' => isset($release) ? $release : null,
         ];
+        !empty($trailer) ? $fitems['trailer'] = $trailer : null;
     }
 
     if (valid_array($fitems)) {
