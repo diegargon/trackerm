@@ -126,6 +126,7 @@ function themoviedb_MediaPrep($media_type, $items) {
 
     $fitems = [];
 
+    $i = 1;
     foreach ($items as $item) {
         if ($media_type == 'movies') {
             $title = $item['title'];
@@ -161,7 +162,7 @@ function themoviedb_MediaPrep($media_type, $items) {
             empty($trailer) ? $trailer = 0 : null; //we use 0 for mark as not have trailer atm
         }
 
-        $fitems[] = [
+        $fitems[$i] = [
             'ilink' => $media_type . '_db',
             'themoviedb_id' => $item['id'],
             'title' => $title,
@@ -177,7 +178,8 @@ function themoviedb_MediaPrep($media_type, $items) {
             'updated' => time(),
             'release' => isset($release) ? $release : null,
         ];
-        !empty($trailer) ? $fitems['trailer'] = $trailer : null;
+        !empty($trailer) ? $fitems[$i]['trailer'] = $trailer : null;
+        $i++;
     }
 
     if (valid_array($fitems)) {
@@ -242,18 +244,6 @@ function themoviedb_getSeasons($id) {
 }
 
 function themoviedb_showsDetailsPrep($id, $seasons_data, $episodes_data) {
-    /*
-      $item_seasons = [
-      'themoviedb_id' => $id,
-      'n_seasons' => $seasons_data['number_of_seasons'],
-      'n_episodes' => $seasons_data['number_of_episodes'],
-      'release' => !empty($seasons_data['first_air_date']) ? $seasons_data['first_air_date'] : null,
-      'homepage' => !empty($seasons_data['homepage']) ? $seasons_data['homepage'] : null,
-      'in_production' => !empty($seasons_data['in_production']) ? $seasons_data['in_production'] : null,
-      'plot' => !empty($seasons_data['overview']) ? $seasons_data['overview'] : null,
-      'status' => $seasons_data['status'] ? $seasons_data['status'] : null,
-      ];
-     */
     $item_episodes = [];
 
     for ($i = 1; $i <= $seasons_data['number_of_seasons']; $i++) {
