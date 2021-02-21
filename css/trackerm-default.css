@@ -231,7 +231,7 @@ button {
     border:0px solid #ff5b5b;
     text-align:center;
     object-fit: cover;
-    max-width: 210px;
+    /* max-width: 210px; */
 }
 
 .poster_preview{
@@ -243,7 +243,7 @@ button {
 .img_poster_preview {
     height: auto;
     width: 100%;
-    max-width:200px;
+    /* max-width:200px; */
 }
 
 .item_details {
