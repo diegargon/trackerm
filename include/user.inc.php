@@ -33,8 +33,8 @@ function check_user($username, $password) {
     }
     !empty($password) ? $password_hashed = encrypt_password($password) : $password_hashed = '';
 
-    $ip = get_user_ip();
     if (($user['password'] == $password_hashed)) {
+        $ip = get_user_ip();
         if ($user['ip'] != $ip) {
             $db->updateItemById('users', $user['id'], ['ip' => $ip]);
         }
