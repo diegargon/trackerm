@@ -18,7 +18,7 @@ function loadUserPrefs() {
     $where['uid'] = ['value' => $user['id']];
     $results = $db->select('preferences', null, $where);
 
-    if (($user_prefs = $db->fetchAll($results))) {
+    if (valid_array($user_prefs = $db->fetchAll($results))) {
         foreach ($user_prefs as $pref) {
             if (!empty($pref['pref_name']) && isset($pref['pref_value'])) {
                 $cfg[$pref['pref_name']] = $pref['pref_value'];
@@ -35,9 +35,11 @@ function getPrefsItem($r_key, $system = false) {
     $results = $db->select('preferences', null, $where);
     $user_prefs = $db->fetchAll($results);
 
-    foreach ($user_prefs as $pref) {
-        if ($pref['pref_name'] == $r_key) {
-            return $pref['pref_value'];
+    if (valid_array($user_prefs)) {
+        foreach ($user_prefs as $pref) {
+            if ($pref['pref_name'] == $r_key) {
+                return $pref['pref_value'];
+            }
         }
     }
     return false;
@@ -48,7 +50,6 @@ function getUidWithPref($r_key, $r_value) {
 
     $where['pref_name'] = $r_key;
     $where['pref_value'] = $r_value;
-
     $results = $db->select('preferences', 'uid', $where);
 
     return $results ? $db->fetchAll($results) : false;
@@ -85,7 +86,7 @@ function setPrefsItem($key, $value, $system = false) {
     $db->finalize($result);
     $prefs = $db->fetch($result);
 
-    if ($prefs) {
+    if (valid_array($prefs)) {
         if ($prefs['pref_value'] != $value) {
             $set['pref_value'] = $value;
             $db->update('preferences', $set, $where, 'LIMIT 1');
