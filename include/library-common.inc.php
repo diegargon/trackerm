@@ -97,43 +97,55 @@ function _rebuild($media_type, $path) {
                     $items[$i]['episode'] = 'X';
                 }
             }
-
-            // auto identify episodes froms shows already identified
-            if ($media_type == 'shows') {
-                foreach ($media as $id_item) {
-
-                    if ($id_item['predictible_title'] === ucwords($predictible_title) &&
-                            !empty($id_item['themoviedb_id'])
-                    ) {
-                        $items[$i]['themoviedb_id'] = $id_item['themoviedb_id'];
-                        $items[$i]['title'] = $id_item['title'];
-                        $items[$i]['clean_title'] = clean_title($id_item['title']);
-                        $items[$i]['poster'] = $id_item['poster'];
-                        $items[$i]['rating'] = $id_item['rating'];
-                        $items[$i]['popularity'] = $id_item['popularity'];
-                        $items[$i]['scene'] = $id_item['scene'];
-                        $items[$i]['lang'] = $id_item['lang'];
-                        $items[$i]['plot'] = $id_item['plot'];
-                        isset($id_item['trailer']) ? $items[$i]['trailer'] = $id_item['trailer'] : null;
-                        $items[$i]['original_title'] = $id_item['original_title'];
-                        $log->debug('Ident by already have show: ' . $items[$i]['title'] . ' ' . $items[$i]['season'] . 'E' . $items[$i]['episode']);
-                    }
-                }
-            }
         }
         $i++;
     }
-    if (isset($items)) {
+    if (valid_array($items)) {
         $insert_ids = $db->addItems($library_table, $items);
-        if (valid_array($insert_ids)) {
-            $insert_ids = check_history($media_type, $insert_ids);
-            if (!empty($cfg['auto_identify'])) {
-                (!empty($insert_ids) && count($insert_ids) > 0 ) ? auto_ident_exact($media_type, $insert_ids) : null;
-            }
+        //If is a show we check if already have other episodes identified to identify this. if unset ids
+        if ($media_type == 'shows' && valid_array($media)) {
+            $insert_ids = ident_by_already_have_show($media, $insert_ids);
+        }
+        //We check history for auto identify in we had that file. if unset ids
+        valid_array($insert_ids) ? $insert_ids = check_history($media_type, $insert_ids) : null;
+        //last if auto_identify is on we check title agains online db. if unset ids
+        if (!empty($cfg['auto_identify'])) {
+            (valid_array($insert_ids)) ? auto_ident_exact($media_type, $insert_ids) : null;
         }
     }
 
     return true;
+}
+
+function ident_by_already_have_show($media, $ids) {
+    global $log, $db;
+
+    foreach ($ids as $id_key => $id) {
+        $log->debug("ident_by_already_have_show called for id $id");
+        $item = $db->getItemById('library_shows', $id);
+        foreach ($media as $id_item) {
+            if ($id_item['predictible_title'] === ucwords($item['predictible_title']) &&
+                    !empty($id_item['themoviedb_id'])
+            ) {
+                $item['themoviedb_id'] = $id_item['themoviedb_id'];
+                $item['title'] = $id_item['title'];
+                $item['clean_title'] = clean_title($id_item['title']);
+                $item['poster'] = $id_item['poster'];
+                $item['rating'] = $id_item['rating'];
+                $item['popularity'] = $id_item['popularity'];
+                $item['scene'] = $id_item['scene'];
+                $item['lang'] = $id_item['lang'];
+                $item['plot'] = $id_item['plot'];
+                isset($id_item['trailer']) ? $item['trailer'] = $id_item['trailer'] : null;
+                $item['original_title'] = $id_item['original_title'];
+                submit_ident('shows', $item, $id);
+                unset($ids[$id_key]);
+                $log->debug('Ident by already have show ' . $item['id'] . ' ' . $item['title'] . ' ' . $item['season'] . 'E' . $item['episode']);
+                break;
+            }
+        }
+    }
+    return $ids;
 }
 
 function show_identify_media($media_type) {
@@ -235,10 +247,10 @@ function auto_ident_exact($media_type, $ids) {
     if (!valid_array($ids) || empty($media_type)) {
         return false;
     }
-
     $uniq_shows = [];
 
     foreach ($ids as $id) {
+        $log->debug("auto_ident by exact called for $id");
         $db_item = $db->getItemById('library_' . $media_type, $id);
         if ($media_type == 'movies') {
             $search_media = mediadb_searchMovies($db_item['predictible_title']);
@@ -247,6 +259,7 @@ function auto_ident_exact($media_type, $ids) {
                 $search_media = mediadb_searchShows($db_item['predictible_title']);
                 $uniq_shows[] = $db_item['predictible_title'];
             } else {
+                $log->debug('Already identifyed by first show match');
                 continue;
             }
         } else {
@@ -278,16 +291,20 @@ function auto_ident_exact($media_type, $ids) {
 }
 
 function ident_by_idpairs($media_type, $id_pairs) {
+    global $log;
     if (!valid_array($id_pairs)) {
         return false;
     }
-
+    $log->debug("Ident by idpairs called");
     foreach ($id_pairs as $my_id => $tmdb_id) {
         (!empty($my_id) && !emptY($tmdb_id)) ? ident_by_id($media_type, $tmdb_id, $my_id) : null;
     }
 }
 
 function ident_by_id($media_type, $tmdb_id, $id) {
+    global $log;
+
+    $log->debug("Ident by ident_by_id called");
     $db_data = mediadb_getFromCache($media_type, $tmdb_id);
     ($db_data) ? submit_ident($media_type, $db_data, $id) : null;
 }
@@ -295,8 +312,20 @@ function ident_by_id($media_type, $tmdb_id, $id) {
 function submit_ident($media_type, $item, $id) {
     global $db, $log;
 
+    $log->debug("Submit $media_type ident : " . $item['title'] . ' id:' . $id);
 
-    $q_results = $db->select('library_' . $media_type, '*', ['themoviedb_id' => ['value' => $item['themoviedb_id']]], 'LIMIT 1');
+    $where_check['themoviedb_id'] = ['value' => $item['themoviedb_id']];
+    if ($media_type == 'shows') {
+        $show_check = $db->getItemById('library_shows', $id);
+        if (!empty($show_check['season']) && !empty($show_check['episode'])) {
+            $where_check['season'] = ['value' => $show_check['season']];
+            $where_check['episode'] = ['value' => $show_check['episode']];
+        } else {
+            $log->debug("submit_ident: its show but havent season/episode set " . $id);
+        }
+    }
+
+    $q_results = $db->select('library_' . $media_type, '*', $where_check, 'LIMIT 1');
     $dup_result = $db->fetchAll($q_results);
     if (valid_array($dup_result)) {
         $ep = '';
