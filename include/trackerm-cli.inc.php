@@ -30,14 +30,17 @@ function transmission_scan() {
             $item['files'] = $tor['files'];
             $item['title'] = getFileTitle($tor['name']);
             $item['status'] = $tor['status'];
-            $item['media_type'] = getMediaType($tor['name']);
+            if (!empty($tor['media_type'])) {
+                $item['media_type'] = $tor['media_type'];
+            } else {
+                $item['media_type'] = getMediaType($tor['name']);
+            }
             isset($tor['wanted_id']) ? $item['wanted_id'] = $tor['wanted_id'] : null;
-
             if ($item['media_type'] == 'movies') {
-                $log->debug(" Movie stopped detected begin working on it.. " . $item['title']);
+                $log->debug("Movie stopped detected begin working on it.. " . $item['title']);
                 MovieJob($item);
             } else if ($item['media_type'] == 'shows') {
-                $log->debug(" Show stopped detected begin working on it... " . $item['title']);
+                $log->debug("Show stopped detected begin working on it... " . $item['title']);
                 ShowJob($item);
             }
         }
@@ -54,12 +57,18 @@ function transmission_scan() {
             $item['files'] = $tor['files'];
             $item['title'] = getFileTitle($tor['name']);
             $item['status'] = $tor['status'];
-            $item['media_type'] = getMediaType($tor['name']);
+            if (!empty($tor['media_type'])) {
+                $item['media_type'] = $tor['media_type'];
+            } else {
+                $item['media_type'] = getMediaType($tor['name']);
+            }
             isset($tor['wanted_id']) ? $item['wanted_id'] = $tor['wanted_id'] : null;
 
             if ($item['media_type'] == 'movies') {
+                $log->debug("Movie seeding detected begin working on it.. " . $item['title']);
                 MovieJob($item, true);
             } else if ($item['media_type'] == 'shows') {
+                $log->debug("Show seeding detected begin working on it.. " . $item['title']);
                 ShowJob($item, true);
             }
         }
@@ -228,7 +237,9 @@ function ShowJob($item, $linked = false) {
             $ext = substr($valid_file, -4);
 
             // TAG EPISODE NAME STYLE SxxExx
+            // we get from valid_file instead of item for in case of multiple chapters
             $SE = getFileEpisode(basename($valid_file));
+
             if (!empty($SE['season'] && !empty($SE['episode']))) {
                 (strlen($SE['season']) == 1) ? $_season = 0 . $SE['season'] : $_season = $SE['season'];
                 (strlen($SE['episode']) == 1) ? $_episode = 0 . $SE['episode'] : $_episode = $SE['episode'];
@@ -242,8 +253,7 @@ function ShowJob($item, $linked = false) {
             $episode .= 'E' . $_episode;
             //END EPISODE NAME
             //CREATE PATHS
-            //get again title from indiviual files instead of directory
-            $title = getFileTitle(basename($valid_file));
+            $title = getFileTitle($item['title']);
             if ($cfg['create_shows_season_folder'] && !empty($_season)) {
                 ($_season != "xx") ? $_season = (int) $_season : null; // 01 to 1 for directory
                 if (is_array($cfg['SHOWS_PATH'])) {
