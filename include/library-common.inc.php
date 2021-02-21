@@ -116,7 +116,7 @@ function _rebuild($media_type, $path) {
                         $items[$i]['plot'] = $id_item['plot'];
                         isset($id_item['trailer']) ? $items[$i]['trailer'] = $id_item['trailer'] : null;
                         $items[$i]['original_title'] = $id_item['original_title'];
-                        $db->debug('Ident by already have show: ' . $items[$i]['title'] . ' ' . $items[$i]['season'] . 'E' . $items[$i]['episode']);
+                        $log->debug('Ident by already have show: ' . $items[$i]['title'] . ' ' . $items[$i]['season'] . 'E' . $items[$i]['episode']);
                     }
                 }
             }
