@@ -182,9 +182,7 @@ function wanted_episode($id, $season, $episodes, $track_show = 0, $inherint_trac
 
     foreach ($episodes as $episode) {
         $episode = trim($episode);
-        if (strlen($episode) == 1) {
-            $episode = '0' . $episode;
-        }
+        (strlen($episode) == 1) ? $episode = '0' . $episode : null;
 
         $item = mediadb_getFromCache('shows', $id);
 
