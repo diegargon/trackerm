@@ -907,7 +907,7 @@ function update_trailers() {
         $update = [];
         $update['updated'] = $time_now = time();
         $next_update = time() - $cfg['db_upd_long_delay'];
-        $query = "SELECT themoviedb_id FROM $table WHERE trailer IS NOT NULL AND updated < $next_update LIMIT $limit";
+        $query = "SELECT DISTINTC themoviedb_id FROM $table WHERE trailer IS NOT NULL AND updated < $next_update LIMIT $limit";
         $stmt = $db->query($query);
         $results = $db->fetchAll($stmt);
 
