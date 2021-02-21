@@ -5,13 +5,14 @@ TODO
     [FIX/CHECK] do not contemplate yet what to do if tmdb not found any results.        
 
 [MED]      
+    [FIX] En New, el cambio de filas/columnas falla
     [IMPROVE] Si se borra manualmente un torrente bajado quedara el bd huerfanos. OPCION ORPHAN. 
         Buscar archivos multimedia en el TORRENT DIR y buscar la forma de determina si coincide con alguno en la base de datos
         si no coincide moverlo.     
      [COMPLETE] Finish Filters          
     [FIX] Security
-    [IMPROBE][CLI] Clean old query search caches entrys
-    
+    [IMPROVE][CLI] Clean old query search caches entrys
+    [IMPROVE] Responsive Index, Wanted, T mainly
 [VERY LOW]      
     [IMPROVE] Add to library sub menu a switch to player mode.
     [IMPROVE] añadir tabla view_movies, view=0 not view 1 partial 2 , 3 view.     
