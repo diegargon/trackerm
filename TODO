@@ -8,17 +8,17 @@ TODO
     [IMPROVE] Si se borra manualmente un torrente bajado quedara el bd huerfanos. OPCION ORPHAN. 
         Buscar archivos multimedia en el TORRENT DIR y buscar la forma de determina si coincide con alguno en la base de datos
         si no coincide moverlo.     
-    [IMPROVE]trackerm-cli coge el titulo del archivo en vez del directorio, puede estar mal así que solo hacerlo si hay varios archivos 
-        para episodios si no hay más posibilidades que este bien el nombre del archivo. O buscar otro modo.
      [COMPLETE] Finish Filters          
     [FIX] Security
     [IMPROBE][CLI] Clean old query search caches entrys
-    [IMPROVE][VIEW] add edit custom poster.
+    
 [VERY LOW]      
     [IMPROVE] Add to library sub menu a switch to player mode.
     [IMPROVE] añadir tabla view_movies, view=0 not view 1 partial 2 , 3 view.     
-    [IMPROVE] Pagination: actually we get all results and do a array_slice, now with SQL database we can  do that better.    
-    [FIX/IMPROVE] Normalize dates        
+    [IMPROVE][]LIBRARY Pagination: actually we get all results and do a array_slice, now with SQL database we can  do that better. (movies done: shows need additional general
+    change (Masters)
+    [IMPROVE][VIEW] add edit custom poster. (need master)
+    [FIX/IMPROVE] Normalize dates 
     [FIX] A la hora de identificar las series siguientes capitulos los identifica por el predictible_title, si hubiera varias series con el mismo titulo habria problemas. 
     [IMPROVE][LIBRARY] Los shows(y posiblemente las movies si aceptamos diferentes calidades) deberian de tener un registro maestro con los datos y los demas, los capitulos 
     ser registro secundarios. ¿añadir una tabla library_shows|movies_master?

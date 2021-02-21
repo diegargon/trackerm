@@ -232,7 +232,7 @@ $LNG = [
     'L_CFG_LOG_TO_SYSLOG' => 'Logging to syslog',
     'L_CFG_LOG_TO_FILE' => 'Logging to file',
     'L_CFG_CHARSET' => 'Charset',
-    'L_CFG_LOCALE' => 'Locale (restart apache if change)',
+    'L_CFG_LOCALE' => 'Locale Format: en_US.UTF-8 (empty = default system)',
     'L_CFG_WANT_SHOWS' => 'Do you want shows?',
     'L_CFG_WANT_MOVIES' => 'Do you want movies?',
     'L_CFG_THEME' => 'Default Theme',

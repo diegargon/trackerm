@@ -35,7 +35,9 @@ $db->connect();
 require_once('include/config.class.php');
 $config = new Config();
 
-setlocale(LC_ALL, $cfg['locale']);
+if (!empty($cfg['locale'])) {
+    setlocale(LC_ALL, $cfg['locale']);
+}
 
 require_once('include/logging.class.php');
 global $log;

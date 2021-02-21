@@ -549,7 +549,7 @@ function update_db($from) {
         $db->insert('config', ['cfg_key' => 'want_shows', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_WANT_SHOWS', 'type' => 3, 'category' => 'L_MAIN', 'public' => 1]);
         $db->insert('config', ['cfg_key' => 'wanted_day_delay', 'cfg_value' => 3000, 'cfg_desc' => 'L_CFG_WANT_DAY_DELAY', 'type' => 2, 'category' => 'L_MAIN', 'public' => 1]);
         $db->insert('config', ['cfg_key' => 'charset', 'cfg_value' => 'UTF-8', 'cfg_desc' => 'L_CFG_CHARSET', 'type' => 1, 'category' => 'L_LANG', 'public' => 1]);
-        $db->insert('config', ['cfg_key' => 'locale', 'cfg_value' => 'en_EN.UTF-8', 'cfg_desc' => 'L_CFG_LOCALE', 'type' => 1, 'category' => 'L_LANG', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'locale', 'cfg_value' => '', 'cfg_desc' => 'L_CFG_LOCALE', 'type' => 1, 'category' => 'L_LANG', 'public' => 1]);
         $db->insert('config', ['cfg_key' => 'theme', 'cfg_value' => 'default', 'cfg_desc' => 'L_CFG_THEME', 'type' => 1, 'category' => 'L_DISPLAY', 'public' => 1]);
         $db->insert('config', ['cfg_key' => 'tresults_columns', 'cfg_value' => 8, 'cfg_desc' => 'L_CFG_COLUMNS', 'type' => 2, 'category' => 'L_DISPLAY', 'public' => 0]);
         $db->insert('config', ['cfg_key' => 'jackett_api_path', 'cfg_value' => '/api/v2.0', 'cfg_desc' => 'L_CFG_JACKETT_API_PATH', 'type' => 2, 'category' => 'L_JACKETT', 'public' => 1]);
