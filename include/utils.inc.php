@@ -97,7 +97,6 @@ function get_operating_system() {
     $u_agent = $_SERVER['HTTP_USER_AGENT'];
     $operating_system = 'Unknown Operating System';
 
-
     if (preg_match('/linux/i', $u_agent)) {
         $operating_system = 'Linux';
     } elseif (preg_match('/macintosh|mac os x|mac_powerpc/i', $u_agent)) {
@@ -128,7 +127,7 @@ function update_stats() {
     $movies_db = $db->getTableData('library_movies');
     $num_movies = count($movies_db);
 
-    if (!empty($movies_db)) {
+    if (valid_array($movies_db)) {
         foreach ($movies_db as $db_movie) {
             if (isset($db_movie['size'])) {
                 $movies_size = $movies_size + $db_movie['size'];
@@ -141,7 +140,7 @@ function update_stats() {
     $num_episodes = count($shows_db);
     $count_shows = [];
 
-    if (!empty($shows_db)) {
+    if (valid_array($shows_db)) {
         foreach ($shows_db as $db_show) {
             if (isset($db_show['size'])) {
                 $shows_size = $shows_size + $db_show['size'];
@@ -158,7 +157,6 @@ function update_stats() {
     }
 
     $num_shows = count($count_shows);
-
 
     $db->query("UPDATE config SET cfg_value='$num_movies' WHERE cfg_key='stats_movies' LIMIT 1");
     $db->query("UPDATE config SET cfg_value='$num_shows' WHERE cfg_key='stats_shows' LIMIT 1");
@@ -177,6 +175,7 @@ function valid_array($array) {
 
 function notify_mail($msg) {
     global $db, $LNG;
+
     $tag = "[TRACKERM] ";
     $subject = $tag . $msg['subject'];
 
