@@ -137,7 +137,14 @@ function getFileEpisode($file_name) {
 
         return $SE;
     }
+    /* FORMAT 1x1 */
+    if (preg_match('/[0-9]{1,2}(x)[0-9]{1,2}/i', $file_name, $match) == 1) {
+        $SE_MATCH = $match[0];
+        $SE['season'] = substr($SE_MATCH, 0, stripos($SE_MATCH, 'x'));
+        $SE['episode'] = substr($SE_MATCH, stripos($SE_MATCH, 'x') + 1);
 
+        return $SE;
+    }
     /* FORMAT 000 not temp , this must the near the last check */
     if (preg_match('/[0-9]{3}/', $file_name, $match)) {
         $SE['season'] = 1;
