@@ -324,7 +324,7 @@ function submit_ident($media_type, $item, $id) {
         $db->updateItemById('library_movies', $id, $upd_fields);
     } else if ($media_type == 'shows') {
         $mylib_shows = $db->getItemById('library_shows', $id);
-        if (!valid_array($mylib_shows)) {
+        if (valid_array($mylib_shows)) {
             $where['predictible_title'] = ['value' => $mylib_shows['predictible_title']];
             $db->update('library_shows', $upd_fields, $where);
         } else {
