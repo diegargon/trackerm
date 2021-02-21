@@ -238,6 +238,9 @@ function ShowJob($item, $linked = false) {
 
             // TAG EPISODE NAME STYLE SxxExx
             // we get from valid_file instead of item for in case of multiple chapters
+            //TODO item if wanted have $item[season] & $item[episode], if there is only one valid file get from there
+            //the SE, if not check title of item, if not match check title of validfile
+            //in case of multimple valid files must use valid_file.
             $SE = getFileEpisode(basename($valid_file));
 
             if (!empty($SE['season'] && !empty($SE['episode']))) {
