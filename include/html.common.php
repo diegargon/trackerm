@@ -133,6 +133,11 @@ function build_item($item, $topt) {
 
     $page = '';
 
+    if (!empty($topt['view_type']) &&
+            ($topt['view_type'] == 'movies_library' || $topt['view_type'] == 'shows_library' || $topt['view_type'] == 'shows_db' || $topt['view_type'] == 'movies_db')
+    ) {
+        $item['title'] = $item['title'] . ' (' . strftime("%Y", strtotime($item['release'])) . ')';
+    }
     if (empty($item['poster'])) {
 
         $item['poster'] = $cfg['img_url'] . '/not_available.jpg';

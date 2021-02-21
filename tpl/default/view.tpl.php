@@ -41,12 +41,12 @@
                 <?php if (!empty($tdata['created'])) {
                     ?>
                     <span><?= $LNG['L_ADDED'] ?> :</span>
-                    <span class="view_added"><?= strftime("%d %h", strtotime($tdata['created'])) ?></span>
+                    <span class="view_added"><?= strftime("%x", strtotime($tdata['created'])) ?></span>
                     <br/>
                 <?php } ?>
                 <?php if (!empty($tdata['release'])) { ?>
                     <span><?= $LNG['L_RELEASE'] ?> :</span>
-                    <span class="view_release"><?= $tdata['release'] ?></span>
+                    <span class="view_release"><?= strftime("%Y", strtotime($tdata['release'])) ?></span>
                     <br/>
                 <?php } ?>
                 <?php if (!empty($tdata['size'])) { ?>

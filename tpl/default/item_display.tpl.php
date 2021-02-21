@@ -20,8 +20,7 @@
         <?php } ?>
     </div>
     <div class="item_details">
-        <div class="item_title"><?= $tdata['title'] ?>
-        </div>
+        <div class="item_title"><?= $tdata['title'] ?></div>
         <hr/>
         <div class="item_desc">
             <?php
@@ -64,7 +63,7 @@
                         <a href="?page=view&id=<?= $tdata['show_in_library'] ?>&view_type=shows_library"><?= $LNG['L_HAVEIT'] ?></a>
                     <?php } ?>
                 </span>
-                <?php }
+            <?php }
             ?>
         </div>
 
