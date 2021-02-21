@@ -517,7 +517,7 @@ function page_config() {
 }
 
 function page_login() {
-    global $cfg, $db, $filter;
+    global $cfg, $db, $user, $filter;
 
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -537,6 +537,8 @@ function page_login() {
                     set_user($userid);
                     header("Location: {$cfg['REL_PATH']} ");
                     exit();
+                } else {
+                    $user = [];
                 }
             }
         }
