@@ -116,6 +116,7 @@ function _rebuild($media_type, $path) {
                         $items[$i]['plot'] = $id_item['plot'];
                         isset($id_item['trailer']) ? $items[$i]['trailer'] = $id_item['trailer'] : null;
                         $items[$i]['original_title'] = $id_item['original_title'];
+                        $db->debug('Ident by already have show: ' . $items[$i]['title'] . ' ' . $items[$i]['season'] . 'E' . $items[$i]['episode']);
                     }
                 }
             }
@@ -298,7 +299,10 @@ function submit_ident($media_type, $item, $id) {
     $q_results = $db->select('library_' . $media_type, '*', ['themoviedb_id' => ['value' => $item['themoviedb_id']]], 'LIMIT 1');
     $dup_result = $db->fetchAll($q_results);
     if (valid_array($dup_result)) {
-        $log->debug('Discarding item duplicate ' . $item['title']);
+        $ep = '';
+        isset($item['season']) ? $ep .= 'S' . $item['season'] : null;
+        isset($item['episode']) ? $ep .= 'E' . $item['episode'] : null;
+        $log->debug('Discarding item, already identifyied or duplicate ' . $item['title'] . ' ' . $ep);
         return false;
     }
     if (!empty($item['title'])) {
