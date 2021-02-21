@@ -1000,18 +1000,20 @@ function delete_direct_orphans() {
     global $trans, $db;
 
     $items = $db->getItemsByField('wanted', 'direct', 1);
-    $torrents = $trans->getAll();
+    if (valid_array($items)) {
+        $torrents = $trans->getAll();
 
-    foreach ($items as $item) {
-        $found = 0;
-        foreach ($torrents as $torrent) {
-            if ($item['hashString'] == $torrent['hashString']) {
-                $found = 1;
-                break;
+        foreach ($items as $item) {
+            $found = 0;
+            foreach ($torrents as $torrent) {
+                if ($item['hashString'] == $torrent['hashString']) {
+                    $found = 1;
+                    break;
+                }
             }
-        }
-        if (!$found) {
-            $db->deleteItemById('wanted', $item['id']);
+            if (!$found) {
+                $db->deleteItemById('wanted', $item['id']);
+            }
         }
     }
 }
