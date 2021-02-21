@@ -93,6 +93,10 @@
                     <?php if ($tdata['view_type'] == 'shows_library') { ?>
                         <a class="action_link" href="?page=view&id=<?= $tdata['id'] ?>&view_type=shows_library&update=1"><?= $LNG['L_UPDATE_EPISODES'] ?></a>
                     <?php } ?>
+                    <?php if ($tdata['view_type'] == 'shows_db') { ?>
+                        <a class="action_link" href="?page=view&id=<?= $tdata['id'] ?>&view_type=shows_db&update=1"><?= $LNG['L_UPDATE_EPISODES'] ?></a>
+                    <?php } ?>
+
                     <?php if ($tdata['view_type'] == 'movies_library' && $cfg['localplayer']) { ?>
                         <a class="action_link"  target=_blank href="?page=localplayer&id=<?= $tdata['id'] ?>&media_type=<?= $tdata['media_type'] ?>">LocalPlayer</a>
                     <?php } ?>
