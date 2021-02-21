@@ -145,10 +145,13 @@ function getFileEpisode($file_name) {
 
         return $SE;
     }
-    /* FORMAT 000 not temp , this must the near the last check */
-    if (preg_match('/[0-9]{3}/', $file_name, $match)) {
-        $SE['season'] = 1;
-        $SE['episode'] = trim($match[0]);
+    //FIX: remove first 420p/720p 1080p to match this better
+    /* FORMAT 000 to 399 (avoid match 420p/720p)  not temp , this must the near the last check */
+    if (preg_match('/[0-3]{1}[0-9]{2}/', $file_name, $match)) {
+        $SE_MATCH = trim($match[0]);
+        $SE['season'] = substr($SE_MATCH, 0, 1);
+        $SE['episode'] = substr($SE_MATCH, 1, 2);
+
         return $SE;
     }
 
