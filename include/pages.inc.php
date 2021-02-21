@@ -381,11 +381,10 @@ function page_identify() {
         ($media_type == 'movies') ? $db_media = mediadb_searchMovies($submit_title) : $db_media = mediadb_searchShows($submit_title);
 
         $results_opt = '';
-        if (!empty($db_media)) {
+        if (valid_array($db_media)) {
             $select = '';
 
             foreach ($db_media as $db_item) {
-                //var_dump($db_item);
                 if (!empty($filter->postInt('selected')) && ($db_item['themoviedb_id'] == current($filter->postInt('selected')))) {
                     $selected = 'selected';
                     $item_selected = $db_item;
@@ -459,7 +458,7 @@ function page_transmission() {
             isset($_POST['delete']) && !empty($trans) ? $trans->delete($tid) : null;
         }
     }
-    if (empty($trans) || !($transfers = $trans->getAll())) {
+    if (empty($trans) || !valid_array($transfers = $trans->getAll())) {
         return msg_box(['title' => $LNG['L_ERROR'], 'body' => $LNG['L_SEE_ERROR_DETAILS']]);
     }
 
@@ -486,7 +485,6 @@ function page_config() {
     $page = '';
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (isset($_POST['submit_config'])) {
-
             $config_keys = $filter->postString('config_keys');
             if (!empty($config_keys) && is_array($config_keys) && count($config_keys) > 0) {
                 $config->saveKeys($config_keys);
@@ -518,7 +516,6 @@ function page_config() {
 
 function page_login() {
     global $cfg, $db, $user, $filter;
-
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $dologin = 0;
