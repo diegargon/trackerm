@@ -96,8 +96,8 @@ function getFileEpisode($file_name) {
 
     /* FORMAT S01E01 */
     if (preg_match('/S\d{2}E\d{2}/i', $file_name, $match) == 1) {
-        $matched = $match[0];
-        $SE['season'] = substr($matched, 1, stripos($matched, 'E'));
+        $matched = trim($match[0]);
+        $SE['season'] = substr($matched, 1, 2);
         $SE['episode'] = substr($matched, stripos($matched, 'E') + 1);
 
         return $SE;
@@ -105,8 +105,8 @@ function getFileEpisode($file_name) {
 
     /* FORMAT S01 E01 */
     if (preg_match('/S\d{2}\s+E\d{2}/i', $file_name, $match) == 1) {
-        $matched = $match[0];
-        $SE['season'] = trim(substr($matched, 1, stripos($matched, ' ')));
+        $matched = trim($match[0]);
+        $SE['season'] = trim(substr($matched, 1, 2));
         $SE['episode'] = trim(substr($matched, stripos($matched, 'E') + 1));
         return $SE;
     }
@@ -114,7 +114,7 @@ function getFileEpisode($file_name) {
     /* FORMAT Cap.101 */
     $match = [];
     if (preg_match('/\[Cap.(.*?)\]/i', $file_name, $match) == 1) {
-        $SE_MATCH = $match[1];
+        $SE_MATCH = trim($match[1]);
         if (strlen($SE_MATCH) == 3) {
             $ses = substr($SE_MATCH, 0, 1);
             $epi = substr($SE_MATCH, 1, 2);
@@ -131,7 +131,7 @@ function getFileEpisode($file_name) {
 
     /* FORMAT 1x01 */
     if (preg_match('/[0-9]{1,2}(x)[0-9]{2,2}/i', $file_name, $match) == 1) {
-        $SE_MATCH = $match[0];
+        $SE_MATCH = trim($match[0]);
         $SE['season'] = substr($SE_MATCH, 0, stripos($SE_MATCH, 'x'));
         $SE['episode'] = substr($SE_MATCH, stripos($SE_MATCH, 'x') + 1);
 
@@ -139,7 +139,7 @@ function getFileEpisode($file_name) {
     }
     /* FORMAT 1x1 */
     if (preg_match('/[0-9]{1,2}(x)[0-9]{1,2}/i', $file_name, $match) == 1) {
-        $SE_MATCH = $match[0];
+        $SE_MATCH = trim($match[0]);
         $SE['season'] = substr($SE_MATCH, 0, stripos($SE_MATCH, 'x'));
         $SE['episode'] = substr($SE_MATCH, stripos($SE_MATCH, 'x') + 1);
 
@@ -148,7 +148,7 @@ function getFileEpisode($file_name) {
     /* FORMAT 000 not temp , this must the near the last check */
     if (preg_match('/[0-9]{3}/', $file_name, $match)) {
         $SE['season'] = 1;
-        $SE['episode'] = $match[0];
+        $SE['episode'] = trim($match[0]);
         return $SE;
     }
 
@@ -178,7 +178,7 @@ function getMediaType($file_name) {
         return 'shows';
     }
     // 1x1 01x01
-    if (preg_match('/[0-9]{1,2}(x|X)[0-9]{2,2}/i', $file_name)) {
+    if (preg_match('/[0-9]{1,2}(x|X)[0-9]{1,2}/i', $file_name)) {
         return 'shows';
     }
     // Cap.*
