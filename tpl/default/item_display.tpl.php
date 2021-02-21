@@ -30,6 +30,11 @@
                 <span class="item_download"><a class="action_link" href="<?= basename($_SERVER['REQUEST_URI']) . '&download=' . rawurlencode($tdata['download']) ?>"><?= $LNG['L_DOWNLOAD_MIN'] ?></a></span>
                 <?php
             }
+            if (!empty($tdata['source'])) {
+                ?>
+                <span class="item_source"><a class="action_link" href="<?= $tdata['guid'] ?>" target=_blank ><?= $tdata['source'] ?></a></span>
+                <?php
+            }
             if (!empty($tdata['num_episodes'])) {
                 ?>
                 <span class="item_num_episodes">[<?= $LNG['L_EPISODE_MIN'] . $tdata['num_episodes'] ?>]</span>
@@ -59,14 +64,8 @@
                         <a href="?page=view&id=<?= $tdata['show_in_library'] ?>&view_type=shows_library"><?= $LNG['L_HAVEIT'] ?></a>
                     <?php } ?>
                 </span>
-                <?php
-            }
-            if (!empty($tdata['source'])) {
-                ?>
-                <span class="item_source"><a class="action_link" href="<?= $tdata['guid'] ?>" target=_blank ><?= $tdata['source'] ?></a></span>
-                    <?php
-                }
-                ?>
+                <?php }
+            ?>
         </div>
 
     </div>

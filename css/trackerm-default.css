@@ -150,7 +150,9 @@ button {
 }
 
 .divTableCell {
-    position: relative;    
+    position: relative; 
+    text-align: center;
+    padding:10px;
 }
 .divTableHeading {
     background-color: #EEE;
@@ -224,14 +226,16 @@ button {
     clear:both;
 }
 .display {
-    display: grid;
+    /* display: grid; */
+    display: inline-grid;
     border:0px solid #ff5b5b;
     text-align:center;
     object-fit: cover;
+    max-width: 210px;
 }
 
 .poster_preview{
-    /* position: relative; */
+    position: relative; 
     display: inline-block;
     text-align: center; 
 }
