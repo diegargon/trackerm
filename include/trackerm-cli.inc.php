@@ -35,6 +35,8 @@ function transmission_scan() {
             } else {
                 $item['media_type'] = getMediaType($tor['name']);
             }
+            !empty($tor['season']) ? $item['season'] = $tor['season'] : null;
+            !empty($tor['episode']) ? $item['episode'] = $tor['episode'] : null;
             isset($tor['wanted_id']) ? $item['wanted_id'] = $tor['wanted_id'] : null;
             if ($item['media_type'] == 'movies') {
                 $log->debug("Movie stopped detected begin working on it.. " . $item['title']);
@@ -62,6 +64,8 @@ function transmission_scan() {
             } else {
                 $item['media_type'] = getMediaType($tor['name']);
             }
+            !empty($tor['season']) ? $item['season'] = $tor['season'] : null;
+            !empty($tor['episode']) ? $item['episode'] = $tor['episode'] : null;
             isset($tor['wanted_id']) ? $item['wanted_id'] = $tor['wanted_id'] : null;
 
             if ($item['media_type'] == 'movies') {
@@ -104,34 +108,53 @@ function getRightTorrents() {
 
     // FINISHED TORS
     if (count($finished_list) >= 1) {
-        if ($cfg['move_only_inapp']) {
-            foreach ($finished_list as $finished) {
+        foreach ($finished_list as $finished) {
+            if ($cfg['move_only_inapp']) {
                 foreach ($wanted_db as $wanted_item) {
                     if ($wanted_item['hashString'] == $finished['hashString']) {
+                        !empty($wanted_item['media_type']) ? $finished['media_type'] = $wanted_item['media_type'] : null;
+                        !empty($wanted_item['season']) ? $finished['season'] = $wanted_item['season'] : null;
+                        !empty($wanted_item['episode']) ? $finished['episode'] = $wanted_item['episode'] : null;
                         $tors['finished'][] = $finished;
                     }
                 }
+            } else {
+                foreach ($wanted_db as $wanted_item) {
+                    if ($wanted_item['hashString'] == $finished['hashString']) {
+                        !empty($wanted_item['media_type']) ? $finished['media_type'] = $wanted_item['media_type'] : null;
+                        !empty($wanted_item['season']) ? $finished['season'] = $wanted_item['season'] : null;
+                        !empty($wanted_item['episode']) ? $finished['episode'] = $wanted_item['episode'] : null;
+                    }
+                }
+                $tors['finished'][] = $finished;
             }
-        } else {
-            $tors['finished'] = $finished_list;
         }
     }
 
     //SEEDING TORS
     if (count($seeding_list) >= 1) {
-        if ($cfg['move_only_inapp']) {
-            foreach ($seeding_list as $seeding) {
+        foreach ($seeding_list as $seeding) {
+            if ($cfg['move_only_inapp']) {
                 foreach ($wanted_db as $wanted_item) {
                     if ($wanted_item['hashString'] == $seeding['hashString']) {
+                        !empty($wanted_item['media_type']) ? $seeding['media_type'] = $wanted_item['media_type'] : null;
+                        !empty($wanted_item['season']) ? $seeding['season'] = $wanted_item['season'] : null;
+                        !empty($wanted_item['episode']) ? $seeding['episode'] = $wanted_item['episode'] : null;
                         $tors['seeding'][] = $seeding;
                     }
                 }
+            } else {
+                foreach ($wanted_db as $wanted_item) {
+                    if ($wanted_item['hashString'] == $seeding['hashString']) {
+                        !empty($wanted_item['media_type']) ? $seeding['media_type'] = $wanted_item['media_type'] : null;
+                        !empty($wanted_item['season']) ? $seeding['season'] = $wanted_item['season'] : null;
+                        !empty($wanted_item['episode']) ? $seeding['episode'] = $wanted_item['episode'] : null;
+                    }
+                }
+                $tors['seeding'][] = $seeding;
             }
-        } else {
-            $tors['seeding'] = $seeding_list;
         }
     }
-
 
     return $tors;
 }
@@ -231,19 +254,24 @@ function ShowJob($item, $linked = false) {
     if ($valid_files && count($valid_files) >= 1) {
         $i = 1;
         $new_media = '';
+
         foreach ($valid_files as $valid_file) {
             $many = '';
             $file_tags = getFileTags($valid_file);
             $ext = substr($valid_file, -4);
 
-            // TAG EPISODE NAME STYLE SxxExx
-            // we get from valid_file instead of item for in case of multiple chapters
-            //TODO item if wanted have $item[season] & $item[episode], if there is only one valid file get from there
-            //the SE, if not check title of item, if not match check title of validfile
-            //in case of multimple valid files must use valid_file.
-            $SE = getFileEpisode(basename($valid_file));
+            if (count($valid_files) == 1) {
+                if (!empty($item['season']) && !empty($item['episode'])) {
+                    $SE['season'] = $item['season'];
+                    $SE['episode'] = $item['episode'];
+                } else {
+                    $SE = getFileEpisode($item['files_location']);
+                }
+            } else {
+                $SE = getFileEpisode(basename($valid_file));
+            }
 
-            if (!empty($SE['season'] && !empty($SE['episode']))) {
+            if (isset($SE['season']) && isset($SE['episode']) && !empty($SE['season'] && !empty($SE['episode']))) {
                 (strlen($SE['season']) == 1) ? $_season = 0 . $SE['season'] : $_season = $SE['season'];
                 (strlen($SE['episode']) == 1) ? $_episode = 0 . $SE['episode'] : $_episode = $SE['episode'];
             } else {
@@ -474,7 +502,8 @@ function wanted_work() {
         $log->debug("Wanted list empty");
         return false;
     }
-    $day_of_week = date("w");
+    //TODO: Check better the time thing
+    $day_of_week = date('N');
 
     foreach ($wanted_list as $wanted) {
         $valid_results = [];
