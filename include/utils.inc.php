@@ -193,7 +193,7 @@ function notify_mail($msg) {
         }
     }
     $msg['msg'] .= $footer;
-    $results = $db->query("SELECT id,email FROM users WHERE email != ''");
+    $results = $db->query("SELECT id,email FROM users WHERE email <> ''");
     $users = $db->fetchAll($results);
 
     foreach ($users as $user) {
