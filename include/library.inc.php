@@ -35,8 +35,8 @@ function show_my_movies() {
     $npage == 1 ? $end = $n_results : $end = $npage * $n_results;
     $npage == 1 ? $start = 0 : $start = ($npage - 1) * $n_results;
 
-    $topt['num_table_rows'] = $db->qSingle("SELECT COUNT(*) FROM library_movies WHERE title IS NOT NULL OR title != ''");
-    $query = "SELECT * FROM library_movies WHERE title IS NOT NULL OR title != '' ORDER BY created DESC LIMIT $start,$end ";
+    $topt['num_table_rows'] = $db->qSingle("SELECT COUNT(*) FROM library_movies WHERE title <> ''");
+    $query = "SELECT * FROM library_movies WHERE title <> '' ORDER BY created DESC LIMIT $start,$end ";
     $stmt = $db->query($query);
     $movies = $db->fetchAll($stmt);
 
