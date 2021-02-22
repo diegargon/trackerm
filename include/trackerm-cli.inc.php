@@ -15,12 +15,12 @@ function transmission_scan() {
     $tors = getRightTorrents();
 
     if ($tors == false || (empty($tors['finished']) && empty($tors['seeding']))) {
-        $log->debug("Not found any finished or seeding torrent");
+        $log->debug('Not found any finished or seeding torrent');
         return false;
     }
     // FINISHED TORRENTS
     if (!empty($tors['finished'])) {
-        $log->debug("Found torrents finished: " . count($tors['finished']));
+        $log->debug('Found torrents finished: ' . count($tors['finished']));
         foreach ($tors['finished'] as $tor) {
             $item = [];
 
@@ -39,17 +39,17 @@ function transmission_scan() {
             !empty($tor['episode']) ? $item['episode'] = $tor['episode'] : null;
             isset($tor['wanted_id']) ? $item['wanted_id'] = $tor['wanted_id'] : null;
             if ($item['media_type'] == 'movies') {
-                $log->debug("Movie stopped detected begin working on it.. " . $item['title']);
+                $log->debug('Movie stopped detected: begin working on ' . $item['title']);
                 MovieJob($item);
             } else if ($item['media_type'] == 'shows') {
-                $log->debug("Show stopped detected begin working on it... " . $item['title']);
+                $log->debug('Show stopped detected: begin working on ' . $item['title']);
                 ShowJob($item);
             }
         }
     }
     // SEEDING TORRENTS
     if (!empty($tors['seeding'])) {
-        $log->debug("Found torrents seeding: " . count($tors['seeding']));
+        $log->debug('Found torrents seeding: ' . count($tors['seeding']));
         foreach ($tors['seeding'] as $tor) {
             $item = [];
 
@@ -69,10 +69,10 @@ function transmission_scan() {
             isset($tor['wanted_id']) ? $item['wanted_id'] = $tor['wanted_id'] : null;
 
             if ($item['media_type'] == 'movies') {
-                $log->debug("Movie seeding detected begin working on it.. " . $item['title']);
+                $log->debug('Movie seeding detected: begin working on  ' . $item['title']);
                 MovieJob($item, true);
             } else if ($item['media_type'] == 'shows') {
-                $log->debug("Show seeding detected begin working on it.. " . $item['title']);
+                $log->debug('Show seeding detected: begin working on ' . $item['title']);
                 ShowJob($item, true);
             }
         }
@@ -92,7 +92,7 @@ function getRightTorrents() {
     $wanted_db = $db->getTableData('wanted');
 
     if ($cfg['move_only_inapp'] && empty($wanted_db)) {
-        $log->debug(" No Torrents (INAPP set)");
+        $log->debug('No Torrents (INAPP set)');
         return false;
     }
 
@@ -105,7 +105,6 @@ function getRightTorrents() {
     }
 
     $tors = [];
-
     // FINISHED TORS
     if (count($finished_list) >= 1) {
         foreach ($finished_list as $finished) {
@@ -116,6 +115,7 @@ function getRightTorrents() {
                     !empty($wanted_item['season']) ? $finished['season'] = $wanted_item['season'] : null;
                     !empty($wanted_item['episode']) ? $finished['episode'] = $wanted_item['episode'] : null;
                     $add_tor = 1;
+                    break;
                 }
             }
             if (!$cfg['move_only_inapp'] || $add_tor) {
@@ -134,9 +134,10 @@ function getRightTorrents() {
                     !empty($wanted_item['season']) ? $seeding['season'] = $wanted_item['season'] : null;
                     !empty($wanted_item['episode']) ? $seeding['episode'] = $wanted_item['episode'] : null;
                     $add_tor = 1;
+                    break;
                 }
             }
-            if ($cfg['move_only_inapp'] || $add_tor) {
+            if (!$cfg['move_only_inapp'] || $add_tor) {
                 $tors['seeding'][] = $seeding;
             }
         }
@@ -149,7 +150,6 @@ function MovieJob($item, $linked = false) {
     global $cfg, $log, $trans, $db, $LNG;
 
     $valid_files = [];
-
     $valid_files = get_valid_files($item);
 
     if ($valid_files && count($valid_files) >= 1) {
@@ -194,9 +194,9 @@ function MovieJob($item, $linked = false) {
             }
 
             if (!$linked) {
-                $log->debug(" Moved work: " . $item['hashString']);
+                $log->debug('Moved work: ' . $item['hashString']);
                 if (move_media($valid_file, $final_dest_path) && ($valid_file == end($valid_files) )) {
-                    $log->debug(" Cleaning torrent id/hash:  {$item['tid']} : {$item['hashString']}");
+                    $log->debug("Cleaning torrent id/hash:  {$item['tid']} : {$item['hashString']}");
                     $hashes[] = $item['hashString'];
                     file_exists(dirname($valid_file) . '/trackerm-unrar') ? unlink(dirname($valid_file) . '/trackerm-unrar') : null;
                     file_exists(dirname($valid_file) . '.unrar') ? unlink(dirname($valid_file) . '.unrar') : null;
@@ -204,10 +204,10 @@ function MovieJob($item, $linked = false) {
                     $wanted_item = $db->getItemByField('wanted', 'hashString', $item['hashString']);
                     if (!empty($wanted_item)) {
                         if (!empty($cfg['autoclean_moved_wanted'])) {
-                            $log->debug("Removing wanted id by move: " . $wanted_item['id']);
+                            $log->debug('Removing wanted id by move: ' . $wanted_item['id']);
                             $db->deleteItemById('wanted', $wanted_item['id']);
                         } else {
-                            $log->debug(" Setting to moved wanted id: " . $wanted_item['id']);
+                            $log->debug('Setting to moved wanted id: ' . $wanted_item['id']);
                             $update_ary['wanted_status'] = 9;
                             $update_ary['id'] = $wanted_item['id'];
                             $db->updateItemByField('wanted', $update_ary, 'id');
@@ -219,14 +219,14 @@ function MovieJob($item, $linked = false) {
                     file_exists($work_path) && ($work_path != $cfg['TORRENT_FINISH_PATH']) && (end($valid_files) == $valid_file) ? rmdir($work_path) : null;
                 }
             } else {
-                $log->debug(" Link Seeding: {$item['tid']} : {$item['hashString']}");
+                $log->debug("Link Seeding: {$item['tid']} : {$item['hashString']}");
                 linking_media($valid_file, $final_dest_path);
                 $new_media .= basename($final_dest_path) . "\n";
             }
         }
         !empty($new_media) ? notify_mail(['subject' => $LNG['L_NEW_MEDIA_AVAILABLE'], 'msg' => $new_media]) : null;
     } else {
-        $log->info(" No valid files found on torrent with transmission id: {$item['tid']} : {$item['hashString']} ");
+        $log->info('No valid files found on torrent with transmission id:' . "{$item['tid']} : {$item['hashString']} ");
     }
 }
 
@@ -234,7 +234,6 @@ function ShowJob($item, $linked = false) {
     global $cfg, $db, $LNG, $trans, $log;
 
     $valid_files = [];
-
     $valid_files = get_valid_files($item);
 
     if ($valid_files && count($valid_files) >= 1) {
@@ -314,9 +313,9 @@ function ShowJob($item, $linked = false) {
             }
 
             if (!$linked) {
-                $log->debug(" Moved work: {$item['tid']} : {$item['hashString']}");
+                $log->debug("Moved work: {$item['tid']} : {$item['hashString']}");
                 if (move_media($valid_file, $final_dest_path) && ($valid_file == end($valid_files) )) {
-                    $log->debug(" Cleaning torrent: {$item['tid']} : {$item['hashString']}");
+                    $log->debug("Cleaning torrent: {$item['tid']} : {$item['hashString']}");
                     $hashes[] = $item['hashString'];
                     file_exists(dirname($valid_file) . '/trackerm-unrar') ? unlink(dirname($valid_file) . '/trackerm-unrar') : null;
                     file_exists(dirname($valid_file) . '.rar.unrar') ? unlink(dirname($valid_file) . '.rar.unrar') : null;
@@ -324,11 +323,11 @@ function ShowJob($item, $linked = false) {
                     $wanted_item = $db->getItemByField('wanted', 'hashString', $item['hashString']);
                     if (!empty($wanted_item)) {
                         if (!empty($cfg['autoclean_moved_wanted'])) {
-                            $log->debug("Removing wanted id by move: " . $wanted_item['id']);
+                            $log->debug('Removing wanted id by move: ' . $wanted_item['id']);
                             $db->deleteItemById('wanted', $wanted_item['id']);
                         } else {
 
-                            $log->debug(" Setting to moved wanted {$item['tid']} : {$item['hashString']}");
+                            $log->debug("Setting to moved wanted {$item['tid']} : {$item['hashString']}");
                             $update_ary['wanted_status'] = 9;
                             $update_ary['id'] = $wanted_item['id'];
                             $db->updateItemByField('wanted', $update_ary, 'id');
@@ -339,14 +338,14 @@ function ShowJob($item, $linked = false) {
                     file_exists($work_path) && ($work_path != $cfg['TORRENT_FINISH_PATH']) && (end($valid_files) == $valid_file) ? rmdir($work_path) : null;
                 }
             } else {
-                $log->debug(" Link Seeding: {$item['tid']} : {$item['hashString']}");
+                $log->debug("Link Seeding: {$item['tid']} : {$item['hashString']}");
                 linking_media($valid_file, $final_dest_path);
                 $new_media .= basename($final_dest_path) . "\n";
             }
         }
         !empty($new_media) ? notify_mail(['subject' => $LNG['L_NEW_MEDIA_AVAILABLE'], 'msg' => $new_media]) : null;
     } else {
-        $log->info("No valid files found on torrent with {$item['tid']} : {$item['hashString']}");
+        $log->info('No valid files found on torrent with ' . "{$item['tid']} : {$item['hashString']}");
     }
 }
 
@@ -374,11 +373,11 @@ function get_valid_files($item) {
                         touch($unrar_check);
                         !empty($cfg['files_usergroup']) ? chgrp($unrar_check, $cfg['files_usergroup']) : null;
                         $unrar = $cfg['unrar_path'] . ' x -p- -y "' . $file . '" "' . dirname($file) . '"';
-                        $log->info("Need unrar $file");
+                        $log->info('Need unrar' . $file);
                         exec($unrar);
                         break;
                     } else {
-                        $log->info("Unrar flag is set skipping");
+                        $log->info('Unrar flag is set skipping');
                         break;
                     }
                 } else {
@@ -419,7 +418,7 @@ function get_valid_files($item) {
                 $files_dir = scandir_r($work_path);
 
                 if (empty($files_dir)) {
-                    $log->debug("Work path is empty");
+                    $log->debug('Work path is empty');
                 }
                 foreach ($files_dir as $file) {
                     if (is_media_file($file)) {
@@ -451,12 +450,12 @@ function move_media($valid_file, $final_dest_path) {
         (!empty($cfg['files_usergroup'])) ? chgrp($final_dest_path, $cfg['files_usergroup']) : null;
         umask(0);
         (!empty($cfg['files_perms'])) ? chmod($final_dest_path, octdec("0" . $cfg['files_perms'])) : null;
-        $log->info(" Rename sucessful: $valid_file : $final_dest_path");
+        $log->info("Rename sucessful: $valid_file : $final_dest_path");
         $log->addStateMsg('[' . $LNG['L_MOVED'] . '] ' . basename($final_dest_path));
         return true;
     }
 
-    $log->err(" Move failed: $valid_file : $final_dest_path");
+    $log->err("Move failed: $valid_file : $final_dest_path");
     return false;
 }
 
@@ -467,12 +466,12 @@ function linking_media($valid_file, $final_dest_path) {
         (!empty($cfg['files_usergroup'])) ? chgrp($valid_file, $cfg['files_usergroup']) : null;
         umask(0);
         (!empty($cfg['files_perms'])) ? chmod($valid_file, octdec("0" . $cfg['files_perms'])) : null;
-        $log->info(" Linking sucessful: $valid_file : $final_dest_path");
+        $log->info("Linking sucessful: $valid_file : $final_dest_path");
         $log->addStateMsg('[' . $LNG['L_LINKED'] . '] ' . basename($final_dest_path));
         return true;
     }
 
-    $log->err(" Linking failed: $valid_file : $final_dest_path");
+    $log->err("Linking failed: $valid_file : $final_dest_path");
     return false;
 }
 
@@ -485,7 +484,7 @@ function wanted_work() {
     $trans->updateWanted();
     $wanted_list = $db->getTableData('wanted');
     if (!valid_array($wanted_list)) {
-        $log->debug("Wanted list empty");
+        $log->debug('Wanted list empty');
         return false;
     }
     //TODO: Check better the time thing
@@ -537,7 +536,7 @@ function wanted_work() {
         $media_type = $wanted['media_type'];
 
         if ($media_type == 'movies') {
-            $log->debug(' Search for : ' . $title . "[ $media_type ]");
+            $log->debug('Search for : ' . $title . "[ $media_type ]");
 
             $search['words'] = $title;
             $results = search_media_torrents($media_type, $search, null, true);
@@ -583,7 +582,7 @@ function wanted_work() {
             $db->updateItemById('wanted', $wanted['id'], $update_ary);
         }
 
-        $log->debug("********************************************************************************************************");
+        $log->debug('********************************************************************************************************');
     }
 }
 
@@ -729,15 +728,15 @@ function tracker_shows($wanted) {
 
     $from_season = $wanted['season'];
     $from_episode = $wanted['episode'];
-    $tmdb_id = $wanted['themoviedb_id'];
+    $oid = $wanted['themoviedb_id'];
 
-    if (empty($tmdb_id) || empty($from_season) || empty($from_episode)) {
+    if (empty($oid) || empty($from_season) || empty($from_episode)) {
         return false;
     }
 
     $seasons = [];
-    $stmt = $db->query('SELECT season,episode FROM shows_details WHERE themoviedb_id=' . $tmdb_id . '');
-    $items = $db->fetchAll($stmt);
+    $result = $db->query('SELECT season,episode FROM shows_details WHERE themoviedb_id=' . $oid . '');
+    $items = $db->fetchAll($result);
 
     foreach ($items as $item) {
         (!isset($seasons[$item['season']]) || $seasons[$item['season']] < $item['episode']) ? $seasons[$item['season']] = $item['episode'] : null;
@@ -757,8 +756,8 @@ function tracker_shows($wanted) {
     }
 
     //Get actual wanted list (unfinished) for tmdb id, we use later
-    $stmt = $db->query("SELECT * FROM wanted WHERE themoviedb_id = $tmdb_id AND media_type = 'shows' AND wanted_status < 5 AND track_show = 0");
-    $items_match = $db->fetchAll($stmt);
+    $result = $db->query("SELECT * FROM wanted WHERE themoviedb_id = $oid AND media_type = 'shows' AND wanted_status < 5 AND track_show = 0");
+    $items_match = $db->fetchAll($result);
     $items_match_count = count($items_match);
     //From all the episode that meet the criteria check if already have that item
     //or if already in wanted.
@@ -771,7 +770,7 @@ function tracker_shows($wanted) {
             // Get all wanted regarless or wanted_status for drop gump up the max_wanted_track, since > 5 must not count for send next show
             // At this moment the isn't added because duplicate but neither, must wait next cli run when shows library is building and detect as a
             // have_show.
-            if (have_show($tmdb_id, $season, $episode)) {
+            if (have_show($oid, $season, $episode)) {
                 unset($list_episodes[$season][$key_episode]);
             }
             if ($items_match_count > 0) {
@@ -785,7 +784,7 @@ function tracker_shows($wanted) {
         }
     }
 
-    $item = mediadb_getFromCache('shows', $tmdb_id);
+    $item = mediadb_getFromCache('shows', $oid);
     $title = $item['title'];
     !empty($cfg['max_wanted_track_downloads']) ? $max_wanted_track_downloads = 1 : null;
 
@@ -796,8 +795,8 @@ function tracker_shows($wanted) {
     foreach ($list_episodes as $season => $episodes) {
         foreach ($episodes as $key_episode => $episode) {
             if ($items_match_count < $max_wanted_track_downloads) {
-                $log->debug("Sending to wanted tracker show episode: $title $season:$episode");
-                wanted_episode($tmdb_id, $season, $episode, 0, $inherint_track);
+                $log->debug('Sending to wanted tracker show episode:' . "$title $season:$episode");
+                wanted_episode($oid, $season, $episode, 0, $inherint_track);
                 $items_match_count++;
             }
         }
@@ -869,9 +868,9 @@ function update_trailers() {
         $next_update = time() - $cfg['db_upd_missing_delay'];
 
         $query = "SELECT DISTINCT themoviedb_id FROM $table WHERE trailer = '' OR  (trailer = '0' AND updated < $next_update) LIMIT $limit";
-        $stmt = $db->query($query);
+        $result = $db->query($query);
 
-        $results = $db->fetchAll($stmt);
+        $results = $db->fetchAll($result);
 
         foreach ($results as $item) {
             $trailer = mediadb_getTrailer($media_type, $item['themoviedb_id']);
@@ -894,8 +893,8 @@ function update_trailers() {
         $update['updated'] = $time_now = time();
         $next_update = time() - $cfg['db_upd_long_delay'];
         $query = "SELECT DISTINCT themoviedb_id FROM $table WHERE trailer IS NOT NULL AND updated < $next_update LIMIT $limit";
-        $stmt = $db->query($query);
-        $results = $db->fetchAll($stmt);
+        $result = $db->query($query);
+        $results = $db->fetchAll($result);
 
         foreach ($results as $item) {
             $trailer = mediadb_getTrailer($media_type, $item['themoviedb_id']);
@@ -918,14 +917,14 @@ function update_trailers() {
 function hash_missing() {
     global $db, $log;
 
-    $hashlog = "Hashing: ";
+    $hashlog = 'Hashing: ';
     $query = $db->query('SELECT id,path FROM library_movies WHERE file_hash IS \'\' LIMIT 50');
     $results = $db->fetchAll($query);
 
     foreach ($results as $item) {
         $hash = file_hash($item['path']);
         $update_query = "update library_movies SET file_hash='$hash' WHERE id='{$item['id']}' LIMIT 1";
-        $hashlog .= "*";
+        $hashlog .= '*';
         $db->query($update_query);
     }
 
@@ -935,7 +934,7 @@ function hash_missing() {
     foreach ($results as $item) {
         $hash = file_hash($item['path']);
         $update_query = "update library_shows SET file_hash='$hash' WHERE id='{$item['id']}' LIMIT 1";
-        $hashlog .= "+";
+        $hashlog .= '+';
         $db->query($update_query);
     }
     $log->debug($hashlog);
@@ -962,20 +961,21 @@ function check_broken_files_linked() {
 function update_seasons($force = false) {
     global $db, $log;
 
-    $log->debug("Executing update_seasons");
+    $log->debug('Executing update_seasons');
 
     $update['updated'] = $time_now = time();
     $when_time = time() - 259200; //3 days
-    $query = "SELECT DISTINCT themoviedb_id FROM shows_details";
-    (!$force) ? $query .= " WHERE updated < $when_time" : " LIMIT 20";
-    $stmt = $db->query($query);
-    $shows = $db->fetchAll($stmt);
+    $query = 'SELECT DISTINCT themoviedb_id FROM shows_details';
+    (!$force) ? $query .= " WHERE updated < $when_time" : ' LIMIT 20';
+    $result = $db->query($query);
+    $shows = $db->fetchAll($result);
     $i = 0;
     if (valid_array($shows)) {
         foreach ($shows as $show) {
             mediadb_getSeasons($show['themoviedb_id']);
             $where['themoviedb_id'] = ['value' => $show['themoviedb_id']];
             $db->update('shows_details', $update, $where);
+            $log->debug("Update seasons on {$show['themoviedb_id']}");
             $i++;
         }
     }
@@ -1007,22 +1007,19 @@ function delete_direct_orphans() {
 function update_things() {
     global $cfg;
 
-
     check_broken_files_linked();
-
     rebuild('movies', $cfg['MOVIES_PATH']);
     sleep(1);
     rebuild('shows', $cfg['SHOWS_PATH']);
-
     update_trailers();
     update_seasons();
     hash_missing();
     update_stats();
     //delete from wanted orphans (a orphans is create if user delete the torrent outside trackerm
     delete_direct_orphans();
-
-//UPGRADE
-    set_clean_titles(); // (upgrading v4 change how clean works, must empty the field and redo )
+    // Upgrading v4 change how clean works, must empty the field and redo, not need know
+    // keep for future changes
+    //set_clean_titles();
 }
 
 function leave($msg = false) {

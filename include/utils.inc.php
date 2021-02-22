@@ -147,9 +147,9 @@ function update_stats() {
             }
 
             if (!empty($db_show['themoviedb_id'])) {
-                $tmdb_id = $db_show['themoviedb_id'];
-                if (!isset($count_shows[$tmdb_id])) {
-                    $count_shows[$tmdb_id] = 1;
+                $oid = $db_show['themoviedb_id'];
+                if (!isset($count_shows[$oid])) {
+                    $count_shows[$oid] = 1;
                 }
             }
         }
