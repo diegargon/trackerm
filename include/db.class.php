@@ -406,6 +406,7 @@ class DB {
     }
 
     public function query($query) {
+        $this->querys[] = $query;
         return $this->db->query($query);
     }
 
