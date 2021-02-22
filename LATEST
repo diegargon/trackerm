@@ -1,5 +1,19 @@
 ## Latest / News (Relevant)
 
+[22/02] Add track show.
+When begin this project i have some basic/main features in mind that i want to implement. This is the last one.
+Next weeks i try not add to much new things for avoid introduce more bugs) and fix bugs and some internal 
+improvement/changes (have a lot of work). If you found bugs/problems please report.
+How works: Its simple, under the show view you have now a button for track show, you choose the episode to begin track,
+can be the first one, the last one or any other and "track show" will search from this chapter and forward, jumping already have
+episodes and added to wanted list the missing and new ones, default 1 (configurable), when download is complete will add the next.
+On Wanted section, will appear the tracked show in the bottom with same options that other wanted, but that options are indiferent
+for "track show", that options are the options that will inherit the episode when added to the download/track list. That mean
+if you configure the "track show" for check Sunday, "track show" will add anytime the chapter with "Sunday" configure as a check
+day.
+Warning: Track show by default add one chapter, if this get stuck (no peers) or is missing not will add more, you need change to two
+or more in general wanted configuration.
+[********** COMMIT **********]
 [19/02] Wanted: Config option to autoclean moved items
 [********** COMMIT **********]
 [19/02] More Fixes 
