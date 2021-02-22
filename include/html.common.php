@@ -44,7 +44,15 @@ function getMenu() {
 }
 
 function getFooter() {
-    return getTpl('footer');
+    global $db, $cfg;
+
+    !isset($cfg['show_querys']) ? $cfg['show_querys'] = 0 : null;
+    $querys = $db->getQuerys();
+    valid_array($querys) ? $num_querys = count($querys) : $num_querys = 0;
+    $tdata['num_querys'] = $num_querys;
+    ($cfg['show_querys']) ? $tdata['querys'] = $querys : null;
+
+    return getTpl('footer', $tdata);
 }
 
 function getTpl($tpl, $tdata = []) {

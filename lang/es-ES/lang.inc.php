@@ -283,6 +283,7 @@ $LNG = [
     'L_CFG_LOCALPLAYER_TRACK' => 'Localplayer Track: Hace seguimiento del tiempo de lo que ves (necesita activo el servicio web y la contraseña (unused)',
     'L_CFG_LOCALPLAYER_WEB_PASSWORD' => 'Localplayer Track: Contraseña del servicio web (unused)',
     'L_CFG_DISPLAY_ERRORS' => 'Show page errors',
+    'L_CFG_SHOW_QUERYS' => 'Show querys (debug)',
     /*
       'L_CFG_TRANSCODER_PLAY' => '(unused p1)',
       'L_CFG_TRANSCODER_PATH' => '(unused p2)',

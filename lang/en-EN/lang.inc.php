@@ -283,6 +283,7 @@ $LNG = [
     'L_CFG_LOCALPLAYER_TRACK' => 'Localplayer Track: Track time of content view. Need activate the VLC Web Service and a password (unused)',
     'L_CFG_LOCALPLAYER_WEB_PASSWORD' => 'Localplayer Track: Web service password (unused)',
     'L_CFG_DISPLAY_ERRORS' => 'Mostar errores en pagina',
+    'L_CFG_SHOW_QUERYS' => 'Mostrar querys (debug)',
     /*
       'L_CFG_TRANSCODER_PLAY' => '(unused p1)',
       'L_CFG_TRANSCODER_PATH' => '(unused p2)',

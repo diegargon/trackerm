@@ -51,8 +51,6 @@ if (!(empty($d_link = $filter->getUrl('download')))) {
 }
 
 $req_page != 'login' ? $menu = getMenu() : $menu = '';
-$footer = getFooter();
-
 $body = '';
 $valid_pages = ['index', 'library', 'news', 'tmdb', 'torrents', 'view', 'wanted', 'identify',
     'download', 'localplayer', 'identify', 'download', 'transmission', 'config', 'login', 'logout'];
@@ -68,6 +66,7 @@ if (in_array($req_page, $valid_pages)) {
     $body .= $page_func();
 }
 
+$footer = getFooter();
 $tdata = ['menu' => $menu, 'body' => $body, 'footer' => $footer];
 $page = getTpl('html_mstruct', $tdata);
 $db->close();
