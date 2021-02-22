@@ -278,21 +278,12 @@ class DB {
         return $response;
     }
 
-    /* NOT TESTED */
-
     public function selectMultiple($table, $field, $values, $what = null) {
-        $values = explode(',', $values);
-
-        foreach ($values as $key => $value) {
-            $values[$key] = trim($value);
-            isset($binds) ? $binds = ',?' : $binds = '?,';
-        }
         !isset($what) ? $what = '*' : null;
-
-        $query = 'SELECT ' . $what . ' FROM ' . $table . ' WHERE ' . $field . ' IN(' . $binds . ')';
-        $stmt = $this->db->prepare($query);
-        $stmt->execute($values);
-        $rows = $this->fetchAll($stmt);
+        $query = 'SELECT ' . $what . ' FROM ' . $table . ' WHERE ' . $field . ' IN(' . $values . ')';
+        $this->querys[] = $query;
+        $result = $this->query($query);
+        $rows = $this->fetchAll($result);
 
         return $rows;
     }
