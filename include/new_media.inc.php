@@ -32,13 +32,8 @@ function page_new_media($media_type) {
         } else {
             //$log->debug("News: $media_type using cache " . ( ($media_cache_check['updated'] + $cfg['new_cache_expire']) - time()));
             if (!empty($media_cache_check['ids'])) {
-                $ids = explode(',', $media_cache_check['ids']);
-                if (empty($ids) || count($ids) <= 0) {
-                    return false;
-                }
-                foreach ($ids as $cache_id) {
-                    $res_media_db[] = $db->getItemById($jackett_db, trim($cache_id));
-                }
+                $ids = $media_cache_check['ids'];
+                $res_media_db = $db->selectMultiple($jackett_db, 'id', $ids);
             } else {
                 //No results try without cache
                 $cache_media_expire = 1;

@@ -62,8 +62,8 @@ function themoviedb_searchShows($search) {
 function themoviedb_updateCache($words, $results, $media_type) {
     global $db;
 
-    $tmdb_cache_table = 'search_' . $media_type . '_cache';
     $ids = '';
+    $tmdb_cache_table = 'search_' . $media_type . '_cache';
     $results = $results['results'];
 
     foreach ($results as $result) {
@@ -102,6 +102,7 @@ function themoviedb_searchCache($search_words, $media_type) {
     } else {
         $ids = explode(',', $cached_results['ids']);
         if (valid_array($ids)) {
+            //TODO ONE QUERY
             foreach ($ids as $id) {
                 !empty($id) ? $results[] = themoviedb_getFromCache($media_type, $id) : null;
             }
@@ -146,14 +147,10 @@ function themoviedb_MediaPrep($media_type, $items) {
 
         if ($media_type == 'movies') {
             $library_item = $db->getItemByField('library_movies', 'themoviedb_id', $item['id']);
-            if ($library_item !== false) {
-                $in_library = $library_item['id'];
-            }
+            ($library_item !== false) ? $in_library = $library_item['id'] : null;
         } else if ($media_type == 'shows') {
             $library_item = $db->getItemByField('library_shows', 'themoviedb_id', $item['id']);
-            if ($library_item !== false) {
-                $in_library = $library_item['id'];
-            }
+            ($library_item !== false) ? $in_library = $library_item['id'] : null;
         }
 
         //avoid get trailer if items > 15 for alleviate big querys tracker-cli would fix that
@@ -247,9 +244,6 @@ function themoviedb_showsDetailsPrep($id, $seasons_data, $episodes_data) {
 
     for ($i = 1; $i <= $seasons_data['number_of_seasons']; $i++) {
         $episodes = $episodes_data[$i]['episodes'];
-
-        //$episodes_number = count($episodes);
-
         foreach ($episodes as $episode) {
             if (isset($episode['episode_number'])) {
                 isset($episode['name']) ? $episode_title = $episode['name'] : $episode_title = $episode['episode_number'];

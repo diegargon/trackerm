@@ -50,7 +50,7 @@ function getFooter() {
     $querys = $db->getQuerys();
     valid_array($querys) ? $num_querys = count($querys) : $num_querys = 0;
     $tdata['num_querys'] = $num_querys;
-    ($cfg['show_querys']) ? $tdata['querys'] = $querys : null;
+    (0) ? $tdata['querys'] = $querys : null;
 
     return getTpl('footer', $tdata);
 }
@@ -140,38 +140,39 @@ function build_item($item, $topt) {
     global $cfg, $db;
 
     $page = '';
+    $update_guessed_trailer = 0;
+    $update_guessed_poster = 0;
 
-    if (!empty($topt['view_type']) &&
+    if (!empty($item['release']) && !empty($topt['view_type']) &&
             ($topt['view_type'] == 'movies_library' || $topt['view_type'] == 'shows_library' || $topt['view_type'] == 'shows_db' || $topt['view_type'] == 'movies_db')
     ) {
         $item['title'] = $item['title'] . ' (' . strftime("%Y", strtotime($item['release'])) . ')';
     }
-    if (empty($item['poster'])) {
 
-        $item['poster'] = $cfg['img_url'] . '/not_available.jpg';
-        if (!isset($item['themoviedb_id'])) {
-            if (!empty($item['guessed_poster']) && $item['guessed_poster'] != -1) {
-                $poster = $item['guessed_poster'];
-            } else if (empty($item['guessed_poster'])) {
+    if (empty($item['poster'])) {
+        if (!empty($item['guessed_poster']) && ($item['guessed_poster'] != -1)) {
+            $item['poster'] = $item['guessed_poster'];
+        } else if (isset($item['guessed_poster']) && $item['guessed_poster'] != -1) {
+            $item['poster'] = $cfg['img_url'] . '/not_available.jpg';
+            if (!isset($item['themoviedb_id'])) {
                 $poster = mediadb_guessPoster($item);
-            }
-            if (!empty($poster)) {
-                if ($cfg['cache_images']) {
-                    $cache_img_response = cacheImg($poster);
-                    if ($cache_img_response !== false) {
-                        $item['poster'] = $cache_img_response;
+                if (!empty($poster)) {
+                    if ($cfg['cache_images']) {
+                        $cache_img_response = cacheImg($poster);
+                        if (!empty(cache_img_response)) {
+                            $item['poster'] = $cache_img_response;
+                        }
                     }
+                    $item['guessed_poster'] = 1;
+                    $values['guessed_poster'] = $poster;
+                } else {
+                    $values['guessed_poster'] = -1;
                 }
-                $item['guessed_poster'] = 1;
-                $values['guessed_poster'] = $poster;
-            } else {
-                $values['guessed_poster'] = -1;
+                $update_guessed_poster = 1;
             }
-            if (!empty($topt['view_type']) && $topt['view_type'] == 'movies_torrent') {
-                $db->updateItemById('jackett_movies', $item['id'], $values);
-            } else if (!empty($topt['view_type']) && $topt['view_type'] == 'shows_torrent') {
-                $db->updateItemById('jackett_shows', $item['id'], $values);
-            }
+        } else {
+            $item['guessed_poster'] = 0;
+            $item['poster'] = $cfg['img_url'] . '/not_available.jpg';
         }
     } else {
         if ($cfg['cache_images']) {
@@ -182,29 +183,33 @@ function build_item($item, $topt) {
         }
     }
 
-    if (!isset($item['themoviedb_id']) && empty($item['trailer'])) {
-        if (!empty($item['guessed_trailer']) && $item['guessed_trailer'] != -1) {
-            $trailer = $item['guessed_trailer'];
-        } else if (empty($item['guessed_trailer'])) {
-            $trailer = mediadb_guessTrailer($item);
-        }
-        if (!empty($trailer)) {
-            $item['trailer'] = trim($trailer);
-            if (substr($trailer, 0, 4) == 'http:') {
-                $values['guessed_trailer'] = str_replace('http', 'https', $trailer);
-            } else {
-                $values['guessed_trailer'] = $trailer;
-            }
+    if (!isset($item['themoviedb_id']) && empty($item['trailer']) && empty($item['guessed_trailer'])) {
+        if (!empty($item['guessed_trailer'])) {
+            $item['trailer'] = $item['guessed_trailer'];
         } else {
-            $values['guessed_trailer'] = -1;
+            if (empty($item['guessed_trailer'])) {
+                $trailer = mediadb_guessTrailer($item);
+            }
+            if (!empty($trailer)) {
+                $item['trailer'] = trim($trailer);
+                if (substr($trailer, 0, 4) == 'http:') {
+                    $values['guessed_trailer'] = str_replace('http', 'https', $trailer);
+                } else {
+                    $values['guessed_trailer'] = $trailer;
+                }
+            } else {
+                $values['guessed_trailer'] = -1;
+            }
+            $update_guessed_trailer = 1;
         }
+    }
+    if ($update_guessed_trailer || $update_guessed_poster) {
         if (!empty($topt['view_type']) && $topt['view_type'] == 'movies_torrent') {
             $db->updateItemById('jackett_movies', $item['id'], $values);
         } else if (!empty($topt['view_type']) && $topt['view_type'] == 'shows_torrent') {
             $db->updateItemById('jackett_shows', $item['id'], $values);
         }
     }
-
     $page .= getTpl('item_display', array_merge($item, $topt));
 
     return $page;
@@ -232,7 +237,6 @@ function pager($npage, $nitems, &$topt) {
     $items_per_page = $cfg['tresults_columns'] * $cfg['tresults_rows'];
     $num_pages = ceil($nitems / $items_per_page);
     $search_type = $filter->getUtf8('search_type');
-
     $page = $filter->getString('page');
 
     if ($num_pages > 1) {

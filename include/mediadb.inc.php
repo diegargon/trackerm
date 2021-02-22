@@ -73,6 +73,7 @@ function mediadb_guessFieldGet($item, $field) {
         return false;
     }
 
+    //TODO: Too many querys do better
     /*
 
       if we search for angela and in database the field is Ángela we have a a problem.

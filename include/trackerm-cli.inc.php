@@ -761,6 +761,7 @@ function tracker_shows($wanted) {
     $items_match_count = count($items_match);
     //From all the episode that meet the criteria check if already have that item
     //or if already in wanted.
+    $have_shows = get_have_shows($oid);
     foreach ($list_episodes as $season => $episodes) {
         foreach ($episodes as $key_episode => $episode) {
             //FIXME: When one episode on track show finish download, wanted state is > 5 but cli not linked the show yet (before track_show is called)
@@ -770,9 +771,15 @@ function tracker_shows($wanted) {
             // Get all wanted regarless or wanted_status for drop gump up the max_wanted_track, since > 5 must not count for send next show
             // At this moment the isn't added because duplicate but neither, must wait next cli run when shows library is building and detect as a
             // have_show.
-            if (have_show($oid, $season, $episode)) {
-                unset($list_episodes[$season][$key_episode]);
+            if (valid_array($have_shows)) {
+                foreach ($have_shows as $have_show) {
+                    if ($have_show['season'] == $season && $have_show['episode'] == $episode) {
+                        unset($list_episodes[$season][$key_episode]);
+                        break;
+                    }
+                }
             }
+
             if ($items_match_count > 0) {
                 foreach ($items_match as $item_match) {
                     if (($item_match['season'] == $season) && ($item_match['episode'] == $episode)) {
@@ -847,12 +854,9 @@ function send_transmission($results) {
 function update_trailers() {
     global $db, $cfg, $log;
 
-
     $log->debug('Executing update trailers');
     $limit = 15;
-
     $tables = ['library_movies', 'library_shows', 'tmdb_search_movies', 'tmdb_search_shows'];
-
     //IMPROVE: This can be done in one query per table
     // Update missing trailers and never try get trailer
     foreach ($tables as $table) {

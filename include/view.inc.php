@@ -13,9 +13,7 @@ function view() {
     global $cfg, $LNG, $db, $filter;
     $view_type = $filter->getString('view_type');
     $id = $filter->getInt('id');
-
     empty($id) ? msg_box($msg = ['title' => $LNG['L_ERROR'], 'body' => $LNG['L_ERR_BAD_ID']]) : null;
-
     $other = [];
     $page = '';
 
@@ -292,12 +290,12 @@ function view_season_detailed($season, $items_details) {
     $id = $filter->getInt('id');
     $view_type = $filter->getString('view_type');
     $iurl = '?page=view&id=' . $id . '&view_type=' . $view_type;
-
     $episode_data = '<div class="episode_container">';
     $episode_data .= '<hr/><div class="divTable">';
     $have_episodes = [];
-
     $item_counter = 0;
+    $have_shows = get_have_shows_season($items_details[0]['themoviedb_id'], $items_details[0]['season']);
+
     foreach ($items_details as $item) {
         $tdata = [];
         $tdata['iurl'] = $iurl;
@@ -309,10 +307,14 @@ function view_season_detailed($season, $items_details) {
                 $episode_data .= '<hr/><div class="divTable">';
                 $item_counter = 0;
             }
-            $have_show = have_show($item['themoviedb_id'], $item['season'], $item['episode']);
-            if (valid_array($have_show)) {
-                $tdata['have_show'] = $have_show;
-                $have_episodes[] = $item['episode'];
+            if (valid_array($have_shows)) {
+                foreach ($have_shows as $have_show) {
+                    if ($have_show['episode'] == $item['episode']) {
+                        $tdata['have_show'] = $have_show;
+                        $have_episodes[] = $item['episode'];
+                        break;
+                    }
+                }
             }
             $episode_data .= getTpl('episodes_rows', array_merge($item, $tdata));
 
@@ -341,6 +343,33 @@ function view_season_detailed($season, $items_details) {
     $episode_data .= '</div>';
 
     return $episode_data;
+}
+
+function get_have_shows($oid) {
+    global $db;
+
+    if (!is_numeric($oid)) {
+        return false;
+    }
+    $where['themoviedb_id'] = ['value' => $oid];
+    $results = $db->select('library_shows', null, $where);
+    $shows = $db->fetchAll($results);
+
+    return valid_array($shows) ? $shows : false;
+}
+
+function get_have_shows_season($oid, $season) {
+    global $db;
+
+    if (!is_numeric($oid) || !is_numeric($season)) {
+        return false;
+    }
+    $where['themoviedb_id'] = ['value' => $oid];
+    $where['season'] = ['value' => $season];
+    $results = $db->select('library_shows', null, $where);
+    $shows = $db->fetchAll($results);
+
+    return valid_array($shows) ? $shows : false;
 }
 
 function have_show($oid, $season, $episode) {

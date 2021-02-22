@@ -72,7 +72,7 @@ class DB {
         $id = $this->getIdByField($table, $field, $value);
         if (empty($id)) {
             $this->addItem($table, $item);
-            return true;
+            return $this->getLastId();
         }
         //item already exists
         return false;
@@ -80,8 +80,27 @@ class DB {
 
     public function addItemsUniqField($table, $items, $field) {
         foreach ($items as $item) {
-            $this->addItemUniqField($table, $item, $field);
+            !isset($fields) ? $fields = $item[$field] : $fields .= ',' . $item[$field];
         }
+
+        $items_fields = $this->selectMultiple($table, $field, $fields, $field);
+        foreach ($items as $item) {
+            $found = 0;
+            foreach ($items_fields as $item_field) {
+                if ($item_field[$field] == $item[$field]) {
+                    break;
+                }
+            }
+            if ($found) {
+                $this->addItemUniqField($table, $item, $field);
+            }
+        }
+        /* OLD
+          foreach ($items as $item) {
+          $this->addItemUniqField($table, $item, $field);
+          }
+         *
+         */
     }
 
     //TODO create a upsert insert and replace SQLite have it... i think
@@ -280,7 +299,13 @@ class DB {
 
     public function selectMultiple($table, $field, $values, $what = null) {
         !isset($what) ? $what = '*' : null;
-        $query = 'SELECT ' . $what . ' FROM ' . $table . ' WHERE ' . $field . ' IN(' . $values . ')';
+        $explode_values = array_map('trim', explode(',', $values));
+
+        foreach ($explode_values as $explode_value) {
+            !isset($prep_values) ? $prep_values = '\'' . $explode_value . '\'' : $prep_values .= ',\'' . $explode_value . '\'';
+        }
+        $query = 'SELECT ' . $what . ' FROM ' . $table . ' WHERE ' . $field . ' IN(' . $prep_values . ')';
+
         $this->querys[] = $query;
         $result = $this->query($query);
         $rows = $this->fetchAll($result);

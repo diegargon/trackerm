@@ -53,6 +53,7 @@ function search_media_torrents($media_type, $search, $head = null, $nohtml = fal
                 return false;
             }
             foreach ($ids as $cache_id) {
+                //TODO: GET ALL IDS IN ONE QUERY
                 $db_item = $db->getItemById($jackett_db, trim($cache_id));
                 !empty($db_item) ? $media_db[] = $db_item : null;
             }
@@ -227,13 +228,45 @@ function jackett_prep_media($media_type, $media_results) {
         }
     }
 
-    if (!empty($media) && count($media) > 0) {
-        $db->addItemsUniqField($jackett_db, $media, 'guid');
-        //add ids
-        foreach ($media as $key => $item) {
-            $id = $db->getIdByField($jackett_db, 'guid', $item['guid']);
-            $media[$key]['id'] = $id;
+    if (valid_array($media)) {
+        //Get all item guid results
+        foreach ($media as $item) {
+            !isset($guids) ? $guids = $item['guid'] : $guids .= ',' . $item['guid'];
         }
+        //Select from db  all items with same guids
+        $items_id_guid = $db->selectMultiple($jackett_db, 'guid', $guids, 'id,guid,guessed_poster,guessed_trailer');
+
+        //media haven't id and we need it, here we check if item guid exist in the database
+        //if item exists we add the id to media id
+        //if item not exist we additem, get the last id insert and add to the media item id the id
+        foreach ($media as $key => $item) {
+            $found = 0;
+            foreach ($items_id_guid as $item_id_guid) {
+                if ($item_id_guid['guid'] == $item['guid']) {
+                    $found = 1;
+                    $media[$key]['id'] = $item_id_guid['id'];
+                    //we need this too
+                    $media[$key]['guessed_poster'] = $item_id_guid['guessed_poster'];
+                    $media[$key]['guessed_trailer'] = $item_id_guid['guessed_trailer'];
+                    break;
+                }
+            }
+            if (!$found) {
+                $last_id = $db->addItem($jackett_db, $item);
+                $media[$key]['id'] = $last_id;
+            }
+        }
+        /* OLD
+          $db->addItemsUniqField($jackett_db, $media, 'guid');
+
+          foreach ($media as $key => $item) {
+          $id = $db->getIdByField($jackett_db, 'guid', $item['guid']);
+          $media[$key]['id'] = $id;
+          }
+         *
+         */
+    } else {
+        return false;
     }
 
     return $media;

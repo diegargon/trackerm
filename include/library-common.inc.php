@@ -154,10 +154,9 @@ function show_identify_media($media_type) {
     $titles = '';
     $i = 0;
     $uniq_shows = [];
-
     $iurl = '?page=' . $filter->getString('page');
 
-    $result = $db->query("SELECT * FROM library_$media_type WHERE title = '' OR themoviedb_id = ''");
+    $result = $db->query("SELECT * FROM library_$media_type WHERE title <> '' OR themoviedb_id <> ''");
     $media = $db->fetchAll($result);
     if (!valid_array($media)) {
         return false;
@@ -182,7 +181,7 @@ function show_identify_media($media_type) {
 
         (isset($auto_id_ids) && count($auto_id_ids) > 0 ) ? auto_ident_exact($media_type, $auto_id_ids) : null;
         //Need requery for failed automate ident
-        $result = $db->query("SELECT * FROM library_$media_type WHERE title = '' OR themoviedb_id = ''");
+        $result = $db->query("SELECT * FROM library_$media_type WHERE title <> '' OR themoviedb_id <> ''");
         $media = $db->fetchAll($result);
         if (empty($media)) {
             return false;
@@ -191,7 +190,6 @@ function show_identify_media($media_type) {
 
     $uniq_shows = [];
     foreach ($media as $item) {
-
         $title_tdata['results_opt'] = '';
 
         if (empty($item['title'])) {
@@ -292,6 +290,7 @@ function auto_ident_exact($media_type, $ids) {
 
 function ident_by_idpairs($media_type, $id_pairs) {
     global $log;
+
     if (!valid_array($id_pairs)) {
         return false;
     }
@@ -306,7 +305,7 @@ function ident_by_id($media_type, $tmdb_id, $id) {
 
     $log->debug("Ident by ident_by_id called");
     $db_data = mediadb_getFromCache($media_type, $tmdb_id);
-    ($db_data) ? submit_ident($media_type, $db_data, $id) : null;
+    valid_array($db_data) ? submit_ident($media_type, $db_data, $id) : null;
 }
 
 function submit_ident($media_type, $item, $id) {
