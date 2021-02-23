@@ -53,11 +53,7 @@ function view() {
     if ($view_type == 'movies_db' || $view_type == 'shows_db') {
         $in_library = $db->getItemByField('library_' . $media_type, 'themoviedb_id', $item['themoviedb_id']);
         if ($in_library !== false) {
-            if ($media_type == 'movies') {
-                $item['movie_in_library'] = $in_library['id'];
-            } else if ($media_type == 'shows') {
-                $item['show_in_library'] = $in_library['id'];
-            }
+            $item['in_library'] = $in_library['id'];
         }
     }
 
@@ -118,7 +114,6 @@ function view() {
     }
 
     if ($view_type == 'shows_db' || $view_type == 'shows_library') {
-        //NEWFEATURE
         $other['follow_show'] = get_follow_show($item['themoviedb_id']);
     }
 

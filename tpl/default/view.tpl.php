@@ -71,13 +71,11 @@
                 <?php } ?>
                 <div class="view_actions">
                     <?php
-                    if (!empty($tdata['movie_in_library']) || !empty($tdata['show_in_library'])) {
+                    if (!empty($tdata['in_library'])) {
                         ?>
                         <span class="action_link">
-                            <?php if (!empty($tdata['movie_in_library'])) { ?>
-                                <a href="?page=view&id=<?= $tdata['movie_in_library'] ?>&view_type=movies_library"><?= $LNG['L_HAVEIT'] ?></a>
-                            <?php } else if (!empty($tdata['show_in_library'])) { ?>
-                                <a href="?page=view&id=<?= $tdata['show_in_library'] ?>&view_type=shows_library"><?= $LNG['L_HAVEIT'] ?></a>
+                            <?php if (!empty($tdata['in_library'])) { ?>
+                                <a href="?page=view&id=<?= $tdata['in_library'] ?>&view_type=<?= $tdata['media_type'] ?>_library"><?= $LNG['L_HAVEIT'] ?></a>
                             <?php } ?>
                         </span>
                     <?php } ?>
