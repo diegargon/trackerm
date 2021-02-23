@@ -18,7 +18,7 @@ if ($tdata['want_separator']) {
     <?php
 } else {
     ?>
-    <div class="divTableRow">
+    <div class="divTableRowWanted">
         <div class="divTableCellWanted">
             <a href="<?= $tdata['iurl'] . '&delete=' . $tdata['id'] ?>" class="action_link"><?= $LNG['L_DELETE'] ?></a>
         </div>

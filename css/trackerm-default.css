@@ -114,7 +114,7 @@ button {
     display: table;
     border-collapse: collapse;
 }
-.divTableRow, .catRow {
+.divTableRow, .divTableRowWanted, .catRow {
     display: table-row;
 }
 .divTableHeading {
@@ -513,10 +513,19 @@ button {
 .form_inline {
     display: inline;
 }
+
+.tor_row_container {
+    border:2px solid black;
+    border-collapse: collapse;
+}
+
 .tor_name {
     border:0px solid #ff5b5b;
     background: black;
-    padding: 3px;
+    padding: 8px;
+}
+.tor_tags {
+    margin:4px;
 }
 .tor_tag {
     border: 1px solid blue;
@@ -741,4 +750,43 @@ button {
     width:98%;
     border: 0px solid blue;
     text-align: center;
+}
+
+/* Responsive */
+
+@media only screen and (max-width: 800px) {
+    .info_container {
+        display:block;
+        
+    }
+    .info_column:first-of-type {
+        width:100%;
+    }
+    .info_column:last-of-type {
+        width:100%;
+    }
+    .info_column {
+        height: 80vh;
+    }
+    .divTableCell, .divTableHead {    
+        max-width: 100%;
+    }
+    .wanted_list_container {
+        line-height: 1;  
+    }
+    .divTableWanted {
+        width:100%;
+    }
+    .divTableRowWanted {
+        display: grid;
+    }
+    .divTableCellWanted {
+        display:inline;
+        width:100%;
+
+    }
+    .divTableCell {
+        display:inline-block;
+        width:20%;
+    }
 }
