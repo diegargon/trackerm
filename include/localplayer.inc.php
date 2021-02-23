@@ -39,7 +39,13 @@ function get_pl_shows($item_requested) {
         ) {
             continue;
         }
-        $m3u_title = "#EXTINF:-1, {$item['title']}\r\n";
+        $match = [];
+        if (preg_match('/S\d{2}E\d{2}/i', $item['file_name'], $match) == 1) {
+            $episode = trim($match[0]);
+        } else {
+            $episode = '';
+        }
+        $m3u_title = "#EXTINF:-1, {$item['title']} $episode\r\n";
         $path = str_replace($cfg['playlocal_root_path'], '', $item['path']);
         if (isMobile() || isLinux()) {
             $m3u_path = $cfg['playlocal_share_linux_path'] . $path . "\r\n";
