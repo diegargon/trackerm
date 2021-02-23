@@ -39,6 +39,8 @@
                 <option <?= $tdata['max_rows_sel_6'] ?> value="6">6</option>
                 <option <?= $tdata['max_rows_sel_8'] ?> value="8">8</option>
                 <option <?= $tdata['max_rows_sel_10'] ?> value="10">10</option>
+                <option <?= $tdata['max_rows_sel_25'] ?> value="25">25</option>
+                <option <?= $tdata['max_rows_sel_50'] ?> value="50">50</option>
             </select>
             <?php if ($cfg['want_movies'] && ($tdata['page'] == 'library' || $tdata['page'] == 'library_movies')) { ?>
                 <input class="submit_btn" type="submit" name="rebuild_movies" value="<?= $LNG['L_REESCAN_MOVIES'] ?>"/>

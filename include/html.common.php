@@ -320,10 +320,9 @@ function getOptions() {
     }
 
     ($cfg['max_identify_items'] == 0) ? $tdata['max_id_sel_0'] = 'selected' : $tdata['max_id_sel_0'] = '';
-    ($cfg['max_identify_items'] == 5) ? $tdata['max_id_sel_5'] = 'selected' : $tdata['max_id_sel_5'] = '';
-    ($cfg['max_identify_items'] == 10) ? $tdata['max_id_sel_10'] = 'selected' : $tdata['max_id_sel_10'] = '';
-    ($cfg['max_identify_items'] == 20) ? $tdata['max_id_sel_20'] = 'selected' : $tdata['max_id_sel_20'] = '';
-    ($cfg['max_identify_items'] == 50) ? $tdata['max_id_sel_50'] = 'selected' : $tdata['max_id_sel_50'] = '';
+
+    $tdata['max_id_sel_0'] = $tdata['max_id_sel_5'] = $tdata['max_id_sel_10'] = $tdata['max_id_sel_20'] = $tdata['max_id_sel_50'] = '';
+    $tdata['max_id_sel_' . $cfg['max_identify_items'] . ''] = 'selected';
 
     /* ROWS */
     $max_rows_sel_none = '';
@@ -338,16 +337,10 @@ function getOptions() {
         }
     }
 
-    ($cfg['tresults_rows'] == 1) ? $tdata['max_rows_sel_1'] = 'selected' : $tdata['max_rows_sel_1'] = '';
-    ($cfg['tresults_rows'] == 2) ? $tdata['max_rows_sel_2'] = 'selected' : $tdata['max_rows_sel_2'] = '';
-    ($cfg['tresults_rows'] == 4) ? $tdata['max_rows_sel_4'] = 'selected' : $tdata['max_rows_sel_4'] = '';
-    ($cfg['tresults_rows'] == 6) ? $tdata['max_rows_sel_6'] = 'selected' : $tdata['max_rows_sel_6'] = '';
-    ($cfg['tresults_rows'] == 8) ? $tdata['max_rows_sel_8'] = 'selected' : $tdata['max_rows_sel_8'] = '';
-    ($cfg['tresults_rows'] == 10) ? $tdata['max_rows_sel_10'] = 'selected' : $tdata['max_rows_sel_10'] = '';
-    ($cfg['tresults_rows'] == 25) ? $tdata['max_rows_sel_25'] = 'selected' : $tdata['max_rows_sel_25'] = '';
-    ($cfg['tresults_rows'] == 50) ? $tdata['max_rows_sel_50'] = 'selected' : $tdata['max_rows_sel_50'] = '';
+    $tdata['max_rows_sel_1'] = $tdata['max_rows_sel_2'] = $tdata['max_rows_sel_4'] = $tdata['max_rows_sel_6'] = $tdata['max_rows_sel_8'] = '';
+    $tdata['max_rows_sel_10'] = $tdata['max_rows_sel_25'] = $tdata['max_rows_sel_50'] = '';
+    $tdata['max_rows_sel_' . $cfg['tresults_rows'] . ''] = 'selected';
     $tdata['max_rows_sel_none'] = $max_rows_sel_none;
-
     /* COLUMNS */
 
     $max_columns_sel_none = '';
@@ -362,12 +355,9 @@ function getOptions() {
         }
     }
 
-    ($cfg['tresults_columns'] == 1) ? $tdata['max_columns_sel_1'] = 'selected' : $tdata['max_columns_sel_1'] = '';
-    ($cfg['tresults_columns'] == 2) ? $tdata['max_columns_sel_2'] = 'selected' : $tdata['max_columns_sel_2'] = '';
-    ($cfg['tresults_columns'] == 4) ? $tdata['max_columns_sel_4'] = 'selected' : $tdata['max_columns_sel_4'] = '';
-    ($cfg['tresults_columns'] == 6) ? $tdata['max_columns_sel_6'] = 'selected' : $tdata['max_columns_sel_6'] = '';
-    ($cfg['tresults_columns'] == 8) ? $tdata['max_columns_sel_8'] = 'selected' : $tdata['max_columns_sel_8'] = '';
-    ($cfg['tresults_columns'] == 10) ? $tdata['max_columns_sel_10'] = 'selected' : $tdata['max_columns_sel_10'] = '';
+    $tdata['max_columns_sel_1'] = $tdata['max_columns_sel_2'] = $tdata['max_columns_sel_4'] = $tdata['max_columns_sel_6'] = '';
+    $tdata['max_columns_sel_8'] = $tdata['max_columns_sel_10'] = '';
+    $tdata['max_columns_sel_' . $cfg['tresults_columns'] . ''] = 'selected';
     $tdata['max_columns_sel_none'] = $max_columns_sel_none;
 
     //new filters
