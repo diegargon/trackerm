@@ -319,17 +319,11 @@ function getOptions() {
         setPrefsItem('sel_indexer', $cfg['sel_indexer']);
     }
 
-    ($cfg['max_identify_items'] == 0) ? $max_id_sel_0 = 'selected' : $max_id_sel_0 = '';
-    ($cfg['max_identify_items'] == 5) ? $max_id_sel_5 = 'selected' : $max_id_sel_5 = '';
-    ($cfg['max_identify_items'] == 10) ? $max_id_sel_10 = 'selected' : $max_id_sel_10 = '';
-    ($cfg['max_identify_items'] == 20) ? $max_id_sel_20 = 'selected' : $max_id_sel_20 = '';
-    ($cfg['max_identify_items'] == 50) ? $max_id_sel_50 = 'selected' : $max_id_sel_50 = '';
-
-    $tdata['max_id_sel_0'] = $max_id_sel_0;
-    $tdata['max_id_sel_5'] = $max_id_sel_5;
-    $tdata['max_id_sel_10'] = $max_id_sel_10;
-    $tdata['max_id_sel_20'] = $max_id_sel_20;
-    $tdata['max_id_sel_50'] = $max_id_sel_50;
+    ($cfg['max_identify_items'] == 0) ? $tdata['max_id_sel_0'] = 'selected' : $tdata['max_id_sel_0'] = '';
+    ($cfg['max_identify_items'] == 5) ? $tdata['max_id_sel_5'] = 'selected' : $tdata['max_id_sel_5'] = '';
+    ($cfg['max_identify_items'] == 10) ? $tdata['max_id_sel_10'] = 'selected' : $tdata['max_id_sel_10'] = '';
+    ($cfg['max_identify_items'] == 20) ? $tdata['max_id_sel_20'] = 'selected' : $tdata['max_id_sel_20'] = '';
+    ($cfg['max_identify_items'] == 50) ? $tdata['max_id_sel_50'] = 'selected' : $tdata['max_id_sel_50'] = '';
 
     /* ROWS */
     $max_rows_sel_none = '';
@@ -350,6 +344,8 @@ function getOptions() {
     ($cfg['tresults_rows'] == 6) ? $tdata['max_rows_sel_6'] = 'selected' : $tdata['max_rows_sel_6'] = '';
     ($cfg['tresults_rows'] == 8) ? $tdata['max_rows_sel_8'] = 'selected' : $tdata['max_rows_sel_8'] = '';
     ($cfg['tresults_rows'] == 10) ? $tdata['max_rows_sel_10'] = 'selected' : $tdata['max_rows_sel_10'] = '';
+    ($cfg['tresults_rows'] == 25) ? $tdata['max_rows_sel_25'] = 'selected' : $tdata['max_rows_sel_25'] = '';
+    ($cfg['tresults_rows'] == 50) ? $tdata['max_rows_sel_50'] = 'selected' : $tdata['max_rows_sel_50'] = '';
     $tdata['max_rows_sel_none'] = $max_rows_sel_none;
 
     /* COLUMNS */
