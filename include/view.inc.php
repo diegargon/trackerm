@@ -163,9 +163,7 @@ function view_extra_movies($item, $opt = null) {
         if ($torrent_results !== false) {
             $extra .= $torrent_results;
         } else {
-            $box_msg['title'] = $LNG['L_TORRENT'];
-            $box_msg['body'] = $LNG['L_NOTHING_FOUND'];
-            $extra .= msg_box($box_msg);
+            $extra .= msg_box(['title' => $LNG['L_TORRENT'], 'body' => $LNG['L_NOTHING_FOUND']]);
         }
     }
 
@@ -188,27 +186,21 @@ function view_extra_shows($item, $opt) {
     $extra .= '<input class="submit_btn" type="submit" name="more_torrents" value="' . $LNG['L_SHOW_TORRENTS'] . '" >';
 
     $title = getFileTitle($item['title']);
-
     if (!empty($_GET['search_shows_db'])) {
         $stitle = trim($filter->getString('search_shows_db'));
     } else {
         $stitle = $title;
     }
-
     $extra .= '<input type="text" name="search_shows_db" value="' . $stitle . '">';
     $extra .= '</form>';
 
-    if (
-            isset($_GET['more_shows']) || (!empty($opt['auto_show_db']) && !isset($_GET['more_torrents']))
-    ) {
+    if (isset($_GET['more_shows']) || (!empty($opt['auto_show_db']) && !isset($_GET['more_torrents']))) {
         $shows = mediadb_searchShows($stitle);
         $opt['view_type'] = 'shows_db';
         !empty($shows) ? $extra .= buildTable('L_DB', $shows, $opt) : null;
     }
 
-    if (
-            isset($_GET['more_torrents']) || (!empty($opt['auto_show_torrents']) && !isset($_GET['more_shows']))
-    ) {
+    if (isset($_GET['more_torrents']) || (!empty($opt['auto_show_torrents']) && !isset($_GET['more_shows']))) {
         $search['words'] = $stitle;
         $extra .= search_media_torrents('shows', $search);
     }
@@ -265,7 +257,6 @@ function view_seasons($item, $update = false) {
     }
 
     $iurl = '?page=view&id=' . $id . '&view_type=' . $view_type;
-
     for ($i = 1; $i <= $seasons; $i++) {
         $seasons_data .= '<a class="season_link" href="' . $iurl . '&season=' . $i . '">' . $LNG['L_SEASON'] . ': ' . $i . '</a>';
     }
@@ -274,8 +265,8 @@ function view_seasons($item, $update = false) {
     if ($season) {
         $episode_data = view_season_detailed($season, $items_details);
     }
-
     $seasons_data .= '<br/>' . $episode_data;
+
     return $seasons_data;
 }
 
@@ -289,15 +280,15 @@ function view_season_detailed($season, $items_details) {
     $episode_data .= '<hr/><div class="divTable">';
     $have_episodes = [];
     $item_counter = 0;
-    $have_shows = get_have_shows_season($items_details[0]['themoviedb_id'], $items_details[0]['season']);
 
+    $have_shows = get_have_shows_season($items_details[0]['themoviedb_id'], $items_details[0]['season']);
     foreach ($items_details as $item) {
         $tdata = [];
         $tdata['iurl'] = $iurl;
         if ($item['season'] == $season) {
-            if ($item_counter == 12) {
+            if ($item_counter == 12) { //Max Items per table
                 $episode_data .= '</div>'; //Table
-                $episode_data .= '</div>'; //Container
+                $episode_data .= '</div>'; //Episode container
                 $episode_data .= '<div class="episode_container">';
                 $episode_data .= '<hr/><div class="divTable">';
                 $item_counter = 0;
@@ -318,7 +309,6 @@ function view_season_detailed($season, $items_details) {
     }
     $episode_data .= '</div>'; //EPISODE_CONTAINER
     $episode_data .= '</div>'; //TABLE
-
     $episode_data .= '<div class="episode_options">';
     $episode_list = '';
     $n_episodes = count($items_details);

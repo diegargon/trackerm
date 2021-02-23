@@ -35,18 +35,12 @@ function _rebuild($media_type, $path) {
     global $cfg, $db, $log, $LNG;
 
     $log->debug("Rebuild $media_type called");
-
     $items = [];
     $files = findMediaFiles($path, $cfg['media_ext']);
 
-    if ($media_type == 'movies') {
-        $library_table = 'library_movies';
-    } else if ($media_type == 'shows') {
-        $library_table = 'library_shows';
-    }
+    $library_table = 'library_' . $media_type;
 
     $media = $db->getTableData($library_table);
-
     $i = 0;
 
     //check if each media path it in $files if not probably delete, then delete db entry
@@ -180,7 +174,7 @@ function show_identify_media($media_type) {
         }
 
         (isset($auto_id_ids) && count($auto_id_ids) > 0 ) ? auto_ident_exact($media_type, $auto_id_ids) : null;
-        //Need requery for failed automate ident
+        //Need requery for failed automate ident, probably there is a better way TODO
         $result = $db->query("SELECT * FROM library_$media_type WHERE title <> '' OR themoviedb_id <> ''");
         $media = $db->fetchAll($result);
         if (empty($media)) {
@@ -199,7 +193,6 @@ function show_identify_media($media_type) {
             if ($media_type == 'movies') {
                 $db_media = mediadb_searchMovies($item['predictible_title']);
             } else if ($media_type == 'shows') {
-                //var_dump($item);
                 if ((array_search($item['predictible_title'], $uniq_shows)) === false) {
                     $db_media = mediadb_searchShows($item['predictible_title']);
                     $uniq_shows[] = $item['predictible_title'];
@@ -211,7 +204,6 @@ function show_identify_media($media_type) {
             }
 
             if (valid_array($db_media)) {
-
                 foreach ($db_media as $db_item) {
                     $year = trim(substr($db_item['release'], 0, 4));
                     $title_tdata['results_opt'] .= '<option value="' . $db_item['themoviedb_id'] . '">';
@@ -291,13 +283,15 @@ function auto_ident_exact($media_type, $ids) {
 function ident_by_idpairs($media_type, $id_pairs) {
     global $log;
 
+    $log->debug("Ident by idpairs called");
     if (!valid_array($id_pairs)) {
         return false;
     }
-    $log->debug("Ident by idpairs called");
     foreach ($id_pairs as $my_id => $tmdb_id) {
         (!empty($my_id) && !emptY($tmdb_id)) ? ident_by_id($media_type, $tmdb_id, $my_id) : null;
     }
+
+    return true;
 }
 
 function ident_by_id($media_type, $tmdb_id, $id) {
@@ -305,7 +299,13 @@ function ident_by_id($media_type, $tmdb_id, $id) {
 
     $log->debug("Ident by ident_by_id called");
     $db_data = mediadb_getFromCache($media_type, $tmdb_id);
-    valid_array($db_data) ? submit_ident($media_type, $db_data, $id) : null;
+    if (alid_array($db_data)) {
+        submit_ident($media_type, $db_data, $id);
+    } else {
+        return false;
+    }
+
+    return true;
 }
 
 function submit_ident($media_type, $item, $id) {
@@ -363,6 +363,8 @@ function submit_ident($media_type, $item, $id) {
             return false;
         }
     }
+
+    return true;
 }
 
 function check_history($media_type, $ids) {
@@ -472,11 +474,7 @@ function clean_database($media_type, $files, $media) {
                     $db->update('library_history', $values, ['id' => ['value' => $item_hist_id]], 'LIMIT 1');
                 }
             }
-            if ($media_type == 'movies') {
-                $db->deleteItemById('library_movies', $item['id']);
-            } else if ($media_type == 'shows') {
-                $db->deleteItemById('library_shows', $item['id']);
-            }
+            $db->deleteItemById('library_' . $media_type, $item['id']);
         }
     }
 }

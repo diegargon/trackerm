@@ -13,7 +13,6 @@ function show_my_movies() {
     global $db, $filter, $cfg;
 
     $page = '';
-
     $npage = $filter->getInt('npage');
     $search_type = $filter->getString('search_type');
 
@@ -64,7 +63,6 @@ function show_my_shows() {
         $delete_ptitle_match = $delete_ident_item['predictible_title'];
         $db->deleteItemsByField('library_shows', 'predictible_title', $delete_ptitle_match);
     }
-
     $page .= show_identify_media('shows');
 
     //TODO: for improve and select only from table what we want show we need
@@ -72,9 +70,7 @@ function show_my_shows() {
     //can show size without get all data.
 
     $shows = $db->getTableData('library_shows');
-
     if (valid_array($shows)) {
-
         $shows_identifyed = [];
 
         foreach ($shows as $key => $movie) {
@@ -82,12 +78,10 @@ function show_my_shows() {
                 $shows_identifyed[$key] = $movie;
             }
         }
-
         usort($shows_identifyed, function ($a, $b) {
             return strcmp($a["created"], $b["created"]);
         });
         $shows_identifyed = array_reverse($shows_identifyed);
-
         $uniq_shows = [];
         $sum_sizes = [];
         $episode_count = [];
