@@ -517,6 +517,7 @@ button {
 .tor_row_container {
     border:2px solid black;
     border-collapse: collapse;
+    width:max-content;
 }
 
 .tor_name {

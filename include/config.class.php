@@ -98,8 +98,8 @@ class Config {
             $cat_head .= '<a href = "index.php?page=config&category=' . $category . '">' . $cat_desc . '</a> ';
         }
         $cat_head .= '</div>';
-        $data_result = '<form method = "POST"><input class="submit_btn" type="submit" name="submit_config" value="' . $LNG['L_SUBMIT'] . '"/>';
-        $data_result .= $cat_head . $selected_cat_title;
+        $data_result = $cat_head . $selected_cat_title;
+        $data_result .= '<form method = "POST"><input class="submit_btn" type="submit" name="submit_config" value="' . $LNG['L_SUBMIT'] . '"/>';
         $data_result .= '<div class = "catTable">' . $data_row . '</div></form>';
 
         return $data_result;
