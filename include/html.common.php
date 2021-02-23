@@ -148,18 +148,17 @@ function build_item($item, $topt) {
     ) {
         $item['title'] = $item['title'] . ' (' . strftime("%Y", strtotime($item['release'])) . ')';
     }
-
     if (empty($item['poster'])) {
         if (!empty($item['guessed_poster']) && ($item['guessed_poster'] != -1)) {
             $item['poster'] = $item['guessed_poster'];
-        } else if (isset($item['guessed_poster']) && $item['guessed_poster'] != -1) {
+        } else if (empty($item['guessed_poster']) && $item['guessed_poster'] != -1) {
             $item['poster'] = $cfg['img_url'] . '/not_available.jpg';
             if (!isset($item['themoviedb_id'])) {
                 $poster = mediadb_guessPoster($item);
                 if (!empty($poster)) {
                     if ($cfg['cache_images']) {
                         $cache_img_response = cacheImg($poster);
-                        if (!empty(cache_img_response)) {
+                        if (!empty($cache_img_response)) {
                             $item['poster'] = $cache_img_response;
                         }
                     }

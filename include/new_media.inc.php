@@ -42,7 +42,6 @@ function page_new_media($media_type) {
     }
 
     if (!$cfg['search_cache'] || $cache_media_expire) {
-
         foreach ($cfg['jackett_indexers'] as $indexer) {
             $caps = jackett_get_caps($indexer);
             if (empty($caps) || count($caps) < 1) {
@@ -57,6 +56,9 @@ function page_new_media($media_type) {
 
     ($cache_media_expire == 1) || !$cfg['search_cache'] && !empty($media_res) ? $res_media_db = jackett_prep_media($media_type, $media_res) : null;
 
+    usort($res_media_db, function ($a, $b) {
+        return strcmp($b['id'], $a['id']);
+    });
     $final_res_media_db = $res_media_db; //res_ unfilter need to cache
     //ignore words
     if (!empty($cfg['new_ignore_words_enable']) && !empty($cfg['new_ignore_keywords'])) {
