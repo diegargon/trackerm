@@ -59,42 +59,8 @@ function page_new_media($media_type) {
     usort($res_media_db, function ($a, $b) {
         return strcmp($b['id'], $a['id']);
     });
-    $final_res_media_db = $res_media_db; //res_ unfilter need to cache
-    //ignore words
-    if (!empty($cfg['new_ignore_words_enable']) && !empty($cfg['new_ignore_keywords'])) {
-        $ignore_keywords = array_map('trim', explode(',', $cfg['new_ignore_keywords']));
-        foreach ($final_res_media_db as $key => $item) {
-            $match = str_ireplace($ignore_keywords, '', $item['title']);
-            if (trim($match) != trim($item['title'])) {
-                unset($final_res_media_db[$key]);
-                //echo "Dropping by word " . $item['title'] . "<br>";
-            }
-        }
-    }
 
-    //ignore_size
-    if (!empty($cfg['new_ignore_size_enable']) && !empty($cfg['new_ignore_size'])) {
-        foreach ($final_res_media_db as $key => $item) {
-            $gbytes = round(bytesToGB($item['size']), 2);
-            if ($gbytes > trim($cfg['new_ignore_size'])) {
-                unset($final_res_media_db[$key]);
-                //echo "Dropping by size" . $item['title'] . ":$gbytes<br>";
-            }
-        }
-    }
-    /* BUILD PAGE */
-    $page_news = '';
-
-    if (!empty($final_res_media_db)) {
-        $topt['search_type'] = $media_type;
-        $topt['view_type'] = $media_type . '_torrent';
-        ($media_type == 'movies') ? $head = 'L_MOVIES' : $head = 'L_SHOWS';
-        $final_res_media_db = mix_media_res($final_res_media_db);
-        $page_news_media = buildTable($head, $final_res_media_db, $topt);
-        $page_news .= $page_news_media;
-    }
-
-    //UPDATE CACHE
+    //UPDATE CACHE. save before screening
     if (($cfg['search_cache'] && $cache_media_expire)) {
         $media_cache['words'] = '';
         $media_cache['updated'] = time();
@@ -110,6 +76,41 @@ function page_new_media($media_type) {
         $where['words'] = ['value' => ''];
         $where['media_type'] = ['value' => $media_type];
         $db->upsert($search_cache_db, $media_cache, $where);
+    }
+
+    //Filters TODO: Probably move to function, and filter indexeer in mix_media_res
+    //ignore words
+    if (!empty($cfg['new_ignore_words_enable']) && !empty($cfg['new_ignore_keywords'])) {
+        $ignore_keywords = array_map('trim', explode(',', $cfg['new_ignore_keywords']));
+        foreach ($res_media_db as $key => $item) {
+            $match = str_ireplace($ignore_keywords, '', $item['title']);
+            if (trim($match) != trim($item['title'])) {
+                unset($res_media_db[$key]);
+                //echo "Dropping by word " . $item['title'] . "<br>";
+            }
+        }
+    }
+
+    //ignore_size
+    if (!empty($cfg['new_ignore_size_enable']) && !empty($cfg['new_ignore_size'])) {
+        foreach ($res_media_db as $key => $item) {
+            $gbytes = round(bytesToGB($item['size']), 2);
+            if ($gbytes > trim($cfg['new_ignore_size'])) {
+                unset($res_media_db[$key]);
+                //echo "Dropping by size" . $item['title'] . ":$gbytes<br>";
+            }
+        }
+    }
+    /* BUILD PAGE */
+    $page_news = '';
+
+    if (!empty($res_media_db)) {
+        $topt['search_type'] = $media_type;
+        $topt['view_type'] = $media_type . '_torrent';
+        ($media_type == 'movies') ? $head = 'L_MOVIES' : $head = 'L_SHOWS';
+        $res_media_db = mix_media_res($res_media_db);
+        $page_news_media = buildTable($head, $res_media_db, $topt);
+        $page_news .= $page_news_media;
     }
 
     return $page_news;
@@ -130,6 +131,7 @@ function mix_media_res($res_media_db) {
     }
     $max_items_by_indexer = 0;
     $indexers_names = [];
+    //filter indexers
     foreach ($indexers as $name_key => $indexer) {
         if (empty($cfg['sel_indexer']) || strtolower($cfg['sel_indexer']) == strtolower($name_key) || $cfg['sel_indexer'] == 'sel_indexer_none') {
             $indexers_names[] = $name_key;
