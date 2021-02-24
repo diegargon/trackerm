@@ -142,7 +142,7 @@ function create_db() {
                 )');
 
     //LIBRARY SHOWS
-    // ilink unused, remove/rename
+    // ilink, added unused, remove/rename
     $db->query('CREATE TABLE IF NOT EXISTS "library_shows" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                     "title" VARCHAR NULL,
@@ -788,7 +788,46 @@ function update_db($from) {
       $db->insert('config', ['cfg_key' => 'display_errors', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_DISPLAY_ERRORS', 'type' => 3, 'category' => 'L_LOGGING', 'public' => 1]);
       $db->insert('config', ['cfg_key' => 'localplayer_track', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_LOCALPLAYER_TRACK', 'type' => 3, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
       $db->insert('config', ['cfg_key' => 'localplayer_web_password', 'cfg_value' => '', 'cfg_desc' => 'L_CFG_LOCALPLAYER_WEB_PASSWORD', 'type' => 1, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
+
+      $db->query('CREATE TABLE IF NOT EXISTS "library_master_shows" (
+      "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+      "title" VARCHAR NULL,
+      "clean_title" VARCHAR NULL,
+      "themoviedb_id" INTEGER NULL,
+      "file_name" VARCHAR NOT NULL UNIQUE,
+      "predictible_title" VARCHAR NULL,
+      "original_title" VARCHAR NULL,
+      "total_size" VARCHAR NULL,
+      "total_items" INT NULL,
+      "rating" REAL NULL,
+      "popularity" REAL NULL,
+      "scene" VARCHAR NULL,
+      "lang" VARCHAR NULL,
+      "plot" VARCHAR NULL,
+      "seasons" INTEGER NULL,
+      "episodes" INTEGER NULL,
+      "have_episodes" INTEGER NULL,
+      "title_year" VARCHAR NULL,
+      "trailer" VARCHAR NULL,
+      "poster" VARCHAR NULL,
+      "custom_poster" VARCHAR NULL,
+      "release" VARCHAR NULL,
+      "genre" VARCHAR NULL,
+      "child_ids" VARCHAR NULL,
+      "mediainfo" VARCHAR NULL,
+      "updated" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+      "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+      )');
+
+      $db->query('UPDATE config SET cfg_value=\'13\' WHERE cfg_key=\'db_version\' LIMIT 1');
+      $db->update('db_info', ['version' => 13]);
+      $db->query('VACUUM;');
+      }
+     */
+    /*
+      if ($from < 14) {
       $db->query('CREATE TABLE IF NOT EXISTS "library_master_movies" (
+
       "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
       "title" VARCHAR NULL,
       "clean_title" VARCHAR NULL,
@@ -812,17 +851,15 @@ function update_db($from) {
       "updated" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
       "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
       )');
-      $db->query('UPDATE config SET cfg_value=\'13\' WHERE cfg_key=\'db_version\' LIMIT 1');
-      $db->update('db_info', ['version' => 13]);
+      $db->query('UPDATE config SET cfg_value=\'14\' WHERE cfg_key=\'db_version\' LIMIT 1');
+      $db->update('db_info', ['version' => 14]);
       $db->query('VACUUM;');
       }
      */
-
     /*
-      if ($from < 14) {
-      $db->query('UPDATE config SET cfg_value=\'14\' WHERE cfg_key=\'db_version\' LIMIT 1');
-
-      $db->update('db_info', ['version' => 14]);
+      if ($from < 15) {
+      $db->query('UPDATE config SET cfg_value=\'15\' WHERE cfg_key=\'db_version\' LIMIT 1');
+      $db->update('db_info', ['version' => 15]);
       $db->query('VACUUM;');
       }
      */
