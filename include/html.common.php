@@ -151,7 +151,7 @@ function build_item($item, $topt) {
     if (empty($item['poster'])) {
         if (!empty($item['guessed_poster']) && ($item['guessed_poster'] != -1)) {
             $item['poster'] = $item['guessed_poster'];
-        } else if (empty($item['guessed_poster']) && $item['guessed_poster'] != -1) {
+        } else if (empty($item['guessed_poster'])) {
             $item['poster'] = $cfg['img_url'] . '/not_available.jpg';
             if (!isset($item['themoviedb_id'])) {
                 $poster = mediadb_guessPoster($item);
