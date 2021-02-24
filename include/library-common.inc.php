@@ -9,7 +9,7 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-function rebuild($media_type, $path) {
+function rebuild($media_type, $paths) {
     global $log;
     //r_blocker prevent forever locks, if more than 3 consecutive locks (probably get stuck, resetting)
     if (($r_blocker = getPrefsItem('rebuild_blocker', true)) && $r_blocker <= 3) {
@@ -19,13 +19,13 @@ function rebuild($media_type, $path) {
     }
     setPrefsItem('rebuild_blocker', 1, true);
 
-    if (valid_array($path)) {
-        foreach ($path as $item) {
-            _rebuild($media_type, $item);
+    if (valid_array($paths)) {
+        foreach ($paths as $path) {
+            _rebuild($media_type, $path);
             sleep(1);
         }
     } else {
-        _rebuild($media_type, $path);
+        _rebuild($media_type, $paths);
     }
 
     setPrefsItem('rebuild_blocker', 0, true);
@@ -150,7 +150,7 @@ function show_identify_media($media_type) {
     $uniq_shows = [];
     $iurl = '?page=' . $filter->getString('page');
 
-    $result = $db->query("SELECT * FROM library_$media_type WHERE title <> '' OR themoviedb_id <> ''");
+    $result = $db->query("SELECT * FROM library_$media_type WHERE title = '' OR title is NULL");
     $media = $db->fetchAll($result);
     if (!valid_array($media)) {
         return false;
@@ -172,7 +172,6 @@ function show_identify_media($media_type) {
                 $auto_id_ids[] = $auto_id_item['id'];
             }
         }
-
         (isset($auto_id_ids) && count($auto_id_ids) > 0 ) ? auto_ident_exact($media_type, $auto_id_ids) : null;
         //Need requery for failed automate ident, probably there is a better way TODO
         $result = $db->query("SELECT * FROM library_$media_type WHERE title <> '' OR themoviedb_id <> ''");
@@ -313,6 +312,7 @@ function submit_ident($media_type, $item, $id) {
 
     $log->debug("Submit $media_type ident : " . $item['title'] . ' id:' . $id);
 
+    $upd_fields = [];
     $where_check['themoviedb_id'] = ['value' => $item['themoviedb_id']];
     if ($media_type == 'shows') {
         $show_check = $db->getItemById('library_shows', $id);
