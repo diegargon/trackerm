@@ -36,8 +36,8 @@ function show_my_movies() {
 
     $topt['num_table_rows'] = $db->qSingle("SELECT COUNT(*) FROM library_movies WHERE title <> ''");
     $query = "SELECT * FROM library_movies WHERE title <> '' ORDER BY created DESC LIMIT $start,$end ";
-    $stmt = $db->query($query);
-    $movies = $db->fetchAll($stmt);
+    $results = $db->query($query);
+    $movies = $db->fetchAll($results);
 
     $topt['view_type'] = 'movies_library';
     if (valid_array($movies)) {
