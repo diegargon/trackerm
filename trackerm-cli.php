@@ -13,7 +13,8 @@ define('IN_CLI', true);
 if (file_exists('/etc/trackerm.conf')) {
     require_once('/etc/trackerm.conf');
 } else {
-    echo "\n" . 'The config file /etc/trackerm.conf is missed, please copy the default file in config.inc.php directory to /etc  and rename it as trackerm.conf and configure the settings' . "\n";
+    echo "\n" . 'The config file /etc/trackerm.conf is missed, please copy the default file in config.inc.php directory '
+    . 'to /etc  and rename it as trackerm.conf and configure the settings' . "\n";
     exit();
 }
 
@@ -31,12 +32,10 @@ if (($c_blocker = getPrefsItem('cli_blocker', true)) && $c_blocker <= 3) {
 }
 setPrefsItem('cli_blocker', 1, true);
 
-
 $log->info("Starting trackerm automatic service...");
 transmission_scan();
 wanted_work();
 update_things();
-
 
 setPrefsItem('cli_blocker', 0, true);
 
