@@ -174,7 +174,7 @@ function show_identify_media($media_type) {
         }
         (isset($auto_id_ids) && count($auto_id_ids) > 0 ) ? auto_ident_exact($media_type, $auto_id_ids) : null;
         //Need requery for failed automate ident, probably there is a better way TODO
-        $result = $db->query("SELECT * FROM library_$media_type WHERE title <> '' OR themoviedb_id <> ''");
+        $result = $db->query("SELECT * FROM library_$media_type WHERE title = '' OR title is NULL");
         $media = $db->fetchAll($result);
         if (empty($media)) {
             return false;
