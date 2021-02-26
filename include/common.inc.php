@@ -10,12 +10,6 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-if (1) {
-    ini_set('error_reporting', E_ALL);
-    error_reporting(E_ALL);
-    ini_set("display_errors", 1);
-}
-
 if (!file_exists('/etc/trackerm.conf')) {
     echo '<br> The config file /etc/trackerm.conf is missed, please copy the default file (config/config.min.php) to /etc directory and rename it as trackerm.conf and configure the settings';
     exit();
@@ -34,6 +28,12 @@ $db->connect();
 
 require_once('include/config.class.php');
 $config = new Config();
+
+if (!empty($cfg['display_errors'])) {
+    ini_set('error_reporting', E_ALL);
+    error_reporting(E_ALL);
+    ini_set("display_errors", 1);
+}
 
 if (!empty($cfg['locale'])) {
     setlocale(LC_ALL, $cfg['locale']);
