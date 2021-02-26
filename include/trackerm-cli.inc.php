@@ -856,7 +856,7 @@ function update_trailers() {
 
     $log->debug('Executing update trailers');
     $limit = 15;
-    $tables = ['library_movies', 'library_shows', 'tmdb_search_movies', 'tmdb_search_shows'];
+    $tables = ['library_movies', 'library_master_shows', 'tmdb_search_movies', 'tmdb_search_shows'];
     //IMPROVE: This can be done in one query per table
     // Update missing trailers and never try get trailer
     foreach ($tables as $table) {
@@ -970,7 +970,8 @@ function update_seasons($force = false) {
     $update['updated'] = $time_now = time();
     $when_time = time() - 259200; //3 days
     $query = 'SELECT DISTINCT themoviedb_id FROM shows_details';
-    (!$force) ? $query .= " WHERE updated < $when_time" : ' LIMIT 20';
+    (!$force) ? $query .= " WHERE updated < $when_time" : null;
+    $query .= ' LIMIT 5';
     $result = $db->query($query);
     $shows = $db->fetchAll($result);
     $i = 0;
