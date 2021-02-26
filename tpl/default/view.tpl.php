@@ -36,7 +36,7 @@
                 <?php if (!empty($tdata['themoviedb_id']) && $tdata['media_type'] == 'movies') { ?>
                     <span class="external_link"><a href="<?= $cfg['odb_movies_link'] . $tdata['themoviedb_id'] ?>" target=_blank>TheMovieDB</a></span><br/>
                 <?php } else if (!empty($tdata['themoviedb_id']) && $tdata['media_type'] == 'shows') { ?>
-                    <span class="external_link"><a href="<?= $cfg['odb_movies_link'] . $tdata['themoviedb_id'] ?>" target=_blank>TheMovieDB</a></span><br/>
+                    <span class="external_link"><a href="<?= $cfg['odb_shows_link'] . $tdata['themoviedb_id'] ?>" target=_blank>TheMovieDB</a></span><br/>
                 <?php } ?>
                 <?php if (!empty($tdata['created'])) {
                     ?>
