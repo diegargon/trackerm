@@ -111,58 +111,6 @@ function _rebuild($media_type, $path) {
     return true;
 }
 
-/*
-  function rebuild_master($media_type) {
-  global $db;
-
-  $library_table = 'library_' . $media_type;
-  $library_master_table = 'library_master_' . $media_type;
-  $db->query("DELETE FROM $library_master_table");
-  $result = $db->query("SELECT * FROM $library_table");
-  $media = $db->fetchAll($result);
-
-  foreach ($media as $media_item) {
-  $media_master_check = $db->getItemByField($library_master_table, 'themoviedb_id', $media_item['themoviedb_id']);
-
-  if (valid_array($media_master_check)) {
-  $total_items = $media_master_check['total_items'] + 1;
-  $total_size = $media_master_check['total_size'] + $media_item['size'];
-  $update_ary = [
-  'total_items' => $total_items,
-  'total_size' => $total_size,
-  ];
-
-  $db->update($library_master_table, $update_ary, ['id' => ['value' => $media_master_check['id']]]);
-  } else {
-  $_media_item = [];
-  $_media_item = $media_item;
-  $_media_item['total_items'] = 1;
-  $_media_item['total_size'] = $media_item['size'];
-  unset($_media_item['id']);
-  unset($_media_item['ilink']);
-  unset($_media_item['elink']);
-  unset($_media_item['in_library']);
-  unset($_media_item['file_name']);
-  unset($_media_item['predictible_title']);
-  unset($_media_item['file_name']);
-  unset($_media_item['size']);
-  unset($_media_item['path']);
-  unset($_media_item['tags']);
-  unset($_media_item['ext']);
-  unset($_media_item['season']);
-  unset($_media_item['episode']);
-  unset($_media_item['master']);
-  unset($_media_item['added']);
-  unset($_media_item['created']);
-  unset($_media_item['file_hash']);
-  unset($_media_item['mediainfo']);
-  $db->insert('library_master_shows', $_media_item);
-  }
-  }
-  return true;
-  }
- */
-
 function ident_by_already_have_show($media, $ids) {
     global $log, $db;
 
@@ -203,8 +151,6 @@ function show_identify_media($media_type) {
     $iurl = '?page=' . $filter->getString('page');
 
     if ($media_type == 'shows') {
-        //NEWTABLESHOWS
-        //$result = $db->query("SELECT * FROM library_master_$media_type WHERE title = '' OR title is NULL");
         $result = $db->query("SELECT * FROM library_$media_type WHERE title = '' OR title is NULL");
     } else {
         $result = $db->query("SELECT * FROM library_$media_type WHERE title = '' OR title is NULL");
@@ -369,44 +315,6 @@ function submit_ident($media_type, $item, $id) {
     global $db, $log;
 
     $log->debug("Submit $media_type ident : " . $item['title'] . ' id:' . $id);
-
-    //CHANGE BEHAVIOUR
-    /*
-     * For the next change going to use to identify library_master_shows as parent of library_shows
-     * This table would keep the identification of the show and ids for the episodes pointing to library_shows that will keep
-     * the file related things only and drop all identification fields.
-     * First task will only create and populate the table but behaviour will continue unsing library_shows for avoid
-     * intrudece a big and untested change.
-     */
-    /*
-      if ($media_type == 'shows') {
-      $show_master_check = $db->getItemByField('library_master_shows', 'themoviedb_id', $item['themoviedb_id']);
-      $_item = $item; //to remove, now not want modify item since we use later in actual behaviour.
-      if (valid_array($show_master_check)) {
-      $total_items = $show_master_check['total_items'] + 1;
-      $total_size = $show_master_check['total_size'] + $_item['size'];
-      $db->update('library_master_shows', ['total_items' => $total_items, 'total_size' => $total_size], ['id' => ['value' => $show_master_check['id']]]);
-      } else {
-      $_item['total_items'] = 1;
-      $_item['total_size'] = $_item['size'];
-      unset($_item['id']);
-      unset($_item['ilink']);
-      unset($_item['elink']);
-      unset($_item['in_library']);
-      unset($_item['added']);
-      unset($_item['created']);
-      unset($_item['file_hash']);
-      unset($_item['media_info']);
-      $db->insert('library_master_shows', $_item);
-      }
-      }
-     */
-
-    /*
-     *
-     * FIN CHANGE
-     *
-     */
 
     $upd_fields = [];
     $where_check['themoviedb_id'] = ['value' => $item['themoviedb_id']];
