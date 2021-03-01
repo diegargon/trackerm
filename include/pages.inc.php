@@ -444,7 +444,7 @@ function page_download() {
 }
 
 function page_transmission() {
-    global $trans, $LNG, $filter;
+    global $trans, $filter;
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $tid = $filter->postInt('tid');
@@ -458,8 +458,9 @@ function page_transmission() {
             isset($_POST['delete']) && !empty($trans) ? $trans->delete($tid) : null;
         }
     }
-    if (empty($trans) || !valid_array($transfers = $trans->getAll())) {
-        return msg_box(['title' => $LNG['L_ERROR'], 'body' => $LNG['L_SEE_ERROR_DETAILS']]);
+
+    if (!valid_array($transfers = $trans->getAll())) {
+        return false;
     }
 
     $page = '';
