@@ -5,7 +5,6 @@ TODO
     [FIX/CHECK] do not contemplate yet what to do if tmdb not found any results.        
 
 [MED]      
-    [IMPROVE] WANTED: Add alternate title. your tracker fuck the title? set the title here.
     [IMPROVE] Si se borra manualmente un torrente bajado quedara el bd huerfanos. OPCION ORPHAN. 
         Buscar archivos multimedia en el TORRENT DIR y buscar la forma de determina si coincide con alguno en la base de datos
         si no coincide moverlo.     
