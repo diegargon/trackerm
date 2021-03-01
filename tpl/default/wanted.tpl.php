@@ -64,6 +64,7 @@
                     <div class="divTableCellWanted"><?= $LNG['L_ONLY_PROPER'] ?></div>
                     <div class="divTableCellWanted"><?= $LNG['L_IGNORE'] ?></div>
                     <div class="divTableCellWanted"><?= $LNG['L_REQUIRE'] ?></div>
+                    <div class="divTableCellWanted"><?= $LNG['L_ALT_WANTED_TITLE'] ?></div>
                     <div class="divTableCellWanted">TMDB</div>
                     <div class="divTableCellWanted"><?= $LNG['L_TITLE'] ?></div>
                 </div>

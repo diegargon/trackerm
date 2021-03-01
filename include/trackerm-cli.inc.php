@@ -532,7 +532,7 @@ function wanted_work() {
         }
         $wanted_id = $wanted['id'];
         $themoviedb_id = $wanted['themoviedb_id'];
-        $title = $wanted['title'];
+        $title = !empty($wanted['custom_title']) ? $wanted['custom_title'] : $wanted['title'];
         $media_type = $wanted['media_type'];
 
         if ($media_type == 'movies') {
@@ -798,6 +798,7 @@ function tracker_shows($wanted) {
     $inherint_track = null;
     !empty($wanted['custom_words_ignore']) ? $inherint_track['custom_words_ignore'] = $wanted['custom_words_ignore'] : null;
     !empty($wanted['custom_words_require']) ? $inherint_track['custom_words_require'] = $wanted['custom_words_require'] : null;
+    !empty($wanted['custom_title']) ? $inherint_track['custom_title'] = $wanted['custom_title'] : null;
     !empty($wanted['day_check']) ? $inherint_track['day_check'] = $wanted['day_check'] : null;
     foreach ($list_episodes as $season => $episodes) {
         foreach ($episodes as $key_episode => $episode) {

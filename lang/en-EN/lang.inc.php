@@ -13,6 +13,7 @@ global $LNG;
 
 $LNG = [
     'L_ALL' => 'All',
+    'L_ALT_WANTED_TITLE' => 'Alt/Title',
     'L_ADDED' => 'Added',
     'L_ADD' => 'Add',
     'L_ADMIN' => 'Admin',
@@ -80,6 +81,7 @@ $LNG = [
     'L_FOLLOW_SHOW' => 'Follow this show',
     'L_FREE_TOTAL' => 'HD Free/Total',
     'L_FILTER_INDEXER' => 'Limit',
+    'L_TIP_FIX_TITLE' => 'Fix title',
     'L_GLOBAL_TAGS' => 'Global Tags',
     'L_GLOBAL_QUALITY_TAGS' => 'Quality preferece',
     'L_HOME' => 'Home',

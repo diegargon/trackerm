@@ -24,6 +24,11 @@ function wanted_list() {
                 $db->updateItemById('wanted', $require_key, ['custom_words_require' => $require_value]);
             }
         }
+        if (isset($_POST['custom_title']) && valid_array($_POST['custom_title'])) {
+            foreach ($_POST['custom_title'] as $c_title_key => $c_title_value) {
+                $db->updateItemById('wanted', $c_title_key, ['custom_title' => $c_title_value]);
+            }
+        }
 
         if (isset($_POST['only_proper'])) {
             $id_only_proper = array_key_first($_POST['only_proper']);
@@ -174,10 +179,12 @@ function wanted_episode($id, $season, $episodes, $track_show = 0, $inherint_trac
         isset($inherint_track['day_check']) ? $day_check = $inherint_track['day_check'] : $day_check = null;
         isset($inherint_track['custom_words_require']) ? $custom_words_require = $inherint_track['custom_words_require'] : $custom_words_require = null;
         isset($inherint_track['custom_words_ignore']) ? $custom_words_ignore = $inherint_track['custom_words_ignore'] : $custom_words_ignore = null;
+        isset($inherint_track['custom_title']) ? $custom_title = $inherint_track['custom_title'] : $custom_words_ignore = null;
     } else {
         $day_check = null;
         $custom_words_ignore = null;
         $custom_words_require = null;
+        $custom_title = null;
     }
 
     foreach ($episodes as $episode) {
@@ -200,6 +207,7 @@ function wanted_episode($id, $season, $episodes, $track_show = 0, $inherint_trac
             'track_show' => $track_show,
             'custom_words_require' => $custom_words_require,
             'custom_words_ignore' => $custom_words_ignore,
+            'custom_title' => $custom_title,
         ];
 
         if ($track_show) {

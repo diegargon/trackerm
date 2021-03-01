@@ -576,6 +576,9 @@ button {
     margin:0;
     padding:0;
 }
+.wanted_title_input {
+    width: 150px;
+}
 .wanted_input_red {
     border:1px outset red;
 }

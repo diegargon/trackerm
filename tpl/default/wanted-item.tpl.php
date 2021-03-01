@@ -56,6 +56,11 @@ if ($tdata['want_separator']) {
             </div>
         </div>
         <div class="divTableCellWanted">
+            <div class="inline" data-tip="<?= $LNG['L_TIP_FIX_TITLE'] ?>">
+                <div class="tag_type"><form class="form_inline" method="post" action=""><input class="wanted_title_input" name="custom_title[<?= $tdata['id'] ?>]"  type="text" onchange="this.form.submit()" value="<?= !empty($tdata['custom_title']) ? $tdata['custom_title'] : $tdata['title'] ?>"/></form></div>
+            </div>
+        </div>
+        <div class="divTableCellWanted">
             <div class="tag_id">
                 <?php if (!empty($tdata['elink'])) { ?>
                     <a href="<?= $tdata['elink'] ?>" target="_blank">TMDB</a>
