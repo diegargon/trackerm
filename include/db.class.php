@@ -22,7 +22,7 @@
 
 class DB {
 
-    private $version = 12;
+    private $version = 13;
     private $db;
     private $db_path;
     private $querys = [];
@@ -36,6 +36,7 @@ class DB {
         $response = $this->checkInstall();
         $this->db = new SQLite3($this->db_path, SQLITE3_OPEN_CREATE | SQLITE3_OPEN_READWRITE);
         $this->db->busyTimeout(5000);
+        //$this->db->enableExceptions(true);
         $this->db->exec('PRAGMA journal_mode = wal;');
         if (!$response && !empty($this->db)) {
             $this->createTables();
@@ -235,13 +236,17 @@ class DB {
         $query .= ')';
         $this->querys[] = $query;
 
-        $statement = $this->db->prepare($query);
+        $st = $this->db->prepare($query);
 
         foreach ($bind_values as $bkey => $bvalue) {
-            $statement->bindValue($bkey, $bvalue);
+            $st->bindValue($bkey, $bvalue);
         }
 
-        return (($statement->execute()) || $this->fail());
+        if (!$response = $st->execute()) {
+            //print_r($st->errorInfo());
+            //$this->fail();
+        }
+        return $response;
     }
 
     public function upsert($table, $set, $where) {
@@ -284,15 +289,17 @@ class DB {
         !empty($extra) ? $query .= ' ' . $extra : null;
         $this->querys[] = $query;
 
-        $statement = $this->db->prepare($query);
+        $st = $this->db->prepare($query);
 
         if (!empty($bind_values)) {
             foreach ($bind_values as $bkey => $bvalue) {
-                $statement->bindValue($bkey, $bvalue);
+                $st->bindValue($bkey, $bvalue);
             }
         }
 
-        $response = $statement->execute();
+        if (!($response = $st->execute())) {
+            //print_r($st->errorInfo());
+        }
 
         return $response;
     }
@@ -332,14 +339,17 @@ class DB {
         }
         !empty($extra) ? $query .= ' ' . $extra : null;
         $this->querys[] = $query;
-        $statement = $this->db->prepare($query);
+        $st = $this->db->prepare($query);
 
         if (!empty($bind_values)) {
             foreach ($bind_values as $bkey => $bvalue) {
-                $statement->bindValue($bkey, $bvalue);
+                $st->bindValue($bkey, $bvalue);
             }
         }
-        $response = $statement->execute();
+
+        if (!($response = $st->execute())) {
+            //  print_r($st->errorInfo());
+        }
 
         return $response;
     }
@@ -377,15 +387,19 @@ class DB {
         !empty($extra) ? $query .= ' ' . $extra : null;
         $this->querys[] = $query;
 
-        $statement = $this->db->prepare($query);
+        $st = $this->db->prepare($query);
 
         if (!empty($bind_values)) {
             foreach ($bind_values as $bkey => $bvalue) {
-                $statement->bindValue($bkey, $bvalue);
+                $st->bindValue($bkey, $bvalue);
             }
         }
 
-        $response = $statement->execute();
+        if (!($response = $st->execute())) {
+            //echo end($this->query);
+            //print_r($st->errorInfo());
+            //return false;
+        }
         return $response;
     }
 

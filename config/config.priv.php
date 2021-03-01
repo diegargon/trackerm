@@ -13,7 +13,7 @@
 !defined('IN_WEB') ? exit : true;
 
 $cfg['search_db'] = 'themoviedb';
-$cfg['version'] = 'A85';
+$cfg['version'] = 'A86';
 $cfg['odb_movies_link'] = 'https://www.themoviedb.org/movie/';
 $cfg['odb_shows_link'] = 'https://www.themoviedb.org/tv/';
 

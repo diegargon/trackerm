@@ -111,6 +111,7 @@ function buildTable($head, $db_ary, $topt = null) {
         } else if (!empty($topt['sizes'])) {
             $item['size'] = human_filesize($topt['sizes'][$item['themoviedb_id']]);
         }
+        (isset($item['total_size'])) ? $item['total_size'] = human_filesize($item['total_size']) : null;
 
         if (!empty($item['themoviedb_id']) && !empty($topt['episode_count'][$item['themoviedb_id']])) {
 
