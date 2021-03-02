@@ -10,9 +10,12 @@
 class HTML {
     /*
       function getTpl($tpl, $tdata = []) {
-      global $cfg, $LNG, $user;
+      global $cfg, $LNG, $user; //NO delete work for templates
+
       ob_start();
-      include('tpl/' . $cfg['theme'] . '/' . $tpl . '.tpl.php');
+      $tpl_file = 'tpl/' . $cfg['theme'] . '/' . $tpl . '.tpl.php';
+      !file_exists($tpl_file) ? $tpl_file = 'tpl/default/' . $tpl . '.tpl.php' : null;
+      include($tpl_file);
 
       return ob_get_clean();
       }

@@ -57,8 +57,11 @@ function getFooter() {
 
 function getTpl($tpl, $tdata = []) {
     global $cfg, $LNG, $user; //NO delete work for templates
+
     ob_start();
-    include('tpl/' . $cfg['theme'] . '/' . $tpl . '.tpl.php');
+    $tpl_file = 'tpl/' . $cfg['theme'] . '/' . $tpl . '.tpl.php';
+    !file_exists($tpl_file) ? $tpl_file = 'tpl/default/' . $tpl . '.tpl.php' : null;
+    include($tpl_file);
 
     return ob_get_clean();
 }
@@ -220,10 +223,15 @@ function msg_box($msg) {
 }
 
 function msg_page($msg) {
+    global $cfg;
+
     $footer = getFooter();
     $menu = getMenu();
     $body = msg_box($msg = ['title' => $msg['title'], 'body' => $msg['body']]);
     $tdata = ['menu' => $menu, 'body' => $body, 'footer' => $footer];
+    $tdata['css_file'] = 'tpl/' . $cfg['theme'] . '/css/' . $cfg['css'] . '.css';
+    !file_exists(($tdata['css_file'])) ? $tdata['css_file'] = 'tpl/default/css/default.css' : null;
+    $tdata['css_file'] .= '?nocache=' . time();
     echo getTpl('html_mstruct', $tdata);
 
     exit();

@@ -68,6 +68,9 @@ if (in_array($req_page, $valid_pages)) {
 
 $footer = getFooter();
 $tdata = ['menu' => $menu, 'body' => $body, 'footer' => $footer];
+$tdata['css_file'] = 'tpl/' . $cfg['theme'] . '/css/' . $cfg['css'] . '.css';
+!file_exists(($tdata['css_file'])) ? $tdata['css_file'] = 'tpl/default/css/default.css' : null;
+$tdata['css_file'] .= '?nocache=' . time();
 $page = getTpl('html_mstruct', $tdata);
 $db->close();
 
