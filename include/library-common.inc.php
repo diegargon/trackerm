@@ -534,7 +534,7 @@ function clean_database($media_type, $files, $media) {
                 if ($master['total_items'] > 1) {
                     $new_size = $master['total_size'] - $item['size'];
                     $new_total = $master['total_items'] - 1;
-                    $db->updateItemById('library_master_' . $media_type, ['total_size' => $new_size, 'total_items' => $new_total], ['id' => $master['id']]);
+                    $db->updateItemById('library_master_' . $media_type, $master['id'], ['total_size' => $new_size, 'total_items' => $new_total]);
                 } else {
                     $db->deleteItemById('library_master_' . $media_type, $master['id']);
                 }
