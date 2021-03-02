@@ -179,7 +179,7 @@ function wanted_episode($id, $season, $episodes, $track_show = 0, $inherint_trac
         isset($inherint_track['day_check']) ? $day_check = $inherint_track['day_check'] : $day_check = null;
         isset($inherint_track['custom_words_require']) ? $custom_words_require = $inherint_track['custom_words_require'] : $custom_words_require = null;
         isset($inherint_track['custom_words_ignore']) ? $custom_words_ignore = $inherint_track['custom_words_ignore'] : $custom_words_ignore = null;
-        isset($inherint_track['custom_title']) ? $custom_title = $inherint_track['custom_title'] : $custom_words_ignore = null;
+        isset($inherint_track['custom_title']) ? $custom_title = $inherint_track['custom_title'] : $custom_title = null;
     } else {
         $day_check = null;
         $custom_words_ignore = null;
