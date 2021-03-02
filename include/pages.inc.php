@@ -10,7 +10,7 @@
 !defined('IN_WEB') ? exit : true;
 
 function page_index() {
-    global $cfg, $user, $LNG, $log, $filter;
+    global $cfg, $user, $LNG, $log, $filter, $html;
 
     $titems = [];
     $status_msg = '';
@@ -19,7 +19,7 @@ function page_index() {
     if (!empty($user['isAdmin'])) {
         $tdata = [];
         $tdata['title'] = '';
-        $tdata['content'] = '<a class="action_link" href="index.php?page=config">' . $LNG['L_CONFIG'] . '</a>';
+        $tdata['content'] = $html->link(['class' => 'action_link'], 'index.php', $LNG['L_CONFIG'], ['page' => 'config']);
         $titems['col1'][] = getTpl('home-item', $tdata);
     }
     // General Info
@@ -28,21 +28,16 @@ function page_index() {
     $tdata['title'] = $LNG['L_IDENTIFIED'] . ': ' . strtoupper($user['username']);
 
     if ($filter->getInt('edit_profile')) {
-        $tdata['content'] .= '<form method="POST" id="form_user_prefs" action="?page=index&edit_profile=1">';
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             (isset($_POST['cur_password']) && isset($_POST['new_password'])) ? $status_msg .= user_change_password() . '<br/>' : null;
             $status_msg .= user_change_prefs();
         }
         $tdata['content'] .= user_edit_profile();
-        $tdata['content'] .= '<input type="submit" class="action_link inline" value="' . $LNG['L_SEND'] . '"/>';
-        $tdata['content'] .= '</form>';
     } else {
-        $tdata['content'] .= '<a class="action_link" href="?page=index&edit_profile=1">' . $LNG['L_EDIT'] . '</a>';
+        $tdata['content'] = $html->link(['class' => 'action_link'], '', $LNG['L_EDIT'], ['page' => 'index', 'edit_profile' => 1]);
     }
 
-    $tdata['content'] .= '<a class="action_link" href="?page=logout">' . $LNG['L_LOGOUT'] . '</a>';
-    $tdata['content'] .= '<br/>';
-    empty($status_msg) ? $status_msg = $LNG['L_SEARCH_ENGINE'] . ': ' . '<a href="https://themoviedb.org" target=_blank>themoviedb.org</a>' : null;
+    $tdata['content'] .= $html->link(['class' => 'action_link'], '', $LNG['L_LOGOUT'], ['page' => 'logout']);
     $tdata['content'] .= $status_msg;
     $titems['col1'][] = getTpl('home-item', $tdata);
 

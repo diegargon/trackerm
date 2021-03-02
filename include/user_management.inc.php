@@ -51,8 +51,7 @@ function user_management() {
         }
     }
     $html['title'] = $LNG['L_USERS_MANAGEMENT'];
-    $html['content'] = new_user();
-    $html['content'] .= show_users();
+    $html['content'] = new_user() . show_users();
     $html['content'] .= '<p>' . $status_msg . '</p>';
 
     return $html;
@@ -63,60 +62,39 @@ function new_user() {
 }
 
 function show_users() {
-    $html = '<div class="delete_user_box">';
-    $html .= '<form id="delete_user" method="POST">';
+    global $html;
+
+    $form_content = '';
     $users = get_profiles();
 
     foreach ($users as $_user) {
         if ($_user['id'] > 1) {
-            $html .= getTpl('delete_user', $_user);
+            $form_content .= getTpl('delete_user', $_user);
         }
     }
-    $html .= '</form>';
-    $html .= '</div>';
+    $form = $html->form(['id' => 'delete_user', 'method' => 'POST'], $form_content);
 
-    return $html;
+    return $form;
 }
 
 function encrypt_password($password) {
-
     return sha1($password);
 }
 
 function user_edit_profile() {
-    global $LNG, $user;
-
     $index_pref = getPrefsItem('index_page');
     $email_notify = getPrefsItem('email_notify');
 
-    (empty($index_pref) || $index_pref == 'index') ? $index_selected = 'selected' : $index_selected = '';
-    (!empty($index_pref) && $index_pref == 'library') ? $library_selected = 'selected' : $library_selected = '';
-    (!empty($index_pref) && $index_pref == 'news') ? $news_selected = 'selected' : $news_selected = '';
-    (!empty($index_pref) && $index_pref == 'wanted') ? $wanted_selected = 'selected' : $wanted_selected = '';
-    (!empty($index_pref) && $index_pref == 'torrents') ? $torrents_selected = 'selected' : $torrents_selected = '';
-    (!empty($index_pref) && $index_pref == 'tmdb') ? $tmdb_selected = 'selected' : $tmdb_selected = '';
-    (!empty($index_pref) && $index_pref == 'transmission') ? $transmission_selected = 'selected' : $transmission_selected = '';
-    ($email_notify) ? $email_checked = 'checked' : $email_checked = '';
+    (empty($index_pref) || $index_pref == 'index') ? $tdata['index_selected'] = 'selected' : $tdata['index_selected'] = '';
+    $index_pref == 'library' ? $tdata['library_selected'] = 'selected' : $tdata['library_selected'] = '';
+    $index_pref == 'news' ? $tdata['news_selected'] = 'selected' : $tdata['news_selected'] = '';
+    $index_pref == 'wanted' ? $tdata['wanted_selected'] = 'selected' : $tdata['wanted_selected'] = '';
+    $index_pref == 'torrents' ? $tdata['torrents_selected'] = 'selected' : $tdata['torrents_selected'] = '';
+    $index_pref == 'tmdb' ? $tdata['tmdb_selected'] = 'selected' : $tdata['tmdb_selected'] = '';
+    $index_pref == 'transmission' ? $tdata['transmission_selected'] = 'selected' : $tdata['transmission_selected'] = '';
+    $email_notify ? $tdata['email_checked'] = 'checked' : $tdata['email_checked'] = '';
 
-    $html = '<span>' . $LNG['L_PASSWORD'] . '</span><input size="8" type="text" name="cur_password" value=""/>';
-    $html .= '<span>' . $LNG['L_NEW_PASSWORD'] . '</span><input size="8" type="text" name="new_password" value=""/>';
-    $html .= '<span>' . $LNG['L_EMAIL_NOTIFY'] . ' </span>';
-    $html .= '<input type="hidden" name="email_notify" value="0"/>';
-    $html .= '<input type="checkbox" ' . $email_checked . ' name="email_notify" value="1"/>';
-    $html .= '<span>' . $LNG['L_EMAIL'] . '</span><input size="15" type="text" name="email" value="' . $user['email'] . '"/>';
-    $html .= '<br/><span>' . $LNG['L_INDEX_SELECT'] . '</span>';
-    $html .= '<select name="index_page">';
-    $html .= '<option ' . $index_selected . ' value="index">index</option>';
-    $html .= '<option ' . $library_selected . ' value="library">' . $LNG['L_LIBRARY'] . '</option>';
-    $html .= '<option ' . $news_selected . ' value="news">' . $LNG['L_NEWS'] . '</option>';
-    $html .= '<option ' . $wanted_selected . ' value="wanted">' . $LNG['L_WANTED'] . '</option>';
-    $html .= '<option ' . $torrents_selected . ' value="torrents">' . $LNG['L_TORRENTS'] . '</option>';
-    $html .= '<option ' . $tmdb_selected . ' value="tmdb">tmdb</option>';
-    $html .= '<option ' . $transmission_selected . ' value="transmission">Transmission</option>';
-    $html .= '</select>';
-    //$html .= '</form>';
-
-    return $html . '<br/>';
+    return getTpl('user_prefs', $tdata);
 }
 
 function user_change_prefs() {
