@@ -242,10 +242,9 @@ class DB {
             $st->bindValue($bkey, $bvalue);
         }
 
-        if (!$response = $st->execute()) {
-            print_r($this->db->errorInfo());
-            //$this->fail();
-        }
+        $response = $st->execute();
+        !$response ? print_r($this->db->errorInfo()) : null;
+
         return $response;
     }
 
@@ -297,9 +296,8 @@ class DB {
             }
         }
 
-        if (!($response = $st->execute())) {
-            print_r($this->db->errorInfo());
-        }
+        $response = $st->execute();
+        !$response ? print_r($this->db->errorInfo()) : null;
 
         return $response;
     }
@@ -347,9 +345,8 @@ class DB {
             }
         }
 
-        if (!($response = $st->execute())) {
-            print_r($this->db->errorInfo());
-        }
+        $response = $st->execute();
+        !$response ? print_r($this->db->errorInfo()) : null;
 
         return $response;
     }
@@ -395,10 +392,9 @@ class DB {
             }
         }
 
-        if (!($response = $st->execute())) {
-            echo end($this->querys);
-            print_r($this->db->errorInfo());
-        }
+        $response = $st->execute();
+        !$response ? print_r($this->db->errorInfo()) : null;
+
         return $response;
     }
 
