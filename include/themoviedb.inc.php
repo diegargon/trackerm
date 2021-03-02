@@ -112,14 +112,12 @@ function themoviedb_searchCache($search_words, $media_type) {
 }
 
 function themoviedb_MediaPrep($media_type, $items) {
-    global $db, $db, $log;
-
-    $img_path = 'https://image.tmdb.org/t/p/w500';
+    global $db, $cfg, $log;
 
     if ($media_type == 'movies') {
-        $tmdb_link = 'https://www.themoviedb.org/movie/';
+        $tmdb_link = $cfg['odb_movies_link'];
     } else if ($media_type == 'shows') {
-        $tmdb_link = 'https://www.themoviedb.org/tv/';
+        $tmdb_link = $cfg['odb_shows_link'];
     } else {
         $log->err('mediaprep: media_type was not set');
         return false;
@@ -167,8 +165,8 @@ function themoviedb_MediaPrep($media_type, $items) {
             'rating' => $item['vote_average'],
             'popularity' => isset($item['popularity']) ? $item['popularity'] : 0,
             'elink' => $link,
-            'poster' => !empty($item['poster_path']) ? $img_path . $item['poster_path'] : null,
-            'scene' => !empty($item['backdrop_path']) ? $img_path . $item['backdrop_path'] : null,
+            'poster' => !empty($item['poster_path']) ? $cfg['odb_images_link'] . $item['poster_path'] : null,
+            'scene' => !empty($item['backdrop_path']) ? $cfg['odb_images_link'] . $item['backdrop_path'] : null,
             'lang' => $item['original_language'],
             'plot' => $item['overview'],
             'updated' => time(),

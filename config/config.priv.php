@@ -16,6 +16,7 @@ $cfg['search_db'] = 'themoviedb';
 $cfg['version'] = 'A86';
 $cfg['odb_movies_link'] = 'https://www.themoviedb.org/movie/';
 $cfg['odb_shows_link'] = 'https://www.themoviedb.org/tv/';
+$cfg['odb_images_link'] = 'https://image.tmdb.org/t/p/w500';
 
 $cfg['DB_FILE'] = $cfg['ROOT_PATH'] . '/cache/trackerm.db';
 $cfg['img_url'] = $cfg['REL_PATH'] . '/img';
