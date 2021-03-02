@@ -584,9 +584,9 @@ function update_master_stats() {
             $total_size = 0;
             $set = [];
             $items = $db->getItemsByField('library_shows', 'master', $master_show['id']);
-            $num_items = count($items);
 
             if (valid_array($items)) {
+                $num_items = count($items);
                 foreach ($items as $item) {
                     $total_size = $total_size + $item['size'];
                 }
