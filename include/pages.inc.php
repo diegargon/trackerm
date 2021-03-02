@@ -92,7 +92,7 @@ function page_index() {
     if (!empty($latest_ary)) {
         $latest_ary = array_slice($latest_ary, 2);
         foreach ($latest_ary as $latest) {
-            $tdata['content'] .= $latest;
+            $tdata['content'] .= $html->div(['class' => 'divBlock'], $latest);
         }
     }
     $tdata['main_class'] = 'home_news';
