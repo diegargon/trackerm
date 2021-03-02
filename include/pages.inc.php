@@ -50,32 +50,21 @@ function page_index() {
     // Hard disk
     $tdata = [];
     $tdata['title'] = '';
-
     $lib_stats = getLibraryStats();
-
-    $tdata['content'] = "<h3>{$LNG['L_LIBRARY']}</h3>";
-    $tdata['content'] .= "<span> {$LNG['L_MOVIES']} : {$lib_stats['num_movies']} </span><br/>";
-    $tdata['content'] .= "<span> {$LNG['L_SHOWS']} : {$lib_stats['num_shows']} </span>";
-    $tdata['content'] .= "<span> ({$LNG['L_EPISODES']} : {$lib_stats['num_episodes']}) </span><br/>";
-    $tdata['content'] .= "<h3>{$LNG['L_HARDDISK']}</h3>";
-    $tdata['content'] .= "<span>{$LNG['L_MOVIES']} : " . $lib_stats['movies_size'] . '</span><br/>';
-    $tdata['content'] .= "<span>{$LNG['L_SHOWS']} : " . $lib_stats['shows_size'] . '</span><br/>';
+    $paths['movies_paths'] = '';
+    $paths['shows_paths'] = '';
 
     if (isset($lib_stats['movies_paths']) && valid_array($lib_stats['movies_paths'])) {
         foreach ($lib_stats['movies_paths'] as $path) {
-            $tdata['content'] .= "<span>{$LNG['L_FREE_TOTAL']} {$LNG['L_ON']} {$path['basename']} : {$path['free']} / {$path['total']} </span><br/>";
+            $paths['movies_paths'] = $html->span(['class' => 'harddisk_paths'], "{$LNG['L_FREE_TOTAL']} {$LNG['L_ON']} {$path['basename']} : {$path['free']} / {$path['total']}");
         }
     }
-
     if (isset($lib_stats['shows_paths']) && valid_array($lib_stats['shows_paths'])) {
         foreach ($lib_stats['shows_paths'] as $path) {
-            $tdata['content'] .= "<span>{$LNG['L_FREE_TOTAL']} {$LNG['L_ON']} {$path['basename']} : {$path['free']} / {$path['total']} </span><br/>";
+            $paths['shows_paths'] = $html->span(['class' => 'harddisk_paths'], "{$LNG['L_FREE_TOTAL']} {$LNG['L_ON']} {$path['basename']} : {$path['free']} / {$path['total']}");
         }
     }
-
-    $tdata['content'] .= "<h3>{$LNG['L_DATABASE']}</h3>";
-    $tdata['content'] .= "<span> {$LNG['L_SIZE']} : {$lib_stats['db_size']} </span><br/>";
-
+    $tdata['content'] = getTpl('harddisk', array_merge($lib_stats, $paths));
     $titems['col1'][] = getTpl('home-item', $tdata);
 
     // States Messages
