@@ -8,14 +8,6 @@
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  */
 class HTML {
-
-    function __construct() {
-
-    }
-
-    /*
-      values[] = ['name' =>'', 'value='' ]
-     */
     /*
       function getTpl($tpl, $tdata = []) {
       global $cfg, $LNG, $user;
@@ -26,18 +18,22 @@ class HTML {
       }
      */
 
+    /*
+      values[] = ['name' =>'', 'value='' ]
+     */
+
     function select($conf, $values) {
         if (empty($values) || !is_array($values) || !is_array($conf) || empty($conf['name'])) {
             return false;
         }
         !isset($conf['sel']) ? $conf['sel'] = null : null;
         !isset($conf['class']) ? $class = null : $class = ' class="' . $conf['class'] . ' "';
-        !isset($conf['change_submit']) ? $on_change_submit = null : $on_change_submit = ' onchange="this.form.submit()" ';
+        !isset($conf['onChange']) ? $on_change_submit = null : $on_change_submit = ' onchange="this.form.submit()" ';
 
         $select = '<select ' . $on_change_submit . $class . 'name="' . $conf['name'] . '">';
         foreach ($values as $value) {
-            $value['sel'] == $value['value'] ? $selected = ' selected="selected" ' : $selected = '';
-            $select .= '<option' . $selected . 'value="' . $value['value'] . '">' . $value['name'] . '</option>';
+            isset($conf['selected']) && $conf['selected'] == $value['value'] ? $selected = ' selected="selected" ' : $selected = '';
+            $select .= '<option ' . $selected . ' value="' . $value['value'] . '">' . $value['name'] . '</option>';
         }
         $select .= '</select>';
 

@@ -78,7 +78,7 @@ function page_index() {
     if (!empty($state_msgs) && (count($state_msgs) > 0)) {
         foreach ($state_msgs as $state_msg) {
             $state_msg['display_time'] = strftime("%d %h %X", strtotime($state_msg['created']));
-            $tdata['content'] .= getTpl('statemsg_item.tpl.php');
+            $tdata['content'] .= getTpl('statemsg_item', $state_msg);
         }
     }
     $tdata['main_class'] = 'home_state_msg';
@@ -92,7 +92,7 @@ function page_index() {
     if (!empty($latest_ary)) {
         $latest_ary = array_slice($latest_ary, 2);
         foreach ($latest_ary as $latest) {
-            $tdata['content'] .= $latest . '<br/>';
+            $tdata['content'] .= $latest;
         }
     }
     $tdata['main_class'] = 'home_news';
@@ -332,7 +332,7 @@ function page_wanted() {
 }
 
 function page_identify() {
-    global $LNG, $db, $filter;
+    global $LNG, $db, $filter, $html;
 
     $media_type = $filter->getString('media_type');
     $id = $filter->getInt('identify');
@@ -363,30 +363,28 @@ function page_identify() {
 
     if (!empty($submit_title)) {
         ($media_type == 'movies') ? $db_media = mediadb_searchMovies($submit_title) : $db_media = mediadb_searchShows($submit_title);
-
-        $results_opt = '';
         if (valid_array($db_media)) {
             $select = '';
 
             foreach ($db_media as $db_item) {
                 if (!empty($filter->postInt('selected')) && ($db_item['themoviedb_id'] == current($filter->postInt('selected')))) {
-                    $selected = 'selected';
                     $item_selected = $db_item;
-                } else {
-                    $selected = '';
                 }
-                $year = trim(substr($db_item['release'], 0, 4));
-                $results_opt .= '<option ' . $selected . ' value="' . $db_item['themoviedb_id'] . '">';
-                $results_opt .= $db_item['title'];
-                !empty($year) ? $results_opt .= ' (' . $year . ')' : null;
-                $results_opt .= '</option>';
+                if (!empty($db_item['release'])) {
+                    $year = trim(substr($db_item['release'], 0, 4));
+                }
+                $title = $db_item['title'];
+                !empty($year) ? $title .= ' (' . $year . ')' : null;
+                $values[] = ['value' => $db_item['themoviedb_id'], 'name' => $title];
             }
 
-            if ($media_type == 'movies') {
-                $select .= '<select onchange="this.form.submit()" class="ident_select" name="selected[' . $id . ']">' . $results_opt . '</select>';
-            } else if ($media_type == 'shows') {
-                $select .= '<select onchange="this.form.submit()" class="ident_select" name="selected[' . $id . ']">' . $results_opt . '</select>';
+            if (!empty($filter->postInt('selected'))) {
+                $conf_selected = current($filter->postInt('selected'));
+            } else {
+                $conf_selected = '';
             }
+            $select .= $html->select(['onChange' => 1, 'class' => 'ident_select', 'selected' => $conf_selected, 'name' => 'selected[' . $id . ']'], $values);
+
             $tdata['select'] = $select;
         }
     }
