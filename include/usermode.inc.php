@@ -20,7 +20,8 @@ require_once('include/user.inc.php');
 require_once('include/session.inc.php');
 
 loadUserPrefs();
-
+require_once('include/html.class.php');
+$html = new HTML();
 require_once('include/pages.inc.php');
 require_once('include/html.common.php');
 require_once('include/library.inc.php');

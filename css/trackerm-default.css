@@ -757,6 +757,13 @@ button {
     text-align: center;
 }
 
+.harddisk_paths {
+    display: block;
+}
+
+.divBlock {
+    display: block;
+}
 /* Responsive */
 
 @media only screen and (max-width: 800px) {
