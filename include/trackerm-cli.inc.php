@@ -178,18 +178,22 @@ function MovieJob($item, $linked = false) {
         $i = 1;
         $new_media = '';
 
+        $num_valid = count($valid_files);
         foreach ($valid_files as $valid_file) {
+
             $file_tags = getFileTags($valid_file);
             $ext = substr($valid_file, -4);
 
-            $new_file_name = ucwords($item['title']) . ' ' . $file_tags . $ext;
+            if ($num_valid > 1) {
+                $numerated = '[' . $i++ . ']';
+            } else {
+                $numerated = '';
+            }
+
+            $new_file_name = ucwords($item['title']) . ' ' . $file_tags . $numerated . $ext;
             $final_dest_path = $dest_path . '/' . $new_file_name;
 
-            if (file_exists($final_dest_path) && !$linked && !is_link($final_dest_path)) {
-                $new_file_name = ucwords($item['title']) . ' ' . $file_tags . '[' . $i . ']' . $ext;
-                $final_dest_path = $dest_path . '/' . $new_file_name;
-                $i++;
-            } else if (file_exists($final_dest_path) && $linked) {
+            if (file_exists($final_dest_path) && $linked) {
                 continue;
             }
 
