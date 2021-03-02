@@ -10,7 +10,7 @@
 !defined('IN_WEB') ? exit : true;
 
 function getMenu() {
-    global $cfg, $LNG, $user, $filter;
+    global $cfg, $LNG, $user;
 
     if (empty($user) || empty($user['username']) || empty($user['id'])) {
         $user['id'] = 0;
@@ -27,7 +27,7 @@ function getMenu() {
         }
     }
 
-    if (!empty($filter->getString('page'))) {
+    if (!empty(Filter::getString('page'))) {
         $tdata['menu_opt_link'] = str_replace('&sw_opt=1', '', basename($_SERVER['REQUEST_URI'])) . '&sw_opt=1';
     } else {
         $tdata['menu_opt_link'] = "?page=index&sw_opt=1";
@@ -67,9 +67,9 @@ function getTpl($tpl, $tdata = []) {
 }
 
 function buildTable($head, $db_ary, $topt = null) {
-    global $cfg, $LNG, $filter;
+    global $cfg, $LNG;
 
-    $npage = $filter->getInt('npage');
+    $npage = Filter::getInt('npage');
 
     if (isset($_GET['search_type']) && isset($topt['search_type']) && ($_GET['search_type'] == $topt['search_type'])) {
         empty($npage) ? $npage = 1 : null;
@@ -238,27 +238,27 @@ function msg_page($msg) {
 }
 
 function pager($npage, $nitems, &$topt) {
-    global $cfg, $filter;
+    global $cfg;
 
     /* PAGES */
     $pages = '';
     $items_per_page = $cfg['tresults_columns'] * $cfg['tresults_rows'];
     $num_pages = ceil($nitems / $items_per_page);
-    $search_type = $filter->getUtf8('search_type');
-    $page = $filter->getString('page');
+    $search_type = Filter::getUtf8('search_type');
+    $page = Filter::getString('page');
 
     if ($num_pages > 1) {
         $iurl = '?page=' . $page;
 
-        (!empty($filter->getString('view_type'))) ? $iurl .= '&view_type=' . $filter->getString('view_type') : null;
-        (!empty($filter->getInt('id'))) ? $iurl .= '&id=' . $filter->getInt('id') : null;
-        (!empty($filter->getUtf8('search_shows_torrents'))) ? $iurl .= '&search_shows_torrents=' . $filter->getUtf8('search_shows_torrents') : null;
-        (!empty($filter->getUtf8('search_movies_torrents'))) ? $iurl .= '&search_movies_torrents=' . $filter->getUtf8('search_movies_torrents') : null;
+        (!empty(Filter::getString('view_type'))) ? $iurl .= '&view_type=' . Filter::getString('view_type') : null;
+        (!empty(Filter::getInt('id'))) ? $iurl .= '&id=' . Filter::getInt('id') : null;
+        (!empty(Filter::getUtf8('search_shows_torrents'))) ? $iurl .= '&search_shows_torrents=' . Filter::getUtf8('search_shows_torrents') : null;
+        (!empty(Filter::getUtf8('search_movies_torrents'))) ? $iurl .= '&search_movies_torrents=' . Filter::getUtf8('search_movies_torrents') : null;
         (!empty($_GET['more_movies'])) ? $iurl .= '&more_movies=1' : null;
         (!empty($_GET['more_torrents'])) ? $iurl .= '&more_torrents=1' : null;
-        (!empty($filter->getUtf8('search_movie_db'))) ? $iurl .= '&search_movie_db=' . $filter->getUtf8('search_movie_db') : null;
-        (!empty($filter->getUtf8('search_movies'))) ? $iurl .= '&search_movies=' . $filter->getUtf8('search_movies') : null;
-        (!empty($filter->getUtf8('search_shows'))) ? $iurl .= '&search_shows=' . $filter->getUtf8('search_shows') : null;
+        (!empty(Filter::getUtf8('search_movie_db'))) ? $iurl .= '&search_movie_db=' . Filter::getUtf8('search_movie_db') : null;
+        (!empty(Filter::getUtf8('search_movies'))) ? $iurl .= '&search_movies=' . Filter::getUtf8('search_movies') : null;
+        (!empty(Filter::getUtf8('search_shows'))) ? $iurl .= '&search_shows=' . Filter::getUtf8('search_shows') : null;
 
         for ($i = 1; $i <= ceil($num_pages); $i++) {
             if (($i == 1 || $i == $num_pages || $i == $npage) ||
@@ -287,44 +287,44 @@ function pager($npage, $nitems, &$topt) {
 }
 
 function getOptions() {
-    global $cfg, $filter, $LNG;
+    global $cfg, $LNG;
 
     (isset($_POST['rebuild_movies'])) ? rebuild('movies', $cfg['MOVIES_PATH']) : null;
     (isset($_POST['rebuild_shows'])) ? rebuild('shows', $cfg['SHOWS_PATH']) : null;
 
-    $tdata['page'] = $filter->getString('page');
+    $tdata['page'] = Filter::getString('page');
 
     if (
             isset($_POST['num_ident_toshow']) &&
             ($cfg['max_identify_items'] != $_POST['num_ident_toshow'])
     ) {
-        $num_ident_toshow = $filter->postInt('num_ident_toshow');
+        $num_ident_toshow = Filter::postInt('num_ident_toshow');
         $cfg['max_identify_items'] = $num_ident_toshow;
         setPrefsItem('max_identify_items', $num_ident_toshow);
     }
 
     if (isset($_POST['new_ignore_keywords'])) {
-        $cfg['new_ignore_keywords'] = $filter->postString('new_ignore_keywords');
+        $cfg['new_ignore_keywords'] = Filter::postString('new_ignore_keywords');
         setPrefsItem('new_ignore_keywords', $cfg['new_ignore_keywords']);
     }
 
     if (isset($_POST['new_ignore_size'])) {
-        $cfg['new_ignore_size'] = $filter->postString('new_ignore_size');
+        $cfg['new_ignore_size'] = Filter::postString('new_ignore_size');
         setPrefsItem('new_ignore_size', $cfg['new_ignore_size']);
     }
 
     if (isset($_POST['new_ignore_words_enable'])) {
-        $cfg['new_ignore_words_enable'] = $filter->postString('new_ignore_words_enable');
+        $cfg['new_ignore_words_enable'] = Filter::postString('new_ignore_words_enable');
         setPrefsItem('new_ignore_words_enable', $cfg['new_ignore_words_enable']);
     }
 
     if (isset($_POST['new_ignore_size_enable'])) {
-        $cfg['new_ignore_size_enable'] = $filter->postString('new_ignore_size_enable');
+        $cfg['new_ignore_size_enable'] = Filter::postString('new_ignore_size_enable');
         setPrefsItem('new_ignore_size_enable', $cfg['new_ignore_size_enable']);
     }
 
     if (isset($_POST['sel_indexer'])) {
-        $cfg['sel_indexer'] = $filter->postString('sel_indexer');
+        $cfg['sel_indexer'] = Filter::postString('sel_indexer');
         setPrefsItem('sel_indexer', $cfg['sel_indexer']);
     }
 
@@ -340,7 +340,7 @@ function getOptions() {
         if ($_POST['num_rows_results'] == $LNG['L_DEFAULT']) {
             $max_rows_sel_none = 'selected';
         } else {
-            $num_rows_results = $filter->postInt('num_rows_results');
+            $num_rows_results = Filter::postInt('num_rows_results');
             $cfg['tresults_rows'] = $num_rows_results;
             setPrefsItem('tresults_rows', $num_rows_results);
         }
@@ -358,7 +358,7 @@ function getOptions() {
         if ($_POST['num_columns_results'] == $LNG['L_DEFAULT']) {
             $max_columns_sel_none = 'selected';
         } else {
-            $num_columns_results = $filter->postInt('num_columns_results');
+            $num_columns_results = Filter::postInt('num_columns_results');
             $cfg['tresults_columns'] = $num_columns_results;
             setPrefsItem('tresults_columns', $num_columns_results);
         }

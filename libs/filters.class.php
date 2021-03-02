@@ -11,28 +11,24 @@
 
 Class Filter {
 
-    function __construct() {
-
-    }
-
 //POST/GET
-    function getInt($val, $size = PHP_INT_MAX) {
+    static function getInt($val, $size = PHP_INT_MAX) {
         if (!isset($_GET[$val])) {
             return false;
         }
 
-        return $this->varInt($_GET[$val], $size);
+        return self::varInt($_GET[$val], $size);
     }
 
-    function postInt($val, $size = PHP_INT_MAX) {
+    static function postInt($val, $size = PHP_INT_MAX) {
         if (!isset($_POST[$val])) {
             return false;
         }
 
-        return $this->varInt($_POST[$val], $size);
+        return self::varInt($_POST[$val], $size);
     }
 
-    function varInt($val, $size = PHP_INT_MAX) {
+    static function varInt($val, $size = PHP_INT_MAX) {
         if (!isset($val)) {
             return false;
         }
@@ -63,24 +59,24 @@ Class Filter {
     }
 
 //Simple String words without accents or special characters
-    function getString($val, $size = null) {
+    static function getString($val, $size = null) {
         if (empty($_GET[$val])) {
             return false;
         }
 
-        return $this->varString($_GET[$val], $size);
+        return self::varString($_GET[$val], $size);
     }
 
-    function postString($val, $size = null) {
+    static function postString($val, $size = null) {
         if (empty($_POST[$val])) {
             return false;
         }
 
-        return $this->varString($_POST[$val], $size);
+        return self::varString($_POST[$val], $size);
     }
 
     //TODO FILTER
-    function varString($val, $size = null) {
+    static function varString($val, $size = null) {
         if (empty($val)) {
             return false;
         }
@@ -97,23 +93,23 @@ Class Filter {
     }
 
 //UTF8
-    function getUtf8($val, $size = null) {
+    static function getUtf8($val, $size = null) {
         if (empty($_GET[$val])) {
             return false;
         }
 
-        return $this->varUtf8($_GET[$val], $size);
+        return self::varUtf8($_GET[$val], $size);
     }
 
-    function postUtf8($val, $size = null) {
+    static function postUtf8($val, $size = null) {
         if (empty($_POST[$val])) {
             return false;
         }
 
-        return $this->varUtf8($_POST[$val], $size);
+        return self::varUtf8($_POST[$val], $size);
     }
 
-    function varUtf8($val, $size = null) {
+    static function varUtf8($val, $size = null) {
         if (empty($val) || (!empty($size) && (strlen($val) > $size))) {
             return false;
         }
@@ -122,23 +118,23 @@ Class Filter {
     }
 
 //URL
-    function getUrl($val, $size = null) {
+    static function getUrl($val, $size = null) {
         if (empty($_GET[$val])) {
             return false;
         }
 
-        return $this->varUrl($_GET[$val], $size);
+        return self::varUrl($_GET[$val], $size);
     }
 
-    function postUrl($val, $size = null) {
+    static function postUrl($val, $size = null) {
         if (empty($_POST[$val])) {
             return false;
         }
 
-        return $this->varUrl($_POST[$val], $size);
+        return self::varUrl($_POST[$val], $size);
     }
 
-    function varUrl($val, $size = null) {
+    static function varUrl($val, $size = null) {
         if (empty($val) || (!empty($size) && (strlen($val) > $size))) {
             return false;
         }
@@ -149,23 +145,23 @@ Class Filter {
     }
 
     // AZaz
-    function postAzChar($val, $size = null) {
+    static function postAzChar($val, $size = null) {
         if (empty($_POST[$val])) {
             return false;
         }
 
-        return $this->varAzChar($_POST[$val], $size);
+        return self::varAzChar($_POST[$val], $size);
     }
 
-    function getAzChar($val, $size = null) {
+    static function getAzChar($val, $size = null) {
         if (empty($_GET[$val])) {
             return false;
         }
 
-        return $this->varAzChar($_GET[$val], $size);
+        return self::varAzChar($_GET[$val], $size);
     }
 
-    function varAzChar($var, $max_size = null, $min_size = null) {
+    static function varAzChar($var, $max_size = null, $min_size = null) {
 
         if ((empty($var) ) || (!empty($max_size) && (strlen($var) > $max_size) ) || (!empty($min_size) && (strlen($var) < $min_size))
         ) {
@@ -179,23 +175,23 @@ Class Filter {
     }
 
     //[0-9][A-Za-z]
-    function postAlphanum($val, $size = null) {
+    static function postAlphanum($val, $size = null) {
         if (empty($_POST[$val])) {
             return false;
         }
 
-        return $this->varAlphanum($_POST[$val], $size);
+        return self::varAlphanum($_POST[$val], $size);
     }
 
-    function getAlphanum($val, $size = null) {
+    static function getAlphanum($val, $size = null) {
         if (empty($_GET[$val])) {
             return false;
         }
 
-        return $this->varAlphanum($_GET[$val], $size);
+        return self::varAlphanum($_GET[$val], $size);
     }
 
-    function varAlphanum($var, $max_size = null, $min_size = null) {
+    static function varAlphanum($var, $max_size = null, $min_size = null) {
         if ((empty($var) ) || (!empty($max_size) && (strlen($var) > $max_size) ) || (!empty($min_size) && (strlen($var) < $min_size))
         ) {
             return false;
@@ -208,23 +204,23 @@ Class Filter {
     }
 
     //USERNAME
-    function postUsername($val, $size = null) {
+    static function postUsername($val, $size = null) {
         if (empty($_POST[$val])) {
             return false;
         }
 
-        return $this->varUsername($_POST[$val], $size);
+        return self::varUsername($_POST[$val], $size);
     }
 
-    function getUsername($val, $size = null) {
+    static function getUsername($val, $size = null) {
         if (empty($_GET[$val])) {
             return false;
         }
 
-        return $this->varUsername($_GET[$val], $size);
+        return self::varUsername($_GET[$val], $size);
     }
 
-    function varUsername($var, $max_size = null, $min_size = null) {
+    static function varUsername($var, $max_size = null, $min_size = null) {
 
         if ((empty($var) ) || (!empty($max_size) && (strlen($var) > $max_size) ) || (!empty($min_size) && (strlen($var) < $min_size))) {
             return false;
@@ -238,23 +234,23 @@ Class Filter {
     }
 
     //EMAIL
-    function postEmail($val, $size = null) {
+    static function postEmail($val, $size = null) {
         if (empty($_POST[$val])) {
             return false;
         }
 
-        return $this->varEmail($_POST[$val], $size);
+        return self::varEmail($_POST[$val], $size);
     }
 
-    function getEmail($val, $size = null) {
+    static function getEmail($val, $size = null) {
         if (empty($_GET[$val])) {
             return false;
         }
 
-        return $this->varEmail($_GET[$val], $size);
+        return self::varEmail($_GET[$val], $size);
     }
 
-    function varEmail($var, $max_size = null, $min_size = null) {
+    static function varEmail($var, $max_size = null, $min_size = null) {
 
         if ((empty($var) ) || (!empty($max_size) && (strlen($var) > $max_size) ) || (!empty($min_size) && (strlen($var) < $min_size))) {
             return false;
@@ -266,23 +262,23 @@ Class Filter {
 
     //Strict Chars: at least [A-z][0-9] _
 
-    function postStrict($val, $size = null) {
+    static function postStrict($val, $size = null) {
         if (empty($_POST[$val])) {
             return false;
         }
 
-        return $this->varStrict($_POST[$val], $size);
+        return self::varStrict($_POST[$val], $size);
     }
 
-    function getStrict($val, $size = null) {
+    static function getStrict($val, $size = null) {
         if (empty($_GET[$val])) {
             return false;
         }
 
-        return $this->varStrict($_GET[$val], $size);
+        return self::varStrict($_GET[$val], $size);
     }
 
-    function varStrict($var, $max_size = null, $min_size = null) {
+    static function varStrict($var, $max_size = null, $min_size = null) {
 
         if ((empty($var) ) || (!empty($max_size) && (strlen($var) > $max_size) ) || (!empty($min_size) && (strlen($var) < $min_size))
         ) {
@@ -297,23 +293,23 @@ Class Filter {
     }
 
     // PASSWORD
-    function postPassword($val, $size = null) {
+    static function postPassword($val, $size = null) {
         if (empty($_POST[$val])) {
             return false;
         }
 
-        return $this->varPassword($_POST[$val], $size);
+        return self::varPassword($_POST[$val], $size);
     }
 
-    function getPassword($val, $size = null) {
+    static function getPassword($val, $size = null) {
         if (empty($_GET[$val])) {
             return false;
         }
 
-        return $this->varPassword($_GET[$val], $size);
+        return self::varPassword($_GET[$val], $size);
     }
 
-    function varPassword($var, $max_size = null, $min_size = null) {
+    static function varPassword($var, $max_size = null, $min_size = null) {
 
         if ((!empty($max_size) && (strlen($var) > $max_size) ) || (!empty($min_size) && (strlen($var) < $min_size))
         ) {

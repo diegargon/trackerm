@@ -16,12 +16,9 @@ if (!empty($cfg['only_local_net']) && !is_local_ip()) {
 }
 
 require_once('include/user.inc.php');
-
 require_once('include/session.inc.php');
-
 loadUserPrefs();
-require_once('include/html.class.php');
-$html = new HTML();
+require_once('libs/html.class.php');
 require_once('include/pages.inc.php');
 require_once('include/html.common.php');
 require_once('include/library.inc.php');

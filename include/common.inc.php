@@ -21,12 +21,12 @@ require_once('config/config.priv.php');
 require_once('include/checks.inc.php');
 do_checks();
 
-require_once('include/db.class.php');
+require_once('libs/db.class.php');
 global $db;
 $db = new DB($cfg['DB_FILE']);
 $db->connect();
 
-require_once('include/config.class.php');
+require_once('libs/config.class.php');
 $config = new Config();
 
 if (!empty($cfg['display_errors'])) {
@@ -39,18 +39,15 @@ if (!empty($cfg['locale'])) {
     setlocale(LC_ALL, $cfg['locale']);
 }
 
-require_once('include/logging.class.php');
+require_once('libs/logging.class.php');
 global $log;
 $log = new Log($cfg);
 
 require_once('lang/' . $cfg['LANG'] . '/lang.inc.php');
-require_once('include/filters.class.php');
-global $filter;
-$filter = new Filter();
-
+require_once('libs/filters.class.php');
 require_once('include/curl.inc.php');
 require_once('include/file.utils.php');
-require_once('include/transmission.class.php');
+require_once('libs/transmission.class.php');
 require_once('include/library-common.inc.php');
 require_once('include/ident-title-utils.inc.php');
 require_once('include/view.inc.php');

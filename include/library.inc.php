@@ -10,18 +10,18 @@
 !defined('IN_WEB') ? exit : true;
 
 function show_my_movies() {
-    global $db, $filter, $cfg;
+    global $db, $cfg;
 
     $page = '';
-    $npage = $filter->getInt('npage');
-    $search_type = $filter->getString('search_type');
+    $npage = Filter::getInt('npage');
+    $search_type = Filter::getString('search_type');
 
     empty($npage) || (!empty($search_type) && $search_type == 'shows') ? $npage = 1 : null;
 
     if (!empty($_POST['mult_movies_select'])) {
         ident_by_idpairs('movies', $_POST['mult_movies_select']);
     }
-    if (!empty(($ident_delete = $filter->getInt('ident_delete'))) && ($_GET['media_type'] == 'movies')) {
+    if (!empty(($ident_delete = Filter::getInt('ident_delete'))) && ($_GET['media_type'] == 'movies')) {
         $db->deleteItemById('library_movies', $ident_delete);
     }
     $page .= show_identify_media('movies');

@@ -10,9 +10,9 @@
 !defined('IN_WEB') ? exit : true;
 
 function view() {
-    global $cfg, $LNG, $db, $filter;
-    $view_type = $filter->getString('view_type');
-    $id = $filter->getInt('id');
+    global $cfg, $LNG, $db;
+    $view_type = Filter::getString('view_type');
+    $id = Filter::getInt('id');
     empty($id) ? msg_box($msg = ['title' => $LNG['L_ERROR'], 'body' => $LNG['L_ERR_BAD_ID']]) : null;
     $other = [];
     $page = '';
@@ -130,11 +130,11 @@ function view() {
 }
 
 function view_extra_movies($item, $opt = null) {
-    global $LNG, $filter;
+    global $LNG;
 
-    $id = $filter->getInt('id');
-    $page = $filter->getString('page');
-    $view_type = $filter->getString('view_type');
+    $id = Filter::getInt('id');
+    $page = Filter::getString('page');
+    $view_type = Filter::getString('view_type');
 
     $extra = '';
     $extra .= '<form method="GET" action="">';
@@ -146,7 +146,7 @@ function view_extra_movies($item, $opt = null) {
 
     $title = getFileTitle($item['title']);
 
-    (!empty($_GET['search_movie_db'])) ? $stitle = trim($filter->getUtf8('search_movie_db')) : $stitle = $title;
+    (!empty($_GET['search_movie_db'])) ? $stitle = trim(Filter::getUtf8('search_movie_db')) : $stitle = $title;
 
     $extra .= '<input type="text" name="search_movie_db" value="' . $stitle . '">';
     $extra .= '</form>';
@@ -171,11 +171,11 @@ function view_extra_movies($item, $opt = null) {
 }
 
 function view_extra_shows($item, $opt) {
-    global $LNG, $filter;
+    global $LNG;
 
-    $id = $filter->getInt('id');
-    $page = $filter->getString('page');
-    $view_type = $filter->getString('view_type');
+    $id = Filter::getInt('id');
+    $page = Filter::getString('page');
+    $view_type = Filter::getString('view_type');
 
     $extra = '';
     $extra .= '<form method="GET">';
@@ -187,7 +187,7 @@ function view_extra_shows($item, $opt) {
 
     $title = getFileTitle($item['title']);
     if (!empty($_GET['search_shows_db'])) {
-        $stitle = trim($filter->getString('search_shows_db'));
+        $stitle = trim(Filter::getString('search_shows_db'));
     } else {
         $stitle = $title;
     }
@@ -209,23 +209,23 @@ function view_extra_shows($item, $opt) {
 }
 
 function view_seasons($item, $update = false) {
-    global $db, $LNG, $filter;
+    global $db, $LNG;
 
-    $id = $filter->getInt('id');
-    $season = $filter->getInt('season');
-    $view_type = $filter->getString('view_type');
+    $id = Filter::getInt('id');
+    $season = Filter::getInt('season');
+    $view_type = Filter::getString('view_type');
     $seasons_data = '';
     $episode_data = '';
 
     //SUBMITED WANTED (episode=1 || episode=1,2,3
-    if ($filter->getInt('wanted') && !empty($season)) {
-        $episode = $filter->getInt('episode');
+    if (Filter::getInt('wanted') && !empty($season)) {
+        $episode = Filter::getInt('episode');
 
         if (empty($episode) && !empty($_GET['episode'])) {
             $episodes_check = explode(',', $_GET['episode']);
 
-            if (valid_array($episodes_check) && $filter->varInt($episodes_check)) {
-                $episode = $filter->getString('episode'); //episode string: "1,2,3..."
+            if (valid_array($episodes_check) && Filter::varInt($episodes_check)) {
+                $episode = Filter::getString('episode'); //episode string: "1,2,3..."
             }
         }
         !empty($episode) ? wanted_episode($item['themoviedb_id'], $season, $episode) : null;
@@ -271,10 +271,10 @@ function view_seasons($item, $update = false) {
 }
 
 function view_season_detailed($season, $items_details) {
-    global $LNG, $filter;
+    global $LNG;
 
-    $id = $filter->getInt('id');
-    $view_type = $filter->getString('view_type');
+    $id = Filter::getInt('id');
+    $view_type = Filter::getString('view_type');
     $iurl = '?page=view&id=' . $id . '&view_type=' . $view_type;
     $episode_data = '<div class="episode_container">';
     $episode_data .= '<hr/><div class="divTable">';

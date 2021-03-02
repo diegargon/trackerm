@@ -11,7 +11,7 @@ define('IN_WEB', true);
 
 require_once('include/usermode.inc.php');
 
-$req_page = $filter->getString('page');
+$req_page = Filter::getString('page');
 ($user['id'] < 1) ? $req_page = 'login' : null;
 
 if (empty($req_page) && $user['id'] > 0) {
@@ -22,9 +22,9 @@ if (empty($req_page) && $user['id'] > 0) {
     }
 }
 
-if (!(empty($d_link = $filter->getUrl('download')))) {
+if (!(empty($d_link = Filter::getUrl('download')))) {
 
-    if (($pos = strpos($d_link, "file=")) !== FALSE) {
+    if (($pos = strpos($d_link, 'file=')) !== FALSE) {
         $jackett_filename = substr($d_link, $pos + 5);
         $jackett_filename = trim(str_replace('+', ' ', $jackett_filename));
     }

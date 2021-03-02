@@ -10,7 +10,7 @@
 !defined('IN_WEB') ? exit : true;
 
 function page_index() {
-    global $cfg, $user, $LNG, $log, $filter, $html;
+    global $cfg, $user, $LNG, $log;
 
     $titems = [];
     $status_msg = '';
@@ -19,7 +19,7 @@ function page_index() {
     if (!empty($user['isAdmin'])) {
         $tdata = [];
         $tdata['title'] = '';
-        $tdata['content'] = $html->link(['class' => 'action_link'], 'index.php', $LNG['L_CONFIG'], ['page' => 'config']);
+        $tdata['content'] = Html::link(['class' => 'action_link'], 'index.php', $LNG['L_CONFIG'], ['page' => 'config']);
         $titems['col1'][] = getTpl('home-item', $tdata);
     }
     // General Info
@@ -27,17 +27,17 @@ function page_index() {
     $tdata['content'] = '';
     $tdata['title'] = $LNG['L_IDENTIFIED'] . ': ' . strtoupper($user['username']);
 
-    if ($filter->getInt('edit_profile')) {
+    if (Filter::getInt('edit_profile')) {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             (isset($_POST['cur_password']) && isset($_POST['new_password'])) ? $status_msg .= user_change_password() . '<br/>' : null;
             $status_msg .= user_change_prefs();
         }
         $tdata['content'] .= user_edit_profile();
     } else {
-        $tdata['content'] = $html->link(['class' => 'action_link'], '', $LNG['L_EDIT'], ['page' => 'index', 'edit_profile' => 1]);
+        $tdata['content'] = Html::link(['class' => 'action_link'], '', $LNG['L_EDIT'], ['page' => 'index', 'edit_profile' => 1]);
     }
 
-    $tdata['content'] .= $html->link(['class' => 'action_link'], '', $LNG['L_LOGOUT'], ['page' => 'logout']);
+    $tdata['content'] .= Html::link(['class' => 'action_link'], '', $LNG['L_LOGOUT'], ['page' => 'logout']);
     $tdata['content'] .= $status_msg;
     $titems['col1'][] = getTpl('home-item', $tdata);
 
@@ -56,12 +56,12 @@ function page_index() {
 
     if (isset($lib_stats['movies_paths']) && valid_array($lib_stats['movies_paths'])) {
         foreach ($lib_stats['movies_paths'] as $path) {
-            $paths['movies_paths'] = $html->span(['class' => 'harddisk_paths'], "{$LNG['L_FREE_TOTAL']} {$LNG['L_ON']} {$path['basename']} : {$path['free']} / {$path['total']}");
+            $paths['movies_paths'] = Html::span(['class' => 'harddisk_paths'], "{$LNG['L_FREE_TOTAL']} {$LNG['L_ON']} {$path['basename']} : {$path['free']} / {$path['total']}");
         }
     }
     if (isset($lib_stats['shows_paths']) && valid_array($lib_stats['shows_paths'])) {
         foreach ($lib_stats['shows_paths'] as $path) {
-            $paths['shows_paths'] = $html->span(['class' => 'harddisk_paths'], "{$LNG['L_FREE_TOTAL']} {$LNG['L_ON']} {$path['basename']} : {$path['free']} / {$path['total']}");
+            $paths['shows_paths'] = Html::span(['class' => 'harddisk_paths'], "{$LNG['L_FREE_TOTAL']} {$LNG['L_ON']} {$path['basename']} : {$path['free']} / {$path['total']}");
         }
     }
     $tdata['content'] = getTpl('harddisk', array_merge($lib_stats, $paths));
@@ -71,8 +71,8 @@ function page_index() {
     isset($_POST['clear_state']) ? $log->clearStateMsgs() : null;
     $tdata = [];
     $tdata['title'] = $LNG['L_STATE_MSG'];
-    $clean_link = $html->input(['type' => 'submit', 'class' => 'submit_btn clear_btn', 'name' => 'clear_state', 'value' => $LNG['L_CLEAR']]);
-    $tdata['content'] = $html->form(['method' => 'POST'], $clean_link);
+    $clean_link = Html::input(['type' => 'submit', 'class' => 'submit_btn clear_btn', 'name' => 'clear_state', 'value' => $LNG['L_CLEAR']]);
+    $tdata['content'] = Html::form(['method' => 'POST'], $clean_link);
     $state_msgs = $log->getStateMsgs();
 
     if (!empty($state_msgs) && (count($state_msgs) > 0)) {
@@ -92,7 +92,7 @@ function page_index() {
     if (!empty($latest_ary)) {
         $latest_ary = array_slice($latest_ary, 2);
         foreach ($latest_ary as $latest) {
-            $tdata['content'] .= $html->div(['class' => 'divBlock'], $latest);
+            $tdata['content'] .= Html::div(['class' => 'divBlock'], $latest);
         }
     }
     $tdata['main_class'] = 'home_news';
@@ -102,13 +102,13 @@ function page_index() {
     isset($_POST['clear_log']) ? file_put_contents('cache/log/trackerm.log', '') : null;
     $tdata = [];
     $tdata['title'] = $LNG['L_LOGS'];
-    $clean_link = $html->input(['type' => 'submit', 'class' => 'submit_btn clear_btn', 'name' => 'clear_log', 'value' => $LNG['L_CLEAR']]);
-    $tdata['content'] = $html->form(['method' => 'POST'], $clean_link);
+    $clean_link = Html::input(['type' => 'submit', 'class' => 'submit_btn clear_btn', 'name' => 'clear_log', 'value' => $LNG['L_CLEAR']]);
+    $tdata['content'] = Html::form(['method' => 'POST'], $clean_link);
     $latest_ary = getfile_ary('cache/log/trackerm.log');
     if (!empty($latest_ary)) {
         foreach (array_reverse($latest_ary) as $latest) {
             if (!empty(trim($latest))) {
-                $tdata['content'] .= $html->div(['class' => 'divBlock'], $latest);
+                $tdata['content'] .= Html::div(['class' => 'divBlock'], $latest);
             }
         }
     }
@@ -129,11 +129,11 @@ function page_index() {
 }
 
 function page_view() {
-    global $db, $LNG, $filter;
+    global $db, $LNG;
 
-    $id = $filter->getInt('id');
-    $deletereg = $filter->getInt('deletereg', 1);
-    $view_type = $filter->getString('view_type');
+    $id = Filter::getInt('id');
+    $deletereg = Filter::getInt('deletereg', 1);
+    $view_type = Filter::getString('view_type');
 
     if (empty($id) || empty($view_type)) {
         return msg_box($msg = ['title' => $LNG['L_ERROR'], 'body' => '1A1001']);
@@ -183,14 +183,14 @@ function page_news() {
 }
 
 function page_tmdb() {
-    global $filter, $cfg;
+    global $cfg;
 
-    (!empty($_GET['search_movies'])) ? $search_movies = $filter->getUtf8('search_movies') : $search_movies = '';
-    (!empty($_GET['search_shows'])) ? $search_shows = $filter->getUtf8('search_shows') : $search_shows = '';
+    (!empty($_GET['search_movies'])) ? $search_movies = Filter::getUtf8('search_movies') : $search_movies = '';
+    (!empty($_GET['search_shows'])) ? $search_shows = Filter::getUtf8('search_shows') : $search_shows = '';
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (isset($_POST['show_trending'])) {
-            $show_trending = $filter->postInt('show_trending');
+            $show_trending = Filter::postInt('show_trending');
             if (!empty($show_trending)) {
                 setPrefsItem('show_trending', 1);
             } else {
@@ -199,7 +199,7 @@ function page_tmdb() {
         }
 
         if (isset($_POST['show_popular'])) {
-            $show_popular = $filter->postInt('show_popular');
+            $show_popular = Filter::postInt('show_popular');
             if (!empty($show_popular)) {
                 setPrefsItem('show_popular', 1);
             } else {
@@ -207,7 +207,7 @@ function page_tmdb() {
             }
         }
         if (isset($_POST['show_today_shows'])) {
-            $show_today_shows = $filter->postInt('show_today_shows');
+            $show_today_shows = Filter::postInt('show_today_shows');
             if (!empty($show_today_shows)) {
                 setPrefsItem('show_today_shows', 1);
             } else {
@@ -273,10 +273,10 @@ function page_tmdb() {
 }
 
 function page_torrents() {
-    global $LNG, $filter;
+    global $LNG;
 
-    (!empty($_GET['search_movies_torrents'])) ? $search_movies_torrents = $filter->getUtf8('search_movies_torrents') : $search_movies_torrents = '';
-    (!empty($_GET['search_shows_torrents'])) ? $search_shows_torrents = $filter->getUtf8('search_shows_torrents') : $search_shows_torrents = '';
+    (!empty($_GET['search_movies_torrents'])) ? $search_movies_torrents = Filter::getUtf8('search_movies_torrents') : $search_movies_torrents = '';
+    (!empty($_GET['search_shows_torrents'])) ? $search_shows_torrents = Filter::getUtf8('search_shows_torrents') : $search_shows_torrents = '';
 
     $tdata['search_movies_word'] = $search_movies_torrents;
     $tdata['search_shows_word'] = $search_shows_torrents;
@@ -305,22 +305,22 @@ function page_torrents() {
 }
 
 function page_wanted() {
-    global $db, $filter, $trans;
+    global $db, $trans;
 
     $want = [];
     !empty($trans) ? $trans->updateWanted() : null;
 
     if (isset($_POST['check_day'])) {
-        $wanted_mfy = $filter->postInt('check_day');
+        $wanted_mfy = Filter::postInt('check_day');
         foreach ($wanted_mfy as $w_mfy_id => $w_mfy_value) {
             $day_check['day_check'] = $w_mfy_value;
             $db->updateItemById('wanted', $w_mfy_id, $day_check);
         }
     }
 
-    isset($_GET['id']) ? $wanted_id = $filter->getInt('id') : $wanted_id = false;
-    isset($_GET['media_type']) ? $wanted_type = $filter->getString('media_type') : $wanted_type = false;
-    isset($_GET['delete']) && $filter->getInt('delete') ? $db->deleteItemById('wanted', $filter->getInt('delete')) : null;
+    isset($_GET['id']) ? $wanted_id = Filter::getInt('id') : $wanted_id = false;
+    isset($_GET['media_type']) ? $wanted_type = Filter::getString('media_type') : $wanted_type = false;
+    isset($_GET['delete']) && Filter::getInt('delete') ? $db->deleteItemById('wanted', Filter::getInt('delete')) : null;
 
     if ($wanted_id !== false && $wanted_type !== false && $wanted_type == 'movies') {
         wanted_movies($wanted_id);
@@ -332,10 +332,10 @@ function page_wanted() {
 }
 
 function page_identify() {
-    global $LNG, $db, $filter, $html;
+    global $LNG, $db;
 
-    $media_type = $filter->getString('media_type');
-    $id = $filter->getInt('identify');
+    $media_type = Filter::getString('media_type');
+    $id = Filter::getInt('identify');
 
     if ($media_type === false || $id === false) {
         $box_msg['title'] = $LNG['L_ERROR'];
@@ -351,11 +351,11 @@ function page_identify() {
         $item = $db->getItemById('library_shows', $id);
     }
 
-    if (isset($_POST['identify']) && $filter->postInt('selected')) {
-        ident_by_idpairs($media_type, $filter->postInt('selected'));
+    if (isset($_POST['identify']) && Filter::postInt('selected')) {
+        ident_by_idpairs($media_type, Filter::postInt('selected'));
         return msg_box($msg = ['title' => $LNG['L_SUCCESS'], 'body' => $LNG['L_ADDED_SUCCESSFUL']]);
     }
-    !empty($_POST['submit_title']) ? $submit_title = $filter->postUtf8('submit_title') : $submit_title = $item['predictible_title'];
+    !empty($_POST['submit_title']) ? $submit_title = Filter::postUtf8('submit_title') : $submit_title = $item['predictible_title'];
 
     $tdata['search_title'] = $submit_title;
 
@@ -367,7 +367,7 @@ function page_identify() {
             $select = '';
 
             foreach ($db_media as $db_item) {
-                if (!empty($filter->postInt('selected')) && ($db_item['themoviedb_id'] == current($filter->postInt('selected')))) {
+                if (!empty(Filter::postInt('selected')) && ($db_item['themoviedb_id'] == current(Filter::postInt('selected')))) {
                     $item_selected = $db_item;
                 }
                 if (!empty($db_item['release'])) {
@@ -378,12 +378,12 @@ function page_identify() {
                 $values[] = ['value' => $db_item['themoviedb_id'], 'name' => $title];
             }
 
-            if (!empty($filter->postInt('selected'))) {
-                $conf_selected = current($filter->postInt('selected'));
+            if (!empty(Filter::postInt('selected'))) {
+                $conf_selected = current(Filter::postInt('selected'));
             } else {
                 $conf_selected = '';
             }
-            $select .= $html->select(['onChange' => 1, 'class' => 'ident_select', 'selected' => $conf_selected, 'name' => 'selected[' . $id . ']'], $values);
+            $select .= Html::select(['onChange' => 1, 'class' => 'ident_select', 'selected' => $conf_selected, 'name' => 'selected[' . $id . ']'], $values);
 
             $tdata['select'] = $select;
         }
@@ -404,10 +404,10 @@ function page_identify() {
 }
 
 function page_download() {
-    global $db, $filter;
+    global $db;
 
-    $id = $filter->getInt('id');
-    $view_type = $filter->getString('view_type');
+    $id = Filter::getInt('id');
+    $view_type = Filter::getString('view_type');
 
     if (empty($id) || empty($view_type)) {
         exit();
@@ -426,10 +426,10 @@ function page_download() {
 }
 
 function page_transmission() {
-    global $trans, $filter;
+    global $trans;
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $tid = $filter->postInt('tid');
+        $tid = Filter::postInt('tid');
 
         isset($_POST['start_all']) && !empty($trans) ? $trans->startAll() : null;
         isset($_POST['stop_all']) && !empty($trans) ? $trans->stopAll() : null;
@@ -463,12 +463,12 @@ function page_transmission() {
 }
 
 function page_config() {
-    global $filter, $config;
+    global $config;
 
     $page = '';
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (isset($_POST['submit_config'])) {
-            $config_keys = $filter->postString('config_keys');
+            $config_keys = Filter::postString('config_keys');
             if (!empty($config_keys) && is_array($config_keys) && count($config_keys) > 0) {
                 $config->saveKeys($config_keys);
             }
@@ -482,7 +482,7 @@ function page_config() {
         if (isset($_POST['config_add']) && !empty($_POST['add_item'][array_key_first($_POST['config_add'])])) {
             $key = array_key_first($_POST['config_add']);
             $value = $_POST['add_item'][array_key_first($_POST['config_add'])];
-            $value = $filter->varString($value);
+            $value = Filter::varString($value);
             if (isset($_POST['config_id'][array_key_first($_POST['config_add'])])) {
                 $id = $_POST['config_id'][array_key_first($_POST['config_add'])];
             } else {
@@ -492,19 +492,19 @@ function page_config() {
             $config->addCommaElement($key, trim($value), $id, $before);
         }
     }
-    $page .= $config->display($filter->getString('category'));
+    $page .= $config->display(Filter::getString('category'));
 
     return $page;
 }
 
 function page_login() {
-    global $cfg, $db, $user, $filter;
+    global $cfg, $db, $user;
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $dologin = 0;
 
-        $username = $filter->postUsername('username');
-        $password = $filter->postUsername('password');
+        $username = Filter::postUsername('username');
+        $password = Filter::postUsername('password');
         if (!empty($username)) {
             if ($cfg['force_use_passwords'] && !empty($password)) {
                 $dologin = 1;
@@ -550,10 +550,10 @@ function page_logout() {
 }
 
 function page_localplayer() {
-    global $filter, $db;
+    global $db;
 
-    $id = $filter->getInt('id');
-    $media_type = $filter->getString('media_type');
+    $id = Filter::getInt('id');
+    $media_type = Filter::getString('media_type');
 
     if (empty($id) || empty($media_type)) {
         exit();

@@ -7,7 +7,7 @@
  *  @subpackage
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  */
-class HTML {
+class Html {
     /*
       function getTpl($tpl, $tdata = []) {
       global $cfg, $LNG, $user; //NO delete work for templates
@@ -25,7 +25,7 @@ class HTML {
       values[] = ['name' =>'', 'value='' ]
      */
 
-    function select($conf, $values) {
+    static function select($conf, $values) {
         if (empty($values) || !is_array($values) || !is_array($conf) || empty($conf['name'])) {
             return false;
         }
@@ -50,7 +50,7 @@ class HTML {
       conf = array
      */
 
-    function link($conf, $url = null, $s_name = null, $get_params = null) {
+    static function link($conf, $url = null, $s_name = null, $get_params = null) {
         $opt = '';
 
         if ($get_params != null) {
@@ -68,7 +68,7 @@ class HTML {
         return '<a ' . $opt . ' href="' . $url . $params . '">' . $s_name . '</a>';
     }
 
-    function input($conf) {
+    static function input($conf) {
         $opt = '';
 
         !empty($conf['id']) ? $opt .= 'id="' . $conf['id'] . '" ' : null;
@@ -81,14 +81,14 @@ class HTML {
         if (!empty($conf['label_caption']) && empty($conf['id'])) {
             $label_conf['for'] = $conf['id'];
             !empty($conf['label_class']) ? $label_conf['class'] = $conf['label_class'] : null;
-            $this->label($label_conf, $conf['label_caption']);
+            self::label($label_conf, $conf['label_caption']);
         }
         $input = '<input ' . $opt . ' />';
 
         return $input;
     }
 
-    function form($conf, $content) {
+    static function form($conf, $content) {
         $opt = '';
 
         isset($conf['id']) ? $opt = 'id="' . $conf['id'] . '" ' : null;
@@ -99,7 +99,7 @@ class HTML {
         return '<form ' . $opt . ' >' . $content . '</form>';
     }
 
-    function span($conf, $content) {
+    static function span($conf, $content) {
         $opt = '';
 
         isset($conf['id']) ? $opt = 'id="' . $conf['id'] . '" ' : null;
@@ -108,7 +108,7 @@ class HTML {
         return '<span ' . $opt . ' >' . $content . '</span>';
     }
 
-    function div($conf, $content) {
+    static function div($conf, $content) {
         $opt = '';
 
         isset($conf['id']) ? $opt = 'id="' . $conf['id'] . '" ' : null;
@@ -117,8 +117,7 @@ class HTML {
         return '<div ' . $opt . ' >' . $content . '</div>';
     }
 
-    function label($conf, $caption) {
-        global $LNG;
+    static function label($conf, $caption) {
         $opt = '';
 
         if (isset($conf['for'])) {
@@ -128,7 +127,7 @@ class HTML {
         }
         isset($conf['class']) ? $opt = 'class="' . $conf['class'] . '" ' : null;
 
-        return '<label ' . $opt . '>' . $LNG[$caption] . ' </label>';
+        return '<label ' . $opt . '>' . $caption . ' </label>';
     }
 
 }

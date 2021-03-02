@@ -143,12 +143,12 @@ function ident_by_already_have_show($media, $ids) {
 }
 
 function show_identify_media($media_type) {
-    global $LNG, $cfg, $db, $filter;
+    global $LNG, $cfg, $db;
 
     $titles = '';
     $i = 0;
     $uniq_shows = [];
-    $iurl = '?page=' . $filter->getString('page');
+    $iurl = '?page=' . Filter::getString('page');
 
     if ($media_type == 'shows') {
         $result = $db->query("SELECT * FROM library_$media_type WHERE title = '' OR title is NULL");

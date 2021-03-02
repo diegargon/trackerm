@@ -10,7 +10,7 @@
 !defined('IN_WEB') ? exit : true;
 
 function wanted_list() {
-    global $db, $LNG, $trans, $filter;
+    global $db, $LNG, $trans;
     $iurl = '?page=wanted';
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -37,8 +37,8 @@ function wanted_list() {
             $db->updateItemById('wanted', $id_only_proper, ['only_proper' => $only_proper]);
         }
         if (!empty($_POST['track_show']) && !empty($_POST['id'])) {
-            $id = $filter->postInt('id');
-            $track_show = $filter->postString('track_show');
+            $id = Filter::postInt('id');
+            $track_show = Filter::postString('track_show');
             $track_show = ltrim($track_show, 'S');
             $track_show = explode('E', $track_show);
             $season = $track_show[0];

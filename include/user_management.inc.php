@@ -10,15 +10,15 @@
 !defined('IN_WEB') ? exit : true;
 
 function user_management() {
-    global $LNG, $filter, $db, $cfg, $user;
+    global $LNG, $db, $cfg, $user;
 
     $status_msg = $LNG['L_USERS_MNGT_HELP'];
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST' && $user['isAdmin']) {
         if (isset($_POST['new_user'])) {
-            if (!empty($new_user = $filter->postUsername('username'))) {
+            if (!empty($new_user = Filter::postUsername('username'))) {
                 if ($cfg['force_use_passwords']) {
-                    if (!empty($password = $filter->postPassword('password'))) {
+                    if (!empty($password = Filter::postPassword('password'))) {
                         $user_create['username'] = $new_user;
                         $user_create['password'] = encrypt_password($password);
                         $_POST['is_admin'] == 1 ? $user_create['isAdmin'] = 1 : $user_create['isAdmin'] = 0;
@@ -30,7 +30,7 @@ function user_management() {
                         $status_msg = $LNG['L_USER_INCORRECT_PASSWORD'];
                     }
                 } else {
-                    if (!empty($password = $filter->postPassword('password'))) {
+                    if (!empty($password = Filter::postPassword('password'))) {
                         $user_create['password'] = encrypt_password($password);
                     }
                     $_POST['is_admin'] == 1 ? $user_create['isAdmin'] = 1 : $user_create['isAdmin'] = 0;
@@ -45,7 +45,7 @@ function user_management() {
             }
         }
 
-        if (isset($_POST['delete_user']) && !empty($delete_user_id = $filter->postInt('delete_user_id'))) {
+        if (isset($_POST['delete_user']) && !empty($delete_user_id = Filter::postInt('delete_user_id'))) {
             $db->delete('users', ['id' => ['value' => $delete_user_id]]);
             $status_msg = $LNG['L_USER_DELETED'];
         }
@@ -62,7 +62,7 @@ function new_user() {
 }
 
 function show_users() {
-    global $html;
+    //global $html;
 
     $form_content = '';
     $users = get_profiles();
@@ -72,7 +72,7 @@ function show_users() {
             $form_content .= getTpl('delete_user', $_user);
         }
     }
-    $form = $html->form(['id' => 'delete_user', 'method' => 'POST'], $form_content);
+    $form = Html::form(['id' => 'delete_user', 'method' => 'POST'], $form_content);
 
     return $form;
 }
@@ -98,7 +98,7 @@ function user_edit_profile() {
 }
 
 function user_change_prefs() {
-    global $filter, $user, $db, $LNG;
+    global $user, $db, $LNG;
 
     $status_msg = null;
 
@@ -106,7 +106,7 @@ function user_change_prefs() {
         $user['email'] = '';
         $db->updateItemById('users', $user['id'], ['email' => '']);
         $status_msg .= $LNG['L_EMAIL_CHANGE_SUCESS'];
-    } else if (!empty($_POST['email']) && ($email = $filter->postEmail('email'))) {
+    } else if (!empty($_POST['email']) && ($email = Filter::postEmail('email'))) {
         if ($email && ($email != $user['email'])) {
             $user['email'] = $email;
             $db->updateItemById('users', $user['id'], ['email' => $email]);
@@ -118,7 +118,7 @@ function user_change_prefs() {
     $index_page = getPrefsItem('index_page');
 
     if (isset($_POST['index_page']) && !empty($_POST['index_page']) && ($_POST['index_page'] != $index_page)) {
-        setPrefsItem('index_page', $filter->postString('index_page'));
+        setPrefsItem('index_page', Filter::postString('index_page'));
     }
     if (isset($_POST['email_notify'])) {
         (!empty($_POST['email_notify'])) ? setPrefsItem('email_notify', 1) : setPrefsItem('email_notify', 0);
@@ -128,13 +128,13 @@ function user_change_prefs() {
 }
 
 function user_change_password() {
-    global $cfg, $user, $LNG, $filter, $db;
+    global $cfg, $user, $LNG, $db;
 
     if (isset($_POST['cur_password'])) {
-        !empty($filter->postPassword('cur_password')) ? $cur_password = $filter->postPassword('cur_password') : $cur_password = '';
+        !empty(Filter::postPassword('cur_password')) ? $cur_password = Filter::postPassword('cur_password') : $cur_password = '';
     }
     if (isset($_POST['new_password'])) {
-        !empty($filter->postPassword('new_password')) ? $new_password = $filter->postPassword('new_password') : $new_password = '';
+        !empty(Filter::postPassword('new_password')) ? $new_password = Filter::postPassword('new_password') : $new_password = '';
     }
     if ($cfg['force_use_passwords'] && empty($new_password)) {
         return $LNG['L_PASSWORD_CANT_EMPTY'];
