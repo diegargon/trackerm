@@ -15,15 +15,15 @@ function search_media_torrents($media_type, $search, $head = null, $nohtml = fal
     if ($media_type == 'movies') {
         $jackett_search_media_cache = 'jackett_search_movies_cache';
         $jackett_db = 'jackett_movies';
-        $search_words = iconv("utf-8", "ascii//TRANSLIT", $search['words']);
+        $search_words = iconv($cfg['charset'], "ascii//TRANSLIT", $search['words']);
     } else if ($media_type == 'shows') {
         $jackett_search_media_cache = 'jackett_search_shows_cache';
         $jackett_db = 'jackett_shows';
 
         if (!empty($search['episode'])) {
-            $search_words = iconv("utf-8", "ascii//TRANSLIT", $search['words']) . ' ' . $search['episode'];
+            $search_words = iconv($cfg['charset'], "ascii//TRANSLIT", $search['words']) . ' ' . $search['episode'];
         } else {
-            $search_words = iconv("utf-8", "ascii//TRANSLIT", $search['words']);
+            $search_words = iconv($cfg['charset'], "ascii//TRANSLIT", $search['words']);
         }
     } else {
         return false;

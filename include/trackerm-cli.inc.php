@@ -587,18 +587,18 @@ function wanted_work() {
 }
 
 function wanted_check_title($title, $results) {
-    global $log;
+    global $log, $cfg;
     $valid = [];
 
-    $words = trim($title);
+    $req_title = iconv($cfg['charset'], "ascii//TRANSLIT", trim($title));
     foreach ($results as $item) {
-        $title = trim(getFileTitle($item['title']));
+        $res_title = iconv($cfg['charset'], "ascii//TRANSLIT", trim(getFileTitle($item['title'])));
 
-        if (strcmp(strtolower($title), strtolower($words)) == 0) {
-            $log->debug('Wanted: Valid title found for title: ' . $words . ' ->' . $title);
+        if (strcmp(strtolower($res_title), strtolower($req_title)) == 0) {
+            $log->debug('Wanted: Valid title found for title: ' . $req_title . ' ->' . $res_title);
             $valid[] = $item;
         } else {
-            $log->debug('Wanted: Title discarded since is not exact *' . strtolower($words) . '*:*' . strtolower($title) . '*');
+            $log->debug('Wanted: Title discarded since is not exact *' . strtolower($req_title) . '*:*' . strtolower($res_title) . '*');
         }
     }
 
