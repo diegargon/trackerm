@@ -9,7 +9,7 @@
  */
 define('IN_WEB', true);
 
-require_once('include/usermode.inc.php');
+require_once('includes/usermode.inc.php');
 
 $req_page = Filter::getString('page');
 ($user['id'] < 1) ? $req_page = 'login' : null;

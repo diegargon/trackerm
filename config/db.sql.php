@@ -840,7 +840,7 @@ function update_db($from) {
     }
 
     if ($from < 13) {
-        require_once('include/update.db.php');
+        require_once('includes/update.db.php');
         $db->query('ALTER TABLE config add column weight INTEGER NULL');
         $db->query('UPDATE config SET weight=\'0\' ');
         $db->query('ALTER TABLE wanted add column custom_title VARCHAR NULL');

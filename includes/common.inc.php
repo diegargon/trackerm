@@ -18,15 +18,15 @@ require('/etc/trackerm.conf');
 
 require_once('config/config.priv.php');
 
-require_once('include/checks.inc.php');
+require_once('includes/checks.inc.php');
 do_checks();
 
-require_once('libs/db.class.php');
+require_once('includes/db.class.php');
 global $db;
 $db = new DB($cfg['DB_FILE']);
 $db->connect();
 
-require_once('libs/config.class.php');
+require_once('includes/config.class.php');
 $config = new Config();
 
 if (!empty($cfg['display_errors'])) {
@@ -39,27 +39,27 @@ if (!empty($cfg['locale'])) {
     setlocale(LC_ALL, $cfg['locale']);
 }
 
-require_once('libs/logging.class.php');
+require_once('includes/logging.class.php');
 global $log;
 $log = new Log($cfg);
 
 require_once('lang/' . $cfg['LANG'] . '/lang.inc.php');
-require_once('libs/filters.class.php');
-require_once('include/curl.inc.php');
-require_once('include/file.utils.php');
-require_once('libs/transmission.class.php');
-require_once('include/library-common.inc.php');
-require_once('include/ident-title-utils.inc.php');
-require_once('include/view.inc.php');
-require_once('include/' . $cfg['search_db'] . '.inc.php');
-require_once('include/mediadb.inc.php');
-require_once('include/jackett.inc.php');
-require_once('include/wanted.inc.php');
+require_once('includes/filters.class.php');
+require_once('includes/curl.inc.php');
+require_once('includes/file.utils.php');
+require_once('includes/transmission.class.php');
+require_once('includes/library-common.inc.php');
+require_once('includes/ident-title-utils.inc.php');
+require_once('includes/view.inc.php');
+require_once('includes/' . $cfg['search_db'] . '.inc.php');
+require_once('includes/mediadb.inc.php');
+require_once('includes/jackett.inc.php');
+require_once('includes/wanted.inc.php');
 require_once('vendor/autoload.php');
-require_once('include/utils.inc.php');
+require_once('includes/utils.inc.php');
 
-require_once('include/prefs.inc.php');
-!empty($cfg['localplayer']) ? require_once('include/localplayer.inc.php') : null;
+require_once('includes/prefs.inc.php');
+!empty($cfg['localplayer']) ? require_once('includes/localplayer.inc.php') : null;
 
 global $trans;
 $trans = new TorrentServer($cfg);

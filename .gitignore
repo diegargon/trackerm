@@ -3,5 +3,5 @@
 /old/
 /nbproject/
 
-/include/Thtml.class.php
-/include/TPageBuilder.class.php
+/includes/Thtml.class.php
+/includes/TPageBuilder.class.php

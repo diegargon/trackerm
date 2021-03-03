@@ -19,8 +19,8 @@ if (file_exists('/etc/trackerm.conf')) {
 }
 
 chdir($cfg['ROOT_PATH']);
-require_once('include/common.inc.php');
-require_once('include/trackerm-cli.inc.php');
+require_once('includes/common.inc.php');
+require_once('includes/trackerm-cli.inc.php');
 
 isset($argv[1]) && $argv[1] == '-console' ? $log->setConsole(true) : null;
 
