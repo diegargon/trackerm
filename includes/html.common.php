@@ -9,6 +9,7 @@
  */
 !defined('IN_WEB') ? exit : true;
 
+//TODO move to frontend and html to tpl or html::
 function buildTable($head, $db_ary, $topt = null) {
     global $cfg, $LNG;
 
