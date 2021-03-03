@@ -143,7 +143,7 @@ function ident_by_already_have_show($media, $ids) {
 }
 
 function show_identify_media($media_type) {
-    global $LNG, $cfg, $db;
+    global $LNG, $cfg, $db, $frontend;
 
     $titles = '';
     $i = 0;
@@ -218,7 +218,7 @@ function show_identify_media($media_type) {
             $title_tdata['del_iurl'] = $iurl . '&media_type=' . $media_type . '&ident_delete=' . $item['id'];
             $title_tdata['more_iurl'] = '?page=identify&media_type=' . $media_type . '&identify=' . $item['id'];
             $title_tdata['media_type'] = $media_type;
-            $titles .= $table = getTpl('identify_item', array_merge($item, $title_tdata));
+            $titles .= $table = $frontend->getTpl('identify_item', array_merge($item, $title_tdata));
             $i++;
         }
     }
@@ -227,7 +227,7 @@ function show_identify_media($media_type) {
         $tdata['titles'] = $titles;
         $tdata['head'] = $LNG['L_IDENT_' . strtoupper($media_type) . ''];
 
-        $table = getTpl('identify', $tdata);
+        $table = $frontend->getTpl('identify', $tdata);
 
         return $table;
     }

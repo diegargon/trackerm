@@ -10,7 +10,7 @@
 !defined('IN_WEB') ? exit : true;
 
 function page_index() {
-    global $cfg, $user, $LNG, $log;
+    global $cfg, $user, $LNG, $log, $frontend;
 
     $titems = [];
     $status_msg = '';
@@ -20,7 +20,7 @@ function page_index() {
         $tdata = [];
         $tdata['title'] = '';
         $tdata['content'] = Html::link(['class' => 'action_link'], 'index.php', $LNG['L_CONFIG'], ['page' => 'config']);
-        $titems['col1'][] = getTpl('home-item', $tdata);
+        $titems['col1'][] = $frontend->getTpl('home-item', $tdata);
     }
     // General Info
     $tdata = [];
@@ -39,13 +39,13 @@ function page_index() {
 
     $tdata['content'] .= Html::link(['class' => 'action_link'], '', $LNG['L_LOGOUT'], ['page' => 'logout']);
     $tdata['content'] .= $status_msg;
-    $titems['col1'][] = getTpl('home-item', $tdata);
+    $titems['col1'][] = $frontend->getTpl('home-item', $tdata);
 
     // User managament
     if (!empty($user['isAdmin'])) {
         $tdata = [];
         $tdata = user_management();
-        $titems['col1'][] = getTpl('home-item', $tdata);
+        $titems['col1'][] = $frontend->getTpl('home-item', $tdata);
     }
     // Hard disk
     $tdata = [];
@@ -64,8 +64,8 @@ function page_index() {
             $paths['shows_paths'] = Html::span(['class' => 'harddisk_paths'], "{$LNG['L_FREE_TOTAL']} {$LNG['L_ON']} {$path['basename']} : {$path['free']} / {$path['total']}");
         }
     }
-    $tdata['content'] = getTpl('harddisk', array_merge($lib_stats, $paths));
-    $titems['col1'][] = getTpl('home-item', $tdata);
+    $tdata['content'] = $frontend->getTpl('harddisk', array_merge($lib_stats, $paths));
+    $titems['col1'][] = $frontend->getTpl('home-item', $tdata);
 
     // States Messages
     isset($_POST['clear_state']) ? $log->clearStateMsgs() : null;
@@ -78,11 +78,11 @@ function page_index() {
     if (!empty($state_msgs) && (count($state_msgs) > 0)) {
         foreach ($state_msgs as $state_msg) {
             $state_msg['display_time'] = strftime("%d %h %X", strtotime($state_msg['created']));
-            $tdata['content'] .= getTpl('statemsg_item', $state_msg);
+            $tdata['content'] .= $frontend->getTpl('statemsg_item', $state_msg);
         }
     }
     $tdata['main_class'] = 'home_state_msg';
-    $titems['col2'][] = getTpl('home-item', $tdata);
+    $titems['col2'][] = $frontend->getTpl('home-item', $tdata);
 
     // LATEST info
     $tdata = [];
@@ -96,7 +96,7 @@ function page_index() {
         }
     }
     $tdata['main_class'] = 'home_news';
-    $titems['col2'][] = getTpl('home-item', $tdata);
+    $titems['col2'][] = $frontend->getTpl('home-item', $tdata);
 
     // LOGS
     isset($_POST['clear_log']) ? file_put_contents('cache/log/trackerm.log', '') : null;
@@ -113,34 +113,33 @@ function page_index() {
         }
     }
     $tdata['main_class'] = 'home_log';
-    $titems['col2'][] = getTpl('home-item', $tdata);
+    $titems['col2'][] = $frontend->getTpl('home-item', $tdata);
 
     // Starting Info
     $tdata = [];
     $tdata['title'] = $LNG['L_STARTING'];
     $tdata['content'] = getfile('STARTING.' . substr($cfg['LANG'], 0, 2));
     $tdata['main_class'] = 'home_starting';
-    $titems['col2'][] = getTpl('home-item', $tdata);
+    $titems['col2'][] = $frontend->getTpl('home-item', $tdata);
 
     //FIN
-    $home = getTpl('home-page', $titems);
+    $home = $frontend->getTpl('home-page', $titems);
 
     return $home;
 }
 
 function page_view() {
-    global $db, $LNG;
+    global $db, $frontend;
 
     $id = Filter::getInt('id');
     $deletereg = Filter::getInt('deletereg', 1);
     $view_type = Filter::getString('view_type');
 
     if (empty($id) || empty($view_type)) {
-        return msg_box($msg = ['title' => $LNG['L_ERROR'], 'body' => '1A1001']);
+        return $frontend->msgBox($msg = ['title' => 'L_ERROR', 'body' => '1A1001']);
     }
     if (!empty($deletereg)) {
         if ($view_type == 'movies_library') {
-            //TODO MULTIPLE: when allow multiple files and have master must delete like shows_library for rid all registers
             $db->deleteItemById('library_movies', $id);
         }
         if ($view_type == 'shows_library') {
@@ -148,7 +147,7 @@ function page_view() {
             $media_db_id = $delete_item['themoviedb_id'];
             $db->deleteItemsByField('library_shows', 'themoviedb_id', $media_db_id);
         }
-        return msg_box($msg = ['title' => $LNG['L_SUCCESS'], 'body' => $LNG['L_DELETE_SUCCESSFUL']]);
+        return $frontend->msgBox($msg = ['title' => 'L_SUCCESS', 'body' => 'L_DELETE_SUCCESSFUL']);
     }
 
     return view();
@@ -183,7 +182,7 @@ function page_news() {
 }
 
 function page_tmdb() {
-    global $cfg;
+    global $cfg, $frontend;
 
     (!empty($_GET['search_movies'])) ? $search_movies = Filter::getUtf8('search_movies') : $search_movies = '';
     (!empty($_GET['search_shows'])) ? $search_shows = Filter::getUtf8('search_shows') : $search_shows = '';
@@ -221,7 +220,7 @@ function page_tmdb() {
     $tdata['search_movies_word'] = $search_movies;
     $tdata['search_shows_word'] = $search_shows;
 
-    $page = getTpl('page_tmdb', $tdata);
+    $page = $frontend->getTpl('page_tmdb', $tdata);
 
     if (!empty($search_movies)) {
         $movies = mediadb_searchMovies(trim($search_movies));
@@ -273,7 +272,7 @@ function page_tmdb() {
 }
 
 function page_torrents() {
-    global $LNG;
+    global $frontend;
 
     (!empty($_GET['search_movies_torrents'])) ? $search_movies_torrents = Filter::getUtf8('search_movies_torrents') : $search_movies_torrents = '';
     (!empty($_GET['search_shows_torrents'])) ? $search_shows_torrents = Filter::getUtf8('search_shows_torrents') : $search_shows_torrents = '';
@@ -281,7 +280,7 @@ function page_torrents() {
     $tdata['search_movies_word'] = $search_movies_torrents;
     $tdata['search_shows_word'] = $search_shows_torrents;
 
-    $page = getTpl('page_torrents', $tdata);
+    $page = $frontend->getTpl('page_torrents', $tdata);
 
     if (!empty($search_movies_torrents)) {
         $search['words'] = trim($search_movies_torrents);
@@ -295,9 +294,9 @@ function page_torrents() {
         if ($torrent_results !== false) {
             $page .= $torrent_results;
         } else {
-            $box_msg['title'] = $LNG['L_TORRENT'];
-            $box_msg['body'] = $LNG['L_NOTHING_FOUND'];
-            $page .= msg_box($box_msg);
+            $box_msg['title'] = 'L_TORRENT';
+            $box_msg['body'] = 'L_NOTHING_FOUND';
+            $page .= $frontend->msgBox($box_msg);
         }
     }
 
@@ -305,7 +304,7 @@ function page_torrents() {
 }
 
 function page_wanted() {
-    global $db, $trans;
+    global $db, $trans, $frontend;
 
     $want = [];
     !empty($trans) ? $trans->updateWanted() : null;
@@ -328,19 +327,17 @@ function page_wanted() {
 
     $want['wanted_list'] = wanted_list();
 
-    return !empty($want['wanted_list']) ? getTpl('wanted', $want) : false;
+    return !empty($want['wanted_list']) ? $frontend->getTpl('wanted', $want) : false;
 }
 
 function page_identify() {
-    global $LNG, $db;
+    global $db, $frontend;
 
     $media_type = Filter::getString('media_type');
     $id = Filter::getInt('identify');
 
     if ($media_type === false || $id === false) {
-        $box_msg['title'] = $LNG['L_ERROR'];
-        $box_msg['body'] = '1A1002';
-        return msg_box($box_msg);
+        return $frontend->msgBox(['title' => 'L_ERROR', 'body' => '1A1002']);
     }
 
     $tdata['head'] = '';
@@ -353,7 +350,7 @@ function page_identify() {
 
     if (isset($_POST['identify']) && Filter::postInt('selected')) {
         ident_by_idpairs($media_type, Filter::postInt('selected'));
-        return msg_box($msg = ['title' => $LNG['L_SUCCESS'], 'body' => $LNG['L_ADDED_SUCCESSFUL']]);
+        return $frontend->msgBox($msg = ['title' => 'L_SUCCESS', 'body' => 'L_ADDED_SUCCESSFUL']);
     }
     !empty($_POST['submit_title']) ? $submit_title = Filter::postUtf8('submit_title') : $submit_title = $item['predictible_title'];
 
@@ -400,7 +397,7 @@ function page_identify() {
         }
     }
 
-    return getTpl('identify_adv', array_merge($item, $tdata));
+    return $frontend->getTpl('identify_adv', array_merge($item, $tdata));
 }
 
 function page_download() {
@@ -426,7 +423,7 @@ function page_download() {
 }
 
 function page_transmission() {
-    global $trans;
+    global $trans, $frontend;
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $tid = Filter::postInt('tid');
@@ -454,10 +451,10 @@ function page_transmission() {
 
         $tdata['status_name'] = $trans->getStatusName($transfer['status']);
         $transfer['percentDone'] == 1 ? $tdata['percent'] = '100' : $tdata['percent'] = ((float) $transfer['percentDone']) * 100;
-        $tdata['body'] .= getTpl('transmission-row', array_merge($transfer, $tdata));
+        $tdata['body'] .= $frontend->getTpl('transmission-row', array_merge($transfer, $tdata));
     }
 
-    $page .= getTpl('transmission-body', $tdata);
+    $page .= $frontend->getTpl('transmission-body', $tdata);
 
     return $page;
 }
@@ -498,7 +495,7 @@ function page_config() {
 }
 
 function page_login() {
-    global $cfg, $db, $user;
+    global $cfg, $db, $user, $frontend;
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $dologin = 0;
@@ -531,10 +528,10 @@ function page_login() {
     $tdata['profiles'] = '';
     foreach ($users as $_user) {
         if ($_user['disable'] != 1 && $_user['hide_login'] != 1) {
-            $tdata['profiles'] .= getTpl('profile_box', array_merge($tdata, $_user));
+            $tdata['profiles'] .= $frontend->getTpl('profile_box', array_merge($tdata, $_user));
         }
     }
-    $page .= getTpl('login', $tdata);
+    $page .= $frontend->getTpl('login', $tdata);
     return $page;
 }
 

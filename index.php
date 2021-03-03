@@ -11,17 +11,7 @@ define('IN_WEB', true);
 
 require_once('includes/usermode.inc.php');
 
-$req_page = Filter::getString('page');
-($user['id'] < 1) ? $req_page = 'login' : null;
-
-if (empty($req_page) && $user['id'] > 0) {
-    $index_page = trim(getPrefsItem('index_page'));
-    if (!empty($index_page) && $index_page != "index") {
-        header("Location: {$cfg['REL_PATH']}/?page=$index_page");
-        exit();
-    }
-}
-
+//TODO move out
 if (!(empty($d_link = Filter::getUrl('download')))) {
 
     if (($pos = strpos($d_link, 'file=')) !== FALSE) {
@@ -50,31 +40,6 @@ if (!(empty($d_link = Filter::getUrl('download')))) {
     }
 }
 
-$req_page != 'login' ? $menu = getMenu() : $menu = '';
-$body = '';
-$valid_pages = ['index', 'library', 'news', 'tmdb', 'torrents', 'view', 'wanted', 'identify',
-    'download', 'localplayer', 'identify', 'download', 'transmission', 'config', 'login', 'logout'];
-
-(!isset($req_page) || $req_page == '') ? $req_page = 'index' : null;
-(in_array($req_page, ['library_movies', 'library_shows'])) ? $req_page = 'library' : null;
-(in_array($req_page, ['new_movies', 'new_shows'])) ? $req_page = 'news' : null;
-($req_page == 'config' && $user['isAdmin'] != 1) ? $req_page = 'index' : null;
-($req_page == 'localplayer' && !$cfg['localplayer']) ? $req_page = 'index' : null;
-
-if (in_array($req_page, $valid_pages)) {
-    $page_func = 'page_' . $req_page;
-    $body .= $page_func();
-}
-
-$footer = getFooter();
-$tdata = ['menu' => $menu, 'body' => $body, 'footer' => $footer];
-$tdata['css_file'] = 'tpl/' . $cfg['theme'] . '/css/' . $cfg['css'] . '.css';
-!file_exists(($tdata['css_file'])) ? $tdata['css_file'] = 'tpl/default/css/default.css' : null;
-$tdata['css_file'] .= '?nocache=' . time();
-$page = getTpl('html_mstruct', $tdata);
+$web = new Web($frontend);
+$web->render();
 $db->close();
-
-echo $page;
-
-
-

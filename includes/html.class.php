@@ -9,23 +9,10 @@
  */
 class Html {
     /*
-      function getTpl($tpl, $tdata = []) {
-      global $cfg, $LNG, $user; //NO delete work for templates
-
-      ob_start();
-      $tpl_file = 'tpl/' . $cfg['theme'] . '/' . $tpl . '.tpl.php';
-      !file_exists($tpl_file) ? $tpl_file = 'tpl/default/' . $tpl . '.tpl.php' : null;
-      include($tpl_file);
-
-      return ob_get_clean();
-      }
-     */
-
-    /*
       values[] = ['name' =>'', 'value='' ]
      */
 
-    static function select($conf, $values) {
+    static function select(array $conf, array $values) {
         if (empty($values) || !is_array($values) || !is_array($conf) || empty($conf['name'])) {
             return false;
         }
@@ -50,7 +37,7 @@ class Html {
       conf = array
      */
 
-    static function link($conf, $url = null, $s_name = null, $get_params = null) {
+    static function link(array $conf, string $url = null, string $s_name = null, array $get_params = null) {
         $opt = '';
 
         if ($get_params != null) {
@@ -68,7 +55,7 @@ class Html {
         return '<a ' . $opt . ' href="' . $url . $params . '">' . $s_name . '</a>';
     }
 
-    static function input($conf) {
+    static function input(array $conf) {
         $opt = '';
 
         !empty($conf['id']) ? $opt .= 'id="' . $conf['id'] . '" ' : null;
@@ -88,7 +75,7 @@ class Html {
         return $input;
     }
 
-    static function form($conf, $content) {
+    static function form(array $conf, string $content) {
         $opt = '';
 
         isset($conf['id']) ? $opt = 'id="' . $conf['id'] . '" ' : null;
@@ -99,7 +86,7 @@ class Html {
         return '<form ' . $opt . ' >' . $content . '</form>';
     }
 
-    static function span($conf, $content) {
+    static function span(array $conf, string $content) {
         $opt = '';
 
         isset($conf['id']) ? $opt = 'id="' . $conf['id'] . '" ' : null;
@@ -108,7 +95,7 @@ class Html {
         return '<span ' . $opt . ' >' . $content . '</span>';
     }
 
-    static function div($conf, $content) {
+    static function div(array $conf, string $content) {
         $opt = '';
 
         isset($conf['id']) ? $opt = 'id="' . $conf['id'] . '" ' : null;
@@ -117,7 +104,7 @@ class Html {
         return '<div ' . $opt . ' >' . $content . '</div>';
     }
 
-    static function label($conf, $caption) {
+    static function label(array $conf, string $caption) {
         $opt = '';
 
         if (isset($conf['for'])) {

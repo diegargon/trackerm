@@ -10,7 +10,8 @@
 !defined('IN_WEB') ? exit : true;
 
 function wanted_list() {
-    global $db, $LNG, $trans;
+    global $db, $LNG, $trans, $frontend;
+
     $iurl = '?page=wanted';
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -101,17 +102,17 @@ function wanted_list() {
             $wanted_item['media_type'] == 'movies' ? $tdata['lang_media_type'] = $LNG['L_MOVIES'] : $tdata['lang_media_type'] = $LNG['L_SHOWS'];
 
             if ($wanted_item['track_show'] == 1) {
-                $wanted_list_tmp_data['TRACKING'] .= getTpl('wanted-item', array_merge($wanted_item, $tdata));
+                $wanted_list_tmp_data['TRACKING'] .= $frontend->getTpl('wanted-item', array_merge($wanted_item, $tdata));
             } else if ($wanted_item['wanted_status'] == -1) {
-                $wanted_list_tmp_data['SEARCHING'] .= getTpl('wanted-item', array_merge($wanted_item, $tdata));
+                $wanted_list_tmp_data['SEARCHING'] .= $frontend->getTpl('wanted-item', array_merge($wanted_item, $tdata));
             } else if ($wanted_item['wanted_status'] == 9) {
-                $wanted_list_tmp_data['MOVED'] .= getTpl('wanted-item', array_merge($wanted_item, $tdata));
+                $wanted_list_tmp_data['MOVED'] .= $frontend->getTpl('wanted-item', array_merge($wanted_item, $tdata));
             } else if ($wanted_item['wanted_status'] == 6) {
-                $wanted_list_tmp_data['SEEDING'] .= getTpl('wanted-item', array_merge($wanted_item, $tdata));
+                $wanted_list_tmp_data['SEEDING'] .= $frontend->getTpl('wanted-item', array_merge($wanted_item, $tdata));
             } else if ($wanted_item['wanted_status'] == 10) {
-                $wanted_list_tmp_data['DELETED'] .= getTpl('wanted-item', array_merge($wanted_item, $tdata));
+                $wanted_list_tmp_data['DELETED'] .= $frontend->getTpl('wanted-item', array_merge($wanted_item, $tdata));
             } else {
-                $wanted_list_tmp_data['OTHER'] .= getTpl('wanted-item', array_merge($wanted_item, $tdata));
+                $wanted_list_tmp_data['OTHER'] .= $frontend->getTpl('wanted-item', array_merge($wanted_item, $tdata));
             }
         }
         //IMPROVE: Sorting: do better way
@@ -122,7 +123,7 @@ function wanted_list() {
             isset($wanted_list_tmp_data['SEARCHING']) ? $wanted_list_data .= $wanted_list_tmp_data['SEARCHING'] : null;
             isset($wanted_list_tmp_data['OTHER']) ? $wanted_list_data .= $wanted_list_tmp_data['OTHER'] : null;
             if ($wanted_list_tmp_data['TRACKING']) {
-                $wanted_list_data .= getTpl('wanted-item', ['want_separator' => 1]);
+                $wanted_list_data .= $frontend->getTpl('wanted-item', ['want_separator' => 1]);
                 $wanted_list_data .= $wanted_list_tmp_data['TRACKING'];
             }
         }

@@ -58,18 +58,20 @@ function user_management() {
 }
 
 function new_user() {
-    return getTpl('new_user');
+    global $frontend;
+
+    return $frontend->getTpl('new_user');
 }
 
 function show_users() {
-    //global $html;
+    global $frontend;
 
     $form_content = '';
     $users = get_profiles();
 
     foreach ($users as $_user) {
         if ($_user['id'] > 1) {
-            $form_content .= getTpl('delete_user', $_user);
+            $form_content .= $frontend->getTpl('delete_user', $_user);
         }
     }
     $form = Html::form(['id' => 'delete_user', 'method' => 'POST'], $form_content);
@@ -82,6 +84,8 @@ function encrypt_password($password) {
 }
 
 function user_edit_profile() {
+    global $frontend;
+
     $index_pref = getPrefsItem('index_page');
     $email_notify = getPrefsItem('email_notify');
 
@@ -94,7 +98,7 @@ function user_edit_profile() {
     $index_pref == 'transmission' ? $tdata['transmission_selected'] = 'selected' : $tdata['transmission_selected'] = '';
     $email_notify ? $tdata['email_checked'] = 'checked' : $tdata['email_checked'] = '';
 
-    return getTpl('user_prefs', $tdata);
+    return $frontend->getTpl('user_prefs', $tdata);
 }
 
 function user_change_prefs() {

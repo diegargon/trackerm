@@ -10,10 +10,11 @@
 !defined('IN_WEB') ? exit : true;
 
 function view() {
-    global $cfg, $LNG, $db;
+    global $cfg, $db, $frontend;
+
     $view_type = Filter::getString('view_type');
     $id = Filter::getInt('id');
-    empty($id) ? msg_box($msg = ['title' => $LNG['L_ERROR'], 'body' => $LNG['L_ERR_BAD_ID']]) : null;
+    empty($id) ? $frontend->msgBox($msg = ['title' => 'L_ERROR', 'body' => 'L_ERR_BAD_ID']) : null;
     $other = [];
     $page = '';
 
@@ -47,7 +48,7 @@ function view() {
     $item = $db->getItemById($table, $id);
 
     if (empty($item)) {
-        return msg_box($msg = ['title' => $LNG['L_ERROR'], 'body' => $LNG['L_ITEM_NOT_FOUND'] . ' 1A1003']);
+        return $frontend->msgBox($msg = ['title' => 'L_ERROR', 'body' => 'L_ITEM_NOT_FOUND']);
     }
 
     if ($view_type == 'movies_db' || $view_type == 'shows_db') {
@@ -124,13 +125,13 @@ function view() {
         isset($other['mediainfo']['Audio'][1]['BitRate']) ? $other['mediainfo']['Audio'][1]['BitRate'] = substr($other['mediainfo']['Audio'][1]['BitRate'], 0, 2) . 'hz' : null;
         !empty($other['mediainfo']) ? $other['mediainfo_tags'] = html_mediainfo_tags($other['mediainfo']) : null;
     }
-    $page = getTpl('view', array_merge($item, $other));
+    $page = $frontend->getTpl('view', array_merge($item, $other));
 
     return $page;
 }
 
 function view_extra_movies($item, $opt = null) {
-    global $LNG;
+    global $LNG, $frontend;
 
     $id = Filter::getInt('id');
     $page = Filter::getString('page');
@@ -163,7 +164,7 @@ function view_extra_movies($item, $opt = null) {
         if ($torrent_results !== false) {
             $extra .= $torrent_results;
         } else {
-            $extra .= msg_box(['title' => $LNG['L_TORRENT'], 'body' => $LNG['L_NOTHING_FOUND']]);
+            $extra .= $frontend->msgBox(['title' => 'L_TORRENT', 'body' => 'L_NOTHING_FOUND']);
         }
     }
 
@@ -271,7 +272,7 @@ function view_seasons($item, $update = false) {
 }
 
 function view_season_detailed($season, $items_details) {
-    global $LNG;
+    global $LNG, $frontend;
 
     $id = Filter::getInt('id');
     $view_type = Filter::getString('view_type');
@@ -302,7 +303,7 @@ function view_season_detailed($season, $items_details) {
                     }
                 }
             }
-            $episode_data .= getTpl('episodes_rows', array_merge($item, $tdata));
+            $episode_data .= $frontend->getTpl('episodes_rows', array_merge($item, $tdata));
 
             $item_counter++;
         }
