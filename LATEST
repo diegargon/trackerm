@@ -1,5 +1,7 @@
 ## Latest / News (Relevant)
 
+[04/03] Auto disable indexers when timeout (default 24h config option later)
+[********** COMMIT **********]
 [02/03] Fixes. Add to wanted option to specify a custom title
 [********** COMMIT **********]
 [22/02] Add track show.

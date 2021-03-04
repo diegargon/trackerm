@@ -43,7 +43,7 @@ function search_media_torrents($media_type, $search, $head = null, $nohtml = fal
         if (time() > ($media_cache_check['updated'] + $cfg['search_cache_expire'])) {
             $expire = $media_cache_check['updated'] + $cfg['search_cache_expire'];
             $time_now = time();
-            $log->debug("New: Media cache expire ($media_type), Requesting $time_now:$expire");
+            $log->debug("New: Media cache expire ($media_type), requesting $time_now:$expire");
             $cache_media_expire = 1;
         } else {
             //$log->debug("News:  Using media cache");
@@ -143,7 +143,15 @@ function jackett_search_media($media_type, $words, $indexer, $categories, $limit
 
     $starttime = getPerfTime();
     empty($limit) ? $limit = $cfg['jackett_results'] : null;
+    $disable_time = !empty($cfg['indexer_disable_time']) ? $cfg['indexer_disable_time'] : 24 * 60 * 60;
 
+    if (($indexer_disable = getPrefsItem($indexer . '_disable', true))) {
+        if ($indexer_disable != '0' && $indexer_disable > time()) {
+            return false;
+        } else if ($indexer_disable != '0') {
+            setPrefsItem($indexer . '_disable', '0', true);
+        }
+    }
     $jackett_url = $cfg['jackett_srv'] . $cfg['jackett_api_path'] . '/indexers/' . $indexer . '/results/torznab/';
     $words = rawurlencode($words);
 
@@ -161,9 +169,14 @@ function jackett_search_media($media_type, $words, $indexer, $categories, $limit
     $params = 'api?apikey=' . $cfg['jackett_key'] . '&t=search&extended=1&cat=' . $cats . '&q=' . $words . '&limit=' . $limit;
 
     $result = curl_get_jackett($jackett_url, $params);
+
     $timediff = getPerfTime() - $starttime;
-    if (formatPerfTime($timediff) > $cfg['slow_flow']) { //5s
+    if (formatPerfTime($timediff) > $cfg['slow_flow']) {
         $log->addStateMsg("[{$LNG['L_NOTICE']}] $indexer  {$LNG['L_SLOW_THE_FLOW']} " . formatPerfTime($timediff) . " {$LNG['L_SECONDS']}");
+    }
+    if (formatPerfTime($timediff) > 99) {
+        setPrefsItem($indexer . '_disable', time() + $disable_time, true);
+        $log->addStateMsg("[{$LNG['L_NOTICE']}]: $indexer {$LNG['L_DISABLED']} $disable_time {$LNG['L_SECONDS']}");
     }
     return $result;
 }

@@ -907,9 +907,7 @@ function update_db($from) {
 
     /*
       if ($from < 14) {
-      // disable_indexers = '0, 1, 2' or name public 0/1;
-      // disable_slow_indexers = 0 diasable or time
-      // disable_slow_indexers_bantime =
+      //'indexer_disable_time' default 24*60*60
       $db->insert('config', ['cfg_key' => 'localplayer_track', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_LOCALPLAYER_TRACK', 'type' => 3, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
       $db->insert('config', ['cfg_key' => 'localplayer_web_password', 'cfg_value' => '', 'cfg_desc' => 'L_CFG_LOCALPLAYER_WEB_PASSWORD', 'type' => 1, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
       $db->query('UPDATE config SET cfg_value=\'14\' WHERE cfg_key=\'db_version\' LIMIT 1');
