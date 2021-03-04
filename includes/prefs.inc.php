@@ -27,7 +27,7 @@ function loadUserPrefs() {
     }
 }
 
-function getPrefsItem($r_key, $system = false) {
+function getPrefsItem(string $r_key, bool $system = false) {
     global $db, $user;
 
     ($system) ? $where['uid'] = ['value' => 0] : $where['uid'] = ['value' => $user['id']];
@@ -45,7 +45,7 @@ function getPrefsItem($r_key, $system = false) {
     return false;
 }
 
-function getUidWithPref($r_key, $r_value) {
+function getUidWithPref(string $r_key, string $r_value) {
     global $db;
 
     $where['pref_name'] = $r_key;
@@ -55,7 +55,7 @@ function getUidWithPref($r_key, $r_value) {
     return $results ? $db->fetchAll($results) : false;
 }
 
-function getPrefValueByUid($id, $r_key) {
+function getPrefValueByUid(int $id, string $r_key) {
     global $db;
 
     $where = ['pref_name' => ['value' => $r_key], 'uid' => ['value' => $id]];
@@ -68,7 +68,7 @@ function getPrefValueByUid($id, $r_key) {
     return false;
 }
 
-function setPrefsItem($key, $value, $system = false) {
+function setPrefsItem(string $key, string $value, bool $system = false) {
     global $db, $user;
 
     ($system) ? $uid = 0 : $uid = $user['id'];
