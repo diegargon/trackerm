@@ -10,7 +10,7 @@
 !defined('IN_WEB') ? exit : true;
 
 function curl_get($url, $curl_opt) {
-    global $cfg;
+    global $cfg, $log;
 
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, trim($url));
@@ -22,8 +22,8 @@ function curl_get($url, $curl_opt) {
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     $response = curl_exec($ch);
     if (curl_errno($ch)) {
-        echo 'Curl error: ' . curl_error($ch);
-        return false;
+        $log->err('Curl error: ' . curl_error($ch));
+        $response = false;
     }
     curl_close($ch);
 
