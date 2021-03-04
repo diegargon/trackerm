@@ -229,6 +229,7 @@ function jackett_prep_media($media_type, $media_results) {
     }
 
     if (valid_array($media)) {
+        $media = array_reverse($media);
         //Get all item guid results
         foreach ($media as $item) {
             !isset($guids) ? $guids = $item['guid'] : $guids .= ',' . $item['guid'];
