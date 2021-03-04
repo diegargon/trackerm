@@ -25,9 +25,7 @@ class Web {
             $this->frontend->msgPage(['title' => 'L_ERROR', 'body' => 'L_PAGE_NOEXISTS']);
         }
 
-        $page = $this->frontend->buildPage($req_page);
-
-        echo $page;
+        echo $this->frontend->buildPage($req_page);
     }
 
     function getPage() {

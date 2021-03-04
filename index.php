@@ -36,7 +36,7 @@ if (!(empty($d_link = Filter::getUrl('download')))) {
         ];
         $db->addItemUniqField('wanted', $wanted_db, 'hashString');
     } else {
-        msg_page(['title' => $LNG['L_ERROR'], 'body' => $LNG['L_SEE_ERROR_DETAILS']]);
+        $frontend->msgPage(['title' => 'L_ERROR', 'body' => 'L_SEE_ERROR_DETAILS']);
         return false;
     }
 }
