@@ -43,7 +43,12 @@ require_once('includes/logging.class.php');
 global $log;
 $log = new Log($cfg);
 
-require_once('lang/' . $cfg['LANG'] . '/lang.inc.php');
+//TODO: Better fallback missing lang keys?;
+require_once('lang/en-EN/lang.inc.php');
+if (empty($cfg['LANG']) || $cfg['LANG'] != 'en-EN') {
+    require_once('lang/' . $cfg['LANG'] . '/lang.inc.php');
+}
+
 require_once('includes/filters.class.php');
 require_once('includes/curl.inc.php');
 require_once('includes/file.utils.php');
