@@ -136,19 +136,15 @@ function view_extra_movies($item, $opt = null) {
     $id = Filter::getInt('id');
     $page = Filter::getString('page');
     $view_type = Filter::getString('view_type');
+    $title = getFileTitle($item['title']);
+    (!empty($_GET['search_movie_db'])) ? $stitle = trim(Filter::getUtf8('search_movie_db')) : $stitle = $title;
 
-    $extra = '';
-    $extra .= '<form method="GET" action="">';
+    $extra = '<form method="GET" action="">';
     $extra .= '<input type="hidden" name="page" value="' . $page . '"/>';
     $extra .= '<input type="hidden" name="id" value="' . $id . '"/>';
     $extra .= '<input type="hidden" name="view_type" value="' . $view_type . '"/>';
     $extra .= '<input class="submit_btn" type="submit" name="more_movies" value="' . $LNG['L_SEARCH_MOVIES'] . '" >';
     $extra .= '<input class="submit_btn" type="submit" name="more_torrents" value="' . $LNG['L_SHOW_TORRENTS'] . '" >';
-
-    $title = getFileTitle($item['title']);
-
-    (!empty($_GET['search_movie_db'])) ? $stitle = trim(Filter::getUtf8('search_movie_db')) : $stitle = $title;
-
     $extra .= '<input type="text" name="search_movie_db" value="' . $stitle . '">';
     $extra .= '</form>';
 
@@ -172,26 +168,20 @@ function view_extra_movies($item, $opt = null) {
 }
 
 function view_extra_shows($item, $opt) {
-    global $LNG;
+    global $LNG, $frontend;
 
     $id = Filter::getInt('id');
     $page = Filter::getString('page');
     $view_type = Filter::getString('view_type');
+    $title = getFileTitle($item['title']);
+    (!empty($_GET['search_shows_db'])) ? $stitle = trim(Filter::getString('search_shows_db')) : $stitle = $title;
 
-    $extra = '';
-    $extra .= '<form method="GET">';
+    $extra = '<form method="GET">';
     $extra .= '<input type="hidden" name="page" value="' . $page . '"/>';
     $extra .= '<input type="hidden" name="id" value="' . $id . '"/>';
     $extra .= '<input type="hidden" name="view_type" value="' . $view_type . '"/>';
     $extra .= '<input class="submit_btn" type="submit" name="more_shows" value="' . $LNG['L_SEARCH_SHOWS'] . '" >';
     $extra .= '<input class="submit_btn" type="submit" name="more_torrents" value="' . $LNG['L_SHOW_TORRENTS'] . '" >';
-
-    $title = getFileTitle($item['title']);
-    if (!empty($_GET['search_shows_db'])) {
-        $stitle = trim(Filter::getString('search_shows_db'));
-    } else {
-        $stitle = $title;
-    }
     $extra .= '<input type="text" name="search_shows_db" value="' . $stitle . '">';
     $extra .= '</form>';
 
@@ -203,7 +193,12 @@ function view_extra_shows($item, $opt) {
 
     if (isset($_GET['more_torrents']) || (!empty($opt['auto_show_torrents']) && !isset($_GET['more_shows']))) {
         $search['words'] = $stitle;
-        $extra .= search_media_torrents('shows', $search);
+        $torrent_results = search_media_torrents('shows', $search);
+        if ($torrent_results !== false) {
+            $extra .= $torrent_results;
+        } else {
+            $extra .= $frontend->msgBox(['title' => 'L_TORRENT', 'body' => 'L_NOTHING_FOUND']);
+        }
     }
 
     return $extra;
