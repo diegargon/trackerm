@@ -131,7 +131,7 @@ function view() {
 }
 
 function view_extra_movies($item, $opt = null) {
-    global $LNG, $frontend;
+    global $frontend;
 
     $id = Filter::getInt('id');
     $page = Filter::getString('page');
@@ -139,14 +139,7 @@ function view_extra_movies($item, $opt = null) {
     $title = getFileTitle($item['title']);
     (!empty($_GET['search_movie_db'])) ? $stitle = trim(Filter::getUtf8('search_movie_db')) : $stitle = $title;
 
-    $extra = '<form method="GET" action="">';
-    $extra .= '<input type="hidden" name="page" value="' . $page . '"/>';
-    $extra .= '<input type="hidden" name="id" value="' . $id . '"/>';
-    $extra .= '<input type="hidden" name="view_type" value="' . $view_type . '"/>';
-    $extra .= '<input class="submit_btn" type="submit" name="more_movies" value="' . $LNG['L_SEARCH_MOVIES'] . '" >';
-    $extra .= '<input class="submit_btn" type="submit" name="more_torrents" value="' . $LNG['L_SHOW_TORRENTS'] . '" >';
-    $extra .= '<input type="text" name="search_movie_db" value="' . $stitle . '">';
-    $extra .= '</form>';
+    $extra = $frontend->getTpl('view_extra_movies', ['page' => $page, 'id' => $id, 'view_type' => $view_type, 'stitle' => $stitle]);
 
     if (isset($_GET['more_movies']) || (!empty($opt['auto_show_db']) && !isset($_GET['more_torrents']))) {
         $movies = mediadb_searchMovies($stitle);
@@ -168,7 +161,7 @@ function view_extra_movies($item, $opt = null) {
 }
 
 function view_extra_shows($item, $opt) {
-    global $LNG, $frontend;
+    global $frontend;
 
     $id = Filter::getInt('id');
     $page = Filter::getString('page');
@@ -176,14 +169,7 @@ function view_extra_shows($item, $opt) {
     $title = getFileTitle($item['title']);
     (!empty($_GET['search_shows_db'])) ? $stitle = trim(Filter::getString('search_shows_db')) : $stitle = $title;
 
-    $extra = '<form method="GET">';
-    $extra .= '<input type="hidden" name="page" value="' . $page . '"/>';
-    $extra .= '<input type="hidden" name="id" value="' . $id . '"/>';
-    $extra .= '<input type="hidden" name="view_type" value="' . $view_type . '"/>';
-    $extra .= '<input class="submit_btn" type="submit" name="more_shows" value="' . $LNG['L_SEARCH_SHOWS'] . '" >';
-    $extra .= '<input class="submit_btn" type="submit" name="more_torrents" value="' . $LNG['L_SHOW_TORRENTS'] . '" >';
-    $extra .= '<input type="text" name="search_shows_db" value="' . $stitle . '">';
-    $extra .= '</form>';
+    $extra = $frontend->getTpl('view_extra_shows', ['page' => $page, 'id' => $id, 'view_type' => $view_type, 'stitle' => $stitle]);
 
     if (isset($_GET['more_shows']) || (!empty($opt['auto_show_db']) && !isset($_GET['more_torrents']))) {
         $shows = mediadb_searchShows($stitle);
