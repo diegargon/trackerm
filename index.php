@@ -11,7 +11,8 @@ define('IN_WEB', true);
 
 require_once('includes/usermode.inc.php');
 
-//TODO move out
+//TODO move out: download link are in page view, torrents and new
+
 if (!(empty($d_link = Filter::getUrl('download')))) {
 
     if (($pos = strpos($d_link, 'file=')) !== FALSE) {
