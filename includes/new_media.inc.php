@@ -9,7 +9,7 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-function page_new_media($media_type) {
+function page_new_media(string $media_type) {
     global $cfg, $db, $log;
 
     $cache_media_expire = 0;
@@ -27,7 +27,7 @@ function page_new_media($media_type) {
         !isset($media_cache_check['updated']) ? $media_cache_check['updated'] = 0 : null;
 
         if ((time() > ($media_cache_check['updated'] + $cfg['new_cache_expire']))) {
-            $log->debug("News: $media_type cache expire, Requesting");
+            $log->debug("New media: $media_type cache expire, Requesting");
             $cache_media_expire = 1;
         } else {
             //$log->debug("News: $media_type using cache " . ( ($media_cache_check['updated'] + $cfg['new_cache_expire']) - time()));
@@ -45,7 +45,7 @@ function page_new_media($media_type) {
         foreach ($cfg['jackett_indexers'] as $indexer) {
             $caps = jackett_get_caps($indexer);
             if (empty($caps) || count($caps) < 1) {
-                return false;
+                continue;
             }
             $categories = jackett_get_categories($caps['categories']['category']);
             $results = '';
@@ -116,7 +116,7 @@ function page_new_media($media_type) {
     return $page_news;
 }
 
-function mix_media_res($res_media_db) {
+function mix_media_res(array $res_media_db) {
     global $cfg;
 
     $indexers = [];
