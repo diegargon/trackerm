@@ -44,7 +44,7 @@ function page_new_media(string $media_type) {
     if (!$cfg['search_cache'] || $cache_media_expire) {
         foreach ($cfg['jackett_indexers'] as $indexer) {
             $caps = jackett_get_caps($indexer);
-            if (empty($caps) || count($caps) < 1) {
+            if (!valid_array($caps)) {
                 continue;
             }
             $categories = jackett_get_categories($caps['categories']['category']);

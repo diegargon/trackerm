@@ -63,6 +63,9 @@ function search_media_torrents($media_type, $search, $head = null, $nohtml = fal
     if (!$cfg['search_cache'] || $cache_media_expire) {
         foreach ($cfg['jackett_indexers'] as $indexer) {
             $caps = jackett_get_caps($indexer);
+            if (!valid_array($caps) || empty($caps['categories']['category'])) {
+                continue;
+            }
             $categories = jackett_get_categories($caps['categories']['category']);
 
             ($media_type) == 'movies' ? $jackett_media_key = 'movie-search' : $jackett_media_key = 'tv-search';
