@@ -30,7 +30,7 @@ function curl_get(string $url, array $curl_opt) {
     return $response;
 }
 
-function curl_get_jackett(string $url, array $params) {
+function curl_get_jackett(string $url, string $params) {
 
     $curl_opt['headers'] = [
         'Accept-Encoding: gzip, deflate',
