@@ -178,6 +178,7 @@ function jackett_search_media($media_type, $words, $indexer, $categories, $limit
         setPrefsItem($indexer . '_disable', time() + $disable_time, true);
         $log->addStateMsg("[{$LNG['L_NOTICE']}]: $indexer {$LNG['L_DISABLED']} $disable_time {$LNG['L_SECONDS']}");
     }
+
     return $result;
 }
 

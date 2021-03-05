@@ -9,7 +9,7 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-function curl_get($url, $curl_opt) {
+function curl_get(string $url, array $curl_opt) {
     global $cfg, $log;
 
     $ch = curl_init();
@@ -30,7 +30,7 @@ function curl_get($url, $curl_opt) {
     return $response;
 }
 
-function curl_get_jackett($url, $params) {
+function curl_get_jackett(string $url, array $params) {
 
     $curl_opt['headers'] = [
         'Accept-Encoding: gzip, deflate',
@@ -48,16 +48,15 @@ function curl_get_jackett($url, $params) {
 
     $xml = @simplexml_load_string($response);
 
-    if (!$xml) {
+    if (empty($xml)) {
         return false;
     }
     $json = json_encode($xml);
     $array = json_decode($json, TRUE);
-
     return $array;
 }
 
-function curl_get_tmdb($url) {
+function curl_get_tmdb(string $url) {
     global $cfg;
 
     !isset($cfg['TMDB_LANG']) ? $cfg['TMDB_LANG'] = $cfg['LANG'] : null;
