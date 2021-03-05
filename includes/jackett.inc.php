@@ -143,7 +143,7 @@ function jackett_search_media($media_type, $words, $indexer, $categories, $limit
 
     $starttime = getPerfTime();
     empty($limit) ? $limit = $cfg['jackett_results'] : null;
-    $disable_time = !empty($cfg['indexer_disable_time']) ? $cfg['indexer_disable_time'] : 24 * 60 * 60;
+    $disable_time = !empty($cfg['indexer_disable_time']) ? $cfg['indexer_disable_time'] : 6 * 60 * 60;
 
     if (($indexer_disable = getPrefsItem($indexer . '_disable', true))) {
         if ($indexer_disable != '0' && $indexer_disable > time()) {

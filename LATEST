@@ -1,6 +1,7 @@
 ## Latest / News (Relevant)
 
-[04/03] Auto disable indexers when timeout (default 24h config option later)
+[04/03] Auto disable indexers when timeout (default 6h config option later)
+[04/03] Rewrite some code.
 [********** COMMIT **********]
 [02/03] Fixes. Add to wanted option to specify a custom title
 [********** COMMIT **********]
