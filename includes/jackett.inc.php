@@ -269,7 +269,7 @@ function jackett_prep_media($media_type, $media_results) {
                     break;
                 }
             }
-            if (!$found) {
+            if (empty($found)) {
                 $last_id = $db->addItem($jackett_db, $item);
                 $media[$key]['id'] = $last_id;
             }
