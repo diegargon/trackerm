@@ -243,7 +243,7 @@ class DB {
         }
 
         $response = $st->execute();
-        !$response ? print_r($st->errorInfo()) : null;
+
 
         return $response;
     }
@@ -297,7 +297,7 @@ class DB {
         }
 
         $response = $st->execute();
-        !$response ? print_r($this->db->errorInfo()) : null;
+
 
         return $response;
     }
@@ -346,7 +346,7 @@ class DB {
         }
 
         $response = $st->execute();
-        !$response ? print_r($st->errorInfo()) : null;
+
 
         return $response;
     }
@@ -393,8 +393,6 @@ class DB {
         }
 
         $response = $st->execute();
-
-        !$response ? print_r($st->errorInfo()) : null;
 
         return $response;
     }
