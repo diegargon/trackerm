@@ -311,7 +311,6 @@ class DB {
         }
         $query = 'SELECT ' . $what . ' FROM ' . $table . ' WHERE ' . $field . ' IN(' . $prep_values . ')';
 
-        $this->querys[] = $query;
         $result = $this->query($query);
         $rows = $this->fetchAll($result);
 
