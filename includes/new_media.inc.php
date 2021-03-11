@@ -56,6 +56,9 @@ function page_new_media(string $media_type) {
 
     ($cache_media_expire == 1) || !$cfg['search_cache'] && !empty($media_res) ? $res_media_db = jackett_prep_media($media_type, $media_res) : null;
 
+    if (empty($res_media_db)) {
+        return false;
+    }
     usort($res_media_db, function ($a, $b) {
         return strcmp($b['id'], $a['id']);
     });
