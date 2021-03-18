@@ -16,8 +16,11 @@
     if (!empty($tdata['querys'])) {
         foreach ($tdata['querys'] as $query) {
             ?>
-            <p class="center"><?= $query ?></p>
-            <?php
+            <p class="center"><?= $query['query'] ?></p>
+            <?php if (isset($query['bind'])) { ?>
+                <p class="center"><?= $query['bind'] ?></p>
+                <?php
+            }
         }
     }
     ?>

@@ -234,10 +234,12 @@ class DB {
         }
         $query .= $query_keys . ') VALUES (' . $query_binds;
         $query .= ')';
-        $this->querys[] = $query;
+        $this->querys[]['query'] = $query;
 
         $st = $this->db->prepare($query);
 
+        $last_ary_id = array_key_last($this->querys);
+        $this->querys[$last_ary_id]['bind'] = print_r($bind_values, true);
         foreach ($bind_values as $bkey => $bvalue) {
             $st->bindValue($bkey, $bvalue);
         }
@@ -286,11 +288,13 @@ class DB {
             }
         }
         !empty($extra) ? $query .= ' ' . $extra : null;
-        $this->querys[] = $query;
+        $this->querys[]['query'] = $query;
 
         $st = $this->db->prepare($query);
 
         if (!empty($bind_values)) {
+            $last_ary_id = array_key_last($this->querys);
+            $this->querys[$last_ary_id]['bind'] = print_r($bind_values, true);
             foreach ($bind_values as $bkey => $bvalue) {
                 $st->bindValue($bkey, $bvalue);
             }
@@ -335,10 +339,12 @@ class DB {
             }
         }
         !empty($extra) ? $query .= ' ' . $extra : null;
-        $this->querys[] = $query;
+        $this->querys[]['query'] = $query;
         $st = $this->db->prepare($query);
 
         if (!empty($bind_values)) {
+            $last_ary_id = array_key_last($this->querys);
+            $this->querys[$last_ary_id]['bind'] = print_r($bind_values, true);
             foreach ($bind_values as $bkey => $bvalue) {
                 $st->bindValue($bkey, $bvalue);
             }
@@ -381,11 +387,13 @@ class DB {
             }
         }
         !empty($extra) ? $query .= ' ' . $extra : null;
-        $this->querys[] = $query;
+        $this->querys[]['query'] = $query;
 
         $st = $this->db->prepare($query);
 
         if (!empty($bind_values)) {
+            $last_ary_id = array_key_last($this->querys);
+            $this->querys[$last_ary_id]['bind'] = print_r($bind_values, true);
             foreach ($bind_values as $bkey => $bvalue) {
                 $st->bindValue($bkey, $bvalue);
             }
@@ -434,11 +442,12 @@ class DB {
     }
 
     public function qSingle($query) {
+        $this->querys[]['query'] = $query;
         return $this->db->querySingle($query);
     }
 
     public function query($query) {
-        $this->querys[] = $query;
+        $this->querys[]['query'] = $query;
         return $this->db->query($query);
     }
 
