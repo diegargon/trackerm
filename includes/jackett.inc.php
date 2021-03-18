@@ -249,8 +249,9 @@ function jackett_prep_media($media_type, $media_results) {
         $media = array_reverse($media);
         //Get all item guid results
         foreach ($media as $item) {
-            !isset($guids) ? $guids = $item['guid'] : $guids .= ',' . $item['guid'];
+            $guids[] = $item['guid'];
         }
+
         //Select from db  all items with same guids
         $items_id_guid = $db->selectMultiple($jackett_db, 'guid', $guids, 'id,guid,guessed_poster,guessed_trailer');
 

@@ -306,12 +306,18 @@ class DB {
         return $response;
     }
 
+    /* values can be array or comma separate */
+
     public function selectMultiple($table, $field, $values, $what = null) {
         !isset($what) ? $what = '*' : null;
-        $explode_values = array_map('trim', explode(',', $values));
+        if (!is_array($values)) {
+            $final_values = array_map('trim', explode(',', $values));
+        } else {
+            $final_values = $values;
+        }
 
-        foreach ($explode_values as $explode_value) {
-            !isset($prep_values) ? $prep_values = '\'' . $explode_value . '\'' : $prep_values .= ',\'' . $explode_value . '\'';
+        foreach ($final_values as $final_value) {
+            !isset($prep_values) ? $prep_values = '\'' . $final_value . '\'' : $prep_values .= ',\'' . $final_value . '\'';
         }
         $query = 'SELECT ' . $what . ' FROM ' . $table . ' WHERE ' . $field . ' IN(' . $prep_values . ')';
 
