@@ -317,7 +317,7 @@ class DB {
         }
 
         foreach ($final_values as $final_value) {
-            !isset($prep_values) ? $prep_values = '\'' . $final_value . '\'' : $prep_values .= ',\'' . $final_value . '\'';
+            !isset($prep_values) ? $prep_values = '\'' . trim($final_value) . '\'' : $prep_values .= ',\'' . trim($final_value) . '\'';
         }
         $query = 'SELECT ' . $what . ' FROM ' . $table . ' WHERE ' . $field . ' IN(' . $prep_values . ')';
 
