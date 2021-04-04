@@ -1,0 +1,209 @@
+body {
+    font-size: 14px;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 14px;
+    line-height: 1.0;
+    height:100%;
+    background: #1a1a1a;
+    color: #ff5b5b;;
+}
+input {
+    color:green;
+    border: 0.1em solid #5B5B5B;
+    background: #000;
+    font-size: 1.2em;
+    padding: 4px;
+    padding: 0.2em 0.5em;
+    border-radius: 0.12em;
+    font-family: 'Roboto', sans-serif;
+    margin: 0 0.3em 0.3em 0;    
+}
+a:link {
+    color: white;
+}
+a:visited {
+    color: #b8bcff;
+}
+hr {
+    color: #ff5b5b;
+}
+select {
+    font-size: 1.1em;
+    margin: 4px;
+    background-color: transparent;
+    border: 0.1em solid gray; 
+    color:  #ff5b5b;
+}
+footer {
+    clear:both;
+}
+.center{
+    text-align:center;
+}
+.page { 
+    border:0px solid black;    
+}
+.loading {
+    display: none;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    top: 0;
+    left: 0;
+    background: rgba(58, 58, 58, 0.9) url('../img/loading.gif') 50% 50% no-repeat;
+    z-index: 9;
+}
+.main_menu {
+    border:0px solid #ff5b5b;
+    /* background-color: activeborder;*/
+    margin-bottom: 3px;
+}
+.menu_element, .menu_element_join_left, .menu_element_join_right {
+    border:0px solid blue;
+    display:inline-block;
+    padding: 10px;
+    margin: 5px;
+    background:  #068276;
+    font-size:1.5em;
+    font-weight:bold;
+}
+.menu_element_join_left {
+    margin-left:-10px;
+    border-left: 1px solid black;    
+}
+.menu_element_join_right {
+    margin-right:0px;
+}
+.menu_element a {
+    text-decoration: none;
+}
+button {
+    padding:10px;
+}
+.wrapper {
+    width: 200px;
+    padding:10px;
+    border:1px solid blue;
+}
+.center_box {
+    border:0px solid black;
+    padding: 5px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+
+/* SHIPYARD */
+
+.column_container{
+    display: table;
+    clear:both;
+    width:50%;
+}
+.column {
+    float:left;
+    width:50%;
+}
+
+.desc_item_title {
+    font-size: 1.2em;
+    font-weight: bold;    
+}
+.desc_item_spec {
+    display: inline;
+}
+.desc_item_spec_title {
+    font-weight: bold; 
+    margin-right: 1px;
+}
+.desc_item_spec_value {
+    margin-right: 2px;
+}
+
+/* SHIP */
+.reverse {
+    direction: rtl;
+}
+.display_block {
+    display:block;
+}
+.vertical_range_container {
+    display:inline-block;
+    border:0px solid #000090;
+    width:70px;
+    text-align: center;
+}
+
+.pos_wrap {
+    margin:3px;    
+    font-size: 1.2em;
+}
+.pos_cord {
+    background-color: black;
+    padding: 3px;
+    border: 1px solid blue;
+}
+.ships_page_container {
+    
+}
+.col1, .col2 {    
+    float:left;
+    border:1px solid red;
+    width:49%;
+}
+.col1 {
+    
+}
+.col2 {
+    
+}
+#canvas_container {
+    width:100%;
+}
+#canvas {        
+    background-color: #000;
+    width: 800px;
+    height: 600px;
+    border: 1px solid black;
+    padding: 0px;
+    position: fixed; /* fixed or static */
+
+}
+
+#canvas_inset {    
+    float:left;
+    width: 100px;
+    height: 100px;
+    background-color:rgba(0,0,0,0);
+    border: 1px solid black; /* or none; */
+    position: relative;
+    left: 0px;
+    bottom: 0px;
+    z-index: 100;
+    
+}
+/* PLANET */
+#planet_characters_form select{
+    width: 99%;
+}
+
+#planet_ships_form select {
+    width: 99%;
+}
+.vips_ships {
+    display:inline-block;
+    width: 100%;
+}
+.ships_cont {
+    float:left;
+    width:49%;
+}
+.vips_cont  {
+    float:left;
+    width:49%;
+}
+
+

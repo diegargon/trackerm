@@ -1,0 +1,188 @@
+<?php
+
+/**
+ *
+ *  @author diego/@/envigo.net
+ *  @package
+ *  @subpackage
+ *  @copyright Copyright @ 2020 - 2021 Diego Garcia (diego/@/envigo.net)
+ */
+class User {
+
+    private $ships;
+    private $planets;
+    private $characters;
+    private $planet_store;
+
+    function __construct() {
+        $this->ships = [];
+        $this->planets = [];
+        $this->characters = [];
+        $this->planet_store = [];
+    }
+
+    function username() {
+        return 'diego';
+    }
+
+    function id() {
+        return 1;
+    }
+
+    function isAdmin() {
+        return true;
+    }
+
+    function getShips() {
+        global $db;
+
+        if (empty($this->ships)) {
+            $result = $db->select('ships', '*', ['uid' => $this->id()]);
+            $this->ships = $db->fetchAll($result);
+        }
+
+        return $this->ships;
+    }
+
+    function getPlanets() {
+        global $db;
+
+        if (empty($this->planets)) {
+            $result = $db->select('planets', '*', ['uid' => $this->id()]);
+            $this->planets = $db->fetchAll($result);
+        }
+
+        return $this->planets;
+    }
+
+    function checkInUserPlanet(int $x, int $y, int $z) {
+        foreach ($this->getPlanets() as $planet) {
+            if ($planet['x'] == $x && $planet['y'] == $y && $planet['z'] == $z) {
+                return $planet;
+            }
+        }
+        return false;
+    }
+
+    function checkIfPlanet(int $x, int $y, int $z) {
+        global $db;
+
+        $result = $db->select('planets', '*', ['x' => $x, 'y' => $y, 'z' => $z], 'LIMIT 1');
+        $planet = $db->fetch($result);
+        if ($planet) {
+            return $planet;
+        }
+
+        return false;
+    }
+
+    function getShipById(int $ship_id) {
+        foreach ($this->getShips() as $ship) {
+            if ($ship['id'] == $ship_id) {
+                return $ship;
+            }
+        }
+        return false;
+    }
+
+    function setShipValue(int $ship_id, $ckey, $cvalue) {
+        foreach ($this->ships as $key => $ship) {
+            if ($ship['id'] == $ship_id) {
+                $this->ships[$key][$ckey] = $cvalue;
+            }
+        }
+    }
+
+    function getPlanetById(int $planet_id) {
+        foreach ($this->getPlanets() as $planet) {
+            if ($planet['id'] == $planet_id) {
+                return $planet;
+            }
+        }
+        return false;
+    }
+
+    function getCharacters() {
+        global $db;
+
+        if (empty($this->characters)) {
+            $result = $db->select('characters', '*', ['uid' => $this->id()]);
+            $this->characters = $db->fetchAll($result);
+        }
+
+        return $this->characters;
+    }
+
+    function getAvaibleTypeChar($planet_id, $char_perk) {
+        $avaible_chars = [];
+
+        foreach ($this->getCharacters() as $character) {
+            if ($character['planet_assigned'] == $planet_id && $character['perk'] == $char_perk) {
+                $avaible_chars[] = $character;
+            }
+        }
+
+        return $avaible_chars;
+    }
+
+    function getShipCharacters($ship_id) {
+        $ship_characters = [];
+
+        foreach ($this->getCharacters() as $character) {
+            if ($character['ship_assigned'] == $ship_id) {
+                $ship_characters[] = $character;
+            }
+        }
+
+        return $ship_characters;
+    }
+
+    function getPlanetCharacters(int $planet_id) {
+        $planet_characters = [];
+
+        foreach ($this->getCharacters() as $character) {
+            if ($character['planet_assigned'] == $planet_id) {
+                $planet_characters[] = $character;
+            }
+        }
+
+        return $planet_characters;
+    }
+
+    function getPlanetShips(int $planet_id) {
+        $planet_ships = [];
+        $planet = $this->getPlanetById($planet_id);
+
+        foreach ($this->getShips() as $ship) {
+            if ($ship['x'] == $planet['x'] && $ship['y'] == $planet['y'] && $ship['z'] == $planet['z']) {
+                $planet_ships[] = $ship;
+            }
+        }
+
+        return $planet_ships;
+    }
+
+    function getPlanetStoreItems(int $planet_id) {
+        global $db;
+
+        if (empty($this->planet_store[$planet_id])) {
+            $results = $db->select('store', '*', ['pid' => $planet_id]);
+            $this->planet_store[$planet_id] = $db->fetchAll($results);
+        }
+
+        return $this->planet_store[$planet_id];
+    }
+
+    function getPlanetStoreItemType(int $planet_id, int $item_type_id) {
+        $items_type = [];
+
+        foreach ($this->getPlanetStoreItems($planet_id) as $item) {
+            if ($item['type'] == $item_type_id) {
+                $items_type[] = $item;
+            }
+        }
+
+        return $items_type;
+    }
+
+}
