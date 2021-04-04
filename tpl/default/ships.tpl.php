@@ -10,7 +10,9 @@
 ?>
 
 <div class="ships_page_container">
+    <p><?= !empty($tdata['status_msg']) ? $tdata['status_msg'] : null ?></p>
     <div class="col1">
+        <p><?= !empty($tdata['sel_ship']) ? $tdata['sel_ship'] : null ?></p>
         <h2><?= $L['L_SHIP'] ?>: <?= $tdata['name'] ?></h2>
         <div><?= $L['L_STATUS'] ?>: <?= $tdata['ship_status'] ?></div>
         <br/>
@@ -35,10 +37,18 @@
                 <br/>
                 <?php if ($tdata['in_shipyard']) { ?>
                     <input type="submit" name="ship_shipyard_disconnect" value="<?= $L['L_SHIPYARD_DISCONNECT'] ?>" />
-                <?php } else if (!empty($tdata['can_shipyard_connect'])) { ?>
+                <?php } else if (!empty($tdata['have_shipyard']) && !empty($tdata['can_connect'])) { ?>
                     <input type="submit" name="ship_shipyard_connect" value="<?= $L['L_SHIPYARD_CONNECT'] ?>" />
                 <?php } ?>
+
             </form>
+
+            <?php if (!empty($tdata['ship_conn_sel'])) { ?>
+                <form id="ship_conn_form" method="post">
+                    <input type="hidden" name="ship_id" value="<?= $tdata['id'] ?>" />
+                    <?= $tdata['ship_conn_sel'] ?>
+                </form>
+            <?php } ?>
 
             <form id="destination_controls" method="post">
                 <input type="text" name="dest_x" size="5" value="<?= $tdata['dx'] ?>" />

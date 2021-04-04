@@ -197,6 +197,8 @@ function page_shipyard() {
 }
 
 function page_ships() {
+    global $user;
+
     require('includes/ships-common.inc.php');
     require('includes/ships.inc.php');
 
@@ -204,7 +206,21 @@ function page_ships() {
         ship_control_exec();
     }
 
-    return show_user_ships();
+    if (!empty(Filter::postInt('ship_id'))) {
+        $ship_id = Filter::postInt('ship_id');
+    }
+
+    if (empty($ship_id)) {
+        $ships = $user->getShips();
+        if (valid_array($ships)) {
+            $ship = $ships[0];
+        } else {
+            return false;
+        }
+    } else {
+        $ship = $user->getShipById($ship_id);
+    }
+    return show_control_ships($ship);
 }
 
 function page_planets() {

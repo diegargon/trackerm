@@ -33,6 +33,21 @@ class User {
         return true;
     }
 
+    function updateSession() {
+        global $db, $cfg;
+
+        if (defined('PHP_VERSION_ID') && PHP_VERSION_ID >= 70300) {
+            setcookie('sid', session_id(), [
+                'expires' => time() + $cfg['sid_expire'],
+                'secure' => true,
+                'samesite' => 'lax',
+            ]);
+        } else {
+            setcookie("sid", session_id(), time() + $cfg['sid_expire']);
+        }
+        $db->update('users', ['sid' => session_id()], ['id' => $this->id()]);
+    }
+
     function getShips() {
         global $db;
 
@@ -42,6 +57,23 @@ class User {
         }
 
         return $this->ships;
+    }
+
+    function getInRangeUserShips($ship_id) {
+        global $db;
+
+        $in_range = [];
+        $ship = $this->getShipById($ship_id);
+
+        if (valid_array($ship)) {
+            foreach ($this->ships as $check_ship) {
+                if ($check_ship['id'] !== $ship_id && $check_ship['x'] == $ship['x'] && $check_ship['y'] == $ship['y'] && $check_ship['z'] == $ship['z']) {
+                    $in_range[] = $check_ship;
+                }
+            }
+        }
+
+        return valid_array($in_range) ? $in_range : false;
     }
 
     function getPlanets() {
