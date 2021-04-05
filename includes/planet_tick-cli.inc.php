@@ -21,6 +21,23 @@ function mining_tick() {
             $planet_set['titanium'] = $new_titanium;
             $planet_set['titanium_stored'] = $titanium_stored;
         }
+        //Lithium
+        if ($planet['lithium'] > 0 && $planet['lithium_workers'] > 0) {
+            $mining = round(($planet['lithium_workers'] * $cfg['mining_production']) / 2);
+            $new_lithium = $planet['lithium'] - $mining;
+            $lithium_stored = $planet['lithium_stored'] + $mining;
+            $planet_set['lithium'] = $new_lithium;
+            $planet_set['lithium_stored'] = $lithium_stored;
+        }
+        //Armatita
+        if ($planet['armatita'] > 0 && $planet['armatita_workers'] > 0) {
+            $mining = round(($planet['armatita_workers'] * $cfg['mining_production']) / 4);
+            $new_armatita = $planet['armatita'] - $mining;
+            $armatita_stored = $planet['armatita_stored'] + $mining;
+            $planet_set['armatita'] = $new_armatita;
+            $planet_set['armatita_stored'] = $armatita_stored;
+        }
+
         if (!empty($planet_set)) {
             $db->update('planets', $planet_set, ['id' => $planet['id']], 'LIMIT 1');
         }
@@ -28,7 +45,7 @@ function mining_tick() {
 }
 
 function workers_tick() {
-    global $db, $cfg, $user;
+    global $db, $cfg;
 
     $workers_production = $cfg['workers_production'];
     $db->query("UPDATE planets SET workers = workers + round(workers * $workers_production)  WHERE uid > 0");
