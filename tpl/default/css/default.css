@@ -98,16 +98,17 @@ button {
 
 /* SHIPYARD */
 
-.column_container{
-    display: table;
-    clear:both;
+.shipyard_container {
     width:50%;
 }
-.column {
+.box_field {
+    border:2px solid red;    
+}
+.field_column {
     float:left;
-    width:50%;
+    width:49%;
+    border:0px solid blue;
 }
-
 .desc_item_title {
     font-size: 1.2em;
     font-weight: bold;    

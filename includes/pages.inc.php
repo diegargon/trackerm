@@ -133,67 +133,10 @@ function page_login() {
     return $page;
 }
 
-function page_shipyard() {
-    require('includes/ships-common.inc.php');
-    require('includes/shipyard.inc.php');
+function page_ports() {
+    require('includes/ports.inc.php');
 
-    global $L, $user, $ship_types;
-
-    $tpl_data = '';
-    $status_msg = '';
-
-    //POST
-
-    if (!empty($_POST)) {
-        if (!empty($_POST['ship_builder_submit'])) {
-            $status_msg = ship_builder();
-        }
-        if (!empty($_POST['calculate_ship'])) {
-            $status_msg = calculate_ship_build();
-        }
-    }
-
-    //Planet Switcher
-
-    $values = [];
-    $conf = [];
-    if (!empty(Filter::postInt('planet'))) {
-        $planet_sel = Filter::postInt('planet');
-    }
-    $planets = $user->getPlanets();
-
-
-    $conf['name'] = 'planet';
-    $conf['onChange'] = 1;
-
-    !empty($planet_sel) ? $conf['selected'] = $planet_sel : null;
-
-    foreach ($planets as $_planet) {
-        $values[] = [
-            'name' => $_planet['name'],
-            'value' => $_planet['id'],
-        ];
-    }
-
-    $tpl_data .= html::select($conf, $values);
-
-    if (!empty(Filter::postInt('planet'))) {
-        $planet_id = Filter::postInt('planet');
-        foreach ($planets as $_planet) {
-            if ($_planet['id'] == $planet_id) {
-                $planet = $_planet;
-                break;
-            }
-        }
-    } else {
-        $planet = $planets[0];
-    }
-    //Status
-    !empty($status_msg) ? $tpl_data .= html::head(['h' => 3], $status_msg) : null;
-
-    $tpl_data .= show_shipyard($planet);
-
-    return $tpl_data;
+    return show_port();
 }
 
 function page_ships() {

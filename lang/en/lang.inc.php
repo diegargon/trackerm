@@ -65,6 +65,7 @@ $L['L_NAME'] = 'Name';
 $L['L_PILOT'] = 'Pilot';
 $L['L_PILOT_COMBAT'] = 'Combat Pilot';
 $L['L_POSITION'] = 'Position';
+$L['L_PORTS'] = 'Ports';
 $L['L_PRODUCTION'] = 'Production';
 $L['L_PLANETS'] = 'Planets';
 $L['L_PLANET'] = 'Planet';
