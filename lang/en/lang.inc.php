@@ -40,6 +40,7 @@ $L['L_ERR_ACCUMULATOR_MANDATORY'] = 'Accumulator is mandatory';
 $L['L_ERR_PROPELLER_MANDATORY'] = 'Propeller is mandatory';
 $L['L_ERR_SHIPNAME_MANDATORY'] = 'Ship name is mandatory';
 $L['L_ERR_SHIPNAME_EXISTS'] = 'Ship name already exists';
+$L['L_ERR_NEED_PILOT'] = 'Error: Ships need pilot';
 $L['L_EDIT'] = 'Edit';
 $L['L_EXPLORER'] = 'Explorer';
 $L['L_FRONT_GUNS'] = 'Front Guns';

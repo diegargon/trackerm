@@ -7,7 +7,9 @@
  *  @subpackage
  *  @copyright Copyright @ 2020 - 2021 Diego Garcia (diego/@/envigo.net)
  */
-function show_control_ships($ship) {
+!defined('IN_WEB') ? exit : true;
+
+function show_control_ships($ship, $status_msg) {
     global $L, $user, $frontend, $perks, $ship_parts;
 
     $tpl_data = '';
@@ -21,6 +23,7 @@ function show_control_ships($ship) {
     if ($planet) {
         $tdata['planet_id'] = $planet['id'];
         $ship['own_planet_sector'] = 1;
+        $tdata['have_shipyard'] = 1;
     } else {
         $alien_planet = $user->checkIfPlanet($ship['x'], $ship['y'], $ship['z']);
         $ship['alien_planet_sector'] = 1;
@@ -70,7 +73,6 @@ function show_control_ships($ship) {
         $tdata['del_vips_sel'] = html::select(['name' => 'char_del'], $char_sel_values);
     }
 
-
     $ship_status = '';
     if ($ship['in_ship_cargo']) {
         $ship_status = $L['L_SHIPSTATUS_SHIP_CARGO'];
@@ -91,6 +93,8 @@ function show_control_ships($ship) {
 
     $tdata['ship_status'] = $ship_status;
     $tdata['max_speed'] = 1;
+    $tdata['status_msg'] = $status_msg;
+
     $tpl_data .= $frontend->getTpl('ships', array_merge($ship, $tdata));
 
     return $tpl_data;
@@ -113,109 +117,11 @@ function frmt_select_user_ships($ship) {
     return html::select(['name' => 'ship_id', 'onChange' => 1, 'selected' => $ship['id']], $values);
 }
 
-function showShipOpts() {
-    global $L, $user, $frontend, $perks, $ship_parts;
-
-    $tpl_data = '';
-    $tdata = [];
-
-    $ship = $user->getShipById($ship_id);
-
-    $values = [];
-    foreach ($ships as $_ship) {
-        $values[] = [
-            'name' => $_ship['name'],
-            'value' => $_ship['id'],
-        ];
-    }
-
-    $tpl_data['sel_ship'] = html::select(['name' => 'ship_id', 'onChange' => 1, 'selected' => $ship_id], $values);
-
-    $tdata['energy_max'] = $ship_parts['accumulator'][$ship['accumulator']]['cap'];
-
-    $planet = $user->checkInUserPlanet($ship['x'], $ship['y'], $ship['z']);
-    if ($planet) {
-        $tdata['planet_id'] = $planet['id'];
-        $ship['own_planet_sector'] = 1;
-    } else {
-        $alien_planet = $user->checkIfPlanet($ship['x'], $ship['y'], $ship['z']);
-        $ship['alien_planet_sector'] = 1;
-    }
-    if ($ship['in_ship_cargo'] || $ship['ship_connection'] || $ship['in_shipyard']) {
-        $ship['can_connect'] = 0;
-    } else {
-        $ship['can_connect'] = 1;
-    }
-
-    if ($ship['can_connect']) {
-        $own_ships_in_range = $user->getInRangeUserShips($ship['id']);
-        if (valid_array($own_ships_in_range)) {
-            $ir_values = [];
-            foreach ($own_ships_in_range as $ship_ir) {
-                if (!$ship_ir['in_shipyard'] && !$ship_ir['in_ship_cargo'] && !$ship_ir['ship_connection']) {
-                    $ir_values[] = ['name' => $ship_ir['name'], 'value' => $ship_ir['id']];
-                }
-            }
-            if (valid_array($ir_values)) {
-                $tdata['ship_conn_sel'] = html::input(['name' => 'ship_conn_submit', 'value' => $L['L_SHIP_CONNECT']]);
-                $tdata['ship_conn_sel'] .= html::select(['name' => 'ship_conn'], $ir_values);
-            }
-        }
-    }
-    if ($ship['ship_connection']) {
-        $tdata['ship_conn_sel'] = html::input(['name' => 'ship_disconn_submit', 'value' => $L['L_SHIP_DISCONNECT']]);
-    }
-
-    if ($ship['in_shipyard']) {
-        $char_sel_values = [];
-        foreach ($user->getPlanetCharacters($planet['id']) as $planet_character) {
-            $char_name = $planet_character['name'];
-            $char_name .= ' ' . $L[$perks[$planet_character['perk']]];
-            $char_name .= '(' . $planet_character['perk_value'] . ')';
-            $char_sel_values[] = ['name' => $char_name, 'value' => $planet_character['id']];
-            $tdata['add_vips_sel'] = html::select(['name' => 'char_add'], $char_sel_values);
-        }
-    }
-
-    $char_sel_values = [];
-    foreach ($user->getShipCharacters($ship['id']) as $ship_character) {
-        $char_name = $ship_character['name'];
-        $char_name .= ' ' . $L[$perks[$ship_character['perk']]];
-        $char_name .= '(' . $ship_character['perk_value'] . ')';
-        $char_sel_values[] = ['name' => $char_name, 'value' => $ship_character['id']];
-        $tdata['del_vips_sel'] = html::select(['name' => 'char_del'], $char_sel_values);
-    }
-
-
-    $ship_status = '';
-    if ($ship['in_ship_cargo']) {
-        $ship_status = $L['L_SHIPSTATUS_SHIP_CARGO'];
-    } else if ($ship['ship_connection']) {
-        $conn_ship = $user->getShipById($ship['ship_connection']);
-        $ship_status = $L['L_SHIPSTATUS_SHIP_CONNECTION'] . ' ' . $conn_ship['name'];
-    } else if ($ship['in_shipyard']) {
-        $ship_status = $L['L_SHIPSTATUS_IN_SHIPYARD'];
-    } else if ($ship['speed'] == 0 && (!empty($ship['own_planet_sector']) || !empty($ship['alien_planet_sector']) )) {
-        $ship_status .= $L['L_SHIPSTATUS_ORBIT_PLANET'];
-    } else if ($ship['speed'] > 0 && (!empty($ship['own_planet_sector']) || !empty($ship['alien_planet_sector']) )) {
-        $ship_status .= $L['L_SHIPSTATUS_PLANET_SECTOR_PATROL'];
-    } else if ($ship['speed'] == 0 && empty($ship['own_planet_sector']) && empty($ship['alien_planet_sector'])) {
-        $ship_status .= $L['L_SHIPSTATUS_SPACE_STOPPED'];
-    } else if ($ship['speed'] > 0 && empty($ship['own_planet_sector']) && empty($ship['alien_planet_sector'])) {
-        $ship_status .= $L['L_SHIPSTATUS_SPACE_TRAVEL'];
-    }
-
-    $tdata['ship_status'] = $ship_status;
-    $tdata['max_speed'] = 1;
-    $tpl_data .= $frontend->getTpl('ships', array_merge($ship, $tdata));
-
-    return $tpl_data;
-}
-
 function ship_control_exec() {
-    global $db, $user, $ship_parts;
+    global $db, $user, $L, $ship_parts;
 
-    //var_dump($_POST);
+    $status_msg = '';
+
     $ship_id = Filter::postInt('ship_id');
     if (empty($ship_id)) {
         return false;
@@ -233,9 +139,21 @@ function ship_control_exec() {
     // SHIPYARD DISCONNECT
     if (!empty($_POST['ship_shipyard_disconnect'])) {
         //TODO ENERGY -
-        $db->update('ships', ['in_shipyard' => 0, 'speed' => 0.1], ['id' => $ship_id]);
-        $user->setShipValue($ship_id, 'in_shipyard', 0);
-        $user->setShipValue($ship_id, 'speed', 0.1);
+        $ship_chars = $user->getShipCharacters($ship_id);
+        $have_pilot = 0;
+        foreach ($ship_chars as $ship_char) {
+            if ($ship_char['perk'] == 1 || $ship_char['perk'] == 2) {
+                $have_pilot = 1;
+                break;
+            }
+        }
+        if ($have_pilot) {
+            $db->update('ships', ['in_shipyard' => 0, 'speed' => 0.1], ['id' => $ship_id]);
+            $user->setShipValue($ship_id, 'in_shipyard', 0);
+            $user->setShipValue($ship_id, 'speed', 0.1);
+        } else {
+            return $L['L_ERR_NEED_PILOT'];
+        }
     }
     //SHIP CONNECT
 
@@ -300,5 +218,4 @@ function ship_control_exec() {
     if (!empty($_POST['del_vip']) && !empty($char_add = Filter::postInt('char_del'))) {
         echo "DEL";
     }
-    //var_dump($_POST);
 }
