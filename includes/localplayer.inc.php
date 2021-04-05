@@ -30,7 +30,14 @@ function get_pl_shows($item_requested) {
     if (!valid_array($items)) {
         exit();
     }
-    //$header_title = $items[0]['title'];
+
+    usort($items, function ($a, $b) {
+        $season = strcmp($a['season'], $b['season']);
+        if ($season === 0) {
+            return $a['episode'] - $b['episode'];
+        }
+        return $season;
+    });
 
     $m3u_playlist = '';
     foreach ($items as $item) {
