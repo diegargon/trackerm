@@ -36,6 +36,14 @@ function mining_tick() {
             $armatita_stored = $planet['armatita_stored'] + $mining;
             $planet_set['armatita'] = $new_armatita;
             $planet_set['armatita_stored'] = $armatita_stored;
+
+            if ($planet['armatita_stored_purity'] == 0) {
+                $planet_set['armatita_stored_purity'] = $planet['armatita_purity'];
+            } else {
+                $pure_stored = ($planet['armatita_stored_purity'] / 100) * $planet['armatita_stored'];
+                $pure_mining = ($planet['armatita_purity'] / 100 ) * $mining;
+                $planet_set['armatita_stored_purity'] = round((($pure_stored + $pure_mining) / $armatita_stored) * 100, 2);
+            }
         }
 
         if (!empty($planet_set)) {

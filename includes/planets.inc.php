@@ -170,7 +170,7 @@ function planet_brief(array $planet) {
         $info .= '<br/>' . $L['L_LITHIUM'] . ': ' . $planet['lithium'] . ' / ' . $L['L_LITHIUM_STORED'] . ': ' . $planet['lithium_stored'] . ' / ' . $L['L_LITHIUM_WORKERS'] . ': ' . $planet['lithium_workers'];
     }
     if (!empty($planet['armatita'])) {
-        $info .= '<br/>' . $L['L_ARMATITA'] . ': ' . $planet['armatita'] . ' / ' . $L['L_ARMATITA_STORED'] . ': ' . $planet['armatita_stored'] . ' / ' . $L['L_ARMATITA_WORKERS'] . ': ' . $planet['armatita_workers'];
+        $info .= '<br/>' . $L['L_ARMATITA'] . ': ' . $planet['armatita'] . ' (' . $planet['armatita_purity'] . '%) / ' . $L['L_ARMATITA_STORED'] . ': ' . $planet['armatita_stored'] . ' (' . $planet['armatita_stored_purity'] . '%) / ' . $L['L_ARMATITA_WORKERS'] . ': ' . $planet['armatita_workers'];
     }
 
     $tpl_data .= html::p([], $info);
