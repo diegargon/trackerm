@@ -36,81 +36,21 @@ $planet_table = [
     8 => 8000000,
 ];
 
-
 $character_names = [
-    'Oliver',
-    'Jack',
-    'Harry',
-    'Jacob',
-    'Charlie',
-    'Thomas',
-    'George',
-    'Oscar',
-    'James',
-    'Willian',
-    'Jake',
-    'Kyle',
-    'Joe',
-    'Damian',
-    'Noah',
-    'Liam',
-    'Willian',
-    'Ethan',
-    'Michael',
-    'Alexander',
-    'John',
-    'Daniel',
-    'Richard',
-    'David',
-    'Joseph',
-    'Margaret',
-    'Samantha',
-    'Elizabeth',
-    'Megan',
-    'Victoria',
-    'Michelle',
-    'Tracy',
-    'Madison',
-    'Charlotte',
-    'Mary',
-    'Linda',
-    'Susan',
-    'Sarah',
-    'Amelia',
-    'Olivia',
-    'Isla',
-    'Emily',
-    'Poppy',
-    'Ava',
-    'Isabella',
-    'Jessica',
-    'Lily',
-    'Sophie',
+    'Oliver', 'Jack', 'Harry', 'Jacob', 'Charlie', 'Thomas', 'George',
+    'Oscar', 'James', 'Willian', 'Jake', 'Kyle', 'Joe', 'Damian', 'Noah',
+    'Liam', 'Willian', 'Ethan', 'Michael', 'Alexander', 'John', 'Daniel',
+    'Richard', 'David', 'Joseph', 'Margaret', 'Samantha', 'Elizabeth',
+    'Megan', 'Victoria', 'Michelle', 'Tracy', 'Madison', 'Charlotte',
+    'Mary', 'Linda', 'Susan', 'Sarah', 'Amelia', 'Olivia', 'Isla',
+    'Emily', 'Poppy', 'Ava', 'Isabella', 'Jessica', 'Lily', 'Sophie',
+    'Diego', 'Santiago', 'Felix', 'Ivan',
 ];
 
 $character_surnames = [
-    'Smith',
-    'Jones',
-    'Willians',
-    'Brown',
-    'Taylor',
-    'Davies',
-    'Wilson',
-    'Roberts',
-    'Li',
-    'Murphy',
-    'Walsh',
-    'Ryan',
-    'Connor',
-    'Miller',
-    'Garcia',
-    'Rodriguez',
-    'Lam',
-    'Lee',
-    'White',
-    'Anderson',
-    'Wang',
-    'Singh',
+    'Smith', 'Jones', 'Willians', 'Brown', 'Taylor', 'Davies', 'Wilson', 'Roberts',
+    'Li', 'Murphy', 'Walsh', 'Ryan', 'Connor', 'Miller', 'Garcia', 'Rodriguez',
+    'Lam', 'Lee', 'White', 'Anderson', 'Wang', 'Singh', 'Gonzalez', 'Varela', 'Castro',
 ];
 
 
@@ -124,15 +64,13 @@ $perks = [
     5 => 'L_EXPLORER', //Explorador mejora radar? para ello el radar no puede tener 100% efectividad ¿distancia?
     // lo ideal que la efectividad del radar dependiera de la distancia
     6 => 'L_SCIENTIFIC', //Mejora Investigacion
-    7 => 'L_SOLDER', //Extructura
+    7 => 'L_ENGINIEER', //Extructuras/Shipyard
 ];
 
 
 /*
  * Research
  *
-
-
 
 
   /* Ships

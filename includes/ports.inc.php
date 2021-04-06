@@ -18,12 +18,8 @@ function show_port() {
 
     //POST
     if (!empty($_POST)) {
-        if (!empty($_POST['ship_builder_submit'])) {
-            $status_msg = ship_builder();
-        }
-        if (!empty($_POST['calculate_ship'])) {
-            $status_msg = calculate_ship_build();
-        }
+        (!empty($_POST['ship_builder_submit'])) ? $status_msg .= ship_builder() : null;
+        (!empty($_POST['calculate_ship'])) ? $status_msg .= calculate_ship_build() : null;
     }
 
     $planets = $user->getPlanets();
@@ -38,11 +34,10 @@ function show_port() {
 
     $tdata = [];
 
-
     if ($planet['have_shipyard']) {
         $tdata['planet_shipyard'] = show_shipyard($planet);
     }
-
+    $tdata['status_msg'] = $status_msg;
     $tpl_data .= $frontend->getTpl('port', $tdata);
 
     return $tpl_data;

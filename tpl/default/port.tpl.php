@@ -8,9 +8,8 @@
  */
 ?>
 <div class="port_page">
+    <p><?= !empty($tdata['status_msg']) ? $tdata['status_msg'] : null ?></p>
     <?php if (!empty($tdata['planet_shipyard'])) { ?>
-        <div class="ship_container">
-            <?= $tdata['planet_shipyard'] ?>
-        </div>
+        <?= $tdata['planet_shipyard'] ?>
     <?php } ?>
 </div>
