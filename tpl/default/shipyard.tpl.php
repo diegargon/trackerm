@@ -9,7 +9,7 @@
 ?>
 
 <div class="shipyard_container">
-    <fieldset class="box_field">
+    <fieldset>
         <legend><?= $L['L_SHIPYARD'] ?></legend>
         <div class="field_column">
             <form id="shipyard_build" method="POST">

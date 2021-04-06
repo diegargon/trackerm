@@ -91,6 +91,7 @@ $L['L_SHIPSTATUS_SPACE_STOPPED'] = 'Stopped in space';
 $L['L_SHIPSTATUS_SECTOR_PATROL'] = 'Sector patrol';
 $L['L_SHIP_CONNECT'] = 'Ship connect';
 $L['L_SHIP_DISCONNECT'] = 'Ship disconnect';
+$L['L_SHIP_SPECS'] = 'Ship specs';
 $L['L_SHIPS'] = 'Ships';
 $L['L_SHIP'] = 'Ship';
 $L['L_STARTING'] = 'Starting';

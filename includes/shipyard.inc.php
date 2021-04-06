@@ -226,13 +226,13 @@ function ship_builder() {
     $bship['accumulator'] = $ship_build['accumulator'];
     $bship['propeller'] = $ship_build['propeller'];
     $bship['bridge_type'] = $ship_build['bridge'];
-    !empty($bship['crew_type']) ? $bship['crew'] = $ship_build['crew'] : null;
-    !empty($bship['cargo_type']) ? $bship['cargo'] = $ship_build['cargo'] : null;
-    !empty($bship['front_guns']) ? $bship['front_guns'] = $ship_build['front_guns'] : null;
-    !empty($bship['missile_storage']) ? $bship['missile_storage'] = $ship_build['missile_storage'] : null;
-    !empty($bship['turrets']) ? $bship['turrets'] = $ship_build['turrets'] : null;
-    !empty($bship['shields']) ? $bship['shields'] = $ship_build['shields'] : null;
-    !empty($bship['radar']) ? $bship['radar'] = $ship_build['radar'] : null;
+    !empty($ship_build['crew']) ? $bship['crew_type'] = $ship_build['crew'] : null;
+    !empty($ship_build['cargo']) ? $bship['cargo_type'] = $ship_build['cargo'] : null;
+    !empty($ship_build['front_guns']) ? $bship['front_guns'] = $ship_build['front_guns'] : null;
+    !empty($ship_build['missile_storage']) ? $bship['missile_storage'] = $ship_build['missile_storage'] : null;
+    !empty($ship_build['turrets']) ? $bship['turrets'] = $ship_build['turrets'] : null;
+    !empty($ship_build['shields']) ? $bship['shields'] = $ship_build['shields'] : null;
+    !empty($ship_build['radar']) ? $bship['radar'] = $ship_build['radar'] : null;
     $bship['name'] = $ship_build['ship_name'];
     $bship['in_shipyard'] = 1;
 

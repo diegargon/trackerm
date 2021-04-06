@@ -34,6 +34,9 @@ select {
     border: 0.1em solid gray; 
     color:  #ff5b5b;
 }
+fieldset {
+    border: 2px solid red;
+}
 footer {
     clear:both;
 }
@@ -101,9 +104,6 @@ button {
 .shipyard_container {
     width:50%;
 }
-.box_field {
-    border:2px solid red;    
-}
 .field_column {
     float:left;
     width:49%;
@@ -170,7 +170,8 @@ button {
     height: 600px;
     border: 1px solid black;
     padding: 0px;
-    position: fixed; /* fixed or static */
+     /* fixed or static */
+    /* position: fixed; */
 
 }
 

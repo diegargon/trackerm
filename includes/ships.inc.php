@@ -90,7 +90,11 @@ function show_control_ships($ship, $status_msg) {
     } else if ($ship['speed'] > 0 && empty($ship['own_planet_sector']) && empty($ship['alien_planet_sector'])) {
         $ship_status .= $L['L_SHIPSTATUS_SPACE_TRAVEL'];
     }
+    //ships_specs
+    $tdata['ship_specs'] = get_ship_specs($ship);
+    $tdata['ship_specs'] = $frontend->getTpl('ship-specs', $tdata);
 
+    //
     $tdata['ship_status'] = $ship_status;
     $tdata['max_speed'] = 1;
     $tdata['status_msg'] = $status_msg;
@@ -100,7 +104,22 @@ function show_control_ships($ship, $status_msg) {
     return $tpl_data;
 }
 
-function frmt_select_user_ships($ship) {
+function get_ship_specs(array $ship) {
+    global $ship_parts, $L;
+    //TODO better
+    $brief = '';
+
+    $ship['turrets'] ? $brief .= $L['L_TURRETS'] . ': ' . $ship_parts['turrets'][$ship['turrets']]['name'] . '</br>' : null;
+    $ship['generator'] ? $brief .= $L['L_GENERATOR'] . ': ' . $ship_parts['generator'][$ship['generator']]['name'] . '</br>' : null;
+    $ship['accumulator'] ? $brief .= $L['L_ACCUMULATOR'] . ': ' . $ship_parts['accumulator'][$ship['accumulator']]['name'] . '</br>' : null;
+    $ship['propeller'] ? $brief .= $L['L_PROPELLER'] . ': ' . $ship_parts['propeller'][$ship['propeller']]['name'] . '</br>' : null;
+    $ship['crew_type'] ? $brief .= $L['L_CREW'] . ': ' . $ship_parts['crew'][$ship['crew_type']]['name'] . '</br>' : null;
+    $ship['radar'] ? $brief .= $L['L_RADAR'] . ': ' . $ship_parts['radar'][$ship['radar']]['name'] . '</br>' : null;
+    $ship['shields'] ? $brief .= $L['L_SHIELDS'] . ': ' . $ship_parts['shields'][$ship['shields']]['name'] . '</br>' : null;
+    return $brief;
+}
+
+function frmt_select_user_ships(array $ship) {
     global $user;
 
     $values = [];

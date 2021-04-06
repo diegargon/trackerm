@@ -90,13 +90,15 @@
     <div class="col2">
         <div id="canvas_container" >
             <div id="canvas">
-
             </div>
             <div id="canvas_inset"></div>
             <script src="js/TrackBallControls.js"></script>
             <script src="js/ship-radar.js"></script>
-
-
         </div>
+        <?php
+        if (!empty($tdata['ship_specs'])) {
+            echo $tdata['ship_specs'];
+        }
+        ?>
     </div> <!-- col -->
 </div>
