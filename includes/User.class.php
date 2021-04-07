@@ -134,6 +134,14 @@ class User {
         return false;
     }
 
+    function setPlanetValue(int $planet_id, $ckey, $cvalue) {
+        foreach ($this->planets as $key => $planet) {
+            if ($planet['id'] == $planet_id) {
+                $this->planets[$key][$ckey] = $cvalue;
+            }
+        }
+    }
+
     function getCharacters() {
         global $db;
 

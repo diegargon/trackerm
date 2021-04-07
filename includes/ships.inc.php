@@ -73,6 +73,87 @@ function show_control_ships($ship, $status_msg) {
         $tdata['del_vips_sel'] = html::select(['name' => 'char_del'], $char_sel_values);
     }
 
+    //CARGO
+    $can_cargo = 0;
+    if ($ship['cargo_type'] && ($ship['in_shipyard'] || $ship['in_port'] || $ship['ship_connection'] )) {
+        if ($ship['ship_connection']) {
+            $conn_ship = $user->getShipById($ship['ship_connection']);
+            if ($conn_ship['cargo_type']) {
+                $can_cargo = 1;
+            }
+        } else {
+            $can_cargo = 1;
+        }
+    }
+
+    if ($can_cargo) {
+        //$L['L_CARGO_LOAD'] . ':' . $tdata['actual_cargo'] . '(' . $tdata['actual_cargo_type'] . ')'
+        if ($ship['cargo'] == 0) {
+            $tdata['actual_cargo'] = $L['L_EMPTY'];
+        } else {
+            global $cargo_types;
+            $tdata['actual_cargo'] = $ship['cargo'] . '(' . $L[$cargo_types[$ship['cargo_load_type']]] . ')';
+        }
+
+        $sel_values = [];
+        if ($ship['in_shipyard'] || $ship['in_port']) {
+            $tdata['cargo_link'] = 'planet';
+            if ($ship['cargo_load_type']) {
+                if ($ship['cargo_load_type'] == 1 && !empty($planet['titanium_stored'])) {
+                    $sel_values[] = ['name' => $L['L_TITANIUM'], 'value' => 1];
+                } else if ($ship['cargo_load_type'] == 2 && !empty($planet['lithium_stored'])) {
+                    $sel_values[] = ['name' => $L['L_LITHIUM'], 'value' => 2];
+                } else if ($ship['cargo_load_type'] == 3 && !empty($planet['armatita_stored'])) {
+                    $sel_values[] = ['name' => $L['L_ARMATITA'], 'value' => 3];
+                }
+                $tdata['cargo_sel'] = html::select(['name' => 'selected_cargo', 'readonly' => 1], $sel_values);
+            } else {
+                !empty($planet['titanium_stored']) ? $sel_values[] = ['name' => $L['L_TITANIUM'], 'value' => 1] : null;
+                !empty($planet['lithium_stored']) ? $sel_values[] = ['name' => $L['L_LITHIUM'], 'value' => 2] : null;
+                !empty($planet['armatita_stored']) ? $sel_values[] = ['name' => $L['L_ARMATITA'], 'value' => 3] : null;
+
+                if (valid_array($sel_values)) {
+                    $tdata['cargo_sel'] = html::select(['name' => 'selected_cargo', 'sel_none' => 1], $sel_values);
+                } else {
+                    $can_cargo = 0;
+                }
+            }
+        } else if ($ship['ship_connection']) {
+            $ship_linked = $user->getShipById($ship['ship_connection']);
+
+            if ($ship['cargo_load_type'] || $ship_linked['cargo_load_type']) {
+                $can_ship_trade = 0;
+                if (($ship['cargo_load_type'] == 1 && $ship_linked['cargo_load_type'] == 1) ||
+                        ($ship['cargo_load_type'] == 1 && $ship_linked['cargo_load_type'] == 0) ||
+                        ($ship['cargo_load_type'] == 0 && $ship_linked['cargo_load_type'] == 1)
+                ) {
+                    $sel_values[] = ['name' => $L['L_TITANIUM'], 'value' => 1];
+                    $can_ship_trade = 1;
+                } else if (($ship['cargo_load_type'] == 2 && $ship_linked['cargo_load_type'] == 2) ||
+                        ($ship['cargo_load_type'] == 2 && $ship_linked['cargo_load_type'] == 0) ||
+                        ($ship['cargo_load_type'] == 0 && $ship_linked['cargo_load_type'] == 2)
+                ) {
+                    $can_ship_trade = 1;
+                    $sel_values[] = ['name' => $L['L_LITHIUM'], 'value' => 2];
+                } else if (($ship['cargo_load_type'] == 3 && $ship_linked['cargo_load_type'] == 3) ||
+                        ($ship['cargo_load_type'] == 3 && $ship_linked['cargo_load_type'] == 0) ||
+                        ($ship['cargo_load_type'] == 0 && $ship_linked['cargo_load_type'] == 3)
+                ) {
+                    $can_ship_trade = 1;
+                    $sel_values[] = ['name' => $L['L_ARMATITA'], 'value' => 3];
+                }
+                if ($can_ship_trade) {
+                    $tdata['cargo_link'] = 'ship';
+                    $tdata['cargo_sel'] = html::select(['name' => 'selected_cargo', 'readonly' => 1], $sel_values);
+                }
+            } else {
+                $can_cargo = 0;
+            }
+        }
+        $tdata['cargo_units'] = 0;
+    }
+
+    //END CARGO
     $ship_status = '';
     if ($ship['in_ship_cargo']) {
         $ship_status = $L['L_SHIPSTATUS_SHIP_CARGO'];
@@ -98,6 +179,7 @@ function show_control_ships($ship, $status_msg) {
     $tdata['ship_status'] = $ship_status;
     $tdata['max_speed'] = 1;
     $tdata['status_msg'] = $status_msg;
+    $tdata['can_cargo'] = $can_cargo;
 
     $tpl_data .= $frontend->getTpl('ships', array_merge($ship, $tdata));
 
@@ -109,6 +191,7 @@ function get_ship_specs(array $ship) {
     //TODO better
     $brief = '';
 
+    $ship['bridge_type'] ? $brief .= $L['L_BRIDGE'] . ': ' . $ship_parts['bridge'][$ship['bridge_type']]['name'] . '</br>' : null;
     $ship['turrets'] ? $brief .= $L['L_TURRETS'] . ': ' . $ship_parts['turrets'][$ship['turrets']]['name'] . '</br>' : null;
     $ship['generator'] ? $brief .= $L['L_GENERATOR'] . ': ' . $ship_parts['generator'][$ship['generator']]['name'] . '</br>' : null;
     $ship['accumulator'] ? $brief .= $L['L_ACCUMULATOR'] . ': ' . $ship_parts['accumulator'][$ship['accumulator']]['name'] . '</br>' : null;
@@ -116,6 +199,7 @@ function get_ship_specs(array $ship) {
     $ship['crew_type'] ? $brief .= $L['L_CREW'] . ': ' . $ship_parts['crew'][$ship['crew_type']]['name'] . '</br>' : null;
     $ship['radar'] ? $brief .= $L['L_RADAR'] . ': ' . $ship_parts['radar'][$ship['radar']]['name'] . '</br>' : null;
     $ship['shields'] ? $brief .= $L['L_SHIELDS'] . ': ' . $ship_parts['shields'][$ship['shields']]['name'] . '</br>' : null;
+    $ship['cargo_type'] ? $brief .= $L['L_CARGO'] . ': ' . $ship_parts['cargo'][$ship['cargo_type']]['name'] . '</br>' : null;
     return $brief;
 }
 
@@ -235,6 +319,266 @@ function ship_control_exec() {
 
     // DEL VIP
     if (!empty($_POST['del_vip']) && !empty($char_add = Filter::postInt('char_del'))) {
+        //TODO
         echo "DEL";
     }
+
+    //var_dump($_POST);
+    //CARGO PLANET LOAD
+    if (!empty($_POST['selected_cargo']) && isset($_POST['load_units']) && !empty($_POST['cargo_units'])) {
+        if ($_POST['cargo_link'] == 'planet' && !empty(($planet_id = Filter::postInt('planet_id')))) {
+            if (!empty(($cargo_units = Filter::postInt('cargo_units')))) {
+                $planet = $user->getPlanetById($planet_id);
+                $selected_cargo = Filter::postInt('selected_cargo');
+                if (!empty($selected_cargo)) {
+                    ship_load_cargo_planet($ship, $planet, $cargo_units, 1);
+                }
+            }
+        }
+    }
+    //CARGO PLANET UNLOAD
+    if (!empty($_POST['selected_cargo']) && isset($_POST['unload_units']) && !empty($_POST['cargo_units'])) {
+        if ($_POST['cargo_link'] == 'planet' && !empty(($planet_id = Filter::postInt('planet_id')))) {
+            if (!empty(($cargo_units = Filter::postInt('cargo_units')))) {
+                $planet = $user->getPlanetById($planet_id);
+                $selected_cargo = Filter::postInt('selected_cargo');
+                if (!empty($selected_cargo)) {
+                    ship_unload_cargo_planet($ship, $planet, $cargo_units, 1);
+                }
+            }
+        }
+    }
+    //CARGO SHIP LOAD
+    if (!empty($_POST['selected_cargo']) && isset($_POST['load_units']) && !empty($_POST['cargo_units'])) {
+        if ($_POST['cargo_link'] == 'ship') {
+            if (!empty(($cargo_units = Filter::postInt('cargo_units')))) {
+                $selected_cargo = Filter::postInt('selected_cargo');
+                if (!empty($selected_cargo)) {
+                    ship_load_cargo_ship($ship, $cargo_units, 1);
+                }
+            }
+        }
+    }
+    //CARGO SHIP UNLOAD
+    if (!empty($_POST['selected_cargo']) && isset($_POST['unload_units']) && !empty($_POST['cargo_units'])) {
+        if ($_POST['cargo_link'] == 'ship') {
+            if (!empty(($cargo_units = Filter::postInt('cargo_units')))) {
+                $selected_cargo = Filter::postInt('selected_cargo');
+                if (!empty($selected_cargo)) {
+                    ship_unload_cargo_ship($ship, $cargo_units, 1);
+                }
+            }
+        }
+    }
+}
+
+function ship_load_cargo_planet($ship, $planet, $cargo_units, $type) {
+    global $db, $user, $ship_parts;
+
+    $max_ship_cap = $ship_parts['cargo'][$ship['cargo_type']]['cap'];
+
+    if (($cargo_units + $ship['cargo']) > $max_ship_cap) {
+        $cargo_units = $max_ship_cap - $ship['cargo'];
+    }
+
+
+    if ($type == 1) {
+        $item_stored = 'titanium_stored';
+    } else if ($type == 2) {
+        $item_stored = 'lithium_stored';
+    } else if ($type == 3) {
+        $item_stored = 'armatita_stored';
+    }
+
+    if ($cargo_units > $planet[$item_stored]) {
+        $cargo_units = $planet[$item_stored];
+    }
+    if ($cargo_units == 0) {
+        return false;
+    }
+
+    $planet_set[$item_stored] = $planet[$item_stored] - $cargo_units;
+    $ship_set['cargo'] = $cargo_units + $ship['cargo'];
+    $ship_set['cargo_load_type'] = $type;
+    if ($type == 3) {
+        if ($ship['cargo'] == 0) {
+            $new_purity = $planet['armatita_stored_purity'];
+        } else {
+            $new_purity = calc_new_purity($ship['cargo_purity'], $cargo_units, $planet['armatita_stored_purity'], $planet['armatita_stored']);
+        }
+        $ship_set['cargo_purity'] = $new_purity;
+        $user->setShipValue($ship['id'], 'cargo_purity', $new_purity);
+        if ($planet_set[$item_stored] == 0) {
+            $planet_set['armatita_stored_purity'] = 0;
+        }
+    }
+
+    $db->update('planets', $planet_set, ['id' => $planet['id']], 'LIMIT 1');
+    $user->setPlanetValue($planet['id'], $item_stored, $planet_set[$item_stored]);
+    $db->update('ships', $ship_set, ['id' => $ship['id']], 'LIMIT 1');
+    $user->setShipValue($ship['id'], 'cargo', $ship_set['cargo']);
+    $user->setShipValue($ship['id'], 'cargo_load_type', $type);
+}
+
+function ship_unload_cargo_planet($ship, $planet, $cargo_units, $type) {
+    global $db, $user;
+
+    if ($type == 1) {
+        $item_stored = 'titanium_stored';
+    } else if ($type == 2) {
+        $item_stored = 'lithium_stored';
+    } else if ($type == 3) {
+        $item_stored = 'armatita_stored';
+    }
+
+    if ($cargo_units > $ship['cargo']) {
+        $cargo_units = $ship['cargo'];
+    }
+
+    if ($cargo_units == 0) {
+        return false;
+    }
+    $planet_set[$item_stored] = $planet[$item_stored] + $cargo_units;
+    $ship_set['cargo'] = $ship['cargo'] - $cargo_units;
+
+    if ($type == 3) {
+        if ($planet['armatita_stored'] == 0) {
+            $new_purity = $ship['cargo_purity'];
+        } else {
+            $new_purity = calc_new_purity($planet['armatita_stored_purity'], $planet['armatita_stored'], $ship['cargo_purity'], $cargo_units);
+        }
+        $planet_set['armatita_stored_purity'] = $ship['cargo_purity'];
+        $user->setPlanetValue($planet['id'], 'armatita_stored_purity', $ship['cargo_purity']);
+    }
+
+    if ($ship_set['cargo'] == 0) {
+        $ship_set['cargo_load_type'] = 0;
+        $user->setShipValue($ship['id'], 'cargo_load_type', $ship_set['cargo_load_type']);
+        if ($type == 3) {
+            $ship_set['cargo_purity'] = 0;
+            $user->setShipValue($ship['id'], 'cargo_purity', 0);
+        }
+    }
+
+    $db->update('planets', $planet_set, ['id' => $planet['id']], 'LIMIT 1');
+    $user->setPlanetValue($planet['id'], $item_stored, $planet_set[$item_stored]);
+    $db->update('ships', $ship_set, ['id' => $ship['id']], 'LIMIT 1');
+    $user->setShipValue($ship['id'], 'cargo', $ship_set['cargo']);
+}
+
+function ship_load_cargo_ship($ship, $cargo_units, $type) {
+    global $db, $user, $ship_parts;
+
+    $max_ship_cap = $ship_parts['cargo'][$ship['cargo_type']]['cap'];
+
+    if (($cargo_units + $ship['cargo']) > $max_ship_cap) {
+        $cargo_units = $max_ship_cap - $ship['cargo'];
+    }
+
+
+    if ($type == 1) {
+        $item_stored = 'titanium_stored';
+    } else if ($type == 2) {
+        $item_stored = 'lithium_stored';
+    } else if ($type == 3) {
+        $item_stored = 'armatita_stored';
+    }
+
+    $ship_connected = $user->getShipById($ship['ship_connection']);
+
+    if (!$ship_connected || $cargo_units == 0) {
+        return false;
+    }
+
+    if ($cargo_units > $ship_connected['cargo']) {
+        $cargo_units = $ship_connected['cargo'];
+    }
+
+    $ship_connected_set['cargo'] = $ship_connected['cargo'] - $cargo_units;
+    $ship_set['cargo'] = $cargo_units + $ship['cargo'];
+    $ship_set['cargo_load_type'] = $type;
+
+    if ($ship_connected_set['cargo'] == 0) {
+        $ship_connected_set['cargo_load_type'] = 0;
+    }
+    if ($type == 3) {
+        if ($ship['cargo'] == 0) {
+            $new_purity = $ship_connected['cargo_purity'];
+        } else {
+            $new_purity = calc_new_purity($ship['cargo_purity'], $cargo_units, $ship_connected['cargo_purity'], $ship_connected['cargo']);
+        }
+        $ship_set['cargo_purity'] = $new_purity;
+        $user->setShipValue($ship['id'], 'cargo_purity', $new_purity);
+        if ($ship_connected_set['cargo'] == 0) {
+            $ship_connected_set['cargo_purity'] = 0;
+        }
+    }
+
+    $db->update('ships', $ship_connected_set, ['id' => $ship_connected['id']], 'LIMIT 1');
+    $user->setShipValue($ship_connected['id'], 'cargo', $ship_connected_set['cargo']);
+    $db->update('ships', $ship_set, ['id' => $ship['id']], 'LIMIT 1');
+    $user->setShipValue($ship['id'], 'cargo', $ship_set['cargo']);
+    $user->setShipValue($ship['id'], 'cargo_load_type', $type);
+}
+
+function ship_unload_cargo_ship($ship, $cargo_units, $type) {
+    global $db, $user, $ship_parts;
+
+    if ($type == 1) {
+        $item_stored = 'titanium_stored';
+    } else if ($type == 2) {
+        $item_stored = 'lithium_stored';
+    } else if ($type == 3) {
+        $item_stored = 'armatita_stored';
+    }
+
+    if ($cargo_units > $ship['cargo']) {
+        $cargo_units = $ship['cargo'];
+    }
+
+    $ship_connected = $user->getShipById($ship['ship_connection']);
+
+    $max_ship_connected_cap = $ship_parts['cargo'][$ship_connected['cargo_type']]['cap'];
+
+    if (($cargo_units + $ship_connected['cargo']) > $max_ship_connected_cap) {
+        $cargo_units = $max_ship_connected_cap - $ship_connected['cargo'];
+    }
+
+
+    if (!$ship_connected || $cargo_units == 0) {
+        return false;
+    }
+
+    $ship_connected_set['cargo'] = $ship_connected['cargo'] + $cargo_units;
+    $ship_set['cargo'] = $ship['cargo'] - $cargo_units;
+    $ship_connected_set['cargo_load_type'] = $type;
+
+    if ($ship_set['cargo'] == 0) {
+        $ship_set['cargo_load_type'] = 0;
+    }
+
+    if ($type == 3) {
+        if ($ship_connected['cargo'] == 0) {
+            $new_purity = $ship['cargo_purity'];
+        } else {
+            $new_purity = calc_new_purity($ship_connected['cargo_purity'], $ship_connected['cargo'], $ship['cargo_purity'], $cargo_units);
+        }
+        $ship_connected_set['cargo_purity'] = $new_purity;
+
+        $user->setShipValue($ship_connected['id'], 'cargo_purity', $new_purity);
+    }
+
+    if ($ship_set['cargo'] == 0) {
+        $ship_set['cargo_load_type'] = 0;
+        $user->setShipValue($ship['id'], 'cargo_load_type', $ship_set['cargo_load_type']);
+        if ($type == 3) {
+            $ship_set['cargo_purity'] = 0;
+            $user->setShipValue($ship['id'], 'cargo_purity', 0);
+        }
+    }
+
+    $db->update('ships', $ship_connected_set, ['id' => $ship_connected['id']], 'LIMIT 1');
+    $user->setShipValue($ship_connected['id'], 'cargo', $ship_connected_set['cargo']);
+    $db->update('ships', $ship_set, ['id' => $ship['id']], 'LIMIT 1');
+    $user->setShipValue($ship['id'], 'cargo', $ship_set['cargo']);
 }

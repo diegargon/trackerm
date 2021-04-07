@@ -8,7 +8,6 @@
  *  @copyright Copyright @ 2020 - 2021 Diego Garcia (diego/@/envigo.net)
  */
 function show_port() {
-    require('includes/ships-common.inc.php');
     require('includes/shipyard.inc.php');
 
     global $user, $frontend;

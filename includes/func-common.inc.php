@@ -22,3 +22,11 @@ function get_ship_mass($ship) {
     }
     return $mass;
 }
+
+function calc_new_purity(float $purity_dest, float $amount_dest, float $purity_orig, float $amount_orig) {
+
+    $pure_stored = ($purity_dest / 100) * $amount_dest;
+    $pure_mining = ($purity_orig / 100) * $amount_orig;
+
+    return (($pure_stored + $pure_mining) / ($amount_dest + $amount_orig)) * 100;
+}

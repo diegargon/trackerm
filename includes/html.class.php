@@ -18,9 +18,11 @@ class Html {
             return false;
         }
         !isset($conf['sel']) ? $conf['sel'] = null : null;
-        isset($conf['class']) ? $opt = ' class="' . $conf['class'] . ' "' : null;
-        isset($conf['onChange']) ? $opt .= ' onchange="this.form.submit()" ' : null;
+        isset($conf['class']) ? $opt = 'class="' . $conf['class'] . ' "' : null;
+        isset($conf['onChange']) ? $opt .= 'onchange="this.form.submit()" ' : null;
         !empty($conf['size']) ? $opt .= 'size="' . $conf['size'] . '" ' : null;
+        !empty($conf['disabled']) ? $opt .= 'disabled="disabled" ' : null;
+        !empty($conf['readonly']) ? $opt .= 'readonly="readonly" ' : null;
         $select = '';
         (!empty($conf['onChange']) || !empty($conf['form'])) ? $select .= '<form method="post">' : null;
 

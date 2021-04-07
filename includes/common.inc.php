@@ -23,3 +23,5 @@ require('includes/logging.class.php');
 $log = new Log($cfg);
 require('includes/utils.inc.php');
 require('includes/vars.inc.php');
+require('includes/func-common.inc.php');
+

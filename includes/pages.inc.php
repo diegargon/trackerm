@@ -144,7 +144,6 @@ function page_ships() {
 
     $status_msg = '';
 
-    require('includes/ships-common.inc.php');
     require('includes/ships.inc.php');
 
     if (!empty(Filter::postInt('ship_id'))) {

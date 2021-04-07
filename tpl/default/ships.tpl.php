@@ -58,6 +58,18 @@
                 <input type="hidden" name="ship_id" value="<?= $tdata['id'] ?>" />
                 <input type="submit" name="ship_set_destination" value="<?= $L['L_SET_DESTINATION'] ?>" />
             </form>
+            <?php if ($tdata['can_cargo']) { ?>
+                <p><?= $L['L_CARGO_LOAD'] . ':' . $tdata['actual_cargo'] ?></p>
+                <form id="cargo_form" method="post">
+                    <?= $tdata['cargo_sel'] ?>
+                    <input type="text" name="cargo_units" size="5" value="<?= $tdata['cargo_units'] ?>" />
+                    <input type="hidden" name="planet_id" value="<?= $tdata['planet_id'] ?>" />
+                    <input type="hidden" name="ship_id" value="<?= $tdata['id'] ?>" />
+                    <input type="hidden" name="cargo_link" value="<?= $tdata['cargo_link'] ?>" />
+                    <input type="submit" name="load_units" value="<?= $L['L_CARGO_LOAD'] ?>" />
+                    <input type="submit" name="unload_units" value="<?= $L['L_CARGO_UNLOAD'] ?>" />
+                </form>
+            <?php } ?>
         </div>
 
         <div>

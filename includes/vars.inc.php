@@ -281,3 +281,7 @@ $ship_parts['radar'][1] = [
     'mass' => 0.5,
 ];
 
+//MATS
+$cargo_types[1] = 'L_TITANIUM';
+$cargo_types[2] = 'L_LITHIUM';
+$cargo_types[3] = 'L_ARMATITA';
