@@ -137,7 +137,8 @@ function view_extra_movies($item, $opt = null) {
     $page = Filter::getString('page');
     $view_type = Filter::getString('view_type');
     $title = getFileTitle($item['title']);
-    (!empty($_GET['search_movie_db'])) ? $stitle = trim(Filter::getUtf8('search_movie_db')) : $stitle = $title;
+    (!empty($_GET['search_movies_db'])) ? $stitle = trim(Filter::getUtf8('search_movies_db')) : $stitle = $title;
+    $stitle = preg_replace('/\s\d{4}/', '', $stitle);
 
     $extra = $frontend->getTpl('view_extra_movies', ['page' => $page, 'id' => $id, 'view_type' => $view_type, 'stitle' => $stitle]);
 
