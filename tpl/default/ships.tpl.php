@@ -58,6 +58,16 @@
                 <input type="hidden" name="ship_id" value="<?= $tdata['id'] ?>" />
                 <input type="submit" name="ship_set_destination" value="<?= $L['L_SET_DESTINATION'] ?>" />
             </form>
+            <?php if (!empty($tdata['alien_planet_sector']) && $tdata['radar']) { ?>
+                <div class="scan_planet_container">
+                    <form id="scan_planet_form" method="post">
+                        <input type="hidden" name="ship_id" value="<?= $tdata['id'] ?>" />
+                        <input type="hidden" name="alien_planet_id" value="<?= $tdata['alien_planet_sector'] ?>" />
+                        <input type="submit" name="scan_planet" value="<?= $L['L_SCAN_PLANET'] ?>" />
+                    </form>
+                    <?= !empty($tdata['scan_planet_report']) ? '<span>' . $tdata['scan_planet_report'] . '</span>' : null; ?>
+                </div>
+            <?php } ?>
             <?php if ($tdata['can_cargo']) { ?>
                 <p><?= $L['L_CARGO_LOAD'] . ':' . $tdata['actual_cargo'] ?></p>
                 <form id="cargo_form" method="post">
@@ -107,10 +117,6 @@
             <script src="js/TrackBallControls.js"></script>
             <script src="js/ship-radar.js"></script>
         </div>
-        <?php
-        if (!empty($tdata['ship_specs'])) {
-            echo $tdata['ship_specs'];
-        }
-        ?>
+        <?= (!empty($tdata['ship_specs'])) ? $tdata['ship_specs'] : null; ?>
     </div> <!-- col -->
 </div>

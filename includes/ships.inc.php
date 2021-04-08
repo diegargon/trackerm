@@ -9,11 +9,13 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-function show_control_ships($ship, $status_msg) {
+function show_control_ships(array $ship, array $post_data) {
     global $L, $user, $frontend, $perks, $ship_parts;
 
     $tpl_data = '';
     $tdata = [];
+
+    !empty($post_data['status_msg']) ? $status_msg = $post_data['status_msg'] : $status_msg = '';
 
     $tdata['sel_ship'] = frmt_select_user_ships($ship);
 
@@ -25,8 +27,8 @@ function show_control_ships($ship, $status_msg) {
         $ship['own_planet_sector'] = 1;
         $tdata['have_shipyard'] = 1;
     } else {
-        $alien_planet = $user->checkIfPlanet($ship['x'], $ship['y'], $ship['z']);
-        $ship['alien_planet_sector'] = 1;
+        $alien_planet = Planets::checkIfPlanet($ship['x'], $ship['y'], $ship['z']);
+        $ship['alien_planet_sector'] = $alien_planet['id'];
     }
     if ($ship['in_ship_cargo'] || $ship['ship_connection'] || $ship['in_shipyard']) {
         $ship['can_connect'] = 0;
@@ -181,6 +183,8 @@ function show_control_ships($ship, $status_msg) {
     $tdata['status_msg'] = $status_msg;
     $tdata['can_cargo'] = $can_cargo;
 
+    !empty($post_data['scan_planet_report']) ? $tdata['scan_planet_report'] = $post_data['scan_planet_report'] : null;
+
     $tpl_data .= $frontend->getTpl('ships', array_merge($ship, $tdata));
 
     return $tpl_data;
@@ -221,9 +225,9 @@ function frmt_select_user_ships(array $ship) {
 }
 
 function ship_control_exec() {
-    global $db, $user, $L, $ship_parts;
+    global $db, $user, $L, $frontend, $ship_parts;
 
-    $status_msg = '';
+    $post_data = [];
 
     $ship_id = Filter::postInt('ship_id');
     if (empty($ship_id)) {
@@ -370,9 +374,20 @@ function ship_control_exec() {
             }
         }
     }
+    //Scan planet
+    if (!empty($_POST['scan_planet']) &&
+            !empty(($alien_planet_id = Filter::postInt('alien_planet_id')))
+    ) {
+        $alien_planet = Planets::getPlanetById($alien_planet_id);
+        if (valid_array($alien_planet)) {
+            $post_data['scan_planet_report'] = $frontend->getTpl('scan_planet_report', $alien_planet);
+        }
+    }
+
+    return $post_data;
 }
 
-function ship_load_cargo_planet($ship, $planet, $cargo_units, $type) {
+function ship_load_cargo_planet(array $ship, array $planet, int $cargo_units, int $type) {
     global $db, $user, $ship_parts;
 
     $max_ship_cap = $ship_parts['cargo'][$ship['cargo_type']]['cap'];
@@ -420,7 +435,7 @@ function ship_load_cargo_planet($ship, $planet, $cargo_units, $type) {
     $user->setShipValue($ship['id'], 'cargo_load_type', $type);
 }
 
-function ship_unload_cargo_planet($ship, $planet, $cargo_units, $type) {
+function ship_unload_cargo_planet(array $ship, array $planet, int $cargo_units, int $type) {
     global $db, $user;
 
     if ($type == 1) {
@@ -466,7 +481,7 @@ function ship_unload_cargo_planet($ship, $planet, $cargo_units, $type) {
     $user->setShipValue($ship['id'], 'cargo', $ship_set['cargo']);
 }
 
-function ship_load_cargo_ship($ship, $cargo_units, $type) {
+function ship_load_cargo_ship(array $ship, int $cargo_units, int $type) {
     global $db, $user, $ship_parts;
 
     $max_ship_cap = $ship_parts['cargo'][$ship['cargo_type']]['cap'];
@@ -521,7 +536,7 @@ function ship_load_cargo_ship($ship, $cargo_units, $type) {
     $user->setShipValue($ship['id'], 'cargo_load_type', $type);
 }
 
-function ship_unload_cargo_ship($ship, $cargo_units, $type) {
+function ship_unload_cargo_ship(array $ship, int $cargo_units, int $type) {
     global $db, $user, $ship_parts;
 
     if ($type == 1) {

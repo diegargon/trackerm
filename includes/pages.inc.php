@@ -142,7 +142,7 @@ function page_ports() {
 function page_ships() {
     global $user;
 
-    $status_msg = '';
+    $post_data = [];
 
     require('includes/ships.inc.php');
 
@@ -150,7 +150,8 @@ function page_ships() {
         $ship_id = Filter::postInt('ship_id');
     }
 
-    (!empty($_POST)) ? $status_msg .= ship_control_exec() : null;
+    (!empty($_POST)) ? $post_data = ship_control_exec() : null;
+
 
     if (empty($ship_id)) {
         $ships = $user->getShips();
@@ -162,7 +163,7 @@ function page_ships() {
     } else {
         $ship = $user->getShipById($ship_id);
     }
-    return show_control_ships($ship, $status_msg);
+    return show_control_ships($ship, $post_data);
 }
 
 function page_planets() {

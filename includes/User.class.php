@@ -96,18 +96,6 @@ class User {
         return false;
     }
 
-    function checkIfPlanet(int $x, int $y, int $z) {
-        global $db;
-
-        $result = $db->select('planets', '*', ['x' => $x, 'y' => $y, 'z' => $z], 'LIMIT 1');
-        $planet = $db->fetch($result);
-        if ($planet) {
-            return $planet;
-        }
-
-        return false;
-    }
-
     function getShipById(int $ship_id) {
         foreach ($this->getShips() as $ship) {
             if ($ship['id'] == $ship_id) {
