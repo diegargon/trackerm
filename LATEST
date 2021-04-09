@@ -1,5 +1,7 @@
 ## Latest / News (Relevant)
 
+[09/04] Fix Bug (index) try loading a big log file 
+[********** COMMIT **********]
 [04/03] Auto disable indexers when timeout (default 6h config option later)
 [04/03] Rewrite some code.
 [********** COMMIT **********]

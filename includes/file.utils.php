@@ -151,18 +151,18 @@ function scandir_r($dir) {
     return isset($result) ? $result : false;
 }
 
-function getfile_ary($filename) {
+function getfile_ary($filename, $max = 1000000) {
     $data = false;
     if (file_exists($filename)) {
-        $data = file_get_contents($filename);
+        $data = file_get_contents($filename, false, null, 0, $max);
     }
     return !empty($data) ? explode("\n", $data) : false;
 }
 
-function getfile($filename) {
+function getfile($filename, $max = 1000000) {
     $data = false;
     if (file_exists($filename)) {
-        $data = file_get_contents($filename);
+        $data = file_get_contents($filename, $max);
     }
     return !empty($data) ? $data : false;
 }
