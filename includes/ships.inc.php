@@ -22,13 +22,15 @@ function show_control_ships(array $ship, array $post_data) {
     $tdata['energy_max'] = $ship_parts['accumulator'][$ship['accumulator']]['cap'];
 
     $planet = $user->checkInUserPlanet($ship['x'], $ship['y'], $ship['z']);
-    if ($planet) {
+    if (valid_array($planet)) {
         $tdata['planet_id'] = $planet['id'];
         $ship['own_planet_sector'] = 1;
         $tdata['have_shipyard'] = 1;
     } else {
         $alien_planet = Planets::checkIfPlanet($ship['x'], $ship['y'], $ship['z']);
-        $ship['alien_planet_sector'] = $alien_planet['id'];
+        if (valid_array($alien_planet)) {
+            $ship['alien_planet_sector'] = $alien_planet['id'];
+        }
     }
     if ($ship['in_ship_cargo'] || $ship['ship_connection'] || $ship['in_shipyard']) {
         $ship['can_connect'] = 0;
@@ -228,12 +230,16 @@ function ship_control_exec() {
     global $db, $user, $L, $frontend, $ship_parts;
 
     $post_data = [];
+    $post_data['status_msg'] = '';
 
     $ship_id = Filter::postInt('ship_id');
     if (empty($ship_id)) {
         return false;
     }
     $ship = $user->getShipById($ship_id);
+    if (!valid_array($ship)) {
+        return false;
+    }
 
     // SHIPYARD CONNECT
     if (!empty($_POST['ship_shipyard_connect'])) {
@@ -286,11 +292,15 @@ function ship_control_exec() {
         $user->setShipValue($remote_ship_to_disconn, 'speed', 0.1);
     }
     // SET SPEED
-    if (!empty($_POST['ship_set_speed']) && !empty(Filter::postInt('setspeed'))) {
-        $setspeed = Filter::postInt('setspeed');
-        if ($setspeed != $ship['speed']) {
-            $db->update('ships', ['speed' => $setspeed, 'tick_div' => $setspeed], ['id' => $ship_id]);
-            $user->setShipValue($ship_id, 'speed', $setspeed);
+    if (!empty($_POST['ship_set_speed']) && null !== (Filter::postInt('setspeed'))) {
+        if ($ship['in_shipyard'] || $ship['in_port'] || $ship['ship_connection']) {
+            $post_data['status_msg'] = $L['L_DISCONNECT_FIRST'];
+        } else {
+            $setspeed = Filter::postInt('setspeed');
+            if ($setspeed != $ship['speed']) {
+                $db->update('ships', ['speed' => $setspeed, 'tick_div' => $setspeed], ['id' => $ship_id]);
+                $user->setShipValue($ship_id, 'speed', $setspeed);
+            }
         }
     }
 
@@ -318,13 +328,31 @@ function ship_control_exec() {
             $char_set['planet_assigned'] = 0;
             $char_set['ship_assigned'] = $ship['id'];
             $db->update('characters', $char_set, ['id' => $char_add]);
+            $user->setCharacterValue($char_add, 'planet_assigned', 0);
+            $user->setCharacterValue($char_add, 'ship_assigned', $ship['id']);
         }
     }
 
-    // DEL VIP
-    if (!empty($_POST['del_vip']) && !empty($char_add = Filter::postInt('char_del'))) {
-        //TODO
-        echo "DEL";
+    // REMOVE VIP
+    if (valid_array($ship) && !empty($_POST['del_vip']) && !empty($char_del = Filter::postInt('char_del'))) {
+        if (($ship_destination_id = Filter::postInt('ship_connection_id'))) {
+            $ship_dest = $user->getShipById($ship_destination_id);
+            $bridge_cap = $ship_parts['bridge'][$ship_dest['bridge_type']]['cap'];
+            $ship_dest_chars = $user->getShipCharacters($ship_dest['id']);
+            if (count($ship_dest_chars) < $bridge_cap) {
+                $db->update('characters', ['ship_assigned' => $ship_dest['id']], ['id' => $char_del]);
+                $user->setCharacterValue($char_del, 'ship_assigned', $ship_dest['id']);
+            } else {
+                $post_data['status_msg'] .= $L['L_WITHOUT_SPACE'];
+            }
+        } else if (!empty($planet_id = Filter::postInt('planet_id')) && ($ship['in_port'] || $ship['in_shipyard'])) {
+            $db->update('characters', ['planet_assigned' => $planet_id, 'ship_assigned' => 0], ['id' => $char_del]);
+            $user->setCharacterValue($char_del, 'ship_assigned', 0);
+            $user->setCharacterValue($char_del, 'planet_assigned', $planet_id);
+        } else {
+            $db->delete('characters', ['id' => $char_del], 'LIMIT 1');
+            $post_data['status_msg'] = $L['L_VIP_DEL_CRYING'];
+        }
     }
 
     //var_dump($_POST);

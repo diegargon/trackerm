@@ -101,8 +101,13 @@
                         ?>
                         <?= $tdata['del_vips_sel'] ?>
                         <input type="hidden" name="ship_id" value="<?= $tdata['id'] ?>" />
-                        <input type="hidden" name="planet_id" value="<?= $tdata['planet_id'] ?>" />
-                        <input type="submit" name="del_vip" value="<?= $L['L_DEL'] ?>"/>
+                        <?php if (!empty($tdata['ship_connection'])) { ?>
+                            <input type="hidden" name="ship_connection_id" value="<?= $tdata['ship_connection'] ?>" />
+                        <?php } ?>
+                        <?php if (!empty($tdata['planet_id'])) { ?>
+                            <input type="hidden" name="planet_id" value="<?= $tdata['planet_id'] ?>" />
+                        <?php } ?>
+                        <input type="submit" name="del_vip" value="<?= $L['L_REMOVE_VIP'] ?>"/>
                     </div>
                 <?php } ?>
             </form>

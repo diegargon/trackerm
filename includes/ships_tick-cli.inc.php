@@ -16,20 +16,26 @@ function move_ships() {
 
     $ships = $db->select('ships', '*', ['speed' => ['value' => 0, 'op' => '>']]);
 
-    foreach ($ships as $ship) {
-        $set = [];
-        if ($ship['speed'] == 1) {
-            $set = cal_new_ship_pos($ship);
-            $ship['tick_div'] != 1 ? $set['tick_div'] = 1 : null;
-        } else {
-            $set['tick_div'] = $ship['tick_div'] + 0.1;
-            if ($ship['tick_div'] + 0.1 == 1) {
-                $set = cal_new_ship_pos($ship);
-                $set['tick_div'] = $ship['speed'];
+    if (valid_array($ships)) {
+        foreach ($ships as $ship) {
+            //speed must be 0 if is connected but be check again here
+            if ($ship['in_shipyard'] || $ship['in_port'] || $ship['ship_connection']) {
+                continue;
             }
-        }
+            $set = [];
+            if ($ship['speed'] == 1) {
+                $set = cal_new_ship_pos($ship);
+                $ship['tick_div'] != 1 ? $set['tick_div'] = 1 : null;
+            } else {
+                $set['tick_div'] = $ship['tick_div'] + 0.1;
+                if ($ship['tick_div'] + 0.1 == 1) {
+                    $set = cal_new_ship_pos($ship);
+                    $set['tick_div'] = $ship['speed'];
+                }
+            }
 
-        update_cords('ships', $ship['id'], $set);
+            update_cords('ships', $ship['id'], $set);
+        }
     }
 }
 

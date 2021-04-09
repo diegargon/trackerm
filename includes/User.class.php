@@ -134,11 +134,19 @@ class User {
         global $db;
 
         if (empty($this->characters)) {
-            $result = $db->select('characters', '*', ['uid' => $this->id()]);
+            $result = $db->select('characters', '*', ['uid' => $this->id()], 'ORDER BY name');
             $this->characters = $db->fetchAll($result);
         }
 
         return $this->characters;
+    }
+
+    function setCharacterValue(int $char_id, $ckey, $cvalue) {
+        foreach ($this->characters as $key => $char) {
+            if ($char['id'] == $char_id) {
+                $this->characters[$key][$ckey] = $cvalue;
+            }
+        }
     }
 
     function getAvaibleTypeChar($planet_id, $char_perk) {
