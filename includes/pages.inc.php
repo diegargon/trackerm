@@ -163,6 +163,7 @@ function page_ships() {
     } else {
         $ship = $user->getShipById($ship_id);
     }
+
     return show_control_ships($ship, $post_data);
 }
 

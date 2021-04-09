@@ -173,15 +173,17 @@ class User {
         return $ship_characters;
     }
 
-    function getPlanetCharacters(int $planet_id) {
+    function getPlanetCharacters(int $planet_id, int $only_free = 0) {
         $planet_characters = [];
 
         foreach ($this->getCharacters() as $character) {
+
             if ($character['planet_assigned'] == $planet_id) {
-                $planet_characters[] = $character;
+                if (!$only_free || ($only_free && !$character['job'])) {
+                    $planet_characters[] = $character;
+                }
             }
         }
-
         return $planet_characters;
     }
 

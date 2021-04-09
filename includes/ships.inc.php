@@ -158,6 +158,41 @@ function show_control_ships(array $ship, array $post_data) {
     }
 
     //END CARGO
+    //CREW_CARGO
+    $can_crew_cargo = 0;
+    if ($ship['crew_type'] && ($ship['in_shipyard'] || $ship['in_port'] || $ship['ship_connection'] )) {
+        if ($ship['ship_connection']) {
+            $conn_ship = $user->getShipById($ship['ship_connection']);
+            if ($conn_ship['crew_type']) {
+                $can_crew_cargo = 1;
+            }
+        } else {
+            $can_crew_cargo = 1;
+        }
+    }
+
+    if ($can_crew_cargo) {
+        if ($ship['crew'] == 0) {
+            $tdata['actual_crew_cargo'] = $L['L_EMPTY'];
+        } else {
+            global $cargo_types;
+            $tdata['actual_crew_cargo'] = $ship['crew'];
+        }
+
+        if ($ship['in_shipyard'] || $ship['in_port']) {
+            $tdata['crew_cargo_link'] = 'planet';
+        } else if ($ship['ship_connection']) {
+            $ship_linked = $user->getShipById($ship['ship_connection']);
+            if (!$ship_linked['crew_type']) {
+                $can_crew_cargo = 0;
+            } else {
+                $tdata['crew_cargo_link'] = 'ship';
+            }
+        }
+        $tdata['crew_cargo_units'] = 0;
+    }
+    //END_CREW_CARGO
+
     $ship_status = '';
     if ($ship['in_ship_cargo']) {
         $ship_status = $L['L_SHIPSTATUS_SHIP_CARGO'];
@@ -184,6 +219,7 @@ function show_control_ships(array $ship, array $post_data) {
     $tdata['max_speed'] = 1;
     $tdata['status_msg'] = $status_msg;
     $tdata['can_cargo'] = $can_cargo;
+    $tdata['can_crew_cargo'] = $can_crew_cargo;
 
     !empty($post_data['scan_planet_report']) ? $tdata['scan_planet_report'] = $post_data['scan_planet_report'] : null;
 
@@ -202,10 +238,10 @@ function get_ship_specs(array $ship) {
     $ship['generator'] ? $brief .= $L['L_GENERATOR'] . ': ' . $ship_parts['generator'][$ship['generator']]['name'] . '</br>' : null;
     $ship['accumulator'] ? $brief .= $L['L_ACCUMULATOR'] . ': ' . $ship_parts['accumulator'][$ship['accumulator']]['name'] . '</br>' : null;
     $ship['propeller'] ? $brief .= $L['L_PROPELLER'] . ': ' . $ship_parts['propeller'][$ship['propeller']]['name'] . '</br>' : null;
-    $ship['crew_type'] ? $brief .= $L['L_CREW'] . ': ' . $ship_parts['crew'][$ship['crew_type']]['name'] . '</br>' : null;
+    $ship['crew_type'] ? $brief .= $L['L_CREW'] . ': ' . $ship_parts['crew'][$ship['crew_type']]['name'] . '(' . $ship['crew'] . ')' . '</br>' : null;
     $ship['radar'] ? $brief .= $L['L_RADAR'] . ': ' . $ship_parts['radar'][$ship['radar']]['name'] . '</br>' : null;
     $ship['shields'] ? $brief .= $L['L_SHIELDS'] . ': ' . $ship_parts['shields'][$ship['shields']]['name'] . '</br>' : null;
-    $ship['cargo_type'] ? $brief .= $L['L_CARGO'] . ': ' . $ship_parts['cargo'][$ship['cargo_type']]['name'] . '</br>' : null;
+    $ship['cargo_type'] ? $brief .= $L['L_CARGO'] . ': ' . $ship_parts['cargo'][$ship['cargo_type']]['name'] . '(' . $ship['cargo'] . ')' . '</br>' : null;
     return $brief;
 }
 
@@ -227,7 +263,7 @@ function frmt_select_user_ships(array $ship) {
 }
 
 function ship_control_exec() {
-    global $db, $user, $L, $frontend, $ship_parts;
+    global $db, $user, $cfg, $L, $frontend, $ship_parts;
 
     $post_data = [];
     $post_data['status_msg'] = '';
@@ -355,7 +391,6 @@ function ship_control_exec() {
         }
     }
 
-    //var_dump($_POST);
     //CARGO PLANET LOAD
     if (!empty($_POST['selected_cargo']) && isset($_POST['load_units']) && !empty($_POST['cargo_units'])) {
         if ($_POST['cargo_link'] == 'planet' && !empty(($planet_id = Filter::postInt('planet_id')))) {
@@ -402,6 +437,40 @@ function ship_control_exec() {
             }
         }
     }
+
+    //CARGO CREW LOAD
+    if (isset($_POST['load_crew_units']) && !empty($crew_cargo_units = Filter::postInt('crew_cargo_units'))) {
+        if ($_POST['crew_cargo_link'] == 'planet' && !empty(($planet_id = Filter::postInt('planet_id')))) {
+            if (!empty($crew_cargo_units)) {
+                $planet = $user->getPlanetById($planet_id);
+                ship_load_crew_planet($ship, $planet, $crew_cargo_units);
+            }
+        }
+    }
+
+    //CARGO CREW UNLOAD
+    if (isset($_POST['unload_crew_units']) && !empty($crew_cargo_units = Filter::postInt('crew_cargo_units'))) {
+        if ($_POST['crew_cargo_link'] == 'planet' && !empty(($planet_id = Filter::postInt('planet_id')))) {
+            if (!empty($crew_cargo_units)) {
+                $planet = $user->getPlanetById($planet_id);
+                ship_unload_crew_planet($ship, $planet, $crew_cargo_units);
+            }
+        }
+    }
+
+    //SHIP CARGO CREW LOAD
+    if (isset($_POST['load_crew_units']) && !empty($_POST['crew_cargo_units']) && $_POST['crew_cargo_link'] == 'ship') {
+        if (!empty(($crew_cargo_units = Filter::postInt('crew_cargo_units')))) {
+            ship_load_crew_ship($ship, $crew_cargo_units);
+        }
+    }
+    //SHIP CARGO SHIP UNLOAD
+    if (isset($_POST['unload_crew_units']) && !empty($_POST['crew_cargo_units']) && $_POST['crew_cargo_link'] == 'ship') {
+        if (!empty(($cargo_units = Filter::postInt('crew_cargo_units')))) {
+            ship_unload_crew_ship($ship, $crew_cargo_units);
+        }
+    }
+
     //Scan planet
     if (!empty($_POST['scan_planet']) &&
             !empty(($alien_planet_id = Filter::postInt('alien_planet_id')))
@@ -411,7 +480,42 @@ function ship_control_exec() {
             $post_data['scan_planet_report'] = $frontend->getTpl('scan_planet_report', $alien_planet);
         }
     }
-
+    //Build Port
+    if (!empty($_POST['build_port']) &&
+            !empty(($alien_planet_id = Filter::postInt('alien_planet_id')))
+    ) {
+        $alien_planet = Planets::getPlanetById($alien_planet_id);
+        if (valid_array($alien_planet) && !empty($ship['id'])) {
+            $ship_chars = $user->getShipCharacters($ship['id']);
+            $have_engineer = 0;
+            foreach ($ship_chars as $ship_char) {
+                if ($ship_char['perk'] == 7) {
+                    $have_engineer = $ship_char['id'];
+                    break;
+                }
+            }
+            if (empty($have_engineer)) {
+                $post_data['status_msg'] .= $L['L_NEED_ENGINEER'];
+                return $post_data;
+            }
+            if ($ship['cargo_type'] != 1 || $ship['cargo'] < $cfg['build_port_cost']) {
+                $post_data['status_msg'] .= $L['L_NEED_TITANIUM'] . '(' . $cfg['build_port_cost'] . ')';
+                return $post_data;
+            }
+            if ($ship['crew'] < $cfg['build_port_workers']) {
+                $post_data['status_msg'] .= $L['L_NEED_WORKERS'] . '(' . $cfg['build_port_workers'] . ')';
+                return $post_data;
+            }
+        }
+        $ship_set['cargo'] = $ship['cargo'] - $cfg['build_port_cost'];
+        $ship_set['crew'] = $ship['crew'] - $cfg['build_port_workers'];
+        if ($ship_set['cargo'] == 0) {
+            $ship_set['cargo_load_type'] = 0;
+        }
+        $db->update('ships', $ship_set, ['id' => $ship['id']], 'LIMIT 1');
+        $db->update('planets', ['uid' => $user->id(), 'port_workers' => $cfg['build_port_workers']], ['id' => $alien_planet['id']], 'LIMIT 1');
+        $db->insert('build', ['id_dest' => $alien_planet['id'], 'type' => 'port', 'ticks' => $cfg['build_port_ticks']]);
+    }
     return $post_data;
 }
 
@@ -624,4 +728,100 @@ function ship_unload_cargo_ship(array $ship, int $cargo_units, int $type) {
     $user->setShipValue($ship_connected['id'], 'cargo', $ship_connected_set['cargo']);
     $db->update('ships', $ship_set, ['id' => $ship['id']], 'LIMIT 1');
     $user->setShipValue($ship['id'], 'cargo', $ship_set['cargo']);
+}
+
+function ship_load_crew_planet(array $ship, array $planet, int $crew_cargo_units) {
+    global $db, $user, $ship_parts;
+
+    $max_ship_crew = $ship_parts['crew'][$ship['crew_type']]['cap'];
+
+    if (($crew_cargo_units + $ship['crew']) > $max_ship_crew) {
+        $crew_cargo_units = $max_ship_crew - $ship['crew'];
+    }
+
+    if ($crew_cargo_units > $planet['workers']) {
+        $crew_cargo_units = $planet['workers'];
+    }
+    if ($crew_cargo_units == 0) {
+        return false;
+    }
+
+    $planet_set['workers'] = $planet['workers'] - $crew_cargo_units;
+    $ship_set['crew'] = $crew_cargo_units + $ship['crew'];
+
+    $db->update('planets', $planet_set, ['id' => $planet['id']], 'LIMIT 1');
+    $user->setPlanetValue($planet['id'], 'workers', $planet_set['workers']);
+    $db->update('ships', $ship_set, ['id' => $ship['id']], 'LIMIT 1');
+    $user->setShipValue($ship['id'], 'crew', $ship_set['crew']);
+}
+
+function ship_unload_crew_planet(array $ship, array $planet, int $crew_cargo_units) {
+    global $db, $user;
+
+    if ($crew_cargo_units == 0) {
+        return false;
+    }
+    $planet_set['workers'] = $planet['workers'] + $crew_cargo_units;
+    $ship_set['crew'] = $ship['crew'] - $crew_cargo_units;
+
+    $db->update('planets', $planet_set, ['id' => $planet['id']], 'LIMIT 1');
+    $user->setPlanetValue($planet['id'], 'workers', $planet_set['workers']);
+    $db->update('ships', $ship_set, ['id' => $ship['id']], 'LIMIT 1');
+    $user->setShipValue($ship['id'], 'crew', $ship_set['crew']);
+}
+
+function ship_load_crew_ship(array $ship, int $crew_cargo_units) {
+    global $db, $user, $ship_parts;
+
+    $max_ship_crew = $ship_parts['crew'][$ship['crew_type']]['cap'];
+
+    if (($crew_cargo_units + $ship['crew']) > $max_ship_crew) {
+        $crew_cargo_units = $max_ship_crew - $ship['crew'];
+    }
+
+    $ship_connected = $user->getShipById($ship['ship_connection']);
+
+    if (!$ship_connected || $crew_cargo_units == 0) {
+        return false;
+    }
+
+    if ($crew_cargo_units > $ship_connected['crew']) {
+        $crew_cargo_units = $ship_connected['crew'];
+    }
+
+    $ship_connected_set['crew'] = $ship_connected['crew'] - $crew_cargo_units;
+    $ship_set['crew'] = $crew_cargo_units + $ship['crew'];
+
+    $db->update('ships', $ship_connected_set, ['id' => $ship_connected['id']], 'LIMIT 1');
+    $user->setShipValue($ship_connected['id'], 'crew', $ship_connected_set['crew']);
+    $db->update('ships', $ship_set, ['id' => $ship['id']], 'LIMIT 1');
+    $user->setShipValue($ship['id'], 'crew', $ship_set['crew']);
+}
+
+function ship_unload_crew_ship(array $ship, int $crew_cargo_units) {
+    global $db, $user, $ship_parts;
+
+    if ($crew_cargo_units > $ship['crew']) {
+        $crew_cargo_units = $ship['crew'];
+    }
+
+    $ship_connected = $user->getShipById($ship['ship_connection']);
+
+    $max_ship_connected_crew = $ship_parts['crew'][$ship_connected['crew_type']]['cap'];
+
+    if (($crew_cargo_units + $ship_connected['crew']) > $max_ship_connected_crew) {
+        $crew_cargo_units = $max_ship_connected_crew - $ship_connected['crew'];
+    }
+
+    if (!$ship_connected || $crew_cargo_units == 0) {
+        return false;
+    }
+
+    $ship_connected_set['crew'] = $ship_connected['crew'] + $crew_cargo_units;
+    $ship_set['crew'] = $ship['crew'] - $crew_cargo_units;
+
+    $db->update('ships', $ship_connected_set, ['id' => $ship_connected['id']], 'LIMIT 1');
+    $user->setShipValue($ship_connected['id'], 'crew', $ship_connected_set['crew']);
+    $db->update('ships', $ship_set, ['id' => $ship['id']], 'LIMIT 1');
+    $user->setShipValue($ship['id'], 'crew', $ship_set['crew']);
 }

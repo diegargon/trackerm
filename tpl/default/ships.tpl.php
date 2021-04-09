@@ -64,6 +64,7 @@
                         <input type="hidden" name="ship_id" value="<?= $tdata['id'] ?>" />
                         <input type="hidden" name="alien_planet_id" value="<?= $tdata['alien_planet_sector'] ?>" />
                         <input type="submit" name="scan_planet" value="<?= $L['L_SCAN_PLANET'] ?>" />
+                        <input type="submit" name="build_port" value="<?= $L['L_BUILD_PORT'] ?>" />
                     </form>
                     <?= !empty($tdata['scan_planet_report']) ? '<span>' . $tdata['scan_planet_report'] . '</span>' : null; ?>
                 </div>
@@ -73,11 +74,26 @@
                 <form id="cargo_form" method="post">
                     <?= $tdata['cargo_sel'] ?>
                     <input type="text" name="cargo_units" size="5" value="<?= $tdata['cargo_units'] ?>" />
-                    <input type="hidden" name="planet_id" value="<?= $tdata['planet_id'] ?>" />
+                    <?php if (!empty($tdata['planet_id'])) { ?>
+                        <input type="hidden" name="planet_id" value="<?= $tdata['planet_id'] ?>" />
+                    <?php } ?>
                     <input type="hidden" name="ship_id" value="<?= $tdata['id'] ?>" />
                     <input type="hidden" name="cargo_link" value="<?= $tdata['cargo_link'] ?>" />
                     <input type="submit" name="load_units" value="<?= $L['L_CARGO_LOAD'] ?>" />
                     <input type="submit" name="unload_units" value="<?= $L['L_CARGO_UNLOAD'] ?>" />
+                </form>
+            <?php } ?>
+            <?php if ($tdata['can_crew_cargo']) { ?>
+                <p><?= $L['L_CREW_CARGO_LOAD'] . ':' . $tdata['crew'] ?></p>
+                <form id="crew_cargo_form" method="post">
+                    <input type="text" name="crew_cargo_units" size="5" value="<?= $tdata['crew_cargo_units'] ?>" />
+                    <?php if (!empty($tdata['planet_id'])) { ?>
+                        <input type="hidden" name="planet_id" value="<?= $tdata['planet_id'] ?>" />
+                    <?php } ?>
+                    <input type="hidden" name="ship_id" value="<?= $tdata['id'] ?>" />
+                    <input type="hidden" name="crew_cargo_link" value="<?= $tdata['crew_cargo_link'] ?>" />
+                    <input type="submit" name="load_crew_units" value="<?= $L['L_CREW_CARGO_LOAD'] ?>" />
+                    <input type="submit" name="unload_crew_units" value="<?= $L['L_CREW_CARGO_UNLOAD'] ?>" />
                 </form>
             <?php } ?>
         </div>
