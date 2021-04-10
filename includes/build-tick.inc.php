@@ -14,18 +14,21 @@ function build_tick() {
 
     $result = $db->select('build', '*', ['ticks' => ['value' => 0]]);
     $builds = $db->fetchAll($result);
-
     $delete_ids = '';
+
     if (valid_array($builds)) {
         $ports_creation = '';
+
         foreach ($builds as $build) {
+
             if ($build['type'] == 'port') {
                 empty($ports_creation) ? $ports_creation .= $build['id_dest'] : $ports_creation .= ',' . $build['id_dest'];
                 empty($delete_ids) ? $delete_ids .= $build['id'] : $delete_ids .= ',' . $build['id'];
             }
         }
+
         if (!empty($ports_creation)) {
-            $db->query("UPDATE planets SET port_built = 0, have_port = 1 WHERE id IN ($ports_creation)");
+            $db->query("UPDATE planets SET port_built = 0, have_port = 1, port_slots = 1, develop_level = develop_level + 1 WHERE id IN ($ports_creation)");
         }
     }
 

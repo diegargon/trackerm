@@ -163,6 +163,10 @@ function planet_brief(array $planet) {
 
     $info = $L['L_LOCATION'] . ": {$planet['x']}:{$planet['y']}:{$planet['z']}";
     $info .= html::br([]) . $L['L_WORKERS'] . ': ' . $planet['workers'];
+    $info .= html::br([]) . $L['L_DEVELOP_LEVEL'] . ' ' . $planet['develop_level'];
+    $slots = $L['L_PORT_SLOTS'] . ' ' . $planet['port_slots'];
+    $slots .= ' ' . $L['L_SHIPYARD_SLOTS'] . ' ' . $planet['shipyard_slots'];
+    $info .= html::br([]) . $slots;
     $info .= html::br([]);
     if (!empty($planet['titanium'])) {
         $info .= $L['L_TITANIUM'] . ': ' . $planet['titanium'] . ' / ' . $L['L_TITANIUM_STORED'] . ': ' . $planet['titanium_stored'] . ' / ' . $L['L_TITANIUM_WORKERS'] . ': ' . $planet['titanium_workers'];
@@ -181,6 +185,7 @@ function planet_brief(array $planet) {
             $info .= '<br/>' . $L['L_PORT_BUILT'] . ' ' . $L['L_ETA'] . ' ' . $build_res['ticks'] . ' ' . $L['L_TICKS'];
         }
     }
+
     $tpl_data .= html::p([], $info);
 
     return $tpl_data;

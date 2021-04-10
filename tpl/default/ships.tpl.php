@@ -37,10 +37,15 @@
                 <br/>
                 <?php if ($tdata['in_shipyard']) { ?>
                     <input type="submit" name="ship_shipyard_disconnect" value="<?= $L['L_SHIPYARD_DISCONNECT'] ?>" />
-                <?php } else if (!empty($tdata['have_shipyard']) && !empty($tdata['can_connect'])) { ?>
+                <?php } else if (!empty($tdata['can_conn_shipyard'])) { ?>
                     <input type="submit" name="ship_shipyard_connect" value="<?= $L['L_SHIPYARD_CONNECT'] ?>" />
                 <?php } ?>
+                <?php if ($tdata['in_port']) { ?>
+                    <input type="submit" name="ship_port_disconnect" value="<?= $L['L_PORT_DISCONNECT'] ?>" />
+                <?php } else if (!empty($tdata['can_conn_port'])) { ?>
 
+                    <input type="submit" name="ship_port_connect" value="<?= $L['L_PORT_CONNECT'] ?>" />
+                <?php } ?>
             </form>
 
             <?php if (!empty($tdata['ship_conn_sel'])) { ?>

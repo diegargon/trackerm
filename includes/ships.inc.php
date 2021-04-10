@@ -31,7 +31,7 @@ function show_control_ships(array $ship, array $post_data) {
             $ship['alien_planet_sector'] = $alien_planet['id'];
         }
     }
-    if ($ship['in_ship_cargo'] || $ship['ship_connection'] || $ship['in_shipyard']) {
+    if ($ship['in_port'] || $ship['ship_connection'] || $ship['in_shipyard']) {
         $ship['can_connect'] = 0;
     } else {
         $ship['can_connect'] = 1;
@@ -42,13 +42,24 @@ function show_control_ships(array $ship, array $post_data) {
         if (valid_array($own_ships_in_range)) {
             $ir_values = [];
             foreach ($own_ships_in_range as $ship_ir) {
-                if (!$ship_ir['in_shipyard'] && !$ship_ir['in_ship_cargo'] && !$ship_ir['ship_connection']) {
+                if (!$ship_ir['in_shipyard'] && !$ship_ir['in_port'] && !$ship_ir['ship_connection']) {
                     $ir_values[] = ['name' => $ship_ir['name'], 'value' => $ship_ir['id']];
                 }
             }
             if (valid_array($ir_values)) {
                 $tdata['ship_conn_sel'] = html::input(['name' => 'ship_conn_submit', 'value' => $L['L_SHIP_CONNECT']]);
                 $tdata['ship_conn_sel'] .= html::select(['name' => 'ship_conn'], $ir_values);
+            }
+        }
+
+        if (valid_array($planet)) {
+            if ($planet['have_port']) {
+                //TODO check free slots
+                $tdata['can_conn_port'] = 1;
+            }
+            if ($planet['have_shipyard']) {
+                //TODO check free slots
+                $tdata['can_conn_shipyard'] = 1;
             }
         }
     }
@@ -193,7 +204,7 @@ function show_control_ships(array $ship, array $post_data) {
     //END_CREW_CARGO
 
     $ship_status = '';
-    if ($ship['in_ship_cargo']) {
+    if ($ship['in_port']) {
         $ship_status = $L['L_SHIPSTATUS_SHIP_CARGO'];
     } else if ($ship['ship_connection']) {
         $conn_ship = $user->getShipById($ship['ship_connection']);
@@ -298,6 +309,34 @@ function ship_control_exec() {
         if ($have_pilot) {
             $db->update('ships', ['in_shipyard' => 0, 'speed' => 0.1], ['id' => $ship_id]);
             $user->setShipValue($ship_id, 'in_shipyard', 0);
+            $user->setShipValue($ship_id, 'speed', 0.1);
+        } else {
+            return $L['L_ERR_NEED_PILOT'];
+        }
+    }
+
+    // PORT CONNECT
+    if (!empty($_POST['ship_port_connect'])) {
+        //TODO ENERGY -
+        $db->update('ships', ['in_port' => 1, 'speed' => 0], ['id' => $ship_id]);
+        $user->setShipValue($ship_id, 'in_port', 1);
+        $user->setShipValue($ship_id, 'speed', 0);
+    }
+
+    // PORT DISCONNECT
+    if (!empty($_POST['ship_port_disconnect'])) {
+        //TODO ENERGY -
+        $ship_chars = $user->getShipCharacters($ship_id);
+        $have_pilot = 0;
+        foreach ($ship_chars as $ship_char) {
+            if ($ship_char['perk'] == 1 || $ship_char['perk'] == 2) {
+                $have_pilot = 1;
+                break;
+            }
+        }
+        if ($have_pilot) {
+            $db->update('ships', ['in_port' => 0, 'speed' => 0.1], ['id' => $ship_id]);
+            $user->setShipValue($ship_id, 'in_port', 0);
             $user->setShipValue($ship_id, 'speed', 0.1);
         } else {
             return $L['L_ERR_NEED_PILOT'];
