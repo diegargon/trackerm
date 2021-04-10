@@ -12,13 +12,12 @@ function show_user_planets() {
 
     $values = [];
     $conf = [];
-    if (!empty(Filter::postInt('planet'))) {
-        $planet_sel = Filter::postInt('planet');
-    }
+
+    $planet_sel = Filter::postInt('planet_id');
     $planets = $user->getPlanets();
     $html = '';
 
-    $conf['name'] = 'planet';
+    $conf['name'] = 'planet_id';
     $conf['onChange'] = 1;
 
     !empty($planet_sel) ? $conf['selected'] = $planet_sel : null;
@@ -32,10 +31,9 @@ function show_user_planets() {
 
     $tpl_data = html::select($conf, $values);
 
-    if (!empty(Filter::postInt('planet'))) {
-        $planet_id = Filter::postInt('planet');
+    if (!empty($planet_sel)) {
         foreach ($planets as $_planet) {
-            if ($_planet['id'] == $planet_id) {
+            if ($_planet['id'] == $planet_sel) {
                 $planet = $_planet;
                 break;
             }
@@ -108,28 +106,9 @@ function planet_show_characters($planet) {
 }
 
 function planet_show_mining($planet) {
-    global $L;
+    global $frontend;
 
-    $tpl_data = html::head(['h' => 3], $L['L_MINING']);
-
-    $form_wrap = html::input(['type' => 'hidden', 'name' => 'planet_id', 'value' => $planet['id']]);
-    if (!empty($planet['titanium'])) {
-        $form_wrap .= html::p([], $L['L_TITANIUM']);
-        $form_wrap .= html::input(['type' => 'text', 'name' => 'titanium_assign', 'value' => $planet['titanium_workers'], 'size' => 4]);
-    }
-    if (!empty($planet['lithium'])) {
-        $form_wrap .= html::p([], $L['L_LITHIUM']);
-        $form_wrap .= html::input(['type' => 'text', 'name' => 'lithium_assign', 'value' => $planet['lithium_workers'], 'size' => 4]);
-    }
-    if (!empty($planet['armatita'])) {
-        $form_wrap .= html::p([], $L['L_ARMATITA']);
-        $form_wrap .= html::input(['type' => 'text', 'name' => 'armatita_assign', 'value' => $planet['armatita_workers'], 'size' => 4]);
-    }
-
-    $form_wrap .= html::input(['type' => 'submit', 'name' => 'mining_submit', 'value' => $L['L_ASSIGN']]);
-    $tpl_data .= html::form(['id' => 'mining_form', 'method' => 'post'], $form_wrap);
-
-    return $tpl_data;
+    return $frontend->getTpl('planet-mining', $planet);
 }
 
 function planet_post_mining($planet) {
@@ -139,7 +118,7 @@ function planet_post_mining($planet) {
     $lithium_assign = Filter::postInt('lithium_assign');
     $armatita_assign = Filter::postInt('armatita_assign');
 
-    if (!empty($titanium_assign) && $titanium_assign != $planet['titanium_workers']) {
+    if (isset($titanium_assign) && $titanium_assign != $planet['titanium_workers']) {
         $free_workers = $planet['workers'] + $planet['titanium_workers'];
         if ($titanium_assign <= $free_workers) {
             $planet_set['titanium_workers'] = $titanium_assign;
@@ -148,7 +127,7 @@ function planet_post_mining($planet) {
             $planet['workers'] = $planet_set['workers'];
         }
     }
-    if (!empty($lithium_assign) && $lithium_assign != $planet['lithium_workers']) {
+    if (isset($lithium_assign) && $lithium_assign != $planet['lithium_workers']) {
         $free_workers = $planet['workers'] + $planet['lithium_workers'];
         if ($lithium_assign <= $free_workers) {
             $planet_set['lithium_workers'] = $lithium_assign;
@@ -158,7 +137,7 @@ function planet_post_mining($planet) {
         }
     }
 
-    if (!empty($armatita_assign) && $armatita_assign != $planet['armatita_workers']) {
+    if (isset($armatita_assign) && $armatita_assign != $planet['armatita_workers']) {
         $free_workers = $planet['workers'] + $planet['armatita_workers'];
         if ($armatita_assign <= $free_workers) {
             $planet_set['armatita_workers'] = $armatita_assign;
@@ -177,7 +156,7 @@ function planet_post_mining($planet) {
 }
 
 function planet_brief(array $planet) {
-    global $L;
+    global $L, $db;
 
     $tpl_data = html::head(['h' => 2], $L['L_SUMMARY']);
     $tpl_data .= html::p([], $L['L_PLANET']);
@@ -195,6 +174,13 @@ function planet_brief(array $planet) {
         $info .= '<br/>' . $L['L_ARMATITA'] . ': ' . $planet['armatita'] . ' (' . $planet['armatita_purity'] . '%) / ' . $L['L_ARMATITA_STORED'] . ': ' . $planet['armatita_stored'] . ' (' . $planet['armatita_stored_purity'] . '%) / ' . $L['L_ARMATITA_WORKERS'] . ': ' . $planet['armatita_workers'];
     }
 
+    if (!empty($planet['port_built'])) {
+        $result = $db->select('build', 'ticks', ['id_dest' => ['value' => $planet['id']]], 'LIMIT 1');
+        $build_res = $db->fetch($result);
+        if (valid_array($build_res)) {
+            $info .= '<br/>' . $L['L_PORT_BUILT'] . ' ' . $L['L_ETA'] . ' ' . $build_res['ticks'] . ' ' . $L['L_TICKS'];
+        }
+    }
     $tpl_data .= html::p([], $info);
 
     return $tpl_data;

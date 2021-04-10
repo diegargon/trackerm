@@ -514,7 +514,7 @@ function ship_control_exec() {
             $ship_set['cargo_load_type'] = 0;
         }
         $db->update('ships', $ship_set, ['id' => $ship['id']], 'LIMIT 1');
-        $db->update('planets', ['uid' => $user->id(), 'port_workers' => $cfg['build_port_workers']], ['id' => $alien_planet['id']], 'LIMIT 1');
+        $db->update('planets', ['uid' => $user->id(), 'port_workers' => $cfg['build_port_workers'], 'port_build' => 1], ['id' => $alien_planet['id']], 'LIMIT 1');
         $db->insert('build', ['id_dest' => $alien_planet['id'], 'type' => 'port', 'ticks' => $cfg['build_port_ticks']]);
     }
     return $post_data;

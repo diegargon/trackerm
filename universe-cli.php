@@ -25,7 +25,7 @@ if ($tick >= $universe['workers_tick']) {
     workers_tick();
 }
 
+build_tick();
+
 $universe_set['tick'] = $tick;
 $db->update('universe', $universe_set, ['universe' => 1]);
-
-
