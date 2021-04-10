@@ -513,8 +513,19 @@ function ship_control_exec() {
         if ($ship_set['cargo'] == 0) {
             $ship_set['cargo_load_type'] = 0;
         }
+        //Engineer move to planet
+        $char_set['ship_assigned'] = 0;
+        $char_set['planet_assigned'] = $alien_planet['id'];
+        $char_set['job'] = 1;
+        $alien_planet_set['port_engineer'] = $have_engineer;
+        //Planet set
+        $alien_planet_set['uid'] = $user->id();
+        $alien_planet_set['port_workers'] = $cfg['build_port_workers'];
+        $alien_planet_set['port_built'] = 1;
+
+        $db->update('characters', $char_set, ['id' => $have_engineer], 'LIMIT 1');
         $db->update('ships', $ship_set, ['id' => $ship['id']], 'LIMIT 1');
-        $db->update('planets', ['uid' => $user->id(), 'port_workers' => $cfg['build_port_workers'], 'port_build' => 1], ['id' => $alien_planet['id']], 'LIMIT 1');
+        $db->update('planets', $alien_planet_set, ['id' => $alien_planet['id']], 'LIMIT 1');
         $db->insert('build', ['id_dest' => $alien_planet['id'], 'type' => 'port', 'ticks' => $cfg['build_port_ticks']]);
     }
     return $post_data;
