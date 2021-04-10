@@ -25,7 +25,6 @@ function show_control_ships(array $ship, array $post_data) {
     if (valid_array($planet)) {
         $tdata['planet_id'] = $planet['id'];
         $ship['own_planet_sector'] = 1;
-        $tdata['have_shipyard'] = 1;
     } else {
         $alien_planet = Planets::checkIfPlanet($ship['x'], $ship['y'], $ship['z']);
         if (valid_array($alien_planet)) {
@@ -509,6 +508,8 @@ function ship_control_exec() {
         }
         $ship_set['cargo'] = $ship['cargo'] - $cfg['build_port_cost'];
         $ship_set['crew'] = $ship['crew'] - $cfg['build_port_workers'];
+        $ship_set['speed'] = 0;
+        //TODO ENERGY IF NOT STOPPED
         if ($ship_set['cargo'] == 0) {
             $ship_set['cargo_load_type'] = 0;
         }

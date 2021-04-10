@@ -50,7 +50,7 @@ function show_user_planets() {
 }
 
 function showPlanetOpt(array $planet) {
-    global $L, $user, $perks, $frontend;
+    global $L, $frontend;
 
     $tdata = [];
 
@@ -63,8 +63,54 @@ function showPlanetOpt(array $planet) {
     $tpl_data = html::head(['h' => 1], $L['L_PLANETS']);
     $tpl_data .= planet_brief($planet);
 
-    //MINING
-    $tpl_data .= html::head(['h' => 3], $L['L_MINING']);
+    if ($planet['have_port']) {
+        //MINING
+        $tpl_data .= planet_show_mining($planet);
+        //CHARACTERS
+        $tdata['vips_data'] = planet_show_characters($planet);
+        //SHIPS
+        $tdata['ships_data'] = planet_show_ships($planet);
+    }
+
+    $tpl_data .= $frontend->getTpl('planets', $tdata);
+
+    return $tpl_data;
+}
+
+function planet_show_ships($planet) {
+    global $user;
+
+    $in_planet_ships = $user->getPlanetShips($planet['id']);
+
+    $ships_select = [];
+    foreach ($in_planet_ships as $in_planet_ship) {
+        $ships_select[] = ['name' => $in_planet_ship['name'], 'value' => $in_planet_ship['id']];
+    }
+    $ships_data = html::select(['name' => 'ships_select', 'size' => 10], $ships_select);
+
+    return $ships_data;
+}
+
+function planet_show_characters($planet) {
+    global $user, $perks, $L;
+
+    $vips = $user->getPlanetCharacters($planet['id']);
+
+    $vips_select = [];
+    foreach ($vips as $vip) {
+        $vips_data = $vip['name'];
+        $vips_data .= ' ' . $L[$perks[$vip['perk']]];
+        $vips_data .= '(' . $vip['perk_value'] . ')';
+        $vips_select[] = ['name' => $vips_data, 'value' => $vip['id']];
+    }
+
+    return html::select(['name' => 'vip_select', 'size' => 10], $vips_select);
+}
+
+function planet_show_mining($planet) {
+    global $L;
+
+    $tpl_data = html::head(['h' => 3], $L['L_MINING']);
 
     $form_wrap = html::input(['type' => 'hidden', 'name' => 'planet_id', 'value' => $planet['id']]);
     if (!empty($planet['titanium'])) {
@@ -82,30 +128,6 @@ function showPlanetOpt(array $planet) {
 
     $form_wrap .= html::input(['type' => 'submit', 'name' => 'mining_submit', 'value' => $L['L_ASSIGN']]);
     $tpl_data .= html::form(['id' => 'mining_form', 'method' => 'post'], $form_wrap);
-
-
-    //CHARACTERS
-    $vips = $user->getPlanetCharacters($planet['id']);
-
-    $vips_select = [];
-    foreach ($vips as $vip) {
-        $vips_data = $vip['name'];
-        $vips_data .= ' ' . $L[$perks[$vip['perk']]];
-        $vips_data .= '(' . $vip['perk_value'] . ')';
-        $vips_select[] = ['name' => $vips_data, 'value' => $vip['id']];
-    }
-    $tdata['vip_data'] = html::select(['name' => 'vip_select', 'size' => 10], $vips_select);
-
-    //SHIPS
-    $in_planet_ships = $user->getPlanetShips($planet['id']);
-
-    $ships_select = [];
-    foreach ($in_planet_ships as $in_planet_ship) {
-        $ships_select[] = ['name' => $in_planet_ship['name'], 'value' => $in_planet_ship['id']];
-    }
-    $tdata['ships_data'] = html::select(['name' => 'ships_select', 'size' => 10], $ships_select);
-
-    $tpl_data .= $frontend->getTpl('planets', $tdata);
 
     return $tpl_data;
 }

@@ -67,6 +67,6 @@ function cal_new_ship_pos($ship) {
     if ($z !== $dz) {
         $dir_z < 0 ? $z-- : $z++;
     }
-    echo $ship['id'] . ": $x:$y:$z ($dir_x:$dir_y:$dir_z) ($dx:$dy:$dz)\n";
+    //echo $ship['id'] . ": $x:$y:$z ($dir_x:$dir_y:$dir_z) ($dx:$dy:$dz)\n";
     return ['x' => $x, 'y' => $y, 'z' => $z];
 }

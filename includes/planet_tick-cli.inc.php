@@ -12,7 +12,9 @@ function mining_tick() {
 
     $result = $db->select('planets', '*', ['uid' > ['value' => 0, 'op' => '>']]);
     $planets = $db->fetchAll($result);
+
     foreach ($planets as $planet) {
+        $planet_set = [];
         //Titanium
         if ($planet['titanium'] > 0 && $planet['titanium_workers'] > 0) {
             $mining = $planet['titanium_workers'] * $cfg['mining_production'];
@@ -59,13 +61,14 @@ function workers_tick() {
     global $db, $cfg;
 
     $workers_production = $cfg['workers_production'];
-    $db->query("UPDATE planets SET workers = workers + round(workers * $workers_production)  WHERE uid > 0");
+    $db->query("UPDATE planets SET workers = workers + round(workers * $workers_production)  WHERE uid > 0 AND workers > 1");
 
     //Random/Probabilist create characters
-    $result = $db->select('planets', 'id,uid');
+    $result = $db->select('planets', 'id,uid', ['uid' => ['value' => 1, 'op' => '>']]);
     $planets = $db->fetchAll($result);
     foreach ($planets as $planet) {
         ///if (chance(100)) {
+        $char = [];
         if (chance($cfg['character_creation_chance'])) {
             $char = character_creation();
             $char['uid'] = $planet['uid'];

@@ -195,10 +195,7 @@ button {
 #planet_ships_form select {
     width: 99%;
 }
-.vips_ships {
-    display:inline-block;
-    width: 100%;
-}
+
 .ships_cont {
     float:left;
     width:49%;
