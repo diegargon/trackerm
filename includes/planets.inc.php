@@ -48,7 +48,7 @@ function show_user_planets() {
 }
 
 function showPlanetOpt(array $planet) {
-    global $L, $frontend;
+    global $L, $frontend, $user;
 
     $tdata = [];
 
@@ -62,6 +62,25 @@ function showPlanetOpt(array $planet) {
     $tpl_data .= planet_brief($planet);
 
     if ($planet['have_port']) {
+        $port_engineer = html::div([], $L['L_ENGINEER']);
+        $perk_chars = $user->getCharactersByPerk(7);
+
+        $values = [];
+        foreach ($perk_chars as $perk_char) {
+            if ($perk_char['planet_assigned'] == $planet['id']) {
+                if ($perk_char['job'] == 0 || ($perk_char['job'] == 1 && $perk_char['id'] == $planet['port_engineer'])) {
+                    $values[] = [
+                        'name' => $perk_char['name'] . ' ( ' . $perk_char['perk_value'] . ' )',
+                        'value' => $perk_char['id'],
+                    ];
+                }
+            }
+        }
+
+        $port_engineer .= html::select(['name' => 'char_perk_sel', 'selected' => $planet['port_engineer'], 'onChange' => 1], $values);
+
+        $tpl_data .= html::form(['name' => 'port_char_sel', 'method' => 'post'], $port_engineer);
+
         //MINING
         $tpl_data .= planet_show_mining($planet);
         //CHARACTERS

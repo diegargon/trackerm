@@ -141,6 +141,30 @@ class User {
         return $this->characters;
     }
 
+    function getCharacterById(int $id) {
+        $chars = $this->getCharacters();
+
+        foreach ($chars as $char) {
+            if ($char['id'] == $id) {
+                return $char;
+            }
+        }
+
+        return false;
+    }
+
+    function getCharactersByPerk(int $perk) {
+        $chars = $this->getCharacters();
+        $perk_chars = [];
+        foreach ($chars as $char) {
+            if ($char['perk'] == $perk) {
+                $perk_chars[] = $char;
+            }
+        }
+
+        return valid_array($perk_chars) ? $perk_chars : false;
+    }
+
     function setCharacterValue(int $char_id, $ckey, $cvalue) {
         foreach ($this->characters as $key => $char) {
             if ($char['id'] == $char_id) {

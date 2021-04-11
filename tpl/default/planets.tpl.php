@@ -9,6 +9,7 @@
 ?>
 
 <!-- <div class="vips_ships"> -->
+
 <?php if (!empty($tdata['vips_data'])) { ?>
     <div class="vips_cont">
         <h3><?= $L['L_VIPS'] ?></h3>

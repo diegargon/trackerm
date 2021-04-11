@@ -64,7 +64,7 @@ $perks = [
     5 => 'L_EXPLORER', //Explorador mejora radar? para ello el radar no puede tener 100% efectividad ¿distancia?
     // lo ideal que la efectividad del radar dependiera de la distancia
     6 => 'L_SCIENTIFIC', //Mejora Investigacion
-    7 => 'L_ENGINIEER', //Extructuras/Shipyard
+    7 => 'L_ENGINEER', //Extructuras/Shipyard
 ];
 
 

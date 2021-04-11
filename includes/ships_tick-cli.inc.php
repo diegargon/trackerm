@@ -19,7 +19,7 @@ function move_ships() {
 
     if (valid_array($ships)) {
         foreach ($ships as $ship) {
-            //speed must be 0 if is connected but be check again here
+            //speed must be 0 if is connected but be check again here if is connected
             if ($ship['in_shipyard'] || $ship['in_port'] || $ship['ship_connection']) {
                 continue;
             }

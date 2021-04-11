@@ -67,14 +67,16 @@ function show_control_ships(array $ship, array $post_data) {
         $tdata['ship_conn_sel'] = html::input(['name' => 'ship_disconn_submit', 'value' => $L['L_SHIP_DISCONNECT']]);
     }
 
-    if ($ship['in_shipyard']) {
+    if ($ship['in_shipyard'] || $ship['in_port']) {
         $char_sel_values = [];
         foreach ($user->getPlanetCharacters($planet['id']) as $planet_character) {
-            $char_name = $planet_character['name'];
-            $char_name .= ' ' . $L[$perks[$planet_character['perk']]];
-            $char_name .= '(' . $planet_character['perk_value'] . ')';
-            $char_sel_values[] = ['name' => $char_name, 'value' => $planet_character['id']];
-            $tdata['add_vips_sel'] = html::select(['name' => 'char_add'], $char_sel_values);
+            if (empty($planet_character['job'])) {
+                $char_name = $planet_character['name'];
+                $char_name .= ' ' . $L[$perks[$planet_character['perk']]];
+                $char_name .= '(' . $planet_character['perk_value'] . ')';
+                $char_sel_values[] = ['name' => $char_name, 'value' => $planet_character['id']];
+                $tdata['add_vips_sel'] = html::select(['name' => 'char_add'], $char_sel_values);
+            }
         }
     }
 
@@ -311,7 +313,8 @@ function ship_control_exec() {
             $user->setShipValue($ship_id, 'in_shipyard', 0);
             $user->setShipValue($ship_id, 'speed', 0.1);
         } else {
-            return $L['L_ERR_NEED_PILOT'];
+            $post_data['status_msg'] = $L['L_ERR_NEED_PILOT'];
+            return $post_data;
         }
     }
 
@@ -339,7 +342,8 @@ function ship_control_exec() {
             $user->setShipValue($ship_id, 'in_port', 0);
             $user->setShipValue($ship_id, 'speed', 0.1);
         } else {
-            return $L['L_ERR_NEED_PILOT'];
+            $post_data['status_msg'] = $L['L_ERR_NEED_PILOT'];
+            return $post_data;
         }
     }
     //SHIP CONNECT

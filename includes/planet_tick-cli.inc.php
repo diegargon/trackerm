@@ -18,6 +18,7 @@ function mining_tick() {
         //Titanium
         if ($planet['titanium'] > 0 && $planet['titanium_workers'] > 0) {
             $mining = $planet['titanium_workers'] * $cfg['mining_production'];
+            $mining > $planet['titanium'] ? $mining = $planet['titanium'] : null;
             $new_titanium = $planet['titanium'] - $mining;
             $titanium_stored = $planet['titanium_stored'] + $mining;
             $planet_set['titanium'] = $new_titanium;
@@ -26,6 +27,7 @@ function mining_tick() {
         //Lithium
         if ($planet['lithium'] > 0 && $planet['lithium_workers'] > 0) {
             $mining = round(($planet['lithium_workers'] * $cfg['mining_production']) / 2);
+            $mining > $planet['lithium'] ? $mining = $planet['lithium'] : null;
             $new_lithium = $planet['lithium'] - $mining;
             $lithium_stored = $planet['lithium_stored'] + $mining;
             $planet_set['lithium'] = $new_lithium;
@@ -34,6 +36,7 @@ function mining_tick() {
         //Armatita
         if ($planet['armatita'] > 0 && $planet['armatita_workers'] > 0) {
             $mining = round(($planet['armatita_workers'] * $cfg['mining_production']) / 4);
+            $mining > $planet['armatita'] ? $mining = $planet['armatita'] : null;
             $new_armatita = $planet['armatita'] - $mining;
             $armatita_stored = $planet['armatita_stored'] + $mining;
             $planet_set['armatita'] = $new_armatita;
