@@ -41,7 +41,7 @@ class Web {
                 exit();
             }
         }
-        $valid_pages = ['index', 'ports', 'ships', 'planets', 'research', 'production', 'config', 'login', 'logout'];
+        $valid_pages = ['index', 'ships', 'planets', 'research', 'production', 'config', 'login', 'logout'];
 
         (!isset($req_page) || $req_page == '') ? $req_page = 'index' : null;
         ($req_page == 'config' && $user->isAdmin() != 1) ? $req_page = 'index' : null;

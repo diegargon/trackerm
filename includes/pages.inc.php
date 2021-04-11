@@ -133,12 +133,6 @@ function page_login() {
     return $page;
 }
 
-function page_ports() {
-    require('includes/ports.inc.php');
-
-    return show_port();
-}
-
 function page_ships() {
     global $user;
 
@@ -169,6 +163,7 @@ function page_ships() {
 
 function page_planets() {
     require('includes/planets.inc.php');
+    require('includes/ports.inc.php');
 
     return show_user_planets();
 }

@@ -36,6 +36,7 @@ select {
 }
 fieldset {
     border: 2px solid red;
+    margin-bottom: 3px;
 }
 footer {
     clear:both;
@@ -107,7 +108,7 @@ button {
 /* SHIPYARD */
 
 .shipyard_container {
-    width:50%;
+
 }
 .field_column {
     float:left;
@@ -193,6 +194,20 @@ button {
     
 }
 /* PLANET */
+.planet_page {
+    display: block;
+    border: 0px solid blue;
+}
+.planet_col1, .planet_col2 {
+    display: block;
+    float:left;
+    border: 0px solid yellow;
+    width: 49.5%;
+}
+.planet_list_container {
+    overflow:auto;
+    width:100%;
+}
 #planet_characters_form select{
     width: 99%;
 }
@@ -202,16 +217,18 @@ button {
 }
 
 .ships_cont {
+    position:relative;
     float:left;
-    width:49%;
+    width:49.5%;
 }
 .vips_cont  {
+    position:relative;
     float:left;
-    width:49%;
+    width:49.5%;
 }
 
 #shipyard_char_sel, #port_char_sel {
-    display:inline-block;
+    display:inline-block;    
 }
 
 #shipyard_char_sel div, #port_char_sel div {

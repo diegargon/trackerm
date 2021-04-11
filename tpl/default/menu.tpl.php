@@ -13,7 +13,6 @@
     <a onClick="show_loading()" href="<?= '?page=index' ?>"><div class="menu_element"><?= strtoupper($user->username()) ?></div></a>
     <a onClick="show_loading()" href="?page=ships"><div class="menu_element"><?= $L['L_SHIPS'] ?></div></a>
     <a onClick="show_loading()" href="?page=planets"><div class="menu_element"><?= $L['L_PLANETS'] ?></div></a>
-    <a onClick="show_loading()" href="?page=ports"><div class="menu_element"><?= $L['L_PORTS'] ?></div></a>
     <a onClick="show_loading()" href="?page=production"><div class="menu_element"><?= $L['L_PRODUCTION'] ?></div></a>
     <a onClick="show_loading()" href="?page=research"><div class="menu_element"><?= $L['L_RESEARCH'] ?></div></a>
 </div>

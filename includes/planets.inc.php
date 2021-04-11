@@ -11,7 +11,6 @@ function show_user_planets() {
     global $user, $html;
 
     $values = [];
-    $conf = [];
 
     $planet_sel = Filter::postInt('planet_id');
     $planets = $user->getPlanets();
@@ -47,6 +46,8 @@ function showPlanetOpt(array $planet) {
 
     $tdata = [];
 
+    $tdata['planet_head_data'] = html::head(['h' => 1], $L['L_PLANETS']);
+
     if (!empty($_POST)) {
         if (isset($_POST['mining_submit'])) {
             $planet = planet_post_mining($planet);
@@ -55,8 +56,7 @@ function showPlanetOpt(array $planet) {
         }
     }
 
-    $tpl_data = html::head(['h' => 1], $L['L_PLANETS']);
-    $tpl_data .= planet_brief($planet);
+    $tdata['planet_brief_data'] = planet_brief($planet);
 
     if ($planet['have_port']) {
         $port_engineer = '';
@@ -100,18 +100,20 @@ function showPlanetOpt(array $planet) {
             $shipyard_engineer .= html::select(['name' => 'char_shipyard_sel', 'selected' => $planet['shipyard_engineer'], 'onChange' => 1], $values);
         }
 
-        $tpl_data .= html::form(['name' => 'engineer_char_sel', 'class' => 'inline_block', 'method' => 'post'], $port_engineer . $shipyard_engineer);
+        $tdata['planet_engineers_data'] = html::form(['name' => 'engineer_char_sel', 'class' => 'inline_block', 'method' => 'post'], $port_engineer . $shipyard_engineer);
         //MINING
-        $tpl_data .= planet_show_mining($planet);
+        $tdata['mining_data'] = planet_show_mining($planet);
         //CHARACTERS
         $tdata['vips_data'] = planet_show_characters($planet);
         //SHIPS
         $tdata['ships_data'] = planet_show_ships($planet);
     }
 
-    $tpl_data .= $frontend->getTpl('planets', $tdata);
+    if ($planet['have_shipyard'] && !$planet['shipyard_built']) {
+        $tdata['planet_shipyard_data'] = show_port();
+    }
 
-    return $tpl_data;
+    return $frontend->getTpl('planets', $tdata);
 }
 
 function planet_post_engineer($planet) {
