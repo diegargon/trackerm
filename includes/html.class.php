@@ -14,6 +14,7 @@ class Html {
 
     static function select(array $conf, array $values) {
         $opt = '';
+        $form_opt = '';
         if (empty($values) || !is_array($values) || !is_array($conf) || empty($conf['name'])) {
             return false;
         }
@@ -23,8 +24,10 @@ class Html {
         !empty($conf['size']) ? $opt .= 'size="' . $conf['size'] . '" ' : null;
         !empty($conf['disabled']) ? $opt .= 'disabled="disabled" ' : null;
         !empty($conf['readonly']) ? $opt .= 'readonly="readonly" ' : null;
+        !empty($conf['form_class']) ? $form_opt .= 'class="' . $conf['form_class'] . '" ' : null;
+        !empty($conf['form_id']) ? $form_opt .= 'id="' . $conf['form_id'] . '" ' : null;
         $select = '';
-        (!empty($conf['onChange']) || !empty($conf['form'])) ? $select .= '<form method="post">' : null;
+        (!empty($conf['form'])) ? $select .= '<form method="post" ' . $form_opt . '>' : null;
 
         $select .= '<select ' . $opt . ' name="' . $conf['name'] . '">';
         isset($conf['sel_none']) ? $select .= '<option value="0"></option>' : null;
@@ -33,7 +36,7 @@ class Html {
             $select .= '<option ' . $selected . ' value="' . $value['value'] . '">' . $value['name'] . '</option>';
         }
         $select .= '</select>';
-        (!empty($conf['onChange']) || !empty($conf['form'])) ? $select .= '</form>' : null;
+        (!empty($conf['form'])) ? $select .= '</form>' : null;
 
         return $select;
     }

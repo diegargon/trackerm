@@ -197,6 +197,20 @@ class User {
         return $ship_characters;
     }
 
+    function shipHavePilot($ship_id) {
+        $ship_chars = $this->getShipCharacters($ship_id);
+        if (!valid_array($ship_chars)) {
+            return false;
+        } else {
+            foreach ($ship_chars as $ship_char) {
+                if ($ship_char['perk'] == 1 || $ship_char['perk'] == 2) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     function getPlanetCharacters(int $planet_id, int $only_free = 0) {
         $planet_characters = [];
 

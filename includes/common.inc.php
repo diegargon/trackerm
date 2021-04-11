@@ -25,3 +25,4 @@ require('includes/utils.inc.php');
 require('includes/vars.inc.php');
 require('includes/func-common.inc.php');
 require('includes/planets.class.php');
+require('includes/ships.class.php');

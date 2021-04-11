@@ -37,6 +37,9 @@ function show_control_ships(array $ship, array $post_data) {
         $ship['can_connect'] = 1;
     }
 
+    if (!$user->shipHavePilot($ship['id'])) {
+        $ship['can_connect'] = 0;
+    }
     if ($ship['can_connect']) {
         $own_ships_in_range = $user->getInRangeUserShips($ship['id']);
         if (valid_array($own_ships_in_range)) {
@@ -67,9 +70,9 @@ function show_control_ships(array $ship, array $post_data) {
         $tdata['ship_conn_sel'] = html::input(['name' => 'ship_disconn_submit', 'value' => $L['L_SHIP_DISCONNECT']]);
     }
 
-    if ($ship['in_shipyard'] || $ship['in_port']) {
+    if (valid_array($planet) && ($ship['in_shipyard'] || $ship['in_port'])) {
         $char_sel_values = [];
-        foreach ($user->getPlanetCharacters($planet['id']) as $planet_character) {
+        foreach ($user->getPlanetCharacters($planet['id'], $free = 1) as $planet_character) {
             if (empty($planet_character['job'])) {
                 $char_name = $planet_character['name'];
                 $char_name .= ' ' . $L[$perks[$planet_character['perk']]];
@@ -271,7 +274,7 @@ function frmt_select_user_ships(array $ship) {
         ];
     }
 
-    return html::select(['name' => 'ship_id', 'onChange' => 1, 'selected' => $ship['id']], $values);
+    return html::select(['name' => 'ship_id', 'form' => 1, 'onChange' => 1, 'selected' => $ship['id']], $values);
 }
 
 function ship_control_exec() {
@@ -290,7 +293,7 @@ function ship_control_exec() {
     }
 
     // SHIPYARD CONNECT
-    if (!empty($_POST['ship_shipyard_connect'])) {
+    if (!empty($_POST['ship_shipyard_connect']) && $user->shipHavePilot($ship_id)) {
         //TODO ENERGY -
         $db->update('ships', ['in_shipyard' => 1, 'speed' => 0], ['id' => $ship_id]);
         $user->setShipValue($ship_id, 'in_shipyard', 1);
@@ -298,7 +301,7 @@ function ship_control_exec() {
     }
 
     // SHIPYARD DISCONNECT
-    if (!empty($_POST['ship_shipyard_disconnect'])) {
+    if (!empty($_POST['ship_shipyard_disconnect']) && $user->shipHavePilot($ship_id)) {
         //TODO ENERGY -
         $ship_chars = $user->getShipCharacters($ship_id);
         $have_pilot = 0;
@@ -319,7 +322,7 @@ function ship_control_exec() {
     }
 
     // PORT CONNECT
-    if (!empty($_POST['ship_port_connect'])) {
+    if (!empty($_POST['ship_port_connect']) && $user->shipHavePilot($ship_id)) {
         //TODO ENERGY -
         $db->update('ships', ['in_port' => 1, 'speed' => 0], ['id' => $ship_id]);
         $user->setShipValue($ship_id, 'in_port', 1);
@@ -327,7 +330,7 @@ function ship_control_exec() {
     }
 
     // PORT DISCONNECT
-    if (!empty($_POST['ship_port_disconnect'])) {
+    if (!empty($_POST['ship_port_disconnect']) && $user->shipHavePilot($ship_id)) {
         //TODO ENERGY -
         $ship_chars = $user->getShipCharacters($ship_id);
         $have_pilot = 0;
@@ -348,7 +351,7 @@ function ship_control_exec() {
     }
     //SHIP CONNECT
 
-    if (!empty($_POST['ship_conn_submit']) && !empty(Filter::postInt('ship_conn'))) {
+    if (!empty($_POST['ship_conn_submit']) && !empty(Filter::postInt('ship_conn')) && $user->shipHavePilot($ship_id)) {
         $connect_to_ship = Filter::postInt('ship_conn');
         //TODO ENERGY;
         $db->query("UPDATE ships SET ship_connection = $connect_to_ship, speed = 0 WHERE id = {$ship['id']} LIMIT 1");
@@ -360,7 +363,7 @@ function ship_control_exec() {
     }
 
     //SHIP DISCONNECT
-    if (!empty($_POST['ship_disconn_submit'])) {
+    if (!empty($_POST['ship_disconn_submit']) && $user->shipHavePilot($ship_id) && $user->shipHavePilot($ship_id)) {
         //TODO ENERGY
         $remote_ship_to_disconn = $ship['ship_connection'];
         $db->query("UPDATE ships SET ship_connection = 0, speed = 0.1 WHERE id = $remote_ship_to_disconn OR id = {$ship['id']} LIMIT 2");
@@ -370,7 +373,7 @@ function ship_control_exec() {
         $user->setShipValue($remote_ship_to_disconn, 'speed', 0.1);
     }
     // SET SPEED
-    if (!empty($_POST['ship_set_speed']) && null !== (Filter::postInt('setspeed'))) {
+    if (!empty($_POST['ship_set_speed']) && null !== (Filter::postInt('setspeed')) && $user->shipHavePilot($ship_id)) {
         if ($ship['in_shipyard'] || $ship['in_port'] || $ship['ship_connection']) {
             $post_data['status_msg'] = $L['L_DISCONNECT_FIRST'];
         } else {
@@ -383,7 +386,7 @@ function ship_control_exec() {
     }
 
     // SET DESTINATION
-    if (!empty($_POST['ship_set_destination'])) {
+    if (!empty($_POST['ship_set_destination']) && $user->shipHavePilot($ship_id)) {
         $set_dest['dx'] = Filter::postInt('dest_x');
         $set_dest['dy'] = Filter::postInt('dest_y');
         $set_dest['dz'] = Filter::postInt('dest_z');

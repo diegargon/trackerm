@@ -210,4 +210,10 @@ button {
     width:49%;
 }
 
+#shipyard_char_sel, #port_char_sel {
+    display:inline-block;
+}
 
+#shipyard_char_sel div, #port_char_sel div {
+    display:inline-block;
+}
