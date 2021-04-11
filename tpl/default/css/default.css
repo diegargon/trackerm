@@ -98,7 +98,12 @@ button {
     transform: translate(-50%, -50%);
 }
 
-
+.inline {
+    display: inline;
+}
+.inline_block {
+    display: inline-block;
+}
 /* SHIPYARD */
 
 .shipyard_container {

@@ -62,7 +62,9 @@ function showPlanetOpt(array $planet) {
     $tpl_data .= planet_brief($planet);
 
     if ($planet['have_port']) {
-        $port_engineer = html::div([], $L['L_ENGINEER']);
+
+        //PORT ENGINEER
+        $port_engineer = html::div([], $L['L_PORT_ENGINEER']);
         $perk_chars = $user->getCharactersByPerk(7);
 
         $values = [];
@@ -77,9 +79,30 @@ function showPlanetOpt(array $planet) {
             }
         }
 
-        $port_engineer .= html::select(['name' => 'char_perk_sel', 'selected' => $planet['port_engineer'], 'onChange' => 1], $values);
+        $port_engineer .= html::select(['name' => 'char_port_sel', 'selected' => $planet['port_engineer'], 'onChange' => 1], $values);
 
-        $tpl_data .= html::form(['name' => 'port_char_sel', 'method' => 'post'], $port_engineer);
+        $tpl_data .= html::form(['name' => 'port_char_sel', 'class' => 'inline_block', 'method' => 'post'], $port_engineer);
+
+        //SHIPYARD ENGINEER
+        if ($planet['have_shipyard']) {
+            $shipyard_engineer = html::div([], $L['L_SHIPYARD_ENGINEER']);
+            $perk_chars = $user->getCharactersByPerk(7);
+
+            $values = [];
+            foreach ($perk_chars as $perk_char) {
+                if ($perk_char['planet_assigned'] == $planet['id']) {
+                    if ($perk_char['job'] == 0 || ($perk_char['job'] == 1 && $perk_char['id'] == $planet['shipyard_engineer'])) {
+                        $values[] = [
+                            'name' => $perk_char['name'] . ' ( ' . $perk_char['perk_value'] . ' )',
+                            'value' => $perk_char['id'],
+                        ];
+                    }
+                }
+            }
+
+            $shipyard_engineer .= html::select(['name' => 'char_shipyard_sel', 'selected' => $planet['shipyard_engineer'], 'onChange' => 1], $values);
+            $tpl_data .= html::form(['name' => 'shipyard_char_sel', 'class' => 'inline_block', 'method' => 'post'], $shipyard_engineer);
+        }
 
         //MINING
         $tpl_data .= planet_show_mining($planet);
