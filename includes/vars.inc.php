@@ -16,6 +16,8 @@
  * 50: 1334
  * 15: 41000
  */
+!defined('IN_WEB') ? exit : true;
+
 $galaxy_tpl = [
     'galaxy_min_spacer' => 60 * 24 * 15,
     'galaxy_maxsize_from_sun' => 60 * 24 * 7,
