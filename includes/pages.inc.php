@@ -112,7 +112,7 @@ function page_index() {
     $tdata['title'] = $LNG['L_LOGS'];
     $clean_link = Html::input(['type' => 'submit', 'class' => 'submit_btn clear_btn', 'name' => 'clear_log', 'value' => $LNG['L_CLEAR']]);
     $tdata['content'] = Html::form(['method' => 'POST'], $clean_link);
-    $latest_ary = getfile_ary('cache/log/trackerm.log', 100000);
+    $latest_ary = getfile_log('cache/log/trackerm.log');
     if (!empty($latest_ary)) {
         foreach (array_reverse($latest_ary) as $latest) {
             if (!empty(trim($latest))) {

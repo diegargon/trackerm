@@ -151,18 +151,33 @@ function scandir_r($dir) {
     return isset($result) ? $result : false;
 }
 
-function getfile_ary($filename, $max = 1000000) {
-    $data = false;
+function getfile_ary($filename, $max = 100000) {
+    $data = '';
     if (file_exists($filename)) {
+        $fsize = filesize($filename);
+        $max > $fsize ? $max = $fsize : null;
         $data = file_get_contents($filename, false, null, 0, $max);
     }
     return !empty($data) ? explode("\n", $data) : false;
 }
 
-function getfile($filename, $max = 1000000) {
-    $data = false;
+function getfile_log($filename, $max = 100000) {
+    $data = '';
     if (file_exists($filename)) {
-        $data = file_get_contents($filename, $max);
+        $fsize = filesize($filename);
+        $max > $fsize ? $max = $fsize : null;
+        $data = file_get_contents($filename, false, null, -1 * $max);
+    }
+    return !empty($data) ? explode("\n", $data) : false;
+}
+
+function getfile($filename, $max = 100000) {
+    $data = '';
+
+    if (file_exists($filename)) {
+        $fsize = filesize($filename);
+        $max > $fsize ? $max = $fsize : null;
+        $data = file_get_contents($filename, false, null, 0, $max);
     }
     return !empty($data) ? $data : false;
 }
