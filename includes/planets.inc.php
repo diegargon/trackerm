@@ -45,15 +45,20 @@ function showPlanetOpt(array $planet) {
     global $L, $frontend, $user;
 
     $tdata = [];
+    $post_data = [];
 
     $tdata['planet_head_data'] = html::head(['h' => 1], $L['L_PLANETS']);
 
     if (!empty($_POST)) {
         if (isset($_POST['mining_submit'])) {
-            $planet = planet_post_mining($planet);
+            $post_data = planet_post_mining($planet);
         } else if (isset($_POST['char_port_sel']) || isseT($_POST['char_shipyard_sel'])) {
-            $planet = planet_post_engineer($planet);
+            $post_data = planet_post_engineer($planet);
+        } else if (isset($_POST['build_shipyard_submit']) && !empty($_POST['build_shipyard_sel'])) {
+            $post_data = planet_build_shipyard($planet);
         }
+        //RELOAD;
+        $planet = $user->getPlanetById($planet['id']);
     }
 
     $tdata['planet_brief_data'] = planet_brief($planet);
@@ -76,14 +81,14 @@ function showPlanetOpt(array $planet) {
                 }
             }
         }
+        if (valid_array($values)) {
+            $port_engineer .= html::input(['name' => 'planet_id', 'value' => $planet['id'], 'type' => 'hidden']);
+            $port_engineer .= html::select(['name' => 'char_port_sel', 'selected' => $planet['port_engineer'], 'onChange' => 1], $values);
+        }
 
-        $port_engineer .= html::input(['name' => 'planet_id', 'value' => $planet['id'], 'type' => 'hidden']);
-        $port_engineer .= html::select(['name' => 'char_port_sel', 'selected' => $planet['port_engineer'], 'onChange' => 1], $values);
         //SHIPYARD ENGINEER
-        if ($planet['have_shipyard']) {
+        if ($planet['have_shipyard'] && valid_array($perk_chars)) {
             $shipyard_engineer .= html::div(['class' => 'inline_block'], $L['L_SHIPYARD_ENGINEER']);
-            $perk_chars = $user->getCharactersByPerk(7);
-
             $values = [];
             foreach ($perk_chars as $perk_char) {
                 if ($perk_char['planet_assigned'] == $planet['id']) {
@@ -95,12 +100,32 @@ function showPlanetOpt(array $planet) {
                     }
                 }
             }
-
-            $shipyard_engineer .= html::input(['name' => 'planet_id', 'value' => $planet['id'], 'type' => 'hidden']);
-            $shipyard_engineer .= html::select(['name' => 'char_shipyard_sel', 'selected' => $planet['shipyard_engineer'], 'onChange' => 1], $values);
+            if (valid_array($values)) {
+                $shipyard_engineer .= html::input(['name' => 'planet_id', 'value' => $planet['id'], 'type' => 'hidden']);
+                $shipyard_engineer .= html::select(['name' => 'char_shipyard_sel', 'selected' => $planet['shipyard_engineer'], 'onChange' => 1], $values);
+            }
         }
 
         $tdata['planet_engineers_data'] = html::form(['name' => 'engineer_char_sel', 'class' => 'inline_block', 'method' => 'post'], $port_engineer . $shipyard_engineer);
+        //Build Shipyard
+        if (!$planet['have_shipyard'] && empty($planet['shipyard_built']) && count($perk_chars) > 1) {
+            $build_shipyard = html::input(['name' => 'planet_id', 'value' => $planet['id'], 'type' => 'hidden']);
+            $build_shipyard .= html::input(['name' => 'build_shipyard_submit', 'value' => $L['L_BUILD_SHIPYARD'], 'type' => 'submit']);
+            $values = [];
+            foreach ($perk_chars as $perk_char) {
+                if ($perk_char['planet_assigned'] == $planet['id']) {
+                    if ($perk_char['job'] == 0) {
+                        $values[] = [
+                            'name' => $perk_char['name'] . ' ( ' . $perk_char['perk_value'] . ' )',
+                            'value' => $perk_char['id'],
+                        ];
+                    }
+                }
+            }
+            $build_shipyard .= html::select(['name' => 'build_shipyard_sel'], $values);
+            $tdata['build_shipyard'] = html::form(['name' => 'build_shipyard_form', 'class' => '', 'method' => 'post'], $build_shipyard);
+        }
+
         //MINING
         $tdata['mining_data'] = planet_show_mining($planet);
         //CHARACTERS
@@ -112,14 +137,57 @@ function showPlanetOpt(array $planet) {
     if ($planet['have_shipyard'] && !$planet['shipyard_built']) {
         $tdata['planet_shipyard_data'] = show_port();
     }
-
+    !empty($post_data['status_msg']) ? $tdata['status_msg'] = $post_data['status_msg'] : null;
     return $frontend->getTpl('planets', $tdata);
+}
+
+function planet_build_shipyard($planet) {
+    global $db, $cfg, $L, $user;
+
+    $post_data['status_msg'] = '';
+    $build_engineer = Filter::postInt('build_shipyard_sel');
+
+    if ($planet['workers'] < $cfg['build_shipyard_workers']) {
+        $post_data['status_msg'] = $L['L_NEED_WORKERS'] . '(' . $cfg['build_shipyard_workers'] . ') <br/>';
+    }
+    if ($planet['titanium_stored'] < $cfg['build_shipyard_cost']) {
+        $post_data['status_msg'] = $L['L_NEED_TITANIUM'] . '(' . $cfg['build_shipyard_cost'] . ')';
+    }
+    if (!empty($post_data['status_msg'])) {
+        return $post_data;
+    }
+
+    if (!empty($build_engineer)) {
+        $char_set['ship_assigned'] = 0;
+        $char_set['planet_assigned'] = $planet['id'];
+        $char_set['job'] = 1;
+        $planet_set['shipyard_engineer'] = $build_engineer;
+        $planet_set['shipyard_workers'] = $cfg['build_port_workers'];
+        $planet_set['workers'] = $planet['workers'] - $cfg['build_port_workers'];
+        $planet_set['shipyard_built'] = 1;
+
+        $db->update('characters', $char_set, ['id' => $build_engineer], 'LIMIT 1');
+        $db->update('planets', $planet_set, ['id' => $planet['id']], 'LIMIT 1');
+        $db->insert('build', ['id_dest' => $planet['id'], 'type' => 'shipyard', 'ticks' => $cfg['build_shipyard_ticks']]);
+        $user->setCharacterValue($build_engineer, 'job', 1);
+        $user->setCharacterValue($build_engineer, 'planet_assigned', $planet['id']);
+        $user->setCharacterValue($build_engineer, 'ship_assigned', 0);
+        $user->setPlanetValue($planet['id'], 'shipyard_engineer', $build_engineer);
+        $user->setPlanetValue($planet['id'], 'shipyard_workers', $planet_set['shipyard_workers']);
+        $user->setPlanetValue($planet['id'], 'workers', $planet_set['workers']);
+        $user->setPlanetValue($planet['id'], 'shipyard_built', 1);
+
+        $post_data['status_msg'] = $L['L_ORDER_BUILD_SHIPYARD'];
+    }
+
+    return $post_data;
 }
 
 function planet_post_engineer($planet) {
     global $db, $user;
 
     $planet_set = [];
+    $post_data = [];
 
     $port_engineer = Filter::postInt('char_port_sel');
     $shipyard_engineer = Filter::postInt('char_shipyard_sel');
@@ -131,7 +199,7 @@ function planet_post_engineer($planet) {
         $db->update('characters', ['job' => 0], ['id' => $planet['port_engineer']]);
         $user->setCharacterValue($port_engineer, 'job', 1);
         $user->setCharacterValue($planet['port_engineer'], 'job', 0);
-        $planet['port_engineer'] = $port_engineer;
+        $user->setPlanetValue($planet['id'], 'port_engineer', $port_engineer);
     }
     if ($shipyard_engineer && $shipyard_engineer != $planet['shipyard_engineer']) {
         $planet_set['shipyard_engineer'] = $shipyard_engineer;
@@ -139,13 +207,13 @@ function planet_post_engineer($planet) {
         $db->update('characters', ['job' => 0], ['id' => $planet['shipyard_engineer']]);
         $user->setCharacterValue($shipyard_engineer, 'job', 1);
         $user->setCharacterValue($planet['shipyard_engineer'], 'job', 0);
-        $planet['shipyard_engineer'] = $shipyard_engineer;
+        $user->setPlanetValue($planet['id'], 'shipyard_engineer', $port_engineer);
     }
     if (valid_array($planet_set)) {
         $db->update('planets', $planet_set, ['id' => $planet['id']]);
     }
 
-    return $planet;
+    return $post_data;
 }
 
 function planet_show_ships($planet) {
@@ -185,7 +253,9 @@ function planet_show_mining($planet) {
 }
 
 function planet_post_mining($planet) {
-    global $db;
+    global $db, $user;
+
+    $post_data = [];
 
     $titanium_assign = Filter::postInt('titanium_assign');
     $lithium_assign = Filter::postInt('lithium_assign');
@@ -195,18 +265,18 @@ function planet_post_mining($planet) {
         $free_workers = $planet['workers'] + $planet['titanium_workers'];
         if ($titanium_assign <= $free_workers) {
             $planet_set['titanium_workers'] = $titanium_assign;
-            $planet['titanium_workers'] = $titanium_assign;
+            $user->setPlanetValue($planet['id'], 'titanium_workers', $titanium_assign);
             $planet_set['workers'] = $free_workers - $titanium_assign;
-            $planet['workers'] = $planet_set['workers'];
+            $user->setPlanetValue($planet['id'], 'workers', $planet_set['workers']);
         }
     }
     if (isset($lithium_assign) && $lithium_assign != $planet['lithium_workers']) {
         $free_workers = $planet['workers'] + $planet['lithium_workers'];
         if ($lithium_assign <= $free_workers) {
             $planet_set['lithium_workers'] = $lithium_assign;
-            $planet['lithium_workers'] = $lithium_assign;
+            $user->setPlanetValue($planet['id'], 'lithium_workers', $lithium_assign);
             $planet_set['workers'] = $free_workers - $lithium_assign;
-            $planet['workers'] = $planet_set['workers'];
+            $user->setPlanetValue($planet['id'], 'workers', $planet_set['workers']);
         }
     }
 
@@ -214,9 +284,9 @@ function planet_post_mining($planet) {
         $free_workers = $planet['workers'] + $planet['armatita_workers'];
         if ($armatita_assign <= $free_workers) {
             $planet_set['armatita_workers'] = $armatita_assign;
-            $planet['armatita_workers'] = $armatita_assign;
+            $user->setPlanetValue($planet['id'], 'armatita_workers', $armatita_assign);
             $planet_set['workers'] = $free_workers - $armatita_assign;
-            $planet['workers'] = $planet_set['workers'];
+            $user->setPlanetValue($planet['id'], 'workers', $planet_set['workers']);
         }
     }
 
@@ -225,7 +295,7 @@ function planet_post_mining($planet) {
         $db->update('planets', $planet_set, ['id' => $planet['id']], 'LIMIT 1');
     }
 
-    return $planet;
+    return $post_data;
 }
 
 function planet_brief(array $planet) {

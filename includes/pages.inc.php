@@ -51,7 +51,7 @@ function page_index() {
     // States Messages
     isset($_POST['clear_state']) ? $log->clearStateMsgs() : null;
     $tdata = [];
-    $tdata['title'] = $L['L_STATE_MSG'];
+    $tdata['title'] = $L['L_STATUS_MSG'];
     $clean_link = Html::input(['type' => 'submit', 'class' => 'submit_btn clear_btn', 'name' => 'clear_state', 'value' => $L['L_CLEAR']]);
     $tdata['content'] = Html::form(['method' => 'POST'], $clean_link);
     $state_msgs = $log->getStateMsgs();

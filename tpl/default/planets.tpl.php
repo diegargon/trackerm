@@ -13,10 +13,17 @@
 <div class="planet_page">
     <div class="planet_col1">
         <?= $tdata['planet_head_data'] ?>
+        <?php if (!empty($tdata['status_msg'])) { ?>
+            <fieldset>
+                <legend><?= $L['L_STATUS_MSG'] ?></legend>
+                <?= $tdata['status_msg'] ?>
+            </fieldset>
+        <?php } ?>
         <fieldset>
             <legend><?= $L['L_SUMMARY'] ?></legend>
             <?= $tdata['planet_brief_data'] ?>
             <?= $tdata['planet_engineers_data'] ?>
+            <?= !empty($tdata['build_shipyard']) ? $tdata['build_shipyard'] : null; ?>
         </fieldset>
         <fieldset>
             <legend><?= $L['L_MINING'] ?></legend>
