@@ -10,7 +10,7 @@
 !defined('IN_WEB') ? exit : true;
 
 function page_index() {
-    global $cfg, $user, $LNG, $log, $frontend;
+    global $cfg, $db, $user, $LNG, $log, $frontend;
 
     $titems = [];
     $status_msg = '';
@@ -19,7 +19,9 @@ function page_index() {
     if (!empty($user['isAdmin'])) {
         $tdata = [];
         $tdata['title'] = '';
-        $tdata['content'] = Html::link(['class' => 'action_link'], 'index.php', $LNG['L_CONFIG'], ['page' => 'config']);
+        $tdata['content'] = Html::form(['id' => 'clear_disabled', 'method' => 'post'], Html::input(['type' => 'submit', 'name' => 'clear_disabled', 'value' => $LNG['L_CLEAR_DISABLE']]));
+        $tdata['content'] .= Html::link(['class' => 'action_link'], 'index.php', $LNG['L_CONFIG'], ['page' => 'config']);
+
         $titems['col1'][] = $frontend->getTpl('home-item', $tdata);
     }
     // General Info
@@ -37,6 +39,12 @@ function page_index() {
         $tdata['content'] = Html::link(['class' => 'action_link'], '', $LNG['L_EDIT'], ['page' => 'index', 'edit_profile' => 1]);
     }
 
+    if (isset($_POST['clear_disabled'])) {
+        foreach ($cfg['jackett_indexers'] as $indexer) {
+            $indexer_disabled = $indexer . '_disable';
+            $db->delete('preferences', ['pref_name' => ['value' => $indexer_disabled]], 'LIMIT 1');
+        }
+    }
     $tdata['content'] .= Html::link(['class' => 'action_link'], '', $LNG['L_LOGOUT'], ['page' => 'logout']);
     $tdata['content'] .= $status_msg;
     $titems['col1'][] = $frontend->getTpl('home-item', $tdata);

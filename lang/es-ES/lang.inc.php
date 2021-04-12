@@ -28,6 +28,7 @@ $LNG = [
     'L_CATEGORY' => 'Categorias',
     'L_COLUMNS' => 'Columnas',
     'L_CLEAR' => 'Limpiar',
+    'L_CLEAR_DISABLE' => 'Desbloquear indexer deshabilitados',
     'L_CREATE' => 'Crear',
     'L_COMPLETED' => 'Completado',
     'L_CONFIG' => 'Configuración',
