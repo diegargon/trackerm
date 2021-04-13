@@ -119,10 +119,11 @@ function getFileEpisode($file_name) {
             $ses = substr($SE_MATCH, 0, 1);
             $epi = substr($SE_MATCH, 1, 2);
         }
-        if (strlen($SE_MATCH) == 4) {
+        if (strlen($SE_MATCH) > 3) {
             $ses = substr($SE_MATCH, 0, 2);
             $epi = substr($SE_MATCH, 2, 3);
         }
+
         $SE['season'] = $ses;
         $SE['episode'] = $epi;
 
