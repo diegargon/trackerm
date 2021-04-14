@@ -464,6 +464,7 @@ function create_db() {
     $db->insert('config', ['cfg_key' => 'autoclean_moved_wanted', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_AUTOCLEAN_MOVED', 'type' => 3, 'category' => 'L_WANTED', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'show_querys', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_SHOW_QUERYS', 'type' => 3, 'category' => 'L_LOGGING', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'display_errors', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_DISPLAY_ERRORS', 'type' => 3, 'category' => 'L_LOGGING', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'curl_timeout', 'cfg_value' => 70, 'cfg_desc' => 'L_CFG_CURL_TIMEOUT', 'type' => 2, 'category' => 'L_MAIN', 'public' => 1]);
 
     /*
       $db->insert('config', ['cfg_key' => 'transcoder_player', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_TRANSCODER_PLAYER', 'type' => 3, 'category' => 'L_PLAY', 'public' => 1]);
