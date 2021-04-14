@@ -20,6 +20,7 @@ function page_index() {
         $tdata = [];
         $tdata['title'] = '';
         $tdata['content'] = Html::form(['id' => 'clear_disabled', 'method' => 'post'], Html::input(['type' => 'submit', 'name' => 'clear_disabled', 'value' => $LNG['L_CLEAR_DISABLE']]));
+        $tdata['content'] .= Html::form(['id' => 'clear_search_cache', 'method' => 'post'], Html::input(['type' => 'submit', 'name' => 'clear_search_cache', 'value' => $LNG['L_CLEAR_SEARCH_CACHE']]));
         $tdata['content'] .= Html::link(['class' => 'action_link'], 'index.php', $LNG['L_CONFIG'], ['page' => 'config']);
 
         $titems['col1'][] = $frontend->getTpl('home-item', $tdata);
@@ -44,6 +45,12 @@ function page_index() {
             $indexer_disabled = $indexer . '_disable';
             $db->delete('preferences', ['pref_name' => ['value' => $indexer_disabled]], 'LIMIT 1');
         }
+    }
+    if (isset($_POST['clear_search_cache'])) {
+        $db->delete('jackett_search_movies_cache');
+        $db->delete('jackett_search_shows_cache');
+        $db->delete('search_movies_cache');
+        $db->delete('search_shows_cache');
     }
     $tdata['content'] .= Html::link(['class' => 'action_link'], '', $LNG['L_LOGOUT'], ['page' => 'logout']);
     $tdata['content'] .= $status_msg;

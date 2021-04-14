@@ -1,5 +1,8 @@
 ## Latest / News (Relevant)
 
+[14/04] Clear query cache (index) here you can clear the searchs caches.
+[13/04] Added (index) Clear disable torrents (trackerm disable timeout indexers and clear after certain time, here you can force clean)
+[********** COMMIT **********]
 [09/04] Fix Bug (index) try loading a big log file 
 [********** COMMIT **********]
 [04/03] Auto disable indexers when timeout (default 6h config option later)

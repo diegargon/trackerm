@@ -29,6 +29,7 @@ $LNG = [
     'L_COLUMNS' => 'Columns',
     'L_CLEAR' => 'Clear',
     'L_CLEAR_DISABLE' => 'Unblock disabled indexers',
+    'L_CLEAR_SEARCH_CACHE' => 'Clear Search Cache',
     'L_CREATE' => 'Create',
     'L_COMPLETED' => 'Completed',
     'L_CONFIG' => 'Config',

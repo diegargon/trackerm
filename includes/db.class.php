@@ -17,6 +17,7 @@
   .mode column
   y luego el select * o lo que sea;
 
+  v0.1
  */
 !defined('IN_WEB') ? exit : true;
 
@@ -327,7 +328,7 @@ class DB {
         return $rows;
     }
 
-    public function delete($table, $where, $extra = null) {
+    public function delete($table, $where = null, $extra = null) {
 
         $query = 'DELETE FROM ' . $table . ' ';
 
