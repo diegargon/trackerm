@@ -908,7 +908,6 @@ function update_db($from) {
 
 
     if ($from < 14) {
-        //'indexer_disable_time' default 24*60*60
         $db->query('UPDATE config SET cfg_value=\'14\' WHERE cfg_key=\'db_version\' LIMIT 1');
         $db->insert('config', ['cfg_key' => 'curl_timeout', 'cfg_value' => 70, 'cfg_desc' => 'L_CFG_CURL_TIMEOUT', 'type' => 2, 'category' => 'L_MAIN', 'public' => 1]);
         $db->update('db_info', ['version' => 14]);
@@ -917,6 +916,7 @@ function update_db($from) {
 
     /*
       if ($from < 15) {
+      //'indexer_disable_time' default 24*60*60
       $db->query('UPDATE config SET cfg_value=\'15\' WHERE cfg_key=\'db_version\' LIMIT 1');
       $db->insert('config', ['cfg_key' => 'localplayer_track', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_LOCALPLAYER_TRACK', 'type' => 3, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
       $db->insert('config', ['cfg_key' => 'localplayer_web_password', 'cfg_value' => '', 'cfg_desc' => 'L_CFG_LOCALPLAYER_WEB_PASSWORD', 'type' => 1, 'category' => 'L_LOCALPLAYER', 'public' => 1]);     *
