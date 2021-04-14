@@ -47,8 +47,6 @@ function wanted_list() {
             wanted_episode($id, $season, $episode, 1);
         }
     }
-    //update wanted agains transmission-daemon
-    !empty($trans) ? $trans->updateWanted() : null;
 
     $wanted_list = $db->getTableData('wanted');
 

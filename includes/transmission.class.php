@@ -175,9 +175,11 @@ class TorrentServer {
         global $db;
 
         $trans = $this->getAll();
-        if ($trans == false) {
+        if (!valid_array($trans)) {
             return false;
         }
+        $wanted_db = $db->getTableData('wanted');
+
         $hashes = [];
         foreach ($trans as $item) {
 
@@ -185,7 +187,12 @@ class TorrentServer {
 
             $hashes[] = $item['hashString'];
 
-            $wanted_item = $db->getItemByField('wanted', 'hashString', $item['hashString']);
+            foreach ($wanted_db as $wanted_db_item) {
+                if ($wanted_db_item['hashString'] == $item['hashString']) {
+                    $wanted_item = $wanted_db_item;
+                    break;
+                }
+            }
 
             if ($wanted_item && ($wanted_item['wanted_status'] != $status)) {
                 $update_ary['wanted_status'] = $status;
@@ -194,7 +201,6 @@ class TorrentServer {
             }
         }
         // check if all wanted started are in transmission if not is probably remove from OUTAPP. change status to 10 deleted.
-        $wanted_db = $db->getTableData('wanted');
 
         foreach ($wanted_db as $wanted_item) {
             if (($wanted_item['wanted_status'] > 1) &&

@@ -322,6 +322,7 @@ function page_wanted() {
     global $db, $trans, $frontend;
 
     $want = [];
+    //Update wanted agains transmission
     !empty($trans) ? $trans->updateWanted() : null;
 
     if (isset($_POST['check_day'])) {
