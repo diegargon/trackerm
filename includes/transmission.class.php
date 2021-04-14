@@ -60,6 +60,12 @@ class TorrentServer {
                 $array[$key][$item_key] = $item;
             }
         }
+
+
+        usort($array, function ($a, $b) {
+            return strcmp($a["percentDone"], $b["percentDone"]);
+        });
+
         return $array;
     }
 
@@ -182,7 +188,7 @@ class TorrentServer {
 
         $hashes = [];
         foreach ($trans as $item) {
-
+            $wanted_item = [];
             $item['status'] == 0 && $item['percentDone'] == 1 ? $status = 8 : $status = $item['status'];
 
             $hashes[] = $item['hashString'];
@@ -194,7 +200,7 @@ class TorrentServer {
                 }
             }
 
-            if ($wanted_item && ($wanted_item['wanted_status'] != $status)) {
+            if (valid_array($wanted_item) && ($wanted_item['wanted_status'] != $status)) {
                 $update_ary['wanted_status'] = $status;
                 $update_ary['id'] = $wanted_item['id'];
                 $db->upsertItemByField('wanted', $update_ary, 'id');

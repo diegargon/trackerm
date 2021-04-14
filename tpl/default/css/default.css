@@ -526,6 +526,11 @@ button {
     background: black;
     padding: 8px;
 }
+.tor_name_downloading {
+    border:0px solid #ff5b5b;
+    background: #05474b;
+    padding: 8px;
+}
 .tor_tags {
     margin:4px;
 }

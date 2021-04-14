@@ -10,7 +10,11 @@
 <div class="tor_row_container">
     <form method="POST" action="">
         <div class="tor_download">
-            <div class="tor_name"><?= $tdata['name'] ?> </div>
+            <?php if ($tdata['percent'] == 100) { ?>
+                <div class="tor_name"><?= $tdata['name'] ?> </div>
+            <?php } else { ?>
+                <div class="tor_name_downloading"><?= $tdata['name'] ?> </div>
+            <?php } ?>
         </div>
         <div class="tor_tags">
             <div class="tor_action">
