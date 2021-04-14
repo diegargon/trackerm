@@ -177,7 +177,7 @@ function jackett_search_media($media_type, $words, $indexer, $categories, $limit
     if (formatPerfTime($timediff) > $cfg['slow_flow']) {
         $log->addStateMsg("[{$LNG['L_NOTICE']}] $indexer  {$LNG['L_SLOW_THE_FLOW']} " . formatPerfTime($timediff) . " {$LNG['L_SECONDS']}");
     }
-    if (formatPerfTime($timediff) > 99) {
+    if (formatPerfTime($timediff) > $cfg['curl_timeout'] - 1) {
         setPrefsItem($indexer . '_disable', time() + $disable_time, true);
         $log->addStateMsg("[{$LNG['L_NOTICE']}]: $indexer {$LNG['L_DISABLED']} $disable_time {$LNG['L_SECONDS']}");
     }

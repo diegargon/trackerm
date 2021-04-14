@@ -16,6 +16,7 @@ function curl_get(string $url, array $curl_opt) {
     curl_setopt($ch, CURLOPT_URL, trim($url));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $cfg['curl_conntimeout']);
+    curl_setopt($ch, CURLOPT_TIMEOUT, $cfg['curl_timeout']);
     if (!empty($curl_opt['headers'])) {
         curl_setopt($ch, CURLOPT_HTTPHEADER, $curl_opt['headers']);
     }

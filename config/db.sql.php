@@ -20,7 +20,7 @@ function create_db() {
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
                 )');
 
-    $db->insert('db_info', ["app_name" => 'trackerm', "version" => 12]);
+    $db->insert('db_info', ["app_name" => 'trackerm', "version" => 14]);
 
     // USERS
     $db->query('CREATE TABLE IF NOT EXISTS "users" (
@@ -399,7 +399,7 @@ function create_db() {
           "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
           )');
 
-    $db->insert('config', ['cfg_key' => 'db_version', 'cfg_value' => 13, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
+    $db->insert('config', ['cfg_key' => 'db_version', 'cfg_value' => 14, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
     $db->insert('config', ['cfg_key' => 'profile', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
     $db->insert('config', ['cfg_key' => 'max_identify_items', 'cfg_value' => 5, 'cfg_desc' => 'L_CFG_MAXID_ITEMS', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
     $db->insert('config', ['cfg_key' => 'app_name', 'cfg_value' => 'trackerm', 'cfg_desc' => '', 'type' => 1, 'category' => 'L_PRIV', 'public' => 0]);
@@ -905,19 +905,20 @@ function update_db($from) {
         update_v13_rebuild_master('shows');
     }
 
-    /*
-      if ($from < 14) {
-      //'indexer_disable_time' default 24*60*60
-      $db->insert('config', ['cfg_key' => 'localplayer_track', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_LOCALPLAYER_TRACK', 'type' => 3, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
-      $db->insert('config', ['cfg_key' => 'localplayer_web_password', 'cfg_value' => '', 'cfg_desc' => 'L_CFG_LOCALPLAYER_WEB_PASSWORD', 'type' => 1, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
-      $db->query('UPDATE config SET cfg_value=\'14\' WHERE cfg_key=\'db_version\' LIMIT 1');
-      $db->update('db_info', ['version' => 14]);
-      $db->query('VACUUM;');
-      }
-     */
+
+    if ($from < 14) {
+        //'indexer_disable_time' default 24*60*60
+        $db->query('UPDATE config SET cfg_value=\'14\' WHERE cfg_key=\'db_version\' LIMIT 1');
+        $db->insert('config', ['cfg_key' => 'curl_timeout', 'cfg_value' => 70, 'cfg_desc' => 'L_CFG_CURL_TIMEOUT', 'type' => 2, 'category' => 'L_MAIN', 'public' => 1]);
+        $db->update('db_info', ['version' => 14]);
+        $db->query('VACUUM;');
+    }
+
     /*
       if ($from < 15) {
       $db->query('UPDATE config SET cfg_value=\'15\' WHERE cfg_key=\'db_version\' LIMIT 1');
+      $db->insert('config', ['cfg_key' => 'localplayer_track', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_LOCALPLAYER_TRACK', 'type' => 3, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
+      $db->insert('config', ['cfg_key' => 'localplayer_web_password', 'cfg_value' => '', 'cfg_desc' => 'L_CFG_LOCALPLAYER_WEB_PASSWORD', 'type' => 1, 'category' => 'L_LOCALPLAYER', 'public' => 1]);     *
       $db->update('db_info', ['version' => 15]);
       $db->query('VACUUM;');
       }
