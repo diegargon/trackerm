@@ -8,19 +8,48 @@
 
 **SPANISH**
 
-Probando a realizar una alternativa Sonarr+Radar sobre servidor web.
-Puedes ver sceenshots del aspecto (posiblemente desactualizado) en /screenshots aunque cambiara que el proyecto esta en fase temprana.
+Alternativa Sonarr+Radarr sobre servidor web haciendo uso como estos de jackett. 
 
-Warning: Gran parte del codigo fue realizado a correr (el grueso fue programado  en 3 intensos dias), no solo hay que pulirlo y reescribir mucho si no que 
-hay que revisar la seguridad. Si lo instalas espera una aplicación alpha, osea un poco verde.
+Jackett es una aplicacion que hace intermediario o pasarela entre trackers, foros o paginas web que ofrecen archivos torrentes
+y así poder obtener resultados de una forma standard independiente de la fuente.
+
+Sonarr+Radarr, son aplicacines que utilizan jackett para mantener, organizar, programar, descargar archivos multimedia. Una esta 
+centrada en series y otra en peliculas.
+
+Trackerm es una mezcla de ambas realizada en php en vez C# (Sonarr/Radarr) que necesita de instalación de un servidor web.
+Al contrario que las otras trackerm obvia los "fechas de lanzamiento/publicacion" oficales que son muy dependientes de cada
+pais. Las busquedas de series por ejemplo las hace semanalmente estableciendo por el usuario un dia.
+
+Trackerm solo soporta linux/unix.
+
+En /screenshots encontraras algunos sceenshots del aspecto posiblemente desactualizados
+
+Atención: Gran parte del codigo fue realizado a correr (el grueso fue programado  en 3 intensos dias). La aplicación es funcional pero  hay que pulirlo y reescribir mucho 
+y revisar la seguridad. Si lo instalas espera una aplicación alpha.
 
 
 **ENGLISH**
 
-Trying a Sonarr & Radarr alternative over a web server.
-You can see screenshots of the  appearance (not latest probably) in /screenshots although it going to change since this proyect 
-is in early stage.
-Warning: Much of the code  was done in 3 days, have to polish alot/rewrite alot and check security. If you install expect a alpha version.
+Sonarr & Radarr alternative over a web server using jackett.
+
+Jackett is an application that acts as an intermediary/gateway between trackers, forums or web pages that offer torrent files
+and thus be able to obtain results in a standard way independent of the source.
+
+Sonarr + Radarr, are applications that use jackett to maintain, organize, program and download multimedia files. One is
+focused on shows and the other on movies.
+
+Trackerm is a mixture of both made in php instead of C# (Sonarr / Radarr) that requires the installation of a web server.
+Unlike the other trackerm it obviates the official "release / publication dates" which are highly dependent on each
+country. Shows searches, for example, are done weekly, by setting a day by the user.
+
+Trackerm solo soporta linux/unix
+
+In / screenshots you will find some possibly outdated sceenshots of the look
+
+Attention: Much of the code was made to run (the bulk was programmed in 3 intense days). The application is functional but you need polish it and rewrite a lot
+and review security. If you install it expects an alpha application.
+
+ 
 
 ## LEGAL
 
