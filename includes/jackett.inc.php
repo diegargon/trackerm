@@ -47,16 +47,7 @@ function search_media_torrents($media_type, $search, $head = null, $nohtml = fal
             $cache_media_expire = 1;
         } else {
             //$log->debug("News:  Using media cache");
-            $ids = explode(',', $media_cache_check['ids']);
-
-            if (empty($ids) || count($ids) <= 0) {
-                return false;
-            }
-            foreach ($ids as $cache_id) {
-                //TODO: GET ALL IDS IN ONE QUERY
-                $db_item = $db->getItemById($jackett_db, trim($cache_id));
-                !empty($db_item) ? $media_db[] = $db_item : null;
-            }
+            $media_db = $db->getItemsByIds($jackett_db, $media_cache_check['ids']);
         }
     }
 
