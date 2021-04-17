@@ -17,7 +17,7 @@
   .mode column
   y luego el select * o lo que sea;
 
-  v0.2
+  v0.3
  */
 !defined('IN_WEB') ? exit : true;
 
@@ -55,12 +55,12 @@ class DB {
 
     /* Common / Helpers */
 
-    public function addItem($table, $item) {
+    public function addItem(string $table, array $item) {
         $this->insert($table, $item);
         return $this->getLastId();
     }
 
-    public function addItems($table, $items) {
+    public function addItems(string $table, array $items) {
         $ids = [];
         foreach ($items as $item) {
             $this->insert($table, $item);
@@ -69,7 +69,7 @@ class DB {
         return $ids;
     }
 
-    public function addItemUniqField($table, $item, $field) {
+    public function addItemUniqField(string $table, array $item, string $field) {
         $value = $item[$field];
         $id = $this->getIdByField($table, $field, $value);
         if (empty($id)) {
@@ -80,7 +80,7 @@ class DB {
         return false;
     }
 
-    public function addItemsUniqField($table, $items, $field) {
+    public function addItemsUniqField(string $table, array $items, string $field) {
         foreach ($items as $item) {
             !isset($fields) ? $fields = $item[$field] : $fields .= ',' . $item[$field];
         }
@@ -106,7 +106,7 @@ class DB {
     }
 
     //TODO create a upsert insert and replace SQLite have it... i think
-    public function upsertItemByField($table, $item, $field) {
+    public function upsertItemByField(string $table, array $item, string $field) {
         $value = $item[$field];
         $_item = $this->getItemByField($table, $field, $value);
         if (!empty($_item)) {
@@ -120,7 +120,7 @@ class DB {
         return false;
     }
 
-    public function getItemById($table, $id) {
+    public function getItemById(string $table, $id) {
         $where['id'] = ['value' => $id];
         $result = $this->select($table, null, $where, 'LIMIT 1');
         $row = $this->fetch($result);
@@ -129,13 +129,13 @@ class DB {
         return (!empty($row) && (count($row) > 0)) ? $row : false;
     }
 
-    public function getItemsByIds($table, $ids) {
+    public function getItemsByIds(string $table, string $ids) {
         $rows = $this->selectMultiple($table, 'id', $ids);
 
         return is_array($rows) && (count($rows)) ? $rows : false;
     }
 
-    public function getItemByField($table, $field, $value) {
+    public function getItemByField(string $table, string $field, string $value) {
         $where[$field] = ['value' => $value];
         $result = $this->select($table, null, $where, 'LIMIT 1');
         $row = $this->fetch($result);
@@ -143,7 +143,7 @@ class DB {
         return (!empty($row) && (count($row) > 0)) ? $row : false;
     }
 
-    public function getItemsByField($table, $field, $value) {
+    public function getItemsByField(string $table, string $field, $value) {
         $where[$field] = ['value' => $value];
         $result = $this->select($table, null, $where);
         $rows = $this->fetchAll($result);
@@ -151,7 +151,13 @@ class DB {
         return (!empty($rows) && (count($rows) > 0)) ? $rows : false;
     }
 
-    public function getIdByField($table, $field, $value) {
+    public function getItemsByFieldM(string $table, string $field, string $values) {
+        $rows = $this->selectMultiple($table, $field, $values);
+
+        return is_array($rows) && (count($rows)) ? $rows : false;
+    }
+
+    public function getIdByField(string $table, string $field, $value) {
         $where[$field] = ['value' => $value];
         $result = $this->select($table, 'id', $where, 'LIMIT 1');
         $row = $this->fetch($result);
@@ -166,19 +172,19 @@ class DB {
         $this->update($table, $values, $where, 'LIMIT 1');
     }
 
-    public function updateItemByField($table, $item, $field) {
+    public function updateItemByField(string $table, array $item, $field) {
         $where[$field] = ['value' => $item[$field]];
 
         $this->update($table, $item, $where, 'LIMIT 1');
     }
 
-    public function updateItemsByField($table, $items, $field) {
+    public function updateItemsByField(string $table, array $items, $field) {
         $where[$field] = ['value' => $items[$field]];
 
         $this->update($table, $items, $where);
     }
 
-    public function getTableData($table) {
+    public function getTableData(string $table) {
         $result = $this->select($table);
         $rows = $this->fetchAll($result);
         $this->finalize($result);
@@ -186,23 +192,23 @@ class DB {
         return $rows;
     }
 
-    public function deleteItemById($table, $id) {
+    public function deleteItemById(string $table, $id) {
         $where['id'] = ['value' => $id];
         $this->delete($table, $where, 'LIMIT 1');
     }
 
-    public function deleteItemByField($table, $field, $value) {
+    public function deleteItemByField(string $table, $field, $value) {
         $where[$field] = ['value' => $value];
         $this->delete($table, $where, 'LIMIT 1');
     }
 
-    public function deleteItemsByField($table, $field, $value) {
+    public function deleteItemsByField(string $table, $field, $value) {
         $where[$field] = ['value' => $value];
         $this->delete($table, $where);
     }
 
     //exact mean word separated with spaces don't known yet if works like this possible TODO/FIX
-    public function search($table, $field, $value, $exact = null, $extra = null) {
+    public function search(string $table, $field, $value, bool $exact = null, string $extra = null) {
         $value = $this->escapeString($value);
         $query = "SELECT * FROM " . $table . " WHERE " . $field . " LIKE ";
         if (!empty($exact)) {
@@ -216,14 +222,14 @@ class DB {
 
     /* MAIN */
 
-    public function count($table) {
+    public function count(string $table) {
         $result = $this->query('SELECT COUNT (*) FROM ' . $table);
         $row = $result->fetchArray();
 
         return $row[0];
     }
 
-    public function insert($table, $values) {
+    public function insert(string $table, array $values) {
         $query = 'INSERT INTO "' . $table . '" (';
         $query_binds = '';
         $query_keys = '';
@@ -257,7 +263,7 @@ class DB {
         return $response;
     }
 
-    public function upsert($table, $set, $where) {
+    public function upsert(string $table, array $set, array $where) {
         //FIX upsert with fixed field name id not good
         $result = $this->select($table, 'id', $where, 'LIMIT 1');
         $item = $this->fetch($result);
@@ -274,7 +280,7 @@ class DB {
       $where['userid'] = [ 'value' => diego, 'op' => '=', 'logic' => 'AND' ];
      */
 
-    public function select($table, $what = null, $where = null, $extra = null) {
+    public function select(string $table, string $what = null, array $where = null, string $extra = null) {
 
         $bind_values = [];
 
@@ -315,7 +321,7 @@ class DB {
 
     /* values can be array or comma separate */
 
-    public function selectMultiple($table, $field, $values, $what = null) {
+    public function selectMultiple(string $table, $field, $values, $what = null) {
         !isset($what) ? $what = '*' : null;
         if (!is_array($values)) {
             $final_values = array_map('trim', explode(',', $values));
@@ -334,7 +340,7 @@ class DB {
         return $rows;
     }
 
-    public function delete($table, $where = null, $extra = null) {
+    public function delete(string $table, array $where = null, string $extra = null) {
 
         $query = 'DELETE FROM ' . $table . ' ';
 
@@ -374,7 +380,7 @@ class DB {
       $where['userid'] = [ 'value' => diego, 'op' => '=', 'logic' => 'AND' ];
      */
 
-    public function update($table, $set, $where = null, $extra = null) {
+    public function update(string $table, array $set, array $where = null, string $extra = null) {
         $bind_values = [];
 
         $query = 'UPDATE ' . $table;
@@ -417,7 +423,7 @@ class DB {
         return $response;
     }
 
-    public function escape($string) {
+    public function escape(string $string) {
         return $this->db->escapeString($string);
     }
 
