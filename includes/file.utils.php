@@ -243,7 +243,7 @@ function mediainfo_json($file) {
         return false;
     }
     if (!file_exists(($file))) {
-        $log->warn("Mediainfo: Media file not exists: $file");
+        $log->warning("Mediainfo: Media file not exists: $file");
         return false;
     }
 
