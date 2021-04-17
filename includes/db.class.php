@@ -17,7 +17,7 @@
   .mode column
   y luego el select * o lo que sea;
 
-  v0.1
+  v0.2
  */
 !defined('IN_WEB') ? exit : true;
 
@@ -127,6 +127,12 @@ class DB {
         $this->finalize($result);
 
         return (!empty($row) && (count($row) > 0)) ? $row : false;
+    }
+
+    public function getItemsByIds($table, $ids) {
+        $rows = $this->selectMultiple($table, 'id', $ids);
+
+        return is_array($rows) && (count($rows)) ? $rows : false;
     }
 
     public function getItemByField($table, $field, $value) {
