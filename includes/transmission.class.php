@@ -86,6 +86,11 @@ class TorrentServer {
         $hashes = [];
 
         $trans = $this->getAll();
+
+        if (!valid_array($trans)) {
+            return false;
+        }
+
         foreach ($ids as $id) {
             foreach ($trans as $item) {
                 if ($item['id'] == $id) {
@@ -103,6 +108,11 @@ class TorrentServer {
     public function deleteHashes($hashes) {
         $ids = [];
         $trans = $this->getAll();
+
+        if (!valid_array($trans)) {
+            return false;
+        }
+
         foreach ($hashes as $hash) {
             foreach ($trans as $item) {
                 if ($item['hashString'] == $hash) {
