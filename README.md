@@ -42,11 +42,11 @@ Trackerm is a mixture of both made in php instead of C# (Sonarr / Radarr) that r
 Unlike the other trackerm it obviates the official "release / publication dates" which are highly dependent on each
 country. Shows searches, for example, are done weekly, by setting a day by the user.
 
-Trackerm solo soporta linux/unix
+Trackerm only supports linux/unix
 
 In / screenshots you will find some possibly outdated sceenshots of the look
 
-Attention: Much of the code was made to run (the bulk was programmed in 3 intense days). The application is functional but you need polish it and rewrite a lot
+Warn: Much of the code was made to run (the bulk was programmed in 3 intense days). The application is functional but i need polish it and rewrite a lot
 and review security. If you install it expects an alpha application.
 
  
