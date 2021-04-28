@@ -40,7 +40,7 @@ function getFileTitle($file) {
     $regex .= '(?!_\d+_)';  // los char _digitos_
     $regex .= '(?!.\d+x)';  // .digits and x (.1x)
     $regex .= '(?!_\d+x)';  // .digits and x (_1x)
-    $regex .= '(?!-\s+Temporada)';  // - Temporada
+    $regex .= '(?!-\s+Temp)';  // - Temp*
     $regex .= '(?!\s+Temporada)';  //  Temporada
     $regex .= '(?!-\s+Season)';  // - Season
     $regex .= '(?!720p)'; // 720p
