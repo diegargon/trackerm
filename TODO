@@ -1,6 +1,8 @@
 TODO
 
 [HIGH]    
+    [IMPROVE] Import path
+    [IMPROVE] Wanted Not count for max download 
     [IMPROVE] Indexers to config
     [FIX/CHECK] do not contemplate yet what to do if tmdb not found any results.        
 
