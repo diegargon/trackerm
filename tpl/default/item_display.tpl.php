@@ -26,7 +26,10 @@
             <?php
             if (!empty($tdata['download'])) {
                 ?>
-                <span class="item_download"><a class="action_link" href="<?= basename($_SERVER['REQUEST_URI']) . '&download=' . rawurlencode($tdata['download']) ?>"><?= $LNG['L_DOWNLOAD_MIN'] ?></a></span>
+                <form id="download_url" class="form_inline" method="POST" action="">
+                    <input type="submit" class="action_link" value="<?= $LNG['L_DOWNLOAD_MIN'] ?>"/>
+                    <input type="hidden" name="download" value="<?= $tdata['download'] ?>"/>
+                </form>
                 <?php
             }
             if (!empty($tdata['source'])) {

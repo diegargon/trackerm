@@ -12,9 +12,7 @@ define('IN_WEB', true);
 require_once('includes/usermode.inc.php');
 
 //TODO move out: download link are in page view, torrents and new
-
-if (!(empty($d_link = Filter::getUrl('download')))) {
-
+if (!(empty($d_link = Filter::postUrl('download')))) {
     if (($pos = strpos($d_link, 'file=')) !== FALSE) {
         $jackett_filename = substr($d_link, $pos + 5);
         $jackett_filename = trim(str_replace('+', ' ', $jackett_filename));
