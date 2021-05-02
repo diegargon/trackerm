@@ -19,6 +19,7 @@ class Web {
 
     function render() {
 
+        $this->pagesGlobal();
         $req_page = $this->getPage();
 
         if ($req_page === false) {
@@ -55,6 +56,37 @@ class Web {
         }
 
         return false;
+    }
+
+    function pagesGlobal() {
+        global $trans, $db, $user;
+
+        if (!(empty($d_link = Filter::postUrl('download')))) {
+            if (($pos = strpos($d_link, 'file=')) !== FALSE) {
+                $jackett_filename = substr($d_link, $pos + 5);
+                $jackett_filename = trim(str_replace('+', ' ', $jackett_filename));
+            }
+            !empty($trans) ? $trans_response = $trans->addUrl($d_link) : null;
+            if (!empty($trans_response)) {
+                foreach ($trans_response as $rkey => $rval) {
+                    $trans_db[$rkey] = $rval;
+                }
+
+                $wanted_db = [
+                    'tid' => $trans_db['id'],
+                    'wanted_status' => 1,
+                    'jackett_filename' => !empty($jackett_filename) ? $jackett_filename : null,
+                    'hashString' => $trans_db['hashString'],
+                    /* 'themoviedb_id' => */
+                    'direct' => 1,
+                    'profile' => $user['id'],
+                ];
+                $db->addItemUniqField('wanted', $wanted_db, 'hashString');
+            } else {
+                $this->frontend->msgPage(['title' => 'L_ERROR', 'body' => 'L_SEE_ERROR_DETAILS']);
+                return false;
+            }
+        }
     }
 
 }

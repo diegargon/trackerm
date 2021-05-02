@@ -133,7 +133,7 @@ function wanted_list() {
 }
 
 function wanted_movies($wanted_id) {
-    global $db, $cfg, $log;
+    global $db, $log, $user;
 
     $item = [];
     $wanted_type = 'movies';
@@ -152,7 +152,7 @@ function wanted_movies($wanted_id) {
         'direct' => 0,
         'wanted_status' => -1,
         'media_type' => $wanted_type,
-        'profile' => (int) $cfg['profile'],
+        'profile' => $user['id'],
     ];
 
     $where_check = [
