@@ -797,7 +797,7 @@ function tracker_shows($wanted) {
 
     $item = mediadb_getFromCache('shows', $oid);
     $title = $item['title'];
-    !empty($cfg['max_wanted_track_downloads']) ? $max_wanted_track_downloads = 1 : null;
+    empty($cfg['max_wanted_track_downloads']) ? $max_wanted_track_downloads = 1 : $max_wanted_track_downloads = $cfg['max_wanted_track_downloads'];
 
     $inherint_track = null;
     !empty($wanted['custom_words_ignore']) ? $inherint_track['custom_words_ignore'] = $wanted['custom_words_ignore'] : null;
