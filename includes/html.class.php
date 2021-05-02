@@ -7,7 +7,7 @@
  *  @subpackage
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  *
- * v0.1
+ * v0.2
  */
 !defined('IN_WEB') ? exit : true;
 
@@ -34,7 +34,7 @@ class Html {
         (!empty($conf['form'])) ? $select .= '<form method="post" ' . $form_opt . '>' : null;
 
         $select .= '<select ' . $opt . ' name="' . $conf['name'] . '">';
-        isset($conf['sel_none']) ? $select .= '<option value="0"></option>' : null;
+        !empty($conf['sel_none']) ? $select .= '<option value="0"></option>' : null;
         foreach ($values as $value) {
             isset($conf['selected']) && $conf['selected'] == $value['value'] ? $selected = ' selected="selected" ' : $selected = '';
             $select .= '<option ' . $selected . ' value="' . $value['value'] . '">' . $value['name'] . '</option>';
