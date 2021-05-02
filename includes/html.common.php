@@ -67,9 +67,7 @@ function buildTable($head, $db_ary, $topt = null) {
         !empty($topt['search_type']) ? $item['media_type'] = $topt['search_type'] : null;
 
         $num_col_items == 0 ? $page .= '<div class="divTableRow">' : null;
-        $page .= '<div class="divTableCell">';
-        $page .= build_item($item, $topt);
-        $page .= '</div>';
+        $page .= html::div(['class' => 'divTableCell'], build_item($item, $topt));
 
         $num_col_items++;
         if ($num_col_items == $columns) {
@@ -166,34 +164,35 @@ function pager($npage, $nitems, &$topt) {
     global $cfg;
 
     /* PAGES */
-    $pages = '';
+
+    $pages_links = '';
     $items_per_page = $cfg['tresults_columns'] * $cfg['tresults_rows'];
     $num_pages = ceil($nitems / $items_per_page);
     $search_type = Filter::getUtf8('search_type');
     $page = Filter::getString('page');
 
     if ($num_pages > 1) {
-        $iurl = '?page=' . $page;
-
-        (!empty(Filter::getString('view_type'))) ? $iurl .= '&view_type=' . Filter::getString('view_type') : null;
-        (!empty(Filter::getInt('id'))) ? $iurl .= '&id=' . Filter::getInt('id') : null;
-        (!empty(Filter::getUtf8('search_shows_torrents'))) ? $iurl .= '&search_shows_torrents=' . Filter::getUtf8('search_shows_torrents') : null;
-        (!empty(Filter::getUtf8('search_movies_torrents'))) ? $iurl .= '&search_movies_torrents=' . Filter::getUtf8('search_movies_torrents') : null;
-        (!empty($_GET['more_movies'])) ? $iurl .= '&more_movies=1' : null;
-        (!empty($_GET['more_torrents'])) ? $iurl .= '&more_torrents=1' : null;
-        (!empty(Filter::getUtf8('search_movie_db'))) ? $iurl .= '&search_movie_db=' . Filter::getUtf8('search_movie_db') : null;
-        (!empty(Filter::getUtf8('search_movies'))) ? $iurl .= '&search_movies=' . Filter::getUtf8('search_movies') : null;
-        (!empty(Filter::getUtf8('search_shows'))) ? $iurl .= '&search_shows=' . Filter::getUtf8('search_shows') : null;
+        $get_params = [];
+        $get_params['page'] = $page;
+        (!empty(Filter::getString('view_type'))) ? $get_params['view_type'] = Filter::getString('view_type') : null;
+        (!empty(Filter::getInt('id'))) ? $get_params['id'] = Filter::getInt('id') : null;
+        (!empty(Filter::getUtf8('search_shows_torrents'))) ? $get_params['search_shows_torrents'] = Filter::getUtf8('search_shows_torrents') : null;
+        (!empty(Filter::getUtf8('search_movies_torrents'))) ? $get_params['search_movies_torrents'] = Filter::getUtf8('search_movies_torrents') : null;
+        (!empty($_GET['more_movies'])) ? $get_params['more_movies'] = 1 : null;
+        (!empty($_GET['more_torrents'])) ? $get_params['more_torrents'] = 1 : null;
+        (!empty(Filter::getUtf8('search_movie_db'))) ? $get_params['search_movie_db'] = Filter::getUtf8('search_movie_db') : null;
+        (!empty(Filter::getUtf8('search_movies'))) ? $get_params['search_movies'] = Filter::getUtf8('search_movies') : null;
+        (!empty(Filter::getUtf8('search_shows'))) ? $get_params['search_shows'] = Filter::getUtf8('search_shows') : null;
 
         for ($i = 1; $i <= ceil($num_pages); $i++) {
             if (($i == 1 || $i == $num_pages || $i == $npage) ||
                     in_range($i, ($npage - 3), ($npage + 3), TRUE)
             ) {
-                $extra = '';
+
                 $link_npage_class = "num_pages_link";
 
                 if (!empty($topt['search_type'])) {
-                    $extra = '&search_type=' . $topt['search_type'];
+                    $get_params['search_type'] = $topt['search_type'];
                 }
 
                 if (isset($npage) && ($npage == $i)) {
@@ -203,12 +202,14 @@ function pager($npage, $nitems, &$topt) {
                         $link_npage_class .= '_selected';
                     }
                 }
-                $pages .= '<a onClick="show_loading()"  class="' . $link_npage_class . '" href="' . $iurl . '&npage=' . $i . $extra . '">' . $i . '</a>';
+                $get_params['npage'] = $i;
+
+                $pages_links .= html::link(['onClick' => 'show_loading()', 'class' => $link_npage_class], '', $i, $get_params);
             }
         }
     }
 
-    return '<div class="type_pages_numbers">' . $pages . '</div>';
+    return html::div(['class' => 'type_pages_numbers'], $pages_links);
 }
 
 function html_mediainfo_tags($mediainfo, $tags = null) {
