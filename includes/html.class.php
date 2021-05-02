@@ -7,7 +7,7 @@
  *  @subpackage
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  *
- * v0.3
+ * v0.31
  */
 !defined('IN_WEB') ? exit : true;
 
@@ -52,7 +52,7 @@ class Html {
       conf = array
      */
 
-    static function link(array $conf, string $url = null, string $s_name = null, array $get_params = null) {
+    static function link(array $conf, string $url = null, string $display_name = null, array $get_params = null) {
         $opt = '';
 
         if ($get_params != null) {
@@ -62,13 +62,13 @@ class Html {
         } else {
             $params = '';
         }
-        empty($s_name) ? $s_name = $url : null;
+        empty($display_name) ? $display_name = $url : null;
         isset($conf['class']) ? $opt .= 'class="' . $conf['class'] . '" ' : null;
         isset($conf['_blank']) ? $opt .= 'target=_blank ' : null;
         isset($conf['id']) ? $opt .= 'id="' . $conf['id'] . '" ' : null;
         isset($conf['onClick']) ? $opt .= 'onClick="' . $conf['onClick'] . '" ' : null;
 
-        return '<a ' . $opt . ' href="' . $url . $params . '">' . $s_name . '</a>';
+        return '<a ' . $opt . ' href="' . $url . $params . '">' . $display_name . '</a>';
     }
 
     static function input(array $conf) {
