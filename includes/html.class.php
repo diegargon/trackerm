@@ -7,7 +7,7 @@
  *  @subpackage
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  *
- * v0.2
+ * v0.3
  */
 !defined('IN_WEB') ? exit : true;
 
@@ -24,7 +24,7 @@ class Html {
         }
         !isset($conf['sel']) ? $conf['sel'] = null : null;
         isset($conf['class']) ? $opt = 'class="' . $conf['class'] . ' "' : null;
-        isset($conf['onChange']) ? $opt .= 'onchange="this.form.submit()" ' : null;
+        isset($conf['onChange']) ? $opt .= 'onChange="' . $conf['onChange'] . '" ' : null;
         !empty($conf['size']) ? $opt .= 'size="' . $conf['size'] . '" ' : null;
         !empty($conf['disabled']) ? $opt .= 'disabled="disabled" ' : null;
         !empty($conf['readonly']) ? $opt .= 'readonly="readonly" ' : null;
@@ -66,6 +66,7 @@ class Html {
         isset($conf['class']) ? $opt .= 'class="' . $conf['class'] . '" ' : null;
         isset($conf['_blank']) ? $opt .= 'target=_blank ' : null;
         isset($conf['id']) ? $opt .= 'id="' . $conf['id'] . '" ' : null;
+        isset($conf['onClick']) ? $opt .= 'onClick="' . $conf['onClick'] . '" ' : null;
 
         return '<a ' . $opt . ' href="' . $url . $params . '">' . $s_name . '</a>';
     }
