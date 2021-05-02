@@ -396,7 +396,7 @@ function page_identify() {
             } else {
                 $conf_selected = '';
             }
-            $select .= Html::select(['onChange' => 1, 'class' => 'ident_select', 'selected' => $conf_selected, 'name' => 'selected[' . $id . ']'], $values);
+            $select .= Html::select(['onChange' => 'this.form.submit()', 'class' => 'ident_select', 'selected' => $conf_selected, 'name' => 'selected[' . $id . ']'], $values);
 
             $tdata['select'] = $select;
         }

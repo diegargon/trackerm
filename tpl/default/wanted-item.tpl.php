@@ -41,23 +41,23 @@ if ($tdata['want_separator']) {
             <div class="tag_type">
                 <form class="form_inline" method="POST" action="">
                     <input type="hidden" name="only_proper[<?= $tdata['id'] ?>]" value="0">
-                    <input  <?= !empty($tdata['only_proper']) ? "checked" : null ?> onchange="this.form.submit()" type="checkbox" name="only_proper[<?= $tdata['id'] ?>]]" value="1">
+                    <input  <?= !empty($tdata['only_proper']) ? "checked" : null ?> onChange="this.form.submit()" type="checkbox" name="only_proper[<?= $tdata['id'] ?>]]" value="1">
                 </form>
             </div>
         </div>
         <div class="divTableCellWanted">
             <div class="inline" data-tip="<?= $LNG['L_TIP_COMMA'] ?>">
-                <div class="tag_type"><form class="form_inline" method="post" action=""><input class="wanted_input_red" name="ignore_tags[<?= $tdata['id'] ?>]" type="text" onchange="this.form.submit()" value="<?= !empty($tdata['custom_words_ignore']) ? $tdata['custom_words_ignore'] : null ?>"/></form></div>
+                <div class="tag_type"><form class="form_inline" method="post" action=""><input class="wanted_input_red" name="ignore_tags[<?= $tdata['id'] ?>]" type="text" onChange="this.form.submit()" value="<?= !empty($tdata['custom_words_ignore']) ? $tdata['custom_words_ignore'] : null ?>"/></form></div>
             </div>
         </div>
         <div class="divTableCellWanted">
             <div class="inline" data-tip="<?= $LNG['L_TIP_COMMA'] ?>">
-                <div class="tag_type"><form class="form_inline" method="post" action=""><input class="wanted_input" name="require_tags[<?= $tdata['id'] ?>]"  type="text" onchange="this.form.submit()" value="<?= !empty($tdata['custom_words_require']) ? $tdata['custom_words_require'] : null ?>"/></form></div>
+                <div class="tag_type"><form class="form_inline" method="post" action=""><input class="wanted_input" name="require_tags[<?= $tdata['id'] ?>]"  type="text" onChange="this.form.submit()" value="<?= !empty($tdata['custom_words_require']) ? $tdata['custom_words_require'] : null ?>"/></form></div>
             </div>
         </div>
         <div class="divTableCellWanted">
             <div class="inline" data-tip="<?= $LNG['L_TIP_FIX_TITLE'] ?>">
-                <div class="tag_type"><form class="form_inline" method="post" action=""><input class="wanted_title_input" name="custom_title[<?= $tdata['id'] ?>]"  type="text" onchange="this.form.submit()" value="<?= !empty($tdata['custom_title']) ? $tdata['custom_title'] : $tdata['title'] ?>"/></form></div>
+                <div class="tag_type"><form class="form_inline" method="post" action=""><input class="wanted_title_input" name="custom_title[<?= $tdata['id'] ?>]"  type="text" onChange="this.form.submit()" value="<?= !empty($tdata['custom_title']) ? $tdata['custom_title'] : $tdata['title'] ?>"/></form></div>
             </div>
         </div>
         <div class="divTableCellWanted">

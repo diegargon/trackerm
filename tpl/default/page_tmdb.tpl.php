@@ -25,17 +25,17 @@
         <form class="form_inline" method="POST" action="">
             <label for="show_trending"><?= $LNG['L_SHOW_TRENDING'] ?> </label>
             <input  type="hidden" name="show_trending" value="0"/>
-            <input id="show_trending" <?= $tdata['TRENDING_CHECKED'] ?> onchange="this.form.submit()" type="checkbox" name="show_trending" value="1"/>
+            <input id="show_trending" <?= $tdata['TRENDING_CHECKED'] ?> onChange="this.form.submit()" type="checkbox" name="show_trending" value="1"/>
         </form>
         <form class="form_inline" method="POST" action="">
             <label for="show_popular"><?= $LNG['L_SHOW_POPULAR'] ?> </label>
             <input  type="hidden" name="show_popular" value="0"/>
-            <input id="show_popular" <?= $tdata['POPULAR_CHECKED'] ?> onchange="this.form.submit()" type="checkbox" name="show_popular" value="1"/>
+            <input id="show_popular" <?= $tdata['POPULAR_CHECKED'] ?> onChange="this.form.submit()" type="checkbox" name="show_popular" value="1"/>
         </form>
         <form class="form_inline" method="POST" action="">
             <label for="show_today_shows"><?= $LNG['L_TODAY_SHOWS'] ?> </label>
             <input  type="hidden" name="show_today_shows" value="0"/>
-            <input id="show_today_shows" <?= $tdata['TODAYSHOWS_CHECKED'] ?> onchange="this.form.submit()" type="checkbox" name="show_today_shows" value="1"/>
+            <input id="show_today_shows" <?= $tdata['TODAYSHOWS_CHECKED'] ?> onChange="this.form.submit()" type="checkbox" name="show_today_shows" value="1"/>
         </form>
     </div>
 </div>
