@@ -6,28 +6,6 @@
 
 ## Description: 
 
-**SPANISH**
-
-Alternativa Sonarr+Radarr sobre servidor web haciendo uso como estos de jackett. 
-
-Jackett es una aplicacion que hace intermediario o pasarela entre trackers, foros o paginas web que ofrecen archivos torrentes
-y así poder obtener resultados de una forma standard independiente de la fuente.
-
-Sonarr+Radarr, son aplicacines que utilizan jackett para mantener, organizar, programar, descargar archivos multimedia. Una esta 
-centrada en series y otra en peliculas.
-
-Trackerm es una mezcla de ambas realizada en php en vez C# (Sonarr/Radarr) que necesita de instalación de un servidor web.
-Al contrario que las otras trackerm obvia los "fechas de lanzamiento/publicacion" oficales que son muy dependientes de cada
-pais. Las busquedas de series por ejemplo las hace semanalmente estableciendo por el usuario un dia.
-
-Trackerm solo soporta linux/unix.
-
-En /screenshots encontraras algunos sceenshots del aspecto posiblemente desactualizados
-
-Atención: Gran parte del codigo fue realizado a correr (el grueso fue programado  en 3 intensos dias). La aplicación es funcional pero  hay que pulirlo y reescribir mucho 
-y revisar la seguridad. Si lo instalas espera una aplicación alpha.
-
-
 **ENGLISH**
 
 Sonarr & Radarr alternative over a web server using jackett.
@@ -49,6 +27,26 @@ In / screenshots you will find some possibly outdated sceenshots of the look
 Warn: Much of the code was made to run (the bulk was programmed in 3 intense days). The application is functional but i need polish it and rewrite a lot
 and review security. If you install it expects an alpha application.
 
+**SPANISH**
+
+Alternativa Sonarr+Radarr sobre servidor web haciendo uso como estos de jackett. 
+
+Jackett es una aplicacion que hace intermediario o pasarela entre trackers, foros o paginas web que ofrecen archivos torrentes
+y así poder obtener resultados de una forma standard independiente de la fuente.
+
+Sonarr+Radarr, son aplicacines que utilizan jackett para mantener, organizar, programar, descargar archivos multimedia. Una esta 
+centrada en series y otra en peliculas.
+
+Trackerm es una mezcla de ambas realizada en php en vez C# (Sonarr/Radarr) que necesita de instalación de un servidor web.
+Al contrario que las otras trackerm obvia los "fechas de lanzamiento/publicacion" oficales que son muy dependientes de cada
+pais. Las busquedas de series por ejemplo las hace semanalmente estableciendo por el usuario un dia.
+
+Trackerm solo soporta linux/unix.
+
+En /screenshots encontraras algunos sceenshots del aspecto posiblemente desactualizados
+
+Atención: Gran parte del codigo fue realizado a correr (el grueso fue programado  en 3 intensos dias). La aplicación es funcional pero  hay que pulirlo y reescribir mucho 
+y revisar la seguridad. Si lo instalas espera una aplicación alpha.
  
 
 ## LEGAL
