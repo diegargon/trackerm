@@ -1,5 +1,7 @@
 ## Latest / News (Relevant)
 
+[03/05] Add nocount, 'track show' will not take into account 'this' show episode and add next, trackerm will search for 'this' and next.
+[********** COMMIT **********]
 [14/04] Clear query cache (index) here you can clear the searchs caches.
 [13/04] Added (index) Clear disable torrents (trackerm disable timeout indexers and clear after certain time, here you can force clean)
 [********** COMMIT **********]

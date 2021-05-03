@@ -763,6 +763,14 @@ function tracker_shows($wanted) {
     $result = $db->query("SELECT * FROM wanted WHERE themoviedb_id = $oid AND media_type = 'shows' AND wanted_status < 5 AND track_show = 0");
     $items_match = $db->fetchAll($result);
     $items_match_count = count($items_match);
+
+    //nocount option// add later to max for ignore max_wanted_track_download
+    $nocount = 0;
+    foreach ($items_match as $item_match) {
+        if ($item_match['ignore_count']) {
+            $nocount ++;
+        }
+    }
     //From all the episode that meet the criteria check if already have that item
     //or if already in wanted.
     $have_shows = get_have_shows($oid);
@@ -775,6 +783,7 @@ function tracker_shows($wanted) {
             // Get all wanted regarless or wanted_status for drop gump up the max_wanted_track, since > 5 must not count for send next show
             // At this moment the isn't added because duplicate but neither, must wait next cli run when shows library is building and detect as a
             // have_show.
+
             if (valid_array($have_shows)) {
                 foreach ($have_shows as $have_show) {
                     if ($have_show['season'] == $season && $have_show['episode'] == $episode) {
@@ -797,7 +806,7 @@ function tracker_shows($wanted) {
 
     $item = mediadb_getFromCache('shows', $oid);
     $title = $item['title'];
-    empty($cfg['max_wanted_track_downloads']) ? $max_wanted_track_downloads = 1 : $max_wanted_track_downloads = $cfg['max_wanted_track_downloads'];
+    empty($cfg['max_wanted_track_downloads']) ? $max_wanted_track_downloads = 1 + $nocount : $max_wanted_track_downloads = $cfg['max_wanted_track_downloads'] + $nocount;
 
     $inherint_track = null;
     !empty($wanted['custom_words_ignore']) ? $inherint_track['custom_words_ignore'] = $wanted['custom_words_ignore'] : null;

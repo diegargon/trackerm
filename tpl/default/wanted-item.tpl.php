@@ -40,6 +40,14 @@ if ($tdata['want_separator']) {
         <div class="divTableCellWanted">
             <div class="tag_type">
                 <form class="form_inline" method="POST" action="">
+                    <input type="hidden" name="nocount[<?= $tdata['id'] ?>]" value="0">
+                    <input  <?= !empty($tdata['ignore_count']) ? "checked" : null ?> onChange="this.form.submit()" type="checkbox" name="nocount[<?= $tdata['id'] ?>]]" value="1">
+                </form>
+            </div>
+        </div>
+        <div class="divTableCellWanted">
+            <div class="tag_type">
+                <form class="form_inline" method="POST" action="">
                     <input type="hidden" name="only_proper[<?= $tdata['id'] ?>]" value="0">
                     <input  <?= !empty($tdata['only_proper']) ? "checked" : null ?> onChange="this.form.submit()" type="checkbox" name="only_proper[<?= $tdata['id'] ?>]]" value="1">
                 </form>

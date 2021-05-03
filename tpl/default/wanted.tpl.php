@@ -61,6 +61,7 @@
                     <div class="divTableCellWanted"><?= $LNG['L_ADDED'] ?></div>
                     <div class="divTableCellWanted"><?= $LNG['L_CHECKED'] ?></div>
                     <div class="divTableCellWanted"><?= $LNG['L_TYPE'] ?></div>
+                    <div class="divTableCellWanted"><?= $LNG['L_NOCOUNT'] ?>&nbsp;</div>
                     <div class="divTableCellWanted"><?= $LNG['L_ONLY_PROPER'] ?></div>
                     <div class="divTableCellWanted"><?= $LNG['L_IGNORE'] ?></div>
                     <div class="divTableCellWanted"><?= $LNG['L_REQUIRE'] ?></div>
@@ -75,6 +76,7 @@
 </div>
 <div class="wanted_help">
     <div><?= $LNG['L_HELP_PROPER'] ?></div>
+    <div><?= $LNG['L_HELP_NOCOUNT'] ?></div>
     <div><?= $LNG['L_HELP_IGNORE_TAGS'] ?></div>
     <div><?= $LNG['L_HELP_REQUIRE_TAGS'] ?></div>
 </div>

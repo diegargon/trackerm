@@ -37,6 +37,13 @@ function wanted_list() {
 
             $db->updateItemById('wanted', $id_only_proper, ['only_proper' => $only_proper]);
         }
+        if (isset($_POST['nocount'])) {
+            $id_nocount = array_key_first($_POST['nocount']);
+            $_POST['nocount'][$id_nocount] == 0 ? $nocount = 0 : $nocount = 1;
+
+            $db->updateItemById('wanted', $id_nocount, ['ignore_count' => $nocount]);
+        }
+
         if (!empty($_POST['track_show']) && !empty($_POST['id'])) {
             $id = Filter::postInt('id');
             $track_show = Filter::postString('track_show');
