@@ -451,9 +451,19 @@ function move_media($valid_file, $final_dest_path) {
     global $cfg, $log, $LNG;
 
     if (rename($valid_file, $final_dest_path)) {
-        (!empty($cfg['files_usergroup'])) ? chgrp($final_dest_path, $cfg['files_usergroup']) : null;
+        if (!empty($cfg['files_usergroup'])) {
+            if (!chgrp($final_dest_path, $cfg['files_usergroup'])) {
+                $log->err("chgrp on $valid_file fail (move_media)");
+                return false;
+            }
+        }
         umask(0);
-        (!empty($cfg['files_perms'])) ? chmod($final_dest_path, octdec("0" . $cfg['files_perms'])) : null;
+        if (!empty($cfg['files_perms'])) {
+            if (!chmod($final_dest_path, octdec("0" . $cfg['files_perms']))) {
+                $log->err("chmod on $valid_file fail (move_media)");
+                return false;
+            }
+        }
         $log->info("Rename sucessful: $valid_file : $final_dest_path");
         $log->addStateMsg('[' . $LNG['L_MOVED'] . '] ' . basename($final_dest_path));
         return true;
@@ -467,9 +477,19 @@ function linking_media($valid_file, $final_dest_path) {
     global $cfg, $log, $LNG;
 
     if (symlink($valid_file, $final_dest_path)) {
-        (!empty($cfg['files_usergroup'])) ? chgrp($valid_file, $cfg['files_usergroup']) : null;
+        if (!empty($cfg['files_usergroup'])) {
+            if (!chgrp($valid_file, $cfg['files_usergroup'])) {
+                $log->err("chgrp on $valid_file fail (linking)");
+                return false;
+            }
+        }
         umask(0);
-        (!empty($cfg['files_perms'])) ? chmod($valid_file, octdec("0" . $cfg['files_perms'])) : null;
+        if (!empty($cfg['files_perms'])) {
+            if (!chmod($valid_file, octdec("0" . $cfg['files_perms']))) {
+                $log->err("chmod on $valid_file fail (linking)");
+                return false;
+            }
+        }
         $log->info("Linking sucessful: $valid_file : $final_dest_path");
         $log->addStateMsg('[' . $LNG['L_LINKED'] . '] ' . basename($final_dest_path));
         return true;
