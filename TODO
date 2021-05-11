@@ -1,6 +1,7 @@
 TODO
 
 [HIGH]    
+    [FIX] Tracker cli must check space before doing move/linking
     [IMPROVE] Import path
     [IMPROVE] Wanted Not count for max download 
     [IMPROVE] Indexers to config
@@ -14,6 +15,8 @@ TODO
     [FIX] Security
     [IMPROVE][CLI] Clean old query search caches entrys
     [IMPROVE] Reduce querys on Wanted, TMDB
+    [FIX] Si no hay espacio en torrent temp transmission no mueve pero para trackerm consta que esta finalizado y intenta enlazarlo pero sige en temp no en 
+    finalize/Ultimo.
 [VERY LOW]      
     [IMPROVE] Add to library sub menu a switch to player mode.
     [IMPROVE] añadir tabla view_movies, view=0 not view 1 partial 2 , 3 view.     
