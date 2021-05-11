@@ -217,6 +217,8 @@ button {
 }
 .item_title {
     margin: 4px;
+    word-break: break-word;
+    max-width: 100%;
 }
 .item_desc {}
 .item_source, .item_size, .item_download, .item_rating {
