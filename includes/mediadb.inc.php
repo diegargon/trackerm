@@ -80,6 +80,7 @@ function mediadb_guessFieldGet($item, $field) {
       testing adding and using clean_title column
      */
     $title = trim(getFileTitle($item['title']));
+    $title = $db->escape($title);
     $c_title = clean_title($title);
 
     $media_type = $item['media_type'];
