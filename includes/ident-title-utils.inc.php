@@ -51,6 +51,7 @@ function getFileTitle($file) {
     $regex .= '(?!4K)'; //4K
     $regex .= '(?!UHD)'; // UHD
     $regex .= '(?!HD4K)'; //HD4K
+    $regex .= '(?!HQ-TS)'; //HD-TS
     $regex .= '(?!Xvid)'; //XviD
     $regex .= '(?!DVD)'; //DVD
     $regex .= '(?!DVDRip)'; //DVDRip
