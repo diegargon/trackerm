@@ -311,8 +311,8 @@ function getFileTags($file_name) {
     }
     if (
             (stripos($file_name, 'SCREENER') !== false) ||
-            (stripos($file_name, 'hd-tc') !== false)
-                    (stripos($file_name, 'hd-ts') !== false)
+            (stripos($file_name, 'hd-tc') !== false) ||
+            (stripos($file_name, 'hd-ts') !== false)
     ) {
         $tags .= "[SCREENER]";
     }
