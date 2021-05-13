@@ -51,7 +51,8 @@ function getFileTitle($file) {
     $regex .= '(?!4K)'; //4K
     $regex .= '(?!UHD)'; // UHD
     $regex .= '(?!HD4K)'; //HD4K
-    $regex .= '(?!HQ-TS)'; //HD-TS
+    $regex .= '(?!HQ-TS)'; //HQ-TS
+    $regex .= '(?!HD-TS)'; //HD-TS
     $regex .= '(?!Xvid)'; //XviD
     $regex .= '(?!DVD)'; //DVD
     $regex .= '(?!DVDRip)'; //DVDRip
@@ -311,6 +312,7 @@ function getFileTags($file_name) {
     if (
             (stripos($file_name, 'SCREENER') !== false) ||
             (stripos($file_name, 'hd-tc') !== false)
+                    (stripos($file_name, 'hd-ts') !== false)
     ) {
         $tags .= "[SCREENER]";
     }
