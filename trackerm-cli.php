@@ -30,10 +30,15 @@ if (($c_blocker = getPrefsItem('cli_blocker', true)) && $c_blocker <= 3) {
 
     return false;
 }
+if (!valid_array($trans)) {
+    $log->err("Starting TAS fail: Fail Transmission connection");
+    exit(1);
+}
+transmission_scan();
+
 setPrefsItem('cli_blocker', 1, true);
 
 $log->info("Starting trackerm automatic service...");
-transmission_scan();
 wanted_work();
 update_things();
 

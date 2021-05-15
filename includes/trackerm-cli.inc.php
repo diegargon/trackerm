@@ -1025,7 +1025,7 @@ function delete_direct_orphans() {
     global $trans, $db;
 
     $items = $db->getItemsByField('wanted', 'direct', 1);
-    if (valid_array($items)) {
+    if (valid_array($trans) && valid_array($items)) {
         $torrents = $trans->getAll();
         if (!valid_array($trans)) {
             return false;

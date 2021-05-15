@@ -118,7 +118,7 @@ function ident_by_already_have_show($media, $ids) {
         $log->debug("ident_by_already_have_show called for id $id");
         $item = $db->getItemById('library_shows', $id);
         foreach ($media as $id_item) {
-            if ($id_item['predictible_title'] === ucwords($item['predictible_title']) &&
+            if (valid_array($item) && $id_item['predictible_title'] === ucwords($item['predictible_title']) &&
                     !empty($id_item['themoviedb_id'])
             ) {
                 $item['themoviedb_id'] = $id_item['themoviedb_id'];
