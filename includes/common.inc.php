@@ -67,7 +67,7 @@ require_once('includes/prefs.inc.php');
 
 global $trans;
 $trans = new TorrentServer($cfg);
-if ($trans->trans_conn == false) {
+if (empty($trans) || $trans->trans_conn == false) {
     $cfg['general_warn_msg'] = $LNG['L_ERR_TRANS_CONN'];
     $trans = false;
 }

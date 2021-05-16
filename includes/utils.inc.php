@@ -173,6 +173,14 @@ function valid_array($array) {
     return false;
 }
 
+function valid_object($object) {
+    if (!empty($object) && is_object($object) && count(array($object)) > 0) {
+        return true;
+    }
+
+    return false;
+}
+
 function notify_mail($msg) {
     global $db, $LNG;
 

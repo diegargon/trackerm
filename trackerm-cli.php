@@ -30,7 +30,7 @@ if (($c_blocker = getPrefsItem('cli_blocker', true)) && $c_blocker <= 3) {
 
     return false;
 }
-if (!valid_array($trans)) {
+if (!valid_object($trans)) {
     $log->err("Starting TAS fail: Fail Transmission connection");
     exit(1);
 }
