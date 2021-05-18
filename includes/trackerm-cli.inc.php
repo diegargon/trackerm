@@ -155,10 +155,11 @@ function MovieJob($item, $linked = false) {
     if ($valid_files && count($valid_files) >= 1) {
 
         if ($cfg['create_movie_folders']) {
+            $folder_title = preg_replace('/\s+/', ' ', $item['title']);
             if (is_array($cfg['MOVIES_PATH'])) {
-                $dest_path = $cfg['MOVIES_PATH'][0] . '/' . ucwords($item['title']);
+                $dest_path = $cfg['MOVIES_PATH'][0] . '/' . ucwords($folder_title);
             } else {
-                $dest_path = $cfg['MOVIES_PATH'] . '/' . ucwords($item['title']);
+                $dest_path = $cfg['MOVIES_PATH'] . '/' . ucwords($folder_title);
             }
             if (!file_exists($dest_path)) {
                 umask(0);
@@ -185,12 +186,21 @@ function MovieJob($item, $linked = false) {
             $ext = substr($valid_file, -4);
 
             if ($num_valid > 1) {
-                $numerated = '[' . $i++ . ']';
+                $numerated = '[' . $i . ']';
             } else {
                 $numerated = '';
             }
-
-            $new_file_name = ucwords($item['title']) . ' ' . $file_tags . $numerated . $ext;
+            if ($num_valid > 1) {
+                $title = getFileTitle(basename($valid_file));
+            } else {
+                $title = ucwords($item['title']);
+            }
+            $title = preg_replace('/\s+/', ' ', $title);
+            $new_file_name = $title . ' ' . $file_tags . $ext;
+            if (file_exists($new_file_name)) {
+                $new_file_name = $title . ' ' . $file_tags . $numerated . $ext;
+                $i++;
+            }
             $final_dest_path = $dest_path . '/' . $new_file_name;
 
             if (file_exists($final_dest_path) && $linked) {
@@ -274,6 +284,7 @@ function ShowJob($item, $linked = false) {
             //END EPISODE NAME
             //CREATE PATHS
             $title = getFileTitle($item['title']);
+            $title = preg_replace('!\s+!', ' ', $title);
             if ($cfg['create_shows_season_folder'] && !empty($_season)) {
                 ($_season != "xx") ? $_season = (int) $_season : null; // 01 to 1 for directory
                 if (is_array($cfg['SHOWS_PATH'])) {
