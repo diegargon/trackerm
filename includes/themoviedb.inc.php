@@ -24,7 +24,7 @@ function themoviedb_searchMovies($search) {
     $url = 'https://api.themoviedb.org/3/search/movie?api_key=' . $cfg['db_api_token'] . '&query=' . $search_query . '&language=' . $cfg['TMDB_LANG'];
     $data = curl_get_tmdb($url);
 
-    if (valid_array($data['results'])) {
+    if (valid_array($data) && !empty($data['results'])) {
         themoviedb_updateCache($search, $data, 'movies');
         $movies = themoviedb_MediaPrep('movies', $data['results']);
     } else {
