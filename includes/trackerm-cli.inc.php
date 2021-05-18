@@ -626,9 +626,12 @@ function wanted_check_title($title, $results) {
     $valid = [];
 
     $req_title = iconv($cfg['charset'], "ascii//TRANSLIT", trim($title));
+    $req_title = clean_title($req_title);
+    $req_title = preg_replace('/\s+/', ' ', $req_title);
     foreach ($results as $item) {
         $res_title = iconv($cfg['charset'], "ascii//TRANSLIT", trim(getFileTitle($item['title'])));
-
+        $res_title = clean_title($res_title);
+        $res_title = preg_replace('/\s+/', ' ', $res_title);
         if (strcmp(strtolower($res_title), strtolower($req_title)) == 0) {
             $log->debug('Wanted: Valid title found for title: ' . $req_title . ' ->' . $res_title);
             $valid[] = $item;
