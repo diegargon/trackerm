@@ -489,8 +489,12 @@ function linking_media($valid_file, $final_dest_path) {
 
     if (symlink($valid_file, $final_dest_path)) {
         if (!empty($cfg['files_usergroup'])) {
-            if (!chgrp($valid_file, $cfg['files_usergroup'])) {
-                $log->err("chgrp on $valid_file fail (linking)");
+            if (file_exists($valid_file)) {
+                if (!chgrp($valid_file, $cfg['files_usergroup'])) {
+                    $log->err("chgrp on $valid_file fail (linking)");
+                    return false;
+                }
+            } else {
                 return false;
             }
         }

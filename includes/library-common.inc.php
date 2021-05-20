@@ -373,6 +373,7 @@ function submit_ident($media_type, $item, $id) {
         unset($_item['created']);
         unset($_item['file_hash']);
         unset($_item['media_info']);
+        unset($_item['file_name']);
         if (empty($media_in_library['master'])) {
             $db->insert('library_master_' . $media_type, $_item);
             $lastid_master = $db->getLastId();
