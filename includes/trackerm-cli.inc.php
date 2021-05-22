@@ -461,7 +461,7 @@ function get_valid_files($item) {
 function move_media($valid_file, $final_dest_path) {
     global $cfg, $log, $LNG;
 
-    if (rename($valid_file, $final_dest_path)) {
+    if (move_file($valid_file, $final_dest_path)) {
         if (!empty($cfg['files_usergroup'])) {
             if (!chgrp($final_dest_path, $cfg['files_usergroup'])) {
                 $log->err("chgrp on $valid_file fail (move_media)");

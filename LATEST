@@ -1,5 +1,7 @@
 ## Latest / News (Relevant)
 
+[22/05] Fix error moving files cross partitions and others.
+[********** COMMIT **********]
 [03/05] Add nocount, 'track show' will not take into account 'this' show episode and add next, trackerm will search for 'this' and next.
 [********** COMMIT **********]
 [14/04] Clear query cache (index) here you can clear the searchs caches.
