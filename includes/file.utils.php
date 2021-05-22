@@ -313,8 +313,6 @@ function move_file($origen, $destino) {
         if (copy($origen, $destino)) {
             unlink($origen);
             return true;
-        } else {
-            echo "$ret \n";
         }
     }
 
