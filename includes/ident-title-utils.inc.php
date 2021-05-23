@@ -115,7 +115,7 @@ function getFileEpisode($file_name) {
 
     /* FORMAT Cap.101 */
     $match = [];
-    if (preg_match('/\[Cap.(\d+)/i', $file_name, $match) == 1) {
+    if (preg_match('/\Cap.(\d+)/i', $file_name, $match) == 1) {
         $SE_MATCH = trim($match[1]);
         if (strlen($SE_MATCH) == 3) {
             $ses = substr($SE_MATCH, 0, 1);
