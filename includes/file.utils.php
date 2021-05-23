@@ -53,13 +53,19 @@ function getFileExt($file) {
 }
 
 function getDirContents($dir, &$results = []) {
+    global $log;
+
+    if (!is_readable($dir)) {
+        $log->debug("Directory $dir is not readable");
+        return false;
+    }
     $files = scandir($dir);
 
-    foreach ($files as $key => $value) {
+    foreach ($files as $value) {
         $path = $dir . DIRECTORY_SEPARATOR . $value;
         if (!is_dir($path)) {
             $results[] = $path;
-        } else if ($value != "." && $value != "..") {
+        } else if ($value != '.' && $value != '..') {
             getDirContents($path, $results);
             $results[] = $path;
         }
