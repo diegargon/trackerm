@@ -64,10 +64,13 @@ function getFileTitle($file) {
     $regex .= '(?!S\d{2}\s+E\d{2})'; // SXX EXX
     $regex .= '(?!3D)'; // 3D
     $regex .= '(?!BRRip)'; // BRRIP
+    $regex .= '(?!BDRip)'; // BDRIP
     $regex .= '(?!\.mkv$)'; //.mkv
     $regex .= '(?!\.avi$)'; //.avi
     $regex .= '(?!\.mp4$)'; //.mp4
-
+    $regex .= '(?!Cap\s\d+$)'; // Cap.
+    $regex .= '(?!Temporada\s\d+$)'; //Temporada X
+    $regex .= '(?!Temp\s\d+$)'; //Temp.X
     /* REGEX TERMINATION */
     $regex .= '.)*/i';
 
