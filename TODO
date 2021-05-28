@@ -1,6 +1,7 @@
 TODO
 
-[HIGH]    
+[HIGH]
+    [CURL] Proxy external (not jackett) request
     [FIX] Tracker cli must check space before doing move/linking
     [IMPROVE] Import path
     [IMPROVE] Wanted Not count for max download 
