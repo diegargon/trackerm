@@ -149,6 +149,7 @@ $LNG = [
     'L_PASSWORD_EQUAL' => 'New password is equal to old password',
     'L_PROFILE' => 'Profile',
     'L_PROFILES' => 'Profiles',
+    'L_PROXY' => 'Proxy',
     'L_POPULARITY' => 'Popularity',
     'L_POSTER_GUESSED' => 'Guessed<br/>Poster',
     'L_POPULAR_SHOWS' => 'Popular shows',
@@ -289,8 +290,13 @@ $LNG = [
     'L_CFG_AUTOCLEAN_MOVED' => '¿Auto clean moved items from wanted list?',
     'L_CFG_LOCALPLAYER_TRACK' => 'Localplayer Track: Track time of content view. Need activate the VLC Web Service and a password (unused)',
     'L_CFG_LOCALPLAYER_WEB_PASSWORD' => 'Localplayer Track: Web service password (unused)',
-    'L_CFG_DISPLAY_ERRORS' => 'Mostar errores en pagina',
-    'L_CFG_SHOW_QUERYS' => 'Mostrar querys (debug)',
+    'L_CFG_DISPLAY_ERRORS' => 'Show page errors',
+    'L_CFG_SHOW_QUERYS' => 'Show querys (debug)',
+    'L_CFG_PROXY_ENABLE' => 'Enable Proxy (Used to get the cover from indexers, if you use proxy on jackett you must enable proxy)',
+    'L_CFG_PROXY_URL' => 'Example tcp://X.X.X.X:3128',
+    'L_CFG_PROXY_TIMEOUT' => 'Proxy tiemeout',
+    'L_CFG_PROXY_USER' => 'Proxy user (leave blank if not used)',
+    'L_CFG_PROXY_PASS' => 'Proxy password (leave blank if not used)',
     /*
       'L_CFG_TRANSCODER_PLAY' => '(unused p1)',
       'L_CFG_TRANSCODER_PATH' => '(unused p2)',
@@ -301,6 +307,6 @@ $LNG = [
       'L_CFG_VIDEOJS_AUTOPLAY' => '(unused p7)',
      */
 //TOOLTIP
-    'L_TIP_COMMA' => 'Palabras separadas por coma',
+    'L_TIP_COMMA' => 'Words comma comma separated',
     'L_TIP_IGNORE_SIZE' => 'Max size in GB (ex:1 for 1gb )',
 ];

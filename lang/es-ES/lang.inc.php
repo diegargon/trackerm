@@ -149,6 +149,7 @@ $LNG = [
     'L_PASSWORD_EQUAL' => 'La contraseña nueva es igual que la antigua',
     'L_PROFILE' => 'Perfil',
     'L_PROFILES' => 'Perfiles',
+    'L_PROXY' => 'Proxy',
     'L_POPULARITY' => 'Popularidad',
     'L_POSTER_GUESSED' => 'Posible<br/>Poster',
     'L_POPULAR_SHOWS' => 'Series populares',
@@ -291,6 +292,11 @@ $LNG = [
     'L_CFG_LOCALPLAYER_WEB_PASSWORD' => 'Localplayer Track: Contraseña del servicio web (unused)',
     'L_CFG_DISPLAY_ERRORS' => 'Show page errors',
     'L_CFG_SHOW_QUERYS' => 'Show querys (debug)',
+    'L_CFG_PROXY_ENABLE' => 'Usar Proxy (Usado para obtener los posters de los indexers, si utilizas proxy en jackett habilitalo aquí tambien)',
+    'L_CFG_PROXY_URL' => 'Ejemplo tcp://X.X.X.X:3128',
+    'L_CFG_PROXY_TIMEOUT' => 'Proxy tiemeout',
+    'L_CFG_PROXY_USER' => 'Usuario Proxy (dejar en blanco si no es necesario)',
+    'L_CFG_PROXY_PASS' => 'Contraseña Proxy (dejar en blanco si no es necesario)',
     /*
       'L_CFG_TRANSCODER_PLAY' => '(unused p1)',
       'L_CFG_TRANSCODER_PATH' => '(unused p2)',
@@ -300,7 +306,7 @@ $LNG = [
       'L_CFG_VIDEOJS_LIVEUI' => '(unused p6)',
       'L_CFG_VIDEOJS_AUTOPLAY' => '(unused p7)',
      */
-    //TOOLTIP
+//TOOLTIP
     'L_TIP_COMMA' => 'Palabras separadas por coma',
     'L_TIP_IGNORE_SIZE' => 'Tamaño maximo en GB ej:1 para 1gb',
 ];

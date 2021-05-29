@@ -416,7 +416,6 @@ function create_db() {
     $db->insert('config', ['cfg_key' => 'db_upd_long_delay', 'cfg_value' => 2592000, 'cfg_desc' => 'L_CFG_UPD_LONG_DELAY', 'type' => 2, 'category' => 'L_MAIN', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'want_movies', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_WANT_MOVIES', 'type' => 3, 'category' => 'L_MAIN', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'want_shows', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_WANT_SHOWS', 'type' => 3, 'category' => 'L_MAIN', 'public' => 1]);
-    $db->insert('config', ['cfg_key' => 'wanted_day_delay', 'cfg_value' => 3600, 'cfg_desc' => 'L_CFG_WANT_DAY_DELAY', 'type' => 2, 'category' => 'L_MAIN', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'charset', 'cfg_value' => 'UTF-8', 'cfg_desc' => 'L_CFG_CHARSET', 'type' => 1, 'category' => 'L_LANG', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'locale', 'cfg_value' => 'en_US.UTF-8', 'cfg_desc' => 'L_CFG_LOCALE', 'type' => 1, 'category' => 'L_LANG', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'theme', 'cfg_value' => 'default', 'cfg_desc' => 'L_CFG_THEME', 'type' => 1, 'category' => 'L_DISPLAY', 'public' => 1]);
@@ -428,6 +427,7 @@ function create_db() {
     $db->insert('config', ['cfg_key' => 'search_cache', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_SEARCH_CACHE', 'type' => 3, 'category' => 'L_SEARCH', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'search_cache_expire', 'cfg_value' => 3600, 'cfg_desc' => 'L_CFG_SEARCH_CACHE_EXPIRE', 'type' => 2, 'category' => 'L_SEARCH', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'wanted_paused', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_WANTED_PAUSED', 'type' => 3, 'category' => 'L_WANTED', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'wanted_day_delay', 'cfg_value' => 3600, 'cfg_desc' => 'L_CFG_WANT_DAY_DELAY', 'type' => 2, 'category' => 'L_WANTED', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'cache_images', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_CACHE_IMAGES', 'type' => 3, 'category' => 'L_IMAGES', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'cache_images_path', 'cfg_value' => '/cache/images', 'cfg_desc' => 'L_CFG_CACHE_IMAGES_PATH', 'type' => 1, 'category' => 'L_IMAGES', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'unrar_path', 'cfg_value' => '/usr/bin/unrar', 'cfg_desc' => 'L_CFG_UNRAR_PATH', 'type' => 1, 'category' => 'L_FILES', 'public' => 1]);
@@ -467,6 +467,11 @@ function create_db() {
     $db->insert('config', ['cfg_key' => 'display_errors', 'cfg_value' => 1, 'cfg_desc' => 'L_CFG_DISPLAY_ERRORS', 'type' => 3, 'category' => 'L_LOGGING', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'curl_timeout', 'cfg_value' => 70, 'cfg_desc' => 'L_CFG_CURL_TIMEOUT', 'type' => 2, 'category' => 'L_MAIN', 'public' => 1]);
 
+    $db->insert('config', ['cfg_key' => 'proxy_enable', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_PROXY_ENABLE', 'type' => 3, 'category' => 'L_PROXY', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'proxy_url', 'cfg_value' => '', 'cfg_desc' => 'L_CFG_PROXY_URL', 'type' => 1, 'category' => 'L_PROXY', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'proxy_user', 'cfg_value' => '', 'cfg_desc' => 'L_CFG_PROXY_USER', 'type' => 1, 'category' => 'L_PROXY', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'proxy_pass', 'cfg_value' => '', 'cfg_desc' => 'L_CFG_PROXY_PASS', 'type' => 1, 'category' => 'L_PROXY', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'proxy_timeout', 'cfg_value' => 10, 'cfg_desc' => 'L_CFG_PROXY_TIMEOUT', 'type' => 2, 'category' => 'L_PROXY', 'public' => 1]);
     /*
       $db->insert('config', ['cfg_key' => 'transcoder_player', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_TRANSCODER_PLAYER', 'type' => 3, 'category' => 'L_PLAY', 'public' => 1]);
       $db->insert('config', ['cfg_key' => 'transcoder_path', 'cfg_value' => '/usr/bin/ffmpeg', 'cfg_desc' => 'L_CFG_TRANSCODER_PATH', 'type' => 1, 'category' => 'L_PLAY', 'public' => 1]);
@@ -923,8 +928,20 @@ function update_db($from) {
         $db->query('VACUUM;');
     }
 
+    if ($from < 16) {
+        $db->insert('config', ['cfg_key' => 'proxy_enable', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_PROXY_ENABLE', 'type' => 3, 'category' => 'L_PROXY', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'proxy_url', 'cfg_value' => '', 'cfg_desc' => 'L_CFG_PROXY_URL', 'type' => 1, 'category' => 'L_PROXY', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'proxy_user', 'cfg_value' => '', 'cfg_desc' => 'L_CFG_PROXY_USER', 'type' => 1, 'category' => 'L_PROXY', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'proxy_pass', 'cfg_value' => '', 'cfg_desc' => 'L_CFG_PROXY_PASS', 'type' => 1, 'category' => 'L_PROXY', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'proxy_timeout', 'cfg_value' => 10, 'cfg_desc' => 'L_CFG_PROXY_TIMEOUT', 'type' => 2, 'category' => 'L_PROXY', 'public' => 1]);
+        $db->update('config', ['category' => 'L_WANTED'], ['cfg_key' => ['value' => 'wanted_day_delay']]);
+        $db->query('UPDATE config SET cfg_value=\'16\' WHERE cfg_key=\'db_version\' LIMIT 1');
+        $db->update('db_info', ['version' => 16]);
+        $db->query('VACUUM;');
+    }
+
     /*
-      if ($from < 16) {
+      if ($from < 18) {
       //'indexer_disable_time' default 24*60*60
       $db->query('UPDATE config SET cfg_value=\'16\' WHERE cfg_key=\'db_version\' LIMIT 1');
       $db->insert('config', ['cfg_key' => 'localplayer_track', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_LOCALPLAYER_TRACK', 'type' => 3, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
@@ -934,7 +951,7 @@ function update_db($from) {
       }
      */
     /*
-      if ($from < 17) {
+      if ($from < 19) {
       $db->query('UPDATE config SET cfg_value=\'17\' WHERE cfg_key=\'db_version\' LIMIT 1');
       $db->update('db_info', ['version' => 17]);
       $db->query('VACUUM;');
