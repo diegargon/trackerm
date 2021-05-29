@@ -1,7 +1,8 @@
 ## Latest / News (Relevant)
 
-[29/05] Add proxy support. trackerm when avaible, take the cover from indexer results (url provide by jackett), if the indexer is banned on your country and you 
-are using a proxy in jackett, get the cover fail. You can now configure a proxy (configuration) for avoid problems getting indexers covers.
+[29/05] Add proxy support. trackerm when available, take the cover from indexer (external url provide by jackett), if the indexer is banned
+on your country and you are using a proxy in jackett, get the cover fail. You can now configure a proxy (in onfiguration) for avoid problems 
+getting indexers covers.
 [********** COMMIT **********]
 [22/05] Fix error moving files cross partitions and others fixes.
 [********** COMMIT **********]
