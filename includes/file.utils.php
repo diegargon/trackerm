@@ -105,7 +105,7 @@ function cacheImg($img_url) {
     if (!file_exists($img_path)) {
         $http_options['timeout'] = $cfg['proxy_timeout'];
 
-        if ($cfg['proxy_enable'] && !empty($cfg['proxy_url'])) {
+        if (!empty($cfg['proxy_enable']) && !empty($cfg['proxy_url'])) {
             if (!empty($cfg['proxy_user']) && !empty($cfg['proxy_pass'])) {
                 $auth = base64_encode($cfg['proxy_user'] . ':' . $cfg['proxy_pass']);
             }
