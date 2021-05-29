@@ -1,9 +1,9 @@
 ## Latest / News (Relevant)
 
-[29/05] Add proxy support. trackerm take the cover when avaible from indexer (url provide by jackett), if the indexer is banned on your country and you use a proxy
-in jackett get the cover cause a problem. You can now configure the proxy in configuration for avoid problems getting covers.
+[29/05] Add proxy support. trackerm when avaible, take the cover from indexer results (url provide by jackett), if the indexer is banned on your country and you 
+are using a proxy in jackett, get the cover fail. You can now configure a proxy (configuration) for avoid problems getting indexers covers.
 [********** COMMIT **********]
-[22/05] Fix error moving files cross partitions and others.
+[22/05] Fix error moving files cross partitions and others fixes.
 [********** COMMIT **********]
 [03/05] Add nocount, 'track show' will not take into account 'this' show episode and add next, trackerm will search for 'this' and next.
 [********** COMMIT **********]
