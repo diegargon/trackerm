@@ -75,9 +75,11 @@ function view() {
         $item['size'] = human_filesize($tsize);
     }
 
+    $cache_img_response = false;
     if (!empty($item['poster']) && $cfg['cache_images']) {
-        $cache_img_response = cacheImg($item['poster']);
-        $cache_img_response !== false ? $item['poster'] = $cache_img_response : null;
+        if (($cache_img_response = cacheImg($item['poster']) !== false)) {
+            $item['poster'] = $cache_img_response;
+        }
     }
 
     if (empty($item['poster'])) {

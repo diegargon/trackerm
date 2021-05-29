@@ -102,12 +102,31 @@ function cacheImg($img_url) {
     $file_name = basename($img_url);
     $img_path = $_SERVER['DOCUMENT_ROOT'] . $cfg['REL_PATH'] . $cfg['cache_images_path'] . '/' . $file_name;
 
-    if (
-            file_exists($img_path) ||
-            file_put_contents($img_path, file_get_contents($img_url)) !== false
-    ) {
+    if (!file_exists($img_path)) {
+        $http_options['timeout'] = $cfg['proxy_timeout'];
+
+        if ($cfg['proxy_enable'] && !empty($cfg['proxy_url'])) {
+            if (!empty($cfg['proxy_user']) && !empty($cfg['proxy_pass'])) {
+                $auth = base64_encode($cfg['proxy_user'] . ':' . $cfg['proxy_pass']);
+            }
+
+            $http_options['proxy'] = $cfg['proxy_url'];
+            $http_options['request_fulluri'] = true;
+            if (!empty($auth)) {
+                $http_options['header'] = "Proxy-Authorization: Basic $auth";
+            }
+        }
+        $ctx = stream_context_create(['http' => $http_options]);
+        $img_file = file_get_contents($img_url, false, $ctx);
+        if ($img_file !== false) {
+            file_put_contents($img_path, $img_file);
+        }
+    }
+
+    if (file_exists($img_path)) {
         return $cfg['REL_PATH'] . $cfg['cache_images_path'] . '/' . $file_name;
     }
+
     return false;
 }
 
