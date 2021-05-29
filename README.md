@@ -24,8 +24,8 @@ Trackerm only supports linux/unix
 
 In / screenshots you will find some possibly outdated sceenshots of the look
 
-Warn: Much of the code was made to run (the bulk was programmed in 3 intense days). The application is functional but i need polish it and rewrite a lot
-and review security. If you install it expects an alpha application.
+Warn: The application is functional but i need polish it and rewrite a lot of code 
+and review security.
 
 **SPANISH**
 
