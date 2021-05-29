@@ -20,7 +20,7 @@ function create_db() {
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
                 )');
 
-    $db->insert('db_info', ["app_name" => 'trackerm', "version" => 15]);
+    $db->insert('db_info', ["app_name" => 'trackerm', "version" => 16]);
 
     // USERS
     $db->query('CREATE TABLE IF NOT EXISTS "users" (
@@ -400,7 +400,7 @@ function create_db() {
           "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
           )');
 
-    $db->insert('config', ['cfg_key' => 'db_version', 'cfg_value' => 15, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
+    $db->insert('config', ['cfg_key' => 'db_version', 'cfg_value' => 16, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
     $db->insert('config', ['cfg_key' => 'profile', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
     $db->insert('config', ['cfg_key' => 'max_identify_items', 'cfg_value' => 5, 'cfg_desc' => 'L_CFG_MAXID_ITEMS', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
     $db->insert('config', ['cfg_key' => 'app_name', 'cfg_value' => 'trackerm', 'cfg_desc' => '', 'type' => 1, 'category' => 'L_PRIV', 'public' => 0]);
