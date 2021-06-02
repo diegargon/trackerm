@@ -1,6 +1,6 @@
 ## Latest / News (Relevant)
 
-[02/06] Fix year tag and change tag from [ to ) (beware trackerm will create another link on actually seeding torrents, that mean you going to
+[02/06] Fix Poster view Path / Fix year tag and change tag from [ to ) (beware trackerm will create another link on actually seeding torrents, that mean you going to
 have two after upgrade, one with [ and the other with ), you must delete manually old link) 
 [********** COMMIT **********]
 [29/05] Add proxy support. trackerm when available, take the cover from indexer (external url provide by jackett), if the indexer is banned
