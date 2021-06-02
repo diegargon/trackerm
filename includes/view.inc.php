@@ -77,7 +77,7 @@ function view() {
 
     $cache_img_response = false;
     if (!empty($item['poster']) && $cfg['cache_images']) {
-        if (($cache_img_response = cacheImg($item['poster']) !== false)) {
+        if (($cache_img_response = cacheImg($item['poster'])) !== false) {
             $item['poster'] = $cache_img_response;
         }
     }
