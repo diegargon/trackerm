@@ -227,17 +227,17 @@ function getFileTags($file_name) {
     global $cfg;
     $tags = '';
 
+    $year = getFileYear($file_name);
+    if (!empty($year)) {
+        $tags .= '(' . $year . ')';
+    }
+
     if (isset($cfg['extra_tags']) && count($cfg['extra_tags']) > 0) {
         foreach ($cfg['extra_tags']as $extra_tag) {
             if (stripos($file_name, $extra_tag) !== false) {
                 $tags .= '[' . $extra_tag . ']';
             }
         }
-    }
-
-    $year = getFileYear($file_name);
-    if (!empty($year)) {
-        $tags .= '[' . $year . ']';
     }
 
     if (stripos($file_name, 'vose') !== false) {
