@@ -166,9 +166,9 @@ function getFileYear($file_name) {
     $year = '';
     $match = [];
 
-    if (preg_match('/\(+[1-2]{1}+[0-9]{1}+\d{2}\)/', $file_name, $match)) {
+    if (preg_match('/\(+[1-2]{1}+\d{3}\)/', $file_name, $match)) {
         isset($match[0]) ? $year = str_replace(['(', ')'], '', $match[0]) : $year = false;
-    } else if (preg_match('/\[+[1-2]{1}+[0-9]{1}+\d{2}\]/', $file_name, $match)) {
+    } else if (preg_match('/\[+[1-2]{1}+\d{3}\]/', $file_name, $match)) {
         isset($match[0]) ? $year = str_replace(['[', ']'], '', $match[0]) : $year = false;
     }
     return $year;
