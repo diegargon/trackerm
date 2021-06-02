@@ -78,8 +78,7 @@ function getFileTitle($file) {
     preg_match($regex, $file, $matches);
     $_title = mb_strtolower($matches[0]);
 
-    $_title = str_replace('.', ' ', $_title);
-    $_title = str_replace('_', ' ', $_title);
+    $_title = str_replace(['.', '_'], ' ', $_title);
 
     //Remove year, this can cause problems for titles if the year is a real part of title
     //Here only check if remove year we get empty title, that avoid break media titles where the year is only
@@ -167,12 +166,11 @@ function getFileYear($file_name) {
     $year = '';
     $match = [];
 
-    if (preg_match('/\([1-9]{4}\)/', $file_name, $match)) {
-        isset($match[0]) ? $year = str_replace('(', '', str_replace(')', '', $match[0])) : $year = false;
-    } else if (preg_match('/[1-9]{4}/', $file_name, $match)) {
-        isset($match[0]) ? $year = $match[0] : $year = false;
+    if (preg_match('/\(+[1-2]{1}+[0-9]{1}+\d{2}\)/', $file_name, $match)) {
+        isset($match[0]) ? $year = str_replace(['(', ')'], '', $match[0]) : $year = false;
+    } else if (preg_match('/\[+[1-2]{1}+[0-9]{1}+\d{2}\]/', $file_name, $match)) {
+        isset($match[0]) ? $year = str_replace(['[', ']'], '', $match[0]) : $year = false;
     }
-
     return $year;
 }
 
@@ -236,8 +234,7 @@ function getFileTags($file_name) {
             }
         }
     }
-    //Would tag wrong in media where year is part of title and not a tag
-    //tag wrong when Season/Episode its something like 1501
+
     $year = getFileYear($file_name);
     if (!empty($year)) {
         $tags .= '[' . $year . ']';
