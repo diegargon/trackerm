@@ -124,6 +124,8 @@ function build_item($item, $topt) {
             $cache_img_response = cacheImg($item['poster']);
             if ($cache_img_response !== false) {
                 $item['poster'] = $cache_img_response;
+            } else {
+                $item['poster'] = $cfg['img_url'] . '/not_available.jpg';
             }
         }
     }

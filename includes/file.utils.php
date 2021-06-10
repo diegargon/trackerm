@@ -117,7 +117,7 @@ function cacheImg($img_url) {
             }
         }
         $ctx = stream_context_create(['http' => $http_options]);
-        $img_file = file_get_contents($img_url, false, $ctx);
+        $img_file = @file_get_contents($img_url, false, $ctx);
         if ($img_file !== false) {
             file_put_contents($img_path, $img_file);
         }
