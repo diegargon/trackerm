@@ -188,7 +188,7 @@ function getMediaType($file_name) {
         return 'shows';
     }
     // Cap.*
-    if (preg_match('/\Cap.(.*?)/i', $file_name)) {
+    if (preg_match('/Cap\.\d+/i', $file_name)) {
         return 'shows';
     }
     //Temp. 1 Capitulo 1
