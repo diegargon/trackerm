@@ -61,9 +61,8 @@ class TorrentServer {
             }
         }
 
-
         usort($array, function ($a, $b) {
-            return strcmp($a["percentDone"], $b["percentDone"]);
+            return $a['percentDone'] - $b['percentDone'];
         });
 
         return $array;
