@@ -103,7 +103,7 @@ function build_item($item, $topt) {
                 $poster = mediadb_guessPoster($item);
                 if (!empty($poster)) {
                     if ($cfg['cache_images']) {
-                        $cache_img_response = cacheImg($poster);
+                        $cache_img_response = cache_img($poster);
                         if (!empty($cache_img_response)) {
                             $item['poster'] = $cache_img_response;
                         }
@@ -121,7 +121,7 @@ function build_item($item, $topt) {
         }
     } else {
         if ($cfg['cache_images']) {
-            $cache_img_response = cacheImg($item['poster']);
+            $cache_img_response = cache_img($item['poster']);
             if ($cache_img_response !== false) {
                 $item['poster'] = $cache_img_response;
             } else {
