@@ -315,7 +315,6 @@ class DB {
 
         $response = $st->execute();
 
-
         return $response;
     }
 
