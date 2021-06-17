@@ -59,8 +59,9 @@ function page_new_media(string $media_type) {
     if (empty($res_media_db)) {
         return false;
     }
+
     usort($res_media_db, function ($a, $b) {
-        return strcmp($b['id'], $a['id']);
+        return $b['id'] - $a['id'];
     });
 
     //UPDATE CACHE. save before screening
