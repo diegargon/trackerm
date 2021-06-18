@@ -1,5 +1,6 @@
 ## Latest / News (Relevant)
 
+[18/06] Add search feature to library and new torrents
 [17/06] Improve Identify and allow multiple files/same media
 [********** COMMIT **********]
 [02/06] Fix Poster view Path / Fix year tag and change tag from [ to ) (beware trackerm will create another link on actually seeding torrents, that mean you going to

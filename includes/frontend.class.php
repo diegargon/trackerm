@@ -113,13 +113,17 @@ class FrontEnd {
     function getMenuOptions() {
         global $cfg, $LNG;
 
+        $tdata = [];
+
         (isset($_POST['rebuild_movies'])) ? rebuild('movies', $cfg['MOVIES_PATH']) : null;
         (isset($_POST['rebuild_shows'])) ? rebuild('shows', $cfg['SHOWS_PATH']) : null;
 
         $tdata['page'] = Filter::getString('page');
 
-        if (
-                isset($_POST['num_ident_toshow']) &&
+        !empty($_POST['search_term']) ? $tdata['search_term'] = Filter::postString('search_term') : null;
+        !empty($_GET['search_term']) ? $tdata['search_term'] = Filter::getString('search_term') : null;
+
+        if (isset($_POST['num_ident_toshow']) &&
                 ($cfg['max_identify_items'] != $_POST['num_ident_toshow'])
         ) {
             $num_ident_toshow = Filter::postInt('num_ident_toshow');

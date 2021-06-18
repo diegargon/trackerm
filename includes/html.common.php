@@ -14,12 +14,7 @@ function buildTable($head, $db_ary, $topt = null) {
     global $cfg, $LNG;
 
     $npage = Filter::getInt('npage');
-
-    if (isset($_GET['search_type']) && isset($topt['search_type']) && ($_GET['search_type'] == $topt['search_type'])) {
-        empty($npage) ? $npage = 1 : null;
-    } else {
-        $npage = 1;
-    }
+    empty($npage) ? $npage = 1 : null;
 
     empty($topt['columns']) ? $columns = $cfg['tresults_columns'] : $columns = $topt['columns'];
     empty($topt['max_items']) ? $max_items = $cfg['tresults_rows'] * $columns : $max_items = $topt['max_items'];
@@ -182,9 +177,10 @@ function pager($npage, $nitems, &$topt) {
         (!empty(Filter::getUtf8('search_movies_torrents'))) ? $get_params['search_movies_torrents'] = Filter::getUtf8('search_movies_torrents') : null;
         (!empty($_GET['more_movies'])) ? $get_params['more_movies'] = 1 : null;
         (!empty($_GET['more_torrents'])) ? $get_params['more_torrents'] = 1 : null;
-        (!empty(Filter::getUtf8('search_movie_db'))) ? $get_params['search_movie_db'] = Filter::getUtf8('search_movie_db') : null;
+        (!empty(Filter::getUtf8('search_movies_db'))) ? $get_params['search_movies_db'] = Filter::getUtf8('search_movies_db') : null;
         (!empty(Filter::getUtf8('search_movies'))) ? $get_params['search_movies'] = Filter::getUtf8('search_movies') : null;
         (!empty(Filter::getUtf8('search_shows'))) ? $get_params['search_shows'] = Filter::getUtf8('search_shows') : null;
+        !empty($topt['search_term']) ? $get_params['search_term'] = $topt['search_term'] : null;
 
         for ($i = 1; $i <= ceil($num_pages); $i++) {
             if (($i == 1 || $i == $num_pages || $i == $npage) ||
@@ -255,17 +251,6 @@ function html_mediainfo_tags($mediainfo, $tags = null) {
             isset($audio['Language']) ? $audio_tags .= '<div title="' . $LNG['L_AUDIO'] . '" class="mediainfo_tag">' . $audio['Language'] . '</div>' : null;
         }
     }
-    /*
-      if (isset($mediainfo['Text'])) {
-      $subs_langs = '';
-      foreach ($mediainfo['Text'] as $text) {
-      if (isset($text['Language'])) {
-      empty($subs_langs) ? $subs_langs .= $text['Language'] : $subs_langs .= ':' . $text['Language'];
-      }
-      }
-      !empty($subs_langs) ? $text_tags .= '<span title="' . $LNG['L_SUBS'] . '" class="mediainfo_tag">' . $subs_langs . '</span>' : null;
-      }
-     *
-     */
+
     return $general_tags . $video_tags . $audio_tags . $text_tags;
 }

@@ -13,7 +13,14 @@ function page_new_media(string $media_type) {
     global $cfg, $db, $log;
 
     $cache_media_expire = 0;
+    $topt = [];
 
+    if (!empty($_POST['search_term'])) {
+        $search_term = Filter::postString('search_term');
+    } else if (!empty($_GET['search_term'])) {
+        $search_term = Filter::getString('search_term');
+    }
+    !empty($search_term) ? $topt['search_term'] = $search_term : null;
     if ($media_type == 'movies') {
         $search_cache_db = 'jackett_search_movies_cache';
         $jackett_db = 'jackett_movies';
@@ -55,6 +62,16 @@ function page_new_media(string $media_type) {
     }
 
     ($cache_media_expire == 1) || !$cfg['search_cache'] && !empty($media_res) ? $res_media_db = jackett_prep_media($media_type, $media_res) : null;
+
+    if (!empty($search_term) && !empty($res_media_db)) {
+        $res_tmp = [];
+        foreach ($res_media_db as $res) {
+            if (stripos($res['title'], strtolower($search_term)) !== false) {
+                $res_tmp[] = $res;
+            }
+        }
+        $res_media_db = $res_tmp;
+    }
 
     if (empty($res_media_db)) {
         return false;

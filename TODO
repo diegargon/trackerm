@@ -1,43 +1,35 @@
 [TODO]
 
 [HIGH]
-    [CURL] Proxy external (not jackett) request
     [FIX] Tracker cli must check space before doing move/linking
-    [IMPROVE] Import path
-    [IMPROVE] Wanted Not count for max download 
+    [IMPROVE] Import path    
     [IMPROVE] Indexers to config
-    [FIX/CHECK] do not contemplate yet what to do if tmdb not found any results.        
 
 [MED]      
     [IMPROVE] Si se borra manualmente un torrente bajado quedara el bd huerfanos. OPCION ORPHAN. 
         Buscar archivos multimedia en el TORRENT DIR y buscar la forma de determina si coincide con alguno en la base de datos
         si no coincide moverlo.     
-     [COMPLETE] Finish Filters          
+    [COMPLETE] Finish Filters          
     [FIX] Security
     [IMPROVE][CLI] Clean old query search caches entrys
     [IMPROVE] Reduce querys on Wanted, TMDB
     [FIX] Si no hay espacio en torrent temp transmission no mueve pero para trackerm consta que esta finalizado y intenta enlazarlo pero sige en temp no en 
     finalize/Ultimo.
     [CLEAN] library_movies/shows now sinche change to masters not need most fields, remove
-
+    [FIX/CHECK] do not contemplate yet what to do if tmdb not found any results.    
+    
 [VERY LOW]      
     [IMPROVE] Add to library sub menu a switch to player mode.
     [IMPROVE] añadir tabla view_movies, view=0 not view 1 partial 2 , 3 view.     
-    [IMPROVE][]LIBRARY Pagination: actually we get all results and do a array_slice, now with SQL database we can  do that better. (movies done: shows need additional general
-    change (Masters)
     [IMPROVE][VIEW] add edit custom poster. (need master)
     [FIX/IMPROVE] Normalize dates 
     [FIX] A la hora de identificar las series siguientes capitulos los identifica por el predictible_title, si hubiera varias series con el mismo titulo habria problemas. 
-    [IMPROVE][LIBRARY] Los shows(y posiblemente las movies si aceptamos diferentes calidades) deberian de tener un registro maestro con los datos y los demas, los capitulos 
-    ser registro secundarios. ¿añadir una tabla library_shows|movies_master?
     [IMPROVE] Too much messy code...
     [IMPROVE][VIEW]Add delete media button
-    [NEW] Escaneo de directorios a más para avi sin ser torrents. $cfg['SCAN_MEDIA_DIR'] = 1;
-    [NEW] Biblio: buscador en nuestra libreria o enlace a una pagina buscador más facil de implementar.
+    [NEW] Escaneo de directorios a más para avi sin ser torrents. $cfg['SCAN_MEDIA_DIR'] = 1;    
     [CHANGE?] Clean title: remove words <=2 chars?
     [IMPROVE]On torrent new/search get release data from tmdb and show it, get local database if not request database
-    [IMPROVE][LocalPlayer] Investigate web interface for track time
-    [IMPROVE][Search] Si un tracker es lento en la busquedas desconectar (tiempo establecido por configuracion)
+    [IMPROVE][LocalPlayer] Investigate web interface for track time    
 
 [BACKLOG]
     [IMPROVE] Catalog
