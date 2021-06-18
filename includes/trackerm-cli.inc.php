@@ -1011,7 +1011,7 @@ function check_broken_files_linked() {
     } else {
         $paths[] = $cfg['SHOWS_PATH'];
     }
-    RemoveBrokenMedialinks($paths, $cfg['media_ext']);
+    remove_broken_medialinks($paths, $cfg['media_ext']);
 }
 
 function update_seasons($force = false) {
@@ -1064,6 +1064,46 @@ function delete_direct_orphans() {
     }
 }
 
+function check_masters_childs_integrity() {
+    global $db, $log;
+
+    //check if any master have no childs.
+    foreach (['movies', 'shows'] as $media_type) {
+        $library_master = 'library_master_' . $media_type;
+        $library = 'library_' . $media_type;
+
+        $log->debug('Executing master/childs integrity on ' . $media_type);
+
+        $results = $db->select($library_master, 'id');
+        $masters = $db->fetchAll($results);
+
+        $results = $db->select($library, 'id,themoviedb_id,master');
+        $childs = $db->fetchAll($results);
+
+        foreach ($masters as $master) {
+            if (array_search($master['id'], array_column($childs, 'master')) === false) {
+                $log->warning('Detected master without childs, removing master id: ' . $master['id']);
+                $db->deleteItemById($library_master, $master['id']);
+            }
+        }
+
+        foreach ($childs as $child) {
+            $delete_child = 0;
+            if (empty($child['master']) && !empty($child['themoviedb_id'])) {
+                $log->warning('Detected empty master from identify child delete to reidentify: ' . $child['id']);
+                $delete_child = 1;
+            }
+            if (!empty($child['master']) && !empty($child['themoviedb_id'])) {
+                if (array_search($child['master'], array_column($masters, 'id')) === false) {
+                    $log->warning(' Detected an identify child with a missing master (' . $child['master'] . '), delete to reidentify tmdbid: ' . $child['id']);
+                    $delete_child = 1;
+                }
+            }
+            ($delete_child) ? $db->deleteItemById($library, $child['id']) : null;
+        }
+    }
+}
+
 function update_things() {
     global $cfg;
 
@@ -1081,6 +1121,8 @@ function update_things() {
     // Upgrading v4 change how clean works, must empty the field and redo, not need know
     // keep for future changes
     //set_clean_titles();
+
+    check_masters_childs_integrity();
 }
 
 function leave($msg = false) {

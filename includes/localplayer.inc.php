@@ -25,14 +25,14 @@ function get_pl_movies($item_requested) {
 function get_pl_shows($item_requested) {
     global $db, $cfg;
 
-    $items = $db->getItemsByField('library_shows', 'themoviedb_id', $item_requested['themoviedb_id']);
+    $items = $db->getItemsByField('library_shows', 'master', $item_requested['master']);
 
     if (!valid_array($items)) {
         exit();
     }
 
     usort($items, function ($a, $b) {
-        $season = strcmp($a['season'], $b['season']);
+        $season = $a['season'] - $b['season'];
         if ($season === 0) {
             return $a['episode'] - $b['episode'];
         }

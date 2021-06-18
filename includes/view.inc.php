@@ -19,12 +19,12 @@ function view() {
     $page = '';
 
     if ($view_type == 'movies_library') {
-        $table = 'library_movies';
+        $table = 'library_master_movies';
         $media_type = 'movies';
         $other['reidentify'] = 1;
         $other['deletereg'] = 1;
     } else if ($view_type == 'shows_library') {
-        $table = 'library_shows';
+        $table = 'library_master_shows';
         $media_type = 'shows';
         $other['reidentify'] = 1;
         $other['deletereg'] = 1;
@@ -52,7 +52,8 @@ function view() {
     }
 
     if ($view_type == 'movies_db' || $view_type == 'shows_db') {
-        $in_library = $db->getItemByField('library_' . $media_type, 'themoviedb_id', $item['themoviedb_id']);
+        //TODO master no tmdbid
+        $in_library = $db->getItemByField('library_master_' . $media_type, 'themoviedb_id', $item['themoviedb_id']);
         if ($in_library !== false) {
             $item['in_library'] = $in_library['id'];
         }
@@ -63,21 +64,11 @@ function view() {
         $other['seasons_data'] = view_seasons($item, $update);
     }
 
-    (isset($item['size'])) ? $item['size'] = human_filesize($item['size']) : null;
-
-    if ($view_type == 'shows_library') {
-        $shows_library = $db->getItemsByField('library_shows', 'themoviedb_id', $item['themoviedb_id']);
-        $tsize = 0;
-        foreach ($shows_library as $show_library) {
-            $tsize = $show_library['size'] + $tsize;
-        }
-        $item['have_episodes'] = count($shows_library);
-        $item['size'] = human_filesize($tsize);
-    }
+    $item['total_size'] = human_filesize($item['total_size']);
 
     $cache_img_response = false;
     if (!empty($item['poster']) && $cfg['cache_images']) {
-        if (($cache_img_response = cacheImg($item['poster'])) !== false) {
+        if (($cache_img_response = cache_img($item['poster'])) !== false) {
             $item['poster'] = $cache_img_response;
         }
     }
@@ -89,7 +80,7 @@ function view() {
         $poster = mediadb_guessPoster($item);
         if (!empty($poster)) {
             if ($cfg['cache_images']) {
-                $cache_img_response = cacheImg($poster);
+                $cache_img_response = cache_img($poster);
                 if ($cache_img_response !== false) {
                     $item['poster'] = $cache_img_response;
                 }
@@ -120,13 +111,10 @@ function view() {
         $other['follow_show'] = get_follow_show($item['themoviedb_id']);
     }
 
-    if (!empty($item['path'])) {
-        $other['mediainfo'] = mediainfo_formated($item['path']);
-        isset($other['mediainfo']['General']['Duration']) ? $other['mediainfo']['General']['Duration'] = format_seconds($other['mediainfo']['General']['Duration']) : null;
-        isset($other['mediainfo']['General']['FrameRate']) ? $other['mediainfo']['General']['FrameRate'] = round($other['mediainfo']['General']['FrameRate']) . 'fps' : null;
-        isset($other['mediainfo']['Audio'][1]['BitRate']) ? $other['mediainfo']['Audio'][1]['BitRate'] = substr($other['mediainfo']['Audio'][1]['BitRate'], 0, 2) . 'hz' : null;
-        !empty($other['mediainfo']) ? $other['mediainfo_tags'] = html_mediainfo_tags($other['mediainfo']) : null;
+    if ($view_type == 'movies_library' || $view_type == 'shows_library') {
+        $other['media_files'] = get_media_files($id, $media_type);
     }
+
     $page = $frontend->getTpl('view', array_merge($item, $other));
 
     return $page;
@@ -315,50 +303,6 @@ function view_season_detailed($season, $items_details) {
     return $episode_data;
 }
 
-function get_have_shows($oid) {
-    global $db;
-
-    if (!is_numeric($oid)) {
-        return false;
-    }
-    $where['themoviedb_id'] = ['value' => $oid];
-    $results = $db->select('library_shows', null, $where);
-    $shows = $db->fetchAll($results);
-
-    return valid_array($shows) ? $shows : false;
-}
-
-function get_have_shows_season($oid, $season) {
-    global $db;
-
-    if (!is_numeric($oid) || !is_numeric($season)) {
-        return false;
-    }
-    $where['themoviedb_id'] = ['value' => $oid];
-    $where['season'] = ['value' => $season];
-    $results = $db->select('library_shows', null, $where);
-    $shows = $db->fetchAll($results);
-
-    return valid_array($shows) ? $shows : false;
-}
-
-function have_show($oid, $season, $episode) {
-    global $db;
-
-    if (!is_numeric($oid) || !is_numeric($season) || !is_numeric($episode)) {
-        return false;
-    }
-
-    $where['themoviedb_id'] = ['value' => $oid];
-    $where['season'] = ['value' => $season];
-    $where['episode'] = ['value' => $episode];
-
-    $results = $db->select('library_shows', null, $where, 'LIMIT 1');
-    $show = $db->fetchAll($results);
-
-    return valid_array($show) ? $show[0] : false;
-}
-
 function get_follow_show($oid) {
     global $LNG, $db;
     $seasons = [];
@@ -387,4 +331,72 @@ function get_follow_show($oid) {
     $html .= '</form>';
 
     return $html;
+}
+
+function get_media_files($id, $media_type) {
+    global $db, $LNG, $cfg;
+
+    $sel_values = [];
+    $media_files = '';
+    $selected_id = Filter::postInt('selected_id');
+    $library = 'library_' . $media_type;
+    $files = $db->getItemsByField($library, 'master', $id);
+
+    if (!valid_array($files)) {
+        return false;
+    }
+    foreach ($files as $file) {
+        if (empty($selected_id)) {
+            $selected_id = $file['id'];
+            $selected_item = $file;
+        } else {
+            if (empty($selected_item)) {
+                if ($file['id'] == $selected_id) {
+                    $selected_item = $file;
+                }
+            }
+        }
+        $sel_values[] = [
+            'value' => $file['id'],
+            'name' => basename($file['path'])
+        ];
+    }
+
+    usort($sel_values, function ($a, $b) {
+        return strcmp($a['name'], $b['name']);
+    });
+    if (!empty($selected_item['path'])) {
+        $mediainfo = mediainfo_formated($selected_item['path']);
+        if (isset($mediainfo['General']['Duration'])) {
+            $media_files .= html::span([], $LNG['L_DURATION'] . ': ');
+            $media_files .= html::span([], format_seconds($mediainfo['General']['Duration']));
+        }
+        if (!empty($mediainfo)) {
+            $media_files .= html::br([]);
+            $media_files .= html_mediainfo_tags($mediainfo);
+        }
+    }
+
+    $media_files .= Html::form(['method' => 'POST'], Html::select(['onChange' => 'this.form.submit()', 'selected' => $selected_id, 'name' => 'selected_id'], $sel_values));
+    //Identify link
+    $link_identify_parms = ['page' => 'identify', 'identify' => $selected_id, 'media_type' => $media_type];
+    $media_files .= Html::link(['class' => 'action_link'], '', $LNG['L_IDENTIFY'], $link_identify_parms);
+    //Delete reg
+    $link_delete_parms = ['page' => 'view', 'id' => $id, 'deletereg_id' => $selected_id, 'view_type' => $media_type . '_library'];
+    $media_files .= Html::link(['class' => 'action_link', 'onClick' => 'return confirm(\'Are you sure?\')'], '', $LNG['L_DELETE_REGISTER'], $link_delete_parms);
+
+    if ($media_type == 'movies') {
+        //localplayer
+        if ($cfg['localplayer']) {
+            $link_localplayer_parms = ['page' => 'localplayer', 'id' => $selected_id, 'media_type' => $media_type];
+            $media_files .= Html::link(['class' => 'action_link'], '', 'LocalPlay', $link_localplayer_parms);
+        }
+        //Download
+        if ($cfg['download_button']) {
+            $link_download_parms = ['page' => 'download', 'id' => $selected_id, 'media_type' => $media_type, 'view_type' => 'movies_library'];
+            $media_files .= Html::link(['class' => 'action_link'], '', $LNG['L_DOWNLOAD'], $link_download_parms);
+        }
+    }
+
+    return $media_files;
 }

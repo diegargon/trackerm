@@ -10,11 +10,11 @@
 // https://www.php.net/manual/en/function.glob.php#111217
 !defined('IN_WEB') ? exit : true;
 
-function findMediaFiles($directory, $extensions = []) {
-    $content = getDirContents($directory);
+function find_media_files($directory, $extensions = []) {
+    $content = get_dir_contents($directory);
     $files = [];
     foreach ($content as $file) {
-        $ext = getFileExt($file);
+        $ext = get_file_ext($file);
         if (in_array($ext, $extensions)) {
             $files[] = $file;
         }
@@ -25,19 +25,19 @@ function findMediaFiles($directory, $extensions = []) {
 function is_media_file($file) {
     global $cfg;
 
-    $ext = getFileExt($file);
+    $ext = get_file_ext($file);
     if (in_array($ext, $cfg['media_ext'])) {
         return true;
     }
     return false;
 }
 
-function RemoveBrokenMedialinks($paths, $extensions = []) {
+function remove_broken_medialinks($paths, $extensions = []) {
     $links = [];
     $files = [];
 
     foreach ($paths as $path) {
-        $files = array_merge($files, findMediaFiles($path, $extensions));
+        $files = array_merge($files, find_media_files($path, $extensions));
     }
 
     foreach ($files as $file) {
@@ -48,11 +48,11 @@ function RemoveBrokenMedialinks($paths, $extensions = []) {
     return $links;
 }
 
-function getFileExt($file) {
+function get_file_ext($file) {
     return strtolower(substr($file, -3));
 }
 
-function getDirContents($dir, &$results = []) {
+function get_dir_contents($dir, &$results = []) {
     global $log;
 
     if (!is_readable($dir)) {
@@ -66,7 +66,7 @@ function getDirContents($dir, &$results = []) {
         if (!is_dir($path)) {
             $results[] = $path;
         } else if ($value != '.' && $value != '..') {
-            getDirContents($path, $results);
+            get_dir_contents($path, $results);
             $results[] = $path;
         }
     }
@@ -92,7 +92,7 @@ function load_from_file_json($file) {
     return false;
 }
 
-function cacheImg($img_url) {
+function cache_img($img_url) {
     global $cfg;
 
     if (!is_writeable($_SERVER['DOCUMENT_ROOT'] . $cfg['REL_PATH'] . $cfg['cache_images_path'])) {

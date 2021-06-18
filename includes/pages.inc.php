@@ -147,22 +147,36 @@ function page_view() {
     global $db, $frontend;
 
     $id = Filter::getInt('id');
-    $deletereg = Filter::getInt('deletereg', 1);
+    $deletereg_id = Filter::getInt('deletereg_id');
     $view_type = Filter::getString('view_type');
 
     if (empty($id) || empty($view_type)) {
         return $frontend->msgBox($msg = ['title' => 'L_ERROR', 'body' => '1A1001']);
     }
-    if (!empty($deletereg)) {
+    if (!empty($deletereg_id)) {
         if ($view_type == 'movies_library') {
-            $db->deleteItemById('library_movies', $id);
+            $library = 'library_movies';
+            $library_master = 'library_master_movies';
+        } else if ($view_type == 'shows_library') {
+            $library = 'library_shows';
+            $library_master = 'library_master_shows';
         }
-        if ($view_type == 'shows_library') {
-            $delete_item = $db->getItemById('library_shows', $id);
-            $media_db_id = $delete_item['themoviedb_id'];
-            $db->deleteItemsByField('library_shows', 'themoviedb_id', $media_db_id);
+        $register_item = $db->getItemById($library, $deletereg_id);
+        if (valid_array($register_item)) {
+            $register_master_item = $db->getItemById($library_master, $register_item['master']);
+            if (valid_array($register_master_item)) {
+                if ($register_master_item['total_items'] == 1) {
+                    $db->deleteItemById($library, $deletereg_id);
+                    $db->deleteItemById($library_master, $register_item['master']);
+                    return $frontend->msgBox($msg = ['title' => 'L_SUCCESS', 'body' => 'L_DELETE_SUCCESSFUL']);
+                } else {
+                    $db->deleteItemById($library, $deletereg_id);
+                    $new_total_items = $register_master_item['total_items'] - 1;
+                    $new_total_size = $register_master_item['total_size'] - $register_item['size'];
+                    $db->updateItemById($library_master, $register_item['master'], ['total_items' => $new_total_items, 'total_size' => $new_total_size]);
+                }
+            }
         }
-        return $frontend->msgBox($msg = ['title' => 'L_SUCCESS', 'body' => 'L_DELETE_SUCCESSFUL']);
     }
 
     return view();
@@ -368,7 +382,7 @@ function page_identify() {
         ident_by_idpairs($media_type, Filter::postInt('selected'));
         return $frontend->msgBox($msg = ['title' => 'L_SUCCESS', 'body' => 'L_ADDED_SUCCESSFUL']);
     }
-    !empty($_POST['submit_title']) ? $submit_title = Filter::postUtf8('submit_title') : $submit_title = $item['predictible_title'];
+    !empty($_POST['submit_title']) ? $submit_title = Filter::postUtf8('submit_title') : $submit_title = getFileTitle(basename($item['path']));
 
     $tdata['search_title'] = $submit_title;
 

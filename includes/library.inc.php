@@ -34,8 +34,8 @@ function show_my_movies() {
     $npage == 1 ? $end = $n_results : $end = $npage * $n_results;
     $npage == 1 ? $start = 0 : $start = ($npage - 1) * $n_results;
 
-    $topt['num_table_rows'] = $db->qSingle("SELECT COUNT(*) FROM library_movies WHERE title <> ''");
-    $query = "SELECT * FROM library_movies WHERE title <> '' ORDER BY created DESC LIMIT $start,$end ";
+    $topt['num_table_rows'] = $db->qSingle("SELECT COUNT(*) FROM library_master_movies WHERE title <> ''");
+    $query = "SELECT * FROM library_master_movies WHERE title <> '' ORDER BY created DESC LIMIT $start,$end ";
     $results = $db->query($query);
     $movies = $db->fetchAll($results);
 
@@ -65,60 +65,16 @@ function show_my_shows() {
     }
     $page .= show_identify_media('shows');
 
-    //TODO: for improve and select only from table what we want show we need
-    //add a total_field size to library_shows and update with tracker-cli then i
-    //can show size without get all data.
-
-    $shows = $db->getTableData('library_shows');
+    $shows = $db->getTableData('library_master_shows');
     if (valid_array($shows)) {
-        $shows_identifyed = [];
-
-        foreach ($shows as $key => $movie) {
-            if (!empty($movie['title'])) {
-                $shows_identifyed[$key] = $movie;
-            }
-        }
-        usort($shows_identifyed, function ($a, $b) {
-            return strcmp($a["created"], $b["created"]);
+        usort($shows, function ($a, $b) {
+            return $a['updated'] - $b['updated'];
         });
-        $shows_identifyed = array_reverse($shows_identifyed);
-        $uniq_shows = [];
-        $sum_sizes = [];
-        $episode_count = [];
-
-        foreach ($shows_identifyed as $show) {
-            $exists = false;
-
-            if (isset($sum_sizes[$show['themoviedb_id']])) {
-                $sum_sizes[$show['themoviedb_id']] = $show['size'] + $sum_sizes[$show['themoviedb_id']];
-            } else {
-                $sum_sizes[$show['themoviedb_id']] = $show['size'];
-            }
-
-            if (isset($episode_count[$show['themoviedb_id']])) {
-                $episode_count[$show['themoviedb_id']] = 1 + $episode_count[$show['themoviedb_id']];
-            } else {
-                $episode_count[$show['themoviedb_id']] = 1;
-            }
-
-            foreach ($uniq_shows as $item) {
-                if ($item['title'] == $show['title']) {
-                    $exists = true;
-                    break;
-                } else {
-                    $exists = false;
-                }
-            }
-
-            $exists === false ? $uniq_shows[] = $show : null;
-        }
-        count($sum_sizes) > 1 ? $topt['sizes'] = $sum_sizes : null;
-        count($episode_count) > 1 ? $topt['episode_count'] = $episode_count : null;
-
+        $shows = array_reverse($shows);
         $topt['view_type'] = 'shows_library';
         $topt['search_type'] = 'shows';
 
-        $page .= buildTable('L_SHOWS', $uniq_shows, $topt);
+        $page .= buildTable('L_SHOWS', $shows, $topt);
     }
     return $page;
 }

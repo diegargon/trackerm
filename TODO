@@ -1,4 +1,4 @@
-TODO
+[TODO]
 
 [HIGH]
     [CURL] Proxy external (not jackett) request
@@ -18,6 +18,8 @@ TODO
     [IMPROVE] Reduce querys on Wanted, TMDB
     [FIX] Si no hay espacio en torrent temp transmission no mueve pero para trackerm consta que esta finalizado y intenta enlazarlo pero sige en temp no en 
     finalize/Ultimo.
+    [CLEAN] library_movies/shows now sinche change to masters not need most fields, remove
+
 [VERY LOW]      
     [IMPROVE] Add to library sub menu a switch to player mode.
     [IMPROVE] añadir tabla view_movies, view=0 not view 1 partial 2 , 3 view.     

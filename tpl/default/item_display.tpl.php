@@ -37,14 +37,9 @@
                 <span class="item_source"><a class="action_link" href="<?= $tdata['guid'] ?>" target=_blank ><?= $tdata['source'] ?></a></span>
                 <?php
             }
-            if (!empty($tdata['num_episodes'])) { //TO DELETE
-                ?>
-                <span class="item_num_episodes">[<?= $LNG['L_EPISODE_MIN'] . $tdata['num_episodes'] ?>]</span>
-                <?php
-            }
             if (!empty($tdata['total_items'])) {
                 ?>
-                <span class="item_num_episodes">[<?= $LNG['L_EPISODE_MIN'] . $tdata['total_items'] ?>]</span>
+                <span class="item_num_episodes">[<?= $tdata['total_items'] ?>]</span>
                 <?php
             }
 

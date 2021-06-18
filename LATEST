@@ -1,5 +1,7 @@
 ## Latest / News (Relevant)
 
+[17/06] Improve Identify and allow multiple files/same media
+[********** COMMIT **********]
 [02/06] Fix Poster view Path / Fix year tag and change tag from [ to ) (beware trackerm will create another link on actually seeding torrents, that mean you going to
 have two after upgrade, one with [ and the other with ), you must delete manually old link) 
 [********** COMMIT **********]

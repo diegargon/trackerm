@@ -49,9 +49,9 @@
                     <span class="view_release"><?= strftime("%Y", strtotime($tdata['release'])) ?></span>
                     <br/>
                 <?php } ?>
-                <?php if (!empty($tdata['size'])) { ?>
+                <?php if (!empty($tdata['total_size'])) { ?>
                     <span><?= $LNG['L_SIZE'] ?> :</span>
-                    <span class="view_size"><?= $tdata['size'] ?></span>
+                    <span class="view_size"><?= $tdata['total_size'] ?></span>
                     <br/>
                 <?php } ?>
                 <?php if (!empty($tdata['rating'])) { ?>
@@ -59,15 +59,10 @@
                     <span class="view_rating"><?= $tdata['rating'] ?></span>
                     <br/>
                 <?php } ?>
-                <?php if (!empty($tdata['have_episodes'])) { ?>
-                    <span><?= $LNG['L_EPISODES_HAVE'] ?> :</span>
-                    <span class="view_have_episodes"><?= $tdata['have_episodes'] ?></span>
+                <?php if (!empty($tdata['total_items'])) { ?>
+                    <span><?= $LNG['L_N_FILES'] ?> :</span>
+                    <span class="view_have_episodes"><?= $tdata['total_items'] ?></span>
                     <br/>
-                <?php } ?>
-                <?php if (!empty($tdata['mediainfo']['General']['Duration'])) { ?>
-                    <span><?= $LNG['L_DURATION'] ?> :</span>
-                    <span><?= $tdata['mediainfo']['General']['Duration'] ?></span>
-                    <hr/>
                 <?php } ?>
                 <div class="view_actions">
                     <?php
@@ -82,25 +77,12 @@
                     <?php if (!empty($tdata['wanted']) && empty($tdata['movie_in_library']) && empty($tdata['show_in_library'])) { ?>
                         <a class="action_link" href="?page=wanted&id=<?= $tdata['themoviedb_id'] ?>&media_type=<?= $tdata['media_type'] ?>"><?= $LNG['L_WANTED'] ?></a>
                     <?php } ?>
-                    <?php if (!empty($tdata['reidentify'])) { ?>
-                        <a class="action_link" href="?page=identify&identify=<?= $tdata['id'] ?>&media_type=<?= $tdata['media_type'] ?>"><?= $LNG['L_IDENTIFY'] ?></a>
-                    <?php } ?>
-                    <?php if (!empty($tdata['deletereg'])) { ?>
-                        <a class="action_link" href="?page=view&id=<?= $tdata['id'] ?>&view_type=<?= $tdata['view_type'] ?>&deletereg=1" onclick="return confirm('Are you sure?')" ><?= $LNG['L_DELETE_REGISTER'] ?></a>
-                    <?php } ?>
-                    <?php if ($tdata['view_type'] == 'shows_library') { ?>
-                        <a class="action_link" href="?page=view&id=<?= $tdata['id'] ?>&view_type=shows_library&update=1"><?= $LNG['L_UPDATE_EPISODES'] ?></a>
-                    <?php } ?>
-                    <?php if ($tdata['view_type'] == 'shows_db') { ?>
-                        <a class="action_link" href="?page=view&id=<?= $tdata['id'] ?>&view_type=shows_db&update=1"><?= $LNG['L_UPDATE_EPISODES'] ?></a>
+                    <?= !empty($tdata['media_files']) ? $tdata['media_files'] : null; ?>
+
+                    <?php if ($tdata['view_type'] == 'shows_library' || $tdata['view_type'] == 'shows_db') { ?>
+                        <a class="action_link" href="?page=view&id=<?= $tdata['id'] ?>&view_type=<?= $tdata['view_type'] ?>&update=1"><?= $LNG['L_UPDATE_EPISODES'] ?></a>
                     <?php } ?>
 
-                    <?php if ($tdata['view_type'] == 'movies_library' && $cfg['localplayer']) { ?>
-                        <a class="action_link"  target=_blank href="?page=localplayer&id=<?= $tdata['id'] ?>&media_type=<?= $tdata['media_type'] ?>">LocalPlayer</a>
-                    <?php } ?>
-                    <?php if ($tdata['view_type'] == 'movies_library' && ($cfg['download_button'])) { ?>
-                        <a class="action_link" href="?page=download&id=<?= $tdata['id'] ?>&view_type=movies_library" target=_blank><?= $LNG['L_DOWNLOAD'] ?></a>
-                    <?php } ?>
                     <?php !empty($tdata['follow_show']) ? print $tdata['follow_show'] : null; ?>
                 </div>
                 <?php if (!empty($tdata['download'])) { ?>
