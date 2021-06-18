@@ -63,8 +63,7 @@ function view() {
         isset($_GET['update']) ? $update = true : $update = false;
         $other['seasons_data'] = view_seasons($item, $update);
     }
-
-    $item['total_size'] = human_filesize($item['total_size']);
+    !empty($item['total_size']) ? $item['total_size'] = human_filesize($item['total_size']) : null;
 
     $cache_img_response = false;
     if (!empty($item['poster']) && $cfg['cache_images']) {
