@@ -201,6 +201,7 @@ button {
     text-align:center;
     object-fit: cover;
     /* max-width: 210px; */
+    width:100%;
 }
 .poster_preview{
     position: relative; 
