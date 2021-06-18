@@ -1,18 +1,18 @@
 
 ## How WILL works. (EXCUSE MY ENGLISH)
 
-This proyect it in early stage, will change  between commits.
+This proyect it in early stage.
 
-To configure copy the config/config.min.php file to /etc/trackerm.cnf y edit the config. All fields required.
+To configure copy the config/config.min.php file to /etc/trackerm.conf and edit the config. All fields required.
 
-In "TMDB" tab you can search for movies/shows and  automatically will show you the torrents, if there is none you can choose 'wanted' and  
-trackerm will check released torrents and automatically download when a match appears. 
+In "TMDB" tab you can search for movies/shows and automatically will show you the torrents, if can't find any you can choose 'wanted' and  
+trackerm will check every certain time for released torrents and automatically download when a match appears. 
 
-In Torrents tab you can search movies/shows torrents and clicking in download will automatically sending to Transmission-daemon
+In the Torrents tab you can search for movies/shows torrents. Clicking in download will automatically sending to Transmission-daemon
 
 In Wanted you can see what movies/shows trackerm are tracking for download, and change the check day.
 
-In Released you can see the latest torrent releases by your trackers
+In Released you can see the latest torrent releases published by your selected trackers
 
 In Library you can see your movies/shows, identify, show seasons and check missing episodes.
 
@@ -34,7 +34,6 @@ trackerm will track your transmission movie/shows downloads and automatically mo
     All configuration options going in /etc/trackerm.conf , you need copy the file config/config.min.php to /etc and rename as trackerm.conf and then configure.    
 
 ## Automatic search for wanted media and "automatic moving file"  mechanism.
-    At this moment all auto mechanism are in develop, can have bugs.
     trackerm-cli.php must be added to your cron.
 
     How works :
@@ -42,25 +41,25 @@ trackerm will track your transmission movie/shows downloads and automatically mo
     * Will move all media detected in transmission-daemon from "completed" directory to your library directory (you can configure if move all or only the media download
     throught this software (adding to transmission clicking throught this app).
   
-    The "automatic move tool" (AMT) only move  stopped torrents (completed). The AMT tool will create a symbolic link to your library when the torrent is seeding. 
+    The "automatic move tool" (AMT) only move  pause/stopped torrents (completed). The AMT tool will create a symbolic link to your library when the torrent is seeding. 
     When finish seeding it will move the file to your library path and remove the torrent and all related content.
 
-    Support RAR files. Will warn if the file is encrypt for doing it manulally.
+    Support RAR files. Will warn if the file is encrypt for unrar it manulally.
 
     Basic line for /etc/crontab (every 15 minuts): 
         */15 *   * * *   root    /usr/bin/php  /path/to/trackerm-cli.php
 
-    You can put trackerm-cli where you want and change user if the right permissions is set. Remember the permission for all directorys. If you move the trackerm-cli file
-    out of his original place remember each time you upgrade trackerm you must move and overwrite the file.
+    You can place trackerm-cli where you do want and change the user if you set the right permissions. Remember look at the permission for all directorys where trackerm will work. 
+    If you move the trackerm-cli file out of his original place remember each time you upgrade trackerm you must move and overwrite the file.
 
 ## Programming Language
-    Php+Javascript (Jquery in the futer probably)
+    Php+Javascript (Jquery in the futere probably)
 
 ## Requisites:
 Apache+Php7 (or similar), Jacket, Transmission, Composer, account+api key themoviedb.org, CRON, sqlite3
 
 ## Installation
-    * Copy files from to a destination directory (AKA: dest), copy config.min.php to /etc/trackerm.conf and fill all fields
+    * Copy all files from to a destination directory (AKA: dest). Copy config.min.php to /etc/trackerm.conf and fill all fields
 
     * Installl composer.
 
@@ -79,12 +78,12 @@ Apache+Php7 (or similar), Jacket, Transmission, Composer, account+api key themov
     * For caching the images you need allow_url_fopen in your php.ini
     * R/W in cache and cache/images cache/log. Database files and images will be stored in cache dir, must be writable.
 * Jackett
-    * Configured with indexers (add the indexers you want use to you config file and set the api key
+    * Configured with your selected indexers (add the indexers you want use to you config file and set the api key
 
 * Transmission-daemon
-    * Configure to accept RPC connections (add the connection details to /etc/trackerm.conf (template config/config.min.php)
+    * Configured to accept RPC connections (add the connection details to /etc/trackerm.conf (template config/config.min.php)
     * Beware the transmission settings.json will we rewrite after stop the daemon. Stop the daemon before do any changes.
 
 * TheMovieDB.ORG    
-    * You need a acount and request a api key and set it in /etc/tracker.conf
+    * I provide a general and probably working API key , but you can create a account and request a personal api key (set it in /etc/tracker.conf)
 

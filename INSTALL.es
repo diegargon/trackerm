@@ -1,7 +1,7 @@
 
 ## Como funcionara
 
-Este proyecto esta algo verde todavia, cambiara entre commits.
+Este proyecto esta algo verde todavia.
 
 Para usarlo renombre el archivo config.min.php  a /etc/trackerm.conf y rellene lo que se pide. Todos los datos ahí indicados son obligatorios.
 Luego pinche en escanear la libreria y identifique sus archivos multimedia actuales.
@@ -17,9 +17,9 @@ En biblioteca podras ver tus peliculas/series, identificar y ver episodios y cua
 Es más que recomendable si tienes que borrar un archivo torrent de transmission añadido con trackerm hacerlo desde trackerm. Para el mejor funcionamiento
 es mejor que todo lo hagas desde trackerm.
 
-El sistema de seguimiento automatico (aun alpha) aunque funciona con los torrents al menos en español (otras lenguages personalmente no probe) y
-se activa metiendo el archivo trackerm-cli.php en el cron y poner que se ejecute cada poco tiempo (hay otros mecanismos en el archivo de config que evitan
-sobrecargar el sistema si lo pones cada poco, 15 minutos, 30 minutos o o 1 hora estan bien si quieres que esten  todas las tareas bien actualizadas
+El sistema de seguimiento automatico se activa metiendo el archivo trackerm-cli.php en el cron y poner que se ejecute cada poco tiempo (hay otros mecanismos 
+en el archivo de config que evitan sobrecargar el sistema si lo pones cada poco, 15 minutos, 30 minutos o o 1 hora estan bien si quieres que esten  todas las 
+tareas bien actualizadas
 
 ## Permisos de directorio
     Your www server must have this permissions:
@@ -60,26 +60,25 @@ Apache+Php7+sqlite3 , Jacket, Transmission, Composer, cuenta+api key themoviedb.
     Toda las opciones personalizables de configuración van en /etc/trackerm.conf copie el archivo de la carpeta config/config.min.php 
     a /etc y renombrelo como trackerm.conf y configurelo.
 
-    Importante añadir, themoviedb api key, jacket server ip y key, los indexers  que queremos utilizar (previamente activados en jackett)
-    y basicamente rellenar todo de config.min.php en /etc/trackerm.conf
+    Necesitas una themoviedb api key (aunque proveo una general que deberia funcionar), jacket server ip y key, los indexers  que queremos 
+    utilizar (previamente activados en jackett) y basicamente rellenar todo de config.min.php en /etc/trackerm.conf
 
 ## Tareas automaticas: Seguimiento y mover a la libreria.
-    En estos momentos todos los mecanismos automaticos estan en pruebas y puede contener errores.
-    
+
     Para usarlo hay que añadir trackerm-cli.php a CRON. Posiblemente seria recomendable moverlo fuera del ROOT_PATH. Si lo moviera
     tenga en cuenta que al actualizarlo tendra que moverlo otra vez y sobreescribir el antiguo.
 
     Como funcionara  :
     * Automaticamente buscara torrentes en "seguimiento" el dia seleccionado, si encuentra coincidencias que satisfaga los filtros lo descargara.
     * Automaticamente movera todos los archivos descargados por transmission a tu libreria, opcionalmente puedes configurarlo para que mueva solo los
-    que descargastes pulsando dentro de la aplicación trackerm. Por defecto mueve todo los archivos multimedia (video) que encuentra en la ruta de
-    transmission.
+    que descargastes pulsando dentro de la aplicación trackerm. Por defecto mueve todo los archivos multimedia (video) que encuentra en en pausa + finalizado
+    en transmission
     * (no disponible todavía) Automaticamente y activandolo podra mover todos los archivos multimedia de determinas carpetas que configuremos.
-    * Automaticamente descomprime archivos rar, no soporta contraseñas hasta que Jackett las soporte. Si avisa.
+    * Automaticamente descomprime archivos rar, no soporta contraseñas hasta que Jackett las soporte. Si avisa de que encontro un archivo protegido.
 
     El funcionamiento para que automaticamente se muevan los archivos bajados por transmission es el siguiente:
         Primero busca los archivos que indicamos descargar con trackerm, si los encuentra mira si esta parado/pausa o sirviendo(seeding) si es así en el primer caso
-        parado, lo movera y borrar el torrent y otros archivos residuales de la descarga, en el segundo caso, creara un enlace simbolico para poder acceder al archivo 
+        parado, lo movera y borrara el torrent y otros archivos residuales de la descarga, en el segundo caso, creara un enlace simbolico para poder acceder al archivo 
         desde tu libreria hasta que sea parado o pare de "servirse" el archivo, en cuyo caso se movera.
 
     La linea basica para ejecutar las tareas automaticas  (ejemplo cada 15 minutos) es la siguiente (/etc/crontab)
@@ -100,7 +99,7 @@ Apache+Php7+sqlite3 , Jacket, Transmission, Composer, cuenta+api key themoviedb.
 
 * Jackett
     Instalado y configurado añadiendo algunos indexers de peliculas/series.
-    Necesitas la clave api para conectarse al servidor jackett, esta ira en /etc/trackerm.conf
+    Necesitas la clave api de Jackett y acceso esterno activado para conectarse al servidor jackett, la clave ira en /etc/trackerm.conf
 
 * Transmission-daemon
     Instalado/configurado y permitiendo las conexiones RPC a la ip del servidor
@@ -112,6 +111,7 @@ Apache+Php7+sqlite3 , Jacket, Transmission, Composer, cuenta+api key themoviedb.
     * Utilizo una libreria externa para el dialogo con transmission que hay que instalar via composer (ver instalación) 
 
 * TheMovieDB.ORG    
-    Es importante y no opcional para el correcto funcionamiento crearse una cuenta en dicha pagina, se utilizar para buscar peliculas/series, caratulas, identificar y demas.
-    Necesitais una clave api de un proveedor, actualmente solo soporta themoviedb.org (el api key va en /etc/trackerm.php utilizando la plantilla config/config.min.php)
-    Quizas en el futuro se añadan otras alternativas pero de momento solo hay esta y es imprescindible.
+    Es importante y no opcional para el correcto funcionamiento un API Ke, se utilizar para buscar peliculas/series, caratulas, identificar y demas.
+    Necesitais una clave api de un proveedor, actualmente solo soporta themoviedb.org (el api key va en /etc/trackerm.conf utilizando la plantilla config/config.min.php)
+    Quizas en el futuro se añadan otras alternativas pero de momento solo hay esta y es imprescindible. 
+    Proporciono con la configuracion un API key que deberia funcionar pero podeis cambiar por uno propio.
