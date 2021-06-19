@@ -12,6 +12,11 @@
 function search_media_torrents($media_type, $search, $head = null, $nohtml = false) {
     global $cfg, $log, $db;
 
+    $result = [];
+    $page = '';
+    $results_count = 0;
+    $cache_media_expire = 0;
+
     if ($media_type == 'movies') {
         $jackett_search_media_cache = 'jackett_search_movies_cache';
         $jackett_db = 'jackett_movies';
@@ -29,24 +34,19 @@ function search_media_torrents($media_type, $search, $head = null, $nohtml = fal
         return false;
     }
 
-    $result = [];
-    $page = '';
-    $results_count = 0;
-    $cache_media_expire = 0;
-
     $search_words = strtolower($search_words);
 
     if ($cfg['search_cache']) {
         $media_cache_check = $db->getItemByField($jackett_search_media_cache, 'words', $search_words);
         !isset($media_cache_check['updated']) ? $media_cache_check['updated'] = 0 : null;
 
-        if (time() > ($media_cache_check['updated'] + $cfg['search_cache_expire'])) {
-            $expire = $media_cache_check['updated'] + $cfg['search_cache_expire'];
+        $expire = $media_cache_check['updated'] + $cfg['search_cache_expire'];
+
+        if (time() > $expire) {
             $time_now = time();
             $log->debug("New: Media cache expire ($media_type), requesting $time_now:$expire");
             $cache_media_expire = 1;
         } else {
-            //$log->debug("News:  Using media cache");
             $media_db = $db->getItemsByIds($jackett_db, $media_cache_check['ids']);
         }
     }
@@ -61,7 +61,11 @@ function search_media_torrents($media_type, $search, $head = null, $nohtml = fal
 
             ($media_type) == 'movies' ? $jackett_media_key = 'movie-search' : $jackett_media_key = 'tv-search';
             if ($caps['searching'][$jackett_media_key]['@attributes']['available'] == "yes") {
-                //some indexer jackett return the query year added to title (hack for radarr) we query without year and filter later
+                /*
+                 * We can't search with the year added since Jackett return in some indexers the searched year added to every result
+                 * If the search contains the year we query without year and then filter later
+                 * We do the same with SXXEXX
+                 */
                 //update: query only title if request chapter, filter later too
                 if ((preg_match('/\s+\d{4}/i', $search_words, $match) == 1) || (preg_match('/S\d{2}E\d{2}/i', $search_words, $match) == 1)) {
                     $words_clean = getFileTitle($search_words);
@@ -79,6 +83,9 @@ function search_media_torrents($media_type, $search, $head = null, $nohtml = fal
         }
 
         $media_db = jackett_prep_media($media_type, $result);
+        if (empty($media_db)) {
+            return false;
+        }
         if (($cfg['search_cache'] && $cache_media_expire)) {
             $media_cache['words'] = $search_words;
             $media_cache['updated'] = time();
@@ -92,13 +99,10 @@ function search_media_torrents($media_type, $search, $head = null, $nohtml = fal
             $db->upsertItemByField($jackett_search_media_cache, $media_cache, 'words');
         }
     }
-
     $topt['search_type'] = $media_type;
     $topt['view_type'] = $media_type . '_torrent';
-    if (empty($media_db)) {
-        return false;
-    }
 
+    /* Here if the search contains the year where delete results without year */
     if (preg_match('/\s+\d{4}/i', $search_words, $match) == 1) {
         $year = trim($match[0]);
 
@@ -109,6 +113,7 @@ function search_media_torrents($media_type, $search, $head = null, $nohtml = fal
             }
         }
     }
+    /* Here if the search contains the SxxExx where delete results without year */
     if (preg_match('/S\d{2}E\d{2}/i', $search_words, $match) == 1) {
         $episode = trim($match[0]);
 
@@ -119,13 +124,13 @@ function search_media_torrents($media_type, $search, $head = null, $nohtml = fal
             }
         }
     }
+    /* Check again after the unsets */
     if (!valid_array($media_db)) {
         return false;
     }
     if ($nohtml) {
         return $media_db;
     }
-
     $media_db = mix_media_res($media_db);
     $page .= buildTable($head, $media_db, $topt);
 
@@ -266,15 +271,6 @@ function jackett_prep_media($media_type, $media_results) {
                 $media[$key]['id'] = $last_id;
             }
         }
-        /* OLD
-          $db->addItemsUniqField($jackett_db, $media, 'guid');
-
-          foreach ($media as $key => $item) {
-          $id = $db->getIdByField($jackett_db, 'guid', $item['guid']);
-          $media[$key]['id'] = $id;
-          }
-         *
-         */
     } else {
         return false;
     }
