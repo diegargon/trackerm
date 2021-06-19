@@ -538,7 +538,7 @@ function wanted_work() {
         }
 
         if (!empty($wanted['track_show'])) {
-            $log->debug("Jumping wanted {$wanted['title']} by track_show");
+            $log->debug("Track Show on {$wanted['title']}");
             //TODO send wanted_list to avoid query again
             tracker_shows($wanted);
             continue;
@@ -821,12 +821,17 @@ function tracker_shows($wanted) {
             // Get all wanted regarless or wanted_status for drop gump up the max_wanted_track, since > 5 must not count for send next show
             // At this moment the isn't added because duplicate but neither, must wait next cli run when shows library is building and detect as a
             // have_show.
+            //FIXME: Despues de descargar Algo 1x05 como 1x05 no esta la BD todavia vuelve añadir 1x05 que no se añade por que esta sirviendo
+            //habria que comprobar si Algo 1x05 esta en wanted y si esta eliminarlo para que añada 1x06.
 
             if (valid_array($have_shows)) {
                 foreach ($have_shows as $have_show) {
                     if ($have_show['season'] == $season && $have_show['episode'] == $episode) {
                         unset($list_episodes[$season][$key_episode]);
-                        break;
+                        if (count($list_episodes[$season]) == 0) {
+                            unset($list_episodes[$season]);
+                        }
+                        //break;
                     }
                 }
             }
@@ -835,13 +840,18 @@ function tracker_shows($wanted) {
                 foreach ($items_match as $item_match) {
                     if (($item_match['season'] == $season) && ($item_match['episode'] == $episode)) {
                         unset($list_episodes[$season][$key_episode]);
-                        break;
+                        if (count($list_episodes[$season]) == 0) {
+                            unset($list_episodes[$season]);
+                        }
+                        //break;
                     }
                 }
             }
         }
     }
-
+    if (!valid_array($list_episodes)) {
+        return false;
+    }
     $item = mediadb_getFromCache('shows', $oid);
     $title = $item['title'];
     empty($cfg['max_wanted_track_downloads']) ? $max_wanted_track_downloads = 1 + $nocount : $max_wanted_track_downloads = $cfg['max_wanted_track_downloads'] + $nocount;
@@ -851,12 +861,15 @@ function tracker_shows($wanted) {
     !empty($wanted['custom_words_require']) ? $inherint_track['custom_words_require'] = $wanted['custom_words_require'] : null;
     !empty($wanted['custom_title']) ? $inherint_track['custom_title'] = $wanted['custom_title'] : null;
     !empty($wanted['day_check']) ? $inherint_track['day_check'] = $wanted['day_check'] : null;
+
     foreach ($list_episodes as $season => $episodes) {
         foreach ($episodes as $key_episode => $episode) {
             if ($items_match_count < $max_wanted_track_downloads) {
-                $log->debug('Sending to wanted tracker show episode:' . "$title $season:$episode");
+                $log->AddStateMsg('Sending to wanted tracker show episode:' . "$title $season:$episode");
                 wanted_episode($oid, $season, $episode, 0, $inherint_track);
                 $items_match_count++;
+            } else {
+                break;
             }
         }
     }
