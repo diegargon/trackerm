@@ -43,8 +43,7 @@ function _rebuild($media_type, $path) {
     $media = $db->getTableData($library_table);
     $i = 0;
 
-    //check if each media path it in $files if not probably delete, then delete db entry
-    //this avoid problems if the file was moved
+    //Check if each media path it in $files if not probably delete or moved and must clean.
     (valid_array($media)) ? clean_database($media_type, $files, $media) : null;
 
     foreach ($files as $file) {
@@ -96,13 +95,22 @@ function _rebuild($media_type, $path) {
     }
     if (valid_array($items)) {
         $insert_ids = $db->addItems($library_table, $items);
-        //If is a show we check if already have other episodes identified to identify this. if unset ids
+        /*
+         * If is a show we check if already have other episodes identified to identify this.
+         * Return no identified items.
+         */
+
         if ($media_type == 'shows' && valid_array($media)) {
             $insert_ids = ident_by_already_have_show($media, $insert_ids);
         }
-        //We check history for auto identify in we had that file. if unset ids
+        /*
+         * We check library history for auto identify in we had that file.
+         * Return no identified items
+         */
         valid_array($insert_ids) ? $insert_ids = check_history($media_type, $insert_ids) : null;
-        //last if auto_identify is on we check title agains online db. if unset ids
+        /*
+         * Last if auto_identify is on we check title agains online db.
+         */
         if (!empty($cfg['auto_identify'])) {
             (valid_array($insert_ids)) ? auto_ident_exact($media_type, $insert_ids) : null;
         }
@@ -115,7 +123,7 @@ function ident_by_already_have_show($media, $ids) {
     global $log, $db;
 
     foreach ($ids as $id_key => $id) {
-        $log->debug("Try ident_by_already_have_show called for id $id");
+        $log->debug("Called ident_by_already_have_show for id $id");
         $item = $db->getItemById('library_shows', $id);
         foreach ($media as $id_item) {
             if (valid_array($item) && $id_item['predictible_title'] === ucwords($item['predictible_title']) &&
@@ -151,7 +159,7 @@ function show_identify_media($media_type) {
     $uniq_shows = [];
     $iurl = '?page=' . Filter::getString('page');
 
-    $result = $db->query("SELECT * FROM library_$media_type WHERE title = '' OR title is NULL OR master is NULL");
+    $result = $db->query("SELECT * FROM library_$media_type WHERE master is NULL");
     $media = $db->fetchAll($result);
 
     if (!valid_array($media)) {
