@@ -37,7 +37,7 @@
                 <span class="item_source"><a class="action_link" href="<?= $tdata['guid'] ?>" target=_blank ><?= $tdata['source'] ?></a></span>
                 <?php
             }
-            if (!empty($tdata['total_items'])) {
+            if (!empty($tdata['total_items']) && $tdata['total_items'] > 1) {
                 ?>
                 <span class="item_num_episodes">[<?= $tdata['total_items'] ?>]</span>
                 <?php
