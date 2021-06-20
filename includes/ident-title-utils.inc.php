@@ -151,9 +151,8 @@ function getFileEpisode($file_name) {
         return $SE;
     }
 
-    $file_name = str_replace(['480p', '720p', '1080p', '2160p'], '', $file_name);
-    /* FORMAT 000  not temp , this must the near the last check */
-    if (preg_match('/[0-9]{3}/', $file_name, $match)) {
+    /* FORMAT 000  not temp , this must the last try */
+    if (preg_match('/\s+[0-9]{3}\s+/', $file_name, $match)) {
         $SE['season'] = 1;
         $SE['episode'] = $match[0];
         return $SE;
@@ -219,6 +218,7 @@ function getMediaType($file_name) {
     if (preg_match('/Temp.+\d{1,2}/i', $file_name)) {
         return 'shows';
     }
+    /* SXX */
     if (preg_match('/S\d{2}/i', $file_name)) {
         return 'shows';
     }
@@ -245,6 +245,9 @@ function getFileTags($file_name) {
     if (stripos($file_name, 'vose') !== false) {
         $tags .= "[VOSE]";
     }
+    if (strpos($file_name, 'MULTi') !== false) {
+        $tags .= "[MULTi]";
+    }
     if (stripos($file_name, 'dual') !== false) {
         $tags .= "[DUAL]";
     }
@@ -262,8 +265,26 @@ function getFileTags($file_name) {
     } else if (stripos($file_name, 'AC3') !== false) {
         $tags .= "[AC3]";
     }
+    if (stripos($file_name, 'AC-3 5.1') !== false) {
+        $tags .= "[AC-3 5.1]";
+    } else if (stripos($file_name, 'AC-3') !== false) {
+        $tags .= "[AC3]";
+    }
+    if (stripos($file_name, 'AAC 5.1') !== false) {
+        $tags .= "[AAC 5.1]";
+    } else if (stripos($file_name, 'AAC 2.0') !== false) {
+        $tags .= "[AAC 2.0]";
+    } else if (stripos($file_name, 'AAC') !== false) {
+        $tags .= "[AAC]";
+    }
     if (stripos($file_name, 'DTS 5.1') !== false) {
         $tags .= "[DTS 5.1]";
+    } else if (stripos($file_name, 'DTS 2.0') !== false) {
+        $tags .= "[DTS 2.0]";
+    } else if (stripos($file_name, 'DTS 4.0') !== false) {
+        $tags .= "[DTS 4.0]";
+    } else if (strpos($file_name, 'DTS') !== false) {
+        $tags .= "[DTS]";
     }
     if (stripos($file_name, 'DVDRip') !== false) {
         $tags .= "[DVDRip]";
@@ -285,6 +306,15 @@ function getFileTags($file_name) {
     if (stripos($file_name, 'HDTV') !== false) {
         $tags .= "[HDTV]";
     }
+    if (stripos($file_name, 'SDTV') !== false) {
+        $tags .= "[SDTV]";
+    }
+    if (stripos($file_name, 'TVRIP') !== false) {
+        $tags .= "[TVRIP]";
+    }
+    if (stripos($file_name, 'MicroHD') !== false) {
+        $tags .= "[MicroHD]";
+    }
     if (stripos($file_name, 'X264') !== false) {
         $tags .= "[x254]";
     }
@@ -297,8 +327,14 @@ function getFileTags($file_name) {
     if (stripos($file_name, 'BluRay') !== false) {
         $tags .= "[BluRay]";
     }
+    if (stripos($file_name, 'BDRip') !== false) {
+        $tags .= "[BDRip]";
+    }
     if (stripos($file_name, '60fps') !== false) {
         $tags .= "[60FPS]";
+    }
+    if (stripos($file_name, 'WEB-DL') !== false) {
+        $tags .= "[WEB-DL]";
     }
     if (stripos($file_name, 'WebRip') !== false) {
         $tags .= "[WebRip]";
