@@ -293,7 +293,7 @@ $LNG = [
     'L_CFG_SHOW_QUERYS' => 'Show querys (debug)',
     'L_CFG_PROXY_ENABLE' => 'Enable Proxy (Used to get the cover from indexers, if you use proxy on jackett you must enable proxy)',
     'L_CFG_PROXY_URL' => 'Example tcp://X.X.X.X:3128',
-    'L_CFG_PROXY_TIMEOUT' => 'Proxy tiemeout',
+    'L_CFG_PROXY_TIMEOUT' => 'Proxy timeout',
     'L_CFG_PROXY_USER' => 'Proxy user (leave blank if not used)',
     'L_CFG_PROXY_PASS' => 'Proxy password (leave blank if not used)',
     /*
