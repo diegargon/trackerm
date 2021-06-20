@@ -131,7 +131,7 @@ button {
 .divTableCell {
     position: relative; 
     text-align: center;
-    padding:10px;
+    padding:5px;
 }
 .divTableHeading {
     background-color: #EEE;
