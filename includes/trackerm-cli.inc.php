@@ -153,7 +153,6 @@ function MovieJob($item, $linked = false) {
     $valid_files = get_valid_files($item);
 
     if ($valid_files && count($valid_files) >= 1) {
-
         if ($cfg['create_movie_folders']) {
             $folder_title = preg_replace('/\s+/', ' ', $item['title']);
             if (is_array($cfg['MOVIES_PATH'])) {
@@ -178,29 +177,28 @@ function MovieJob($item, $linked = false) {
 
         $i = 1;
         $new_media = '';
-
         $num_valid = count($valid_files);
+        $num_valid > 1 ? sort($valid_files) : null;
+
         foreach ($valid_files as $valid_file) {
 
             $file_tags = getFileTags($valid_file);
             $ext = substr($valid_file, -4);
 
             if ($num_valid > 1) {
-                $numerated = '[' . $i . ']';
-            } else {
-                $numerated = '';
-            }
-            if ($num_valid > 1) {
-                $title = getFileTitle(basename($valid_file));
+                $title = ucwords(getFileTitle(basename($valid_file)));
             } else {
                 $title = ucwords($item['title']);
             }
             $title = preg_replace('/\s+/', ' ', $title);
-            $new_file_name = $title . ' ' . $file_tags . $ext;
-            if (file_exists($new_file_name)) {
-                $new_file_name = $title . ' ' . $file_tags . $numerated . $ext;
-                $i++;
+            !empty($file_tags) ? $file_tags = ' ' . $file_tags : null;
+            if ($num_valid > 1) {
+                $numerated = '[' . $i . ']';
+            } else {
+                $numerated = '';
             }
+            $new_file_name = $title . $file_tags . $numerated . $ext;
+            $i++;
             $final_dest_path = $dest_path . '/' . $new_file_name;
 
             if (file_exists($final_dest_path) && $linked) {
