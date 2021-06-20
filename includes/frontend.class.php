@@ -25,7 +25,7 @@ class FrontEnd {
     }
 
     function getTpl(string $tpl, array $tdata = []) {
-        global $cfg, $LNG, $user; //NO delete work for templates
+        global $cfg, $LNG, $user; //NO delete need for templates
 
         ob_start();
         $tpl_file = 'tpl/' . $cfg['theme'] . '/' . $tpl . '.tpl.php';
