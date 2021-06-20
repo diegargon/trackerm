@@ -10,7 +10,7 @@
 <div class="footer">
     <p class="center">Querys(<?= $tdata['num_querys'] ?>)</p>
     <p class="copyright">
-        <a href="https://github.com/diegargon/trackerm" target="_blank">trackerm</a> - Copyright @ 2020 - 2021
+        <a href="https://github.com/diegargon/trackerm" target="_blank">TrackerM</a> - Copyright @ 2020 - 2021
     </p>
     <?php
     if (!empty($tdata['querys'])) {
