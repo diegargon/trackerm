@@ -243,130 +243,130 @@ function getFileTags($file_name) {
     }
 
     if (stripos($file_name, 'vose') !== false) {
-        $tags .= "[VOSE]";
+        $tags .= '[VOSE]';
     }
     if (stripos($file_name, 'AVC') !== false) {
-        $tags .= "[AVC]";
+        $tags .= '[AVC]';
     }
     if (stripos($file_name, '8bits') !== false) {
-        $tags .= "[8bits]";
+        $tags .= '[8bits]';
     }
     if (stripos($file_name, '10bits') !== false) {
-        $tags .= "[10bits]";
+        $tags .= '[10bits]';
     }
     if (stripos($file_name, 'TrueHD') !== false) {
-        $tags .= "[TrueHD]";
+        $tags .= '[TrueHD]';
     }
     if (strpos($file_name, 'MULTi') !== false) {
-        $tags .= "[MULTi]";
+        $tags .= '[MULTi]';
     }
     if (stripos($file_name, 'dual') !== false) {
-        $tags .= "[DUAL]";
+        $tags .= '[DUAL]';
     }
     if (stripos($file_name, '720p') !== false) {
-        $tags .= "[720p]";
+        $tags .= '[720p]';
     }
     if (stripos($file_name, '1080p') !== false) {
-        $tags .= "[1080p]";
+        $tags .= '[1080p]';
     }
     if (stripos($file_name, '480p') !== false) {
-        $tags .= "[480p]";
+        $tags .= '[480p]';
     }
     if (stripos($file_name, 'AC3 5.1') !== false) {
-        $tags .= "[AC3 5.1]";
+        $tags .= '[AC3 5.1]';
     } else if (stripos($file_name, 'AC3') !== false) {
-        $tags .= "[AC3]";
+        $tags .= '[AC3]';
     }
     if (stripos($file_name, 'AC-3 5.1') !== false) {
-        $tags .= "[AC-3 5.1]";
+        $tags .= '[AC-3 5.1]';
     } else if (stripos($file_name, 'AC-3') !== false) {
-        $tags .= "[AC3]";
+        $tags .= '[AC3]';
     }
     if (stripos($file_name, 'AAC 5.1') !== false) {
-        $tags .= "[AAC 5.1]";
+        $tags .= '[AAC 5.1]';
     } else if (stripos($file_name, 'AAC 2.0') !== false) {
-        $tags .= "[AAC 2.0]";
+        $tags .= '[AAC 2.0]';
     } else if (stripos($file_name, 'AAC') !== false) {
-        $tags .= "[AAC]";
+        $tags .= '[AAC]';
     }
     if (stripos($file_name, 'DTS 5.1') !== false) {
-        $tags .= "[DTS 5.1]";
+        $tags .= '[DTS 5.1]';
     } else if (stripos($file_name, 'DTS 2.0') !== false) {
-        $tags .= "[DTS 2.0]";
+        $tags .= '[DTS 2.0]';
     } else if (stripos($file_name, 'DTS 4.0') !== false) {
-        $tags .= "[DTS 4.0]";
+        $tags .= '[DTS 4.0]';
     } else if (strpos($file_name, 'DTS') !== false) {
-        $tags .= "[DTS]";
+        $tags .= '[DTS]';
     }
     if (stripos($file_name, 'DVDRip') !== false) {
-        $tags .= "[DVDRip]";
+        $tags .= '[DVDRip]';
     } else if (stripos($file_name, 'DVD') !== false) {
-        $tags .= "[DVD]";
+        $tags .= '[DVD]';
     }
     if (stripos($file_name, 'DDP5.1') !== false) {
-        $tags .= "[DDP5.1]";
+        $tags .= '[DDP5.1]';
     }
     if (stripos($file_name, 'Xvid') !== false) {
-        $tags .= "[XVID]";
+        $tags .= '[XVID]';
     }
     if (stripos($file_name, 'M1080') !== false) {
-        $tags .= "[M1080]";
+        $tags .= '[M1080]';
     }
     if (stripos($file_name, 'BD1080') !== false) {
         $tags .= "[BD1080]";
     }
     if (stripos($file_name, 'HDTV') !== false) {
-        $tags .= "[HDTV]";
+        $tags .= '[HDTV]';
     }
     if (stripos($file_name, 'SDTV') !== false) {
-        $tags .= "[SDTV]";
+        $tags .= '[SDTV]';
     }
     if (stripos($file_name, 'TVRIP') !== false) {
-        $tags .= "[TVRIP]";
+        $tags .= '[TVRIP]';
     }
     if (stripos($file_name, 'MicroHD') !== false) {
-        $tags .= "[MicroHD]";
+        $tags .= '[MicroHD]';
     }
     if (stripos($file_name, 'X264') !== false) {
-        $tags .= "[x254]";
+        $tags .= '[x254]';
     }
     if ((stripos($file_name, 'X265') !== false) || stripos($file_name, 'HEVC') !== false) {
-        $tags .= "[x265]";
+        $tags .= '[x265]';
     }
     if (stripos($file_name, 'HDR') !== false) {
-        $tags .= "[HDR]";
+        $tags .= '[HDR]';
     }
     if (stripos($file_name, 'BluRay Rip') !== false) {
-        $tags .= "[BluRay RIP]";
+        $tags .= '[BluRay RIP]';
     } else if (stripos($file_name, 'BluRay') !== false) {
-        $tags .= "[BluRay]";
+        $tags .= '[BluRay]';
     }
     if (stripos($file_name, 'BDRip') !== false) {
-        $tags .= "[BDRip]";
+        $tags .= '[BDRip]';
     }
     if (stripos($file_name, '60fps') !== false) {
-        $tags .= "[60FPS]";
+        $tags .= '[60FPS]';
     }
     if (stripos($file_name, 'WEB-DL') !== false) {
-        $tags .= "[WEB-DL]";
+        $tags .= '[WEB-DL]';
     }
     if (stripos($file_name, 'WEBDL') !== false) {
-        $tags .= "[WEB-DL]";
+        $tags .= '[WEB-DL]';
     }
     if (stripos($file_name, 'WEB-Rip') !== false) {
-        $tags .= "[WEB-RIP]";
+        $tags .= '[WEB-RIP]';
     }
     if (stripos($file_name, 'WEBRIP') !== false) {
-        $tags .= "[WEB-RIP]";
+        $tags .= '[WEB-RIP]';
     }
     if (stripos($file_name, 'WebRip') !== false) {
-        $tags .= "[WebRip]";
+        $tags .= '[WebRip]';
     }
     if (stripos($file_name, '[3D]') !== false) {
-        $tags .= "[3D]";
+        $tags .= '[3D]';
     }
     if (stripos($file_name, '[REMUX]') !== false) {
-        $tags .= "[REMUX]";
+        $tags .= '[REMUX]';
     }
     if (stripos($file_name, '[subs]') !== false) {
         $tags .= "[SUBS]";
@@ -376,7 +376,7 @@ function getFileTags($file_name) {
             (stripos($file_name, 'hd-tc') !== false) ||
             (stripos($file_name, 'hd-ts') !== false)
     ) {
-        $tags .= "[SCREENER]";
+        $tags .= '[SCREENER]';
     }
     if (
             (stripos($file_name, 'UHD') !== false) ||
@@ -387,7 +387,7 @@ function getFileTags($file_name) {
         if (stripos($file_name, '4K') !== false) {
             $tags .= "4K ";
         }
-        $tags .= "UHD]";
+        $tags .= 'UHD]';
     }
 
     return $tags;
