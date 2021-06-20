@@ -241,38 +241,37 @@ function jackett_prep_media($media_type, $media_results) {
         }
     }
 
-    if (valid_array($media)) {
-        $media = array_reverse($media);
-        //Get all item guid results
-        foreach ($media as $item) {
-            $guids[] = $item['guid'];
-        }
-
-        //Select from db  all items with same guids
-        $items_id_guid = $db->selectMultiple($jackett_db, 'guid', $guids, 'id,guid,guessed_poster,guessed_trailer');
-
-        //media haven't id and we need it, here we check if item guid exist in the database
-        //if item exists we add the id to media id
-        //if item not exist we additem, get the last id insert and add to the media item id the id
-        foreach ($media as $key => $item) {
-            $found = 0;
-            foreach ($items_id_guid as $item_id_guid) {
-                if ($item_id_guid['guid'] == $item['guid']) {
-                    $found = 1;
-                    $media[$key]['id'] = $item_id_guid['id'];
-                    //we need this too
-                    $media[$key]['guessed_poster'] = $item_id_guid['guessed_poster'];
-                    $media[$key]['guessed_trailer'] = $item_id_guid['guessed_trailer'];
-                    break;
-                }
-            }
-            if (empty($found)) {
-                $last_id = $db->addItem($jackett_db, $item);
-                $media[$key]['id'] = $last_id;
-            }
-        }
-    } else {
+    if (!valid_array($media)) {
         return false;
+    }
+
+    $media = array_reverse($media);
+    //Get all item guid results
+    foreach ($media as $item) {
+        $guids[] = $item['guid'];
+    }
+
+    //Select from db  all items with same guids
+    $items_id_guid = $db->selectMultiple($jackett_db, 'guid', $guids, 'id,guid,guessed_poster,guessed_trailer');
+    //media haven't id and we need it, here we check if item guid exist in the database
+    //if item exists we add the id to media id
+    //if item not exist we additem, get the last id insert and add to the media item id the id
+    foreach ($media as $key => $item) {
+        $found = 0;
+        foreach ($items_id_guid as $item_id_guid) {
+            //if ($item_id_guid['guid'] == $item['guid']) {
+            if (strcmp($item_id_guid['guid'], $item['guid']) === 0) {
+                $found = 1;
+                $media[$key]['id'] = $item_id_guid['id'];
+                $media[$key]['guessed_poster'] = $item_id_guid['guessed_poster'];
+                $media[$key]['guessed_trailer'] = $item_id_guid['guessed_trailer'];
+                break;
+            }
+        }
+        if (empty($found)) {
+            $last_id = $db->addItem($jackett_db, $item);
+            $media[$key]['id'] = $last_id;
+        }
     }
 
     return $media;
