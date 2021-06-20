@@ -373,7 +373,8 @@ function submit_ident($media_type, $item, $id) {
             unset($_item['file_hash']);
             unset($_item['media_info']);
             unset($_item['file_name']);
-
+            unset($_item['predictible_title']);
+            unset($_item['size']);
             $db->insert('library_master_' . $media_type, $_item);
             $lastid_master = $db->getLastId();
             $db->update('library_' . $media_type, ['master' => $lastid_master], ['id' => ['value' => $id]]);
