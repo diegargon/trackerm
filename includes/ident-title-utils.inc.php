@@ -245,6 +245,18 @@ function getFileTags($file_name) {
     if (stripos($file_name, 'vose') !== false) {
         $tags .= "[VOSE]";
     }
+    if (stripos($file_name, 'AVC') !== false) {
+        $tags .= "[AVC]";
+    }
+    if (stripos($file_name, '8bits') !== false) {
+        $tags .= "[8bits]";
+    }
+    if (stripos($file_name, '10bits') !== false) {
+        $tags .= "[10bits]";
+    }
+    if (stripos($file_name, 'TrueHD') !== false) {
+        $tags .= "[TrueHD]";
+    }
     if (strpos($file_name, 'MULTi') !== false) {
         $tags .= "[MULTi]";
     }
@@ -324,7 +336,9 @@ function getFileTags($file_name) {
     if (stripos($file_name, 'HDR') !== false) {
         $tags .= "[HDR]";
     }
-    if (stripos($file_name, 'BluRay') !== false) {
+    if (stripos($file_name, 'BluRay Rip') !== false) {
+        $tags .= "[BluRay RIP]";
+    } else if (stripos($file_name, 'BluRay') !== false) {
         $tags .= "[BluRay]";
     }
     if (stripos($file_name, 'BDRip') !== false) {
@@ -335,6 +349,15 @@ function getFileTags($file_name) {
     }
     if (stripos($file_name, 'WEB-DL') !== false) {
         $tags .= "[WEB-DL]";
+    }
+    if (stripos($file_name, 'WEBDL') !== false) {
+        $tags .= "[WEB-DL]";
+    }
+    if (stripos($file_name, 'WEB-Rip') !== false) {
+        $tags .= "[WEB-RIP]";
+    }
+    if (stripos($file_name, 'WEBRIP') !== false) {
+        $tags .= "[WEB-RIP]";
     }
     if (stripos($file_name, 'WebRip') !== false) {
         $tags .= "[WebRip]";
