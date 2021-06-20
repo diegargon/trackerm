@@ -24,12 +24,11 @@ function themoviedb_searchMovies($search) {
     $url = 'https://api.themoviedb.org/3/search/movie?api_key=' . $cfg['db_api_token'] . '&query=' . $search_query . '&language=' . $cfg['TMDB_LANG'];
     $data = curl_get_tmdb($url);
 
-    if (valid_array($data) && !empty($data['results'])) {
-        themoviedb_updateCache($search, $data, 'movies');
-        $movies = themoviedb_MediaPrep('movies', $data['results']);
-    } else {
+    if (!valid_array($data) || empty($data['results'])) {
         return false;
     }
+    themoviedb_updateCache($search, $data, 'movies');
+    $movies = themoviedb_MediaPrep('movies', $data['results']);
 
     return valid_array($movies) ? $movies : null;
 }
@@ -49,12 +48,11 @@ function themoviedb_searchShows($search) {
     $url = 'https://api.themoviedb.org/3/search/tv?api_key=' . $cfg['db_api_token'] . '&query=' . $search_query . '&language=' . $cfg['TMDB_LANG'];
     $data = curl_get_tmdb($url);
 
-    if (isset($data['results']) && valid_array($data['results'])) {
-        themoviedb_updateCache($search, $data, 'shows');
-        $shows = themoviedb_MediaPrep('shows', $data['results']);
-    } else {
+    if (!valid_array($data) || empty($data['results'])) {
         return false;
     }
+    themoviedb_updateCache($search, $data, 'shows');
+    $shows = themoviedb_MediaPrep('shows', $data['results']);
 
     return valid_array($shows) ? $shows : null;
 }
@@ -214,26 +212,27 @@ function themoviedb_getSeasons($id) {
     }
 
     $items = themoviedb_showsDetailsPrep($id, $seasons_data, $episodes_data);
-    if (valid_array($items)) {
-        foreach ($items as $item) {
-            $where = [];
-            $where['themoviedb_id'] = ['value' => $id];
-            $where['season'] = ['value' => $item['season']];
-            $where['episode'] = ['value' => $item['episode']];
-            $results = $db->select('shows_details', null, $where, 'LIMIT 1');
-            $result_row = $db->fetch($results);
-            $db->finalize($results);
-
-            if ($result_row) {
-                $where_update['id'] = ['value' => $result_row['id']];
-                $db->update('shows_details', $item, $where_update, 'LIMIT 1');
-            } else {
-                $db->insert('shows_details', $item);
-            }
-        }
-    } else {
+    if (!valid_array($items)) {
         return false;
     }
+
+    foreach ($items as $item) {
+        $where = [];
+        $where['themoviedb_id'] = ['value' => $id];
+        $where['season'] = ['value' => $item['season']];
+        $where['episode'] = ['value' => $item['episode']];
+        $results = $db->select('shows_details', null, $where, 'LIMIT 1');
+        $result_row = $db->fetch($results);
+        $db->finalize($results);
+
+        if ($result_row) {
+            $where_update['id'] = ['value' => $result_row['id']];
+            $db->update('shows_details', $item, $where_update, 'LIMIT 1');
+        } else {
+            $db->insert('shows_details', $item);
+        }
+    }
+
     return $items;
 }
 
@@ -273,7 +272,7 @@ function themoviedb_getByLocalId($media_type, $id) {
 
     $item = $db->getItemById('tmdb_search_' . $media_type, $id);
 
-    return $item ? $item : false;
+    return valid_array($item) ? $item : false;
 }
 
 function themoviedb_getFromCache($media_type, $id) {
@@ -297,10 +296,7 @@ function themoviedb_getFromCache($media_type, $id) {
         $url = 'https://api.themoviedb.org/3/movie/' . $id . '?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['TMDB_LANG'];
     } else if ($media_type == 'shows') {
         $url = 'https://api.themoviedb.org/3/tv/' . $id . '?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['TMDB_LANG'];
-    } else {
-        return false;
     }
-
     $response_item[] = curl_get_tmdb($url);
 
     if (!valid_array($response_item)) {
@@ -413,11 +409,11 @@ function themoviedb_getTrailer($media_type, $id) {
     $url = "http://api.themoviedb.org/3/{$tmdb_type}/{$id}/videos?api_key=" . $cfg['db_api_token'] . '&language=' . $cfg['TMDB_LANG'];
 
     $curl_data = curl_get_tmdb($url);
-    if (isset($curl_data['results']) && valid_array($curl_data['results'])) {
-        $results = array_pop($curl_data['results']);
-    } else {
+
+    if (!valid_array($curl_data['results']) || empty($curl_data['results'])) {
         return false;
     }
+    $results = array_pop($curl_data['results']);
     if (!empty($results['site']) && $results['site'] == 'YouTube') {
         $video = 'http://www.youtube.com/embed/' . $results['key'];
     } else if (!empty($results['site']) && $results['site'] == 'Vimeo') {
