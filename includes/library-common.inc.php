@@ -38,6 +38,9 @@ function _rebuild($media_type, $path) {
     $items = [];
     $files = find_media_files($path, $cfg['media_ext']);
 
+    /* Avoid broken links && Detect Dups  */
+    linked_files_check($files);
+
     $library_table = 'library_' . $media_type;
 
     $media = $db->getTableData($library_table);
@@ -544,6 +547,48 @@ function clean_database($media_type, $files, $media) {
             }
 
             $db->deleteItemById('library_' . $media_type, $item['id']);
+        }
+    }
+}
+
+function linked_files_check(array &$files) {
+    global $log;
+
+    $realpaths = [];
+
+    foreach ($files as $file_key => $file) {
+        if (is_link($file) && !file_exists($file)) {
+            $log->AddStateMsg('Broken link detected ignoring...' . $file);
+            unset($files[$file_key]);
+        }
+        if (is_link($file) && file_exists($file)) {
+            if (array_key_exists(realpath($file), $realpaths)) {
+                $log->AddStateMsg('Duplicate link detected <br/>' . $file . "<br/>" . $realpaths[realpath($file)]);
+                $link1 = lstat($realpaths[realpath($file)]);
+                $link2 = lstat($file);
+                /* Remove and unset old */
+                if ($link1['ctime'] < $link2['ctime']) {
+                    if (unlink($realpaths[realpath($file)])) {
+                        $log->AddStateMsg('Cleaning duplicate link success: ' . $realpaths[realpath($file)]);
+                        foreach ($files as $_file_key => $_file) {
+                            if ($_file === $realpaths[realpath($file)]) {
+                                unset($files[$_file_key]);
+                            }
+                        }
+                    }
+                } else {
+                    if (unlink($file)) {
+                        $log->AddStateMsg('Cleaning duplicate link success: ' . $file);
+                        foreach ($files as $_file_key => $_file) {
+                            if ($_file === $file) {
+                                unset($files[$_file_key]);
+                            }
+                        }
+                    }
+                }
+            } else {
+                $realpaths[realpath($file)] = $file;
+            }
         }
     }
 }
