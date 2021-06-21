@@ -390,7 +390,7 @@ function get_valid_files($item) {
                         exec($unrar);
                         break;
                     } else {
-                        $log->info('Unrar flag is set skipping');
+                        $log->debug('Unrar flag is set skipping');
                         break;
                     }
                 } else {
