@@ -23,12 +23,12 @@ Class Log {
         global $cfg;
 
         $LOG_TYPE = [
-            'LOG_EMERG' => 0, // 	system is unusable
-            'LOG_ALERT' => 1, // 	action must be taken immediately
-            'LOG_CRIT' => 2, // 	critical conditions
+            'LOG_EMERG' => 0, // 	UNUSEDsystem is unusable
+            'LOG_ALERT' => 1, // 	UNUSED: action must be taken immediately UNUSED
+            'LOG_CRIT' => 2, // 	UNUSED: critical conditions
             'LOG_ERR' => 3, //          error conditions
             'LOG_WARNING' => 4, // 	warning conditions
-            'LOG_NOTICE' => 5, //	normal, but significant, condition
+            'LOG_NOTICE' => 5, //	UNUSED: normal, but significant, condition
             'LOG_INFO' => 6, // 	informational message
             'LOG_DEBUG' => 7, //	debug-level message
         ];
@@ -93,10 +93,6 @@ Class Log {
 
     public function err($msg) {
         $this->logged('LOG_ERR', $msg);
-    }
-
-    public function crit($msg) {
-        $this->logged('LOG_CRIT', $msg);
     }
 
     public function alert($msg) {

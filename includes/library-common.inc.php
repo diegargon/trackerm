@@ -34,7 +34,7 @@ function rebuild($media_type, $paths) {
 function _rebuild($media_type, $path) {
     global $cfg, $db, $log, $LNG;
 
-    $log->debug("Rebuild $media_type called");
+    $log->info("Rebuild $media_type called");
     $items = [];
     $files = find_media_files($path, $cfg['media_ext']);
 
@@ -569,7 +569,7 @@ function linked_files_check(array &$files) {
                 /* Remove and unset old */
                 if ($link1['ctime'] < $link2['ctime']) {
                     if (unlink($realpaths[realpath($file)])) {
-                        $log->notice('Cleaning duplicate link success: ' . $realpaths[realpath($file)]);
+                        $log->info('Cleaning duplicate link success: ' . $realpaths[realpath($file)]);
                         foreach ($files as $_file_key => $_file) {
                             if ($_file === $realpaths[realpath($file)]) {
                                 unset($files[$_file_key]);
@@ -578,7 +578,7 @@ function linked_files_check(array &$files) {
                     }
                 } else {
                     if (unlink($file)) {
-                        $log->notice('Cleaning duplicate link success: ' . $file);
+                        $log->info('Cleaning duplicate link success: ' . $file);
                         foreach ($files as $_file_key => $_file) {
                             if ($_file === $file) {
                                 unset($files[$_file_key]);

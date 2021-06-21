@@ -56,7 +56,7 @@ function get_dir_contents($dir, &$results = []) {
     global $log;
 
     if (!is_readable($dir)) {
-        $log->debug("Directory $dir is not readable");
+        $log->warning("Directory $dir is not readable");
         return false;
     }
     $files = scandir($dir);
@@ -216,7 +216,7 @@ function check_file_encrypt($type, $file) {
         $f = fopen($file, 'rb');
         $s = fread($f, 7);
         if (bin2hex($s) == '526172211a0701') {
-            $log->debug('RAR5 signature found (' . bin2hex($s) . ')');
+            $log->info('RAR5 signature found (' . bin2hex($s) . ')');
             fseek($f, 7 + 6);
             $s = fread($f, 1);
             if (bin2hex($s) == "04") {
@@ -225,7 +225,7 @@ function check_file_encrypt($type, $file) {
             }
         } else if (bin2hex($s) == '526172211a0700') {
             //FIX: Except signature all same as RAR5 probably not work
-            $log->debug('RAR4 signature found (' . bin2hex($s) . ')');
+            $log->info('RAR4 signature found (' . bin2hex($s) . ')');
             fseek($f, 7 + 6);
             $s = fread($f, 1);
             if (bin2hex($s) == "04") {

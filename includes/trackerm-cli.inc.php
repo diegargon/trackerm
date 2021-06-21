@@ -946,7 +946,7 @@ function update_trailers() {
                     $trailer = str_replace('http', 'https', $trailer);
                 }
                 $update['trailer'] = $trailer;
-                $log->debug("(1) Update $table trailer on tmdb_id {$item['themoviedb_id']} trailer $trailer");
+                $log->info("(1) Update $table trailer on tmdb_id {$item['themoviedb_id']} trailer $trailer");
             } else {
                 $update['trailer'] = 0;
             }
@@ -970,7 +970,7 @@ function update_trailers() {
                     $trailer = str_replace('http', 'https', $trailer);
                 }
                 $update['trailer'] = $trailer;
-                $log->debug("(2) Update $table trailer on tmdb_id {$item['themoviedb_id']} trailer $trailer");
+                $log->info("(2) Update $table trailer on tmdb_id {$item['themoviedb_id']} trailer $trailer");
             } else {
                 $update['trailer'] = 0;
             }
@@ -1047,7 +1047,7 @@ function update_seasons($force = false) {
             $i++;
         }
     }
-    $log->debug("Seasons updated: $i");
+    $log->info("Seasons updated: $i");
 }
 
 function delete_direct_orphans() {
