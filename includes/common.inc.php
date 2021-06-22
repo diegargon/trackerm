@@ -11,7 +11,7 @@
 !defined('IN_WEB') ? exit : true;
 
 if (!file_exists('/etc/trackerm.conf')) {
-    echo '<br> The config file /etc/trackerm.conf is missed, please copy the default file (config/config.min.php) to /etc directory and rename it as trackerm.conf and configure the settings';
+    echo '<br> Missed config file /etc/trackerm.conf, please copy the default file (config/config.min.php) to /etc directory and rename it as trackerm.conf and configure the settings';
     exit();
 }
 require('/etc/trackerm.conf');
@@ -43,10 +43,10 @@ require_once('includes/logging.class.php');
 global $log;
 $log = new Log($cfg);
 
-//TODO: Better fallback missing lang keys?;
 require_once('lang/en-EN/lang.inc.php');
 if (empty($cfg['LANG']) || $cfg['LANG'] != 'en-EN') {
-    require_once('lang/' . $cfg['LANG'] . '/lang.inc.php');
+    $lang_file = 'lang/' . $cfg['LANG'] . '/lang.inc.php';
+    file_exists($lang_file) ? require_once($lang_file) : null;
 }
 
 require_once('includes/filters.class.php');
