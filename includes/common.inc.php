@@ -53,6 +53,7 @@ require_once('includes/filters.class.php');
 require_once('includes/curl.inc.php');
 require_once('includes/file.utils.php');
 require_once('includes/transmission.class.php');
+require_once('includes/identify.inc.php');
 require_once('includes/library-common.inc.php');
 require_once('includes/ident-title-utils.inc.php');
 require_once('includes/view.inc.php');
