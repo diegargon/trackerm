@@ -74,7 +74,13 @@ function update_v16tov17() {
         $result = $db->select('library_master_' . $media_type, 'id,updated');
         $media = $db->fetchAll($result);
         foreach ($media as $item) {
-            $db->update('library_master_' . $media_type, ['items_updated' => $item['updated']], ['id' => ['value' => $item['id']]]);
+            if (empty($item['updated'])) {
+                $updated['items_updated'] = time();
+                $updated['updated'] = time();
+            } else {
+                $updated['items_updated'] = $item['updated'];
+            }
+            $db->update('library_master_' . $media_type, $updated, ['id' => ['value' => $item['id']]]);
         }
     }
 }
