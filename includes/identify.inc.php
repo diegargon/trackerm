@@ -224,7 +224,7 @@ function submit_ident($media_type, $item, $id) {
             $where_check['season'] = ['value' => $show_check['season']];
             $where_check['episode'] = ['value' => $show_check['episode']];
         } else {
-            $log->debug("submit_ident: its show but havent season/episode set " . $id);
+            $log->err("submit_ident: its show but havent season/episode set " . $id);
             return false;
         }
     }
@@ -238,9 +238,8 @@ function submit_ident($media_type, $item, $id) {
         if (valid_array($media_in_library)) {
             $total_items = $media_master['total_items'] + 1;
             $total_size = $media_master['total_size'] + $media_in_library['size'];
-            $update_time = time();
 
-            $db->update('library_master_' . $media_type, ['total_items' => $total_items, 'total_size' => $total_size, 'updated' => $update_time], ['id' => ['value' => $media_master['id']]]);
+            $db->update('library_master_' . $media_type, ['total_items' => $total_items, 'total_size' => $total_size, 'items_updated' => time()], ['id' => ['value' => $media_master['id']]]);
             $db->update('library_' . $media_type, ['master' => $media_master['id']], ['id' => ['value' => $id]], 'LIMIT 1');
             //if is a change master rest 1 or delete from old master.
             if (!empty($media_in_library['master']) && $media_in_library['master'] !== $media_master['id']) {
@@ -270,6 +269,7 @@ function submit_ident($media_type, $item, $id) {
             unset($_item['file_name']);
             unset($_item['predictible_title']);
             unset($_item['size']);
+            $_item['items_updated'] = time();
             $db->insert('library_master_' . $media_type, $_item);
             $lastid_master = $db->getLastId();
             $db->update('library_' . $media_type, ['master' => $lastid_master], ['id' => ['value' => $id]]);
