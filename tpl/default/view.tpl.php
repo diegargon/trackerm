@@ -49,7 +49,7 @@
                     <span class="view_release"><?= strftime("%Y", strtotime($tdata['release'])) ?></span>
                     <br/>
                 <?php } ?>
-                <?php if ($tdata['media_type'] == 'shows') {
+                <?php if ($tdata['media_type'] == 'shows' && isset($tdata['ended'])) {
                     ?>
                     <span><?= $LNG['L_STATE'] ?> :</span>
                     <?php if ($tdata['ended'] === 1) { ?>
