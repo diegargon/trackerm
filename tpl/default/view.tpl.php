@@ -49,6 +49,18 @@
                     <span class="view_release"><?= strftime("%Y", strtotime($tdata['release'])) ?></span>
                     <br/>
                 <?php } ?>
+                <?php if ($tdata['media_type'] == 'shows') {
+                    ?>
+                    <span><?= $LNG['L_STATE'] ?> :</span>
+                    <?php if ($tdata['ended'] === 1) { ?>
+                        <span class="view_ended"><?= $LNG['L_ENDED'] ?></span>
+                    <?php } else if ($tdata['ended'] === 0) { ?>
+                        <span class="view_ended"><?= $LNG['L_CONTINUE'] ?></span>
+                        <?php
+                    }
+                    ?><br/><?php
+                }
+                ?>
                 <?php if (!empty($tdata['total_size'])) { ?>
                     <span><?= $LNG['L_SIZE'] ?> :</span>
                     <span class="view_size"><?= $tdata['total_size'] ?></span>

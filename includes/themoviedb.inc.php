@@ -171,6 +171,11 @@ function themoviedb_MediaPrep($media_type, $items) {
             'release' => isset($release) ? $release : null,
         ];
         !empty($trailer) ? $fitems[$i]['trailer'] = $trailer : null;
+        if ($media_type == 'shows' && !empty($item['in_production'])) {
+            $fitems[$i]['ended'] = 0;
+        } else if (isset($item['in_production'])) {
+            $fitems[$i]['ended'] = 1;
+        }
         $i++;
     }
 

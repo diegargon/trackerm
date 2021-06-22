@@ -20,7 +20,7 @@ function create_db() {
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
                 )');
 
-    $db->insert('db_info', ["app_name" => 'trackerm', "version" => 16]);
+    $db->insert('db_info', ["app_name" => 'trackerm', "version" => 17]);
 
     // USERS
     $db->query('CREATE TABLE IF NOT EXISTS "users" (
@@ -75,7 +75,7 @@ function create_db() {
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                     UNIQUE(themoviedb_id)
                 )');
-    // TMDB_SEARCH MOVIES
+    // TMDB_SEARCH SHOWS
     // ilink unused, remove/rename
     $db->query('CREATE TABLE IF NOT EXISTS "tmdb_search_shows" (
                     "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -95,6 +95,7 @@ function create_db() {
                     "release" VARCHAR NULL,
                     "in_library" INTEGER NULL,
                     "genre" VARCHAR NULL,
+                    "ended" INTEGER NULL,
                     "updated" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                     UNIQUE(themoviedb_id)
@@ -400,7 +401,7 @@ function create_db() {
           "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
           )');
 
-    $db->insert('config', ['cfg_key' => 'db_version', 'cfg_value' => 16, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
+    $db->insert('config', ['cfg_key' => 'db_version', 'cfg_value' => 17, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
     $db->insert('config', ['cfg_key' => 'profile', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
     $db->insert('config', ['cfg_key' => 'max_identify_items', 'cfg_value' => 5, 'cfg_desc' => 'L_CFG_MAXID_ITEMS', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
     $db->insert('config', ['cfg_key' => 'app_name', 'cfg_value' => 'trackerm', 'cfg_desc' => '', 'type' => 1, 'category' => 'L_PRIV', 'public' => 0]);
@@ -940,8 +941,31 @@ function update_db($from) {
         $db->query('VACUUM;');
     }
 
+
+    if ($from < 17) {
+        $db->query('ALTER TABLE tmdb_search_shows add column ended INTEGER NULL'); //ignore this download for
+        $db->query('UPDATE config SET cfg_value=\'17\' WHERE cfg_key=\'db_version\' LIMIT 1');
+        $db->update('db_info', ['version' => 17]);
+        $db->query('VACUUM;');
+    }
+
     /*
       if ($from < 18) {
+      $db->query('UPDATE config SET cfg_value=\'18\' WHERE cfg_key=\'db_version\' LIMIT 1');
+      $db->update('db_info', ['version' => 18]);
+      $db->query('VACUUM;');
+      }
+     */
+
+    /*
+      if ($from < 19) {
+      $db->query('UPDATE config SET cfg_value=\'19\' WHERE cfg_key=\'db_version\' LIMIT 1');
+      $db->update('db_info', ['version' => 19]);
+      $db->query('VACUUM;');
+      }
+     */
+    /*
+      if ($from < 20) {
       //'indexer_disable_time' default 24*60*60
       $db->query('UPDATE config SET cfg_value=\'16\' WHERE cfg_key=\'db_version\' LIMIT 1');
       $db->insert('config', ['cfg_key' => 'localplayer_track', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_LOCALPLAYER_TRACK', 'type' => 3, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
@@ -951,7 +975,7 @@ function update_db($from) {
       }
      */
     /*
-      if ($from < 19) {
+      if ($from < 21) {
       $db->query('UPDATE config SET cfg_value=\'17\' WHERE cfg_key=\'db_version\' LIMIT 1');
       $db->update('db_info', ['version' => 17]);
       $db->query('VACUUM;');
