@@ -128,6 +128,7 @@ function create_db() {
           "custom_poster" VARCHAR NULL,
           "release" VARCHAR NULL,
           "genre" VARCHAR NULL,
+          "items_updated" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
           "updated" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
           "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
           )');
@@ -188,6 +189,7 @@ function create_db() {
           "release" VARCHAR NULL,
           "genre" VARCHAR NULL,
           "ended" INTEGER default 0,
+          "items_updated" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
           "updated" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
           "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
           )');
@@ -945,10 +947,14 @@ function update_db($from) {
 
 
     if ($from < 17) {
+        require_once('includes/update.db.php');
         $db->query('ALTER TABLE tmdb_search_shows add column ended INTEGER NULL'); //ignore this download for
         $db->insert('config', ['cfg_key' => 'cron_daily', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
         $db->insert('config', ['cfg_key' => 'cron_weekly', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
         $db->insert('config', ['cfg_key' => 'cron_monthly', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
+        $db->query('ALTER TABLE library_master_movies add column items_updated TIMESTAMP');
+        $db->query('ALTER TABLE library_master_shows add column items_updated TIMESTAMP');
+        update_v16tov17();
         $db->query('UPDATE config SET cfg_value=\'17\' WHERE cfg_key=\'db_version\' LIMIT 1');
         $db->update('db_info', ['version' => 17]);
         $db->query('VACUUM;');

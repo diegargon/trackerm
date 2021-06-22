@@ -66,3 +66,15 @@ function update_v13_rebuild_master($media_type) {
     }
     return true;
 }
+
+function update_v16tov17() {
+    global $db;
+
+    foreach (['movies', 'shows'] as $media_type) {
+        $result = $db->select('library_master_' . $media_type, 'id,updated');
+        $media = $db->fetchAll($result);
+        foreach ($media as $item) {
+            $db->update('library_master_' . $media_type, ['items_updated' => $item['updated']], ['id' => ['value' => $item['id']]]);
+        }
+    }
+}
