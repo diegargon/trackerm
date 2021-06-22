@@ -118,53 +118,6 @@ function get_operating_system() {
     return $operating_system;
 }
 
-function update_stats() {
-    global $db;
-
-    $movies_size = 0;
-    $shows_size = 0;
-
-    $movies_db = $db->getTableData('library_movies');
-    $num_movies = count($movies_db);
-
-    if (valid_array($movies_db)) {
-        foreach ($movies_db as $db_movie) {
-            if (isset($db_movie['size'])) {
-                $movies_size = $movies_size + $db_movie['size'];
-            }
-        }
-        $movies_size = human_filesize($movies_size);
-    }
-
-    $shows_db = $db->getTableData('library_shows');
-    $num_episodes = count($shows_db);
-    $count_shows = [];
-
-    if (valid_array($shows_db)) {
-        foreach ($shows_db as $db_show) {
-            if (isset($db_show['size'])) {
-                $shows_size = $shows_size + $db_show['size'];
-            }
-
-            if (!empty($db_show['themoviedb_id'])) {
-                $oid = $db_show['themoviedb_id'];
-                if (!isset($count_shows[$oid])) {
-                    $count_shows[$oid] = 1;
-                }
-            }
-        }
-        $shows_size = human_filesize($shows_size);
-    }
-
-    $num_shows = count($count_shows);
-
-    $db->query("UPDATE config SET cfg_value='$num_movies' WHERE cfg_key='stats_movies' LIMIT 1");
-    $db->query("UPDATE config SET cfg_value='$num_shows' WHERE cfg_key='stats_shows' LIMIT 1");
-    $db->query("UPDATE config SET cfg_value='$num_episodes' WHERE cfg_key='stats_shows_episodes' LIMIT 1");
-    $db->query("UPDATE config SET cfg_value='$movies_size' WHERE cfg_key='stats_total_movies_size' LIMIT 1");
-    $db->query("UPDATE config SET cfg_value='$shows_size' WHERE cfg_key='stats_total_shows_size' LIMIT 1");
-}
-
 function valid_array($array) {
     if (!empty($array) && is_array($array) && count($array) > 0) {
         return true;

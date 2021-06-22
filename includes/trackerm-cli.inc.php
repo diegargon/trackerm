@@ -1125,8 +1125,8 @@ function update_things() {
     update_trailers();
     update_seasons();
     hash_missing();
-    update_stats();
-    update_master_stats();
+    update_library_stats();
+    check_master_stats();
     //delete from wanted orphans (a orphans is create if user delete the torrent outside trackerm
     delete_direct_orphans();
     // Upgrading v4 change how clean works, must empty the field and redo, not need know
