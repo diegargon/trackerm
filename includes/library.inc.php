@@ -45,7 +45,7 @@ function show_my_movies() {
         $query = "SELECT * FROM library_master_movies WHERE title <> '' ORDER BY updated DESC LIMIT $start,$end ";
     } else {
         $topt['num_table_rows'] = $db->qSingle("SELECT COUNT(*) FROM library_master_movies WHERE title <> '' AND title LIKE \"%$search_term%\" ");
-        $query = "SELECT * FROM library_master_movies WHERE title <> '' AND title LIKE \"%$search_term%\" ORDER BY updated DESC LIMIT $start,$end ";
+        $query = "SELECT * FROM library_master_movies WHERE title <> '' AND title LIKE \"%$search_term%\" ORDER BY items_updated DESC LIMIT $start,$end ";
     }
 
     $results = $db->query($query);
@@ -100,7 +100,7 @@ function show_my_shows() {
         $query = "SELECT * FROM library_master_shows WHERE title <> '' ORDER BY updated DESC LIMIT $start,$end ";
     } else {
         $topt['num_table_rows'] = $db->qSingle("SELECT COUNT(*) FROM library_master_shows WHERE title <> '' AND title LIKE \"%$search_term%\" ");
-        $query = "SELECT * FROM library_master_shows WHERE title <> '' AND title LIKE \"%$search_term%\" ORDER BY updated DESC LIMIT $start,$end ";
+        $query = "SELECT * FROM library_master_shows WHERE title <> '' AND title LIKE \"%$search_term%\" ORDER BY items_updated DESC LIMIT $start,$end ";
     }
     $results = $db->query($query);
     $shows = $db->fetchAll($results);
