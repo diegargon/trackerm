@@ -39,10 +39,10 @@ function transmission_scan() {
             !empty($tor['episode']) ? $item['episode'] = $tor['episode'] : null;
             isset($tor['wanted_id']) ? $item['wanted_id'] = $tor['wanted_id'] : null;
             if ($item['media_type'] == 'movies') {
-                $log->debug('Movie stopped detected: begin working on ' . $item['title']);
+                $log->debug('Movie stopped detected: Working on ' . $item['title']);
                 MovieJob($item);
             } else if ($item['media_type'] == 'shows') {
-                $log->debug('Show stopped detected: begin working on ' . $item['title']);
+                $log->debug('Show stopped detected: Working on ' . $item['title']);
                 ShowJob($item);
             }
         }
@@ -69,10 +69,10 @@ function transmission_scan() {
             isset($tor['wanted_id']) ? $item['wanted_id'] = $tor['wanted_id'] : null;
 
             if ($item['media_type'] == 'movies') {
-                $log->debug('Movie seeding detected: begin working on  ' . $item['title']);
+                $log->debug('Movie seeding detected: Checking ' . $item['title']);
                 MovieJob($item, true);
             } else if ($item['media_type'] == 'shows') {
-                $log->debug('Show seeding detected: begin working on ' . $item['title']);
+                $log->debug('Show seeding detected: Checking ' . $item['title']);
                 ShowJob($item, true);
             }
         }
