@@ -65,30 +65,23 @@ function view() {
     }
     !empty($item['total_size']) ? $item['total_size'] = human_filesize($item['total_size']) : null;
 
-    $cache_img_response = false;
-    if (!empty($item['poster']) && $cfg['cache_images']) {
-        if (($cache_img_response = cache_img($item['poster'])) !== false) {
-            $item['poster'] = $cache_img_response;
-        }
-    }
-
-    if (empty($item['poster'])) {
-        $item['poster'] = $cfg['img_url'] . '/not_available.jpg';
-        empty($item['media_type']) ? $item['media_type'] = $media_type : null;
-
-        $poster = mediadb_guessPoster($item);
-        if (!empty($poster)) {
-            if ($cfg['cache_images']) {
-                $cache_img_response = cache_img($poster);
-                if ($cache_img_response !== false) {
-                    $item['poster'] = $cache_img_response;
-                }
-            } else {
-                $item['poster'] = $poster;
+    if ($cfg['cache_images']) {
+        if (!empty($item['poster'])) {
+            $cache_img_response = cache_img($item['poster']);
+            if ($cache_img_response !== false) {
+                $item['poster'] = $cache_img_response;
             }
-            $item['guessed_poster'] = 1;
+        } else if (!empty($item['guessed_poster']) && $item['guessed_poster'] != -1) {
+            $cache_img_response = cache_img($item['guessed_poster']);
+            if ($cache_img_response !== false) {
+                $item['poster'] = $cache_img_response;
+            }
         }
+    } else if (empty($item['poster']) && !empty($item['guessed_poster'])) {
+        $item['pòster'] = $item['guessed_poster'];
     }
+    empty($item['poster']) ? $item['poster'] = $cfg['img_url'] . '/not_available.jpg' : null;
+
     $other['extra'] = '';
     $opt['auto_show_torrents'] = 0;
     $opt['auto_show_db'] = 0;

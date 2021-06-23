@@ -69,6 +69,7 @@ $LNG = [
     'L_EMAIL_CHANGE_SUCESS' => 'Email cambiado',
     'L_EMAIL_NOTIFY' => 'Notificar email',
     'L_ERROR' => 'Error',
+    'L_ERR_TRANS_CONN' => 'Error de conexión con transmission-daemon, por favor comprueba la configuración y que transmission-daemon se este ejecutando',
     'L_ERR_BADWAY' => 'Error interno o has intentado acceder de forma inadecuada',
     'L_ERR_FILE_ENCRYPT_MANUAL' => 'Archivo encryptado, necesita intervencion manual',
     'L_ERR_ID' => 'Id incorrecto',

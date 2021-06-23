@@ -273,6 +273,7 @@ function jackett_prep_media($media_type, $media_results) {
             }
         }
         if (empty($found)) {
+            jackett_guess_fields($media_type, $item);
             $last_id = $db->addItem($jackett_db, $item);
             $media[$key]['id'] = $last_id;
         }
@@ -322,4 +323,28 @@ function jackett_get_categories($categories) {
     }
 
     return $cats;
+}
+
+function jackett_guess_fields($media_type, &$item) {
+
+    if (empty($item['poster']) && empty($item['guessed_poster'])) {
+        $item['guessed_poster'] = -1;
+        $poster = mediadb_guessPoster($item['title'], $media_type);
+        if (!empty($poster)) {
+            $item['guessed_poster'] = $poster;
+        }
+    }
+
+    if (empty($item['trailer']) && empty($item['guessed_trailer'])) {
+        $trailer = mediadb_guessTrailer($item['title'], $media_type);
+        if (!empty($trailer)) {
+            if (substr($trailer, 0, 4) == 'http:') {
+                $item['guessed_trailer'] = str_replace('http', 'https', $trailer);
+            } else {
+                $item['guessed_trailer'] = $trailer;
+            }
+        } else {
+            $item['guessed_trailer'] = -1;
+        }
+    }
 }

@@ -11,7 +11,7 @@
 <div class="view_page">
     <div class="view_content">
         <div class="view_poster_container">
-            <img class="view_poster" src="<?= isset($tdata['poster']) ? $tdata['poster'] : null ?>" alt=""/>
+            <img class="view_poster" src="<?= $tdata['poster'] ?>" alt=""/>
             <?php
             if (!empty($tdata['guessed_poster'])) {
                 ?>

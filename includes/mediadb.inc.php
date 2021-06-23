@@ -53,37 +53,31 @@ function mediadb_getTrailer($media_type, $id) {
     return themoviedb_getTrailer($media_type, $id);
 }
 
-function mediadb_guessPoster($item) {
+function mediadb_guessPoster($title, $media_type) {
 
-    $result = mediadb_guessFieldGet($item, 'poster');
-
-    return !empty($result) ? $result : false;
-}
-
-function mediadb_guessTrailer($item) {
-
-    $result = mediadb_guessFieldGet($item, 'trailer');
+    $result = mediadb_guessFieldGet($title, $media_type, 'poster');
 
     return !empty($result) ? $result : false;
 }
 
-function mediadb_guessFieldGet($item, $field) {
+function mediadb_guessTrailer($title, $media_type) {
+
+    $result = mediadb_guessFieldGet($title, $media_type, 'trailer');
+
+    return !empty($result) ? $result : false;
+}
+
+function mediadb_guessFieldGet($title, $media_type, $field) {
     global $db;
-    if (!isset($item['media_type'])) {
-        return false;
-    }
 
     //TODO: Too many querys do better
     /*
-
       if we search for angela and in database the field is Ángela we have a a problem.
       testing adding and using clean_title column
      */
-    $title = trim(getFileTitle($item['title']));
-    $title = $db->escape($title);
+    $title = $db->escape(trim(getFileTitle($title)));
     $c_title = clean_title($title);
 
-    $media_type = $item['media_type'];
     $table = 'tmdb_search_' . $media_type;
     $query = "SELECT $field FROM $table WHERE title LIKE '$title'  COLLATE NOCASE OR clean_title LIKE '$c_title' OR original_title LIKE '$title'  COLLATE NOCASE ORDER BY release DESC";
     $results = $db->query($query);
