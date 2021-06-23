@@ -215,7 +215,11 @@ function jackett_prep_media($media_type, $media_results) {
             ];
             //More than one
         } else if (isset($indexer['channel']['item'])) {
+            $added_guids = []; //check duplicates in results, some problems in some indexers
             foreach ($indexer['channel']['item'] as $item) {
+                if (in_array($item['guid'], $added_guids)) {
+                    continue;
+                }
                 isset($item['files']) ? $files = $item['files'] : $files = '';
 
                 $torznab = $item['torznab'];
@@ -237,6 +241,7 @@ function jackett_prep_media($media_type, $media_results) {
                     'poster' => $poster,
                     'clean_title' => clean_title($item['title'])
                 ];
+                $added_guids[] = $item['guid'];
             }
         }
     }
