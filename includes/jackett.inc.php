@@ -264,7 +264,6 @@ function jackett_prep_media($media_type, $media_results) {
     foreach ($media as $key => $item) {
         $found = 0;
         foreach ($items_id_guid as $item_id_guid) {
-            //if ($item_id_guid['guid'] == $item['guid']) {
             if (strcmp($item_id_guid['guid'], $item['guid']) === 0) {
                 $found = 1;
                 $media[$key]['id'] = $item_id_guid['id'];
