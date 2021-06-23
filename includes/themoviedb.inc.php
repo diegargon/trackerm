@@ -360,14 +360,14 @@ function themoviedb_getTrending() {
     $shows_url = 'https://api.themoviedb.org/3/trending/tv/day?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['TMDB_LANG'];
     if ($cfg['want_movies']) {
         $response_items = curl_get_tmdb($movies_url);
-        if (valid_array($response_items) && $response_items[0] !== false) {
+        if (valid_array($response_items)) {
             themoviedb_updateCache('_TRENDING_', $response_items, 'movies');
             $results['movies'] = themoviedb_MediaPrep('movies', $response_items['results']);
         }
     }
     if ($cfg['want_shows']) {
         $response_items = curl_get_tmdb($shows_url);
-        if (valid_array($response_items) && $response_items[0] !== false) {
+        if (valid_array($response_items)) {
             themoviedb_updateCache('_TRENDING_', $response_items, 'shows');
             $results['shows'] = themoviedb_MediaPrep('shows', $response_items['results']);
         }
