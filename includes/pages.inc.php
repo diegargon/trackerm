@@ -188,10 +188,10 @@ function page_library() {
     $page = '';
 
     if (($cfg['want_movies']) && ( $_GET['page'] == 'library' || $_GET['page'] == 'library_movies')) {
-        $page .= show_my_movies();
+        $page .= show_my_media('movies');
     }
     if (($cfg['want_shows']) && ($_GET['page'] == 'library' || $_GET['page'] == 'library_shows')) {
-        $page .= show_my_shows();
+        $page .= show_my_media('shows');
     }
 
     return $page;
