@@ -29,6 +29,8 @@ $db->connect();
 require_once('includes/config.class.php');
 $config = new Config();
 
+$db->checkNeedUpgrade();
+
 if (!empty($cfg['display_errors'])) {
     ini_set('error_reporting', E_ALL);
     error_reporting(E_ALL);

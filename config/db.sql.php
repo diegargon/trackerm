@@ -9,18 +9,10 @@
  */
 !defined('IN_WEB') ? exit : true;
 
+define('DB_VERSION', 17);
+
 function create_db() {
     global $db;
-
-    //DB_INFO
-    $db->query('CREATE TABLE IF NOT EXISTS "db_info" (
-                    "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                    "version" INTEGER NOT NULL,
-                    "app_name" VARCHAR NOT NULL,
-                    "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
-                )');
-
-    $db->insert('db_info', ["app_name" => 'trackerm', "version" => 17]);
 
     // USERS
     $db->query('CREATE TABLE IF NOT EXISTS "users" (
@@ -403,7 +395,7 @@ function create_db() {
           "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
           )');
 
-    $db->insert('config', ['cfg_key' => 'db_version', 'cfg_value' => 17, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
+    $db->insert('config', ['cfg_key' => 'db_version', 'cfg_value' => DB_VERSION, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
     $db->insert('config', ['cfg_key' => 'profile', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
     $db->insert('config', ['cfg_key' => 'max_identify_items', 'cfg_value' => 5, 'cfg_desc' => 'L_CFG_MAXID_ITEMS', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
     $db->insert('config', ['cfg_key' => 'app_name', 'cfg_value' => 'trackerm', 'cfg_desc' => '', 'type' => 1, 'category' => 'L_PRIV', 'public' => 0]);
@@ -950,28 +942,25 @@ function update_db($from) {
 
 
     if ($from < 17) {
-        /*
-          require_once('includes/update.db.php');
-          $db->query('ALTER TABLE tmdb_search_shows add column ended INTEGER NULL'); //ignore this download for
-          $db->insert('config', ['cfg_key' => 'cron_hourly', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
-          $db->insert('config', ['cfg_key' => 'cron_halfday', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
-          $db->insert('config', ['cfg_key' => 'cron_daily', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
-          $db->insert('config', ['cfg_key' => 'cron_weekly', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
-          $db->insert('config', ['cfg_key' => 'cron_monthly', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
-          $db->query('ALTER TABLE library_master_movies add column items_updated TIMESTAMP');
-          $db->query('ALTER TABLE library_master_shows add column items_updated TIMESTAMP');
-          update_v16tov17();
-         */
+        require_once('includes/update.db.php');
+        $db->query('ALTER TABLE tmdb_search_shows add column ended INTEGER NULL'); //ignore this download for
         $db->insert('config', ['cfg_key' => 'cron_quarter', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
+        $db->insert('config', ['cfg_key' => 'cron_hourly', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
+        $db->insert('config', ['cfg_key' => 'cron_halfday', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
+        $db->insert('config', ['cfg_key' => 'cron_daily', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
+        $db->insert('config', ['cfg_key' => 'cron_weekly', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
+        $db->insert('config', ['cfg_key' => 'cron_monthly', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
+        $db->query('ALTER TABLE library_master_movies add column items_updated TIMESTAMP');
+        $db->query('ALTER TABLE library_master_shows add column items_updated TIMESTAMP');
+        update_v16tov17();
         $db->query('UPDATE config SET cfg_value=\'17\' WHERE cfg_key=\'db_version\' LIMIT 1');
-        $db->update('db_info', ['version' => 17]);
+        $db->query('DROP TABLE IF EXISTS db_info');
         $db->query('VACUUM;');
     }
 
     /*
       if ($from < 18) {
       $db->query('UPDATE config SET cfg_value=\'18\' WHERE cfg_key=\'db_version\' LIMIT 1');
-      $db->update('db_info', ['version' => 18]);
       $db->query('VACUUM;');
       }
      */
@@ -979,7 +968,6 @@ function update_db($from) {
     /*
       if ($from < 19) {
       $db->query('UPDATE config SET cfg_value=\'19\' WHERE cfg_key=\'db_version\' LIMIT 1');
-      $db->update('db_info', ['version' => 19]);
       $db->query('VACUUM;');
       }
      */
@@ -989,14 +977,12 @@ function update_db($from) {
       $db->query('UPDATE config SET cfg_value=\'16\' WHERE cfg_key=\'db_version\' LIMIT 1');
       $db->insert('config', ['cfg_key' => 'localplayer_track', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_LOCALPLAYER_TRACK', 'type' => 3, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
       $db->insert('config', ['cfg_key' => 'localplayer_web_password', 'cfg_value' => '', 'cfg_desc' => 'L_CFG_LOCALPLAYER_WEB_PASSWORD', 'type' => 1, 'category' => 'L_LOCALPLAYER', 'public' => 1]);     *
-      $db->update('db_info', ['version' => 16]);
       $db->query('VACUUM;');
       }
      */
     /*
       if ($from < 21) {
       $db->query('UPDATE config SET cfg_value=\'17\' WHERE cfg_key=\'db_version\' LIMIT 1');
-      $db->update('db_info', ['version' => 17]);
       $db->query('VACUUM;');
       }
      */

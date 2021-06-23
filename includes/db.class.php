@@ -39,6 +39,7 @@ class DB {
         $this->db->busyTimeout(5000);
         //$this->db->enableExceptions(true);
         $this->db->exec('PRAGMA journal_mode = wal;');
+
         if (!$response && !empty($this->db)) {
             $this->createTables();
             $response = $this->checkInstall();
@@ -46,8 +47,13 @@ class DB {
         if (empty($this->db)) {
             return $this->fail();
         }
+    }
 
+    public function checkNeedUpgrade() {
         $version = $this->getDbVersion();
+        if ($version == false) {
+            print('Impossible determine installed db version');
+        }
         if ($version < $this->version) {
             $this->upgradeDb($version);
         }
@@ -449,10 +455,9 @@ class DB {
     }
 
     public function getDbVersion() {
-        //TODO: get from cfg['db_version'] and remove db_info table;
-        $query = $this->select('db_info');
-        $result = $this->fetch($query);
-        return $result['version'];
+        global $cfg;
+
+        return !empty($cfg['db_version']) ? $cfg['db_version'] : false;
     }
 
     public function getQuerys() {
@@ -483,7 +488,8 @@ class DB {
     }
 
     private function fail() {
-        return false;
+        print ('Fatal error: impossible connect to the database');
+        exit();
     }
 
     private function createTables() {
