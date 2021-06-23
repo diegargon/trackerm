@@ -414,6 +414,8 @@ function create_db() {
     $db->insert('config', ['cfg_key' => 'stats_shows_episodes', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
     $db->insert('config', ['cfg_key' => 'stats_total_movies_size', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
     $db->insert('config', ['cfg_key' => 'stats_total_shows_size', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
+    $db->insert('config', ['cfg_key' => 'cron_hourly', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
+    $db->insert('config', ['cfg_key' => 'cron_halfday', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
     $db->insert('config', ['cfg_key' => 'cron_daily', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
     $db->insert('config', ['cfg_key' => 'cron_weekly', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
     $db->insert('config', ['cfg_key' => 'cron_monthly', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
@@ -955,6 +957,8 @@ function update_db($from) {
         $db->query('ALTER TABLE library_master_movies add column items_updated TIMESTAMP');
         $db->query('ALTER TABLE library_master_shows add column items_updated TIMESTAMP');
         update_v16tov17();
+        $db->insert('config', ['cfg_key' => 'cron_hourly', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
+        $db->insert('config', ['cfg_key' => 'cron_halfday', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
         $db->query('UPDATE config SET cfg_value=\'17\' WHERE cfg_key=\'db_version\' LIMIT 1');
         $db->update('db_info', ['version' => 17]);
         $db->query('VACUUM;');
