@@ -361,7 +361,7 @@ function page_wanted() {
 }
 
 function page_identify() {
-    global $db, $frontend;
+    global $db, $cfg, $frontend;
 
     $media_type = Filter::getString('media_type');
     $id = Filter::getInt('identify');
@@ -417,12 +417,12 @@ function page_identify() {
     }
 
     if (valid_array($item_selected)) {
-        isset($item_selected['poster']) ? $tdata['selected_poster'] = $item_selected['poster'] : null;
+        isset($item_selected['poster']) ? $tdata['selected_poster'] = $item_selected['poster'] : $tdata['selected_poster'] = $cfg['img_url'] . '/not_available.jpg';
         isset($item_selected['plot']) ? $tdata['selected_plot'] = $item_selected['plot'] : null;
     } else {
         if (valid_array($db_media)) {
             $first_item = current($db_media);
-            isset($first_item['poster']) ? $tdata['selected_poster'] = $first_item['poster'] : null;
+            isset($first_item['poster']) ? $tdata['selected_poster'] = $first_item['poster'] : $tdata['selected_poster'] = $cfg['img_url'] . '/not_available.jpg';
             isset($first_item['plot']) ? $tdata['selected_plot'] = $first_item['plot'] : null;
         }
     }
