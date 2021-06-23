@@ -39,6 +39,7 @@ class TorrentServer {
             $this->trans_conn->portTest();
         } catch (Exception $e) {
             $log->err("trans __construct test fail: " . $e->getMessage());
+            //  echo $e->getMessage();
             $this->trans_conn = false;
         }
         return $this->trans_conn;
