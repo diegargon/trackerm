@@ -455,7 +455,7 @@ function page_download() {
 function page_transmission() {
     global $trans, $frontend;
 
-    if (!valid_array($trans)) {
+    if ($trans == false) {
         return false;
     }
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
