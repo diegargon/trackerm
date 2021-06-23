@@ -946,7 +946,7 @@ function hash_missing() {
 
         foreach ($results as $item) {
             $hash = file_hash($item['path']);
-            $update_query = "update library_'. $media_type .' SET file_hash='$hash' WHERE id='{$item['id']}' LIMIT 1";
+            $update_query = 'update library_' . $media_type . ' SET file_hash=\'' . $hash . '\' WHERE id=\'' . $item['id'] . '\' LIMIT 1';
             $hashlog .= '*';
             $db->query($update_query);
         }
@@ -1226,21 +1226,25 @@ function update_things() {
     if (($cfg['cron_daily'] + 8640) < $time_now) {
         $db->update('config', ['cfg_value' => $time_now], ['cfg_key' => ['value' => 'cron_daily']]);
         update_masters();
-        check_master_stats();
+        //check_master_stats();
         update_seasons();
         //delete from wanted orphans (a orphans is create if user delete the torrent outside trackerm
         delete_direct_orphans();
     }
+
+    //  hash_missing();
     if (($cfg['cron_weekly'] + 604800) < $time_now) {
         $db->update('config', ['cfg_value' => $time_now], ['cfg_key' => ['value' => 'cron_weekly']]);
-        clear_tmdb_cache('shows');
+        //   clear_tmdb_cache('shows');
         hash_missing();
     }
     if (($cfg['cron_monthly'] + 2592000) < $time_now) {
         $db->update('config', ['cfg_value' => $time_now], ['cfg_key' => ['value' => 'cron_monthly']]);
-        clear_tmdb_cache('movies');
+        //    clear_tmdb_cache('movies');
         $db->query('VACUUM');
     }
+
+    hash_missing();
 
     //update_trailers();
     // Upgrading v4 change how clean works, must empty the field and redo, not need know
@@ -1254,7 +1258,7 @@ function update_things() {
 function leave($msg = false) {
     global $log;
 
-    $log->debug('Exit Called');
+    $log->debug('Exit Called  ');
     !empty($msg) ? $log->err($msg) : null;
 
     exit();
