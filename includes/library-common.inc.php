@@ -255,6 +255,7 @@ function linked_files_check(array &$files) {
 function check_master_stats() {
     global $db, $log;
 
+    $log->debug('Check master stats');
     foreach (['movies', 'shows'] as $media_type) {
         $masters_media = $db->getTableData('library_master_' . $media_type);
         $childs_media = $db->getTableData('library_' . $media_type);
@@ -333,10 +334,12 @@ function get_have_shows_season($oid, $season) {
 }
 
 function update_library_stats() {
-    global $db;
+    global $db, $log;
 
     $movies_size = 0;
     $shows_size = 0;
+
+    $log->debug('Updating library stats');
 
     $movies_db = $db->getTableData('library_movies');
     $num_movies = count($movies_db);
