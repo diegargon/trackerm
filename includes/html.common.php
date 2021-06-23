@@ -35,7 +35,7 @@ function buildTable($head, $db_ary, $topt = null) {
 
     if (isset($topt['num_table_rows']) ||
             $npage == 1 ||
-            (isset($topt['search_type']) && ($_GET['search_type'] != $topt['search_type']))
+            (isset($topt['search_type']) && isset($_GET['search_type']) && ($_GET['search_type'] != $topt['search_type']))
     ) {
         $db_ary_slice = $db_ary;
     } else {
@@ -173,13 +173,15 @@ function pager($npage, $nitems, &$topt) {
         $get_params['page'] = $page;
         (!empty(Filter::getString('view_type'))) ? $get_params['view_type'] = Filter::getString('view_type') : null;
         (!empty(Filter::getInt('id'))) ? $get_params['id'] = Filter::getInt('id') : null;
-        (!empty(Filter::getUtf8('search_shows_torrents'))) ? $get_params['search_shows_torrents'] = Filter::getUtf8('search_shows_torrents') : null;
-        (!empty(Filter::getUtf8('search_movies_torrents'))) ? $get_params['search_movies_torrents'] = Filter::getUtf8('search_movies_torrents') : null;
+        (!empty(Filter::getUtf8('search_shows_torrents'))) ? $get_params['search_shows_torrents'] = trim(Filter::getUtf8('search_shows_torrents')) : null;
+        (!empty(Filter::getUtf8('search_movies_torrents'))) ? $get_params['search_movies_torrents'] = trim(Filter::getUtf8('search_movies_torrents')) : null;
         (!empty($_GET['more_movies'])) ? $get_params['more_movies'] = 1 : null;
+        (!empty($_GET['more_shows'])) ? $get_params['more_shows'] = 1 : null;
         (!empty($_GET['more_torrents'])) ? $get_params['more_torrents'] = 1 : null;
-        (!empty(Filter::getUtf8('search_movies_db'))) ? $get_params['search_movies_db'] = Filter::getUtf8('search_movies_db') : null;
-        (!empty(Filter::getUtf8('search_movies'))) ? $get_params['search_movies'] = Filter::getUtf8('search_movies') : null;
-        (!empty(Filter::getUtf8('search_shows'))) ? $get_params['search_shows'] = Filter::getUtf8('search_shows') : null;
+        (!empty(Filter::getUtf8('search_movies_db'))) ? $get_params['search_movies_db'] = trim(Filter::getUtf8('search_movies_db')) : null;
+        (!empty(Filter::getUtf8('search_shows_db'))) ? $get_params['search_shows_db'] = trim(Filter::getUtf8('search_shows_db')) : null;
+        (!empty(Filter::getUtf8('search_movies'))) ? $get_params['search_movies'] = trim(Filter::getUtf8('search_movies')) : null;
+        (!empty(Filter::getUtf8('search_shows'))) ? $get_params['search_shows'] = trim(Filter::getUtf8('search_shows')) : null;
         !empty($topt['search_term']) ? $get_params['search_term'] = $topt['search_term'] : null;
 
         for ($i = 1; $i <= ceil($num_pages); $i++) {
