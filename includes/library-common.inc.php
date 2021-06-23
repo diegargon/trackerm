@@ -176,7 +176,7 @@ function clean_database($media_type, $files, $media) {
                 $log->addStateMsg('[' . $LNG['L_NOTE'] . '] ' . $item['title'] . ' ' . $LNG['L_NOTE_MOVDEL']);
                 $last_oid = $item['themoviedb_id'];
             }
-            if (isset($item['themoviedb_id'])) {
+            if (isset($item['themoviedb_id']) && !empty($item['file_hash'])) {
                 $values['title'] = $item['title'];
                 $values['themoviedb_id'] = $item['themoviedb_id'];
                 $values['clean_title'] = clean_title($item['title']);

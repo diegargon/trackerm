@@ -953,6 +953,7 @@ function update_db($from) {
         $db->query('ALTER TABLE library_master_movies add column items_updated TIMESTAMP');
         $db->query('ALTER TABLE library_master_shows add column items_updated TIMESTAMP');
         update_v16tov17();
+        $db->query('DELETE FROM library_history WHERE file_hash IS NULL');
         $db->query('UPDATE config SET cfg_value=\'17\' WHERE cfg_key=\'db_version\' LIMIT 1');
         $db->query('DROP TABLE IF EXISTS db_info');
         $db->query('VACUUM;');
