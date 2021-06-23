@@ -34,14 +34,11 @@ if (!valid_object($trans)) {
     $log->err("Starting TAS fail: Fail Transmission connection");
     exit(1);
 }
-transmission_scan();
-
-setPrefsItem('cli_blocker', 1, true);
-
 $log->info("Starting trackerm automatic service...");
+transmission_scan();
+setPrefsItem('cli_blocker', 1, true);
 wanted_work();
 update_things();
-
 setPrefsItem('cli_blocker', 0, true);
 
 $log->info("trackerm automatic service finish...");
