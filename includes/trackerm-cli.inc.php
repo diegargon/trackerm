@@ -604,6 +604,7 @@ function wanted_work() {
             $valid_results[0]['media_type'] = $media_type;
             $valid_results[0]['wanted_id'] = $wanted_id;
             $first_valid[] = $valid_results[0];
+            $log->debug('Sending to transmission ' . $valid_results[0]['title']);
             if (send_transmission($first_valid)) {
                 $state_msg = '[' . $LNG['L_DOWNLOADING'] . '] ';
                 if (!empty($s_episode)) {
@@ -635,7 +636,7 @@ function wanted_check_title($title, $results) {
         $res_title = clean_title($res_title);
         $res_title = preg_replace('/\s+/', ' ', $res_title);
         if (strcmp(strtolower($res_title), strtolower($req_title)) == 0) {
-            $log->debug('Wanted: Valid title found for title: ' . $req_title . ' ->' . $res_title);
+            $log->debug('Wanted: Valid title found for title: ' . $req_title . ' ->' . $res_title . '[' . $item['title'] . ']');
             $valid[] = $item;
         } else {
             $log->debug('Wanted: Title discarded since is not exact *' . strtolower($req_title) . '*:*' . strtolower($res_title) . '*');
@@ -647,12 +648,15 @@ function wanted_check_title($title, $results) {
 
 function wanted_check_flags($wanted, $results) {
     global $cfg, $log;
-    $noignore = [];
+
     $torrent_ignore_prefs = [];
     $custom_words_ignore = [];
     $custom_words_require = [];
-    $valid_results = [];
+    $final_results = [];
 
+    /*
+     * IGNORE KEYWORDS GLOBAL && CUSTOM
+     */
     if (!empty($wanted['custom_words_ignore'])) {
         $custom_words_ignore = explode(',', $wanted['custom_words_ignore']);
     }
@@ -663,66 +667,44 @@ function wanted_check_flags($wanted, $results) {
         $torrent_ignore_prefs = array_merge($custom_words_ignore, $torrent_ignore_prefs);
     }
     if (count($torrent_ignore_prefs) > 0) {
-        foreach ($results as $result) {
-            $ignore_flag = 0;
-
+        foreach ($results as $key_result => $result) {
             foreach ($cfg['torrent_ignore_prefs'] as $ignore) {
                 if (stripos($result['title'], trim($ignore))) {
-                    $ignore_flag = 1;
                     $log->debug('Wanted: Ignored coincidence for item ' . $result['title'] . ' by ignore key ' . $ignore);
+                    unset($results[$key_result]);
+                    break;
                 }
             }
-            if ($ignore_flag != 1) {
-                $noignore[] = $result;
-            }
         }
-    } else {
-        $noignore = $results;
+        if (!valid_array($results)) {
+            return false;
+        }
     }
 
-    if (count($cfg['torrent_quality_prefs']) > 0) {
-
-        //build quality array with PROPER and without PROPER
-        $_order = 0;
-        foreach ($cfg['torrent_quality_prefs'] as $quality) {
-            if ($quality == 'ANY') {
-                $TORRENT_QUALITYS_PREFS_PROPER[$_order] = 'PROPER';
-                if (empty($wanted['only_proper'])) {
-                    $TORRENT_QUALITYS_PREFS_PROPER[$_order + 1] = $quality;
-                    $_order = $_order + 2;
-                } else {
-                    $_order = $_order + 1;
-                }
-            } else {
-                $TORRENT_QUALITYS_PREFS_PROPER[$_order] = $quality . ' PROPER';
-                if (empty($wanted['only_proper'])) {
-                    $TORRENT_QUALITYS_PREFS_PROPER[$_order + 1] = $quality;
-                    $_order = $_order + 2;
-                } else {
-                    $_order = $_order + 1;
-                }
+    /*
+     * If only proper drop all not contains proper
+     */
+    if (!empty($wanted['only_proper'])) {
+        foreach ($results as $key_result => $result) {
+            if (!stripos($result['title'], 'PROPER')) {
+                unset($results[$key_result]);
             }
         }
-
-        foreach ($TORRENT_QUALITYS_PREFS_PROPER as $quality) {
-            foreach ($noignore as $noignore_result) {
-                if (stripos($noignore_result['title'], $quality) || $quality == 'ANY') {
-                    $log->debug('Wanted: Quality coincidence for item ' . $noignore_result['title'] . ' by quality key ' . $quality);
-                    $valid_results[] = $noignore_result;
-                }
-            }
+        if (!valid_array($results)) {
+            return false;
         }
-    } else {
-        $valid_results = $noignore;
     }
 
-    if (!empty($cfg['torrent_require_or_prefs']) && (count($cfg['torrent_require_or_prefs']) > 0) && !empty($valid_results) && (count($valid_results) > 0)) {
+    /*
+     *  Require OR prefs A OR B need
+     */
+    if (!empty($cfg['torrent_require_or_prefs']) && (count($cfg['torrent_require_or_prefs']) > 0) && !empty($results) && (count($results) > 0)) {
 
-        foreach ($valid_results as $valid_key => $valid_result) {
+        foreach ($results as $key_result => $result) {
             $match = 0;
             $words_checked = '';
             foreach ($cfg['torrent_require_or_prefs'] as $or_prefs) {
-                if (strpos($valid_result['title'], $or_prefs)) {
+                if (strpos($result['title'], $or_prefs)) {
                     $match = 1;
                     break;
                 } else {
@@ -730,41 +712,85 @@ function wanted_check_flags($wanted, $results) {
                 }
             }
             if ($match === 0) {
-                $log->debug('Wanted: Drop valid item by global OR ' . $valid_result['title'] . ' any required words ' . $words_checked);
-                unset($valid_results[$valid_key]);
+                $log->debug('Wanted: Drop item by global OR ' . $result['title'] . ' any required words ' . $words_checked);
+                unset($results[$key_result]);
             }
         }
     }
 
-    if (!empty($wanted['custom_words_require']) && !empty($valid_results) && (count($valid_results) > 0)) {
+    /*
+     *  Customs words require in the title
+     */
+    if (!empty($wanted['custom_words_require']) && !empty($results) && (count($results) > 0)) {
         $custom_words_require = explode(',', $wanted['custom_words_require']);
-        foreach ($valid_results as $valid_key => $valid_result) {
+        foreach ($results as $key_result => $result) {
             foreach ($custom_words_require as $word_require) {
-                if (!(stripos($valid_result['title'], trim($word_require)))) {
-                    $log->debug('Wanted: Drop valid item by custom require words ' . $valid_result['title'] . ' required word ' . $word_require);
-                    unset($valid_results[$valid_key]);
+                if (!(stripos($result['title'], trim($word_require)))) {
+                    $log->debug('Wanted: Drop item by custom require words ' . $result['title'] . ' required word ' . $word_require);
+                    unset($results[$key_result]);
                 }
             }
         }
     }
 
-    if (!empty($wanted['custom_words_ignore']) && count($valid_results) > 0) {
+    /*
+     * Custom ignore words
+     */
+    if (!empty($wanted['custom_words_ignore']) && count($results) > 0) {
         $custom_words_ignore = explode(',', $wanted['custom_words_ignore']);
-        foreach ($valid_results as $valid_key => $valid_result) {
+        foreach ($results as $key_result => $result) {
             foreach ($custom_words_ignore as $word_ignore) {
-                if ((stripos($valid_result['title'], $word_ignore))) {
-                    $log->debug('Wanted: Drop valid item by custom ignore words ' . $valid_result['title'] . ' ignore word ' . trim($word_ignore));
-                    unset($valid_results[$valid_key]);
+                if ((stripos($result['title'], $word_ignore))) {
+                    $log->debug('Wanted: Drop item by custom ignore words ' . $result['title'] . ' ignore word ' . trim($word_ignore));
+                    unset($results[$key_result]);
                 }
             }
         }
     }
 
-    return count($valid_results) > 0 ? $valid_results : false;
+    if (!valid_array($results)) {
+        return false;
+    }
+    /*
+     * Order Priority Quality+Proper -> Quality -> ANY if set
+     */
+
+    if (count($cfg['torrent_quality_prefs']) > 0) {
+        foreach ($cfg['torrent_quality_prefs'] as $quality) {
+            if (strtoupper($quality) == 'ANY') {
+                foreach ($results as $key_result => $result) {
+                    if (stripos($result['title'], 'PROPER')) {
+                        $final_results[] = $result;
+                        unset($results[$key_result]);
+                    }
+                }
+                foreach ($results as $key_result => $result) {
+                    $final_results[] = $result;
+                    unset($results[$key_result]);
+                }
+            } else {
+                foreach ($results as $key_result => $result) {
+                    if (stripos($result['title'], $quality) && stripos($result['title'], 'PROPER')) {
+                        $final_results[] = $result;
+                        unset($results[$key_result]);
+                    }
+                }
+                foreach ($results as $key_result => $result) {
+                    if (stripos($result['title'], $quality)) {
+                        $final_results[] = $result;
+                        unset($results[$key_result]);
+                    }
+                }
+            }
+        }
+    }
+
+
+    return valid_array($final_results) ? $final_results : false;
 }
 
 function tracker_shows($wanted) {
-    global $db, $cfg, $log;
+    global $db, $cfg, $log, $LNG;
 
     $from_season = $wanted['season'];
     $from_episode = $wanted['episode'];
@@ -863,7 +889,7 @@ function tracker_shows($wanted) {
     foreach ($list_episodes as $season => $episodes) {
         foreach ($episodes as $key_episode => $episode) {
             if ($items_match_count < $max_wanted_track_downloads) {
-                $log->AddStateMsg('Sending to wanted tracker show episode:' . "$title $season:$episode");
+                $log->info('Sending to wanted:' . "$title $season:$episode");
                 wanted_episode($oid, $season, $episode, 0, $inherint_track);
                 $items_match_count++;
             } else {
@@ -909,107 +935,31 @@ function send_transmission($results) {
     return true;
 }
 
-/*
-  1º check movies/shows with empty trailer and update if we already not update in DB_UPD_MISSING_DELAY
-  2º check no empty trailers movie/shows and update trailer link after DB_UPD_LONG_DELAY
- */
-
-function update_trailers() {
-    global $db, $cfg, $log;
-
-    $log->debug('Executing update trailers');
-    $limit = 15;
-    $tables = ['library_movies', 'library_shows', 'tmdb_search_movies', 'tmdb_search_shows'];
-    //IMPROVE: This can be done in one query per table
-    // Update missing trailers and never try get trailer
-    foreach ($tables as $table) {
-        $update = [];
-
-        if ($table == 'library_movies' || $table == 'tmdb_search_movies') {
-            $media_type = 'movies';
-        } else {
-            $media_type = 'shows';
-        }
-
-        $update['updated'] = $time_now = time();
-        $next_update = time() - $cfg['db_upd_missing_delay'];
-
-        $query = "SELECT DISTINCT themoviedb_id FROM $table WHERE trailer = '' OR  (trailer = '0' AND updated < $next_update) LIMIT $limit";
-        $result = $db->query($query);
-
-        $results = $db->fetchAll($result);
-
-        foreach ($results as $item) {
-            $trailer = mediadb_getTrailer($media_type, $item['themoviedb_id']);
-            if (!empty($trailer)) {
-                if (substr(trim($trailer), 0, 5) != 'https') {
-                    $trailer = str_replace('http', 'https', $trailer);
-                }
-                $update['trailer'] = $trailer;
-                $log->info("(1) Update $table trailer on tmdb_id {$item['themoviedb_id']} trailer $trailer");
-            } else {
-                $update['trailer'] = 0;
-            }
-            $where_upd = ['themoviedb_id' => ['value' => $item['themoviedb_id']]];
-
-            $db->update($table, $update, $where_upd);
-        }
-
-        // LONG DELAY UPDATE TRAILER
-        $update = [];
-        $update['updated'] = $time_now = time();
-        $next_update = time() - $cfg['db_upd_long_delay'];
-        $query = "SELECT DISTINCT themoviedb_id FROM $table WHERE trailer IS NOT NULL AND updated < $next_update LIMIT $limit";
-        $result = $db->query($query);
-        $results = $db->fetchAll($result);
-
-        foreach ($results as $item) {
-            $trailer = mediadb_getTrailer($media_type, $item['themoviedb_id']);
-            if (!empty($trailer)) {
-                if (substr(trim($trailer), 0, 5) != 'https') {
-                    $trailer = str_replace('http', 'https', $trailer);
-                }
-                $update['trailer'] = $trailer;
-                $log->info("(2) Update $table trailer on tmdb_id {$item['themoviedb_id']} trailer $trailer");
-            } else {
-                $update['trailer'] = 0;
-            }
-            $where_upd = ['themoviedb_id' => ['value' => $item['themoviedb_id']]];
-
-            $db->update($table, $update, $where_upd);
-        }
-    }
-}
-
 function hash_missing() {
     global $db, $log;
 
-    $hashlog = 'Hashing: ';
-    $query = $db->query('SELECT id,path FROM library_movies WHERE file_hash IS \'\' LIMIT 50');
-    $results = $db->fetchAll($query);
+    $hashlog = 'Hashing missing...';
 
-    foreach ($results as $item) {
-        $hash = file_hash($item['path']);
-        $update_query = "update library_movies SET file_hash='$hash' WHERE id='{$item['id']}' LIMIT 1";
-        $hashlog .= '*';
-        $db->query($update_query);
+    foreach (['movies', 'shows'] as $media_type) {
+        $query = $db->query('SELECT id,path FROM library_' . $media_type . ' WHERE file_hash IS \'\' LIMIT 50');
+        $results = $db->fetchAll($query);
+
+        foreach ($results as $item) {
+            $hash = file_hash($item['path']);
+            $update_query = "update library_'. $media_type .' SET file_hash='$hash' WHERE id='{$item['id']}' LIMIT 1";
+            $hashlog .= '*';
+            $db->query($update_query);
+        }
     }
 
-    $query = $db->query('SELECT id,path FROM library_shows WHERE file_hash IS \'\' LIMIT 50');
-    $results = $db->fetchAll($query);
-
-    foreach ($results as $item) {
-        $hash = file_hash($item['path']);
-        $update_query = "update library_shows SET file_hash='$hash' WHERE id='{$item['id']}' LIMIT 1";
-        $hashlog .= '+';
-        $db->query($update_query);
-    }
     $log->debug($hashlog);
 }
 
 function check_broken_files_linked() {
-    global $cfg;
+    global $cfg, $log;
     $paths = [];
+
+    $log->debug('Checking broken linked files...');
 
     if (is_array($cfg['MOVIES_PATH'])) {
         $paths = array_merge($paths, $cfg['MOVIES_PATH']);
@@ -1028,10 +978,10 @@ function check_broken_files_linked() {
 function update_seasons($force = false) {
     global $db, $log;
 
-    $log->debug('Executing update_seasons');
+    $log->debug('Executing update_seasons...');
 
     $update['updated'] = $time_now = time();
-    $when_time = time() - 259200; //3 days
+    $when_time = time() - 432000; //5 days
     $query = 'SELECT DISTINCT themoviedb_id FROM shows_details';
     (!$force) ? $query .= " WHERE updated < $when_time" : null;
     $query .= ' LIMIT 5';
@@ -1115,25 +1065,190 @@ function check_masters_childs_integrity() {
     }
 }
 
-function update_things() {
-    global $cfg;
+function clear_tmdb_cache($media_type) {
+    global $db, $log;
 
-    check_broken_files_linked();
-    rebuild('movies', $cfg['MOVIES_PATH']);
-    sleep(1);
-    rebuild('shows', $cfg['SHOWS_PATH']);
-    update_trailers();
-    update_seasons();
-    hash_missing();
-    update_library_stats();
-    check_master_stats();
-    //delete from wanted orphans (a orphans is create if user delete the torrent outside trackerm
-    delete_direct_orphans();
+    $tmdb_cache_table = 'tmdb_search_' . $media_type;
+    if ($media_type == 'movies') {
+        $time_req = time() - 2592000; // 1 month
+    } else {
+        $time_req = time() - 604800; // 15 days
+    }
+
+    $result = $db->select($tmdb_cache_table, 'id', ['updated' => ['value' => $time_req, 'op' => '<']]);
+    $media = $db->fetchAll($result);
+
+    if (valid_array($media)) {
+        $log->info('Cleaning tmdb cache ' . $media_type . '(' . count($media) . ')');
+        $ids = '';
+        $end = end($media);
+        foreach ($media as $item) {
+            if ($end['id'] == $item['id']) {
+                $ids .= $item['id'];
+            } else {
+                $ids .= $item['id'] . ',';
+            }
+        }
+        $db->query('DELETE FROM ' . $tmdb_cache_table . ' WHERE id IN (' . $ids . ')');
+    }
+}
+
+/*
+  1º check movies/shows with empty trailer and update if we already not update in DB_UPD_MISSING_DELAY
+  2º check no empty trailers movie/shows and update trailer link after DB_UPD_LONG_DELAY
+ */
+
+function update_trailers() {
+    global $db, $cfg, $log;
+
+    $log->debug('Executing update trailers');
+    $limit = 15;
+
+    //IMPROVE: This can be done in one query per table
+    // Update missing trailers and never try get trailer
+    foreach (['tmdb_search_movies', 'tmdb_search_shows'] as $table) {
+        $update = [];
+
+        if ($table == 'library_movies' || $table == 'tmdb_search_movies') {
+            $media_type = 'movies';
+        } else {
+            $media_type = 'shows';
+        }
+
+        $update['updated'] = $time_now = time();
+        $next_update = time() - $cfg['db_upd_missing_delay'];
+
+        $query = "SELECT DISTINCT themoviedb_id FROM $table WHERE trailer = '' OR  (trailer = '0' AND updated < $next_update) LIMIT $limit";
+        $result = $db->query($query);
+
+        $results = $db->fetchAll($result);
+
+        foreach ($results as $item) {
+            $trailer = mediadb_getTrailer($media_type, $item['themoviedb_id']);
+            if (!empty($trailer)) {
+                if (substr(trim($trailer), 0, 5) != 'https') {
+                    $trailer = str_replace('http', 'https', $trailer);
+                }
+                $update['trailer'] = $trailer;
+                $log->info("(1) Update $table trailer on tmdb_id {$item['themoviedb_id']} trailer $trailer");
+            } else {
+                $update['trailer'] = 0;
+            }
+            $where_upd = ['themoviedb_id' => ['value' => $item['themoviedb_id']]];
+
+            $db->update($table, $update, $where_upd);
+        }
+
+        // LONG DELAY UPDATE TRAILER
+        $update = [];
+        $update['updated'] = $time_now = time();
+        $next_update = time() - $cfg['db_upd_long_delay'];
+        $query = "SELECT DISTINCT themoviedb_id FROM $table WHERE trailer IS NOT NULL AND updated < $next_update LIMIT $limit";
+        $result = $db->query($query);
+        $results = $db->fetchAll($result);
+
+        foreach ($results as $item) {
+            $trailer = mediadb_getTrailer($media_type, $item['themoviedb_id']);
+            if (!empty($trailer)) {
+                if (substr(trim($trailer), 0, 5) != 'https') {
+                    $trailer = str_replace('http', 'https', $trailer);
+                }
+                $update['trailer'] = $trailer;
+                $log->info("(2) Update $table trailer on tmdb_id {$item['themoviedb_id']} trailer $trailer");
+            } else {
+                $update['trailer'] = 0;
+            }
+            $where_upd = ['themoviedb_id' => ['value' => $item['themoviedb_id']]];
+
+            $db->update($table, $update, $where_upd);
+        }
+    }
+}
+
+function update_masters() {
+    global $db, $log;
+    foreach (['movies', 'shows'] as $media_type) {
+        if ($media_type == 'shows') {
+            $time_req = time() - 1296000; //15 days
+        } else {
+            $time_req = time() - 2592000; //1 month
+        }
+        $where = [
+            'updated' => ['value' => $time_req, 'op' => '<'],
+            'themoviedb_id' => ['value' => '', 'op' => '<>']
+        ];
+        $result = $db->select('library_master_' . $media_type, 'id,themoviedb_id', $where);
+        $media = $db->fetchAll($result);
+
+        if (valid_array($media)) {
+            $log->info('Updating masters ' . $media_type . '(' . count($media) . ')');
+            foreach ($media as $item) {
+                $item_cached = mediadb_getFromCache($media_type, $item['themoviedb_id']);
+                if (!valid_array($item_cached)) {
+                    continue;
+                }
+                $update['updated'] = time();
+                $update['plot'] = $item_cached['plot'];
+                $update['rating'] = $item_cached['rating'];
+                $update['popularity'] = isset($item['popularity']) ? $item['popularity'] : 0;
+                $update['poster'] = !empty($item_cached['poster']) ? $item_cached['poster'] : null;
+                $update['release'] = $item_cached['release'];
+                !empty($item_cached['trailer']) ? $update['trailer'] = $item_cached['trailer'] : null;
+
+                if ($media_type == 'shows' && !empty($item['in_production'])) {
+                    $update['ended'] = 0;
+                } else if (isset($item['in_production'])) {
+                    $update['ended'] = 1;
+                }
+                $db->update('library_master_' . $media_type, $update, ['id' => ['value' => $item['id']]]);
+            }
+        }
+    }
+}
+
+function update_things() {
+    global $cfg, $db;
+
+    $time_now = time();
+
+    if (($cfg['cron_quarter'] + 900) < $time_now) {
+        $db->update('config', ['cfg_value' => $time_now], ['cfg_key' => ['value' => 'cron_quarter']]);
+    }
+    if (($cfg['cron_hourly'] + 3600) < $time_now) {
+        $db->update('config', ['cfg_value' => $time_now], ['cfg_key' => ['value' => 'cron_hourly']]);
+        check_broken_files_linked();
+    }
+    if (($cfg['cron_halfday'] + 21600) < $time_now) {
+        $db->update('config', ['cfg_value' => $time_now], ['cfg_key' => ['value' => 'cron_halfday']]);
+        update_library_stats();
+        check_masters_childs_integrity();
+    }
+    if (($cfg['cron_daily'] + 8640) < $time_now) {
+        $db->update('config', ['cfg_value' => $time_now], ['cfg_key' => ['value' => 'cron_daily']]);
+        update_masters();
+        check_master_stats();
+        update_seasons();
+        //delete from wanted orphans (a orphans is create if user delete the torrent outside trackerm
+        delete_direct_orphans();
+    }
+    if (($cfg['cron_weekly'] + 604800) < $time_now) {
+        $db->update('config', ['cfg_value' => $time_now], ['cfg_key' => ['value' => 'cron_weekly']]);
+        clear_tmdb_cache('shows');
+        hash_missing();
+    }
+    if (($cfg['cron_monthly'] + 2592000) < $time_now) {
+        $db->update('config', ['cfg_value' => $time_now], ['cfg_key' => ['value' => 'cron_monthly']]);
+        clear_tmdb_cache('movies');
+        $db->query('VACUUM');
+    }
+
+    //update_trailers();
     // Upgrading v4 change how clean works, must empty the field and redo, not need know
     // keep for future changes
     //set_clean_titles();
-
-    check_masters_childs_integrity();
+    rebuild('movies', $cfg['MOVIES_PATH']);
+    sleep(1);
+    rebuild('shows', $cfg['SHOWS_PATH']);
 }
 
 function leave($msg = false) {
