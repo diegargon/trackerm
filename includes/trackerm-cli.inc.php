@@ -938,21 +938,21 @@ function send_transmission($results) {
 function hash_missing() {
     global $db, $log;
 
-    $hashlog = 'Hashing missing...';
-
     foreach (['movies', 'shows'] as $media_type) {
-        $query = $db->query('SELECT id,path FROM library_' . $media_type . ' WHERE file_hash IS \'\' LIMIT 50');
+        $query = $db->query('SELECT id,path FROM library_' . $media_type . ' WHERE file_hash IS \'\' LIMIT 200');
         $results = $db->fetchAll($query);
+
+        $hashlog = 'Hashing missing ' . $media_type;
+        $i = 0;
 
         foreach ($results as $item) {
             $hash = file_hash($item['path']);
             $update_query = 'update library_' . $media_type . ' SET file_hash=\'' . $hash . '\' WHERE id=\'' . $item['id'] . '\' LIMIT 1';
-            $hashlog .= '*';
+            $i++;
             $db->query($update_query);
         }
+        $log->debug($hashlog . ' (' . $i . ')');
     }
-
-    $log->debug($hashlog);
 }
 
 function check_broken_files_linked() {
@@ -1226,25 +1226,22 @@ function update_things() {
     if (($cfg['cron_daily'] + 8640) < $time_now) {
         $db->update('config', ['cfg_value' => $time_now], ['cfg_key' => ['value' => 'cron_daily']]);
         update_masters();
-        //check_master_stats();
+        check_master_stats();
         update_seasons();
         //delete from wanted orphans (a orphans is create if user delete the torrent outside trackerm
         delete_direct_orphans();
+        hash_missing();
     }
 
-    //  hash_missing();
     if (($cfg['cron_weekly'] + 604800) < $time_now) {
         $db->update('config', ['cfg_value' => $time_now], ['cfg_key' => ['value' => 'cron_weekly']]);
-        //   clear_tmdb_cache('shows');
-        hash_missing();
+        clear_tmdb_cache('shows');
     }
     if (($cfg['cron_monthly'] + 2592000) < $time_now) {
         $db->update('config', ['cfg_value' => $time_now], ['cfg_key' => ['value' => 'cron_monthly']]);
-        //    clear_tmdb_cache('movies');
+        clear_tmdb_cache('movies');
         $db->query('VACUUM');
     }
-
-    hash_missing();
 
     //update_trailers();
     // Upgrading v4 change how clean works, must empty the field and redo, not need know
