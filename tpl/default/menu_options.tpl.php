@@ -52,7 +52,7 @@
             <?php } ?>
         <?php } ?>
         <?php if (in_array($tdata['page'], ['library', 'library_movies', 'library_shows', 'news', 'new_movies', 'new_shows'])) { ?>
-            <input type="text" size="20"  placeholder="<?= $LNG['L_SEARCH'] ?>" name="search_term" onChange="this.form.submit()" value="<?= !empty($tdata['search_term']) ? $tdata['search_term'] : null ?>"/>
+            <input type="text" size="20"  placeholder="<?= $LNG['L_SEARCH'] ?>" name="search_keyword" onChange="this.form.submit()" value="<?= !empty($tdata['search_keyword']) ? $tdata['search_keyword'] : null ?>"/>
         <?php } ?>
         <?php if (!empty($tdata['page']) && in_array($tdata['page'], ['news', 'new_movies', 'new_shows'])) { ?>
             <span> <?= $LNG['L_FILTER_INDEXER'] ?>:</span>

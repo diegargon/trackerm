@@ -120,8 +120,8 @@ class FrontEnd {
 
         $tdata['page'] = Filter::getString('page');
 
-        !empty($_POST['search_term']) ? $tdata['search_term'] = Filter::postString('search_term') : null;
-        !empty($_GET['search_term']) ? $tdata['search_term'] = Filter::getString('search_term') : null;
+        !empty($_POST['search_keyword']) ? $tdata['search_keyword'] = Filter::postString('search_keyword') : null;
+        !empty($_GET['search_keyword']) ? $tdata['search_keyword'] = Filter::getString('search_keyword') : null;
 
         if (isset($_POST['num_ident_toshow']) &&
                 ($cfg['max_identify_items'] != $_POST['num_ident_toshow'])

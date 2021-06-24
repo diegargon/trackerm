@@ -20,12 +20,12 @@ function show_my_media($media_type) {
 
     empty($npage) || (!empty($search_type) && $search_type !== $media_type) ? $npage = 1 : null;
 
-    if (!empty($_POST['search_term'])) {
-        $search_term = Filter::postString('search_term');
-    } else if (!empty($_GET['search_term'])) {
-        $search_term = Filter::getString('search_term');
+    if (!empty($_POST['search_keyword'])) {
+        $search_keyword = Filter::postString('search_keyword');
+    } else if (!empty($_GET['search_keyword'])) {
+        $search_keyword = Filter::getString('search_keyword');
     }
-    !empty($search_term) ? $topt['search_term'] = $search_term : null;
+    !empty($search_keyword) ? $topt['search_keyword'] = $search_keyword : null;
 
 
     if ($media_type == 'movies') {
@@ -50,12 +50,12 @@ function show_my_media($media_type) {
     $npage == 1 ? $end = $n_results : $end = $npage * $n_results;
     $npage == 1 ? $start = 0 : $start = ($npage - 1) * $n_results;
 
-    if (empty($search_term)) {
+    if (empty($search_keyword)) {
         $topt['num_table_rows'] = $db->qSingle("SELECT COUNT(*) FROM $library_master WHERE title <> ''");
         $query = "SELECT * FROM $library_master WHERE title <> '' ORDER BY items_updated DESC LIMIT $start,$end ";
     } else {
-        $topt['num_table_rows'] = $db->qSingle("SELECT COUNT(*) FROM $library_master WHERE title <> '' AND title LIKE \"%$search_term%\" ");
-        $query = "SELECT * FROM $library_master WHERE title <> '' AND title LIKE \"%$search_term%\" ORDER BY items_updated DESC LIMIT $start,$end ";
+        $topt['num_table_rows'] = $db->qSingle("SELECT COUNT(*) FROM $library_master WHERE title <> '' AND title LIKE \"%$search_keyword%\" ");
+        $query = "SELECT * FROM $library_master WHERE title <> '' AND title LIKE \"%$search_keyword%\" ORDER BY items_updated DESC LIMIT $start,$end ";
     }
 
     $results = $db->query($query);

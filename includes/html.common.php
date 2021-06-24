@@ -125,6 +125,7 @@ function pager($npage, $nitems, &$topt) {
         $get_params = [];
         $get_params['page'] = $page;
         (!empty(Filter::getString('view_type'))) ? $get_params['view_type'] = Filter::getString('view_type') : null;
+        !empty($topt['search_keyword']) ? $get_params['search_keyword'] = $topt['search_keyword'] : null;
         (!empty(Filter::getInt('id'))) ? $get_params['id'] = Filter::getInt('id') : null;
         (!empty(Filter::getUtf8('search_shows_torrents'))) ? $get_params['search_shows_torrents'] = trim(Filter::getUtf8('search_shows_torrents')) : null;
         (!empty(Filter::getUtf8('search_movies_torrents'))) ? $get_params['search_movies_torrents'] = trim(Filter::getUtf8('search_movies_torrents')) : null;
@@ -135,7 +136,6 @@ function pager($npage, $nitems, &$topt) {
         (!empty(Filter::getUtf8('search_shows_db'))) ? $get_params['search_shows_db'] = trim(Filter::getUtf8('search_shows_db')) : null;
         (!empty(Filter::getUtf8('search_movies'))) ? $get_params['search_movies'] = trim(Filter::getUtf8('search_movies')) : null;
         (!empty(Filter::getUtf8('search_shows'))) ? $get_params['search_shows'] = trim(Filter::getUtf8('search_shows')) : null;
-        !empty($topt['search_term']) ? $get_params['search_term'] = $topt['search_term'] : null;
 
         for ($i = 1; $i <= ceil($num_pages); $i++) {
             if (($i == 1 || $i == $num_pages || $i == $npage) ||
