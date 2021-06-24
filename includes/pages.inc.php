@@ -434,19 +434,13 @@ function page_download() {
     global $db;
 
     $id = Filter::getInt('id');
-    $view_type = Filter::getString('view_type');
+    $media_type = Filter::getString('media_type');
 
-    if (empty($id) || empty($view_type)) {
+    if (empty($id) || empty($media_type)) {
         exit();
     }
+    $item = $db->getItemById('library_' . $media_type, $id);
 
-    if ($view_type == 'movies_library') {
-        $item = $db->getItemById('library_movies', $id);
-    } else if ($view_type == 'shows_library') {
-        $item = $db->getItemById('library_shows', $id);
-    } else {
-        exit();
-    }
     (!empty($item) && file_exists($item['path'])) ? send_file($item['path']) : null;
 
     exit();
