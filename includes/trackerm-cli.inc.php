@@ -576,7 +576,7 @@ function wanted_work() {
             $log->debug('Search for : ' . $title . "[ $media_type ]");
 
             $search['words'] = $title;
-            $results = search_media_torrents($media_type, $search, null, true);
+            $results = search_media_torrents($media_type, $search);
             if (!empty($results) && count($results) > 0) {
                 $results_pass_flags = wanted_check_flags($wanted, $results);
                 !empty($results_pass_flags) ? $valid_results = wanted_check_title($title, $results_pass_flags) : null;
@@ -590,7 +590,7 @@ function wanted_work() {
             $search['words'] = $title;
             $search['episode'] = $s_episode;
             $log->debug(' Search for : ' . $title . " $s_episode [ $media_type ]");
-            $results = search_media_torrents($media_type, $search, null, true);
+            $results = search_media_torrents($media_type, $search);
             if (!empty($results) && count($results) > 0) {
                 $results_pass_flags = wanted_check_flags($wanted, $results);
                 !empty($results_pass_flags) ? $valid_results = wanted_check_title($title, $results_pass_flags) : null;

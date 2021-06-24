@@ -132,9 +132,11 @@ function view_extra_movies($item, $opt = null) {
 
     if (isset($_GET['more_torrents']) || (!empty($opt['auto_show_torrents']) && !isset($_GET['more_movies']))) {
         $search['words'] = $stitle;
-        $torrent_results = search_media_torrents('movies', $search);
-        if ($torrent_results !== false) {
-            $extra .= $torrent_results;
+        $m_results = search_media_torrents('movies', $search, 'L_TORRENT');
+        if (valid_array($m_results)) {
+            $m_results = mix_media_res($m_results);
+            $topt['view_type'] = 'movies_torrent';
+            $extra .= buildTable('L_TORRENT', $m_results, $topt);
         } else {
             $extra .= $frontend->msgBox(['title' => 'L_TORRENT', 'body' => 'L_NOTHING_FOUND']);
         }
@@ -162,9 +164,11 @@ function view_extra_shows($item, $opt) {
 
     if (isset($_GET['more_torrents']) || (!empty($opt['auto_show_torrents']) && !isset($_GET['more_shows']))) {
         $search['words'] = $stitle;
-        $torrent_results = search_media_torrents('shows', $search);
-        if ($torrent_results !== false) {
-            $extra .= $torrent_results;
+        $m_results = search_media_torrents('', $search, 'L_TORRENT');
+        if (valid_array($m_results)) {
+            $m_results = mix_media_res($m_results);
+            $topt['view_type'] = 'movies_torrent';
+            $extra .= buildTable('L_TORRENT', $m_results, $topt);
         } else {
             $extra .= $frontend->msgBox(['title' => 'L_TORRENT', 'body' => 'L_NOTHING_FOUND']);
         }

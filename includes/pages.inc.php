@@ -313,15 +313,25 @@ function page_torrents() {
 
     if (!empty($search_movies_torrents)) {
         $search['words'] = trim($search_movies_torrents);
-        $page .= search_media_torrents('movies', $search, 'L_TORRENT');
+        $m_results = search_media_torrents('movies', $search, 'L_TORRENT');
+        if (valid_array($m_results)) {
+            $m_results = mix_media_res($m_results);
+            $topt['view_type'] = 'movies_torrent';
+            $page .= buildTable('L_TORRENT', $m_results, $topt);
+        } else {
+            $box_msg['title'] = 'L_TORRENT';
+            $box_msg['body'] = 'L_NOTHING_FOUND';
+            $page .= $frontend->msgBox($box_msg);
+        }
     }
 
     if (!empty($search_shows_torrents)) {
         $search['words'] = trim($search_shows_torrents);
-        $torrent_results = search_media_torrents('shows', $search, 'L_TORRENT');
-
-        if ($torrent_results !== false) {
-            $page .= $torrent_results;
+        $m_results = search_media_torrents('shows', $search, 'L_TORRENT');
+        if (valid_array($m_results)) {
+            $m_results = mix_media_res($m_results);
+            $topt['view_type'] = 'shows_torrent';
+            $page .= buildTable('L_TORRENT', $m_results, $topt);
         } else {
             $box_msg['title'] = 'L_TORRENT';
             $box_msg['body'] = 'L_NOTHING_FOUND';

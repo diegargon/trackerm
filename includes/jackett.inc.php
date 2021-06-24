@@ -9,7 +9,7 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-function search_media_torrents($media_type, $search, $head = null, $nohtml = false) {
+function search_media_torrents($media_type, $search) {
     global $cfg, $log, $db;
 
     $result = [];
@@ -99,8 +99,6 @@ function search_media_torrents($media_type, $search, $head = null, $nohtml = fal
             $db->upsertItemByField($jackett_search_media_cache, $media_cache, 'words');
         }
     }
-    $topt['search_type'] = $media_type;
-    $topt['view_type'] = $media_type . '_torrent';
 
     /* Here if the search contains the year where delete results without year */
     if (preg_match('/\s+\d{4}/i', $search_words, $match) == 1) {
@@ -128,13 +126,8 @@ function search_media_torrents($media_type, $search, $head = null, $nohtml = fal
     if (!valid_array($media_db)) {
         return false;
     }
-    if ($nohtml) {
-        return $media_db;
-    }
-    $media_db = mix_media_res($media_db);
-    $page .= buildTable($head, $media_db, $topt);
 
-    return $page;
+    return $media_db;
 }
 
 function jackett_search_media($media_type, $words, $indexer, $categories, $limit = null) {
