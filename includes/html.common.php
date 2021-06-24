@@ -104,6 +104,7 @@ function build_item($item, $topt) {
         $item['pòster'] = $item['guessed_poster'];
     }
     empty($item['poster']) ? $item['poster'] = $cfg['img_url'] . '/not_available.jpg' : null;
+    empty($item['trailer']) && !empty($item['guessed_trailer']) && $item['guessed_trailer'] != -1 ? $item['trailer'] = $item['guessed_trailer'] : null;
 
     $page .= $frontend->getTpl('item_display', array_merge($item, $topt));
 
