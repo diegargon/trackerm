@@ -260,13 +260,15 @@ function jackett_prep_media($media_type, $media_results) {
             if (strcmp($item_id_guid['guid'], $item['guid']) === 0) {
                 $found = 1;
                 $media[$key]['id'] = $item_id_guid['id'];
-                $media[$key]['guessed_poster'] = $item_id_guid['guessed_poster'];
-                $media[$key]['guessed_trailer'] = $item_id_guid['guessed_trailer'];
+                !empty($item_id_guid['guessed_poster']) ? $media[$key]['guessed_poster'] = $item_id_guid['guessed_poster'] : $media[$key]['guessed_poster'] = '';
+                !empty($item_id_guid['guessed_trailer']) ? $media[$key]['guessed_trailer'] = $item_id_guid['guessed_trailer'] : $media[$key]['guessed_trailer'] = '';
                 break;
             }
         }
         if (empty($found)) {
             jackett_guess_fields($media_type, $item);
+            !empty($item['guessed_poster']) ? $media[$key]['guessed_poster'] = $item['guessed_poster'] : $media[$key]['guessed_poster'] = '';
+            !empty($item['guessed_trailer']) ? $media[$key]['guessed_trailer'] = $item['guessed_trailer'] : $media[$key]['guessed_trailer'] = '';
             $last_id = $db->addItem($jackett_db, $item);
             $media[$key]['id'] = $last_id;
         }
