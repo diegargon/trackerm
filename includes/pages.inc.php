@@ -317,6 +317,7 @@ function page_torrents() {
         if (valid_array($m_results)) {
             $m_results = mix_media_res($m_results);
             $topt['view_type'] = 'movies_torrent';
+            $topt['search_type'] = 'movies';
             $page .= buildTable('L_TORRENT', $m_results, $topt);
         } else {
             $box_msg['title'] = 'L_TORRENT';
@@ -331,6 +332,7 @@ function page_torrents() {
         if (valid_array($m_results)) {
             $m_results = mix_media_res($m_results);
             $topt['view_type'] = 'shows_torrent';
+            $topt['search_type'] = 'shows';
             $page .= buildTable('L_TORRENT', $m_results, $topt);
         } else {
             $box_msg['title'] = 'L_TORRENT';
