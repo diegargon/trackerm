@@ -1,6 +1,11 @@
 ## Latest / News (Relevant)
 
-[18/06] Add search feature to library and new torrents
+[23/06] Fix bug: not working download with priority proper version & hash_missing error
+[20/06]  Added some new tags for tag the files, this going to cause trackerm will link again your seeding torrents and create duplicates if the destine file name change due 
+this changes. I add a way to automatic remove duplicates but its in "testing fase", if you have problems delete the duplicated links manually.
+[20/06] Added links to popular search engines in view mode
+[20/06] Added Duplicate links check&remove.
+[18/06] Added search feature to library and new torrents
 [17/06] Improve Identify and allow multiple files/same media
 [********** COMMIT **********]
 [02/06] Fix Poster view Path / Fix year tag and change tag from [ to ) (beware trackerm will create another link on actually seeding torrents, that mean you going to
