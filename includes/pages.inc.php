@@ -395,7 +395,7 @@ function page_identify() {
     $tdata['head'] = '';
 
     /*
-     * selected containes key: id in local db and value:themoviedb_id;
+     * selected contain key: id in local db and value:themoviedb_id;
      */
     if (isset($_POST['identify']) && Filter::postInt('selected')) {
         $ident_pairs = Filter::postInt('selected');
