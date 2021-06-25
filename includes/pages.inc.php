@@ -377,21 +377,41 @@ function page_identify() {
 
     $media_type = Filter::getString('media_type');
     $id = Filter::getInt('identify');
+    $id_all = Filter::getInt('identify_all');
 
-    if ($media_type === false || $id === false) {
+    if ($media_type === false || ($id === false && $id_all === false)) {
         return $frontend->msgBox(['title' => 'L_ERROR', 'body' => '1A1002']);
     }
 
-    $tdata['head'] = '';
-
-    if ($media_type == 'movies') {
-        $item = $db->getItemById('library_movies', $id);
+    if (empty($id)) {
+        $id = $id_all;
+        $tdata['identify_all'] = 1;
     } else {
-        $item = $db->getItemById('library_shows', $id);
+        $tdata['identify_all'] = 0;
     }
 
+    $library = 'library_' . $media_type;
+    $item = $db->getItemById($library, $id);
+    $tdata['head'] = '';
+
+    /*
+     * selected containes key: id in local db and value:themoviedb_id;
+     */
     if (isset($_POST['identify']) && Filter::postInt('selected')) {
-        ident_by_idpairs($media_type, Filter::postInt('selected'));
+        $ident_pairs = Filter::postInt('selected');
+        if (!empty($_POST['identify_all'])) {
+            $results = $db->select($library, 'master', ['id' => ['value' => array_key_first($ident_pairs)]]);
+            $item_master = $db->fetchAll($results);
+            $results = $db->select($library, 'id', ['master' => ['value' => $item_master[0]['master']]]);
+            $items = $db->fetchAll($results);
+            $ident_pairs_all = [];
+            foreach ($items as $item) {
+                $ident_pairs_all[$item['id']] = $ident_pairs[array_key_first($ident_pairs)];
+            }
+            ident_by_idpairs($media_type, $ident_pairs_all);
+        } else {
+            ident_by_idpairs($media_type, $ident_pairs);
+        }
         return $frontend->msgBox($msg = ['title' => 'L_SUCCESS', 'body' => 'L_ADDED_SUCCESSFUL']);
     }
     !empty($_POST['submit_title']) ? $submit_title = Filter::postUtf8('submit_title') : $submit_title = getFileTitle(basename($item['path']));

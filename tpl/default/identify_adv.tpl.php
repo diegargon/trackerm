@@ -43,6 +43,7 @@
             </div>
         </div>
     </div>
+    <input type="hidden" name="identify_all" value="<?= $tdata['identify_all'] ?>"/>
     <input type="text" name="submit_title" value="<?= $tdata['search_title'] ?>" />
     <input class="submit_btn" type="submit" name="search" value="<?= $LNG['L_SEARCH'] ?>"/>
     <?php

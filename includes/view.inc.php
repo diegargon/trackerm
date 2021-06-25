@@ -379,6 +379,11 @@ function get_media_files($id, $media_type) {
     //Identify link
     $link_identify_parms = ['page' => 'identify', 'identify' => $selected_id, 'media_type' => $media_type];
     $media_files .= Html::link(['class' => 'action_link'], '', $LNG['L_IDENTIFY'], $link_identify_parms);
+    if ($media_type == 'shows') {
+        $link_identify_all_parms = ['page' => 'identify', 'identify_all' => $selected_id, 'media_type' => $media_type];
+        $media_files .= Html::link(['class' => 'action_link'], '', $LNG['L_IDENTIFY_ALL'], $link_identify_all_parms);
+    }
+
     //Delete reg
     $link_delete_parms = ['page' => 'view', 'id' => $id, 'deletereg_id' => $selected_id, 'view_type' => $media_type . '_library'];
     $media_files .= Html::link(['class' => 'action_link', 'onClick' => 'return confirm(\'Are you sure?\')'], '', $LNG['L_DELETE_REGISTER'], $link_delete_parms);

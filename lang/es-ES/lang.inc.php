@@ -100,6 +100,7 @@ $LNG = [
     'L_IDENT_MOVIES' => 'Identificación de peliculas',
     'L_IDENT_SHOWS' => 'Identificación de series',
     'L_IDENTIFY' => 'Identificar',
+    'L_IDENTIFY_ALL' => 'Identificar todo',
     'L_IDENTIFIED' => 'Identificado',
     'L_IMAGES' => 'Imagenes',
     'L_IGNORE' => 'Ignorar',

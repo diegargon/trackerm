@@ -1,5 +1,6 @@
 ## Latest / News (Relevant)
 
+[25/06] Added to view/shows Identify All, reidentify one file choose file and identify, reidentify all files in the group "identify all"
 [23/06] Fix bug: not working download with priority proper version & hash_missing error
 [20/06]  Added some new tags for tag the files, this going to cause trackerm will link again your seeding torrents and create duplicates if the destine file name change due 
 this changes. I add a way to automatic remove duplicates but its in "testing fase", if you have problems delete the duplicated links manually.
