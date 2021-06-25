@@ -189,7 +189,7 @@ function ident_by_idpairs($media_type, $id_pairs) {
 function ident_by_id($media_type, $tmdb_id, $id) {
     global $log;
 
-    $log->debug("Ident by ident_by_id called");
+    $log->debug("Ident by ident_by_id called tmdbid: $tmdb_id, id:$id");
     $db_data = mediadb_getFromCache($media_type, $tmdb_id);
     if (valid_array($db_data)) {
         submit_ident($media_type, $db_data, $id);
@@ -276,38 +276,39 @@ function submit_ident($media_type, $item, $id) {
         }
     }
 
-    if (!empty($item['title'])) {
-        $upd_fields['title'] = $item['title'];
-        $upd_fields['clean_title'] = clean_title($item['title']);
-    }
-    if (!empty($item['name'])) {
-        $upd_fields['name'] = $item['name'];
-        $upd_fields['clean_title'] = clean_title($item['name']);
-    }
-    $upd_fields['themoviedb_id'] = $item['themoviedb_id'];
+    /*
+      if (!empty($item['title'])) {
+      $upd_fields['title'] = $item['title'];
+      $upd_fields['clean_title'] = clean_title($item['title']);
+      }
+      if (!empty($item['name'])) {
+      $upd_fields['name'] = $item['name'];
+      $upd_fields['clean_title'] = clean_title($item['name']);
+      }
+      $upd_fields['themoviedb_id'] = $item['themoviedb_id'];
 
-    !empty($item['poster']) ? $upd_fields['poster'] = $item['poster'] : $upd_fields['poster'] = '';
-    !empty($item['original_title']) ? $upd_fields['original_title'] = $item['original_title'] : $upd_fields['original_title'] = '';
-    !empty($item['rating']) ? $upd_fields['rating'] = $item['rating'] : $upd_fields['rating'] = '';
-    !empty($item['popularity']) ? $upd_fields['popularity'] = $item['popularity'] : $upd_fields['popularity'] = '';
-    !empty($item['scene']) ? $upd_fields['scene'] = $item['scene'] : $upd_fields['scene'] = '';
-    !empty($item['lang']) ? $upd_fields['lang'] = $item['lang'] : $upd_fields['lang'] = '';
-    !empty($item['trailer']) ? $upd_fields['trailer'] = $item['trailer'] : $upd_fields['trailer'] = '';
-    !empty($item['plot']) ? $upd_fields['plot'] = $item['plot'] : $upd_fields['plot'] = '';
-    !empty($item['release']) ? $upd_fields['release'] = $item['release'] : $upd_fields['release'] = '';
+      !empty($item['poster']) ? $upd_fields['poster'] = $item['poster'] : $upd_fields['poster'] = '';
+      !empty($item['original_title']) ? $upd_fields['original_title'] = $item['original_title'] : $upd_fields['original_title'] = '';
+      !empty($item['rating']) ? $upd_fields['rating'] = $item['rating'] : $upd_fields['rating'] = '';
+      !empty($item['popularity']) ? $upd_fields['popularity'] = $item['popularity'] : $upd_fields['popularity'] = '';
+      !empty($item['scene']) ? $upd_fields['scene'] = $item['scene'] : $upd_fields['scene'] = '';
+      !empty($item['lang']) ? $upd_fields['lang'] = $item['lang'] : $upd_fields['lang'] = '';
+      !empty($item['trailer']) ? $upd_fields['trailer'] = $item['trailer'] : $upd_fields['trailer'] = '';
+      !empty($item['plot']) ? $upd_fields['plot'] = $item['plot'] : $upd_fields['plot'] = '';
+      !empty($item['release']) ? $upd_fields['release'] = $item['release'] : $upd_fields['release'] = '';
 
-    if ($media_type == 'movies') {
-        $db->updateItemById('library_movies', $id, $upd_fields);
-    } else if ($media_type == 'shows') {
-        $mylib_shows = $db->getItemById('library_shows', $id);
-        if (valid_array($mylib_shows)) {
-            $where['predictible_title'] = ['value' => $mylib_shows['predictible_title']];
-            $db->update('library_shows', $upd_fields, $where);
-        } else {
-            return false;
-        }
-    }
-
+      if ($media_type == 'movies') {
+      $db->updateItemById('library_movies', $id, $upd_fields);
+      } else if ($media_type == 'shows') {
+      $mylib_shows = $db->getItemById('library_shows', $id);
+      if (valid_array($mylib_shows)) {
+      $where['predictible_title'] = ['value' => $mylib_shows['predictible_title']];
+      $db->update('library_shows', $upd_fields, $where);
+      } else {
+      return false;
+      }
+      }
+     */
     return true;
 }
 
@@ -315,6 +316,8 @@ function ident_by_history($media_type, &$ids) {
     global $db, $log;
 
     $ids_id = [];
+
+    $log->debug("Ident by history called");
 
     if (!valid_array($ids)) {
         return false;

@@ -1223,7 +1223,6 @@ function update_things() {
     if (($cfg['cron_halfday'] + 21600) < $time_now) {
         $db->update('config', ['cfg_value' => $time_now], ['cfg_key' => ['value' => 'cron_halfday']]);
         update_library_stats();
-        check_masters_childs_integrity();
         hash_missing();
     }
     if (($cfg['cron_daily'] + 8640) < $time_now) {
@@ -1249,6 +1248,7 @@ function update_things() {
     // Upgrading v4 change how clean works, must empty the field and redo, not need know
     // keep for future changes
     //set_clean_titles();
+    check_masters_childs_integrity();
     rebuild('movies', $cfg['MOVIES_PATH']);
     sleep(1);
     rebuild('shows', $cfg['SHOWS_PATH']);
