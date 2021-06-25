@@ -122,6 +122,9 @@ function pager($npage, $nitems, &$topt) {
     $search_type = Filter::getUtf8('search_type');
     $page = Filter::getString('page');
 
+    if (isset($topt['search_type']) && $topt['search_type'] != $search_type) {
+        $npage = 1;
+    }
     if ($num_pages > 1) {
         $get_params = [];
         $get_params['page'] = $page;
