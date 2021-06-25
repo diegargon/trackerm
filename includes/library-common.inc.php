@@ -104,7 +104,7 @@ function _rebuild($media_type, $path) {
          */
 
         if ($media_type == 'shows' && valid_array($media)) {
-            ident_by_already_have_show($media, $insert_ids);
+            //  ident_by_already_have_show($media, $insert_ids);
         }
         /*
          * We check library history for auto identify in we had that file.

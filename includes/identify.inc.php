@@ -19,23 +19,11 @@ function ident_by_already_have_show($media, &$ids) {
             if (valid_array($item) && $id_item['predictible_title'] === ucwords($item['predictible_title']) &&
                     !empty($id_item['themoviedb_id'])
             ) {
-                $item['themoviedb_id'] = $id_item['themoviedb_id'];
-                $item['title'] = $id_item['title'];
-                $item['clean_title'] = clean_title($id_item['title']);
-                $item['poster'] = $id_item['poster'];
-                $item['rating'] = $id_item['rating'];
-                $item['popularity'] = $id_item['popularity'];
-                $item['scene'] = $id_item['scene'];
-                $item['master'] = $id_item['master'];
-                $item['lang'] = $id_item['lang'];
-                $item['plot'] = $id_item['plot'];
-                isset($id_item['trailer']) ? $item['trailer'] = $id_item['trailer'] : null;
-                $item['original_title'] = $id_item['original_title'];
-                submit_ident('shows', $item, $id);
+                $tmdb_item = mediadb_getFromCache('shows', $id_item['themoviedb_id']);
+                submit_ident('shows', $tmdb_item, $id);
                 unset($ids[$id_key]);
                 $ids_id[] = $id;
                 $debug_info .= "[$id:{$item['title']}:S{$item['season']}E{$item['episode']}]";
-                break;
             }
         }
     }
