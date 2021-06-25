@@ -12,24 +12,29 @@ function ident_by_already_have_show($media, &$ids) {
 
     $ids_id = [];
     $debug_info = '';
+    $log->debug("Called ident_by_already_have_show");
     foreach ($ids as $id_key => $id) {
-        $log->debug("Called ident_by_already_have_show for id $id");
         $item = $db->getItemById('library_shows', $id);
         foreach ($media as $id_item) {
             if (valid_array($item) && $id_item['predictible_title'] === ucwords($item['predictible_title']) &&
-                    !empty($id_item['themoviedb_id'])
+                    !empty($id_item['master'])
             ) {
-                $tmdb_item = mediadb_getFromCache('shows', $id_item['themoviedb_id']);
-                submit_ident('shows', $tmdb_item, $id);
-                unset($ids[$id_key]);
-                $ids_id[] = $id;
-                $debug_info .= "[$id:{$item['title']}:S{$item['season']}E{$item['episode']}]";
+                $master = $db->getItemById('library_master_shows', $id_item['master']);
+                if (valid_array($master) && !empty($master['themoviedb_id'])) {
+                    $tmdb_item = mediadb_getFromCache('shows', $master['themoviedb_id']);
+                    if (valid_array($tmdb_item)) {
+                        submit_ident('shows', $tmdb_item, $id);
+                        unset($ids[$id_key]);
+                        $ids_id[] = $id;
+                        $debug_info .= "[$id:{$item['title']}:S{$item['season']}E{$item['episode']}]";
+                        break;
+                    }
+                }
             }
         }
     }
-
     if (valid_array($ids_id)) {
-        $log->debug('Ident by already have show items: ', implode('', $ids_id));
+        !empty($debug_info) ? $log->debug('Ident by already have show items: ' . $debug_info) : null;
         return $ids_id;
     } else {
         return false;
@@ -45,7 +50,7 @@ function show_identify_media($media_type) {
     $uniq_shows = [];
     $iurl = '?page=' . Filter::getString('page');
 
-    $result = $db->query("SELECT * FROM library_$media_type WHERE master is NULL");
+    $result = $db->query('SELECT * FROM library_' . $media_type . ' WHERE master is NULL');
     $media = $db->fetchAll($result);
 
     if (!valid_array($media)) {

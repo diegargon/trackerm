@@ -1214,12 +1214,12 @@ function update_things() {
       if (($cfg['cron_quarter'] + 900) < $time_now) {
       $db->update('config', ['cfg_value' => $time_now], ['cfg_key' => ['value' => 'cron_quarter']]);
       }
+
+      if (($cfg['cron_hourly'] + 3600) < $time_now) {
+      $db->update('config', ['cfg_value' => $time_now], ['cfg_key' => ['value' => 'cron_hourly']]);
+      }
      *
      */
-    if (($cfg['cron_hourly'] + 3600) < $time_now) {
-        $db->update('config', ['cfg_value' => $time_now], ['cfg_key' => ['value' => 'cron_hourly']]);
-        check_broken_files_linked();
-    }
     if (($cfg['cron_halfday'] + 21600) < $time_now) {
         $db->update('config', ['cfg_value' => $time_now], ['cfg_key' => ['value' => 'cron_halfday']]);
         update_library_stats();
@@ -1249,6 +1249,7 @@ function update_things() {
     // keep for future changes
     //set_clean_titles();
     check_masters_childs_integrity();
+    check_broken_files_linked();
     rebuild('movies', $cfg['MOVIES_PATH']);
     sleep(1);
     rebuild('shows', $cfg['SHOWS_PATH']);

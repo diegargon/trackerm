@@ -169,21 +169,23 @@ function getLibraryStats() {
 function clean_database($media_type, $files, $media) {
     global $log, $db, $LNG;
 
-    $last_oid = 0;
     foreach ($media as $item) {
         if (!in_array($item['path'], $files)) {
-            if ($last_oid != $item['themoviedb_id']) { //avoid spam on shows deleted
-                $log->addStateMsg('[' . $LNG['L_NOTE'] . '] ' . $item['title'] . ' ' . $LNG['L_NOTE_MOVDEL']);
-                $last_oid = $item['themoviedb_id'];
+            $master = [];
+
+            $log->addStateMsg('[' . $LNG['L_NOTE'] . '] ' . $item['title'] . ' ' . $LNG['L_NOTE_MOVDEL']);
+
+            if (!empty($item['master'])) {
+                $master = $db->getItemById('library_master_' . $media_type, $item['master']);
             }
-            if (isset($item['themoviedb_id']) && !empty($item['file_hash'])) {
-                $values['title'] = $item['title'];
-                $values['themoviedb_id'] = $item['themoviedb_id'];
+
+            if (valid_array($master) && !empty($item['file_hash'])) {
+                $values['title'] = $master['title'];
+                $values['themoviedb_id'] = $master['themoviedb_id'];
                 $values['clean_title'] = clean_title($item['title']);
                 $values['media_type'] = $media_type;
                 $values['file_name'] = $item['file_name'];
-                $values['custom_poster'] = $item['custom_poster'];
-                $values['size'] = $item['size'];
+                $values['custom_poster'] = $master['custom_poster'];
                 $values['file_hash'] = $item['file_hash'];
                 isset($item['season']) ? $values['season'] = $item['season'] : null;
                 isset($item['episode']) ? $values['episode'] = $item['episode'] : null;
@@ -195,7 +197,6 @@ function clean_database($media_type, $files, $media) {
                 }
             }
 
-            $master = $db->getItemById('library_master_' . $media_type, $item['master']);
             if (valid_array($master)) {
                 if ($master['total_items'] > 1) {
                     $new_total_size = $master['total_size'] - $item['size'];
