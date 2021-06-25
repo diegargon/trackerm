@@ -1210,10 +1210,12 @@ function update_things() {
     global $cfg, $db;
 
     $time_now = time();
-
-    if (($cfg['cron_quarter'] + 900) < $time_now) {
-        $db->update('config', ['cfg_value' => $time_now], ['cfg_key' => ['value' => 'cron_quarter']]);
-    }
+    /*
+      if (($cfg['cron_quarter'] + 900) < $time_now) {
+      $db->update('config', ['cfg_value' => $time_now], ['cfg_key' => ['value' => 'cron_quarter']]);
+      }
+     *
+     */
     if (($cfg['cron_hourly'] + 3600) < $time_now) {
         $db->update('config', ['cfg_value' => $time_now], ['cfg_key' => ['value' => 'cron_hourly']]);
         check_broken_files_linked();
@@ -1222,6 +1224,7 @@ function update_things() {
         $db->update('config', ['cfg_value' => $time_now], ['cfg_key' => ['value' => 'cron_halfday']]);
         update_library_stats();
         check_masters_childs_integrity();
+        hash_missing();
     }
     if (($cfg['cron_daily'] + 8640) < $time_now) {
         $db->update('config', ['cfg_value' => $time_now], ['cfg_key' => ['value' => 'cron_daily']]);
@@ -1230,7 +1233,6 @@ function update_things() {
         update_seasons();
         //delete from wanted orphans (a orphans is create if user delete the torrent outside trackerm
         delete_direct_orphans();
-        hash_missing();
     }
 
     if (($cfg['cron_weekly'] + 604800) < $time_now) {
