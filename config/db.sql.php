@@ -958,8 +958,8 @@ function update_db($from) {
         $db->query('DELETE FROM jackett_movies WHERE trailer is NULL AND guessed_trailer is NULL');
         $db->query('DELETE FROM jackett_shows WHERE poster is NULL AND guessed_poster is NULL');
         $db->query('DELETE FROM jackett_shows WHERE trailer is NULL AND guessed_trailer is NULL');
-        $db->query('UPDATE config SET cfg_value=\'17\' WHERE cfg_key=\'db_version\' LIMIT 1');
         $db->query('DROP TABLE IF EXISTS db_info');
+        $db->query('UPDATE config SET cfg_value=\'17\' WHERE cfg_key=\'db_version\' LIMIT 1');
         $db->query('VACUUM;');
     }
 
