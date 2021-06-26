@@ -43,15 +43,15 @@ function _rebuild($media_type, $path) {
 
     $library_table = 'library_' . $media_type;
 
-    $media = $db->getTableData($library_table);
+    $media_db = $db->getTableData($library_table);
     $i = 0;
 
     //Check if each media path it in $files if not probably delete or moved and must clean.
-    (valid_array($media)) ? clean_database($media_type, $files, $media) : null;
+    (valid_array($media_db)) ? clean_database($media_type, $files, $media_db) : null;
 
     foreach ($files as $file) {
-        if (!valid_array($media) ||
-                array_search($file, array_column($media, 'path')) === false
+        if (!valid_array($media_db) ||
+                array_search($file, array_column($media_db, 'path')) === false
         ) {
             $file_name = trim(basename($file));
             $predictible_title = getFileTitle($file_name);
@@ -103,8 +103,8 @@ function _rebuild($media_type, $path) {
          * true: identify and &unset id
          */
 
-        if ($media_type == 'shows' && valid_array($media)) {
-            ident_by_already_have_show($media, $insert_ids);
+        if ($media_type == 'shows' && valid_array($media_db)) {
+            ident_by_already_have_show($media_db, $insert_ids);
         }
         /*
          * We check library history for auto identify in we had that file.

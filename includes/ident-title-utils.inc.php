@@ -91,7 +91,7 @@ function getFileTitle($file) {
 
     (empty($without_year_title)) ? $_title = $without_year_title : $_title = $_title;
 
-    return trim($_title);
+    return ucwords(trim($_title));
 }
 
 function getFileEpisode($file_name) {

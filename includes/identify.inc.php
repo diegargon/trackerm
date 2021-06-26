@@ -7,7 +7,11 @@
  *  @subpackage
  *  @copyright Copyright @ 2020 - 2021 Diego Garcia (diego/@/envigo.net)
  */
-function ident_by_already_have_show($media, &$ids) {
+/*
+ * media_db = all table files
+ * ids = all new ids to identify
+ */
+function ident_by_already_have_show(array $media_db, array &$ids) {
     global $log, $db;
 
     $ids_id = [];
@@ -15,18 +19,19 @@ function ident_by_already_have_show($media, &$ids) {
     $log->debug("Called ident_by_already_have_show");
     foreach ($ids as $id_key => $id) {
         $item = $db->getItemById('library_shows', $id);
-        foreach ($media as $id_item) {
-            if (valid_array($item) && $id_item['predictible_title'] === ucwords($item['predictible_title']) &&
-                    !empty($id_item['master'])
+        foreach ($media_db as $item_db) {
+            $predictible_title_db = getFileTitle($item_db['file_name']);
+            $predictible_title_ident = getFileTitle($item['file_name']);
+            if (valid_array($item) && !empty($item_db['master']) && ($predictible_title_db === $predictible_title_ident)
             ) {
-                $master = $db->getItemById('library_master_shows', $id_item['master']);
+                $master = $db->getItemById('library_master_shows', $item_db['master']);
                 if (valid_array($master) && !empty($master['themoviedb_id'])) {
                     $tmdb_item = mediadb_getFromCache('shows', $master['themoviedb_id']);
                     if (valid_array($tmdb_item)) {
                         submit_ident('shows', $tmdb_item, $id);
                         unset($ids[$id_key]);
                         $ids_id[] = $id;
-                        $debug_info .= "[$id:{$item['title']}:S{$item['season']}E{$item['episode']}]";
+                        $debug_info .= "[$id:$predictible_title_ident:S{$item['season']}E{$item['episode']}]";
                         break;
                     }
                 }
@@ -50,25 +55,26 @@ function show_identify_media($media_type) {
     $uniq_shows = [];
     $iurl = '?page=' . Filter::getString('page');
 
-    $result = $db->query('SELECT * FROM library_' . $media_type . ' WHERE master is NULL');
-    $media = $db->fetchAll($result);
+    $result = $db->query("SELECT * FROM library_$media_type WHERE master = '' OR master IS NULL");
+    $media_library = $db->fetchAll($result);
 
-    if (!valid_array($media)) {
+    if (!valid_array($media_library)) {
         return false;
     }
 
     if ($media_type == 'shows') {
-        foreach ($media as $item) {
-            if ((array_search($item['predictible_title'], $uniq_shows)) === false) {
-                $uniq_shows[] = $item['predictible_title'];
+        foreach ($media_library as $item) {
+            $predictible_title = getFileTitle($item['file_name']);
+            if ((array_search($predictible_title, $uniq_shows)) === false) {
+                $uniq_shows[] = $predictible_title;
                 $media_tmp[] = $item;
             }
         }
-        $media = $media_tmp;
+        $media_library = $media_tmp;
     }
 
     if (!empty($cfg['auto_identify'])) {
-        foreach ($media as $auto_id_item) {
+        foreach ($media_library as $auto_id_item) {
             if (empty($auto_id_item['title']) || empty($auto_id_item['themoviedb_id'])) {
                 $auto_id_ids[] = $auto_id_item['id'];
             }
@@ -76,14 +82,14 @@ function show_identify_media($media_type) {
         (isset($auto_id_ids) && count($auto_id_ids) > 0 ) ? auto_ident_exact($media_type, $auto_id_ids) : null;
         //Need requery for failed automate ident, probably there is a better way TODO
         $result = $db->query("SELECT * FROM library_$media_type WHERE title = '' OR title is NULL");
-        $media = $db->fetchAll($result);
-        if (empty($media)) {
+        $media_library = $db->fetchAll($result);
+        if (empty($media_library)) {
             return false;
         }
     }
 
     $uniq_shows = [];
-    foreach ($media as $item) {
+    foreach ($media_library as $item) {
         $title_tdata['results_opt'] = '';
 
         if (empty($item['title'])) {
@@ -91,10 +97,10 @@ function show_identify_media($media_type) {
                 break;
             }
             if ($media_type == 'movies') {
-                $db_media = mediadb_searchMovies($item['predictible_title']);
+                $odb_media = mediadb_searchMovies($item['predictible_title']);
             } else if ($media_type == 'shows') {
                 if ((array_search($item['predictible_title'], $uniq_shows)) === false) {
-                    $db_media = mediadb_searchShows($item['predictible_title']);
+                    $odb_media = mediadb_searchShows($item['predictible_title']);
                     $uniq_shows[] = $item['predictible_title'];
                 } else {
                     continue;
@@ -103,8 +109,8 @@ function show_identify_media($media_type) {
                 return false;
             }
 
-            if (valid_array($db_media)) {
-                foreach ($db_media as $db_item) {
+            if (valid_array($odb_media)) {
+                foreach ($odb_media as $db_item) {
                     $year = trim(substr($db_item['release'], 0, 4));
                     $title_tdata['results_opt'] .= '<option value="' . $db_item['themoviedb_id'] . '">';
                     $title_tdata['results_opt'] .= $db_item['title'];
