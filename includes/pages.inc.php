@@ -165,16 +165,9 @@ function page_view() {
         if (valid_array($register_item)) {
             $register_master_item = $db->getItemById($library_master, $register_item['master']);
             if (valid_array($register_master_item)) {
-                if ($register_master_item['total_items'] == 1) {
-                    $db->deleteItemById($library, $deletereg_id);
-                    $db->deleteItemById($library_master, $register_item['master']);
-                    return $frontend->msgBox($msg = ['title' => 'L_SUCCESS', 'body' => 'L_DELETE_SUCCESSFUL']);
-                } else {
-                    $db->deleteItemById($library, $deletereg_id);
-                    $new_total_items = $register_master_item['total_items'] - 1;
-                    $new_total_size = $register_master_item['total_size'] - $register_item['size'];
-                    $db->updateItemById($library_master, $register_item['master'], ['total_items' => $new_total_items, 'total_size' => $new_total_size]);
-                }
+                $db->deleteItemById($library_master, $register_item['master']);
+                $db->deleteItemsByField($library, 'master', $register_item['master']);
+                return $frontend->msgBox($msg = ['title' => 'L_SUCCESS', 'body' => 'L_REGISTER_DELETED_SUCCESFUL']);
             }
         }
     }
@@ -394,7 +387,7 @@ function page_identify() {
     }
 
     $library = 'library_' . $media_type;
-    $item = $db->getItemById($library, $id);
+    $ident_item = $db->getItemById($library, $id);
     $tdata['head'] = '';
 
     /*
@@ -413,11 +406,23 @@ function page_identify() {
             }
             ident_by_idpairs($media_type, $ident_pairs_all);
         } else {
-            ident_by_idpairs($media_type, $ident_pairs);
+            /* we add all register without master and same title */
+            $results = $db->query('SELECT id,file_name FROM ' . $library . ' WHERE master IS NULL');
+            $items = $db->fetchAll($results);
+            if (valid_array($items)) {
+                foreach ($items as $item) {
+                    if (getFileTitle($item['file_name']) == getFileTitle($ident_item['file_name'])) {
+                        $ident_pairs_final[$item['id']] = $ident_pairs[array_key_first($ident_pairs)];
+                    }
+                }
+            } else {
+                $ident_pairs_final = $ident_pairs;
+            }
+            ident_by_idpairs($media_type, $ident_pairs_final);
         }
         return $frontend->msgBox($msg = ['title' => 'L_SUCCESS', 'body' => 'L_ADDED_SUCCESSFUL']);
     }
-    !empty($_POST['submit_title']) ? $submit_title = Filter::postUtf8('submit_title') : $submit_title = getFileTitle(basename($item['path']));
+    !empty($_POST['submit_title']) ? $submit_title = Filter::postUtf8('submit_title') : $submit_title = getFileTitle(basename($ident_item['path']));
 
     $tdata['search_title'] = $submit_title;
 
@@ -462,7 +467,7 @@ function page_identify() {
         }
     }
 
-    return $frontend->getTpl('identify_adv', array_merge($item, $tdata));
+    return $frontend->getTpl('identify_adv', array_merge($ident_item, $tdata));
 }
 
 function page_download() {

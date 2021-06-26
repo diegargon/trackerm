@@ -169,6 +169,7 @@ $LNG = [
     'L_RATING' => 'Puntuación',
     'L_RATING_MIN' => 'R',
     'L_RESULTS' => 'Resultados',
+    'L_REGISTER_DELETED_SUCCESFUL' => 'Register deleted successful',
     'L_ROWS' => 'Filas',
     'L_SHOWS' => 'Series',
     'L_SHOWS_MIN' => 'S',

@@ -1,5 +1,8 @@
 ## Latest / News (Relevant)
 
+[26/06] Fix manual identify that cause in shows only identify one file instead of all files nonidentified
+[26/06] Delete register clean all registers related to that master not only the selected
+[********** COMMIT **********]
 [25/06] Added to view/shows Identify All, reidentify one file choose file and identify, reidentify all files in the group "identify all"
 [23/06] Fix bug: not working download with priority proper version & hash_missing error
 [20/06]  Added some new tags for tag the files, this going to cause trackerm will link again your seeding torrents and create duplicates if the destine file name change due 
