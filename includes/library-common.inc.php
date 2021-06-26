@@ -115,7 +115,7 @@ function _rebuild($media_type, $path) {
          * Last if auto_identify is on we check title agains online db.
          */
         if (!empty($cfg['auto_identify'])) {
-            (valid_array($insert_ids)) ? auto_ident_exact($media_type, $insert_ids) : null;
+            (valid_array($insert_ids)) ? auto_ident($media_type, $insert_ids) : null;
         }
     }
 
