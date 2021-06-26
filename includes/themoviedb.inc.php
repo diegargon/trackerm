@@ -303,7 +303,7 @@ function themoviedb_getFromCache($media_type, $id) {
     }
     $response_item[] = curl_get_tmdb($url);
 
-    if (!valid_array($response_item) || (isset($response_item[0]) && $response_item[0] == false)) {
+    if (valid_array($response_item['results']) && $response_item['results'] !== false) {
         $log->err('getFromCache: remote database id ' . $id . ' for ' . $media_type . ' not exists');
         return false;
     }
@@ -331,14 +331,14 @@ function themoviedb_getPopular() {
     $shows_url = 'https://api.themoviedb.org/3/tv/popular?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['TMDB_LANG'];
     if ($cfg['want_movies']) {
         $response_items = curl_get_tmdb($movies_url);
-        if (valid_array($response_items) && $response_items[0] !== false) {
+        if (valid_array($response_items['results']) && $response_items['results'] !== false) {
             themoviedb_updateCache('_POPULAR_', $response_items, 'movies');
             $results['movies'] = themoviedb_MediaPrep('movies', $response_items['results']);
         }
     }
     if ($cfg['want_shows']) {
         $response_items = curl_get_tmdb($shows_url);
-        if (valid_array($response_items) && $response_items[0] !== false) {
+        if (valid_array($response_items['results']) && $response_items['results'] !== false) {
             themoviedb_updateCache('_POPULAR_', $response_items, 'shows');
             $results['shows'] = themoviedb_MediaPrep('shows', $response_items['results']);
         }
@@ -360,14 +360,14 @@ function themoviedb_getTrending() {
     $shows_url = 'https://api.themoviedb.org/3/trending/tv/day?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['TMDB_LANG'];
     if ($cfg['want_movies']) {
         $response_items = curl_get_tmdb($movies_url);
-        if (valid_array($response_items)) {
+        if (valid_array($response_items['results']) && $response_items['results'] !== false) {
             themoviedb_updateCache('_TRENDING_', $response_items, 'movies');
             $results['movies'] = themoviedb_MediaPrep('movies', $response_items['results']);
         }
     }
     if ($cfg['want_shows']) {
         $response_items = curl_get_tmdb($shows_url);
-        if (valid_array($response_items)) {
+        if (valid_array($response_items['results']) && $response_items['results'] !== false) {
             themoviedb_updateCache('_TRENDING_', $response_items, 'shows');
             $results['shows'] = themoviedb_MediaPrep('shows', $response_items['results']);
         }
@@ -386,7 +386,7 @@ function themoviedb_getTodayShows() {
 
     $shows_url = 'https://api.themoviedb.org/3/tv/airing_today?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['TMDB_LANG'];
     $response_items = curl_get_tmdb($shows_url);
-    if (valid_array($response_items) && $response_items[0] !== false) {
+    if (valid_array($response_items['results']) && $response_items['results'] !== false) {
         themoviedb_updateCache('_TODAY_SHOWS_', $response_items, 'shows');
         $results['shows'] = themoviedb_MediaPrep('shows', $response_items['results']);
     }
@@ -414,7 +414,7 @@ function themoviedb_getTrailer($media_type, $id) {
 
     $curl_data = curl_get_tmdb($url);
 
-    if (!valid_array($curl_data['results']) || empty($curl_data['results'])) {
+    if (!valid_array($curl_data['results'])) {
         return false;
     }
     $results = array_pop($curl_data['results']);
