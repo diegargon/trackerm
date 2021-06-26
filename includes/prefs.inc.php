@@ -32,15 +32,13 @@ function getPrefsItem(string $r_key, bool $system = false) {
 
     ($system) ? $where['uid'] = ['value' => 0] : $where['uid'] = ['value' => $user['id']];
 
-    $results = $db->select('preferences', null, $where);
+    $where['pref_name'] = ['value' => $r_key];
+    $results = $db->select('preferences', null, $where, 'LIMIT 1');
     $user_prefs = $db->fetchAll($results);
 
+
     if (valid_array($user_prefs)) {
-        foreach ($user_prefs as $pref) {
-            if ($pref['pref_name'] == $r_key) {
-                return $pref['pref_value'];
-            }
-        }
+        return $user_prefs[0]['pref_value'];
     }
     return false;
 }
