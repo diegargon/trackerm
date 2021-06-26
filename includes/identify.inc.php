@@ -47,7 +47,11 @@ function ident_by_already_have_show(array $media_db, array &$ids) {
     return $ids;
 }
 
-function show_identify_media($media_type) {
+/*
+ * Show identify items on library
+ */
+
+function show_identify_media(string $media_type) {
     global $LNG, $cfg, $db, $frontend;
 
     $titles = '';
@@ -62,6 +66,7 @@ function show_identify_media($media_type) {
         return false;
     }
 
+    /* discard all except one same title */
     if ($media_type == 'shows') {
         foreach ($media_library as $item) {
             $predictible_title = getFileTitle($item['file_name']);
@@ -74,56 +79,56 @@ function show_identify_media($media_type) {
     }
 
     if (!empty($cfg['auto_identify'])) {
-        foreach ($media_library as $auto_id_item) {
-            if (empty($auto_id_item['title']) || empty($auto_id_item['themoviedb_id'])) {
-                $auto_id_ids[] = $auto_id_item['id'];
-            }
+        /* Get IDS */
+        foreach ($media_library as $auto_ident_item) {
+            $auto_ident_ids[] = $auto_ident_item['id'];
         }
-        (isset($auto_id_ids) && count($auto_id_ids) > 0 ) ? auto_ident_exact($media_type, $auto_id_ids) : null;
-        //Need requery for failed automate ident, probably there is a better way TODO
-        $result = $db->query("SELECT * FROM library_$media_type WHERE title = '' OR title is NULL");
+        (isset($auto_ident_ids) && count($auto_ident_ids) > 0 ) ? auto_ident($media_type, $auto_ident_ids) : null;
+        //Need requery for failed automate ident,  TODO: better
+        $result = $db->query("SELECT * FROM library_$media_type WHERE master = '' OR master is NULL");
         $media_library = $db->fetchAll($result);
         if (empty($media_library)) {
             return false;
         }
     }
 
+    /* Show in library the files that need identify */
+
     $uniq_shows = [];
     foreach ($media_library as $item) {
         $title_tdata['results_opt'] = '';
+        $predictible_title = getFileTitle($item['file_name']);
 
-        if (empty($item['title'])) {
-            if ($i >= $cfg['max_identify_items']) {
-                break;
-            }
-            if ($media_type == 'movies') {
-                $odb_media = mediadb_searchMovies($item['predictible_title']);
-            } else if ($media_type == 'shows') {
-                if ((array_search($item['predictible_title'], $uniq_shows)) === false) {
-                    $odb_media = mediadb_searchShows($item['predictible_title']);
-                    $uniq_shows[] = $item['predictible_title'];
-                } else {
-                    continue;
-                }
-            } else {
-                return false;
-            }
-
-            if (valid_array($odb_media)) {
-                foreach ($odb_media as $db_item) {
-                    $year = trim(substr($db_item['release'], 0, 4));
-                    $title_tdata['results_opt'] .= '<option value="' . $db_item['themoviedb_id'] . '">';
-                    $title_tdata['results_opt'] .= $db_item['title'];
-                    !empty($year) ? $title_tdata['results_opt'] .= ' (' . $year . ')' : null;
-                    $title_tdata['results_opt'] .= '</option>';
-                }
-            }
-            $title_tdata['del_iurl'] = $iurl . '&media_type=' . $media_type . '&ident_delete=' . $item['id'];
-            $title_tdata['more_iurl'] = '?page=identify&media_type=' . $media_type . '&identify=' . $item['id'];
-            $title_tdata['media_type'] = $media_type;
-            $titles .= $table = $frontend->getTpl('identify_item', array_merge($item, $title_tdata));
-            $i++;
+        if ($i >= $cfg['max_identify_items']) {
+            break;
         }
+        if ($media_type == 'movies') {
+            $odb_media = mediadb_searchMovies($predictible_title);
+        } else if ($media_type == 'shows') {
+            if ((array_search($predictible_title, $uniq_shows)) === false) {
+                $odb_media = mediadb_searchShows($predictible_title);
+                $uniq_shows[] = $predictible_title;
+            } else {
+                continue;
+            }
+        } else {
+            return false;
+        }
+
+        if (valid_array($odb_media)) {
+            foreach ($odb_media as $odb_item) {
+                $year = trim(substr($odb_item['release'], 0, 4));
+                $title_tdata['results_opt'] .= '<option value="' . $odb_item['themoviedb_id'] . '">';
+                $title_tdata['results_opt'] .= $odb_item['title'];
+                !empty($year) ? $title_tdata['results_opt'] .= ' (' . $year . ')' : null;
+                $title_tdata['results_opt'] .= '</option>';
+            }
+        }
+        $title_tdata['del_iurl'] = $iurl . '&media_type=' . $media_type . '&ident_delete=' . $item['id'];
+        $title_tdata['more_iurl'] = '?page=identify&media_type=' . $media_type . '&identify=' . $item['id'];
+        $title_tdata['media_type'] = $media_type;
+        $titles .= $table = $frontend->getTpl('identify_item', array_merge($item, $title_tdata));
+        $i++;
     }
 
     if (!empty($titles)) {
@@ -137,7 +142,11 @@ function show_identify_media($media_type) {
     return false;
 }
 
-function auto_ident_exact($media_type, $ids) {
+/*
+ * Try auto identify items
+ */
+
+function auto_ident(string $media_type, array $ids) {
     global $log, $db, $cfg;
 
     if (!valid_array($ids) || empty($media_type)) {
@@ -148,31 +157,34 @@ function auto_ident_exact($media_type, $ids) {
     foreach ($ids as $id) {
         $log->debug("auto_ident by exact called for $id");
         $db_item = $db->getItemById('library_' . $media_type, $id);
+        $predictible_title = getFileTitle($db_item['file_name']);
         if ($media_type == 'movies') {
-            $search_media = mediadb_searchMovies($db_item['predictible_title']);
+            $search_results = mediadb_searchMovies($predictible_title);
         } else if ($media_type == 'shows') {
-            if ((array_search($db_item['predictible_title'], $uniq_shows)) === false) {
-                $search_media = mediadb_searchShows($db_item['predictible_title']);
-                $uniq_shows[] = $db_item['predictible_title'];
+            if ((array_search($predictible_title, $uniq_shows)) === false) {
+                $search_results = mediadb_searchShows($predictible_title);
+                $uniq_shows[] = $predictible_title;
             }
         } else {
             return false;
         }
 
-        if (!empty($search_media[0]['themoviedb_id'])) {
+        if (!empty($search_results[0]['themoviedb_id'])) {
             $found = 0;
-            foreach ($search_media as $coincidence) {
+            //Exact
+            foreach ($search_results as $coincidence) {
                 $coincidence_title = clean_title($coincidence['title']);
-                $db_item_title = clean_title($db_item['predictible_title']);
+                $db_item_title = clean_title($predictible_title);
                 if ($coincidence_title == $db_item_title) {
                     submit_ident($media_type, $coincidence, $id);
                     $found = 1;
                     break;
                 }
             }
+            //If strict is not set and cant ident exact, identify with the first Result
             if (!$found && !$cfg['auto_ident_strict']) {
                 $found = 1;
-                submit_ident($media_type, $search_media[0], $id);
+                submit_ident($media_type, $search_results[0], $id);
             }
         } else {
             continue;
@@ -183,7 +195,11 @@ function auto_ident_exact($media_type, $ids) {
     return true;
 }
 
-function ident_by_idpairs($media_type, $id_pairs) {
+/*
+ * Key pair array[localid] = tmdb_id
+ */
+
+function ident_by_idpairs(string $media_type, array $id_pairs) {
     global $log;
 
     $log->debug("Ident by idpairs called");
@@ -191,13 +207,17 @@ function ident_by_idpairs($media_type, $id_pairs) {
         return false;
     }
     foreach ($id_pairs as $my_id => $tmdb_id) {
-        (!empty($my_id) && !emptY($tmdb_id)) ? ident_by_id($media_type, $tmdb_id, $my_id) : null;
+        (!empty($my_id) && !empty($tmdb_id)) ? ident_by_id($media_type, $tmdb_id, $my_id) : null;
     }
 
     return true;
 }
 
-function ident_by_id($media_type, $tmdb_id, $id) {
+/*
+ * Ident an item by id pairs
+ */
+
+function ident_by_id(string $media_type, $tmdb_id, $id) {
     global $log;
 
     $log->debug("Ident by ident_by_id called tmdbid: $tmdb_id, id:$id");
@@ -211,119 +231,7 @@ function ident_by_id($media_type, $tmdb_id, $id) {
     return true;
 }
 
-function submit_ident($media_type, $item, $id) {
-    global $db, $log;
-
-    $log->debug("Submit $media_type ident : (tmdb_id:" . $item['id'] . ")" . $item['title'] . ' id:' . $id);
-    $upd_fields = [];
-
-    if ($media_type == 'shows') {
-        $show_check = $db->getItemById('library_shows', $id);
-        if (!empty($show_check['season']) && !empty($show_check['episode'])) {
-            $where_check['season'] = ['value' => $show_check['season']];
-            $where_check['episode'] = ['value' => $show_check['episode']];
-        } else {
-            $log->err("submit_ident: its show but havent season/episode set " . $id);
-            return false;
-        }
-    }
-
-    $media_master = $db->getItemByField('library_master_' . $media_type, 'themoviedb_id', $item['themoviedb_id']);
-    $_item = $item; //to remove, now not want modify item since we use later in actual behaviour.
-
-    $media_in_library = $db->getItemById('library_' . $media_type, $id);
-
-    if (valid_array($media_master)) {
-        if (valid_array($media_in_library)) {
-            $total_items = $media_master['total_items'] + 1;
-            $total_size = $media_master['total_size'] + $media_in_library['size'];
-
-            $db->update('library_master_' . $media_type, ['total_items' => $total_items, 'total_size' => $total_size, 'items_updated' => time()], ['id' => ['value' => $media_master['id']]]);
-            $db->update('library_' . $media_type, ['master' => $media_master['id']], ['id' => ['value' => $id]], 'LIMIT 1');
-            //if is a change master rest 1 or delete from old master.
-            if (!empty($media_in_library['master']) && $media_in_library['master'] !== $media_master['id']) {
-                $old_master_id = $media_in_library['master'];
-                $item_old_master = $db->getItemById('library_master_' . $media_type, $old_master_id);
-                $total_items = $item_old_master['total_items'];
-                if ($total_items == 1) {
-                    $db->deleteItemById('library_master_' . $media_type, $old_master_id);
-                } else {
-                    $new_size = $item_old_master['total_size'] - $media_in_library['size'];
-                    $db->updateItemById('library_master_' . $media_type, $old_master_id, ['total_items' => $total_items - 1, 'total_size' => $new_size]);
-                }
-            }
-        }
-    } else {
-        if (valid_array($media_in_library)) {
-            $_item['total_items'] = 1;
-            $_item['total_size'] = $media_in_library['size'];
-            unset($_item['id']);
-            unset($_item['ilink']);
-            unset($_item['elink']);
-            unset($_item['in_library']);
-            unset($_item['added']);
-            unset($_item['created']);
-            unset($_item['file_hash']);
-            unset($_item['media_info']);
-            unset($_item['file_name']);
-            unset($_item['predictible_title']);
-            unset($_item['size']);
-            $_item['items_updated'] = time();
-            $db->insert('library_master_' . $media_type, $_item);
-            $lastid_master = $db->getLastId();
-            $db->update('library_' . $media_type, ['master' => $lastid_master], ['id' => ['value' => $id]]);
-            //if is a change master rest 1 or delete from old master.
-            if (!empty($media_in_library['master'])) {
-                $old_master_id = $media_in_library['master'];
-                $item_old_master = $db->getItemById('library_master_' . $media_type, $old_master_id);
-                $total_items = $item_old_master['total_items'];
-                if ($total_items == 1) {
-                    $db->deleteItemById('library_master_' . $media_type, $old_master_id);
-                } else {
-                    $new_size = $item_old_master['total_size'] - $media_in_library['size'];
-                    $db->updateItemById('library_master_' . $media_type, $old_master_id, ['total_items' => $total_items - 1, 'total_size' => $new_size]);
-                }
-            }
-        }
-    }
-
-    /*
-      if (!empty($item['title'])) {
-      $upd_fields['title'] = $item['title'];
-      $upd_fields['clean_title'] = clean_title($item['title']);
-      }
-      if (!empty($item['name'])) {
-      $upd_fields['name'] = $item['name'];
-      $upd_fields['clean_title'] = clean_title($item['name']);
-      }
-      $upd_fields['themoviedb_id'] = $item['themoviedb_id'];
-
-      !empty($item['poster']) ? $upd_fields['poster'] = $item['poster'] : $upd_fields['poster'] = '';
-      !empty($item['original_title']) ? $upd_fields['original_title'] = $item['original_title'] : $upd_fields['original_title'] = '';
-      !empty($item['rating']) ? $upd_fields['rating'] = $item['rating'] : $upd_fields['rating'] = '';
-      !empty($item['popularity']) ? $upd_fields['popularity'] = $item['popularity'] : $upd_fields['popularity'] = '';
-      !empty($item['scene']) ? $upd_fields['scene'] = $item['scene'] : $upd_fields['scene'] = '';
-      !empty($item['lang']) ? $upd_fields['lang'] = $item['lang'] : $upd_fields['lang'] = '';
-      !empty($item['trailer']) ? $upd_fields['trailer'] = $item['trailer'] : $upd_fields['trailer'] = '';
-      !empty($item['plot']) ? $upd_fields['plot'] = $item['plot'] : $upd_fields['plot'] = '';
-      !empty($item['release']) ? $upd_fields['release'] = $item['release'] : $upd_fields['release'] = '';
-
-      if ($media_type == 'movies') {
-      $db->updateItemById('library_movies', $id, $upd_fields);
-      } else if ($media_type == 'shows') {
-      $mylib_shows = $db->getItemById('library_shows', $id);
-      if (valid_array($mylib_shows)) {
-      $where['predictible_title'] = ['value' => $mylib_shows['predictible_title']];
-      $db->update('library_shows', $upd_fields, $where);
-      } else {
-      return false;
-      }
-      }
-     */
-    return true;
-}
-
-function ident_by_history($media_type, &$ids) {
+function ident_by_history(string $media_type, array &$ids) {
     global $db, $log;
 
     $ids_id = [];
@@ -365,4 +273,87 @@ function ident_by_history($media_type, &$ids) {
     } else {
         return false;
     }
+}
+
+/*
+ * This is the final function and all identify options finish here
+ * Here we submit the identification
+ * Need the tmdb item and the local id
+ */
+
+function submit_ident(string $media_type, array $oitem, $id) {
+    global $db, $log;
+
+    $log->debug("Submit $media_type ident : (tmdb_id:" . $oitem['id'] . ")" . $oitem['title'] . ' id:' . $id);
+    //$upd_fields = [];
+
+    if ($media_type == 'shows') {
+        $show_check = $db->getItemById('library_shows', $id);
+        if (!empty($show_check['season']) && !empty($show_check['episode'])) {
+            $where_check['season'] = ['value' => $show_check['season']];
+            $where_check['episode'] = ['value' => $show_check['episode']];
+        } else {
+            $log->err("submit_ident: its show but havent season/episode set " . $id);
+            return false;
+        }
+    }
+
+    $media_master = $db->getItemByField('library_master_' . $media_type, 'themoviedb_id', $oitem['themoviedb_id']);
+    $media_in_library = $db->getItemById('library_' . $media_type, $id);
+
+    if (valid_array($media_master)) {
+        if (valid_array($media_in_library)) {
+            $total_items = $media_master['total_items'] + 1;
+            $total_size = $media_master['total_size'] + $media_in_library['size'];
+
+            $db->update('library_master_' . $media_type, ['total_items' => $total_items, 'total_size' => $total_size, 'items_updated' => time()], ['id' => ['value' => $media_master['id']]]);
+            $db->update('library_' . $media_type, ['master' => $media_master['id']], ['id' => ['value' => $id]], 'LIMIT 1');
+            //if is a change master rest 1 or delete from old master.
+            if (!empty($media_in_library['master']) && $media_in_library['master'] !== $media_master['id']) {
+                $old_master_id = $media_in_library['master'];
+                $item_old_master = $db->getItemById('library_master_' . $media_type, $old_master_id);
+                $total_items = $item_old_master['total_items'];
+                if ($total_items == 1) {
+                    $db->deleteItemById('library_master_' . $media_type, $old_master_id);
+                } else {
+                    $new_size = $item_old_master['total_size'] - $media_in_library['size'];
+                    $db->updateItemById('library_master_' . $media_type, $old_master_id, ['total_items' => $total_items - 1, 'total_size' => $new_size]);
+                }
+            }
+        }
+    } else {
+        if (valid_array($media_in_library)) {
+            //TODO: Fix unusd fields in tmdb_search_ table for avoid  unsets
+            $new_item = $oitem;
+            $new_item['total_items'] = 1;
+            $new_item['total_size'] = $media_in_library['size'];
+            $new_item['items_updated'] = time();
+
+            unset($new_item['id']);
+            unset($new_item['ilink']);
+            unset($new_item['elink']);
+            unset($new_item['in_library']);
+            unset($new_item['added']);
+            unset($new_item['created']);
+            unset($new_item['updated']);
+
+            $db->insert('library_master_' . $media_type, $new_item);
+            $lastid_master = $db->getLastId();
+            $db->update('library_' . $media_type, ['master' => $lastid_master], ['id' => ['value' => $id]]);
+            //if is a change master rest 1 or delete from old master.
+            if (!empty($media_in_library['master'])) {
+                $old_master_id = $media_in_library['master'];
+                $item_old_master = $db->getItemById('library_master_' . $media_type, $old_master_id);
+                $total_items = $item_old_master['total_items'];
+                if ($total_items == 1) {
+                    $db->deleteItemById('library_master_' . $media_type, $old_master_id);
+                } else {
+                    $new_size = $item_old_master['total_size'] - $media_in_library['size'];
+                    $db->updateItemById('library_master_' . $media_type, $old_master_id, ['total_items' => $total_items - 1, 'total_size' => $new_size]);
+                }
+            }
+        }
+    }
+
+    return true;
 }
