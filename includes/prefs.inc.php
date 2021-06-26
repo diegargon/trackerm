@@ -16,7 +16,7 @@ function loadUserPrefs() {
         return false;
     }
     $where['uid'] = ['value' => $user['id']];
-    $results = $db->select('preferences', null, $where);
+    $results = $db->select('preferences', null, $where, 'LIMIT 1');
 
     if (valid_array($user_prefs = $db->fetchAll($results))) {
         foreach ($user_prefs as $pref) {
@@ -43,12 +43,14 @@ function getPrefsItem(string $r_key, bool $system = false) {
     return false;
 }
 
+/* UNUSED */
+
 function getUidWithPref(string $r_key, string $r_value) {
     global $db;
 
     $where['pref_name'] = $r_key;
     $where['pref_value'] = $r_value;
-    $results = $db->select('preferences', 'uid', $where);
+    $results = $db->select('preferences', 'uid', $where, 'LIMIT 1');
 
     return $results ? $db->fetchAll($results) : false;
 }
