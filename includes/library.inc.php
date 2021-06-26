@@ -51,11 +51,11 @@ function show_my_media($media_type) {
     $npage == 1 ? $start = 0 : $start = ($npage - 1) * $n_results;
 
     if (empty($search_keyword)) {
-        $topt['num_table_rows'] = $db->qSingle("SELECT COUNT(*) FROM $library_master WHERE title <> ''");
-        $query = "SELECT * FROM $library_master WHERE title <> '' ORDER BY items_updated DESC LIMIT $start,$end ";
+        $topt['num_table_rows'] = $db->qSingle("SELECT COUNT(*) FROM $library_master");
+        $query = "SELECT * FROM $library_master ORDER BY items_updated DESC LIMIT $start,$end ";
     } else {
-        $topt['num_table_rows'] = $db->qSingle("SELECT COUNT(*) FROM $library_master WHERE title <> '' AND title LIKE \"%$search_keyword%\" ");
-        $query = "SELECT * FROM $library_master WHERE title <> '' AND title LIKE \"%$search_keyword%\" ORDER BY items_updated DESC LIMIT $start,$end ";
+        $topt['num_table_rows'] = $db->qSingle("SELECT COUNT(*) FROM $library_master WHERE title LIKE \"%$search_keyword%\" ");
+        $query = "SELECT * FROM $library_master WHERE title LIKE \"%$search_keyword%\" ORDER BY items_updated DESC LIMIT $start,$end ";
     }
 
     $results = $db->query($query);
