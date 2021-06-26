@@ -34,7 +34,7 @@ if (!valid_object($trans)) {
     $log->err("Starting TAS fail: Fail Transmission connection");
     exit(1);
 }
-$log->info("Starting trackerm automatic service...");
+$log->info("TrackerM v{$cfg['version']}.{$cfg['db_version']}" . 'Starting trackerm automatic service...');
 transmission_scan();
 setPrefsItem('cli_blocker', 1, true);
 wanted_work();
