@@ -115,9 +115,6 @@ class FrontEnd {
 
         $tdata = [];
 
-        (isset($_POST['rebuild_movies'])) ? rebuild('movies', $cfg['MOVIES_PATH']) : null;
-        (isset($_POST['rebuild_shows'])) ? rebuild('shows', $cfg['SHOWS_PATH']) : null;
-
         $tdata['page'] = Filter::getString('page');
 
         !empty($_POST['search_keyword']) ? $tdata['search_keyword'] = Filter::postString('search_keyword') : null;
