@@ -19,7 +19,7 @@
                 <option <?= $tdata['max_id_sel_50'] ?> value="50">50</option>
             </select>
         <?php } ?>
-        <?php if ($tdata['page'] != 'wanted' && $tdata['page'] != 'transmission') { ?>
+        <?php if ($tdata['page'] != 'wanted' && $tdata['page'] != 'transmission' && $tdata['page'] != 'index') { ?>
             <?= $LNG['L_COLUMNS'] ?>:
             <select name="num_columns_results" onChange="this.form.submit()">
                 <option <?= $tdata['max_columns_sel_none'] ?> id="default"><?= $LNG['L_DEFAULT'] ?></option>
@@ -54,11 +54,15 @@
         <?php if (in_array($tdata['page'], ['library', 'library_movies', 'library_shows', 'news', 'new_movies', 'new_shows'])) { ?>
             <input type="text" size="20"  placeholder="<?= $LNG['L_SEARCH'] ?>" name="search_keyword" onChange="this.form.submit()" value="<?= !empty($tdata['search_keyword']) ? $tdata['search_keyword'] : null ?>"/>
         <?php } ?>
-        <?php if (!empty($tdata['page']) && in_array($tdata['page'], ['news', 'new_movies', 'new_shows'])) { ?>
+        <?php if (!empty($tdata['page']) && in_array($tdata['page'], ['news', 'new_movies', 'new_shows', 'torrents'])) { ?>
             <span> <?= $LNG['L_FILTER_INDEXER'] ?>:</span>
             <select name="sel_indexer" onChange="this.form.submit()">
                 <?= $tdata['sel_indexers'] ?>
             </select>
+        <?php
+        }
+        if (!empty($tdata['page']) && in_array($tdata['page'], ['news', 'new_movies', 'new_shows'])) {
+            ?>
             <div class="ignore_search">
                 <!-- ignore words -->
                 <span><?= $LNG['L_IGNORE'] ?></span>
@@ -75,6 +79,6 @@
                     <input type="text" size="2"  name="new_ignore_size" onChange="this.form.submit()" value="<?= !empty($prefs->getPrefsItem('new_ignore_size')) ? $prefs->getPrefsItem('new_ignore_size') : null ?>"/>
                 </div>
             </div>
-        <?php } ?>
+<?php } ?>
     </form>
 </div>
