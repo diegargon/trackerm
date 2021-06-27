@@ -9,7 +9,7 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-define('DB_VERSION', 17);
+define('DB_VERSION', 18);
 
 function create_db() {
     global $db;
@@ -259,6 +259,7 @@ function create_db() {
                     "guessed_poster" VARCHAR NULL,
                     "genre" VARCHAR NULL,
                     "trailer" VARCHAR NULL,
+                    "freelech" INT NULL,
                     "guessed_trailer" VARCHAR NULL,
                     "added" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
@@ -284,6 +285,7 @@ function create_db() {
                     "guessed_poster" VARCHAR NULL,
                     "genre" VARCHAR NULL,
                     "trailer" VARCHAR NULL,
+                    "freelech" INT NULL,
                     "guessed_trailer" VARCHAR NULL,
                     "added" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
@@ -963,12 +965,14 @@ function update_db($from) {
         $db->query('VACUUM;');
     }
 
-    /*  Add fields freelech to jackett_shows/movies
-      if ($from < 18) {
-      $db->query('UPDATE config SET cfg_value=\'18\' WHERE cfg_key=\'db_version\' LIMIT 1');
-      $db->query('VACUUM;');
-      }
-     */
+
+    if ($from < 18) {
+        $db->query('ALTER TABLE jackett_shows add column freelech INT NULL');
+        $db->query('ALTER TABLE jackett_movies add column freelech INT NULL');
+        $db->query('UPDATE config SET cfg_value=\'18\' WHERE cfg_key=\'db_version\' LIMIT 1');
+        $db->query('VACUUM;');
+    }
+
 
     /*
       if ($from < 19) {
