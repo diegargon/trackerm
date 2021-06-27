@@ -309,6 +309,12 @@ function page_torrents() {
     if (!empty($search_movies_torrents)) {
         $search['words'] = trim($search_movies_torrents);
         $m_results = search_media_torrents('movies', $search, 'L_TORRENT');
+        //Ignore words
+        torrents_filter_words($m_results);
+        //Ignore_size
+        torrents_filter_size($m_results);
+        //Selected indexer
+        torrents_filter_indexers($m_results);
         if (valid_array($m_results)) {
             $m_results = mix_media_res($m_results);
             $topt['view_type'] = 'movies_torrent';
@@ -324,6 +330,12 @@ function page_torrents() {
     if (!empty($search_shows_torrents)) {
         $search['words'] = trim($search_shows_torrents);
         $m_results = search_media_torrents('shows', $search, 'L_TORRENT');
+        //Ignore words
+        torrents_filter_words($m_results);
+        //Ignore_size
+        torrents_filter_size($m_results);
+        //Selected indexer
+        torrents_filter_indexers($m_results);
         if (valid_array($m_results)) {
             $m_results = mix_media_res($m_results);
             $topt['view_type'] = 'shows_torrent';

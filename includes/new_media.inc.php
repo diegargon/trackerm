@@ -99,27 +99,12 @@ function page_new_media(string $media_type) {
         $db->upsert($search_cache_db, $media_cache, $where);
     }
 
-    //Filters TODO: Probably move to function, and filter indexer in mix_media_res
-    //ignore words
-    if (!empty($prefs->getPrefsItem('new_ignore_words_enable')) && !empty($prefs->getPrefsItem('new_ignore_keywords'))) {
-        $ignore_keywords = array_map('trim', explode(',', $prefs->getPrefsItem('new_ignore_keywords')));
-        foreach ($res_media_db as $key => $item) {
-            $match = str_ireplace($ignore_keywords, '', $item['title']);
-            if (trim($match) != trim($item['title'])) {
-                unset($res_media_db[$key]);
-            }
-        }
-    }
-
-    //ignore_size
-    if (!empty($prefs->getPrefsItem('new_ignore_size_enable')) && !empty($prefs->getPrefsItem('new_ignore_size'))) {
-        foreach ($res_media_db as $key => $item) {
-            $gbytes = round(bytesToGB($item['size']), 2);
-            if ($gbytes > trim($prefs->getPrefsItem('new_ignore_size'))) {
-                unset($res_media_db[$key]);
-            }
-        }
-    }
+    //Ignore words
+    torrents_filter_words($res_media_db);
+    //Ignore_size
+    torrents_filter_size($res_media_db);
+    //Selected indexer
+    torrents_filter_indexers($res_media_db);
     /* BUILD PAGE */
     $page_news = '';
 
@@ -136,8 +121,6 @@ function page_new_media(string $media_type) {
 }
 
 function mix_media_res(array $res_media_db) {
-    global $prefs;
-
     $indexers = [];
     $media = [];
 
@@ -148,20 +131,9 @@ function mix_media_res(array $res_media_db) {
     foreach ($res_media_db as $item) {
         $indexers[$item['source']][] = $item;
     }
-    $max_items_by_indexer = 0;
-    $indexers_names = [];
-    //filter indexers
-    foreach ($indexers as $name_key => $indexer) {
-        $sel_indexer = $prefs->getPrefsItem('sel_indexer');
-        if (empty($sel_indexer) || strtolower($sel_indexer) == strtolower($name_key) || $sel_indexer == 'sel_indexer_none') {
-            $indexers_names[] = $name_key;
-            $total_indexer = count($indexer);
-            if ($total_indexer > $max_items_by_indexer) {
-                $max_items_by_indexer = $total_indexer;
-            }
-        }
-    }
-    $total_indexers = count($indexers_names);
+
+    $indexers_names = array_keys($indexers);
+
     /*  order two by indexer
       for ($i = 0; $i <= ($max_items_by_indexer) / 2; $i++) {
       foreach ($indexers as $indexer) {

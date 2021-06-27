@@ -797,6 +797,15 @@ button {
 .divBlock {
     display: block;
 }
+
+.num_columns_results, .num_ident_toshow, .num_rows_results {
+    width:43px;
+}
+
+.html_ico {
+    font-size:1.5em;
+}
+
 /* Responsive */
 
 @media only screen and (max-width: 800px) {

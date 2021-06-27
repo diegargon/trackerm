@@ -11,7 +11,7 @@
     <form method="post" action="?page=<?= $tdata['page'] ?>">
         <?php if (in_array($tdata['page'], ['library', 'library_movies', 'library_shows'])) { ?>
             <?= $LNG['L_IDENTIFY'] ?>:
-            <select name="num_ident_toshow" onChange="this.form.submit()">
+            <select class="num_ident_toshow" name="num_ident_toshow" onChange="this.form.submit()">
                 <option <?= $tdata['max_id_sel_0'] ?> value="0">0</option>
                 <option <?= $tdata['max_id_sel_5'] ?> value="5">5</option>
                 <option <?= $tdata['max_id_sel_10'] ?> value="10">10</option>
@@ -20,8 +20,8 @@
             </select>
         <?php } ?>
         <?php if (!in_array($tdata['page'], ['wanted', 'transmission', 'index', 'view'])) { ?>
-            <?= $LNG['L_COLUMNS'] ?>:
-            <select name="num_columns_results" onChange="this.form.submit()">
+            <span class="html_ico">&#8741;</span>
+            <select class="num_columns_results" name="num_columns_results" onChange="this.form.submit()">
                 <option <?= $tdata['max_columns_sel_none'] ?> id="default"><?= $LNG['L_DEFAULT'] ?></option>
                 <option <?= $tdata['max_columns_sel_1'] ?> value="1">1</option>
                 <option <?= $tdata['max_columns_sel_2'] ?> value="2">2</option>
@@ -30,8 +30,8 @@
                 <option <?= $tdata['max_columns_sel_8'] ?> value="8">8</option>
                 <option <?= $tdata['max_columns_sel_10'] ?> value="10">10</option>
             </select>
-            <?= $LNG['L_ROWS'] ?>:
-            <select name="num_rows_results" onChange="this.form.submit()">
+            <span class="html_ico">&#9868;</span>
+            <select class="num_rows_results" name="num_rows_results" onChange="this.form.submit()">
                 <option <?= $tdata['max_rows_sel_none'] ?> value="<?= $LNG['L_DEFAULT'] ?>"><?= $LNG['L_DEFAULT'] ?></option>
                 <option <?= $tdata['max_rows_sel_1'] ?> value="1">1</option>
                 <option <?= $tdata['max_rows_sel_2'] ?> value="2">2</option>
@@ -61,7 +61,7 @@
             </select>
             <?php
         }
-        if (!empty($tdata['page']) && in_array($tdata['page'], ['news', 'new_movies', 'new_shows'])) {
+        if (!empty($tdata['page']) && in_array($tdata['page'], ['news', 'new_movies', 'new_shows', 'torrents'])) {
             ?>
             <div class="ignore_search">
                 <!-- ignore words -->

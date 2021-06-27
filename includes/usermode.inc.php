@@ -26,4 +26,5 @@ require_once('includes/new_media.inc.php');
 require_once('includes/user_management.inc.php');
 require_once('includes/web.class.php');
 require_once('includes/frontend.class.php');
+require_once('includes/torrents.inc.php');
 $frontend = new FrontEnd();
