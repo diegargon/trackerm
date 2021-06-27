@@ -8,12 +8,12 @@
  */
 ?>
 <div class="footer">
-    <p class="center">Querys(<?= $tdata['num_querys'] ?>)</p>
+    <p class="center">Querys[D<?= $tdata['num_querys'] ?>][J<?= $cfg['remote_querys_jackett'] ?>][T<?= $cfg['remote_querys_tmdb'] ?>]</p>
     <p class="copyright">
         <a href="https://github.com/diegargon/trackerm" target="_blank">TrackerM v<?= $cfg['version'] . '.' . $cfg['db_version'] ?></a> - Copyright @ 2020 - 2021
     </p>
     <?php
-    if (!empty($tdata['querys'])) {
+    if (!empty($tdata['querys']) && $user['isAdmin']) {
         foreach ($tdata['querys'] as $query) {
             ?>
             <p class="center"><?= $query['query'] ?></p>

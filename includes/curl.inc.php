@@ -32,12 +32,14 @@ function curl_get(string $url, array $curl_opt) {
 }
 
 function curl_get_jackett(string $url, string $params) {
+    global $cfg;
 
     $curl_opt['headers'] = [
         'Accept-Encoding: gzip, deflate',
     ];
     $url = $url . $params;
 
+    $cfg['remote_querys_jackett'] ++;
     $response = curl_get($url, $curl_opt);
 
     //FIXME tornzb:attr lost by simplexml/json_encode this is a temporary/fast fix
@@ -69,6 +71,7 @@ function curl_get_tmdb(string $url) {
         'Accept-Language:' . $cfg['TMDB_LANG'] . ';q=0.6,' . substr($cfg['TMDB_LANG'], 0, 2) . ';q=0.4'
     ];
 
+    $cfg['remote_querys_tmdb'] ++;
     $response = curl_get($url, $curl_opt['headers']);
 
     if ($response) {
