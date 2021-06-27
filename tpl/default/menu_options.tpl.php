@@ -59,6 +59,9 @@
             <select name="sel_indexer" onChange="this.form.submit()">
                 <?= $tdata['sel_indexers'] ?>
             </select>
+            <span><?= $LNG['L_FREELECH'] ?></span>
+            <input type="hidden" name="only_freelech" value="0"/>
+            <input type="checkbox" <?= !empty($prefs->getPrefsItem('only_freelech')) ? 'checked' : null ?> name="only_freelech" onChange="this.form.submit()" value="1"/>
             <?php
         }
         if (!empty($tdata['page']) && in_array($tdata['page'], ['news', 'new_movies', 'new_shows', 'torrents'])) {

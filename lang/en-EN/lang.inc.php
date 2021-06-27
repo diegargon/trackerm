@@ -82,6 +82,7 @@ $LNG = [
     'L_FINISHED' => 'Finished',
     'L_FOLLOW_SHOW' => 'Follow this show',
     'L_FREE_TOTAL' => 'HD Free/Total',
+    'L_FREELECH' => 'Freelech',
     'L_FILTER_INDEXER' => 'Limit',
     'L_TIP_FIX_TITLE' => 'Fix title',
     'L_GLOBAL_TAGS' => 'Global Tags',

@@ -14,7 +14,7 @@
         ?>
         <div class="banner_head">
             <span class="item_source">
-                <a class="tor_source_link<?= empty($tdata['freelech']) ? '_freelech' : null ?>" href="<?= $tdata['guid'] ?>" target=_blank ><?= $tdata['source'] ?></a>
+                <a class="tor_source_link<?= !empty($tdata['freelech']) ? '_freelech' : null ?>" href="<?= $tdata['guid'] ?>" target=_blank ><?= $tdata['source'] ?></a>
             </span>
         </div>
     <?php } ?>

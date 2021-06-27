@@ -191,7 +191,7 @@ function jackett_prep_media($media_type, $media_results) {
                 $item[$attr['@attributes']['name']] = $attr['@attributes']['value'];
             }
             isset($item['coverurl']) ? $poster = $item['coverurl'] : $poster = '';
-            isset($item['downloadvolumefactor']) ? $freelech = $item['downloadvolumefactor'] : $freelech = 0;
+            isset($item['downloadvolumefactor']) ? $freelech = !$item['downloadvolumefactor'] : $freelech = 0;
             !empty($item['description']) ? $description = $item['description'] : $description = '';
             $media[] = [
                 'guid' => $item['guid'],
@@ -221,7 +221,7 @@ function jackett_prep_media($media_type, $media_results) {
                     $item[$attr['@attributes']['name']] = $attr['@attributes']['value'];
                 }
                 !empty($item['coverurl']) ? $poster = $item['coverurl'] : $poster = '';
-                isset($item['downloadvolumefactor']) ? $freelech = $item['downloadvolumefactor'] : $freelech = 0;
+                isset($item['downloadvolumefactor']) ? $freelech = !$item['downloadvolumefactor'] : $freelech = 0;
                 !empty($item['description']) ? $description = $item['description'] : $description = '';
                 $media[] = [
                     'guid' => $item['guid'],

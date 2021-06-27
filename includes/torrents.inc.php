@@ -47,3 +47,17 @@ function torrents_filter_indexers(&$torrent_results) {
         }
     }
 }
+
+function torrents_filter_only_freelech(&$torrent_results) {
+    global $prefs;
+
+    $only_freelech = $prefs->getPrefsItem('only_freelech');
+
+    if (!empty($only_freelech)) {
+        foreach ($torrent_results as $key_item => $item) {
+            if ($item['freelech'] != 1) {
+                unset($torrent_results[$key_item]);
+            }
+        }
+    }
+}

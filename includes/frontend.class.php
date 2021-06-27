@@ -127,6 +127,9 @@ class FrontEnd {
         if (isset($_POST['new_ignore_keywords'])) {
             $prefs->setPrefsItem('new_ignore_keywords', Filter::postString('new_ignore_keywords'));
         }
+        if (isset($_POST['only_freelech'])) {
+            $prefs->setPrefsItem('only_freelech', Filter::postString('only_freelech'));
+        }
         if (isset($_POST['new_ignore_size'])) {
             $prefs->setPrefsItem('new_ignore_size', Filter::postString('new_ignore_size'));
         }

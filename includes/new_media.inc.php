@@ -105,6 +105,8 @@ function page_new_media(string $media_type) {
     torrents_filter_size($res_media_db);
     //Selected indexer
     torrents_filter_indexers($res_media_db);
+    //Freelech filter
+    torrents_filter_only_freelech($res_media_db);
     /* BUILD PAGE */
     $page_news = '';
 
