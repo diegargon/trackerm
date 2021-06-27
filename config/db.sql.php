@@ -963,7 +963,7 @@ function update_db($from) {
         $db->query('VACUUM;');
     }
 
-    /*
+    /*  Add fields freelech to jackett_shows/movies
       if ($from < 18) {
       $db->query('UPDATE config SET cfg_value=\'18\' WHERE cfg_key=\'db_version\' LIMIT 1');
       $db->query('VACUUM;');
