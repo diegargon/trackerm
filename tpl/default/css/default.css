@@ -217,7 +217,8 @@ button {
     border:0px solid blue;
 }
 .item_title {
-    margin: 4px;
+    margin: 1px;
+    margin-top: 5px;
     word-break: break-word;
     max-width: 100%;
 }
@@ -437,7 +438,8 @@ button {
 }
 .action_link  {
     display: inline-block;
-    background: #ff5b5b;
+    /* background: #ff5b5b; */
+    background: #973a3a;
     padding: 5px;
     text-decoration: none;
     color: white;
@@ -446,6 +448,26 @@ button {
     font-family: 'Roboto', sans-serif;
     margin:3px;
     font-size: 1.0em;
+}
+.tor_source_link, .tor_source_link_freelech  {
+    display: inline-block;
+    /* background: #ff5b5b; */
+    background: #973a3a;
+    padding: 2px;
+    text-decoration: none;
+    color: white;
+    font-family: 'Roboto', sans-serif;
+    margin:0;
+    border: 1px solid #973a4a;
+    font-size: 0.9em;
+    width:100%;
+}
+.tor_source_link_freelech {
+    border: 1px solid #112f04;
+    background: #112f04;
+}
+.banner_head {
+    overflow: clip;
 }
 .info_container {    
     width:100%;

@@ -9,6 +9,13 @@
 ?>
 
 <div class="display display_1">
+    <?php
+    if (!empty($tdata['source'])) {
+        ?>
+        <div class="banner_head">
+            <span class="item_source"><a class="tor_source_link" href="<?= $tdata['guid'] ?>" target=_blank ><?= $tdata['source'] ?></a></span>
+        </div>
+    <?php } ?>
     <div class="poster_preview">
         <a href="?page=view&id=<?= $tdata['id'] ?>&view_type=<?= $tdata['view_type'] ?> ">
             <img class="img_poster_preview"  alt="" src="<?= $tdata['poster'] ?>"/>
@@ -32,11 +39,7 @@
                 </form>
                 <?php
             }
-            if (!empty($tdata['source'])) {
-                ?>
-                <span class="item_source"><a class="action_link" href="<?= $tdata['guid'] ?>" target=_blank ><?= $tdata['source'] ?></a></span>
-                <?php
-            }
+
             if (!empty($tdata['total_items']) && $tdata['total_items'] > 1) {
                 ?>
                 <span class="item_num_episodes">[<?= $tdata['total_items'] ?>]</span>
