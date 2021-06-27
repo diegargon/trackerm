@@ -33,7 +33,7 @@ function search_media_torrents($media_type, $search) {
         return false;
     }
 
-    $search_words = strtolower($search_words);
+    $search_words = clean_title($search_words);
 
     if ($cfg['search_cache']) {
         $media_cache_check = $db->getItemByField($jackett_search_media_cache, 'words', $search_words);
