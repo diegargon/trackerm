@@ -342,39 +342,34 @@ function update_library_stats() {
 
     $log->debug('Updating library stats');
 
-    $movies_db = $db->getTableData('library_movies');
+    $results = $db->query('SELECT total_size FROM library_master_movies');
+    $movies_db = $db->fetchAll($results);
     $num_movies = count($movies_db);
 
     if (valid_array($movies_db)) {
         foreach ($movies_db as $db_movie) {
-            if (isset($db_movie['size'])) {
-                $movies_size = $movies_size + $db_movie['size'];
+            if (isset($db_movie['total_size'])) {
+                $movies_size = $movies_size + $db_movie['total_size'];
             }
         }
         $movies_size = human_filesize($movies_size);
     }
 
-    $shows_db = $db->getTableData('library_shows');
-    $num_episodes = count($shows_db);
-    $count_shows = [];
+
+    $results = $db->query('SELECT total_size,total_items FROM library_master_shows');
+    $shows_db = $db->fetchAll($results);
+    $num_shows = count($shows_db);
+    $num_episodes = 0;
 
     if (valid_array($shows_db)) {
         foreach ($shows_db as $db_show) {
-            if (isset($db_show['size'])) {
-                $shows_size = $shows_size + $db_show['size'];
+            if (isset($db_show['total_size'])) {
+                $shows_size = $shows_size + $db_show['total_size'];
             }
-
-            if (!empty($db_show['themoviedb_id'])) {
-                $oid = $db_show['themoviedb_id'];
-                if (!isset($count_shows[$oid])) {
-                    $count_shows[$oid] = 1;
-                }
-            }
+            $num_episodes = $num_episodes + $db_show['total_items'];
         }
         $shows_size = human_filesize($shows_size);
     }
-
-    $num_shows = count($count_shows);
 
     $db->query("UPDATE config SET cfg_value='$num_movies' WHERE cfg_key='stats_movies' LIMIT 1");
     $db->query("UPDATE config SET cfg_value='$num_shows' WHERE cfg_key='stats_shows' LIMIT 1");
