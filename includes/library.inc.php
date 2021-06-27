@@ -10,7 +10,7 @@
 !defined('IN_WEB') ? exit : true;
 
 function show_my_media($media_type) {
-    global $db, $cfg;
+    global $db, $prefs;
 
     $page = '';
     $npage = Filter::getInt('npage');
@@ -42,10 +42,9 @@ function show_my_media($media_type) {
     }
     $page .= show_identify_media($media_type);
 
-    $rows = getPrefsItem('tresult_rows');
-    empty($rows) ? $rows = $cfg['tresults_rows'] : null;
-    $columns = getPrefsItem('tresult_columns');
-    empty($columns) ? $columns = $cfg['tresults_columns'] : null;
+    $rows = $prefs->getPrefsItem('tresults_rows');
+    $columns = $prefs->getPrefsItem('tresults_columns');
+
     $n_results = $rows * $columns;
     $npage == 1 ? $end = $n_results : $end = $npage * $n_results;
     $npage == 1 ? $start = 0 : $start = ($npage - 1) * $n_results;

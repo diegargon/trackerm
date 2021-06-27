@@ -63,17 +63,16 @@
                 <!-- ignore words -->
                 <span><?= $LNG['L_IGNORE'] ?></span>
                 <input type="hidden" name="new_ignore_words_enable" value="0"/>
-                <input type="checkbox" <?= !empty($cfg['new_ignore_words_enable']) ? 'checked' : null ?> name="new_ignore_words_enable" onChange="this.form.submit()" value="1"/>
-
+                <input type="checkbox" <?= !empty($prefs->getPrefsItem('new_ignore_words_enable')) ? 'checked' : null ?> name="new_ignore_words_enable" onChange="this.form.submit()" value="1"/>
                 <div class="inline" data-tip="<?= $LNG['L_TIP_COMMA'] ?>">
-                    <input type="text" size="15" name="new_ignore_keywords" onChange="this.form.submit()" value="<?= !empty($cfg['new_ignore_keywords']) ? $cfg['new_ignore_keywords'] : null ?>"/>
+                    <input type="text" size="15" name="new_ignore_keywords" onChange="this.form.submit()" value="<?= !empty($prefs->getPrefsItem('new_ignore_keywords')) ? $prefs->getPrefsItem('new_ignore_keywords') : null ?>"/>
                 </div>
                 <!-- ignore size -->
                 <span><?= $LNG['L_SIZE'] ?></span>
                 <input type="hidden" name="new_ignore_size_enable" value="0"/>
-                <input type="checkbox" <?= !empty($cfg['new_ignore_size_enable']) ? 'checked' : null ?> name="new_ignore_size_enable" onChange="this.form.submit()" value="1"/>
+                <input type="checkbox" <?= !empty($prefs->getPrefsItem('new_ignore_size_enable')) ? 'checked' : null ?> name="new_ignore_size_enable" onChange="this.form.submit()" value="1"/>
                 <div class="inline" data-tip="<?= $LNG['L_TIP_IGNORE_SIZE'] ?>">
-                    <input type="text" size="2"  name="new_ignore_size" onChange="this.form.submit()" value="<?= !empty($cfg['new_ignore_size']) ? $cfg['new_ignore_size'] : null ?>"/>
+                    <input type="text" size="2"  name="new_ignore_size" onChange="this.form.submit()" value="<?= !empty($prefs->getPrefsItem('new_ignore_size')) ? $prefs->getPrefsItem('new_ignore_size') : null ?>"/>
                 </div>
             </div>
         <?php } ?>

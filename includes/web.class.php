@@ -18,25 +18,23 @@ class Web {
     }
 
     function render() {
-
         $this->pagesGlobal();
         $req_page = $this->getPage();
 
         if ($req_page === false) {
             $this->frontend->msgPage(['title' => 'L_ERROR', 'body' => 'L_PAGE_NOEXISTS']);
         }
-
         echo $this->frontend->buildPage($req_page);
     }
 
     function getPage() {
-        global $cfg, $user;
+        global $cfg, $user, $prefs;
 
         $req_page = Filter::getString('page');
         ($user['id'] < 1) ? $req_page = 'login' : null;
 
         if (empty($req_page) && $user['id'] > 0) {
-            $index_page = trim(getPrefsItem('index_page'));
+            $index_page = trim($prefs->getPrefsItem('index_page'));
             if (!empty($index_page) && $index_page != "index") {
                 header("Location: {$cfg['REL_PATH']}/?page=$index_page");
                 exit();

@@ -30,4 +30,4 @@
     <a onClick="show_loading()" href="?page=tmdb"><div class="menu_element"><?= 'TMDB' ?></div></a>
     <a onClick="show_loading()" href="?page=transmission"><div class="menu_element"><?= 'T' ?></div></a>
 </div>
-<?= (!isset($cfg['hide_opt']) || $cfg['hide_opt'] != 1) ? $tdata['menu_opt'] : null; ?>
+<?= !empty($tdata['menu_opt']) ? $tdata['menu_opt'] : null ?>

@@ -13,7 +13,6 @@ function search_media_torrents($media_type, $search) {
     global $cfg, $log, $db;
 
     $result = [];
-    $page = '';
     $results_count = 0;
     $cache_media_expire = 0;
 
@@ -131,23 +130,23 @@ function search_media_torrents($media_type, $search) {
 }
 
 function jackett_search_media($media_type, $words, $indexer, $categories, $limit = null) {
-    global $cfg, $log, $LNG;
+    global $cfg, $log, $LNG, $prefs;
 
     $starttime = getPerfTime();
     empty($limit) ? $limit = $cfg['jackett_results'] : null;
     $disable_time = !empty($cfg['indexer_disable_time']) ? $cfg['indexer_disable_time'] : 6 * 60 * 60;
 
-    if (($indexer_disable = getPrefsItem($indexer . '_disable', true))) {
+    if (($indexer_disable = $prefs->getPrefsItem($indexer . '_disable', true))) {
         if ($indexer_disable != '0' && $indexer_disable > time()) {
             return false;
         } else if ($indexer_disable != '0') {
-            setPrefsItem($indexer . '_disable', '0', true);
+            $prefs = setPrefsItem($indexer . '_disable', '0', true);
         }
     }
     $jackett_url = $cfg['jackett_srv'] . $cfg['jackett_api_path'] . '/indexers/' . $indexer . '/results/torznab/';
     $words = rawurlencode($words);
 
-    //Movie cat begin 2 or show 5
+    //Movies category begin 2 and shows 5
     ($media_type == 'movies') ? $jkt_cat_first_digit = 2 : $jkt_cat_first_digit = 5;
 
     foreach ($categories as $category) {
@@ -167,7 +166,7 @@ function jackett_search_media($media_type, $words, $indexer, $categories, $limit
         $log->addStateMsg("[{$LNG['L_NOTICE']}] $indexer  {$LNG['L_SLOW_THE_FLOW']} " . formatPerfTime($timediff) . " {$LNG['L_SECONDS']}");
     }
     if (formatPerfTime($timediff) > $cfg['curl_timeout'] - 1) {
-        setPrefsItem($indexer . '_disable', time() + $disable_time, true);
+        $prefs->setPrefsItem($indexer . '_disable', time() + $disable_time, true);
         $log->addStateMsg("[{$LNG['L_NOTICE']}]: $indexer {$LNG['L_DISABLED']} $disable_time {$LNG['L_SECONDS']}");
     }
 

@@ -84,10 +84,10 @@ function encrypt_password($password) {
 }
 
 function user_edit_profile() {
-    global $frontend;
+    global $frontend, $prefs;
 
-    $index_pref = getPrefsItem('index_page');
-    $email_notify = getPrefsItem('email_notify');
+    $index_pref = $prefs->getPrefsItem('index_page');
+    $email_notify = $prefs->getPrefsItem('email_notify');
 
     (empty($index_pref) || $index_pref == 'index') ? $tdata['index_selected'] = 'selected' : $tdata['index_selected'] = '';
     $index_pref == 'library' ? $tdata['library_selected'] = 'selected' : $tdata['library_selected'] = '';
@@ -102,7 +102,7 @@ function user_edit_profile() {
 }
 
 function user_change_prefs() {
-    global $user, $db, $LNG;
+    global $user, $db, $LNG, $prefs;
 
     $status_msg = null;
 
@@ -119,13 +119,13 @@ function user_change_prefs() {
             $status_msg .= $LNG['L_EMAIL_INVALID'];
         }
     }
-    $index_page = getPrefsItem('index_page');
+    $index_page = $prefs->getPrefsItem('index_page');
 
     if (isset($_POST['index_page']) && !empty($_POST['index_page']) && ($_POST['index_page'] != $index_page)) {
-        setPrefsItem('index_page', Filter::postString('index_page'));
+        $prefs->setPrefsItem('index_page', Filter::postString('index_page'));
     }
     if (isset($_POST['email_notify'])) {
-        (!empty($_POST['email_notify'])) ? setPrefsItem('email_notify', 1) : setPrefsItem('email_notify', 0);
+        (!empty($_POST['email_notify'])) ? $prefs->setPrefsItem('email_notify', 1) : $prefs->setPrefsItem('email_notify', 0);
     }
 
     return $status_msg;

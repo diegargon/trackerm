@@ -9,18 +9,18 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-//TODO move to frontend and html to tpl or html::
+//TODO move to frontend build* and pager and html to tpl or html but before..
+//TODO this functions need a rewrite, especially buildTable and Pager, too much messy... how we build the pager links, etc
 function buildTable($head, $db_ary, $topt = null) {
-    global $cfg, $LNG;
+    global $LNG, $prefs;
 
     $npage = Filter::getInt('npage');
     empty($npage) ? $npage = 1 : null;
-
-    empty($topt['columns']) ? $columns = $cfg['tresults_columns'] : $columns = $topt['columns'];
-    empty($topt['max_items']) ? $max_items = $cfg['tresults_rows'] * $columns : $max_items = $topt['max_items'];
+    $columns = $prefs->getPrefsItem('tresults_columns');
+    $rows = $prefs->getPrefsItem('tresults_rows');
+    $max_items = $rows * $columns;
 
     $page = '<div class="type_head_container">';
-
     !empty($head) ? $page .= '<div class="type_head"><h2>' . $LNG[$head] . '</h2></div>' : null;
 
     if (!isset($topt['no_pages'])) {
@@ -111,13 +111,15 @@ function build_item($item, $topt) {
     return $page;
 }
 
-function pager($npage, $nitems, &$topt) {
-    global $cfg;
+/* Build the pager */
 
-    /* PAGES */
+function pager($npage, $nitems, &$topt) {
+    global $prefs;
 
     $pages_links = '';
-    $items_per_page = $cfg['tresults_columns'] * $cfg['tresults_rows'];
+    $columns = $prefs->getPrefsItem('tresults_columns');
+    $rows = $prefs->getPrefsItem('tresults_rows');
+    $items_per_page = $columns * $rows;
     $num_pages = ceil($nitems / $items_per_page);
     $search_type = Filter::getUtf8('search_type');
     $page = Filter::getString('page');

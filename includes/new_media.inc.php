@@ -10,7 +10,7 @@
 !defined('IN_WEB') ? exit : true;
 
 function page_new_media(string $media_type) {
-    global $cfg, $db, $log;
+    global $cfg, $db, $log, $prefs;
 
     $cache_media_expire = 0;
     $topt = [];
@@ -99,26 +99,24 @@ function page_new_media(string $media_type) {
         $db->upsert($search_cache_db, $media_cache, $where);
     }
 
-    //Filters TODO: Probably move to function, and filter indexeer in mix_media_res
+    //Filters TODO: Probably move to function, and filter indexer in mix_media_res
     //ignore words
-    if (!empty($cfg['new_ignore_words_enable']) && !empty($cfg['new_ignore_keywords'])) {
-        $ignore_keywords = array_map('trim', explode(',', $cfg['new_ignore_keywords']));
+    if (!empty($prefs->getPrefsItem('new_ignore_words_enable')) && !empty($prefs->getPrefsItem('new_ignore_keywords'))) {
+        $ignore_keywords = array_map('trim', explode(',', $prefs->getPrefsItem('new_ignore_keywords')));
         foreach ($res_media_db as $key => $item) {
             $match = str_ireplace($ignore_keywords, '', $item['title']);
             if (trim($match) != trim($item['title'])) {
                 unset($res_media_db[$key]);
-                //echo "Dropping by word " . $item['title'] . "<br>";
             }
         }
     }
 
     //ignore_size
-    if (!empty($cfg['new_ignore_size_enable']) && !empty($cfg['new_ignore_size'])) {
+    if (!empty($prefs->getPrefsItem('new_ignore_size_enable')) && !empty($prefs->getPrefsItem('new_ignore_size'))) {
         foreach ($res_media_db as $key => $item) {
             $gbytes = round(bytesToGB($item['size']), 2);
-            if ($gbytes > trim($cfg['new_ignore_size'])) {
+            if ($gbytes > trim($prefs->getPrefsItem('new_ignore_size'))) {
                 unset($res_media_db[$key]);
-                //echo "Dropping by size" . $item['title'] . ":$gbytes<br>";
             }
         }
     }
@@ -138,7 +136,7 @@ function page_new_media(string $media_type) {
 }
 
 function mix_media_res(array $res_media_db) {
-    global $cfg;
+    global $prefs;
 
     $indexers = [];
     $media = [];
@@ -154,7 +152,8 @@ function mix_media_res(array $res_media_db) {
     $indexers_names = [];
     //filter indexers
     foreach ($indexers as $name_key => $indexer) {
-        if (empty($cfg['sel_indexer']) || strtolower($cfg['sel_indexer']) == strtolower($name_key) || $cfg['sel_indexer'] == 'sel_indexer_none') {
+        $sel_indexer = $prefs->getPrefsItem('sel_indexer');
+        if (empty($sel_indexer) || strtolower($sel_indexer) == strtolower($name_key) || $sel_indexer == 'sel_indexer_none') {
             $indexers_names[] = $name_key;
             $total_indexer = count($indexer);
             if ($total_indexer > $max_items_by_indexer) {
@@ -178,10 +177,10 @@ function mix_media_res(array $res_media_db) {
     $i = 0;
 
     //testing func
-    //That walk throught indexers arrays for mix results, and if in the same indexers (next entry) the  result have same title
-    //its added too, if not change to another indexer for mix results.
+    //This walk throught indexers arrays for mix results, get one from each indexer except  if in the same indexer the next entry
+    // have same title, added too, if not change to another indexer for mix results.
     //Probably must be a better way of doing this. And probably tomorrow i don't
-    //known how works this messy... and is better rewrite again than found a maybe in the future bug.
+    //known how works this messy... and is better rewrite again this than found a maybe future bug.
 
     while (1) {
         if (isset($indexers_names[$indexer_pointer]) && isset($indexers[$indexers_names[$indexer_pointer]][0])) {

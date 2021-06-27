@@ -8,7 +8,7 @@
  *  @copyright Copyright @ 2020 - 2021 Diego Garcia (diego/@/envigo.net)
  */
 /*
- * media_db = all table files
+ * media_db = all media entrys
  * ids = all new ids to identify
  */
 function ident_by_already_have_show(array $media_db, array &$ids) {
@@ -52,14 +52,14 @@ function ident_by_already_have_show(array $media_db, array &$ids) {
  */
 
 function show_identify_media(string $media_type) {
-    global $LNG, $cfg, $db, $frontend;
+    global $LNG, $cfg, $db, $frontend, $prefs;
 
     $titles = '';
-    $i = 0;
     $uniq_shows = [];
     $iurl = '?page=' . Filter::getString('page');
+    $limit = $prefs->getPrefsItem('max_identify_items');
 
-    $result = $db->query("SELECT * FROM library_$media_type WHERE master = '' OR master IS NULL");
+    $result = $db->query("SELECT * FROM library_$media_type WHERE master = '' OR master IS NULL LIMIT $limit");
     $media_library = $db->fetchAll($result);
 
     if (!valid_array($media_library)) {
@@ -83,12 +83,17 @@ function show_identify_media(string $media_type) {
         foreach ($media_library as $auto_ident_item) {
             $auto_ident_ids[] = $auto_ident_item['id'];
         }
-        (isset($auto_ident_ids) && count($auto_ident_ids) > 0 ) ? auto_ident($media_type, $auto_ident_ids) : null;
-        //Need requery for failed automate ident,  TODO: better
-        $result = $db->query("SELECT * FROM library_$media_type WHERE master = '' OR master is NULL");
-        $media_library = $db->fetchAll($result);
-        if (empty($media_library)) {
-            return false;
+        if (isset($auto_ident_ids) && count($auto_ident_ids) > 0) {
+            $return_ids = auto_ident($media_type, $auto_ident_ids);
+        }
+        if ($return_ids && (count($auto_ident_ids) != count($return_ids))) {
+            //Need requery for failed automate ident,  TODO: better
+            $limit = count($return_ids);
+            $result = $db->query("SELECT * FROM library_$media_type WHERE master = '' OR master is NULL LIMIT $limit");
+            $media_library = $db->fetchAll($result);
+            if (empty($media_library)) {
+                return false;
+            }
         }
     }
 
@@ -99,9 +104,6 @@ function show_identify_media(string $media_type) {
         $title_tdata['results_opt'] = '';
         $predictible_title = getFileTitle($item['file_name']);
 
-        if ($i >= $cfg['max_identify_items']) {
-            break;
-        }
         if ($media_type == 'movies') {
             $odb_media = mediadb_searchMovies($predictible_title);
         } else if ($media_type == 'shows') {
@@ -128,16 +130,13 @@ function show_identify_media(string $media_type) {
         $title_tdata['more_iurl'] = '?page=identify&media_type=' . $media_type . '&identify=' . $item['id'];
         $title_tdata['media_type'] = $media_type;
         $titles .= $table = $frontend->getTpl('identify_item', array_merge($item, $title_tdata));
-        $i++;
     }
 
     if (!empty($titles)) {
         $tdata['titles'] = $titles;
         $tdata['head'] = $LNG['L_IDENT_' . strtoupper($media_type) . ''];
 
-        $table = $frontend->getTpl('identify', $tdata);
-
-        return $table;
+        return $frontend->getTpl('identify', $tdata);
     }
     return false;
 }
@@ -154,7 +153,7 @@ function auto_ident(string $media_type, array $ids) {
     }
     $uniq_shows = [];
 
-    foreach ($ids as $id) {
+    foreach ($ids as $key_id => $id) {
         $log->debug("auto_ident by exact called for $id");
         $db_item = $db->getItemById('library_' . $media_type, $id);
         $predictible_title = getFileTitle($db_item['file_name']);
@@ -185,6 +184,7 @@ function auto_ident(string $media_type, array $ids) {
             if (!$found && !$cfg['auto_ident_strict']) {
                 $found = 1;
                 submit_ident($media_type, $search_results[0], $id);
+                unset($ids[$key_id]);
             }
         } else {
             continue;
@@ -192,7 +192,7 @@ function auto_ident(string $media_type, array $ids) {
         !$found ? $log->debug("Auto ident is set but titles not match $db_item_title") : null;
     }
 
-    return true;
+    return $ids;
 }
 
 /*
@@ -217,19 +217,25 @@ function ident_by_idpairs(string $media_type, array $id_pairs) {
  * Ident an item by id pairs
  */
 
-function ident_by_id(string $media_type, $tmdb_id, $id) {
+function ident_by_id(string $media_type, $tmdb_id, $local_id) {
     global $log;
 
-    $log->debug("Ident by ident_by_id called tmdbid: $tmdb_id, id:$id");
+    $log->debug("Ident by ident_by_id called tmdbid: $tmdb_id, id:$local_id");
     $db_data = mediadb_getFromCache($media_type, $tmdb_id);
     if (valid_array($db_data)) {
-        submit_ident($media_type, $db_data, $id);
+        submit_ident($media_type, $db_data, $local_id);
     } else {
         return false;
     }
 
     return true;
 }
+
+/*
+ * Compared file hash agains library_history
+ * Items are added to history when remove the file
+ * Items are not added to history when delete register
+ */
 
 function ident_by_history(string $media_type, array &$ids) {
     global $db, $log;
@@ -276,9 +282,9 @@ function ident_by_history(string $media_type, array &$ids) {
 }
 
 /*
- * This is the final function and all identify options finish here
+ * This is the final identification function and all identify options finish here
  * Here we submit the identification
- * Need the tmdb item and the local id
+ * Need the tmdb item (oitem) and the local id
  */
 
 function submit_ident(string $media_type, array $oitem, $id) {
@@ -323,12 +329,11 @@ function submit_ident(string $media_type, array $oitem, $id) {
         }
     } else {
         if (valid_array($media_in_library)) {
-            //TODO: Fix unusd fields in tmdb_search_ table for avoid  unsets
+            //TODO: Fix unused fields in tmdb_search_ table for avoid  unsets
             $new_item = $oitem;
             $new_item['total_items'] = 1;
             $new_item['total_size'] = $media_in_library['size'];
             $new_item['items_updated'] = time();
-
             unset($new_item['id']);
             unset($new_item['ilink']);
             unset($new_item['elink']);

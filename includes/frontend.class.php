@@ -25,7 +25,7 @@ class FrontEnd {
     }
 
     function getTpl(string $tpl, array $tdata = []) {
-        global $cfg, $LNG, $user; //NO delete need for templates
+        global $cfg, $LNG, $user, $prefs; //NO delete need for templates
 
         ob_start();
         $tpl_file = 'tpl/' . $cfg['theme'] . '/' . $tpl . '.tpl.php';
@@ -65,20 +65,18 @@ class FrontEnd {
     }
 
     function getMenu() {
-        global $cfg, $LNG, $user;
+        global $LNG, $user, $prefs;
 
         if (empty($user) || empty($user['username']) || empty($user['id'])) {
             $user['id'] = 0;
             $user['username'] = $LNG['L_ANONYMOUS'];
         }
         if (isset($_GET['sw_opt'])) {
-            $value = getPrefsItem('hide_opt');
+            $value = $prefs->getPrefsItem('hide_opt');
             if ($value == 0) {
-                setPrefsItem('hide_opt', 1);
-                $cfg['hide_opt'] = 1;
+                $prefs->setPrefsItem('hide_opt', 1);
             } else {
-                setPrefsItem('hide_opt', 0);
-                $cfg['hide_opt'] = 0;
+                $prefs->setPrefsItem('hide_opt', 0);
             }
         }
 
@@ -88,7 +86,7 @@ class FrontEnd {
             $tdata['menu_opt_link'] = "?page=index&sw_opt=1";
         }
 
-        if (empty($cfg['hide_opt'])) {
+        if (empty($prefs->getPrefsItem('hide_opt'))) {
             $tdata['menu_opt'] = $this->getMenuOptions();
             $tdata['arrow'] = '&uarr;';
         } else {
@@ -111,7 +109,7 @@ class FrontEnd {
     }
 
     function getMenuOptions() {
-        global $cfg, $LNG;
+        global $cfg, $LNG, $prefs;
 
         $tdata = [];
 
@@ -121,42 +119,31 @@ class FrontEnd {
         !empty($_GET['search_keyword']) ? $tdata['search_keyword'] = Filter::getString('search_keyword') : null;
 
         if (isset($_POST['num_ident_toshow']) &&
-                ($cfg['max_identify_items'] != $_POST['num_ident_toshow'])
+                ($prefs->getPrefsItem('max_identify_items') != $_POST['num_ident_toshow'])
         ) {
             $num_ident_toshow = Filter::postInt('num_ident_toshow');
-            $cfg['max_identify_items'] = $num_ident_toshow;
-            setPrefsItem('max_identify_items', $num_ident_toshow);
+            $prefs->setPrefsItem('max_identify_items', $num_ident_toshow);
         }
-
         if (isset($_POST['new_ignore_keywords'])) {
-            $cfg['new_ignore_keywords'] = Filter::postString('new_ignore_keywords');
-            setPrefsItem('new_ignore_keywords', $cfg['new_ignore_keywords']);
+            $prefs->setPrefsItem('new_ignore_keywords', Filter::postString('new_ignore_keywords'));
         }
-
         if (isset($_POST['new_ignore_size'])) {
-            $cfg['new_ignore_size'] = Filter::postString('new_ignore_size');
-            setPrefsItem('new_ignore_size', $cfg['new_ignore_size']);
+            $prefs->setPrefsItem('new_ignore_size', Filter::postString('new_ignore_size'));
         }
-
         if (isset($_POST['new_ignore_words_enable'])) {
-            $cfg['new_ignore_words_enable'] = Filter::postString('new_ignore_words_enable');
-            setPrefsItem('new_ignore_words_enable', $cfg['new_ignore_words_enable']);
+            $prefs->setPrefsItem('new_ignore_words_enable', Filter::postString('new_ignore_words_enable'));
         }
-
         if (isset($_POST['new_ignore_size_enable'])) {
-            $cfg['new_ignore_size_enable'] = Filter::postString('new_ignore_size_enable');
-            setPrefsItem('new_ignore_size_enable', $cfg['new_ignore_size_enable']);
+            $prefs->setPrefsItem('new_ignore_size_enable', Filter::postString('new_ignore_size_enable'));
         }
-
         if (isset($_POST['sel_indexer'])) {
-            $cfg['sel_indexer'] = Filter::postString('sel_indexer');
-            setPrefsItem('sel_indexer', $cfg['sel_indexer']);
+            $prefs->setPrefsItem('sel_indexer', Filter::postString('sel_indexer'));
         }
 
-        ($cfg['max_identify_items'] == 0) ? $tdata['max_id_sel_0'] = 'selected' : $tdata['max_id_sel_0'] = '';
+        ($prefs->getPrefsItem('max_identify_items') == 0) ? $tdata['max_id_sel_0'] = 'selected' : $tdata['max_id_sel_0'] = '';
 
         $tdata['max_id_sel_0'] = $tdata['max_id_sel_5'] = $tdata['max_id_sel_10'] = $tdata['max_id_sel_20'] = $tdata['max_id_sel_50'] = '';
-        $tdata['max_id_sel_' . $cfg['max_identify_items'] . ''] = 'selected';
+        $tdata['max_id_sel_' . $prefs->getPrefsItem('max_identify_items') . ''] = 'selected';
 
         /* ROWS */
         $max_rows_sel_none = '';
@@ -166,14 +153,13 @@ class FrontEnd {
                 $max_rows_sel_none = 'selected';
             } else {
                 $num_rows_results = Filter::postInt('num_rows_results');
-                $cfg['tresults_rows'] = $num_rows_results;
-                setPrefsItem('tresults_rows', $num_rows_results);
+                $prefs->setPrefsItem('tresults_rows', $num_rows_results);
             }
         }
 
         $tdata['max_rows_sel_1'] = $tdata['max_rows_sel_2'] = $tdata['max_rows_sel_4'] = $tdata['max_rows_sel_6'] = $tdata['max_rows_sel_8'] = '';
         $tdata['max_rows_sel_10'] = $tdata['max_rows_sel_25'] = $tdata['max_rows_sel_50'] = '';
-        $tdata['max_rows_sel_' . $cfg['tresults_rows'] . ''] = 'selected';
+        $tdata['max_rows_sel_' . $prefs->getPrefsItem('tresults_rows') . ''] = 'selected';
         $tdata['max_rows_sel_none'] = $max_rows_sel_none;
         /* COLUMNS */
 
@@ -184,23 +170,21 @@ class FrontEnd {
                 $max_columns_sel_none = 'selected';
             } else {
                 $num_columns_results = Filter::postInt('num_columns_results');
-                $cfg['tresults_columns'] = $num_columns_results;
-                setPrefsItem('tresults_columns', $num_columns_results);
+                $prefs->setPrefsItem('tresults_columns', $num_columns_results);
             }
         }
-
         $tdata['max_columns_sel_1'] = $tdata['max_columns_sel_2'] = $tdata['max_columns_sel_4'] = $tdata['max_columns_sel_6'] = '';
         $tdata['max_columns_sel_8'] = $tdata['max_columns_sel_10'] = '';
-        $tdata['max_columns_sel_' . $cfg['tresults_columns'] . ''] = 'selected';
+        $tdata['max_columns_sel_' . $prefs->getPrefsItem('tresults_columns') . ''] = 'selected';
         $tdata['max_columns_sel_none'] = $max_columns_sel_none;
 
         //new filters
-        (!empty($cfg['sel_indexer']) && $cfg['sel_indexer'] == 'sel_indexer_none') ? $selected_idx_none = 'selected' : $selected_idx_none = '';
+        (!empty($prefs->getPrefsItem('sel_indexer')) && $prefs->getPrefsItem('sel_indexer') == 'sel_indexer_none') ? $selected_idx_none = 'selected' : $selected_idx_none = '';
 
         $tdata['sel_indexers'] = '<option ' . $selected_idx_none . ' value="sel_indexer_none">' . $LNG['L_ALL'] . '</option>';
 
         foreach ($cfg['jackett_indexers'] as $indexer) {
-            (isset($cfg['sel_indexer']) && $cfg['sel_indexer'] == $indexer) ? $selected_indexer = 'selected="selected"' : $selected_indexer = '';
+            (!empty($prefs->getPrefsItem('sel_indexer')) && $prefs->getPrefsItem('sel_indexer') == $indexer) ? $selected_indexer = 'selected="selected"' : $selected_indexer = '';
             $tdata['sel_indexers'] .= '<option ' . $selected_indexer . ' value="' . $indexer . '">' . $indexer . '</option>';
         }
         /* FIN */

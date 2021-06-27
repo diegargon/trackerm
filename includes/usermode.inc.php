@@ -17,7 +17,7 @@ if (!empty($cfg['only_local_net']) && !is_local_ip()) {
 
 require_once('includes/user.inc.php');
 require_once('includes/session.inc.php');
-loadUserPrefs();
+$prefs = new Preferences($user['id']);
 require_once('includes/html.class.php');
 require_once('includes/pages.inc.php');
 require_once('includes/html.common.php');

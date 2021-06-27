@@ -10,14 +10,15 @@
 !defined('IN_WEB') ? exit : true;
 
 function rebuild($media_type, $paths) {
-    global $log;
+    global $log, $prefs;
     //r_blocker prevent forever locks, if more than 3 consecutive locks (probably get stuck, resetting)
-    if (($r_blocker = getPrefsItem('rebuild_blocker', true)) && $r_blocker <= 3) {
-        setPrefsItem('rebuild_blocker', ++$r_blocker, true);
+    if (($r_blocker = $prefs->getPrefsItem('rebuild_blocker', true)) && $r_blocker <= 3) {
+        $prefs->setPrefsItem('rebuild_blocker', ++$r_blocker, true);
         $log->warning("Rebuild: blocked ($r_blocker)");
         return false;
     }
-    setPrefsItem('rebuild_blocker', 1, true);
+    /* Block for avoid cli & user rebuild same time */
+    $prefs->setPrefsItem('rebuild_blocker', 1, true);
 
     if (valid_array($paths)) {
         foreach ($paths as $path) {
@@ -27,8 +28,7 @@ function rebuild($media_type, $paths) {
     } else {
         _rebuild($media_type, $paths);
     }
-
-    setPrefsItem('rebuild_blocker', 0, true);
+    $prefs->setPrefsItem('rebuild_blocker', 0, true);
 }
 
 function _rebuild($media_type, $path) {
@@ -65,7 +65,7 @@ function _rebuild($media_type, $path) {
                 $hash = null;
                 $filesize = null;
             }
-
+            /* Todo: Since use of master we not need some fields */
             $items[$i] = [
                 'file_name' => $file_name,
                 'size' => $filesize,
@@ -166,6 +166,11 @@ function getLibraryStats() {
     return $stats;
 }
 
+/*
+ * Check database against files for deleted files. Exec before rebuild
+ * if files was remove keep a library_history entry for reidentify with file_hash and delete the entry
+ */
+
 function clean_database($media_type, $files, $media) {
     global $log, $db, $LNG;
 
@@ -212,6 +217,10 @@ function clean_database($media_type, $files, $media) {
     }
 }
 
+/*
+ * Search and clean broken links
+ */
+
 function linked_files_check(array &$files) {
     global $log;
 
@@ -252,6 +261,10 @@ function linked_files_check(array &$files) {
         }
     }
 }
+
+/*
+ * Check integrity of items,size of master
+ */
 
 function check_master_stats() {
     global $db, $log;
@@ -334,13 +347,17 @@ function get_have_shows_season($oid, $season) {
     return valid_array($shows) ? $shows : false;
 }
 
+/*
+ * Update total_size, total_items on masters
+ * Values use in index stats
+ */
+
 function update_library_stats() {
     global $db, $log;
 
+    $log->debug('Updating library stats');
     $movies_size = 0;
     $shows_size = 0;
-
-    $log->debug('Updating library stats');
 
     $results = $db->query('SELECT total_size FROM library_master_movies');
     $movies_db = $db->fetchAll($results);
@@ -354,8 +371,6 @@ function update_library_stats() {
         }
         $movies_size = human_filesize($movies_size);
     }
-
-
     $results = $db->query('SELECT total_size,total_items FROM library_master_shows');
     $shows_db = $db->fetchAll($results);
     $num_shows = count($shows_db);

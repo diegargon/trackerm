@@ -65,7 +65,8 @@ require_once('includes/jackett.inc.php');
 require_once('includes/wanted.inc.php');
 require_once('vendor/autoload.php');
 require_once('includes/utils.inc.php');
-require_once('includes/prefs.inc.php');
+require_once('includes/Preferences.class.php');
+
 !empty($cfg['localplayer']) ? require_once('includes/localplayer.inc.php') : null;
 
 global $trans;

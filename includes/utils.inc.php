@@ -32,6 +32,8 @@ function clean_title($title) {
     return trim($title);
 }
 
+/* UNUSED: keep for if want change how clean_title clean */
+
 function set_clean_titles() {
     global $db;
 
@@ -118,6 +120,8 @@ function get_operating_system() {
     return $operating_system;
 }
 
+/* Valid array is a array with at least one element */
+
 function valid_array($array) {
     if (!empty($array) && is_array($array) && count($array) > 0) {
         return true;
@@ -125,6 +129,8 @@ function valid_array($array) {
 
     return false;
 }
+
+/* Valid object is a object with at least one element */
 
 function valid_object($object) {
     if (!empty($object) && is_object($object) && count(array($object)) > 0) {
@@ -135,7 +141,7 @@ function valid_object($object) {
 }
 
 function notify_mail($msg) {
-    global $db, $LNG;
+    global $db, $LNG, $prefs;
 
     $tag = "[TRACKERM] ";
     $subject = $tag . $msg['subject'];
@@ -157,7 +163,7 @@ function notify_mail($msg) {
     $users = $db->fetchAll($results);
 
     foreach ($users as $user) {
-        if (getPrefValueByUid($user['id'], 'email_notify')) {
+        if ($prefs->getPrefValueByUid($user['id'], 'email_notify')) {
             mail($user['email'], $subject, $msg['msg'], "From: no@reply \r\n");
         }
     }
