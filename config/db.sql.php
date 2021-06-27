@@ -967,6 +967,8 @@ function update_db($from) {
 
 
     if ($from < 18) {
+        $db->query('DELETE FROM jackett_movies');
+        $db->query('DELETE FROM jackett_shows');
         $db->query('ALTER TABLE jackett_shows add column freelech INT NULL');
         $db->query('ALTER TABLE jackett_movies add column freelech INT NULL');
         $db->query('UPDATE config SET cfg_value=\'18\' WHERE cfg_key=\'db_version\' LIMIT 1');
