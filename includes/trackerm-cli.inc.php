@@ -1224,14 +1224,14 @@ function update_things() {
         $db->update('config', ['cfg_value' => $time_now], ['cfg_key' => ['value' => 'cron_halfday']]);
         update_library_stats();
         hash_missing();
+        //delete from wanted orphans (a orphans is create if user delete the torrent outside trackerm
+        delete_direct_orphans();
     }
     if (($cfg['cron_daily'] + 8640) < $time_now) {
         $db->update('config', ['cfg_value' => $time_now], ['cfg_key' => ['value' => 'cron_daily']]);
         update_masters();
         check_master_stats();
         update_seasons();
-        //delete from wanted orphans (a orphans is create if user delete the torrent outside trackerm
-        delete_direct_orphans();
     }
 
     if (($cfg['cron_weekly'] + 604800) < $time_now) {
