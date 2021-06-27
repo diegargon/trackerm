@@ -16,6 +16,7 @@
     <input class="submit_btn" type="submit" name="more_torrents" value="<?= $LNG['L_SHOW_TORRENTS'] ?>" >
     <input type="text" name="search_movies_db" value="<?= $tdata['stitle'] ?>">
 </form>
+<a href="https://www.themoviedb.org/search?query=<?= $tdata['stitle'] ?>" target="_blank">[TMDB]</a> -
 <a href="https://www.imdb.com/find?q=<?= $tdata['stitle'] ?>" target="_blank">[IMDB]</a> -
 <a href="https://www.filmaffinity.com/<?= substr($cfg['LANG'], 0, 2) ?>/search.php?stext=<?= $tdata['stitle'] ?>" target="_blank">[FA]</a> -
 <a href="https://www.metacritic.com/search/all/<?= $tdata['stitle'] ?>/results" target="_blank">[M]</a> -
