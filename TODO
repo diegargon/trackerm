@@ -9,6 +9,9 @@
             cada vez que se baje algo, ver casos. track_show necesitaba rebuild 
     [IMPROVE] Prefs to class
     [IMPROVE] Add year
+    [IMPROVE] jackket_* comprobar si se puede actualizar facilmente por el freelech o si no borrar cache semanalmente o asi
+    [IMPROVE] only_freelech filter on new&torrents
+    [IMPROVE] Ver si es facil pasasar ignorar y tamaño aparte de new a torrents.
 [MED]      
     [IMPROVE] Add option for avoid tags on files.
     [IMPROVE] Si se borra manualmente un torrente bajado quedara el bd huerfanos. OPCION ORPHAN. 

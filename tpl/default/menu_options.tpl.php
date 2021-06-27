@@ -19,7 +19,7 @@
                 <option <?= $tdata['max_id_sel_50'] ?> value="50">50</option>
             </select>
         <?php } ?>
-        <?php if ($tdata['page'] != 'wanted' && $tdata['page'] != 'transmission' && $tdata['page'] != 'index') { ?>
+        <?php if (!in_array($tdata['page'], ['wanted', 'transmission', 'index', 'view'])) { ?>
             <?= $LNG['L_COLUMNS'] ?>:
             <select name="num_columns_results" onChange="this.form.submit()">
                 <option <?= $tdata['max_columns_sel_none'] ?> id="default"><?= $LNG['L_DEFAULT'] ?></option>
@@ -59,7 +59,7 @@
             <select name="sel_indexer" onChange="this.form.submit()">
                 <?= $tdata['sel_indexers'] ?>
             </select>
-        <?php
+            <?php
         }
         if (!empty($tdata['page']) && in_array($tdata['page'], ['news', 'new_movies', 'new_shows'])) {
             ?>
@@ -79,6 +79,6 @@
                     <input type="text" size="2"  name="new_ignore_size" onChange="this.form.submit()" value="<?= !empty($prefs->getPrefsItem('new_ignore_size')) ? $prefs->getPrefsItem('new_ignore_size') : null ?>"/>
                 </div>
             </div>
-<?php } ?>
+        <?php } ?>
     </form>
 </div>
