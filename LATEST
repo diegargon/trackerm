@@ -1,6 +1,8 @@
 ## Latest / News (Relevant)
 
-[26/06] Fix manual identify that cause in shows only identify one file instead of all files nonidentified
+[28/06] Added Filters on torrent search
+[27/06] Freelech: Banner Head color Green for freelech or red for no freelech + Filter Only Freelech
+[26/06] Fix manual identify that cause in shows only identify one file instead of all files (in case of multiple chapters found)
 [26/06] Delete register clean all registers related to that master not only the selected
 [********** COMMIT **********]
 [25/06] Added to view/shows Identify All, reidentify one file choose file and identify, reidentify all files in the group "identify all"
