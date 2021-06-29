@@ -33,8 +33,6 @@ function search_media_torrents($media_type, $search) {
         return false;
     }
 
-    $search_words = clean_title($search_words);
-
     if ($cfg['search_cache']) {
         $media_cache_check = $db->getItemByField($jackett_search_media_cache, 'words', $search_words);
         !isset($media_cache_check['updated']) ? $media_cache_check['updated'] = 0 : null;
@@ -113,7 +111,6 @@ function search_media_torrents($media_type, $search) {
     /* Here if the search contains the SxxExx where delete results without year */
     if (preg_match('/S\d{2}E\d{2}/i', $search_words, $match) == 1) {
         $episode = trim($match[0]);
-
         foreach ($media_db as $item_key => $item) {
             $item_title = $item['title'];
             if (!(stripos($item_title, $episode))) {
