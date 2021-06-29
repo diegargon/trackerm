@@ -303,7 +303,7 @@ function themoviedb_getFromCache($media_type, $id) {
     }
     $response_item[] = curl_get_tmdb($url);
 
-    if (valid_array($response_item['results']) && $response_item['results'] !== false) {
+    if (isset($response_item['results']) && valid_array($response_item['results'])) {
         $log->err('getFromCache: remote database id ' . $id . ' for ' . $media_type . ' not exists');
         return false;
     }
@@ -338,7 +338,7 @@ function themoviedb_getPopular() {
     }
     if ($cfg['want_shows']) {
         $response_items = curl_get_tmdb($shows_url);
-        if (valid_array($response_items['results']) && $response_items['results'] !== false) {
+        if (isset($response_items['results']) && valid_array($response_items['results'])) {
             themoviedb_updateCache('_POPULAR_', $response_items, 'shows');
             $results['shows'] = themoviedb_MediaPrep('shows', $response_items['results']);
         }
@@ -367,7 +367,7 @@ function themoviedb_getTrending() {
     }
     if ($cfg['want_shows']) {
         $response_items = curl_get_tmdb($shows_url);
-        if (valid_array($response_items['results']) && $response_items['results'] !== false) {
+        if (isset($response_items['results']) && valid_array($response_items['results'])) {
             themoviedb_updateCache('_TRENDING_', $response_items, 'shows');
             $results['shows'] = themoviedb_MediaPrep('shows', $response_items['results']);
         }
@@ -386,7 +386,7 @@ function themoviedb_getTodayShows() {
 
     $shows_url = 'https://api.themoviedb.org/3/tv/airing_today?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['TMDB_LANG'];
     $response_items = curl_get_tmdb($shows_url);
-    if (valid_array($response_items['results']) && $response_items['results'] !== false) {
+    if (isset($response_items['results']) && valid_array($response_items['results'])) {
         themoviedb_updateCache('_TODAY_SHOWS_', $response_items, 'shows');
         $results['shows'] = themoviedb_MediaPrep('shows', $response_items['results']);
     }
