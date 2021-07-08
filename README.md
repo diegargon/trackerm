@@ -4,6 +4,26 @@
 
 # trackerm
 
+## Features:
+    - For Movies & Shows 
+    - Track shows: Download next episodes and old episodes if you specify (From SXXEXX).            
+    - Wanted List: Add movies/shows to wanted and TrackerM will download automatically when some tracker release.
+    - Multiple options for tracker/wanted: Ignore/Require Keywords, Quality Preference PROPER, etc
+    - transmission-daemon integration (Sorry only works with transmission-daemon atm)
+    - TheMovieDB search, show popular, trending.
+    - Torrents search: Limit by Indexer, Filter Words, Filter Size, Freelech filter
+    - Torrent show latest releases from you indexers.
+    - Trailers & Covers guess for missing covers
+    - Library: Search you library
+    - Library: Download button
+    - Library: Local Player (no active by default, see config options), play you movies/shows  launching VLC just clicking (share volumes must be accesible)
+    - Library: Stats
+    - Users: Basic IU designed for multiple users, password access, limit local ips (config)
+    - Email: Automatically send email download new media
+    - Automatically link(when seeding) and move (finish seeding) from transmission-daemon download directory to your library
+    - Proxy support
+    - Cache Covers
+    - Automatically disable (temporally) indexers offline
 ## Description: 
 
 **ENGLISH**

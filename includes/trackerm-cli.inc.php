@@ -790,7 +790,7 @@ function wanted_check_flags($wanted, $results) {
 }
 
 function tracker_shows($wanted) {
-    global $db, $cfg, $log, $LNG;
+    global $db, $cfg, $log;
 
     $from_season = $wanted['season'];
     $from_episode = $wanted['episode'];
@@ -830,7 +830,7 @@ function tracker_shows($wanted) {
     $nocount = 0;
     foreach ($items_match as $item_match) {
         if ($item_match['ignore_count']) {
-            $nocount ++;
+            $nocount++;
         }
     }
     //From all the episode that meet the criteria check if already have that item
@@ -901,7 +901,6 @@ function tracker_shows($wanted) {
 
 function send_transmission($results) {
     global $db, $cfg, $trans;
-
 
     foreach ($results as $result) {
 

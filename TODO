@@ -1,8 +1,6 @@
--[TODO]
+[TODO]
 
 [HIGH]
-    [IMPROVE] Import path    
-    [IMPROVE] Indexers to config        
     [IMPROVE] Masters shows al meter un episodio actualiza master ?¿
     [IMPROVE] update tmdb trailer ¿es necesario? ahora tmdb cache se limpia
     [IMPROVE] Revisar rebuilds en cli a ver si se puede meter en el cron, quizas sea necesario un rebuild
@@ -10,6 +8,10 @@
      [IMPROVE] Add year ¿?¿?
     [IMPROVE] jackket_* comprobar si se puede actualizar facilmente por el freelech o si no borrar cache semanalmente o asi
     [IMPROVE] New/Torrent marcar como que la tengo (imagen superpuesta caratula)
+    [IMPROVE][NEW] Ordenamiento: Cambiar, si un tracker no actualiza sus torrents en mucho tiempo con el sistema actual siempre apareceran sus ultimos torrents
+        en la primera pagina.
+    [FIX] Si no hay espacio en torrent temp transmission no mueve pero para trackerm consta que esta finalizado y intenta enlazarlo pero sige en temp no en 
+    finalize/Ultimo.    
 [MED]      
     [IMPROVE] Add option for not add tags on move files.
     [IMPROVE] Si se borra manualmente un torrente bajado quedara el bd huerfanos. OPCION ORPHAN. 
@@ -18,9 +20,9 @@
     [COMPLETE] Finish Filters & Security
     [IMPROVE][CLI] Clean old query search caches entrys
     [IMPROVE] Reduce querys on Wanted, TMDB
-    [FIX] Si no hay espacio en torrent temp transmission no mueve pero para trackerm consta que esta finalizado y intenta enlazarlo pero sige en temp no en 
-    finalize/Ultimo.    
     [FIX/CHECK] do not contemplate yet what to do if tmdb not found any results.    
+    [IMPROVE] Import path    
+    [IMPROVE] Indexers to config        
 [VERY LOW]
     [IMPROVE] Rewrite pager its messy
     [IMPROVE] Log,  posibilidad de emitir un mensaje que solo se envia si no se envio otro igual en X tiempo, ideal para para addstatemsg y no spamear.
