@@ -7,7 +7,7 @@
  *  @subpackage
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  *
- * v0.31
+ * v0.32
  */
 !defined('IN_WEB') ? exit : true;
 
@@ -62,13 +62,14 @@ class Html {
         } else {
             $params = '';
         }
+        $inpage = '';
         empty($display_name) ? $display_name = $url : null;
         isset($conf['class']) ? $opt .= 'class="' . $conf['class'] . '" ' : null;
         isset($conf['_blank']) ? $opt .= 'target=_blank ' : null;
         isset($conf['id']) ? $opt .= 'id="' . $conf['id'] . '" ' : null;
         isset($conf['onClick']) ? $opt .= 'onClick="' . $conf['onClick'] . '" ' : null;
-
-        return '<a ' . $opt . ' href="' . $url . $params . '">' . $display_name . '</a>';
+        !empty($conf['inpage']) ? $inpage .= '#' . $conf['inpage'] : null;
+        return '<a ' . $opt . ' href="' . $url . $params . $inpage . '">' . $display_name . '</a>';
     }
 
     static function input(array $conf) {

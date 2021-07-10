@@ -21,7 +21,12 @@ function buildTable($head, $db_ary, $topt = null) {
     $max_items = $rows * $columns;
 
     $page = '<div class="type_head_container">';
-    !empty($head) ? $page .= '<div class="type_head"><h2>' . $LNG[$head] . '</h2></div>' : null;
+    if (!empty($head)) {
+        $page .= '<div class="type_head"><h2>' . $LNG[$head] . '</h2></div>';
+        if (!empty($topt['search_type'])) {
+            $page .= '<a id="' . $topt['search_type'] . '"></a>';
+        }
+    }
 
     if (!isset($topt['no_pages'])) {
         empty($topt['num_table_rows']) ? $npages = count($db_ary) : $npages = $topt['num_table_rows'];
@@ -123,6 +128,7 @@ function pager($npage, $nitems, &$topt) {
     $num_pages = ceil($nitems / $items_per_page);
     $search_type = Filter::getUtf8('search_type');
     $page = Filter::getString('page');
+    $inpage = '';
 
     if (isset($topt['search_type']) && $topt['search_type'] != $search_type) {
         $npage = 1;
@@ -158,6 +164,7 @@ function pager($npage, $nitems, &$topt) {
 
                 if (!empty($topt['search_type'])) {
                     $get_params['search_type'] = $topt['search_type'];
+                    $inpage = $topt['search_type'];
                 }
 
                 if (isset($npage) && ($npage == $i)) {
@@ -169,7 +176,7 @@ function pager($npage, $nitems, &$topt) {
                 }
                 $get_params['npage'] = $i;
 
-                $pages_links .= html::link(['onClick' => 'show_loading()', 'class' => $link_npage_class], '', $i, $get_params);
+                $pages_links .= html::link(['onClick' => 'show_loading()', 'inpage' => $inpage, 'class' => $link_npage_class], '', $i, $get_params);
             }
         }
     }
