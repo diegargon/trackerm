@@ -7,6 +7,17 @@
  *  @subpackage
  *  @copyright Copyright @ 2020 - 2021 Diego Garcia (diego/@/envigo.net)
  */
+function torrents_filters(&$results) {
+    //Ignore words
+    torrents_filter_words($results);
+    //Ignore_size
+    torrents_filter_size($results);
+    //Selected indexer
+    torrents_filter_indexers($results);
+    //Only freelech
+    torrents_filter_only_freelech($results);
+}
+
 function torrents_filter_words(&$torrent_results) {
     global $prefs;
 
