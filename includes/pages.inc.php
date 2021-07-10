@@ -317,6 +317,11 @@ function page_torrents() {
         torrents_filter_indexers($m_results);
         //Only freelech
         torrents_filter_only_freelech($m_results);
+
+        usort($m_results, function ($a, $b) {
+            return $b['id'] - $a['id'];
+        });
+
         if (valid_array($m_results)) {
             $m_results = mix_media_res($m_results);
             $topt['view_type'] = 'movies_torrent';
@@ -340,6 +345,11 @@ function page_torrents() {
         torrents_filter_indexers($m_results);
         //Only freelech
         torrents_filter_only_freelech($m_results);
+
+        usort($m_results, function ($a, $b) {
+            return strcmp($b['title'], $a['title']);
+        });
+
         if (valid_array($m_results)) {
             $m_results = mix_media_res($m_results);
             $topt['view_type'] = 'shows_torrent';
