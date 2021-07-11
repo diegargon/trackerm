@@ -30,7 +30,6 @@ function create_db() {
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
        )');
 
-
     $db->insert('users', ["username" => "default", "isAdmin" => 1]);
 
     // PREFERENCES
@@ -493,7 +492,6 @@ function create_db() {
 
 function update_db($from) {
     global $db;
-
 
     if ($from < 2) {
         $query = 'ALTER TABLE wanted add column hashstring VARCHAR NULL';
@@ -978,6 +976,7 @@ function update_db($from) {
 
     /*
       if ($from < 19) {
+      $db->insert('config', ['cfg_key' => 'rename_notags', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_RENAME_NOTAGS', 'type' => 3, 'category' => 'L_FILES, 'public' => 0]);
       $db->query('UPDATE config SET cfg_value=\'19\' WHERE cfg_key=\'db_version\' LIMIT 1');
       $db->query('VACUUM;');
       }
