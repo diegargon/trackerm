@@ -96,7 +96,11 @@
                     <?php } ?>
 
                     <?php !empty($tdata['follow_show']) ? print $tdata['follow_show'] : null; ?>
+                    <?php if (!empty($tdata['custom_poster_btn']) && !empty($tdata['user']['isAdmin'])) { ?>
+                        <a class="action_link" href="?page=view&id=<?= $tdata['id'] ?>&view_type=<?= $tdata['view_type'] ?>&show_custom_poster=1"><?= $LNG['L_CUSTOM_POSTER'] ?></a>
+                    <?php } ?>
                 </div>
+
                 <?php if (!empty($tdata['download'])) { ?>
                     <div class="view_download">
                         <form id="download_url" class="form_inline" method="POST" action="">
@@ -104,6 +108,14 @@
                             <input type="hidden" name="download" value="<?= $tdata['download'] ?>"/>
                         </form>
 
+                    </div>
+                <?php } ?>
+                <?php if (!empty($tdata['show_custom_poster'])) { ?>
+                    <div class="custom_poster_div">
+                        <form id="change_custom_poster" class="form_inline" method="POST" action="">
+                            <input type="text" name="new_custom_poster" size="40" placeholder="https://example.com/poster.jpg" value="<?= $tdata['custom_poster'] ?>"/>
+                            <input type="submit" name="change_custom_poster" class="action_link" value="<?= $LNG['L_CHANGE'] ?>"/>
+                        </form>
                     </div>
                 <?php } ?>
                 <?php if (!empty($tdata['seasons_data'])) { ?>

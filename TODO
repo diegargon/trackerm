@@ -13,6 +13,7 @@
     [FIX] Si no hay espacio en torrent temp transmission no mueve pero para trackerm consta que esta finalizado y intenta enlazarlo pero sige en temp no en 
     finalize/Ultimo.    
 [MED]      
+    [IMPROVE] Library: add sort options
     [IMPROVE] Add option for not add tags on move files.
     [IMPROVE] Si se borra manualmente un torrente bajado quedara el bd huerfanos. OPCION ORPHAN. 
         Buscar archivos multimedia en el TORRENT DIR y buscar la forma de determina si coincide con alguno en la base de datos
@@ -25,8 +26,7 @@
     [IMPROVE] Indexers to config        
 [VERY LOW]
     [IMPROVE] Rewrite pager its messy
-    [IMPROVE] Log,  posibilidad de emitir un mensaje que solo se envia si no se envio otro igual en X tiempo, ideal para para addstatemsg y no spamear.
-    [IMPROVE][VIEW] add edit custom poster. (need master)
+    [IMPROVE] Log,  posibilidad de emitir un mensaje que solo se envia si no se envio otro igual en X tiempo, ideal para para addstatemsg y no spamear.    
     [FIX/IMPROVE] Normalize dates 
     [FIX] A la hora de identificar las series siguientes capitulos los identifica por el predictible_title, si hubiera varias series con el mismo titulo habria problemas. 
     [IMPROVE] Too much messy code...

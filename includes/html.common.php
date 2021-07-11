@@ -83,7 +83,7 @@ function buildTable($head, $db_ary, $topt = null) {
 }
 
 function build_item($item, $topt) {
-    global $cfg, $frontend;
+    global $frontend;
 
     $page = '';
 
@@ -93,22 +93,8 @@ function build_item($item, $topt) {
         $item['title'] = $item['title'] . ' (' . strftime("%Y", strtotime($item['release'])) . ')';
     }
 
-    if ($cfg['cache_images']) {
-        if (!empty($item['poster'])) {
-            $cache_img_response = cache_img($item['poster']);
-            if ($cache_img_response !== false) {
-                $item['poster'] = $cache_img_response;
-            }
-        } else if (!empty($item['guessed_poster']) && $item['guessed_poster'] != -1) {
-            $cache_img_response = cache_img($item['guessed_poster']);
-            if ($cache_img_response !== false) {
-                $item['poster'] = $cache_img_response;
-            }
-        }
-    } else if (empty($item['poster']) && !empty($item['guessed_poster'])) {
-        $item['pòster'] = $item['guessed_poster'];
-    }
-    empty($item['poster']) ? $item['poster'] = $cfg['img_url'] . '/not_available.jpg' : null;
+    $item['poster'] = get_poster($item);
+
     empty($item['trailer']) && !empty($item['guessed_trailer']) && $item['guessed_trailer'] != -1 ? $item['trailer'] = $item['guessed_trailer'] : null;
 
     $page .= $frontend->getTpl('item_display', array_merge($item, $topt));

@@ -10,7 +10,7 @@
 !defined('IN_WEB') ? exit : true;
 
 function view() {
-    global $cfg, $db, $frontend;
+    global $cfg, $db, $frontend, $user;
 
     $view_type = Filter::getString('view_type');
     $id = Filter::getInt('id');
@@ -22,12 +22,19 @@ function view() {
         $table = 'library_master_movies';
         $media_type = 'movies';
         $other['reidentify'] = 1;
-        $other['deletereg'] = 1;
+        if ($user['isAdmin']) {
+
+            $other['deletereg'] = 1;
+            $other['custom_poster_btn'] = 1;
+        }
     } else if ($view_type == 'shows_library') {
         $table = 'library_master_shows';
         $media_type = 'shows';
         $other['reidentify'] = 1;
-        $other['deletereg'] = 1;
+        if ($user['isAdmin']) {
+            $other['deletereg'] = 1;
+            $other['custom_poster_btn'] = 1;
+        }
     } else if ($view_type == 'movies_torrent') {
         $table = 'jackett_movies';
         $media_type = 'movies';
@@ -44,6 +51,8 @@ function view() {
     } else {
         return false;
     }
+    !empty($_GET['show_custom_poster']) && $user['isAdmin'] ? $other['show_custom_poster'] = 1 : null;
+
     $other['view_type'] = $view_type;
     $item = $db->getItemById($table, $id);
 
@@ -65,22 +74,17 @@ function view() {
     }
     !empty($item['total_size']) ? $item['total_size'] = human_filesize($item['total_size']) : null;
 
-    if ($cfg['cache_images']) {
-        if (!empty($item['poster'])) {
-            $cache_img_response = cache_img($item['poster']);
-            if ($cache_img_response !== false) {
-                $item['poster'] = $cache_img_response;
-            }
-        } else if (!empty($item['guessed_poster']) && $item['guessed_poster'] != -1) {
-            $cache_img_response = cache_img($item['guessed_poster']);
-            if ($cache_img_response !== false) {
-                $item['poster'] = $cache_img_response;
-            }
+    if (!empty($_POST['change_custom_poster']) && $user['isAdmin']) {
+        if (empty($_POST['new_custom_poster'])) {
+            $new_poster = '';
+        } else {
+            $new_poster = Filter::postUrl('new_custom_poster');
         }
-    } else if (empty($item['poster']) && !empty($item['guessed_poster'])) {
-        $item['pòster'] = $item['guessed_poster'];
+        $db->updateItemById('library_master_' . $media_type, $id, ['custom_poster' => $new_poster]);
+        $item['custom_poster'] = $new_poster;
     }
-    empty($item['poster']) ? $item['poster'] = $cfg['img_url'] . '/not_available.jpg' : null;
+
+    $item['poster'] = get_poster($item);
 
     $other['extra'] = '';
     $opt['auto_show_torrents'] = 0;
@@ -106,7 +110,7 @@ function view() {
     if ($view_type == 'movies_library' || $view_type == 'shows_library') {
         $other['media_files'] = get_media_files($id, $media_type);
     }
-
+    $other['user'] = $user; //avoid merge, id comflict if merge
     $page = $frontend->getTpl('view', array_merge($item, $other));
 
     return $page;
