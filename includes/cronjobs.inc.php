@@ -14,9 +14,11 @@ function cronjobs() {
 
     $time_now = time();
 
-    if (($cfg['cron_quarter'] + 900) < $time_now) {
-        $db->update('config', ['cfg_value' => $time_now], ['cfg_key' => ['value' => 'cron_quarter']]);
-    }
+    /*
+      if (($cfg['cron_quarter'] + 900) < $time_now) {
+      $db->update('config', ['cfg_value' => $time_now], ['cfg_key' => ['value' => 'cron_quarter']]);
+      }
+     */
 
     if (($cfg['cron_hourly'] + 3600) < $time_now) {
         $db->update('config', ['cfg_value' => $time_now], ['cfg_key' => ['value' => 'cron_hourly']]);
@@ -49,7 +51,6 @@ function cronjobs() {
         $db->query('VACUUM');
     }
 
-    //update_trailers();
     // Upgrading v4 change how clean works, must empty the field and redo, not need know
     // keep for future changes
     //set_clean_titles();
@@ -138,9 +139,7 @@ function delete_direct_orphans() {
                     break;
                 }
             }
-            if (!$found) {
-                $db->deleteItemById('wanted', $item['id']);
-            }
+            (!$found) ? $db->deleteItemById('wanted', $item['id']) : null;
         }
     }
 }
@@ -148,7 +147,8 @@ function delete_direct_orphans() {
 function check_masters_childs_integrity() {
     global $db, $log;
 
-    //check if any master have no childs.
+    //check if any master have no childs and childs pointing to a non exists master
+
     foreach (['movies', 'shows'] as $media_type) {
         $library_master = 'library_master_' . $media_type;
         $library = 'library_' . $media_type;
@@ -171,12 +171,12 @@ function check_masters_childs_integrity() {
         foreach ($childs as $child) {
             $delete_child = 0;
             if (empty($child['master']) && !empty($child['themoviedb_id'])) {
-                $log->warning('Detected empty master from identify child delete to reidentify: ' . $child['id']);
+                $log->warning('Detected identified child with empty master, deleting for reidentify: ' . $child['id']);
                 $delete_child = 1;
             }
             if (!empty($child['master']) && !empty($child['themoviedb_id'])) {
                 if (array_search($child['master'], array_column($masters, 'id')) === false) {
-                    $log->warning(' Detected an identify child with a missing master (' . $child['master'] . '), delete to reidentify tmdbid: ' . $child['id']);
+                    $log->warning(' Detected an identify child with a missing master (' . $child['master'] . '), delete for reidentify tmdbid: ' . $child['id']);
                     $delete_child = 1;
                 }
             }
@@ -210,78 +210,6 @@ function clear_tmdb_cache($media_type) {
             }
         }
         $db->query('DELETE FROM ' . $tmdb_cache_table . ' WHERE id IN (' . $ids . ')');
-    }
-}
-
-/*
-  1º check movies/shows with empty trailer and update if we already not update in DB_UPD_MISSING_DELAY
-  2º check no empty trailers movie/shows and update trailer link after DB_UPD_LONG_DELAY
- */
-
-function update_trailers() {
-    global $db, $cfg, $log;
-
-    $log->debug('Executing update trailers');
-    $limit = 15;
-
-    //IMPROVE: This can be done in one query per table
-    // Update missing trailers and never try get trailer
-    foreach (['tmdb_search_movies', 'tmdb_search_shows'] as $table) {
-        $update = [];
-
-        if ($table == 'library_movies' || $table == 'tmdb_search_movies') {
-            $media_type = 'movies';
-        } else {
-            $media_type = 'shows';
-        }
-
-        $update['updated'] = $time_now = time();
-        $next_update = time() - $cfg['db_upd_missing_delay'];
-
-        $query = "SELECT DISTINCT themoviedb_id FROM $table WHERE trailer = '' OR  (trailer = '0' AND updated < $next_update) LIMIT $limit";
-        $result = $db->query($query);
-
-        $results = $db->fetchAll($result);
-
-        foreach ($results as $item) {
-            $trailer = mediadb_getTrailer($media_type, $item['themoviedb_id']);
-            if (!empty($trailer)) {
-                if (substr(trim($trailer), 0, 5) != 'https') {
-                    $trailer = str_replace('http', 'https', $trailer);
-                }
-                $update['trailer'] = $trailer;
-                $log->info("(1) Update $table trailer on tmdb_id {$item['themoviedb_id']} trailer $trailer");
-            } else {
-                $update['trailer'] = 0;
-            }
-            $where_upd = ['themoviedb_id' => ['value' => $item['themoviedb_id']]];
-
-            $db->update($table, $update, $where_upd);
-        }
-
-        // LONG DELAY UPDATE TRAILER
-        $update = [];
-        $update['updated'] = $time_now = time();
-        $next_update = time() - $cfg['db_upd_long_delay'];
-        $query = "SELECT DISTINCT themoviedb_id FROM $table WHERE trailer IS NOT NULL AND updated < $next_update LIMIT $limit";
-        $result = $db->query($query);
-        $results = $db->fetchAll($result);
-
-        foreach ($results as $item) {
-            $trailer = mediadb_getTrailer($media_type, $item['themoviedb_id']);
-            if (!empty($trailer)) {
-                if (substr(trim($trailer), 0, 5) != 'https') {
-                    $trailer = str_replace('http', 'https', $trailer);
-                }
-                $update['trailer'] = $trailer;
-                $log->info("(2) Update $table trailer on tmdb_id {$item['themoviedb_id']} trailer $trailer");
-            } else {
-                $update['trailer'] = 0;
-            }
-            $where_upd = ['themoviedb_id' => ['value' => $item['themoviedb_id']]];
-
-            $db->update($table, $update, $where_upd);
-        }
     }
 }
 
@@ -325,3 +253,79 @@ function update_masters() {
         }
     }
 }
+
+/*
+  1º check movies/shows with empty trailer and update if we already not update in DB_UPD_MISSING_DELAY
+  2º check no empty trailers movie/shows and update trailer link after DB_UPD_LONG_DELAY
+ */
+/*
+ * Since we clean tmdb cache and update masters we don't need this
+
+
+  function update_trailers() {
+  global $db, $cfg, $log;
+
+  $log->debug('Executing update trailers');
+  $limit = 15;
+
+  //IMPROVE: This can be done in one query per table
+  // Update missing trailers and never try get trailer
+  foreach (['tmdb_search_movies', 'tmdb_search_shows'] as $table) {
+  $update = [];
+
+  if ($table == 'library_movies' || $table == 'tmdb_search_movies') {
+  $media_type = 'movies';
+  } else {
+  $media_type = 'shows';
+  }
+
+  $update['updated'] = $time_now = time();
+  $next_update = time() - $cfg['db_upd_missing_delay'];
+
+  $query = "SELECT DISTINCT themoviedb_id FROM $table WHERE trailer = '' OR  (trailer = '0' AND updated < $next_update) LIMIT $limit";
+  $result = $db->query($query);
+
+  $results = $db->fetchAll($result);
+
+  foreach ($results as $item) {
+  $trailer = mediadb_getTrailer($media_type, $item['themoviedb_id']);
+  if (!empty($trailer)) {
+  if (substr(trim($trailer), 0, 5) != 'https') {
+  $trailer = str_replace('http', 'https', $trailer);
+  }
+  $update['trailer'] = $trailer;
+  $log->info("(1) Update $table trailer on tmdb_id {$item['themoviedb_id']} trailer $trailer");
+  } else {
+  $update['trailer'] = 0;
+  }
+  $where_upd = ['themoviedb_id' => ['value' => $item['themoviedb_id']]];
+
+  $db->update($table, $update, $where_upd);
+  }
+
+  // LONG DELAY UPDATE TRAILER
+  $update = [];
+  $update['updated'] = $time_now = time();
+  $next_update = time() - $cfg['db_upd_long_delay'];
+  $query = "SELECT DISTINCT themoviedb_id FROM $table WHERE trailer IS NOT NULL AND updated < $next_update LIMIT $limit";
+  $result = $db->query($query);
+  $results = $db->fetchAll($result);
+
+  foreach ($results as $item) {
+  $trailer = mediadb_getTrailer($media_type, $item['themoviedb_id']);
+  if (!empty($trailer)) {
+  if (substr(trim($trailer), 0, 5) != 'https') {
+  $trailer = str_replace('http', 'https', $trailer);
+  }
+  $update['trailer'] = $trailer;
+  $log->info("(2) Update $table trailer on tmdb_id {$item['themoviedb_id']} trailer $trailer");
+  } else {
+  $update['trailer'] = 0;
+  }
+  $where_upd = ['themoviedb_id' => ['value' => $item['themoviedb_id']]];
+
+  $db->update($table, $update, $where_upd);
+  }
+  }
+  }
+ */
