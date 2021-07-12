@@ -14,16 +14,14 @@ function cronjobs() {
 
     $time_now = time();
 
-    /*
-      if (($cfg['cron_quarter'] + 900) < $time_now) {
-      $db->update('config', ['cfg_value' => $time_now], ['cfg_key' => ['value' => 'cron_quarter']]);
-      }
-     */
+    if (($cfg['cron_quarter'] + 900) < $time_now) {
+        $db->update('config', ['cfg_value' => $time_now], ['cfg_key' => ['value' => 'cron_quarter']]);
+        check_broken_files_linked();
+    }
 
     if (($cfg['cron_hourly'] + 3600) < $time_now) {
         $db->update('config', ['cfg_value' => $time_now], ['cfg_key' => ['value' => 'cron_hourly']]);
         check_masters_childs_integrity();
-        check_broken_files_linked();
     }
 
 
