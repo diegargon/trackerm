@@ -6,29 +6,32 @@
 
 ## Features:
     - For Movies & Shows 
-    - Track shows: Download next episodes and old episodes if you specify (From SXXEXX).            
-    - Wanted List: Add movies/shows to wanted and TrackerM will download automatically when some tracker release.
-    - Multiple options for tracker/wanted: Ignore/Require Keywords, Quality Preference PROPER, etc
+    - Track shows: Automatically download next episodes and old episodes 
+specifying starting chapter
+    - Wanted List: Adding movies/shows to wanted will make TrackerM download automatically 
+when some tracker release.
+    - Multiple options for tracker/wanted: Ignore/Require Keywords, Quality Preference
+ PROPER, etc
     - transmission-daemon integration (Sorry only works with transmission-daemon atm)
     - TheMovieDB search, show popular, trending.
     - Torrents search: Limit by Indexer, Filter Words, Filter Size, Freelech filter
     - Torrent show latest releases from you indexers.
     - Trailers & Covers guess for missing covers
-    - Library: Search you library
-    - Library: Download button
-    - Library: Local Player (no active by default, see config options), play you movies/shows  launching VLC just clicking (share volumes must be accesible)
-    - Library: Stats
+    - Library: Search you library, Downlad button, Stats
+    - Library: Local Player (no active by default, see config options), play you
+ movies/shows  launching VLC just clicking (share volumes must be accesible)
     - Users: Basic IU designed for multiple users, password access, limit local ips (config)
-    - Email: Automatically send email download new media
-    - Automatically link(when seeding) and move (finish seeding) from transmission-daemon download directory to your library
+    - Email: Automatically send email when download new media
+    - Automatically link(when seeding) and move (finish seeding) from transmission-daemon 
+download directory to your library
     - Proxy support
     - Cache Covers
-    - Automatically disable (temporally) indexers offline
+    - Automatically disabling (temporally) indexers offline or slow
 ## Description: 
 
 **ENGLISH**
 
-TrackerM is Sonarr & Radarr alternative that run on a web server. TrackerM use jackett.
+TrackerM is a Sonarr & Radarr alternative that run on a web server. TrackerM use jackett.
 
 Jackett is an application that acts as an intermediary/gateway between trackers, forums or web pages that offer torrent files
 and thus be able to obtain results in a standard way independent of the source.
