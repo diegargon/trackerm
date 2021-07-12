@@ -65,12 +65,8 @@ class FrontEnd {
     }
 
     function getMenu() {
-        global $LNG, $user, $prefs;
+        global $prefs;
 
-        if (empty($user) || empty($user['username']) || empty($user['id'])) {
-            $user['id'] = 0;
-            $user['username'] = $LNG['L_ANONYMOUS'];
-        }
         if (isset($_GET['sw_opt'])) {
             $value = $prefs->getPrefsItem('hide_opt');
             if ($value == 0) {

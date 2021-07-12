@@ -160,11 +160,11 @@ function notify_mail($msg) {
     }
     $msg['msg'] .= $footer;
     $results = $db->query("SELECT id,email FROM users WHERE email <> ''");
-    $users = $db->fetchAll($results);
+    $users_db = $db->fetchAll($results);
 
-    foreach ($users as $user) {
-        if ($prefs->getPrefValueByUid($user['id'], 'email_notify')) {
-            mail($user['email'], $subject, $msg['msg'], "From: no@reply \r\n");
+    foreach ($users_db as $db_user) {
+        if ($prefs->getPrefValueByUid($db_user['id'], 'email_notify')) {
+            mail($db_user['email'], $subject, $msg['msg'], "From: no@reply \r\n");
         }
     }
 }

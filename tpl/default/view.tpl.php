@@ -96,7 +96,7 @@
                     <?php } ?>
 
                     <?php !empty($tdata['follow_show']) ? print $tdata['follow_show'] : null; ?>
-                    <?php if (!empty($tdata['custom_poster_btn']) && !empty($tdata['user']['isAdmin'])) { ?>
+                    <?php if (!empty($tdata['custom_poster_btn']) && !empty($user->isAdmin())) { ?>
                         <a class="action_link" href="?page=view&id=<?= $tdata['id'] ?>&view_type=<?= $tdata['view_type'] ?>&show_custom_poster=1"><?= $LNG['L_CUSTOM_POSTER'] ?></a>
                     <?php } ?>
                 </div>

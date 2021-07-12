@@ -10,7 +10,7 @@
 
 <div class = "main_menu">
     <a onClick="show_loading()" href="<?= $tdata['menu_opt_link'] ?>"><div class="menu_element"><?= $tdata['arrow'] ?></div></a>
-    <a onClick="show_loading()" href="<?= $cfg['REL_PATH'] . '?page=index' ?>"><div class="menu_element"><?= strtoupper($user['username']) ?></div></a>
+    <a onClick="show_loading()" href="<?= $cfg['REL_PATH'] . '?page=index' ?>"><div class="menu_element"><?= strtoupper($user->getUsername()) ?></div></a>
     <?php if ($cfg['want_movies'] == 1 && $cfg['want_shows'] == 1) { ?>
         <a onClick="show_loading()" href="?page=library_movies"><div class="menu_element_join_right"><?= $LNG['L_MOVIES_MIN'] ?></div></a>
         <a onClick="show_loading()" href="?page=library_shows"><div class="menu_element_join_left"><?= $LNG['L_SHOWS_MIN'] ?></div></a>

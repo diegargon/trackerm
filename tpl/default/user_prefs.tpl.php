@@ -14,7 +14,7 @@
     <span><?= $LNG['L_EMAIL_NOTIFY'] ?> </span>
     <input type="hidden" name="email_notify" value="0"/>
     <input type="checkbox" <?= $tdata['email_checked'] ?> name="email_notify" value="1"/>
-    <span><?= $LNG['L_EMAIL'] ?></span><input size="15" type="text" name="email" value="<?= $user['email'] ?>"/>
+    <span><?= $LNG['L_EMAIL'] ?></span><input size="15" type="text" name="email" value="<?= $user->getEmail() ?>"/>
     <br/><span><?= $LNG['L_INDEX_SELECT'] ?></span>
     <select name="index_page">
         <option <?= $tdata['index_selected'] ?> value="index">index</option>

@@ -16,7 +16,7 @@ function page_index() {
     $status_msg = '';
 
     // Config
-    if (!empty($user['isAdmin'])) {
+    if (!empty($user->isAdmin())) {
         $tdata = [];
         $tdata['title'] = '';
         $tdata['content'] = Html::form(['id' => 'clear_disabled', 'method' => 'post'], Html::input(['type' => 'submit', 'name' => 'clear_disabled', 'value' => $LNG['L_CLEAR_DISABLE']]));
@@ -28,7 +28,7 @@ function page_index() {
     // General Info
     $tdata = [];
     $tdata['content'] = '';
-    $tdata['title'] = $LNG['L_IDENTIFIED'] . ': ' . strtoupper($user['username']);
+    $tdata['title'] = $LNG['L_IDENTIFIED'] . ': ' . strtoupper($user->getUsername());
 
     if (Filter::getInt('edit_profile')) {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -37,7 +37,7 @@ function page_index() {
         }
         $tdata['content'] .= user_edit_profile();
     } else {
-        $tdata['content'] = Html::link(['class' => 'action_link'], '', $LNG['L_EDIT'], ['page' => 'index', 'edit_profile' => 1]);
+        $tdata['content'] .= Html::link(['class' => 'action_link'], '', $LNG['L_EDIT'], ['page' => 'index', 'edit_profile' => 1]);
     }
 
     if (isset($_POST['clear_disabled'])) {
@@ -57,7 +57,7 @@ function page_index() {
     $titems['col1'][] = $frontend->getTpl('home-item', $tdata);
 
     // User managament
-    if (!empty($user['isAdmin'])) {
+    if (!empty($user->isAdmin())) {
         $tdata = [];
         $tdata = user_management();
         $titems['col1'][] = $frontend->getTpl('home-item', $tdata);
@@ -577,11 +577,10 @@ function page_config() {
 }
 
 function page_login() {
-    global $cfg, $db, $user, $frontend;
+    global $cfg, $user, $frontend;
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $dologin = 0;
-
         $username = Filter::postUsername('username');
         $password = Filter::postUsername('password');
         if (!empty($username)) {
@@ -591,26 +590,24 @@ function page_login() {
                 $dologin = 1;
             }
             if ($dologin) {
-                $userid = check_user($username, $password);
-                if ($userid) {
-                    set_user($userid);
+                $userid = $user->checkUser($username, $password);
+                if (!empty($userid) && $userid > 0) {
+                    $user->setUser($userid);
                     header("Location: {$cfg['REL_PATH']} ");
                     exit();
-                } else {
-                    $user = [];
                 }
             }
         }
     }
 
     $tdata = [];
-    $result = $db->select('users');
-    $users = $db->fetchAll($result);
+    $users_db = $user->getProfiles();
     $page = '';
     $tdata['profiles'] = '';
-    foreach ($users as $_user) {
-        if ($_user['disable'] != 1 && $_user['hide_login'] != 1) {
-            $tdata['profiles'] .= $frontend->getTpl('profile_box', array_merge($tdata, $_user));
+    foreach ($users_db as $db_user) {
+        if ($db_user['disable'] != 1 && $db_user['hide_login'] != 1) {
+            $tdata['username'] = $db_user['username'];
+            $tdata['profiles'] .= $frontend->getTpl('profile_box', $tdata);
         }
     }
     $page .= $frontend->getTpl('login', $tdata);
@@ -622,6 +619,7 @@ function page_logout() {
 
     $_SESSION['uid'] = 0;
     ($_COOKIE) ? setcookie("uid", null, -1) : null;
+    ($_COOKIE) ? setcookie("sid", null, -1) : null;
     session_regenerate_id();
     session_destroy();
     header("Location: {$cfg['REL_PATH']} ");
@@ -648,7 +646,7 @@ function page_localplayer() {
         $m3u_playlist = get_pl_shows($item);
     }
 
-    $header_title = $item['title'];
+    $header_title = ucwords(clean_title($item['file_name']));
     header("Content-Type: video/mpegurl");
     header("Content-Disposition: attachment; filename=$header_title.m3u8");
     header("Pragma: no-cache");

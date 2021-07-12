@@ -159,7 +159,7 @@ function wanted_movies($wanted_id) {
         'direct' => 0,
         'wanted_status' => -1,
         'media_type' => $wanted_type,
-        'profile' => $user['id'],
+        'profile' => $user->getId(),
     ];
 
     $where_check = [
@@ -178,7 +178,7 @@ function wanted_episode($id, $season, $episodes, $track_show = 0, $inherint_trac
 
     (strlen($season) == 1) ? $season = '0' . $season : null;
     $episodes = explode(',', $episodes);
-    !empty($user['id']) ? $uid = $user['id'] : $uid = 0;
+    !empty($user->getId()) ? $uid = $user->getId() : $uid = 0;
     $track_show == null ? $track_show = 0 : null;
 
     if (valid_array($inherint_track)) {

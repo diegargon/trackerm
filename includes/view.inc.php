@@ -10,7 +10,7 @@
 !defined('IN_WEB') ? exit : true;
 
 function view() {
-    global $cfg, $db, $frontend, $user;
+    global $db, $frontend, $user;
 
     $view_type = Filter::getString('view_type');
     $id = Filter::getInt('id');
@@ -22,8 +22,7 @@ function view() {
         $table = 'library_master_movies';
         $media_type = 'movies';
         $other['reidentify'] = 1;
-        if ($user['isAdmin']) {
-
+        if ($user->isAdmin()) {
             $other['deletereg'] = 1;
             $other['custom_poster_btn'] = 1;
         }
@@ -31,7 +30,7 @@ function view() {
         $table = 'library_master_shows';
         $media_type = 'shows';
         $other['reidentify'] = 1;
-        if ($user['isAdmin']) {
+        if ($user->isAdmin()) {
             $other['deletereg'] = 1;
             $other['custom_poster_btn'] = 1;
         }
@@ -51,7 +50,7 @@ function view() {
     } else {
         return false;
     }
-    !empty($_GET['show_custom_poster']) && $user['isAdmin'] ? $other['show_custom_poster'] = 1 : null;
+    !empty($_GET['show_custom_poster']) && $user->isAdmin() ? $other['show_custom_poster'] = 1 : null;
 
     $other['view_type'] = $view_type;
     $item = $db->getItemById($table, $id);
@@ -74,7 +73,7 @@ function view() {
     }
     !empty($item['total_size']) ? $item['total_size'] = human_filesize($item['total_size']) : null;
 
-    if (!empty($_POST['change_custom_poster']) && $user['isAdmin']) {
+    if (!empty($_POST['change_custom_poster']) && $user->isAdmin()) {
         if (empty($_POST['new_custom_poster'])) {
             $new_poster = '';
         } else {
@@ -110,7 +109,6 @@ function view() {
     if ($view_type == 'movies_library' || $view_type == 'shows_library') {
         $other['media_files'] = get_media_files($id, $media_type);
     }
-    $other['user'] = $user; //avoid merge, id comflict if merge
     $page = $frontend->getTpl('view', array_merge($item, $other));
 
     return $page;

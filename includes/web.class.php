@@ -31,9 +31,10 @@ class Web {
         global $cfg, $user, $prefs;
 
         $req_page = Filter::getString('page');
-        ($user['id'] < 1) ? $req_page = 'login' : null;
 
-        if (empty($req_page) && $user['id'] > 0) {
+        ($user->getId() < 1) ? $req_page = 'login' : null;
+
+        if (empty($req_page) && $user->getId() > 0) {
             $index_page = trim($prefs->getPrefsItem('index_page'));
             if (!empty($index_page) && $index_page != "index") {
                 header("Location: {$cfg['REL_PATH']}/?page=$index_page");
@@ -46,7 +47,7 @@ class Web {
         (!isset($req_page) || $req_page == '') ? $req_page = 'index' : null;
         (in_array($req_page, ['library_movies', 'library_shows'])) ? $req_page = 'library' : null;
         (in_array($req_page, ['new_movies', 'new_shows'])) ? $req_page = 'news' : null;
-        ($req_page == 'config' && $user['isAdmin'] != 1) ? $req_page = 'index' : null;
+        ($req_page == 'config' && !$user->isAdmin()) ? $req_page = 'index' : null;
         ($req_page == 'localplayer' && !$cfg['localplayer']) ? $req_page = 'index' : null;
 
         if (in_array($req_page, $valid_pages)) {
@@ -77,7 +78,7 @@ class Web {
                     'hashString' => $trans_db['hashString'],
                     /* 'themoviedb_id' => */
                     'direct' => 1,
-                    'profile' => $user['id'],
+                    'profile' => $user->getId(),
                 ];
                 $db->addItemUniqField('wanted', $wanted_db, 'hashString');
             } else {

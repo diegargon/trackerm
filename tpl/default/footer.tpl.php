@@ -13,7 +13,7 @@
         <a href="https://github.com/diegargon/trackerm" target="_blank">TrackerM v<?= $cfg['version'] . '.' . $cfg['db_version'] ?></a> - Copyright @ 2020 - 2021
     </p>
     <?php
-    if (!empty($tdata['querys']) && !empty($user['isAdmin'])) {
+    if (!empty($tdata['querys']) && !empty($user->isAdmin())) {
         foreach ($tdata['querys'] as $query) {
             ?>
             <p class="center"><?= $query['query'] ?></p>

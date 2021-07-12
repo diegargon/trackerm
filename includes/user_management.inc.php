@@ -14,7 +14,7 @@ function user_management() {
 
     $status_msg = $LNG['L_USERS_MNGT_HELP'];
 
-    if ($_SERVER['REQUEST_METHOD'] == 'POST' && $user['isAdmin']) {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST' && $user->isAdmin()) {
         if (isset($_POST['new_user'])) {
             if (!empty($new_user = Filter::postUsername('username'))) {
                 if ($cfg['force_use_passwords']) {
@@ -64,10 +64,10 @@ function new_user() {
 }
 
 function show_users() {
-    global $frontend;
+    global $frontend, $user;
 
     $form_content = '';
-    $users = get_profiles();
+    $users = $user->getProfiles();
 
     foreach ($users as $_user) {
         if ($_user['id'] > 1) {
@@ -106,16 +106,14 @@ function user_change_prefs() {
 
     $status_msg = null;
 
-    if (isset($_POST['email']) && empty($_POST['email']) && !empty($user['email'])) {
-        $user['email'] = '';
-        $db->updateItemById('users', $user['id'], ['email' => '']);
+    if (isset($_POST['email']) && empty($_POST['email']) && !empty($user->getEmail())) {
+        $db->updateItemById('users', $user->getId(), ['email' => '']);
         $status_msg .= $LNG['L_EMAIL_CHANGE_SUCESS'];
     } else if (!empty($_POST['email']) && ($email = Filter::postEmail('email'))) {
-        if ($email && ($email != $user['email'])) {
-            $user['email'] = $email;
-            $db->updateItemById('users', $user['id'], ['email' => $email]);
+        if ($email && ($email != $user->getEmail())) {
+            $db->updateItemById('users', $user->getId(), ['email' => $email]);
             $status_msg .= $LNG['L_EMAIL_CHANGE_SUCESS'];
-        } else if ($email != $user['email']) {
+        } else if ($email != $user->getEmail()) {
             $status_msg .= $LNG['L_EMAIL_INVALID'];
         }
     }
@@ -143,25 +141,25 @@ function user_change_password() {
     if ($cfg['force_use_passwords'] && empty($new_password)) {
         return $LNG['L_PASSWORD_CANT_EMPTY'];
     }
-    if (!empty($user['password']) && empty($cur_password)) {
+    if (!empty($user->getPassword()) && empty($cur_password)) {
         return $LNG['L_PASSWORD_INCORRECT'];
     }
-    if (empty($user['password']) && empty($new_password)) {
+    if (empty($user->getPassword()) && empty($new_password)) {
         return false;
     }
-    if (!empty($user['password']) && (encrypt_password($new_password) == $user['password'])) {
+    if (!empty($user->getPassword()) && (encrypt_password($new_password) == $user->getPassword())) {
         return $LNG['L_PASSWORD_EQUAL'];
     }
-    if (empty($user['password']) && empty($cur_password) && !empty($new_password)) {
+    if (empty($user->getPassword()) && empty($cur_password) && !empty($new_password)) {
         !empty($new_password) ? $new_encrypted_password = encrypt_password($new_password) : $new_encrypted_password = '';
-        $db->updateItemById('users', $user['id'], ['password' => $new_encrypted_password]);
+        $db->updateItemById('users', $user->getId(), ['password' => $new_encrypted_password]);
         return $LNG['L_PASSWORD_CHANGE_SUCESS'];
     }
-    if (!empty($user['password'])) {
+    if (!empty($user->getPassword())) {
         $old_encrypted_password = encrypt_password($cur_password);
-        if ($user['password'] == $old_encrypted_password) {
+        if ($user->getPassword() == $old_encrypted_password) {
             !empty($new_password) ? $new_encrypted_password = encrypt_password($new_password) : $new_encrypted_password = '';
-            $db->updateItemById('users', $user['id'], ['password' => $new_encrypted_password]);
+            $db->updateItemById('users', $user->getId(), ['password' => $new_encrypted_password]);
             return $LNG['L_PASSWORD_CHANGE_SUCESS'];
         } else {
             return $LNG['L_PASSWORD_INCORRECT'];
