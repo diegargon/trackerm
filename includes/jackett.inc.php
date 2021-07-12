@@ -188,7 +188,11 @@ function jackett_prep_media($media_type, $media_results) {
                 $item[$attr['@attributes']['name']] = $attr['@attributes']['value'];
             }
             isset($item['coverurl']) ? $poster = $item['coverurl'] : $poster = '';
-            isset($item['downloadvolumefactor']) ? $freelech = !$item['downloadvolumefactor'] : $freelech = 0;
+            if (isset($item['downloadvolumefactor']) && $item['downloadvolumefactor'] >= 1) {
+                $freelech = 0;
+            } else {
+                $freelech = 1;
+            }
             !empty($item['description']) ? $description = $item['description'] : $description = '';
             $media[] = [
                 'guid' => $item['guid'],
@@ -218,7 +222,11 @@ function jackett_prep_media($media_type, $media_results) {
                     $item[$attr['@attributes']['name']] = $attr['@attributes']['value'];
                 }
                 !empty($item['coverurl']) ? $poster = $item['coverurl'] : $poster = '';
-                isset($item['downloadvolumefactor']) ? $freelech = !$item['downloadvolumefactor'] : $freelech = 0;
+                if (isset($item['downloadvolumefactor']) && $item['downloadvolumefactor'] >= 1) {
+                    $freelech = 0;
+                } else {
+                    $freelech = 1;
+                }
                 !empty($item['description']) ? $description = $item['description'] : $description = '';
                 $media[] = [
                     'guid' => $item['guid'],
@@ -250,7 +258,7 @@ function jackett_prep_media($media_type, $media_results) {
     }
 
     //Select from db  all items with same guids
-    $items_id_guid = $db->selectMultiple($jackett_db, 'guid', $guids, 'id,guid,guessed_poster,guessed_trailer');
+    $items_id_guid = $db->selectMultiple($jackett_db, 'guid', $guids, 'id,guid,guessed_poster,guessed_trailer,freelech');
     //media haven't id and we need it, here we check if item guid exist in the database
     //if item exists we add the id to media id
     //if item not exist we additem, get the last id insert and add to the media item id the id
@@ -262,6 +270,11 @@ function jackett_prep_media($media_type, $media_results) {
                 $media[$key]['id'] = $item_id_guid['id'];
                 !empty($item_id_guid['guessed_poster']) ? $media[$key]['guessed_poster'] = $item_id_guid['guessed_poster'] : $media[$key]['guessed_poster'] = '';
                 !empty($item_id_guid['guessed_trailer']) ? $media[$key]['guessed_trailer'] = $item_id_guid['guessed_trailer'] : $media[$key]['guessed_trailer'] = '';
+                //If freelech state change must change in the cache
+                if ($item_id_guid['freelech'] != $media[$key]['freelech']) {
+                    $db->updateItemById($jackett_db, $item_id_guid['id'], ['freelech' => $media[$key]['freelech']]);
+                    //echo "id: " . $item_id_guid['id'] . "// Item cache freelech: " . $item_id_guid['freelech'] . " New Item *" . $media[$key]['freelech'] . "*<br>";
+                }
                 break;
             }
         }
