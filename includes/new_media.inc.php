@@ -152,10 +152,11 @@ function mix_media_res(array $res_media_db) {
 
     //testing func
     //This walk throught indexers arrays for mix results, get one from each indexer except  if in the same indexer the next entry
-    // have same title, added too, if not change to another indexer for mix results.
+    // have same title, in this case  added too, if not change to another indexer for mix results.
     //Probably must be a better way of doing this. And probably tomorrow i don't
     //known how works this messy... and is better rewrite again this than found a maybe future bug.
-
+    //One problem its if indexer X not update his media in some time his results will appears in the first results when is old release.
+    //a solution can be check if the id of other indexers candidates are greater, if are greater jump the indexer with old results.
     while (1) {
         if (isset($indexers_names[$indexer_pointer]) && isset($indexers[$indexers_names[$indexer_pointer]][0])) {
             $item = $indexers[$indexers_names[$indexer_pointer]][0];
