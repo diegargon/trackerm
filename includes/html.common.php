@@ -12,7 +12,7 @@
 //TODO move to frontend build* and pager and html to tpl or html but before..
 //TODO this functions need a rewrite, especially buildTable and Pager, too much messy... how we build the pager links, etc
 function buildTable($head, $db_ary, $topt = null) {
-    global $LNG, $prefs;
+    global $LNG, $prefs, $db;
 
     $npage = Filter::getInt('npage');
     empty($npage) ? $npage = 1 : null;
@@ -46,6 +46,32 @@ function buildTable($head, $db_ary, $topt = null) {
     } else {
         $npage_jump = ($max_items * $npage) - $max_items;
         $db_ary_slice = array_slice($db_ary, $npage_jump);
+    }
+
+    //For have it take titles
+    //TODO: Add haveit to jackett_movies jackett_shows and add for not ask every time, must update when download
+    if ($topt['view_type'] == 'movies_torrent' || $topt['view_type'] == 'shows_torrent') {
+        $titles = [];
+        foreach ($db_ary_slice as $item) {
+            $titles[] = clean_title($item['title']);
+        }
+        $titles = array_unique($titles);
+        if ($topt['view_type'] == 'movies_torrent') {
+            $library_master = 'library_master_movies';
+        } else {
+            $library_master = 'library_master_shows';
+        }
+
+        $media_have = $db->selectMultiple($library_master, 'clean_title', $titles, 'id, title');
+
+        foreach ($db_ary_slice as $key_item => $item) {
+            foreach ($media_have as $item_have) {
+                if (clean_title($item_have['title']) == clean_title($item['title'])) {
+                    $db_ary_slice[$key_item]['have_it'] = $item_have['id'];
+                    break;
+                }
+            }
+        }
     }
 
     foreach ($db_ary_slice as $item) {

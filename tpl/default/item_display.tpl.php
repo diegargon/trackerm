@@ -27,6 +27,11 @@
             ?>
             <div class="guessed_poster"><?= $LNG['L_POSTER_GUESSED'] ?></div>
         <?php } ?>
+        <div class="stack_absolute">
+            <?php if (!empty($tdata['have_it'])) { ?>
+                <div class="have_it"><a href="?page=view&id=<?= $tdata['have_it'] ?>&view_type=<?= $tdata['media_type'] ?>_library">&#9668;</a></div>
+            <?php } ?>
+        </div>
     </div>
     <div class="item_details">
         <div class="item_title"><?= $tdata['title'] ?></div>
