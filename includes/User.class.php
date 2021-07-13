@@ -44,23 +44,19 @@ Class Users {
     }
 
     public function getEmail() {
-        return $this->user['email'];
+        return $this->user['email'] ? $this->user['email'] : false;
     }
 
     public function getUsername() {
-        return $this->user['username'];
+        return $this->user['username'] ? $this->user['username'] : false;
     }
 
     public function getPassword() {
-        return $this->user['password'];
+        return $this->user['password'] ? $this->user['password'] : false;
     }
 
     public function isAdmin() {
-        if (empty($this->user['isAdmin'])) {
-            return false;
-        }
-
-        return true;
+        return empty($this->user['isAdmin']) ? false : true;
     }
 
     public function getProfiles() {
