@@ -48,8 +48,9 @@ function buildTable($head, $db_ary, $topt = null) {
         $db_ary_slice = array_slice($db_ary, $npage_jump);
     }
 
-    //For have it take titles
+    //For have it take titles and search this titles in library
     //TODO: Add haveit to jackett_movies jackett_shows and add for not ask every time, must update when download
+    $media_have = [];
     if ($topt['view_type'] == 'movies_torrent' || $topt['view_type'] == 'shows_torrent') {
         $titles = [];
         foreach ($db_ary_slice as $item) {
@@ -63,15 +64,6 @@ function buildTable($head, $db_ary, $topt = null) {
         }
 
         $media_have = $db->selectMultiple($library_master, 'clean_title', $titles, 'id, title');
-
-        foreach ($db_ary_slice as $key_item => $item) {
-            foreach ($media_have as $item_have) {
-                if (clean_title($item_have['title']) == clean_title($item['title'])) {
-                    $db_ary_slice[$key_item]['have_it'] = $item_have['id'];
-                    break;
-                }
-            }
-        }
     }
 
     foreach ($db_ary_slice as $item) {
@@ -92,6 +84,15 @@ function buildTable($head, $db_ary, $topt = null) {
         }
         !empty($topt['search_type']) ? $item['media_type'] = $topt['search_type'] : null;
 
+        //have it torrent
+        if (valid_array($media_have)) {
+            foreach ($media_have as $item_have) {
+                if (clean_title($item_have['title']) == clean_title($item['title'])) {
+                    $item['have_it'] = $item_have['id'];
+                    break;
+                }
+            }
+        }
         $num_col_items == 0 ? $page .= '<div class="divTableRow">' : null;
         $page .= html::div(['class' => 'divTableCell'], build_item($item, $topt));
 
