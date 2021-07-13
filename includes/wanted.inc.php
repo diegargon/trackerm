@@ -178,7 +178,7 @@ function wanted_episode($id, $season, $episodes, $track_show = 0, $inherint_trac
 
     (strlen($season) == 1) ? $season = '0' . $season : null;
     $episodes = explode(',', $episodes);
-    !empty($user->getId()) ? $uid = $user->getId() : $uid = 0;
+    !empty($user) && !empty($user->getId()) ? $uid = $user->getId() : $uid = 0; //cli use wanted_episode but users is null
     $track_show == null ? $track_show = 0 : null;
 
     if (valid_array($inherint_track)) {
