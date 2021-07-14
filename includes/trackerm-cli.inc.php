@@ -532,33 +532,36 @@ function wanted_work() {
     //TODO: Check better the time thing
     $day_of_week = date('N');
 
+    $log_j_direct = '';
+    $log_j_state = '';
+    $log_j_date_no = '';
+    $log_j_date_never = '';
+    $log_track_show = '';
+
     foreach ($wanted_list as $wanted) {
         $valid_results = [];
 
         if ($wanted['direct'] == 1) {
-            $log->debug("Jumping wanted {$wanted['id']} by direct ");
+            (!empty($log_j_direct)) ? $log_j_direct .= ',' : null;
+            $log_j_direct .= $wanted['id'];
             continue;
         }
-
         if (!empty($wanted['track_show'])) {
-            $log->debug("Track Show on {$wanted['title']}");
-            //TODO send wanted_list to avoid query again
+            $log_track_show .= '[' . $wanted['title'] . ']';
+            //TODO check if we can send wanted_list to avoid query again
             tracker_shows($wanted);
             continue;
         }
-
         if (isset($wanted['wanted_status']) && $wanted['wanted_status'] >= 0) {
-            $log->debug("Jumping wanted {$wanted['title']} check by state " . $trans->getStatusName($wanted['wanted_status']));
+            $log_j_state .= '[' . $wanted['title'] . '(' . $trans->getStatusName($wanted['wanted_status']) . ')]';
             continue;
         }
-
         if ($wanted['day_check'] == -1) {
-            $log->debug("Jumping wanted {$wanted['title']} check by date, {$LNG['L_NEVER']}");
+            $log_j_date_never .= '[' . $wanted['title'] . ']';
             continue;
         }
-
         if (($wanted['day_check'] > 0) && $wanted['day_check'] != $day_of_week) {
-            $log->debug("Jumping wanted {$wanted['title']} check by date, today is not {$LNG[$cfg['CHECK_DAYS'][$wanted['day_check']]]}");
+            $log_j_date_no .= '[' . $wanted['title'] . '(' . $LNG[$cfg['CHECK_DAYS'][$wanted['day_check']]] . ')]';
             continue;
         }
 
@@ -627,6 +630,11 @@ function wanted_work() {
 
         $log->debug('********************************************************************************************************');
     }
+    !empty($log_j_direct) ? $log->debug("Jumping [Direct] " . $log_j_direct) : null;
+    !empty($log_track_show) ? $log->debug("Track Show check: " . $log_track_show) : null;
+    !empty($log_j_date_never) ? $log->debug("Jumping [Never] " . $log_j_date_never) : null;
+    !empty($log_j_date_no) ? $log->debug("Jumping [NotToday] " . $log_j_date_no) : null;
+    !empty($log_j_state) ? $log->debug("Jumping [State] " . $log_j_state) : null;
 }
 
 function wanted_check_title($title, $results) {
