@@ -22,7 +22,7 @@ chdir($cfg['ROOT_PATH']);
 require_once('includes/climode.inc.php');
 
 isset($argv[1]) && $argv[1] == '-console' ? $log->setConsole(true) : null;
-$log->info("TrackerM v{$cfg['version']}.{$cfg['db_version']}" . ' Starting trackerm automatic service...');
+$log->info("TrackerM v{$cfg['version']}.{$cfg['db_version']}" . ' Starting trackerm automatic service (' . date("h:i") . ')');
 
 if (($c_blocker = $prefs->getPrefsItem('cli_blocker')) && $c_blocker <= 3) {
     $prefs->setPrefsItem('cli_blocker', ++$c_blocker);
