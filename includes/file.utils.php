@@ -326,18 +326,20 @@ function move_file($origen, $destino) {
       Rename across partitions fail. We try (for same partition)
       and if fail the file must be  copy to other partition
      */
-    if (!file_exists($origen)) {
-        return false;
-    }
-    if (@rename($origen, $destino)) {
-        return true;
-    } else {
-        if (file_exists($destino)) { //link
-            unlink($destino);
-        }
-        if (copy($origen, $destino)) {
-            unlink($origen);
+    if (file_exists($origen)) {
+        if (@rename($origen, $destino)) {
             return true;
+        } else {
+            if (file_exists($destino) && is_link($destino)) { //link
+                unlink($destino);
+            } else if (file_exists($destino)) {
+                return false;
+            }
+
+            if (copy($origen, $destino)) {
+                unlink($origen);
+                return true;
+            }
         }
     }
 

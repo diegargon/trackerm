@@ -11,8 +11,7 @@
 
 function getFileTitle($file) {
 
-    /* Better way? */
-
+    /* Better way? sure, and Clearly? */
     //regex case sensitive;
     $regex_cs = '/^(?:';
     $regex_cs .= '(?!SPANISH)';
@@ -24,7 +23,6 @@ function getFileTitle($file) {
     $matches = [];
     preg_match($regex_cs, $file, $matches);
     $file = mb_strtolower($matches[0]);
-
 
     /* REGEX  case insentive */
     /* GET ALL */
@@ -90,6 +88,15 @@ function getFileTitle($file) {
     $without_year_title = $matches[0];
 
     (empty($without_year_title)) ? $_title = $without_year_title : $_title = $_title;
+    $_title = trim($_title);
+
+    /* The '-' sometimes is part of the title, ex"Title - The Plan",  sometimes is a separator trackrm thread
+     * it as part of title unless it is followed by a known tag checked before.
+     * Here We check if the title finish in '-'  (after remove tags) and remove it.
+     */
+    if (substr($_title, -1) == "-") {
+        $_title = substr($_title, 0, -1);
+    }
 
     return ucwords(trim($_title));
 }

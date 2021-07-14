@@ -365,6 +365,7 @@ function ShowJob($item, $linked = false) {
 function get_valid_files($item) {
     global $cfg, $LNG, $log;
 
+    //FIX: if two file need unrar and is not in his own directory the unrar flag is setting on the root then will detect both unrar
     $orig_path = $cfg['TORRENT_FINISH_PATH'] . '/' . $item['files_location'];
 
     if (is_dir($orig_path)) {
