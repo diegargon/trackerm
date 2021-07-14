@@ -321,7 +321,7 @@ function mediainfo_formated($file) {
     return $mediainfo_tags;
 }
 
-function move_file($origin, $destino) {
+function move_file($origin, $destination) {
     /*
       Rename across partitions fail. We try (for same partition)
       and if fail the file must be  copy to other partition
