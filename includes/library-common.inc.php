@@ -178,7 +178,7 @@ function clean_database($media_type, $files, $media) {
         if (!in_array($item['path'], $files)) {
             $master = [];
 
-            $log->addStateMsg('[' . $LNG['L_NOTE'] . '] ' . $item['title'] . ' ' . $LNG['L_NOTE_MOVDEL']);
+            $log->addStateMsg('[' . $LNG['L_NOTE'] . '] ' . basename($item['path']) . ' ' . $LNG['L_NOTE_MOVDEL']);
 
             if (!empty($item['master'])) {
                 $master = $db->getItemById('library_master_' . $media_type, $item['master']);
