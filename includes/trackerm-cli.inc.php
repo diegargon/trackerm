@@ -39,10 +39,8 @@ function transmission_scan() {
             !empty($tor['episode']) ? $item['episode'] = $tor['episode'] : null;
             isset($tor['wanted_id']) ? $item['wanted_id'] = $tor['wanted_id'] : null;
             if ($item['media_type'] == 'movies') {
-                $log->debug('Movie stopped detected: Working on ' . $item['title']);
                 MovieJob($item);
             } else if ($item['media_type'] == 'shows') {
-                $log->debug('Show stopped detected: Working on ' . $item['title']);
                 ShowJob($item);
             }
         }
@@ -69,10 +67,8 @@ function transmission_scan() {
             isset($tor['wanted_id']) ? $item['wanted_id'] = $tor['wanted_id'] : null;
 
             if ($item['media_type'] == 'movies') {
-                $log->debug('Movie seeding detected: Checking ' . $item['title']);
                 MovieJob($item, true);
             } else if ($item['media_type'] == 'shows') {
-                $log->debug('Show seeding detected: Checking ' . $item['title']);
                 ShowJob($item, true);
             }
         }
@@ -149,6 +145,10 @@ function getRightTorrents() {
 function MovieJob($item, $linked = false) {
     global $cfg, $log, $trans, $db, $LNG;
 
+    $log_job = 'Movie ';
+    $log_job .= $linked ? 'seeding' : 'finished';
+    $log_job .= ' detected: Checking ' . $item['title'];
+
     $valid_files = [];
     $valid_files = get_valid_files($item);
 
@@ -202,11 +202,12 @@ function MovieJob($item, $linked = false) {
             $final_dest_path = $dest_path . '/' . $new_file_name;
 
             if (file_exists($final_dest_path) && $linked) {
+                $log_job .= '[Status:Already Linked]';
                 continue;
             }
 
             if (!$linked) {
-                $log->debug('Moved work: ' . $item['hashString']);
+                $log_job .= "[Status:Moving {$item['hashString']}]";
                 if (move_media($valid_file, $final_dest_path) && ($valid_file == end($valid_files) )) {
                     $log->debug("Cleaning torrent id/hash:  {$item['tid']} : {$item['hashString']}");
                     $hashes[] = $item['hashString'];
@@ -231,19 +232,24 @@ function MovieJob($item, $linked = false) {
                     file_exists($work_path) && ($work_path != $cfg['TORRENT_FINISH_PATH']) && (end($valid_files) == $valid_file) ? @rmdir($work_path) : null;
                 }
             } else {
-                $log->debug("Link Seeding: {$item['tid']} : {$item['hashString']}");
+                $log_job .= "[Status: Linking {$item['tid']} : {$item['hashString']}]";
                 linking_media($valid_file, $final_dest_path);
                 $new_media .= basename($final_dest_path) . "\n";
             }
         }
         !empty($new_media) ? notify_mail(['subject' => $LNG['L_NEW_MEDIA_AVAILABLE'], 'msg' => $new_media]) : null;
     } else {
-        $log->info('No valid files found on torrent with transmission id:' . "{$item['tid']} : {$item['hashString']} ");
+        $log_job .= ': No valid files found on ' . $item['tid'] . ':' . $item['hashString'];
     }
+    $log->debug($log_job);
 }
 
 function ShowJob($item, $linked = false) {
     global $cfg, $db, $LNG, $trans, $log;
+
+    $log_job = 'Show ';
+    $log_job .= $linked ? 'seeding' : 'finished';
+    $log_job .= ' detected: Checking ' . $item['title'];
 
     $valid_files = [];
     $valid_files = get_valid_files($item);
@@ -322,11 +328,12 @@ function ShowJob($item, $linked = false) {
                 $final_dest_path = $dest_path . '/' . $new_file_name;
                 $i++;
             } else if (file_exists($final_dest_path) && $linked) {
+                $log_job .= '[Status:Already Linked]';
                 continue;
             }
 
             if (!$linked) {
-                $log->debug("Moved work: {$item['tid']} : {$item['hashString']}");
+                $log_job .= "[Status:Moving {$item['hashString']}]";
                 if (move_media($valid_file, $final_dest_path) && ($valid_file == end($valid_files) )) {
                     $log->debug("Cleaning torrent: {$item['tid']} : {$item['hashString']}");
                     $hashes[] = $item['hashString'];
@@ -351,15 +358,16 @@ function ShowJob($item, $linked = false) {
                     file_exists($work_path) && ($work_path != $cfg['TORRENT_FINISH_PATH']) && (end($valid_files) == $valid_file) ? @rmdir($work_path) : null;
                 }
             } else {
-                $log->debug("Link Seeding: {$item['tid']} : {$item['hashString']}");
+                $log_job .= "[Status: Linking {$item['tid']} : {$item['hashString']}]";
                 linking_media($valid_file, $final_dest_path);
                 $new_media .= basename($final_dest_path) . "\n";
             }
         }
         !empty($new_media) ? notify_mail(['subject' => $LNG['L_NEW_MEDIA_AVAILABLE'], 'msg' => $new_media]) : null;
     } else {
-        $log->info('No valid files found on torrent with ' . "{$item['tid']} : {$item['hashString']}");
+        $log_job .= ': No valid files found on ' . $item['tid'] . ':' . $item['hashString'];
     }
+    $log->debug($log_job);
 }
 
 function get_valid_files($item) {
