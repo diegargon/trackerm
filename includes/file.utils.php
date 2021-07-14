@@ -321,23 +321,23 @@ function mediainfo_formated($file) {
     return $mediainfo_tags;
 }
 
-function move_file($origen, $destino) {
+function move_file($origin, $destino) {
     /*
       Rename across partitions fail. We try (for same partition)
       and if fail the file must be  copy to other partition
      */
-    if (file_exists($origen)) {
-        if (@rename($origen, $destino)) {
+    if (file_exists($origin)) {
+        if (@rename($origin, $destination)) {
             return true;
         } else {
-            if (file_exists($destino) && is_link($destino)) { //link
-                unlink($destino);
-            } else if (file_exists($destino)) {
+            if (file_exists($destination) && is_link($destination)) { //link
+                unlink($destination);
+            } else if (file_exists($destination)) {
                 return false;
             }
 
-            if (copy($origen, $destino)) {
-                unlink($origen);
+            if (copy($origin, $destination)) {
+                unlink($origin);
                 return true;
             }
         }
