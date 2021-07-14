@@ -356,9 +356,15 @@ function get_media_files($id, $media_type) {
                 }
             }
         }
+
+        $file_name = '';
+        if (is_link($file['path'])) {
+            $file_name .= '* ';
+        }
+        $file_name .= basename($file['path']);
         $sel_values[] = [
             'value' => $file['id'],
-            'name' => basename($file['path'])
+            'name' => $file_name
         ];
     }
 
