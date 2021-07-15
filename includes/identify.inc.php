@@ -87,7 +87,8 @@ function show_identify_media(string $media_type) {
             $return_ids = auto_ident($media_type, $auto_ident_ids);
         }
         if ($return_ids && (count($auto_ident_ids) != count($return_ids))) {
-            //Need requery for failed automate ident,  TODO: better
+            //Need requery for failed automate ident,  TODO: better (loop media_library and unset ids that not exists in return ids?)
+            //query again but up we discard dups titles on show, check the logic or rewrite TODO
             $limit = count($return_ids);
             $result = $db->query("SELECT * FROM library_$media_type WHERE master = '' OR master is NULL LIMIT $limit");
             $media_library = $db->fetchAll($result);
@@ -291,7 +292,6 @@ function submit_ident(string $media_type, array $oitem, $id) {
     global $db, $log;
 
     $log->debug("Submit $media_type ident : (tmdb_id:" . $oitem['id'] . ")" . $oitem['title'] . ' id:' . $id);
-    //$upd_fields = [];
 
     if ($media_type == 'shows') {
         $show_check = $db->getItemById('library_shows', $id);
@@ -345,7 +345,7 @@ function submit_ident(string $media_type, array $oitem, $id) {
             $db->insert('library_master_' . $media_type, $new_item);
             $lastid_master = $db->getLastId();
             $db->update('library_' . $media_type, ['master' => $lastid_master], ['id' => ['value' => $id]]);
-            //if is a change master rest 1 or delete from old master.
+            //if has master set, its a master change rest 1 or delete from old master if is 1.
             if (!empty($media_in_library['master'])) {
                 $old_master_id = $media_in_library['master'];
                 $item_old_master = $db->getItemById('library_master_' . $media_type, $old_master_id);
