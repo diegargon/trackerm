@@ -1,5 +1,5 @@
 
-## How WILL works. (EXCUSE MY ENGLISH)
+## How works. (EXCUSE MY ENGLISH)
 
 This proyect it in early stage.
 
@@ -78,7 +78,10 @@ Apache+Php7 (or similar), Jacket, Transmission, Composer, account+api key themov
     * For caching the images you need allow_url_fopen in your php.ini
     * R/W in cache and cache/images cache/log. Database files and images will be stored in cache dir, must be writable.
 * Jackett
-    * Configured with your selected indexers (add the indexers you want use to you config file and set the api key
+    * Configured with your selected indexers (add the indexers you want use to you config file and set the api key.
+    You need the indexer name. In jackett you can see the URL in the Copy Feed options, if the url is
+     http://192.x.x.x/api/v2.0/indexers/my_indexer_name/results/torznab/api?apikey=1234
+     You must add my_indexer_name to the trackerm.conf file.
 
 * Transmission-daemon
     * Configured to accept RPC connections (add the connection details to /etc/trackerm.conf (template config/config.min.php)
