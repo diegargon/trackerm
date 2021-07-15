@@ -19,7 +19,7 @@
         </div>
     <?php } ?>
     <div class="poster_preview">
-        <a href="?page=view&id=<?= $tdata['id'] ?>&view_type=<?= $tdata['view_type'] ?> ">
+        <a onClick="show_loading();" href="?page=view&id=<?= $tdata['id'] ?>&view_type=<?= $tdata['view_type'] ?> ">
             <img class="img_poster_preview"  alt="" src="<?= $tdata['poster'] ?>"/>
         </a>
         <?php
@@ -29,7 +29,7 @@
         <?php } ?>
         <div class="stack_absolute">
             <?php if (!empty($tdata['have_it'])) { ?>
-                <div class="have_it"><a href="?page=view&id=<?= $tdata['have_it'] ?>&view_type=<?= $tdata['media_type'] ?>_library">&#9668;</a></div>
+                <div class="have_it"><a onClick="show_loading();" href="?page=view&id=<?= $tdata['have_it'] ?>&view_type=<?= $tdata['media_type'] ?>_library">&#9668;</a></div>
             <?php } ?>
         </div>
     </div>
@@ -77,9 +77,9 @@
                 ?>
                 <span class="action_link">
                     <?php if ($tdata['view_type'] == 'movies_db') { ?>
-                        <a href="?page=view&id=<?= $tdata['movie_in_library'] ?>&view_type=movies_library"><?= $LNG['L_HAVEIT'] ?></a>
+                        <a onClick="show_loading();" href="?page=view&id=<?= $tdata['movie_in_library'] ?>&view_type=movies_library"><?= $LNG['L_HAVEIT'] ?></a>
                     <?php } else if ($tdata['view_type'] == 'shows_db') { ?>
-                        <a href="?page=view&id=<?= $tdata['show_in_library'] ?>&view_type=shows_library"><?= $LNG['L_HAVEIT'] ?></a>
+                        <a onClick="show_loading();" href="?page=view&id=<?= $tdata['show_in_library'] ?>&view_type=shows_library"><?= $LNG['L_HAVEIT'] ?></a>
                     <?php } ?>
                 </span>
             <?php }

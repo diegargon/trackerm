@@ -12,8 +12,8 @@
     <input type="hidden" name="page" value="<?= $tdata['page'] ?>"/>
     <input type="hidden" name="id" value="<?= $tdata['id'] ?>"/>
     <input type="hidden" name="view_type" value="<?= $tdata['view_type'] ?>"/>
-    <input class="submit_btn" type="submit" name="more_shows" value="<?= $LNG['L_SEARCH_SHOWS'] ?>" >
-    <input class="submit_btn" type="submit" name="more_torrents" value="<?= $LNG['L_SHOW_TORRENTS'] ?>" >
+    <input onClick="show_loading();" class="submit_btn" type="submit" name="more_shows" value="<?= $LNG['L_SEARCH_SHOWS'] ?>" >
+    <input onClick="show_loading();" class="submit_btn" type="submit" name="more_torrents" value="<?= $LNG['L_SHOW_TORRENTS'] ?>" >
     <input type="text" name="search_shows_db" value="<?= $tdata['stitle'] ?>">
 </form>
 <a href="https://www.themoviedb.org/search?query=<?= $tdata['stitle'] ?>" target="_blank">[TMDB]</a> -
