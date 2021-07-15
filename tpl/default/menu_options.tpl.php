@@ -54,6 +54,17 @@
         <?php if (in_array($tdata['page'], ['library', 'library_movies', 'library_shows', 'news', 'new_movies', 'new_shows'])) { ?>
             <input type="text" size="20"  placeholder="<?= $LNG['L_SEARCH'] ?>" name="search_keyword" onChange="this.form.submit()" value="<?= !empty($tdata['search_keyword']) ? $tdata['search_keyword'] : null ?>"/>
         <?php } ?>
+        <?php if ($tdata['page'] == 'torrents') { ?>
+            <span><?= $LNG['L_SHOW_CACHED'] ?></span>
+            <input type="hidden" name="movies_cached" value="0"/>
+            <div class="inline" data-tip="<?= $LNG['L_MOVIES'] ?>">
+                <input type="checkbox" <?= !empty($prefs->getPrefsItem('movies_cached')) ? 'checked' : null ?> name="movies_cached" onChange="this.form.submit()" value="1"/>
+            </div>
+            <input type="hidden" name="shows_cached" value="0"/>
+            <div class="inline" data-tip="<?= $LNG['L_SHOWS'] ?>">
+                <input type="checkbox" <?= !empty($prefs->getPrefsItem('shows_cached')) ? 'checked' : null ?> name="shows_cached" onChange="this.form.submit()" value="1"/>
+            </div>
+        <?php } ?>
         <?php if (!empty($tdata['page']) && in_array($tdata['page'], ['news', 'new_movies', 'new_shows', 'torrents'])) { ?>
             <span> <?= $LNG['L_FILTER_INDEXER'] ?>:</span>
             <select name="sel_indexer" onChange="this.form.submit()">

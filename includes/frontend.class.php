@@ -126,6 +126,12 @@ class FrontEnd {
         if (isset($_POST['only_freelech'])) {
             $prefs->setPrefsItem('only_freelech', Filter::postString('only_freelech'));
         }
+        if (isset($_POST['movies_cached'])) {
+            $prefs->setPrefsItem('movies_cached', Filter::postString('movies_cached'));
+        }
+        if (isset($_POST['shows_cached'])) {
+            $prefs->setPrefsItem('shows_cached', Filter::postString('shows_cached'));
+        }
         if (isset($_POST['new_ignore_size'])) {
             $prefs->setPrefsItem('new_ignore_size', Filter::postString('new_ignore_size'));
         }

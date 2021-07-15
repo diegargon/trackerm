@@ -78,6 +78,10 @@ function bytesToGB($bytes) {
     return $bytes / round(pow(1024, 3), 2);
 }
 
+function GBTobytes($gb) {
+    return $gb * pow(1024, 3);
+}
+
 function human_filesize($bytes, $decimals = 2) {
     $sz = 'BKMGTP';
     $factor = floor((strlen($bytes) - 1) / 3);

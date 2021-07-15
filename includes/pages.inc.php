@@ -296,7 +296,7 @@ function page_tmdb() {
 }
 
 function page_torrents() {
-    global $frontend;
+    global $frontend, $prefs;
 
     (!empty($_GET['search_movies_torrents'])) ? $search_movies_torrents = Filter::getUtf8('search_movies_torrents') : $search_movies_torrents = '';
     (!empty($_GET['search_shows_torrents'])) ? $search_shows_torrents = Filter::getUtf8('search_shows_torrents') : $search_shows_torrents = '';
@@ -349,6 +349,15 @@ function page_torrents() {
             $box_msg['title'] = 'L_TORRENT';
             $box_msg['body'] = 'L_NOTHING_FOUND';
             $page .= $frontend->msgBox($box_msg);
+        }
+    }
+
+    if (empty($search_movies_torrents) && empty($search_shows_torrents)) {
+        if ($prefs->getPrefsItem('movies_cached')) {
+            $page .= show_cached_torrents('movies');
+        }
+        if ($prefs->getPrefsItem('shows_cached')) {
+            $page .= show_cached_torrents('shows');
         }
     }
 

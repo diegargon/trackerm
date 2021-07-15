@@ -10,7 +10,7 @@
 !defined('IN_WEB') ? exit : true;
 
 function page_new_media(string $media_type) {
-    global $cfg, $db, $log, $prefs;
+    global $cfg, $db, $log;
 
     $cache_media_expire = 0;
     $topt = [];
@@ -99,14 +99,9 @@ function page_new_media(string $media_type) {
         $db->upsert($search_cache_db, $media_cache, $where);
     }
 
-    //Ignore words
-    torrents_filter_words($res_media_db);
-    //Ignore_size
-    torrents_filter_size($res_media_db);
-    //Selected indexer
-    torrents_filter_indexers($res_media_db);
-    //Freelech filter
-    torrents_filter_only_freelech($res_media_db);
+    //Filter words, size indexer freelech
+    torrents_filters($res_media_db);
+
     /* BUILD PAGE */
     $page_news = '';
 
