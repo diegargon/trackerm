@@ -43,12 +43,12 @@
                 <option <?= $tdata['max_rows_sel_50'] ?> value="50">50</option>
             </select>
             <?php if ($cfg['want_movies'] && ($tdata['page'] == 'library' || $tdata['page'] == 'library_movies')) { ?>
-                <input class="submit_btn" type="submit" name="rebuild_movies" value="<?= $LNG['L_REESCAN_MOVIES'] ?>"/>
+                <input onClick="show_loading();" class="submit_btn" type="submit" name="rebuild_movies" value="<?= $LNG['L_REESCAN_MOVIES'] ?>"/>
                 <?php
             }
             if ($cfg['want_shows'] && ($tdata['page'] == 'library' || $tdata['page'] == 'library_shows')) {
                 ?>
-                <input class="submit_btn" type="submit" name="rebuild_shows" value="<?= $LNG['L_REESCAN_SHOWS'] ?>"/>
+                <input onClick="show_loading();" class="submit_btn" type="submit" name="rebuild_shows" value="<?= $LNG['L_REESCAN_SHOWS'] ?>"/>
             <?php } ?>
         <?php } ?>
         <?php if (in_array($tdata['page'], ['library', 'library_movies', 'library_shows', 'news', 'new_movies', 'new_shows'])) { ?>
@@ -58,11 +58,11 @@
             <span><?= $LNG['L_SHOW_CACHED'] ?></span>
             <input type="hidden" name="movies_cached" value="0"/>
             <div class="inline" data-tip="<?= $LNG['L_MOVIES'] ?>">
-                <input onClick="show_loading()" type="checkbox" <?= !empty($prefs->getPrefsItem('movies_cached')) ? 'checked' : null ?> name="movies_cached" onChange="this.form.submit()" value="1"/>
+                <input onClick="show_loading();" type="checkbox" <?= !empty($prefs->getPrefsItem('movies_cached')) ? 'checked' : null ?> name="movies_cached" onChange="this.form.submit()" value="1"/>
             </div>
             <input type="hidden" name="shows_cached" value="0"/>
             <div class="inline" data-tip="<?= $LNG['L_SHOWS'] ?>">
-                <input onClick="show_loading()"  type="checkbox" <?= !empty($prefs->getPrefsItem('shows_cached')) ? 'checked' : null ?> name="shows_cached" onChange="this.form.submit()" value="1"/>
+                <input onClick="show_loading();"  type="checkbox" <?= !empty($prefs->getPrefsItem('shows_cached')) ? 'checked' : null ?> name="shows_cached" onChange="this.form.submit()" value="1"/>
             </div>
         <?php } ?>
         <?php if (!empty($tdata['page']) && in_array($tdata['page'], ['news', 'new_movies', 'new_shows', 'torrents'])) { ?>
@@ -72,7 +72,7 @@
             </select>
             <span><?= $LNG['L_FREELECH'] ?></span>
             <input type="hidden" name="only_freelech" value="0"/>
-            <input onClick="show_loading()"  type="checkbox" <?= !empty($prefs->getPrefsItem('only_freelech')) ? 'checked' : null ?> name="only_freelech" onChange="this.form.submit()" value="1"/>
+            <input onClick="show_loading();"  type="checkbox" <?= !empty($prefs->getPrefsItem('only_freelech')) ? 'checked' : null ?> name="only_freelech" onChange="this.form.submit()" value="1"/>
             <?php
         }
         if (!empty($tdata['page']) && in_array($tdata['page'], ['news', 'new_movies', 'new_shows', 'torrents'])) {
@@ -81,16 +81,16 @@
                 <!-- ignore words -->
                 <span><?= $LNG['L_IGNORE'] ?></span>
                 <input type="hidden" name="new_ignore_words_enable" value="0"/>
-                <input onClick="show_loading()"  type="checkbox" <?= !empty($prefs->getPrefsItem('new_ignore_words_enable')) ? 'checked' : null ?> name="new_ignore_words_enable" onChange="this.form.submit()" value="1"/>
+                <input onClick="show_loading();"  type="checkbox" <?= !empty($prefs->getPrefsItem('new_ignore_words_enable')) ? 'checked' : null ?> name="new_ignore_words_enable" onChange="this.form.submit()" value="1"/>
                 <div class="inline" data-tip="<?= $LNG['L_TIP_COMMA'] ?>">
-                    <input type="text" size="15" name="new_ignore_keywords" onChange="this.form.submit()" value="<?= !empty($prefs->getPrefsItem('new_ignore_keywords')) ? $prefs->getPrefsItem('new_ignore_keywords') : null ?>"/>
+                    <input type="text" size="15" name="new_ignore_keywords" onChange="this.form.submit();show_loading();" value="<?= !empty($prefs->getPrefsItem('new_ignore_keywords')) ? $prefs->getPrefsItem('new_ignore_keywords') : null ?>"/>
                 </div>
                 <!-- ignore size -->
                 <span><?= $LNG['L_SIZE'] ?></span>
                 <input type="hidden" name="new_ignore_size_enable" value="0"/>
-                <input onClick="show_loading()"  type="checkbox" <?= !empty($prefs->getPrefsItem('new_ignore_size_enable')) ? 'checked' : null ?> name="new_ignore_size_enable" onChange="this.form.submit()" value="1"/>
+                <input onClick="show_loading();"  type="checkbox" <?= !empty($prefs->getPrefsItem('new_ignore_size_enable')) ? 'checked' : null ?> name="new_ignore_size_enable" onChange="this.form.submit()" value="1"/>
                 <div class="inline" data-tip="<?= $LNG['L_TIP_IGNORE_SIZE'] ?>">
-                    <input type="text" size="2"  name="new_ignore_size" onChange="this.form.submit()" value="<?= !empty($prefs->getPrefsItem('new_ignore_size')) ? $prefs->getPrefsItem('new_ignore_size') : null ?>"/>
+                    <input type="text" size="2"  name="new_ignore_size" onChange="this.form.submit();show_loading();" value="<?= !empty($prefs->getPrefsItem('new_ignore_size')) ? $prefs->getPrefsItem('new_ignore_size') : null ?>"/>
                 </div>
             </div>
         <?php } ?>
