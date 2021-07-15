@@ -45,7 +45,7 @@
                     <br/>
                 <?php } ?>
                 <?php if (!empty($tdata['release'])) { ?>
-                    <span><?= $LNG['L_RELEASE'] ?> :</span>
+                    <span><?= $LNG['L_RELEASED'] ?> :</span>
                     <span class="view_release"><?= strftime("%Y", strtotime($tdata['release'])) ?></span>
                     <br/>
                 <?php } ?>

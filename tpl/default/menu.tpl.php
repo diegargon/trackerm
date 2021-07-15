@@ -21,9 +21,9 @@
     <?php if ($cfg['want_movies'] == 1 && $cfg['want_shows'] == 1) { ?>
         <a onClick="show_loading()" href="?page=new_movies"><div class="menu_element_join_right"><?= $LNG['L_MOVIES_MIN'] ?></div></a>
         <a onClick="show_loading()" href="?page=new_shows"><div class="menu_element_join_left"><?= $LNG['L_SHOWS_MIN'] ?></div></a>
-        <a onClick="show_loading()" href="?page=news"><div class="menu_element_join_left"><?= $LNG['L_RELEASE'] ?></div></a>
+        <a onClick="show_loading()" href="?page=news"><div class="menu_element_join_left"><?= $LNG['L_RELEASED'] ?></div></a>
     <?php } else { ?>
-        <a onClick="show_loading()" href="?page=news"><div class="menu_element_join_right"><?= $LNG['L_RELEASE'] ?></div></a>
+        <a onClick="show_loading()" href="?page=news"><div class="menu_element_join_right"><?= $LNG['L_RELEASED'] ?></div></a>
     <?php } ?>
     <a onClick="show_loading()" href="?page=wanted"><div class="menu_element"><?= $LNG['L_WANTED'] ?></div></a>
     <a onClick="show_loading()" href="?page=torrents"><div class="menu_element"><?= $LNG['L_TORRENTS'] ?></div></a>
