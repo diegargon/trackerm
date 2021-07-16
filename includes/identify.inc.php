@@ -155,9 +155,9 @@ function auto_ident(string $media_type, array $ids) {
     $uniq_shows = [];
 
     foreach ($ids as $key_id => $id) {
-        $log->debug("auto_ident by exact called for $id");
         $db_item = $db->getItemById('library_' . $media_type, $id);
         $predictible_title = getFileTitle($db_item['file_name']);
+        $log->debug("auto_ident by exact called for $id, search $predictible_title");
         if ($media_type == 'movies') {
             $search_results = mediadb_searchMovies($predictible_title);
         } else if ($media_type == 'shows') {
@@ -188,6 +188,7 @@ function auto_ident(string $media_type, array $ids) {
                 unset($ids[$key_id]);
             }
         } else {
+            $log->debug("Not found any results on tmdb for $predictible_title");
             continue;
         }
         !$found ? $log->debug("Auto ident is set but titles not match $db_item_title") : null;

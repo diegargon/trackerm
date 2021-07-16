@@ -123,7 +123,7 @@ function themoviedb_MediaPrep($media_type, $items) {
 
     $fitems = [];
 
-    $i = 1;
+    $i = 0;
     foreach ($items as $item) {
         if ($media_type == 'movies') {
             $title = $item['title'];
