@@ -2,31 +2,33 @@
 <img src="https://github.com/diegargon/trackerm/blob/master/screenshots/library-screenshot.png?raw=true" width="100%">
 </p>
 
-# trackerm
+# TrackerM
 
 ## Features:
     - For Movies & Shows 
     - Track shows: Automatically download next episodes and old episodes 
 specifying starting chapter
-    - Wanted List: Adding movies/shows to wanted will make TrackerM download automatically 
+    - Wanted List: Adding movies/shows to the wanted list will make TrackerM download automatically 
 when some tracker release.
     - Multiple options for tracker/wanted: Ignore/Require Keywords, Quality Preference
  PROPER, etc
     - transmission-daemon integration (Sorry only works with transmission-daemon atm)
     - TheMovieDB search, show popular, trending.
     - Torrents search: Limit by Indexer, Filter Words, Filter Size, Freelech filter
-    - Torrent show latest releases from you indexers.
+    - List latest releases from your favorite indexers/trackers.
     - Trailers & Covers guess for missing covers
-    - Library: Search you library, Downlad button, Stats
-    - Library: Local Player (no active by default, see config options), play you
- movies/shows  launching VLC just clicking (share volumes must be accesible)
+    - Library: Search you library, Downlad media, Stats
+    - Library: Local Player (no active by default, see config options), play your
+ movies/shows  launching VLC just clicking (the media share volume must be accesible)
     - Users: Basic IU designed for multiple users, password access, limit local ips (config)
-    - Email: Automatically send email when download new media
+    - Email: Automatically send email when TrackerM add new media to your library
     - Automatically link(when seeding) and move (finish seeding) from transmission-daemon 
 download directory to your library
     - Proxy support
-    - Cache Covers
+    - Cache Covers for fastt experience
     - Automatically disabling (temporally) indexers offline or slow
+    - Use SQLlite, not need a more complex database.
+
 ## Description: 
 
 **ENGLISH**
