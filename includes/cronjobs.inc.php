@@ -24,7 +24,6 @@ function cronjobs() {
         check_masters_childs_integrity();
     }
 
-
     if (($cfg['cron_halfday'] + 21600) < $time_now) {
         $db->update('config', ['cfg_value' => $time_now], ['cfg_key' => ['value' => 'cron_halfday']]);
         update_library_stats();
