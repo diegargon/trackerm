@@ -5,29 +5,24 @@
 # TrackerM
 
 ## Features:
-    - For Movies & Shows 
-    - Track shows: Automatically download next episodes and old episodes 
-specifying starting chapter
-    - Wanted List: Adding movies/shows to the wanted list will make TrackerM download automatically 
-when some tracker release.
-    - Multiple options for tracker/wanted: Ignore/Require Keywords, Quality Preference
- PROPER, etc
-    - transmission-daemon integration (Sorry only works with transmission-daemon atm)
-    - TheMovieDB search, show popular, trending.
-    - Torrents search: Limit by Indexer, Filter Words, Filter Size, Freelech filter
-    - List latest releases from your favorite indexers/trackers.
-    - Trailers & Covers guess for missing covers
-    - Library: Search you library, Downlad media, Stats
-    - Library: Local Player (no active by default, see config options), play your
- movies/shows  launching VLC just clicking (the media share volume must be accesible)
-    - Users: Basic IU designed for multiple users, password access, limit local ips (config)
-    - Email: Automatically send email when TrackerM add new media to your library
-    - Automatically link(when seeding) and move (finish seeding) from transmission-daemon 
-download directory to your library
-    - Proxy support
-    - Cache Covers for fastt experience
-    - Automatically disabling (temporally) indexers offline or slow
-    - Use SQLlite, not need a more complex database.
+    * For Movies & Shows 
+    * Track shows: Automatically download next episodes and old episodes specifying starting chapter
+    * Wanted List: Adding movies/shows to the wanted list will make TrackerM download automatically when some tracker release.
+    * Multiple options for tracker/wanted: Ignore/Require Keywords, Quality Preference PROPER, etc
+    * transmission-daemon integration (Sorry only works with transmission-daemon atm)
+    * TheMovieDB search, show popular, trending.
+    * Torrents search: Limit by Indexer, Filter Words, Filter Size, Freelech filter
+    * List latest releases from your favorite indexers/trackers.
+    * Trailers & Covers guess for missing covers
+    * Library: Search you library, Downlad media, Stats
+    * Library: Local Player (no active by default, see config options), play your movies/shows  launching VLC just clicking (the media share volume must be accesible)
+    * Users: Basic IU designed for multiple users, password access, limit local ips (config)
+    * Email: Automatically send email when TrackerM add new media to your library
+    * Automatically link(when seeding) and move (finish seeding) from transmission-daemon  download directory to your library
+    * Proxy support
+    * Cache Covers for fastt experience
+    * Automatically disabling (temporally) indexers offline or slow
+    * Use SQLlite, not need a more complex database.
 
 ## Description: 
 
