@@ -144,6 +144,37 @@ Class Filter {
         return $val;
     }
 
+    static function getImgUrl($val, $size = null) {
+        if (empty($_GET[$val])) {
+            return false;
+        }
+
+        return self::varImgUrl($_GET[$val], $size);
+    }
+
+    static function postImgUrl($val, $size = null) {
+        if (empty($_POST[$val])) {
+            return false;
+        }
+
+        return self::varImgUrl($_POST[$val], $size);
+    }
+
+    static function varImgUrl($val, $size = null) {
+        $exts = array('jpg', 'gif', 'png');
+
+        if (empty($val) || (!empty($size) && (strlen($val) > $size))) {
+            return false;
+        }
+
+        if (filter_var($val, FILTER_VALIDATE_URL) &&
+                in_array(strtolower(pathinfo($val, PATHINFO_EXTENSION)), $exts)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     // AZaz
     static function postAzChar($val, $size = null) {
         if (empty($_POST[$val])) {
