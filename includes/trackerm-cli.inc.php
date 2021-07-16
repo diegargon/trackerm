@@ -602,7 +602,12 @@ function wanted_work() {
         } else {
             (strlen($wanted['season']) == 1) ? $season = '0' . $wanted['season'] : $season = $wanted['season'];
             (strlen($wanted['episode']) == 1) ? $episode = '0' . $wanted['episode'] : $episode = $wanted['episode'];
-            $s_episode = 'S' . $season . 'E' . $episode;
+            if (empty($season) || empty($episode)) {
+                $log->warning('Supposed wanted show $title havent episode/title set');
+                $s_episode = '';
+            } else {
+                $s_episode = 'S' . $season . 'E' . $episode;
+            }
             $search['words'] = $title;
             $search['episode'] = $s_episode;
             $log->debug(' Search for : ' . $title . " $s_episode [ $media_type ]");
