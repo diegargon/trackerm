@@ -1,11 +1,15 @@
 ## Latest / News (Relevant)
 
-[15/07] In Torrents, you can now list all cached torrents, this torrents links would fail download if indexer is down or remove the torrent.
+[15/07] In Torrents, you can now list all cached torrents, this torrents links would fail download 
+if the tracker/indexer is down or the source remove the torrent, also freelech flag is not reliable.
+Remember the results are cached from one minute ago to few weeks/months ago. Avaible sub menu optiosn
+in torrents tab.
 [14/07] view media  file list: * to denote linked file
 [14/07] Torrents items: Red Triangle indicate have it (guessed by title) 
-[12/07] Fix: update freelech state to avoid retrieve from cache show old freelech state results
-[11/07] Delete Register only for admin
-[11/07] Library/Admin option for Custom Poster (Submit empty for back to default)
+[12/07] Fix: update freelech state when retrieve new release wich are cached to avoid on retrieve 
+old freelech status results
+[11/07] Delete Register. Only for admin
+[11/07] Library/Admin option for Custom Poster (Submit empty for back to default), in view page.
 [************ COMMIT **********]
 [30/06] Fix wanted download wrong episodes
 [************ COMMIT **********]
