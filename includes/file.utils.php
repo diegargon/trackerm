@@ -93,16 +93,20 @@ function load_from_file_json($file) {
 }
 
 function cache_img($img_url) {
-    global $cfg;
+    global $cfg, $log;
 
-    if (!is_writeable($_SERVER['DOCUMENT_ROOT'] . $cfg['REL_PATH'] . $cfg['cache_images_path'])) {
+    $path = $_SERVER['DOCUMENT_ROOT'] . $cfg['REL_PATH'] . $cfg['cache_images_path'];
+    if (!is_writeable($path)) {
+        $log->warning($path . 'is not writable');
         return false;
     }
 
     $file_name = basename($img_url);
-    $img_path = $_SERVER['DOCUMENT_ROOT'] . $cfg['REL_PATH'] . $cfg['cache_images_path'] . '/' . $file_name;
+    $img_path = $path . '/' . $file_name;
 
-    if (!file_exists($img_path)) {
+    if (file_exists($img_path)) {
+        return $cfg['REL_PATH'] . $cfg['cache_images_path'] . '/' . $file_name;
+    } else {
         $http_options['timeout'] = $cfg['proxy_timeout'];
 
         if (!empty($cfg['proxy_enable']) && !empty($cfg['proxy_url'])) {
@@ -121,10 +125,6 @@ function cache_img($img_url) {
         if ($img_file !== false) {
             file_put_contents($img_path, $img_file);
         }
-    }
-
-    if (file_exists($img_path)) {
-        return $cfg['REL_PATH'] . $cfg['cache_images_path'] . '/' . $file_name;
     }
 
     return false;
