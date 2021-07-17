@@ -579,7 +579,7 @@ button {
   transform: rotate(-45deg);
   color: chartreuse;
 }
-.stack_absolute {
+.stack_overlay {
   position: absolute;  
   right:0px;
   bottom: 5px;

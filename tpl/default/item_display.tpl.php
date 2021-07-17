@@ -27,7 +27,7 @@
             ?>
             <div class="guessed_poster"><?= $LNG['L_POSTER_GUESSED'] ?></div>
         <?php } ?>
-        <div class="stack_absolute">
+        <div class="stack_overlay">
             <?php if (!empty($tdata['have_it'])) { ?>
                 <div class="have_it"><a onClick="show_loading();" href="?page=view&id=<?= $tdata['have_it'] ?>&view_type=<?= $tdata['media_type'] ?>_library">&#9668;</a></div>
             <?php } ?>
