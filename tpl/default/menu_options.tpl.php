@@ -10,6 +10,15 @@
 <div class="menu_options">
     <form method="post" action="?page=<?= $tdata['page'] ?>">
         <?php if (in_array($tdata['page'], ['library', 'library_movies', 'library_shows'])) { ?>
+            <!--
+                <div class="inline" data-tip="<?= $LNG['L_VIEW_MODE'] ?>">
+                    <label class="switch">
+                        <input type="hidden" name="view_mode" value="0"/>
+                        <input type="checkbox" name="view_mode"  <?= !empty($prefs->getPrefsItem('view_mode')) ? 'checked' : null ?>  onChange="this.form.submit();show_loading();"/>
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            -->
             <?= $LNG['L_IDENTIFY'] ?>:
             <select class="num_ident_toshow" name="num_ident_toshow" onChange="this.form.submit();show_loading();">
                 <option <?= $tdata['max_id_sel_0'] ?> value="0">0</option>

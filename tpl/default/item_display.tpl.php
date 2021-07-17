@@ -19,6 +19,15 @@
         </div>
     <?php } ?>
     <div class="poster_preview">
+        <?php
+        if (($tdata['view_type'] == 'movies_library' || $tdata['view_type'] == 'shows_library') && !empty($cfg['localplayer']) && !empty($prefs->getPrefsItem('view_mode'))) {
+            ?>
+            <div class="overlay_play">
+                <div class="main_play">
+                    <a onClick="show_loading();" href="?page=view&id=&view_type=<?= $tdata['media_type'] ?>_library">&#9656;</a>
+                </div>
+            </div>
+        <?php } ?>
         <a onClick="show_loading();" href="?page=view&id=<?= $tdata['id'] ?>&view_type=<?= $tdata['view_type'] ?> ">
             <img class="img_poster_preview"  alt="" src="<?= $tdata['poster'] ?>"/>
         </a>
@@ -26,7 +35,25 @@
         if (!empty($tdata['guessed_poster'])) {
             ?>
             <div class="guessed_poster"><?= $LNG['L_POSTER_GUESSED'] ?></div>
-        <?php } ?>
+            <?php
+        }
+        if (($tdata['view_type'] == 'movies_library' || $tdata['view_type'] == 'shows_library') &&
+                !empty($tdata['total_items']) && ($tdata['total_items'] > 1) && empty($prefs->getPrefsItem('view_mode'))) {
+            ?>
+            <div class="overlay_nfiles">
+                <div class="nfiles"><?= $tdata['total_items'] ?></div>
+            </div>
+            <?php
+        }
+        if (($tdata['view_type'] == 'movies_library' || $tdata['view_type'] == 'shows_library') &&
+                !empty($tdata['total_items']) && !empty($prefs->getPrefsItem('view_mode'))) {
+            ?>
+            <div class="overlay_nfiles">
+                <div class="nfiles"><?= $tdata['total_items'] ?></div>
+            </div>
+        <?php }
+        ?>
+
         <div class="stack_overlay">
             <?php if (!empty($tdata['have_it'])) { ?>
                 <div class="have_it"><a onClick="show_loading();" href="?page=view&id=<?= $tdata['have_it'] ?>&view_type=<?= $tdata['media_type'] ?>_library">&#9668;</a></div>
@@ -46,13 +73,6 @@
                 </form>
                 <?php
             }
-
-            if (!empty($tdata['total_items']) && $tdata['total_items'] > 1) {
-                ?>
-                <span class="item_num_episodes">[<?= $tdata['total_items'] ?>]</span>
-                <?php
-            }
-
             if (!empty($tdata['total_size'])) {
                 ?>
                 <span class="item_size">[<?= $tdata['total_size'] ?>]</span>

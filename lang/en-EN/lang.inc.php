@@ -234,6 +234,7 @@ $LNG = [
     'L_UPDATE' => 'Update',
     'L_UPDATE_EPISODES' => 'Update ep.',
     'L_VERIFYING' => 'Checking',
+    'L_VIEW_MODE' => 'View Mode',
     'L_WANTED' => 'Wanted',
     'L_WANTED_ADD' => 'Add Wanted',
     'L_WANT_ALL' => 'Add all',
