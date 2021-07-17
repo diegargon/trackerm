@@ -398,12 +398,12 @@ function get_media_files($id, $media_type) {
 
     if ($media_type == 'movies') {
         //localplayer
-        if ($cfg['localplayer']) {
+        if (!empty($cfg['localplayer'])) {
             $link_localplayer_parms = ['page' => 'localplayer', 'id' => $selected_id, 'media_type' => $media_type];
             $media_files .= Html::link(['class' => 'action_link'], '', 'LocalPlay', $link_localplayer_parms);
         }
         //Download
-        if ($cfg['download_button']) {
+        if (!empty($cfg['download_button'])) {
             $link_download_parms = ['page' => 'download', 'id' => $selected_id, 'media_type' => $media_type, 'view_type' => 'movies_library'];
             $media_files .= Html::link(['class' => 'action_link'], '', $LNG['L_DOWNLOAD'], $link_download_parms);
         }
