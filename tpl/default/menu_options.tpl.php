@@ -14,13 +14,13 @@
                 <div class="inline" data-tip="<?= $LNG['L_VIEW_MODE'] ?>">
                     <label class="switch">
                         <input type="hidden" name="view_mode" value="0"/>
-                        <input type="checkbox" name="view_mode"  <?= !empty($prefs->getPrefsItem('view_mode')) ? 'checked' : null ?>  onChange="this.form.submit();show_loading();"/>
+                        <input type="checkbox" name="view_mode"  <?= !empty($prefs->getPrefsItem('view_mode')) ? 'checked' : null ?>  onChange="show_loading();this.form.submit();"/>
                         <span class="slider round"></span>
                     </label>
                 </div>
             -->
             <?= $LNG['L_IDENTIFY'] ?>:
-            <select class="num_ident_toshow" name="num_ident_toshow" onChange="this.form.submit();show_loading();">
+            <select class="num_ident_toshow" name="num_ident_toshow" onChange="show_loading();this.form.submit();">
                 <option <?= $tdata['max_id_sel_0'] ?> value="0">0</option>
                 <option <?= $tdata['max_id_sel_5'] ?> value="5">5</option>
                 <option <?= $tdata['max_id_sel_10'] ?> value="10">10</option>
@@ -30,7 +30,7 @@
         <?php } ?>
         <?php if (!in_array($tdata['page'], ['wanted', 'transmission', 'index', 'view'])) { ?>
             <span class="html_ico">&#8741;</span>
-            <select class="num_columns_results" name="num_columns_results" onChange="this.form.submit();show_loading();">
+            <select class="num_columns_results" name="num_columns_results" onChange="show_loading();this.form.submit();">
                 <option <?= $tdata['max_columns_sel_none'] ?> id="default"><?= $LNG['L_DEFAULT'] ?></option>
                 <option <?= $tdata['max_columns_sel_1'] ?> value="1">1</option>
                 <option <?= $tdata['max_columns_sel_2'] ?> value="2">2</option>
@@ -40,7 +40,7 @@
                 <option <?= $tdata['max_columns_sel_10'] ?> value="10">10</option>
             </select>
             <span class="html_ico">&#9868;</span>
-            <select class="num_rows_results" name="num_rows_results" onChange="this.form.submit();show_loading();">
+            <select class="num_rows_results" name="num_rows_results" onChange="show_loading();this.form.submit();">
                 <option <?= $tdata['max_rows_sel_none'] ?> value="<?= $LNG['L_DEFAULT'] ?>"><?= $LNG['L_DEFAULT'] ?></option>
                 <option <?= $tdata['max_rows_sel_1'] ?> value="1">1</option>
                 <option <?= $tdata['max_rows_sel_2'] ?> value="2">2</option>
@@ -61,7 +61,7 @@
             <?php } ?>
         <?php } ?>
         <?php if (in_array($tdata['page'], ['library', 'library_movies', 'library_shows', 'news', 'new_movies', 'new_shows'])) { ?>
-            <input type="text" size="20"  placeholder="<?= $LNG['L_SEARCH'] ?>" name="search_keyword" onChange="this.form.submit();show_loading();" value="<?= !empty($tdata['search_keyword']) ? $tdata['search_keyword'] : null ?>"/>
+            <input type="text" size="20"  placeholder="<?= $LNG['L_SEARCH'] ?>" name="search_keyword" onChange="show_loading();this.form.submit();" value="<?= !empty($tdata['search_keyword']) ? $tdata['search_keyword'] : null ?>"/>
         <?php } ?>
         <?php if ($tdata['page'] == 'torrents') { ?>
             <span><?= $LNG['L_SHOW_CACHED'] ?></span>
@@ -76,7 +76,7 @@
         <?php } ?>
         <?php if (!empty($tdata['page']) && in_array($tdata['page'], ['news', 'new_movies', 'new_shows', 'torrents'])) { ?>
             <span> <?= $LNG['L_FILTER_INDEXER'] ?>:</span>
-            <select  name="sel_indexer" onChange="this.form.submit(); show_loading();">
+            <select  name="sel_indexer" onChange="show_loading();this.form.submit();">
                 <?= $tdata['sel_indexers'] ?>
             </select>
             <span><?= $LNG['L_FREELECH'] ?></span>
@@ -92,14 +92,14 @@
                 <input type="hidden" name="new_ignore_words_enable" value="0"/>
                 <input onClick="show_loading();"  type="checkbox" <?= !empty($prefs->getPrefsItem('new_ignore_words_enable')) ? 'checked' : null ?> name="new_ignore_words_enable" onChange="this.form.submit()" value="1"/>
                 <div class="inline" data-tip="<?= $LNG['L_TIP_COMMA'] ?>">
-                    <input type="text" size="15" name="new_ignore_keywords" onChange="this.form.submit();show_loading();" value="<?= !empty($prefs->getPrefsItem('new_ignore_keywords')) ? $prefs->getPrefsItem('new_ignore_keywords') : null ?>"/>
+                    <input type="text" size="15" name="new_ignore_keywords" onChange="show_loading();this.form.submit();" value="<?= !empty($prefs->getPrefsItem('new_ignore_keywords')) ? $prefs->getPrefsItem('new_ignore_keywords') : null ?>"/>
                 </div>
                 <!-- ignore size -->
                 <span><?= $LNG['L_SIZE'] ?></span>
                 <input type="hidden" name="new_ignore_size_enable" value="0"/>
                 <input onClick="show_loading();"  type="checkbox" <?= !empty($prefs->getPrefsItem('new_ignore_size_enable')) ? 'checked' : null ?> name="new_ignore_size_enable" onChange="this.form.submit()" value="1"/>
                 <div class="inline" data-tip="<?= $LNG['L_TIP_IGNORE_SIZE'] ?>">
-                    <input type="text" size="2"  name="new_ignore_size" onChange="this.form.submit();show_loading();" value="<?= !empty($prefs->getPrefsItem('new_ignore_size')) ? $prefs->getPrefsItem('new_ignore_size') : null ?>"/>
+                    <input type="text" size="2"  name="new_ignore_size" onChange="show_loading();this.form.submit();" value="<?= !empty($prefs->getPrefsItem('new_ignore_size')) ? $prefs->getPrefsItem('new_ignore_size') : null ?>"/>
                 </div>
             </div>
         <?php } ?>
