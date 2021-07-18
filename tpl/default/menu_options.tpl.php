@@ -11,13 +11,13 @@
     <form method="post" action="?page=<?= $tdata['page'] ?>">
         <?php if (in_array($tdata['page'], ['library', 'library_movies', 'library_shows'])) { ?>
             <!--
-                <div class="inline" data-tip="<?= $LNG['L_VIEW_MODE'] ?>">
-                    <label class="switch">
-                        <input type="hidden" name="view_mode" value="0"/>
-                        <input type="checkbox" name="view_mode"  <?= !empty($prefs->getPrefsItem('view_mode')) ? 'checked' : null ?>  onChange="show_loading();this.form.submit();"/>
-                        <span class="slider round"></span>
-                    </label>
-                </div>
+            <div class="inline" data-tip="<?= $LNG['L_VIEW_MODE'] ?>">
+                <label class="switch">
+                    <input type="hidden" name="view_mode" value="0"/>
+                    <input type="checkbox" name="view_mode"  <?= !empty($prefs->getPrefsItem('view_mode')) ? 'checked' : null ?>  onChange="show_loading();this.form.submit();"/>
+                    <span class="slider round"></span>
+                </label>
+            </div>
             -->
             <?= $LNG['L_IDENTIFY'] ?>:
             <select class="num_ident_toshow" name="num_ident_toshow" onChange="show_loading();this.form.submit();">
