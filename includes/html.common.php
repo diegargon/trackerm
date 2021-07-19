@@ -169,6 +169,8 @@ function pager($npage, $nitems, &$topt) {
         (!empty(Filter::getUtf8('search_shows'))) ? $get_params['search_shows'] = trim(Filter::getUtf8('search_shows')) : null;
 
         for ($i = 1; $i <= ceil($num_pages); $i++) {
+            $same_page = 0;
+
             if (($i == 1 || $i == $num_pages || $i == $npage) ||
                     in_range($i, ($npage - 3), ($npage + 3), TRUE)
             ) {
@@ -184,12 +186,19 @@ function pager($npage, $nitems, &$topt) {
                     if (isset($topt['search_type']) && ($search_type != $topt['search_type'])) {
 
                     } else {
+                        $same_page = 1;
                         $link_npage_class .= '_selected';
                     }
                 }
-                $get_params['npage'] = $i;
+                $link_options = [];
 
-                $pages_links .= html::link(['onClick' => 'show_loading()', 'inpage' => $inpage, 'class' => $link_npage_class], '', $i, $get_params);
+                $get_params['npage'] = $i;
+                //click same page nomber page not reload then loading not dissapear, avoid
+                (empty($same_page)) ? $link_options['onClick'] = 'show_loading()' : null;
+
+                $link_options['inpage'] = $inpage;
+                $link_options['class'] = $link_npage_class;
+                $pages_links .= html::link($link_options, '', $i, $get_params);
             }
         }
     }

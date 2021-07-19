@@ -226,33 +226,35 @@ function page_library() {
             $results = $db->select('view_media', '*', $where);
             $view_items = $db->fetchAll($results);
 
-            foreach ($items as $item) {
-                $found = 0;
+            if (count($items) == count($view_items)) {
+                $db->delete('view_media', ['themoviedb_id' => ['value' => $master['themoviedb_id']]]);
+            } else {
+                foreach ($items as $item) {
+                    $found = 0;
 
-                foreach ($view_items as $view_item) {
-                    if ($media_type == 'movies' && $view_item['themoviedb_id'] == $master['themoviedb_id']) {
-                        $found = $view_item['id'];
-                        break;
+                    foreach ($view_items as $view_item) {
+                        if ($media_type == 'movies' && $view_item['themoviedb_id'] == $master['themoviedb_id']) {
+                            $found = $view_item['id'];
+                            break;
+                        }
+                        if ($media_type == 'shows' && $view_item['themoviedb_id'] == $master['themoviedb_id'] && $view_item['season'] == $item['season'] && $view_item['episode'] == $item['episode']
+                        ) {
+                            $found = $view_item['id'];
+                            break;
+                        }
                     }
-                    if ($media_type == 'shows' && $view_item['themoviedb_id'] == $master['themoviedb_id'] && $view_item['season'] == $item['season'] && $view_item['episode'] == $item['episode']
-                    ) {
-                        $found = $view_item['id'];
-                        break;
-                    }
-                }
 
-                if (!$found) {
-                    $values['uid'] = $user->getId();
-                    $values['themoviedb_id'] = $master['themoviedb_id'];
-                    $values['file_hash'] = $item['file_hash'];
-                    $values['media_type'] = $media_type;
-                    if ($media_type == 'shows') {
-                        $values['season'] = $item['season'];
-                        $values['episode'] = $item['episode'];
+                    if (!$found) {
+                        $values['uid'] = $user->getId();
+                        $values['themoviedb_id'] = $master['themoviedb_id'];
+                        $values['file_hash'] = $item['file_hash'];
+                        $values['media_type'] = $media_type;
+                        if ($media_type == 'shows') {
+                            $values['season'] = $item['season'];
+                            $values['episode'] = $item['episode'];
+                        }
+                        $db->insert('view_media', $values);
                     }
-                    $db->insert('view_media', $values);
-                } else {
-                    $db->delete('view_media', ['id' => ['value' => $found]], 'LIMIT 1');
                 }
             }
         }
