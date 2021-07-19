@@ -17,7 +17,7 @@
   .mode column
   y luego el select * o lo que sea;
 
-  v0.4
+  v0.5
  */
 !defined('IN_WEB') ? exit : true;
 
@@ -443,8 +443,12 @@ class DB {
         return $this->db->lastInsertRowID();
     }
 
-    public function finalize($result) {
-        $result->finalize();
+    public function finalize($results) {
+        $results->finalize();
+    }
+
+    public function free($results) {
+        $results->finalize();
     }
 
     public function getDbVersion() {
