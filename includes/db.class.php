@@ -17,13 +17,13 @@
   .mode column
   y luego el select * o lo que sea;
 
-  v0.3
+  v0.4
  */
 !defined('IN_WEB') ? exit : true;
 
 class DB {
 
-    private $version = 18;
+    private $version = 19;
     private $db;
     private $db_path;
     private $querys = [];
@@ -103,12 +103,6 @@ class DB {
                 $this->addItemUniqField($table, $item, $field);
             }
         }
-        /* OLD
-          foreach ($items as $item) {
-          $this->addItemUniqField($table, $item, $field);
-          }
-         *
-         */
     }
 
     //TODO create a upsert insert and replace SQLite have it... i think
@@ -265,7 +259,6 @@ class DB {
 
         $response = $st->execute();
 
-
         return $response;
     }
 
@@ -334,8 +327,9 @@ class DB {
             $final_values = $values;
         }
 
+        $prep_values = '';
         foreach ($final_values as $final_value) {
-            !isset($prep_values) ? $prep_values = '\'' . trim($final_value) . '\'' : $prep_values .= ',\'' . trim($final_value) . '\'';
+            empty($prep_values) ? $prep_values = '\'' . trim($final_value) . '\'' : $prep_values .= ',\'' . trim($final_value) . '\'';
         }
         $query = 'SELECT ' . $what . ' FROM ' . $table . ' WHERE ' . $field . ' IN(' . $prep_values . ')';
 
@@ -375,7 +369,6 @@ class DB {
         }
 
         $response = $st->execute();
-
 
         return $response;
     }

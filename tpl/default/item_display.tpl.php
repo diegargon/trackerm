@@ -47,13 +47,21 @@
             </div>
             <?php
         }
-        if (($tdata['view_type'] == 'movies_library' || $tdata['view_type'] == 'shows_library') &&
-                !empty($tdata['total_items']) && !empty($prefs->getPrefsItem('view_mode'))) {
+        if (($tdata['view_type'] == 'movies_library' || $tdata['view_type'] == 'shows_library') && !empty($prefs->getPrefsItem('view_mode'))) {
             ?>
             <div class="overlay_nfiles">
-                <div class="nfiles"><?= $tdata['total_items'] ?></div>
+                <div class="nfiles">
+                    <?php
+                    if (!empty($prefs->getPrefsItem('view_mode')) && isset($tdata['total_unseen_items'])) {
+                        print $tdata['total_unseen_items'];
+                    } else {
+                        print $tdata['total_items'];
+                    }
+                    ?>
+                </div>
             </div>
-        <?php }
+            <?php
+        }
         ?>
 
         <div class="stack_overlay">
@@ -74,6 +82,21 @@
                     <input type="hidden" name="download" value="<?= $tdata['download'] ?>"/>
                 </form>
                 <?php
+            }
+            if (( $tdata['view_type'] == 'movies_library' || $tdata['view_type'] == 'shows_library')) {
+                if (isset($tdata['total_unseen_items']) && $tdata['total_unseen_items'] <= 0) {
+                    ?>
+                    <div class="inline" data-tip="<?= $LNG['L_SEEN'] ?>">
+                        <div class="item_view_view">
+                            <a href="?page=<?= $tdata['page'] ?>&vid=<?= $tdata['id'] ?>&media_type=<?= $tdata['media_type'] ?>&search_type=<?= $tdata['media_type'] ?>&npage=<?= $tdata['npage'] ?>">[ &#10003; ]</a>
+                        </div>
+                    </div>
+                <?php } else { ?>
+                    <div class="inline" data-tip="<?= $LNG['L_UNSEEN'] ?>">
+                        <div class="item_view_noview"><a href="?page=<?= $tdata['page'] ?>&vid=<?= $tdata['id'] ?>&media_type=<?= $tdata['media_type'] ?>&search_type=<?= $tdata['media_type'] ?>&npage=<?= $tdata['npage'] ?>">[ &#10003; ]</a></div>
+                    </div>
+                    <?php
+                }
             }
             if (!empty($tdata['total_size'])) {
                 ?>

@@ -144,23 +144,49 @@ function page_index() {
 }
 
 function page_view() {
-    global $db, $frontend;
+    global $db, $frontend, $user;
 
     $id = Filter::getInt('id');
     $deletereg_id = Filter::getInt('deletereg_id');
     $view_type = Filter::getString('view_type');
+    $media_type = Filter::getAzChar('media_type');
+    $vid = Filter::getInt('vid');
 
     if (empty($id) || empty($view_type)) {
         return $frontend->msgBox($msg = ['title' => 'L_ERROR', 'body' => '1A1001']);
     }
-    if (!empty($deletereg_id)) {
-        if ($view_type == 'movies_library') {
-            $library = 'library_movies';
-            $library_master = 'library_master_movies';
-        } else if ($view_type == 'shows_library') {
-            $library = 'library_shows';
-            $library_master = 'library_master_shows';
+
+    if ($view_type == 'movies_library') {
+        $library = 'library_movies';
+        $library_master = 'library_master_movies';
+    } else if ($view_type == 'shows_library') {
+        $library = 'library_shows';
+        $library_master = 'library_master_shows';
+    }
+
+    if (!empty($vid) && !empty($media_type)) {
+        $vitem = $db->getItemById($library, $vid);
+        $results = $db->select('view_media', '*', ['file_hash' => ['value' => $vitem['file_hash']]], 'LIMIT 1');
+        $view_data = $db->fetchAll($results);
+        if (valid_array($view_data)) {
+            $db->delete('view_media', ['id' => ['value' => $view_data[0]['id']]], 'LIMIT 1');
+        } else {
+            $master = $db->getItemById($library_master, $vitem['master']);
+
+            $values['uid'] = $user->getId();
+            $values['themoviedb_id'] = $master['themoviedb_id'];
+            $values['file_hash'] = $vitem['file_hash'];
+            $values['media_type'] = $media_type;
+            if ($media_type == 'shows') {
+                $values['season'] = $vitem['season'];
+                $values['episode'] = $vitem['episode'];
+            }
+            $db->insert('view_media', $values);
         }
+    }
+
+    if (!empty($deletereg_id)) {
+
         $register_item = $db->getItemById($library, $deletereg_id);
         if (valid_array($register_item)) {
             $register_master_item = $db->getItemById($library_master, $register_item['master']);
@@ -176,13 +202,61 @@ function page_view() {
 }
 
 function page_library() {
-    global $cfg;
+    global $cfg, $db, $user;
 
     $page = '';
 
     (isset($_POST['rebuild_movies'])) ? rebuild('movies', $cfg['MOVIES_PATH']) : null;
     (isset($_POST['rebuild_shows'])) ? rebuild('shows', $cfg['SHOWS_PATH']) : null;
 
+    if (!empty(Filter::getInt('vid')) && !empty(Filter::getAzChar('media_type'))) {
+        $media_type = Filter::getAzChar('media_type');
+        $vid = Filter::getInt('vid');
+        $library = 'library_' . $media_type;
+        $library_master = 'library_master_' . $media_type;
+
+        $master = $db->getItemById($library_master, $vid);
+
+        if (valid_array($master)) {
+            $items = $db->getItemsByField($library, 'master', $master['id']);
+            $where = [
+                'uid' => ['value' => $user->getId()],
+                'themoviedb_id' => ['value' => $master['themoviedb_id']],
+            ];
+            $results = $db->select('view_media', '*', $where);
+            $view_items = $db->fetchAll($results);
+
+            foreach ($items as $item) {
+                $found = 0;
+
+                foreach ($view_items as $view_item) {
+                    if ($media_type == 'movies' && $view_item['themoviedb_id'] == $master['themoviedb_id']) {
+                        $found = $view_item['id'];
+                        break;
+                    }
+                    if ($media_type == 'shows' && $view_item['themoviedb_id'] == $master['themoviedb_id'] && $view_item['season'] == $item['season'] && $view_item['episode'] == $item['episode']
+                    ) {
+                        $found = $view_item['id'];
+                        break;
+                    }
+                }
+
+                if (!$found) {
+                    $values['uid'] = $user->getId();
+                    $values['themoviedb_id'] = $master['themoviedb_id'];
+                    $values['file_hash'] = $item['file_hash'];
+                    $values['media_type'] = $media_type;
+                    if ($media_type == 'shows') {
+                        $values['season'] = $item['season'];
+                        $values['episode'] = $item['episode'];
+                    }
+                    $db->insert('view_media', $values);
+                } else {
+                    $db->delete('view_media', ['id' => ['value' => $found]], 'LIMIT 1');
+                }
+            }
+        }
+    }
     if (($cfg['want_movies']) && ( $_GET['page'] == 'library' || $_GET['page'] == 'library_movies')) {
         $page .= show_my_media('movies');
     }

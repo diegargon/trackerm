@@ -906,7 +906,29 @@ input:checked + .slider:before {
     background-color: rgba(255,255,255,0.25);
     width:100%;
 }
-
+.item_view_view, .item_view_noview {
+    display:inline;    
+}
+.item_view_view {
+    color: #2fb78a !important;        
+    text-decoration: none;    
+    font-weight: bold;
+}
+.item_view_noview {
+    color: gray !important;
+    text-decoration: none;    
+    font-weight: bold;
+}
+.item_view_view a, .item_view_noview a {
+    text-decoration: none;    
+    font-weight: bold;
+}
+.item_view_view a {
+    color: #2fb78a;    
+}
+.item_view_noview a {
+    color: gray;
+}
 /* Responsive */
 
 @media only screen and (max-width: 800px) {
