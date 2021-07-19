@@ -903,7 +903,7 @@ input:checked + .slider:before {
     font-size:6em;
     color: white;
     border-radius: 30%;
-    background-color: rgba(255,255,255,0.25);
+    background-color: rgba(255,255,255,0.50);
     width:100%;
 }
 .item_view_view, .item_view_noview {

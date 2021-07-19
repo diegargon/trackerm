@@ -22,13 +22,11 @@
         <?php
         if (($tdata['view_type'] == 'movies_library' || $tdata['view_type'] == 'shows_library') && !empty($cfg['localplayer']) && !empty($prefs->getPrefsItem('view_mode'))) {
             ?>
-            <!--
-                <div class="overlay_play">
-                    <div class="main_play">
-                        <a onClick="show_loading();" href="?page=view&id=&view_type=<?= $tdata['media_type'] ?>_library">&#9656;</a>
-                    </div>
+            <div class="overlay_play">
+                <div class="main_play">
+                    <a href="?page=localplayer&mid=<?= $tdata['id'] ?>&media_type=<?= $tdata['media_type'] ?>">&#9656;</a>
                 </div>
-            -->
+            </div>
         <?php } ?>
         <a onClick="show_loading();" href="?page=view&id=<?= $tdata['id'] ?>&view_type=<?= $tdata['view_type'] ?> ">
             <img class="img_poster_preview"  alt="" src="<?= $tdata['poster'] ?>"/>

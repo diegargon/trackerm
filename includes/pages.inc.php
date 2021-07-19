@@ -710,26 +710,42 @@ function page_logout() {
 }
 
 function page_localplayer() {
-    global $db;
+    global $db, $frontend;
 
     $id = Filter::getInt('id');
+    $mid = Filter::getInt('mid');
     $media_type = Filter::getString('media_type');
 
-    if (empty($id) || empty($media_type)) {
-        exit();
+    if ((empty($id) && empty($mid)) || empty($media_type)) {
+        $frontend->msgPage($msg = ['title' => 'L_ERROR', 'body' => '1A1003']);
+        return false;
     }
-    $table = 'library_' . $media_type;
-    $item = $db->getItemById($table, $id);
-    if (!valid_array($item)) {
-        exit();
-    }
-    if ($media_type == 'movies') {
-        $m3u_playlist = get_pl_movies($item);
-    } else {
-        $m3u_playlist = get_pl_shows($item);
+    $library = 'library_' . $media_type;
+    $library_master = 'library_master_' . $media_type;
+
+    if (!empty($id)) {
+
+        $item = $db->getItemById($library, $id);
+        if (!valid_array($item)) {
+            $frontend->msgPage($msg = ['title' => 'L_ERROR', 'body' => 'L_ERR_ITEM_NOT_FOUND']);
+            return false;
+        }
+        if ($media_type == 'movies') {
+            $m3u_playlist = get_pl_movies($item);
+        } else {
+            $m3u_playlist = get_pl_shows($item);
+        }
+        $header_title = ucwords(clean_title($item['file_name']));
+    } else if (!empty($mid)) {
+        $master_item = $db->getItemById($library_master, $mid);
+        if (!valid_array($master_item)) {
+            $frontend->msgPage($msg = ['title' => 'L_ERROR', 'body' => 'L_ERR_ITEM_NOT_FOUND']);
+            return false;
+        }
+        $m3u_playlist = get_pl_next_media($master_item, $media_type);
+        $header_title = ucwords($master_item['title']);
     }
 
-    $header_title = ucwords(clean_title($item['file_name']));
     header("Content-Type: video/mpegurl");
     header("Content-Disposition: attachment; filename=$header_title.m3u8");
     header("Pragma: no-cache");
