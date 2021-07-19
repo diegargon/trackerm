@@ -136,6 +136,7 @@ $LNG = [
     'L_NOTHING_FOUND' => 'No se han encontrado resultados',
     'L_NOEXISTS' => 'No existe',
     'L_NONE' => 'Nada',
+    'L_NO_RESULTS' => 'Ningun resultado',
     'L_NOTE' => 'Nota',
     'L_NOTICE' => 'Aviso',
     'L_NOTE_MOVDEL' => 'parece movido o borrado',

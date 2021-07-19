@@ -10,7 +10,7 @@
 !defined('IN_WEB') ? exit : true;
 
 function show_my_media($media_type) {
-    global $db, $prefs, $user;
+    global $db, $prefs, $user, $frontend;
 
     $page_library = '';
     $npage = Filter::getInt('npage');
@@ -120,6 +120,8 @@ function show_my_media($media_type) {
         $topt['media_type'] = $media_type;
         $topt['page'] = $page;
         $page_library .= buildTable('L_' . strtoupper($media_type), $media, $topt);
+    } else {
+        $page_library .= $frontend->msgBox(['title' => 'L_' . strtoupper($media_type), 'body' => 'L_NO_RESULTS']);
     }
 
     return $page_library;
