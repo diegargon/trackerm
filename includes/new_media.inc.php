@@ -10,7 +10,7 @@
 !defined('IN_WEB') ? exit : true;
 
 function page_new_media(string $media_type) {
-    global $cfg, $db, $log;
+    global $cfg, $db, $log, $frontend;
 
     $cache_media_expire = 0;
     $topt = [];
@@ -74,7 +74,7 @@ function page_new_media(string $media_type) {
     }
 
     if (empty($res_media_db)) {
-        return false;
+        return $frontend->msgBox(['title' => 'L_' . strtoupper($media_type), 'body' => 'L_NO_RESULTS']);
     }
 
     usort($res_media_db, function ($a, $b) {
@@ -112,6 +112,8 @@ function page_new_media(string $media_type) {
         $res_media_db = mix_media_res($res_media_db);
         $page_news_media = buildTable($head, $res_media_db, $topt);
         $page_news .= $page_news_media;
+    } else {
+        $page_news .= $frontend->msgBox(['title' => 'L_' . strtoupper($media_type), 'body' => 'L_NO_RESULTS']);
     }
 
     return $page_news;
