@@ -14,7 +14,7 @@ function view() {
 
     $view_type = Filter::getString('view_type');
     $id = Filter::getInt('id');
-    empty($id) ? $frontend->msgBox($msg = ['title' => 'L_ERROR', 'body' => 'L_ERR_BAD_ID']) : null;
+    empty($id) ? $frontend->msgBox(['title' => 'L_ERROR', 'body' => 'L_ERR_BAD_ID']) : null;
     $other = [];
     $view_media = [];
     $page = '';
@@ -57,7 +57,7 @@ function view() {
     $item = $db->getItemById($table, $id);
 
     if (empty($item)) {
-        return $frontend->msgBox($msg = ['title' => 'L_ERROR', 'body' => 'L_ITEM_NOT_FOUND']);
+        return $frontend->msgBox(['title' => 'L_ERROR', 'body' => 'L_ITEM_NOT_FOUND']);
     }
 
     if ($view_type == 'movies_db' || $view_type == 'shows_db') {
