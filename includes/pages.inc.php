@@ -204,7 +204,7 @@ function page_view() {
 function page_library() {
     global $cfg, $db, $user;
 
-    $page = '';
+    $page_library = '';
 
     (isset($_POST['rebuild_movies'])) ? rebuild('movies', $cfg['MOVIES_PATH']) : null;
     (isset($_POST['rebuild_shows'])) ? rebuild('shows', $cfg['SHOWS_PATH']) : null;
@@ -260,13 +260,13 @@ function page_library() {
         }
     }
     if (($cfg['want_movies']) && ( $_GET['page'] == 'library' || $_GET['page'] == 'library_movies')) {
-        $page .= show_my_media('movies');
+        $page_library .= show_my_media('movies');
     }
     if (($cfg['want_shows']) && ($_GET['page'] == 'library' || $_GET['page'] == 'library_shows')) {
-        $page .= show_my_media('shows');
+        $page_library .= show_my_media('shows');
     }
 
-    return $page;
+    return $page_library;
 }
 
 function page_news() {
@@ -320,20 +320,20 @@ function page_tmdb() {
     $tdata['search_movies_word'] = $search_movies;
     $tdata['search_shows_word'] = $search_shows;
 
-    $page = $frontend->getTpl('page_tmdb', $tdata);
+    $page_tmdb = $frontend->getTpl('page_tmdb', $tdata);
 
     if (!empty($search_movies)) {
         $movies = mediadb_searchMovies(trim($search_movies));
         $topt['search_type'] = 'movies';
         $topt['view_type'] = 'movies_db';
-        !empty($movies) ? $page .= buildTable('L_DB', $movies, $topt) : null;
+        !empty($movies) ? $page_tmdb .= buildTable('L_DB', $movies, $topt) : null;
     }
 
     if (!empty($search_shows)) {
         $shows = mediadb_searchShows(trim($search_shows));
         $topt['search_type'] = 'shows';
         $topt['view_type'] = 'shows_db';
-        !empty($shows) ? $page .= buildTable('L_DB', $shows, $topt) : null;
+        !empty($shows) ? $page_tmdb .= buildTable('L_DB', $shows, $topt) : null;
     }
     if (!isset($_GET['search_movies']) && !isset($_GET['search_shows']) && !empty($prefs->getPrefsItem('show_trending'))) {
         $topt['no_pages'] = 1;
@@ -341,11 +341,11 @@ function page_tmdb() {
 
         if ($cfg['want_movies']) {
             $topt['view_type'] = 'movies_db';
-            $page .= buildTable('L_TRENDING_MOVIES', $results['movies'], $topt);
+            $page_tmdb .= buildTable('L_TRENDING_MOVIES', $results['movies'], $topt);
         }
         if ($cfg['want_shows']) {
             $topt['view_type'] = 'shows_db';
-            $page .= buildTable('L_TRENDING_SHOWS', $results['shows'], $topt);
+            $page_tmdb .= buildTable('L_TRENDING_SHOWS', $results['shows'], $topt);
         }
     }
 
@@ -354,11 +354,11 @@ function page_tmdb() {
         $results = mediadb_getPopular();
         if ($cfg['want_movies']) {
             $topt['view_type'] = 'movies_db';
-            $page .= buildTable('L_POPULAR_MOVIES', $results['movies'], $topt);
+            $page_tmdb .= buildTable('L_POPULAR_MOVIES', $results['movies'], $topt);
         }
         if ($cfg['want_shows']) {
             $topt['view_type'] = 'shows_db';
-            $page .= buildTable('L_POPULAR_SHOWS', $results['shows'], $topt);
+            $page_tmdb .= buildTable('L_POPULAR_SHOWS', $results['shows'], $topt);
         }
     }
 
@@ -366,9 +366,9 @@ function page_tmdb() {
         $topt['no_pages'] = 1;
         $results = mediadb_getTodayShows();
         $topt['view_type'] = 'shows_db';
-        $page .= buildTable('L_TODAY_SHOWS', $results['shows'], $topt);
+        $page_tmdb .= buildTable('L_TODAY_SHOWS', $results['shows'], $topt);
     }
-    return $page;
+    return $page_tmdb;
 }
 
 function page_torrents() {
@@ -380,7 +380,7 @@ function page_torrents() {
     $tdata['search_movies_word'] = $search_movies_torrents;
     $tdata['search_shows_word'] = $search_shows_torrents;
 
-    $page = $frontend->getTpl('page_torrents', $tdata);
+    $page_torrents = $frontend->getTpl('page_torrents', $tdata);
 
     if (!empty($search_movies_torrents)) {
         $search['words'] = trim($search_movies_torrents);
@@ -397,11 +397,11 @@ function page_torrents() {
             $m_results = mix_media_res($m_results);
             $topt['view_type'] = 'movies_torrent';
             $topt['search_type'] = 'movies';
-            $page .= buildTable('L_TORRENT', $m_results, $topt);
+            $page_torrents .= buildTable('L_TORRENT', $m_results, $topt);
         } else {
             $box_msg['title'] = 'L_TORRENT';
             $box_msg['body'] = 'L_NOTHING_FOUND';
-            $page .= $frontend->msgBox($box_msg);
+            $page_torrents .= $frontend->msgBox($box_msg);
         }
     }
 
@@ -420,24 +420,24 @@ function page_torrents() {
             $m_results = mix_media_res($m_results);
             $topt['view_type'] = 'shows_torrent';
             $topt['search_type'] = 'shows';
-            $page .= buildTable('L_TORRENT', $m_results, $topt);
+            $page_torrents .= buildTable('L_TORRENT', $m_results, $topt);
         } else {
             $box_msg['title'] = 'L_TORRENT';
             $box_msg['body'] = 'L_NOTHING_FOUND';
-            $page .= $frontend->msgBox($box_msg);
+            $page_torrents .= $frontend->msgBox($box_msg);
         }
     }
 
     if (empty($search_movies_torrents) && empty($search_shows_torrents)) {
         if ($prefs->getPrefsItem('movies_cached')) {
-            $page .= show_cached_torrents('movies');
+            $page_torrents .= show_cached_torrents('movies');
         }
         if ($prefs->getPrefsItem('shows_cached')) {
-            $page .= show_cached_torrents('shows');
+            $page_torrents .= show_cached_torrents('shows');
         }
     }
 
-    return $page;
+    return $page_torrents;
 }
 
 function page_wanted() {
@@ -609,7 +609,6 @@ function page_transmission() {
         return false;
     }
 
-    $page = '';
     $tdata['body'] = '';
 
     foreach ($transfers as $transfer) {
@@ -621,15 +620,13 @@ function page_transmission() {
         $tdata['body'] .= $frontend->getTpl('transmission-row', array_merge($transfer, $tdata));
     }
 
-    $page .= $frontend->getTpl('transmission-body', $tdata);
 
-    return $page;
+    return $frontend->getTpl('transmission-body', $tdata);
 }
 
 function page_config() {
     global $config;
 
-    $page = '';
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (isset($_POST['submit_config'])) {
             $config_keys = Filter::postString('config_keys');
@@ -656,9 +653,8 @@ function page_config() {
             $config->addCommaElement($key, trim($value), $id, $before);
         }
     }
-    $page .= $config->display(Filter::getString('category'));
 
-    return $page;
+    return $config->display(Filter::getString('category'));
 }
 
 function page_login() {
@@ -687,7 +683,7 @@ function page_login() {
 
     $tdata = [];
     $users_db = $user->getProfiles();
-    $page = '';
+
     $tdata['profiles'] = '';
     foreach ($users_db as $db_user) {
         if ($db_user['disable'] != 1 && $db_user['hide_login'] != 1) {
@@ -695,8 +691,8 @@ function page_login() {
             $tdata['profiles'] .= $frontend->getTpl('profile_box', $tdata);
         }
     }
-    $page .= $frontend->getTpl('login', $tdata);
-    return $page;
+
+    return $frontend->getTpl('login', $tdata);
 }
 
 function page_logout() {
