@@ -252,28 +252,53 @@ function jackett_prep_media($media_type, $media_results) {
     }
 
     $media = array_reverse($media);
-    //Get all item guid results
+    //Get all item guid and title results
+    $titles = $guids = [];
     foreach ($media as $item) {
         $guids[] = $item['guid'];
+        $titles[] = clean_title($item['title']);
     }
 
-    //Select from db  all items with same guids
-    $items_id_guid = $db->selectMultiple($jackett_db, 'guid', $guids, 'id,guid,guessed_poster,guessed_trailer,freelech');
+    //Get have in library based on torrents clean titles
+    $titles = array_unique($titles);
+    $library_master = 'library_' . $media_type;
+    $media_have = $db->selectMultiple($library_master, 'clean_title', $titles, 'id, title');
+
+    //Select from db all items with same guids
+    $items_id_guid = $db->selectMultiple($jackett_db, 'guid', $guids, 'id,guid,guessed_poster,guessed_trailer,freelech, have_it');
     //media haven't id and we need it, here we check if item guid exist in the database
     //if item exists we add the id to media id
     //if item not exist we additem, get the last id insert and add to the media item id the id
     foreach ($media as $key => $item) {
         $found = 0;
+
+        /* Mark as have it if have it */
+        $item['have_it'] = 0;
+        if (valid_array($media_have)) {
+            foreach ($media_have as $item_have) {
+                if (clean_title($item_have['title']) == clean_title($item['title'])) {
+                    $item['have_it'] = $item_have['id'];
+                    break;
+                }
+            }
+        }
         foreach ($items_id_guid as $item_id_guid) {
             if (strcmp($item_id_guid['guid'], $item['guid']) === 0) {
                 $found = 1;
                 $media[$key]['id'] = $item_id_guid['id'];
                 !empty($item_id_guid['guessed_poster']) ? $media[$key]['guessed_poster'] = $item_id_guid['guessed_poster'] : $media[$key]['guessed_poster'] = '';
                 !empty($item_id_guid['guessed_trailer']) ? $media[$key]['guessed_trailer'] = $item_id_guid['guessed_trailer'] : $media[$key]['guessed_trailer'] = '';
-                //If freelech state change must change in the cache
+                //If freelech state change must change in the db
+                $update = [];
                 if ($item_id_guid['freelech'] != $media[$key]['freelech']) {
-                    $db->updateItemById($jackett_db, $item_id_guid['id'], ['freelech' => $media[$key]['freelech']]);
-                    //echo "id: " . $item_id_guid['id'] . "// Item cache freelech: " . $item_id_guid['freelech'] . " New Item *" . $media[$key]['freelech'] . "*<br>";
+                    $update['freelech'] = $media[$key]['freelech'];
+                }
+                //if have_it change and item exist in db must change in the db
+                if ($item_id_guid['have_it'] != $item['have_it']) {
+                    $update['have_it'] = $item['have_it'];
+                }
+                if (valid_array($update)) {
+                    $db->updateItemById($jackett_db, $item_id_guid['id'], $update);
                 }
                 break;
             }
