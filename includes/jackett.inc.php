@@ -97,7 +97,7 @@ function search_media_torrents($media_type, $search) {
         }
     }
 
-    /* Here if the search contains the year where delete results without year */
+    /* Here is where if the search contains the year we delete results without year */
     if (preg_match('/\s+\d{4}/i', $search_words, $match) == 1) {
         $year = trim($match[0]);
 
@@ -108,7 +108,7 @@ function search_media_torrents($media_type, $search) {
             }
         }
     }
-    /* Here if the search contains the SxxExx where delete results without year */
+    /* Here is where if the search contains the SxxExx we delete results without year */
     if (preg_match('/S\d{2}E\d{2}/i', $search_words, $match) == 1) {
         $episode = trim($match[0]);
         foreach ($media_db as $item_key => $item) {
