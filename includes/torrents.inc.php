@@ -95,7 +95,7 @@ function where_filters() {
     }
 
     $keywords = $prefs->getPrefsItem('new_ignore_keywords');
-    if (!empty($keywords)) {
+    if (!empty($keywords) && $prefs->getPrefsItem('new_ignore_words_enable')) {
         $ignore_keywords = array_map('trim', explode(',', $prefs->getPrefsItem('new_ignore_keywords')));
         foreach ($ignore_keywords as $ignore_keyword) {
             !empty($where) ? $where .= ' AND' : $where .= 'WHERE ';
