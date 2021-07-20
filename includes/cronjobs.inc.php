@@ -47,6 +47,9 @@ function cronjobs() {
         clear_tmdb_cache('movies');
         $db->query('VACUUM');
     }
+    if ($cfg['cron_update'] == 0) {
+        update_masters(true);
+    }
 
     // Upgrading v4 change how clean works, must empty the field and redo, not need know
     // keep for future changes
@@ -210,7 +213,7 @@ function clear_tmdb_cache($media_type) {
     }
 }
 
-function update_masters() {
+function update_masters(bool $force = false) {
     global $db, $log;
     foreach (['movies', 'shows'] as $media_type) {
         if ($media_type == 'shows') {
@@ -218,16 +221,18 @@ function update_masters() {
         } else {
             $time_req = time() - 2592000; //1 month
         }
-        $where = [
-            'updated' => ['value' => $time_req, 'op' => '<'],
-            'themoviedb_id' => ['value' => '', 'op' => '<>']
-        ];
+        if (!$force) {
+            $where['updated'] = ['value' => $time_req, 'op' => '<'];
+        }
+        $where['themoviedb_id'] = ['value' => '', 'op' => '<>'];
+
         $result = $db->select('library_master_' . $media_type, 'id,themoviedb_id', $where);
         $media = $db->fetchAll($result);
 
         if (valid_array($media)) {
             $log->info('Updating masters ' . $media_type . '(' . count($media) . ')');
             foreach ($media as $item) {
+                $update = [];
                 $item_cached = mediadb_getFromCache($media_type, $item['themoviedb_id']);
                 if (!valid_array($item_cached)) {
                     continue;
@@ -238,13 +243,9 @@ function update_masters() {
                 $update['popularity'] = isset($item['popularity']) ? $item['popularity'] : 0;
                 $update['poster'] = !empty($item_cached['poster']) ? $item_cached['poster'] : null;
                 $update['release'] = $item_cached['release'];
-                !empty($item_cached['trailer']) ? $update['trailer'] = $item_cached['trailer'] : null;
+                !empty($item_cached['trailer']) ? $update['trailer'] = $item_cached['trailer'] : $update['trailer'] = '';
+                $media_type == 'shows' ? $update['ended'] = $item_cached['ended'] : null;
 
-                if ($media_type == 'shows' && !empty($item['in_production'])) {
-                    $update['ended'] = 0;
-                } else if (isset($item['in_production'])) {
-                    $update['ended'] = 1;
-                }
                 $db->update('library_master_' . $media_type, $update, ['id' => ['value' => $item['id']]]);
             }
         }
