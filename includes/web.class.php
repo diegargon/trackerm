@@ -58,14 +58,36 @@ class Web {
     }
 
     function pagesGlobal() {
-        global $trans, $db, $user;
+        global $trans, $db, $user, $log;
 
         if (!(empty($d_link = Filter::postUrl('download')))) {
+            if (empty($trans)) {
+                $log->err('Transmission connection fail');
+                $this->frontend->msgPage(['title' => 'L_ERROR', 'body' => 'L_SEE_ERROR_DETAILS']);
+                return false;
+            }
             if (($pos = strpos($d_link, 'file=')) !== FALSE) {
                 $jackett_filename = substr($d_link, $pos + 5);
                 $jackett_filename = trim(str_replace('+', ' ', $jackett_filename));
             }
-            !empty($trans) ? $trans_response = $trans->addUrl($d_link) : null;
+            $trans_response = $trans->addUrl($d_link);
+
+            //Magnet Link hack: transmission fail to download magnet from url,
+            //if addUrl fail we try for magnets: get with curl extract  and send the magnet
+            if (empty($trans_response)) {
+                $curl_opt['headers'] = ['Accept-Encoding: gzip, deflate'];
+                $curl_opt['return_headers'] = 1;
+                $response = curl_get($d_link, $curl_opt);
+                $match = [];
+                preg_match("/Location:(.+?)\s/", $response, $match);
+                if (valid_array($match) && !empty($match[1])) {
+                    !empty($trans) ? $trans_response = $trans->addUrl(trim($match[1])) : null;
+                    if (!empty($trans_response)) {
+                        $log->info("Magnet detected, fixed error, ignore previous related (addUrl) error");
+                    }
+                }
+            }
+
             if (!empty($trans_response)) {
                 foreach ($trans_response as $rkey => $rval) {
                     $trans_db[$rkey] = $rval;

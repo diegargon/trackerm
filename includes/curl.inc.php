@@ -9,7 +9,7 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-function curl_get(string $url, array $curl_opt) {
+function curl_get(string $url, array $curl_opt = null) {
     global $cfg, $log;
 
     $ch = curl_init();
@@ -17,9 +17,9 @@ function curl_get(string $url, array $curl_opt) {
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $cfg['curl_conntimeout']);
     curl_setopt($ch, CURLOPT_TIMEOUT, $cfg['curl_timeout']);
-    if (!empty($curl_opt['headers'])) {
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $curl_opt['headers']);
-    }
+    (!empty($curl_opt['headers'])) ? curl_setopt($ch, CURLOPT_HTTPHEADER, $curl_opt['headers']) : null;
+    (!empty($curl_opt['return_headers'])) ? curl_setopt($ch, CURLOPT_HEADER, 1) : null;
+
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     $response = curl_exec($ch);
     if (curl_errno($ch)) {
@@ -39,7 +39,7 @@ function curl_get_jackett(string $url, string $params) {
     ];
     $url = $url . $params;
 
-    $cfg['remote_querys_jackett'] ++;
+    $cfg['remote_querys_jackett']++;
     $response = curl_get($url, $curl_opt);
 
     //FIXME tornzb:attr lost by simplexml/json_encode this is a temporary/fast fix
@@ -71,7 +71,7 @@ function curl_get_tmdb(string $url) {
         'Accept-Language:' . $cfg['TMDB_LANG'] . ';q=0.6,' . substr($cfg['TMDB_LANG'], 0, 2) . ';q=0.4'
     ];
 
-    $cfg['remote_querys_tmdb'] ++;
+    $cfg['remote_querys_tmdb']++;
     $response = curl_get($url, $curl_opt['headers']);
 
     if ($response) {
@@ -82,7 +82,6 @@ function curl_get_tmdb(string $url) {
     if (isset($array['success']) && !$array['success']) {
         return false;
     }
-    //var_dump($array);
 
     return $array;
 }

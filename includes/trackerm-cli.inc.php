@@ -926,7 +926,7 @@ function tracker_shows($wanted) {
 }
 
 function send_transmission($results) {
-    global $db, $cfg, $trans;
+    global $db, $cfg, $trans, $log;
 
     foreach ($results as $result) {
 
@@ -936,8 +936,29 @@ function send_transmission($results) {
 
         ($cfg['wanted_paused']) ? $trans_opt['paused'] = true : $trans_opt = [];
 
-        !empty($trans) ? $trans_response = $trans->addUrl($d_link, null, $trans_opt) : null;
-        if (empty($trans) || empty($trans_response)) {
+        if (empty($trans)) {
+            $log->err("Transmission connection fail (cli)");
+            return false;
+        }
+        $trans_response = $trans->addUrl($d_link, null, $trans_opt);
+
+        //Magnet Link hack: transmission fail to download magnet from url,
+        //if addUrl fail we try for magnets: get with curl extract  and send the magnet
+        if (empty($trans_response)) {
+            $curl_opt['headers'] = ['Accept-Encoding: gzip, deflate'];
+            $curl_opt['return_headers'] = 1;
+            $response = curl_get($d_link, $curl_opt);
+            $match = [];
+            preg_match("/Location:(.+?)\s/", $response, $match);
+            if (valid_array($match) && !empty($match[1])) {
+                $trans_response = $trans->addUrl(trim($match[1]));
+                if (!empty($trans_response)) {
+                    $log->info("Magnet detected, fixed error, ignore previous related (addUrl) error");
+                }
+            }
+        }
+        if (empty($trans_response)) {
+            $log->err("Transmission download fail (cli)");
             return false;
         }
 
