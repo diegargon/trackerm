@@ -13,7 +13,7 @@ global $LNG;
 
 $LNG = [
     'L_ALL' => 'Todos',
-    'L_ALT_WANTED_TITLE' => 'Alt/Titulo',
+    'L_ALT_WANTED_TITLE' => 'Modificar Titulo',
     'L_ADDED' => 'Añadido',
     'L_ADD' => 'Añadir',
     'L_ADMIN' => 'Admin',
@@ -80,6 +80,8 @@ $LNG = [
     'L_ERR_TRANS_CONN' => 'Error de conexión con transmission-daemon, por favor comprueba la configuración y que transmission-daemon se este ejecutando',
     'L_E_LINK_MIN' => 'E',
     'L_ENDED' => 'Finalizado',
+    'L_EXPAND' => 'Expandir',
+    'L_EXPAND_ALL' => 'Expandir todo',
     'L_FILES' => 'Archivos',
     'L_FILENAME' => 'Nombre del archivo',
     'L_FINISHED' => 'Finalizado',
@@ -144,6 +146,7 @@ $LNG = [
     'L_N_FILES' => 'Nº Archivos',
     'L_ON' => 'en',
     'L_ONLY_PROPER' => 'Proper',
+    'L_OTHER' => 'Other',
     'L_PLAY' => 'Player',
     'L_PAGE_NOEXISTS' => 'La pagina solicitada no existe',
     'L_PATH' => 'Ruta',

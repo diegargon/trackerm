@@ -74,7 +74,10 @@ function formatPerfTime($time) {
     return round($time / 1e+9, 2);
 }
 
-function bytesToGB($bytes) {
+function bytesToGB(float $bytes, float $round) {
+    if ($round) {
+        return round($bytes / round(pow(1024, 3), 2), 2);
+    }
     return $bytes / round(pow(1024, 3), 2);
 }
 

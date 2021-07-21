@@ -37,7 +37,7 @@ function torrents_filter_size(&$torrent_results) {
 
     if (!empty($prefs->getPrefsItem('new_ignore_size_enable')) && !empty($prefs->getPrefsItem('new_ignore_size'))) {
         foreach ($torrent_results as $key => $item) {
-            $gbytes = round(bytesToGB($item['size']), 2);
+            $gbytes = bytesToGB($item['size'], 2);
             if ($gbytes > trim($prefs->getPrefsItem('new_ignore_size'))) {
                 unset($torrent_results[$key]);
             }

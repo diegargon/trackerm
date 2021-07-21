@@ -13,7 +13,7 @@ global $LNG;
 
 $LNG = [
     'L_ALL' => 'All',
-    'L_ALT_WANTED_TITLE' => 'Alt/Title',
+    'L_ALT_WANTED_TITLE' => 'Modify Title',
     'L_ADDED' => 'Added',
     'L_ADD' => 'Add',
     'L_ADMIN' => 'Admin',
@@ -79,6 +79,8 @@ $LNG = [
     'L_ERR_SE' => 'Can\'t determine season/episode',
     'L_E_LINK_MIN' => 'E',
     'L_ENDED' => 'Ended',
+    'L_EXPAND' => 'Expandir',
+    'L_EXPAND_ALL' => 'Expandir todo',
     'L_FILES' => 'Files',
     'L_FILENAME' => 'Filename',
     'L_FINISHED' => 'Finished',
@@ -143,6 +145,7 @@ $LNG = [
     'L_N_FILES' => 'Nº Files',
     'L_ON' => 'On',
     'L_ONLY_PROPER' => 'Proper',
+    'L_OTHER' => 'Other',
     'L_PLAY' => 'Player',
     'L_PAGE_NOEXISTS' => 'The page required not exists',
     'L_PATH' => 'Path',

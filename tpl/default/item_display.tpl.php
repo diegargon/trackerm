@@ -75,7 +75,7 @@
             <?php
             if (!empty($tdata['download'])) {
                 ?>
-                <form id="download_url" class="form_inline" method="POST" action="">
+                <form id="download_url" class="form_inline" method="POST" >
                     <input type="submit" class="action_link" value="<?= $LNG['L_DOWNLOAD_MIN'] ?>"/>
                     <input type="hidden" name="download" value="<?= $tdata['download'] ?>"/>
                 </form>

@@ -10,7 +10,7 @@
 
 <h2><?= $LNG['L_SEARCHTORRENTS'] ?></h2>
 <p><?= $LNG['L_SEARCHTORRENTS_DESC'] ?></p>
-<form method="GET" action="">
+<form method="GET" >
     <div class="moviedb_container">
         <?php if ($cfg['want_movies']) { ?>
             <div class="search_tag"><?= $LNG['L_MOVIE'] ?>:</div><div class="search_box"><input type="text" name="search_movies_torrents" value="<?= $tdata['search_movies_word'] ?>"></div>

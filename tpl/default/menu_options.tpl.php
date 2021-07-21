@@ -9,6 +9,11 @@
 ?>
 <div class="menu_options">
     <form method="post" action="?page=<?= $tdata['page'] ?>">
+        <?php if (in_array($tdata['page'], ['wanted'])) { ?>
+            <span><?= $LNG['L_EXPAND_ALL'] ?></span>
+            <input type="hidden" name="expand_all" value="0"/>
+            <input onClick="show_loading();" type="checkbox" <?= !empty($prefs->getPrefsItem('expand_all')) ? 'checked' : null ?> name="expand_all" onChange="this.form.submit()" value="1"/>
+        <?php } ?>
         <?php if (in_array($tdata['page'], ['library', 'library_movies', 'library_shows'])) { ?>
             <div class="inline" data-tip="<?= $LNG['L_VIEW_MODE'] ?>">
                 <label class="switch">

@@ -65,6 +65,10 @@
                     <span><?= $LNG['L_SIZE'] ?> :</span>
                     <span class="view_size"><?= $tdata['total_size'] ?></span>
                     <br/>
+                <?php } else if (!empty($tdata['size'])) { ?>
+                    <span><?= $LNG['L_SIZE'] ?> :</span>
+                    <span class="view_size"><?= bytesToGB($tdata['size'], 2) ?>GB</span>
+                    <br/>
                 <?php } ?>
                 <?php if (!empty($tdata['rating'])) { ?>
                     <span><?= $LNG['L_RATING'] ?> :</span>
@@ -102,7 +106,7 @@
 
                     <?php if (!empty($tdata['download'])) { ?>
                         <div class="view_download">
-                            <form id="download_url" class="form_inline" method="POST" action="">
+                            <form id="download_url" class="form_inline" method="POST" >
                                 <input type="submit" class="action_link" value="<?= $LNG['L_DOWNLOAD'] ?>"/>
                                 <input type="hidden" name="download" value="<?= $tdata['download'] ?>"/>
                             </form>
@@ -111,7 +115,7 @@
                     <?php } ?>
                     <?php if (!empty($tdata['show_custom_poster'])) { ?>
                         <div class="custom_poster_div">
-                            <form id="change_custom_poster" class="form_inline" method="POST" action="">
+                            <form id="change_custom_poster" class="form_inline" method="POST" >
                                 <input type="text" name="new_custom_poster" size="40" placeholder="https://example.com/poster.jpg" value="<?= $tdata['custom_poster'] ?>"/>
                                 <input type="submit" name="change_custom_poster" class="action_link" value="<?= $LNG['L_CHANGE'] ?>"/>
                             </form>

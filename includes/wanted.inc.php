@@ -58,9 +58,10 @@ function wanted_list() {
     $wanted_list = $db->getTableData('wanted');
 
     if (valid_array($wanted_list)) {
-        $wanted_list_data = null;
         $wanted_list_tmp_data['TRACKING'] = '';
         $wanted_list_tmp_data['SEARCHING'] = '';
+        $wanted_list_tmp_data['COMPLETED'] = '';
+        $wanted_list_tmp_data['DOWNLOADING'] = '';
         $wanted_list_tmp_data['MOVED'] = '';
         $wanted_list_tmp_data['SEEDING'] = '';
         $wanted_list_tmp_data['OTHER'] = '';
@@ -93,11 +94,12 @@ function wanted_list() {
                 ($wanted_item['track_show'] == 1) ? $s_episode = '>=' . $s_episode : null;
                 $wanted_item['show_title'] = $wanted_item['title'] . ' ' . $s_episode;
             }
-            $mediadb_item = mediadb_getFromCache($wanted_item['media_type'], $wanted_item['themoviedb_id']);
-            $tdata['elink'] = $mediadb_item['elink'];
+            $odb_item = mediadb_getFromCache($wanted_item['media_type'], $wanted_item['themoviedb_id']);
+            $tdata['odb_item'] = $odb_item;
+            $tdata['elink'] = $odb_item['elink'];
 
             ($wanted_item['media_type'] == 'movies') ? $view_type = 'movies_db' : $view_type = 'shows_db';
-            $tdata['link'] = '?page=view&id=' . $mediadb_item['id'] . '&view_type=' . $view_type;
+            $tdata['link'] = '?page=view&id=' . $odb_item['id'] . '&view_type=' . $view_type;
             if (!empty($wanted_item['show_title'])) {
                 $tdata['link_name'] = $wanted_item['show_title'];
             } else {
@@ -108,8 +110,12 @@ function wanted_list() {
 
             if ($wanted_item['track_show'] == 1) {
                 $wanted_list_tmp_data['TRACKING'] .= $frontend->getTpl('wanted-item', array_merge($wanted_item, $tdata));
+            } else if ($wanted_item['wanted_status'] == 4) {
+                $wanted_list_tmp_data['DOWNLOADING'] .= $frontend->getTpl('wanted-item', array_merge($wanted_item, $tdata));
             } else if ($wanted_item['wanted_status'] == -1) {
                 $wanted_list_tmp_data['SEARCHING'] .= $frontend->getTpl('wanted-item', array_merge($wanted_item, $tdata));
+            } else if ($wanted_item['wanted_status'] == 8) {
+                $wanted_list_tmp_data['COMPLETED'] .= $frontend->getTpl('wanted-item', array_merge($wanted_item, $tdata));
             } else if ($wanted_item['wanted_status'] == 9) {
                 $wanted_list_tmp_data['MOVED'] .= $frontend->getTpl('wanted-item', array_merge($wanted_item, $tdata));
             } else if ($wanted_item['wanted_status'] == 6) {
@@ -121,18 +127,47 @@ function wanted_list() {
             }
         }
         //IMPROVE: Sorting: do better way
+        $wanted_list_data['working_list'] = null;
+        $wanted_list_data['track_show_list'] = null;
         if (valid_array($wanted_list_tmp_data)) {
-            isset($wanted_list_tmp_data['DELETED']) ? $wanted_list_data .= $wanted_list_tmp_data['DELETED'] : null;
-            isset($wanted_list_tmp_data['MOVED']) ? $wanted_list_data .= $wanted_list_tmp_data['MOVED'] : null;
-            isset($wanted_list_tmp_data['SEEDING']) ? $wanted_list_data .= $wanted_list_tmp_data['SEEDING'] : null;
-            isset($wanted_list_tmp_data['SEARCHING']) ? $wanted_list_data .= $wanted_list_tmp_data['SEARCHING'] : null;
-            isset($wanted_list_tmp_data['OTHER']) ? $wanted_list_data .= $wanted_list_tmp_data['OTHER'] : null;
-            if ($wanted_list_tmp_data['TRACKING']) {
-                $wanted_list_data .= $frontend->getTpl('wanted-item', ['want_separator' => 1]);
-                $wanted_list_data .= $wanted_list_tmp_data['TRACKING'];
+            if (!empty($wanted_list_tmp_data['OTHER'])) {
+                $wanted_list_data['working_list'] .= Html::div(['class' => 'wanted_item_separator'], Html::span([], $LNG['L_OTHER']));
+                $wanted_list_data['working_list'] .= $wanted_list_tmp_data['OTHER'];
+            }
+            if (!empty($wanted_list_tmp_data['DOWNLOADING'])) {
+                $wanted_list_data['working_list'] .= Html::div(['class' => 'wanted_item_separator'], Html::span([], $LNG['L_DOWNLOADING']));
+                $wanted_list_data['working_list'] .= $wanted_list_tmp_data['DOWNLOADING'];
+            }
+            if (!empty($wanted_list_tmp_data['COMPLETED'])) {
+                $wanted_list_data['working_list'] .= Html::div(['class' => 'wanted_item_separator'], Html::span([], $LNG['L_COMPLETED']));
+                $wanted_list_data['working_list'] .= $wanted_list_tmp_data['COMPLETED'];
+            }
+
+            if (!empty($wanted_list_tmp_data['DELETED'])) {
+                $wanted_list_data['working_list'] .= Html::div(['class' => 'wanted_item_separator'], Html::span([], $LNG['L_DELETED']));
+                $wanted_list_data['working_list'] .= $wanted_list_tmp_data['DELETED'];
+            }
+
+            if (!empty($wanted_list_tmp_data['MOVED'])) {
+                $wanted_list_data['working_list'] .= Html::div(['class' => 'wanted_item_separator'], Html::span([], $LNG['L_MOVED']));
+                $wanted_list_data['working_list'] .= $wanted_list_tmp_data['MOVED'];
+            }
+
+            if (!empty($wanted_list_tmp_data['SEEDING'])) {
+                $wanted_list_data['working_list'] .= Html::div(['class' => 'wanted_item_separator'], Html::span([], $LNG['L_SEEDING']));
+                $wanted_list_data['working_list'] .= $wanted_list_tmp_data['SEEDING'];
+            }
+
+            if (!empty($wanted_list_tmp_data['SEARCHING'])) {
+                $wanted_list_data['working_list'] .= Html::div(['class' => 'wanted_item_separator'], Html::span([], $LNG['L_SEARCHING']));
+                $wanted_list_data['working_list'] .= $wanted_list_tmp_data['SEARCHING'];
+            }
+
+            if (!empty($wanted_list_tmp_data['TRACKING'])) {
+                $wanted_list_data['track_show_list'] .= Html::div(['class' => 'wanted_item_separator'], Html::span([], $LNG['L_WANTED'] . ': ' . $LNG['L_SHOWS']));
+                $wanted_list_data['track_show_list'] .= $wanted_list_tmp_data['TRACKING'];
             }
         }
-
 
         return $wanted_list_data;
     }
@@ -273,7 +308,7 @@ function day_check($id, $day_time, $wanted_status) {
     }
 
     ($wanted_status != -1 ) ? $disabled = 'disabled' : $disabled = '';
-    $data .= '<form class="form_inline" method="POST" action="">';
+    $data .= '<form class="form_inline" method="POST" >';
     $data .= '<select ' . $disabled . ' onchange="this.form.submit()" name="check_day[' . $id . ']">';
     $data .= '<option ' . $sel_never . ' value="-1">' . $LNG['L_NEVER'] . '</option>';
     $data .= '<option ' . $sel_all . ' value="0">' . $LNG['L_DAY_ALL'] . '</option>';

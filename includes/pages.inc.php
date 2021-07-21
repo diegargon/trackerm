@@ -462,10 +462,9 @@ function page_wanted() {
     if ($wanted_id !== false && $wanted_type !== false && $wanted_type == 'movies') {
         wanted_movies($wanted_id);
     }
+    $want = wanted_list();
 
-    $want['wanted_list'] = wanted_list();
-
-    return !empty($want['wanted_list']) ? $frontend->getTpl('wanted', $want) : false;
+    return !empty($want) ? $frontend->getTpl('wanted', $want) : false;
 }
 
 function page_identify() {
@@ -745,7 +744,7 @@ function page_localplayer() {
     }
 
     header("Content-Type: video/mpegurl");
-    header("Content-Disposition: attachment; filename=$header_title.m3u8");
+    header("Content-Disposition: attachment; filename=$header_title.m3u");
     header("Pragma: no-cache");
     header("Expires: 0");
     echo "#EXTM3U\r\n";

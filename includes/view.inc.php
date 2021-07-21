@@ -250,8 +250,9 @@ function view_seasons($item, $opt, $update = false) {
     }
     $seasons_data .= '<br/><span>' . $LNG['L_SEASONS'] . ': ' . $seasons . ' ' . $LNG['L_EPISODES'] . ': ' . $episodes . '</span><br/>';
 
+    !empty($opt['view_media']) ? $view_media = $opt['view_media'] : $view_media = null;
     if ($season) {
-        $episode_data = view_season_detailed($season, $items_details, $opt['view_media']);
+        $episode_data = view_season_detailed($season, $items_details, $view_media);
     }
     $seasons_data .= '<br/>' . $episode_data;
 
@@ -282,7 +283,7 @@ function view_season_detailed($season, $items_details, $view_media) {
                 $item_counter = 0;
             }
 
-            if (valid_array($have_shows)) {
+            if (valid_array($have_shows) && valid_array($view_media)) {
                 foreach ($have_shows as $have_show) {
                     if ($have_show['episode'] == $item['episode']) {
                         $tdata['have_show'] = $have_show;

@@ -9,7 +9,7 @@
 ?>
 
 <div class="tor_container">
-    <form method="POST" action="">
+    <form method="POST" >
         <div class="tor_general_options">
             <input type="submit" class="submit_btn" name="start_all" value="<?= $LNG['L_START_ALL'] ?>">
             <input type="submit" class="submit_btn" name="stop_all" value="<?= $LNG['L_STOP_ALL'] ?>">
