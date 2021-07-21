@@ -48,6 +48,7 @@ function cronjobs() {
         $db->query('VACUUM');
     }
     if ($cfg['cron_update'] == 0) {
+        $db->update('config', ['cfg_value' => $time_now], ['cfg_key' => ['value' => 'cron_update']]);
         update_masters(true);
     }
 
