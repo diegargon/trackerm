@@ -216,10 +216,14 @@ function view_seasons($item, $opt, $update = false) {
     }
 
     if (empty($season)) {
+        /*
+         * by default (not ask for season details), only need the fields seasons&episodes, we need only one
+         *  item is enough but if need requesst we use the all return and show season 1
+         */
         $item_details = $db->getItemByField('shows_details', 'themoviedb_id', $item['themoviedb_id']);
         if ($item_details === false || $update) {
-            mediadb_getSeasons($item['themoviedb_id']);
-            $item_details = $db->getItemByField('shows_details', 'themoviedb_id', $item['themoviedb_id']);
+            $items_details = mediadb_getSeasons($item['themoviedb_id']);
+            $season = 1;
         }
     } else {
         $where['themoviedb_id'] = ['value' => $item['themoviedb_id']];
