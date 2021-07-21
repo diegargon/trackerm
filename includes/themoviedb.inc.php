@@ -155,6 +155,16 @@ function themoviedb_MediaPrep($media_type, $items) {
             empty($trailer) ? $trailer = 0 : null; //we use 0 for mark as not have trailer atm
         }
 
+        $genres = '';
+        if (!empty($item['genres']) && valid_array($item['genres'])) {
+            $o_genres = $item['genres'];
+            if (valid_array($o_genres)) {
+                foreach ($o_genres as $o_genre) {
+                    empty($genres) ? $genres = $o_genre['id'] : $genres .= ',' . $o_genre['id'];
+                }
+            }
+        }
+
         $fitems[$i] = [
             'themoviedb_id' => $item['id'],
             'title' => $title,
@@ -167,7 +177,7 @@ function themoviedb_MediaPrep($media_type, $items) {
             'scene' => !empty($item['backdrop_path']) ? $cfg['odb_images_link'] . $item['backdrop_path'] : null,
             'lang' => $item['original_language'],
             'plot' => $item['overview'],
-            'updated' => time(),
+            'genre' => !empty($genres) ? $genres : null,
             'release' => isset($release) ? $release : null,
         ];
         !empty($trailer) ? $fitems[$i]['trailer'] = $trailer : null;
