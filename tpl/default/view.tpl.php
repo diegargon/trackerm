@@ -68,7 +68,7 @@
                 }
                 ?>
                 <?php if (!empty($tdata['total_size'])) { ?>
-                    <span><?= $LNG['L_SIZE'] ?> :</span>
+                    <span><?= $LNG['L_TOTAL_SIZE'] ?> :</span>
                     <span class="view_size"><?= $tdata['total_size'] ?></span>
                     <br/>
                 <?php } else if (!empty($tdata['size'])) { ?>

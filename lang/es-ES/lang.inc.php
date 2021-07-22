@@ -225,6 +225,7 @@ $LNG = [
     'L_TORRENT' => 'Torrent',
     'L_TORRENTS' => 'Torrents',
     'L_TOR_MAN_DEL' => 'Parece que este torrent fue borrado manualmente',
+    'L_TOTAL_SIZE' => 'Tamaño total',
     'L_TRENDING' => 'Trending',
     'L_TRENDING_MOVIES' => 'Trending Peliculas',
     'L_TRENDING_SHOWS' => 'Trending Series',

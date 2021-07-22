@@ -417,6 +417,11 @@ function get_media_files($master, $media_type, $view_media) {
             $media_files .= html::span([], $LNG['L_DURATION'] . ': ');
             $media_files .= html::span([], format_seconds($mediainfo['General']['Duration']));
         }
+        if (!empty($selected_item['size'])) {
+            $media_files .= html::br([]);
+            $media_files .= html::span([], $LNG['L_SIZE'] . ': ');
+            $media_files .= html::span([], bytesToGB($selected_item['size'], 2) . 'GB');
+        }
         if (!empty($mediainfo)) {
             $media_files .= html::br([]);
             $media_files .= html_mediainfo_tags($mediainfo);
