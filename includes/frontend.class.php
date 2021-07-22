@@ -65,7 +65,7 @@ class FrontEnd {
     }
 
     function getMenu() {
-        global $prefs;
+        global $prefs, $cfg;
 
         if (isset($_GET['sw_opt'])) {
             $value = $prefs->getPrefsItem('hide_opt');
@@ -77,9 +77,15 @@ class FrontEnd {
         }
 
         if (!empty(Filter::getString('page'))) {
+            $page = Filter::getString('page');
             $tdata['menu_opt_link'] = str_replace('&sw_opt=1', '', basename($_SERVER['REQUEST_URI'])) . '&sw_opt=1';
         } else {
             $tdata['menu_opt_link'] = "?page=index&sw_opt=1";
+            if (!empty($cfg['index_page'])) {
+                $page = $cfg['index_page'];
+            } else {
+                $page = 'index';
+            }
         }
 
         if (empty($prefs->getPrefsItem('hide_opt'))) {
@@ -89,6 +95,7 @@ class FrontEnd {
             $tdata['arrow'] = '&darr;';
         }
 
+        $tdata['page'] = $page;
         return $this->getTpl('menu', $tdata);
     }
 

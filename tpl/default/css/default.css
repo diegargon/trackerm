@@ -89,6 +89,9 @@ select {
 .menu_element a {
     text-decoration: none;
 }
+.menu_selected {
+    background: #032623;
+}
 button {
     padding:10px;
 }
