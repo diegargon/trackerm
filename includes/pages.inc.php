@@ -228,7 +228,9 @@ function page_library() {
             $view_items = $db->fetchAll($results);
 
             if (count($items) == count($view_items)) {
-                $db->delete('view_media', ['themoviedb_id' => ['value' => $master['themoviedb_id']]]);
+                $where_del['themoviedb_id'] = ['value' => $master['themoviedb_id']];
+                $where_del['media_type'] = ['value' => $media_type];
+                $db->delete('view_media', $where_del);
             } else {
                 foreach ($items as $item) {
                     $found = 0;
