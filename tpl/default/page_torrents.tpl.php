@@ -8,8 +8,7 @@
  */
 ?>
 
-<h2><?= $LNG['L_SEARCHTORRENTS'] ?></h2>
-<p><?= $LNG['L_SEARCHTORRENTS_DESC'] ?></p>
+<h2><?= $LNG['L_SEARCHTORRENTS'] ?>: <?= $LNG['L_SEARCHTORRENTS_DESC'] ?></h2>
 <form method="GET" >
     <div class="moviedb_container">
         <?php if ($cfg['want_movies']) { ?>
@@ -19,7 +18,7 @@
             <div class="search_tag"><?= $LNG['L_SHOW'] ?>:</div><div class="search_box"><input type="text" name="search_shows_torrents" value="<?= $tdata['search_shows_word'] ?>"></div>
         <?php } ?>
         <input type="hidden" name="page" value="<?= $_GET['page'] ?>">
-        <div class="search_btn"><input onClick="show_loading()" class="submit_btn" type="submit" value="<?= $LNG['L_SEARCH'] ?>"></div>
+        <div class="search_btn inline"><input onClick="show_loading()" class="submit_btn" type="submit" value="<?= $LNG['L_SEARCH'] ?>"></div>
     </div>
 </form>
 
