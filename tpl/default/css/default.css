@@ -375,6 +375,9 @@ button {
 .wanted_opt_global {
     margin-bottom: 12px;
 }
+.wanted_opt_global span{
+    margin-right: 3px;
+}
 .global_title {
     font-weight: bold;
 }

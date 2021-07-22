@@ -412,7 +412,7 @@ function page_torrents() {
 }
 
 function page_wanted() {
-    global $db, $trans, $frontend;
+    global $db, $cfg, $trans, $frontend;
 
     $want = [];
     //Update wanted agains transmission
@@ -434,6 +434,34 @@ function page_wanted() {
         wanted_movies($wanted_id);
     }
     $want = wanted_list();
+
+    if (!empty($cfg['torrent_quality_prefs'])) {
+        $want['quality_tags'] = '';
+        foreach ($cfg['torrent_quality_prefs'] as $quality) {
+            $want['quality_tags'] .= Html::span(['class' => 'tag_quality'], $quality);
+        }
+    }
+
+    if (!empty($cfg['torrent_ignore_prefs'])) {
+        $want['ignore_tags'] = '';
+        foreach ($cfg['torrent_ignore_prefs'] as $ignores) {
+            $want['ignore_tags'] .= Html::span(['class' => 'tag_ignore'], $ignores);
+        }
+    }
+
+    if (!empty($cfg['torrent_require_prefs'])) {
+        $want['require_tags'] = '';
+        foreach ($cfg['torrent_require_prefs'] as $require) {
+            $want['require_tags'] .= Html::span(['class' => 'tag_require'], $require);
+        }
+    }
+
+    if (!empty($cfg['torrent_require_or_prefs'])) {
+        $want['require_or_tags'] = '';
+        foreach ($cfg['torrent_require_or_prefs'] as $or_require) {
+            $want['require_or_tags'] .= Html::span(['class' => 'tag_require'], $or_require);
+        }
+    }
 
     return !empty($want) ? $frontend->getTpl('wanted', $want) : false;
 }

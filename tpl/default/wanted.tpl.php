@@ -13,42 +13,14 @@
         <h2><?= $LNG['L_WANTED'] ?></h2>
         <div class="wanted_opt_global">
             <span class="global_title"><?= $LNG['L_GLOBAL_QUALITY_TAGS'] ?></span>
-            <?php
-            if (!empty($cfg['torrent_quality_prefs'])) {
-                foreach ($cfg['torrent_quality_prefs'] as $quality) {
-                    ?>
-                    <span class="tag_quality"><?= $quality ?></span>
-                    <?php
-                }
-            }
-            ?>
+            <?= !empty($tdata['quality_tags']) ? $tdata['quality_tags'] : $LNG['L_NONE']; ?>
             <span class="global_title"><?= $LNG['L_GLOBAL_TAGS'] ?></span>
-            <?php
-            if (!empty($cfg['torrent_ignore_prefs'])) {
-                foreach ($cfg['torrent_ignore_prefs'] as $ignores) {
-                    ?>
-                    <span class="tag_ignore"><?= $ignores ?></span>
-                    <?php
-                }
-            }
-            if (!empty($cfg['torrent_require_prefs'])) {
-                foreach ($cfg['torrent_require_prefs'] as $require) {
-                    ?>
-                    <span class="tag_require"><?= $require ?></span>
-                    <?php
-                }
-            }
-            if (!empty($cfg['torrent_require_or_prefs'])) {
-                ?>
+            <?= !empty($tdata['ignore_tags']) ? $tdata['ignore_tags'] : null ?>
+            <?= !empty($tdata['require_tags']) ? $tdata['require_tags'] : null ?>
+            <?php if (!empty($tdata['require_or_tags'])) { ?>
                 <span class="global_title"><?= $LNG['L_ANY_TAG'] ?></span>
-                <?php
-                foreach ($cfg['torrent_require_or_prefs'] as $or_require) {
-                    ?>
-                    <span class="tag_require"><?= $or_require ?></span>
-                    <?php
-                }
-            }
-            ?>
+                <?= $tdata['require_or_tags'] ?>
+            <?php } ?>
         </div>
         <div class="wanted_list_container">
             <?= isset($tdata['working_list']) ? $tdata['working_list'] : null ?>
