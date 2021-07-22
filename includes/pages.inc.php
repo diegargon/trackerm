@@ -218,6 +218,7 @@ function page_library() {
         $master = $db->getItemById($library_master, $vid);
 
         if (valid_array($master)) {
+
             $items = $db->getItemsByField($library, 'master', $master['id']);
             $where = [
                 'uid' => ['value' => $user->getId()],
@@ -231,14 +232,8 @@ function page_library() {
             } else {
                 foreach ($items as $item) {
                     $found = 0;
-
                     foreach ($view_items as $view_item) {
-                        if ($media_type == 'movies' && $view_item['themoviedb_id'] == $master['themoviedb_id']) {
-                            $found = $view_item['id'];
-                            break;
-                        }
-                        if ($media_type == 'shows' && $view_item['themoviedb_id'] == $master['themoviedb_id'] && $view_item['season'] == $item['season'] && $view_item['episode'] == $item['episode']
-                        ) {
+                        if ($view_item['file_hash'] == $item['file_hash']) {
                             $found = $view_item['id'];
                             break;
                         }
