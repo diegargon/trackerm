@@ -51,7 +51,12 @@ function show_my_media($media_type) {
 
     /*
      * Get view media, select masters and check view items vs total items,
+     * count only file_hashes coincidences not all items.
      * if results is 0 get the id for not show the master
+     * This code/was is not very efficent when view_media grow:
+     * 3 querys for get all master related to view_media(themoviedb_id) and his library file
+     * Probably we must keep track of view items in master or in master in view_media
+     * in case of "history/remember" view items after a master deletion
      */
 
     $where_view_data = [
@@ -61,22 +66,42 @@ function show_my_media($media_type) {
     $results = $db->select('view_media', '*', $where_view_data);
     $views_data = $db->fetchAll($results);
     $views_tmdb_ids = [];
+    $views_hashs = [];
+    /*
+     * Get from view_media the masters ids for get total_items
+     * Get from view_media the file_hashes for get total item view
+     */
     foreach ($views_data as $view_data) {
         $views_tmdb_ids[] = $view_data['themoviedb_id'];
+        $views_hashs[] = $view_data['file_hash'];
     }
+
     $views_tmdb_ids_uniq = array_unique($views_tmdb_ids);
-    $view_master_matchs = $db->selectMultiple($library_master, 'themoviedb_id', $views_tmdb_ids_uniq, 'id,themoviedb_id, total_items');
+    //Get Masters for fill total_items
+    $view_master_matchs = $db->selectMultiple($library_master, 'themoviedb_id', $views_tmdb_ids_uniq, 'id,total_items');
+    /*  view_item[master_id][number total items]  and view_item[master_id][number view items] */
     $views_items = [];
+    /* Get Master Ids for query library files */
+    $master_ids = [];
     foreach ($view_master_matchs as $vmm) {
         $views_items[$vmm['id']]['total_items'] = $vmm['total_items'];
-        $views_items[$vmm['id']]['view_items'] = 0;
-        foreach ($views_tmdb_ids as $vti) {
-            if ($vmm['themoviedb_id'] == $vti) {
-                $views_items[$vmm['id']]['view_items']++;
+        $master_ids[] = $vmm['id'];
+    }
+    /* Get Files of master ids */
+    $view_files_matchs = $db->selectMultiple($library, 'master', $master_ids, 'id,master,file_hash');
+    foreach ($view_files_matchs as $vfm) {
+        empty($views_items[$vfm['master']]['view_items']) ? $views_items[$vfm['master']]['view_items'] = 0 : null;
+        foreach ($views_data as $view_data) {
+            /* if we have a  file hashes coincidence we see that file */
+            if ($view_data['file_hash'] == $vfm['file_hash']) {
+                $views_items[$vfm['master']]['view_items']++;
             }
         }
     }
+
+    /* Build a list of all master ids that we see all files for ignore and not list */
     if ($prefs->getPrefsItem('view_mode')) {
+
         $ignore_master_ids = '';
         foreach ($views_items as $key_view_item => $view_item) {
             if (($view_item['total_items'] - $view_item['view_items']) <= 0) {
@@ -84,7 +109,7 @@ function show_my_media($media_type) {
             }
         }
     }
-
+    //FIN VIEW_ITEMS
     $where = '';
     if (!empty($search_keyword)) {
         $where = " WHERE title LIKE \"%$search_keyword%\" ";

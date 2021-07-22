@@ -227,10 +227,25 @@ function page_library() {
             $results = $db->select('view_media', '*', $where);
             $view_items = $db->fetchAll($results);
 
-            if (count($items) == count($view_items)) {
-                $where_del['themoviedb_id'] = ['value' => $master['themoviedb_id']];
-                $where_del['media_type'] = ['value' => $media_type];
-                $db->delete('view_media', $where_del);
+            /*
+             *  view_media can have other old  items, this items can be deleted but keep in viewmedia
+             *  with same themoviedb id. We must check the file_hash  and count, and check if count match, if count
+             * match we want "mark as unwatch all actual items" if not we wan mark as "watch" all items
+             */
+            $nfound = [];
+            foreach ($items as $item) {
+                foreach ($view_items as $view_item) {
+                    if ($view_item['file_hash'] == $item['file_hash']) {
+                        $nfound[] = $view_item['id'];
+                        break;
+                    }
+                }
+            }
+
+            if (count($items) == count($nfound)) {
+                foreach ($nfound as $found_item) {
+                    $db->delete('view_media', ['id' => ['value' => $found_item]]);
+                }
             } else {
                 foreach ($items as $item) {
                     $found = 0;
