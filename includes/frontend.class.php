@@ -150,6 +150,10 @@ class FrontEnd {
         if (isset($_POST['expand_all'])) {
             $prefs->setPrefsItem('expand_all', Filter::postString('expand_all'));
         }
+        (isset($_POST['show_trending'])) ? $prefs->setPrefsItem('show_trending', Filter::postString('show_trending')) : null;
+        (isset($_POST['show_popular'])) ? $prefs->setPrefsItem('show_popular', Filter::postString('show_popular')) : null;
+        (isset($_POST['show_today_shows'])) ? $prefs->setPrefsItem('show_today_shows', Filter::postString('show_today_shows')) : null;
+
         ($prefs->getPrefsItem('max_identify_items') == 0) ? $tdata['max_id_sel_0'] = 'selected' : $tdata['max_id_sel_0'] = '';
 
         $tdata['max_id_sel_0'] = $tdata['max_id_sel_5'] = $tdata['max_id_sel_10'] = $tdata['max_id_sel_20'] = $tdata['max_id_sel_50'] = '';

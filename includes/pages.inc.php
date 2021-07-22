@@ -288,35 +288,6 @@ function page_tmdb() {
     (!empty($_GET['search_movies'])) ? $search_movies = Filter::getUtf8('search_movies') : $search_movies = '';
     (!empty($_GET['search_shows'])) ? $search_shows = Filter::getUtf8('search_shows') : $search_shows = '';
 
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        if (isset($_POST['show_trending'])) {
-            $show_trending = Filter::postInt('show_trending');
-            if (!empty($show_trending)) {
-                $prefs->setPrefsItem('show_trending', 1);
-            } else {
-                $prefs->setPrefsItem('show_trending', 0);
-            }
-        }
-        if (isset($_POST['show_popular'])) {
-            $show_popular = Filter::postInt('show_popular');
-            if (!empty($show_popular)) {
-                $prefs->setPrefsItem('show_popular', 1);
-            } else {
-                $prefs->setPrefsItem('show_popular', 0);
-            }
-        }
-        if (isset($_POST['show_today_shows'])) {
-            $show_today_shows = Filter::postInt('show_today_shows');
-            if (!empty($show_today_shows)) {
-                $prefs->setPrefsItem('show_today_shows', 1);
-            } else {
-                $prefs->setPrefsItem('show_today_shows', 0);
-            }
-        }
-    }
-    !empty($prefs->getPrefsItem('show_trending')) ? $tdata['TRENDING_CHECKED'] = 'checked' : $tdata['TRENDING_CHECKED'] = '';
-    !empty($prefs->getPrefsItem('show_popular')) ? $tdata['POPULAR_CHECKED'] = 'checked' : $tdata['POPULAR_CHECKED'] = '';
-    !empty($prefs->getPrefsItem('show_today_shows')) ? $tdata['TODAYSHOWS_CHECKED'] = 'checked' : $tdata['TODAYSHOWS_CHECKED'] = '';
     $tdata['search_movies_word'] = $search_movies;
     $tdata['search_shows_word'] = $search_shows;
 
