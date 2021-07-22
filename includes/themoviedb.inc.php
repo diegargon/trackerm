@@ -156,11 +156,21 @@ function themoviedb_MediaPrep($media_type, $items) {
         }
 
         $genres = '';
-        if (!empty($item['genres']) && valid_array($item['genres'])) {
+
+        if (!empty($item['genre_ids'])) {
+            $o_genres = $item['genre_ids'];
+            if (valid_array($o_genres)) {
+                foreach ($o_genres as $o_genre) {
+                    empty($genres) ? $genres .= $o_genre : $genres .= ',' . $o_genre;
+                }
+            }
+        } else if (!empty($item['genres'])) {
             $o_genres = $item['genres'];
             if (valid_array($o_genres)) {
                 foreach ($o_genres as $o_genre) {
-                    empty($genres) ? $genres = $o_genre['id'] : $genres .= ',' . $o_genre['id'];
+                    if (!empty($o_genre['id'])) {
+                        empty($genres) ? $genres .= $o_genre['id'] : $genres .= ',' . $o_genre['id'];
+                    }
                 }
             }
         }
@@ -179,6 +189,7 @@ function themoviedb_MediaPrep($media_type, $items) {
             'plot' => $item['overview'],
             'genre' => !empty($genres) ? $genres : null,
             'release' => isset($release) ? $release : null,
+            'updated' => time(),
         ];
         !empty($trailer) ? $fitems[$i]['trailer'] = $trailer : null;
         if ($media_type == 'shows' && !empty($item['in_production'])) {

@@ -167,3 +167,19 @@ function get_poster($item) {
 
     return $poster;
 }
+
+function get_fgenres($item) {
+    global $cfg, $LNG;
+
+    $genres = '';
+    if (empty($item['genre'])) {
+        return $genres;
+    }
+
+    $genres_ary = explode(',', $item['genre']);
+    foreach ($genres_ary as $vgenre) {
+        $genres .= Html::span(['class' => 'fgenres'], $LNG[$cfg['TMDB_GENRES'][$vgenre]]);
+    }
+
+    return $genres;
+}

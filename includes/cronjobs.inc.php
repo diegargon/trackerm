@@ -241,9 +241,10 @@ function update_masters(bool $force = false) {
                 $update['updated'] = time();
                 $update['plot'] = $item_cached['plot'];
                 $update['rating'] = $item_cached['rating'];
-                $update['popularity'] = isset($item['popularity']) ? $item['popularity'] : 0;
+                $update['popularity'] = isset($item_cached['popularity']) ? $item_cached['popularity'] : 0;
                 $update['poster'] = !empty($item_cached['poster']) ? $item_cached['poster'] : null;
                 $update['release'] = $item_cached['release'];
+                $update['genre'] = !empty($item_cached['genre']) ? $item_cached['genre'] : null;
                 !empty($item_cached['trailer']) ? $update['trailer'] = $item_cached['trailer'] : $update['trailer'] = '';
                 $media_type == 'shows' ? $update['ended'] = $item_cached['ended'] : null;
 

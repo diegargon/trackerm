@@ -120,6 +120,8 @@ function view() {
         $other['follow_show'] = get_follow_show($item['themoviedb_id']);
     }
 
+    $item['f_genres'] = get_fgenres($item);
+
     $page = $frontend->getTpl('view', array_merge($item, $other));
 
     return $page;

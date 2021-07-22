@@ -990,6 +990,12 @@ input:checked + .slider:before {
     padding: 5px;
     width: 49%;
 }
+.fgenres {
+    border:0px solid blue;
+    margin-right: 2px;
+    padding:2px;
+    background-color: black;
+}
 
 /* Responsive */
 @media only screen and (max-width: 1024px) {

@@ -44,6 +44,12 @@
                     <span class="view_added"><?= strftime("%x", strtotime($tdata['created'])) ?></span>
                     <br/>
                 <?php } ?>
+                <?php if (!empty($tdata['f_genres'])) { ?>
+                    <span><?= $LNG['L_GENRES'] ?> :</span>
+                    <span class="view_genres"><?= $tdata['f_genres'] ?></span>
+                    <br/>
+                <?php } ?>
+
                 <?php if (!empty($tdata['release'])) { ?>
                     <span><?= $LNG['L_RELEASED'] ?> :</span>
                     <span class="view_release"><?= strftime("%Y", strtotime($tdata['release'])) ?></span>
