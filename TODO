@@ -1,16 +1,22 @@
 [TODO]
 
 [HIGH]
+    [IMPROVE][VIEW]Add delete media button
+    [IMPROVE] Add option for not add tags on move files. (rename_notags config)    
     [IMPROVE] Masters shows al meter un episodio actualiza master ?¿
     [FIX] Si no hay espacio en torrent temp transmission no mueve pero para trackerm consta que esta finalizado y intenta enlazarlo pero sige en temp no en 
     finalize/Ultimo.    
     [IMPROVE] Import path    
     [IMPROVE] Indexers to config
-    [IMPROVE][VIEW]Add delete media button
-
+    [IMPROVE] Actualmente cada vez que listamos torrents comprobamos si lo tenemos en library; 
+            Deberiamos utilizar have_it de jackett_* para no tener que comprobar la library, para ello [TODO]
+            Cuando lo metemos en el cache deberiamos comprobar la library y marcar have_it de jackett_* [DONE] 
+            Cada vez que descargamos algo actualizar el have_it de jackett_* [TODO]
+            Cada vez que se borra algo de library actualizar el have_it de jackett_* [TODO]
+            
 [MED]    
+    [IMPROVE] Menu resaltar pagina que estamos
     [IMPROVE] Wanted funciona buscando el dia, deberia comprobar los release torrents cada 6h 
-    [IMPROVE] Add option for not add tags on move files. (need db update)
     [IMPROVE] Si se borra manualmente un torrente bajado quedara el bd huerfanos. OPCION ORPHAN. 
         Buscar archivos multimedia en el TORRENT DIR y buscar la forma de determina si coincide con alguno en la base de datos
         si no coincide moverlo.     
@@ -22,8 +28,15 @@
             cada vez que se baje algo, ver casos. track_show necesitaba rebuild 
     [IMPROVE][NEW] Ordenamiento: Cambiar, si un tracker no actualiza sus torrents en mucho tiempo con el sistema actual siempre apareceran sus ultimos torrents
         en la primera pagina.
-
+    [IMPROVE][WANTED] Options ocultar sirviendo
+    [IMPROVE][WANTED] Boton borrar a icono  papelera
+    [FIX/IMPROVE] La consulta/muestra de shows vistos (view_media) solo funciona en library no en shows_db
 [VERY LOW]
+    [IMPROVE][WANTED]Track show, option for modify from episode.
+    [IMPROVE][INDEX] Responsive
+    [IMPROVE][WANTED] way for ask before download, checkbox supervisar, en wanted guardar ids de los torrentes encontrados, listbox selecionar uno, 
+        boton aceptar selecionado, si se descartatan todos(boton descartar), campo que lleve cuenta de los ids descartados. 
+        Quizas campo para "en espera de supervision" o evitar, si hay ids en el campo supervisar esta en espera si esta vacio buscar.       
     [IMPROVE] Rewrite pager its messy
     [IMPROVE] Log,  posibilidad de emitir un mensaje que solo se envia si no se envio otro igual en X tiempo, ideal para para addstatemsg y no spamear.    
     [FIX/IMPROVE] Normalize dates 
@@ -33,14 +46,12 @@
     [IMPROVE]On torrent new/search get release data from tmdb and show it, get local database if not request database    
     [CLEAN] library_movies/shows now since change to masters not need most fields, remove
     [IMPROVE] Library: add sort options
-    [IMPROVE][PLAY] Add to library sub menu a switch to player mode.
-    [IMPROVE][PLAY] añadir tabla view_movies, view=0 not view 1 partial 2 , 3 view.     
     [IMPROVE][PLAY][LocalPlayer] Investigate web interface for track time
 
 [BACKLOG]
-    [IMPROVE] Catalog
+    [IMPROVE] Coleciones (Trilogias/Marvel etc), Genero, Custom Genero, Visto /No Visto
     [CHANGE] Change actual Transmission rpc api to something basic, since some basic is enough and the actual have alot of deps 
-    [NEW/IMPROVE] En el select de identificar estaria bien mostrar las caractulas al poner encima    
+    [NEW/IMPROVE] En el select de identificar estaria bien mostrar las caratulas al poner encima    
     [IMPROVE] Selectable/hide Home items
     [NEW/IMPROVE] Home: Informacion reducida de torrents en transmission y su estado (when begin use jquery)
     [NEW/IMPROVE] recargar con jquery solo las partes necesarias en vez de recargar toda la pagina

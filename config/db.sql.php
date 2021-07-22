@@ -9,7 +9,7 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-define('DB_VERSION', 18);
+define('DB_VERSION', 19);
 
 function create_db() {
     global $db;
@@ -257,6 +257,7 @@ function create_db() {
                     "poster" VARCHAR NULL,
                     "guessed_poster" VARCHAR NULL,
                     "genre" VARCHAR NULL,
+                    "have_it" INTEGER NULL,
                     "trailer" VARCHAR NULL,
                     "freelech" INT NULL,
                     "guessed_trailer" VARCHAR NULL,
@@ -283,6 +284,7 @@ function create_db() {
                     "poster" VARCHAR NULL,
                     "guessed_poster" VARCHAR NULL,
                     "genre" VARCHAR NULL,
+                    "have_it" INTEGER NULL,
                     "trailer" VARCHAR NULL,
                     "freelech" INT NULL,
                     "guessed_trailer" VARCHAR NULL,
@@ -396,6 +398,18 @@ function create_db() {
           "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
           )');
 
+    //VIEW MEDIA
+    $db->query('CREATE TABLE IF NOT EXISTS "view_media" (
+          "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+          "uid" INTEGER NOT NULL,
+          "themoviedb_id" INTEGER NOT NULL,
+          "season" INTEGER NULL,
+          "episode" INTEGER NULL,
+          "media_type" VARCHAR NOT NULL,
+          "file_hash" VARCHAR NOT NULL,
+          "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+          )');
+
     $db->insert('config', ['cfg_key' => 'db_version', 'cfg_value' => DB_VERSION, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
     $db->insert('config', ['cfg_key' => 'profile', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
     $db->insert('config', ['cfg_key' => 'max_identify_items', 'cfg_value' => 5, 'cfg_desc' => 'L_CFG_MAXID_ITEMS', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
@@ -473,6 +487,8 @@ function create_db() {
     $db->insert('config', ['cfg_key' => 'proxy_user', 'cfg_value' => '', 'cfg_desc' => 'L_CFG_PROXY_USER', 'type' => 1, 'category' => 'L_PROXY', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'proxy_pass', 'cfg_value' => '', 'cfg_desc' => 'L_CFG_PROXY_PASS', 'type' => 1, 'category' => 'L_PROXY', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'proxy_timeout', 'cfg_value' => 10, 'cfg_desc' => 'L_CFG_PROXY_TIMEOUT', 'type' => 2, 'category' => 'L_PROXY', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'rename_notags', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_RENAME_NOTAGS', 'type' => 3, 'category' => 'L_FILES', 'public' => 0]);
+    $db->insert('config', ['cfg_key' => 'cron_update', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
     /*
       $db->insert('config', ['cfg_key' => 'transcoder_player', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_TRANSCODER_PLAYER', 'type' => 3, 'category' => 'L_PLAY', 'public' => 1]);
       $db->insert('config', ['cfg_key' => 'transcoder_path', 'cfg_value' => '/usr/bin/ffmpeg', 'cfg_desc' => 'L_CFG_TRANSCODER_PATH', 'type' => 1, 'category' => 'L_PLAY', 'public' => 1]);
@@ -912,14 +928,12 @@ function update_db($from) {
         update_v13_rebuild_master('shows');
     }
 
-
     if ($from < 14) {
         $db->query('UPDATE config SET cfg_value=\'14\' WHERE cfg_key=\'db_version\' LIMIT 1');
         $db->insert('config', ['cfg_key' => 'curl_timeout', 'cfg_value' => 70, 'cfg_desc' => 'L_CFG_CURL_TIMEOUT', 'type' => 2, 'category' => 'L_MAIN', 'public' => 1]);
         $db->update('db_info', ['version' => 14]);
         $db->query('VACUUM;');
     }
-
 
     if ($from < 15) {
         $db->query('ALTER TABLE wanted add column ignore_count INTEGER NULL'); //ignore this download for
@@ -939,7 +953,6 @@ function update_db($from) {
         $db->update('db_info', ['version' => 16]);
         $db->query('VACUUM;');
     }
-
 
     if ($from < 17) {
         require_once('includes/update.db.php');
@@ -963,7 +976,6 @@ function update_db($from) {
         $db->query('VACUUM;');
     }
 
-
     if ($from < 18) {
         $db->query('DELETE FROM jackett_movies');
         $db->query('DELETE FROM jackett_shows');
@@ -973,16 +985,26 @@ function update_db($from) {
         $db->query('VACUUM;');
     }
 
+    if ($from < 19) {
+        $db->insert('config', ['cfg_key' => 'rename_notags', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_RENAME_NOTAGS', 'type' => 3, 'category' => 'L_FILES', 'public' => 0]);
+        $db->insert('config', ['cfg_key' => 'cron_update', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
+        $db->query('ALTER TABLE jackett_shows add column have_it INT NULL');
+        $db->query('ALTER TABLE jackett_movies add column have_it INT NULL');
+        $db->query('CREATE TABLE IF NOT EXISTS "view_media" (
+          "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+          "uid" INTEGER NOT NULL,
+          "themoviedb_id" INTEGER NOT NULL,
+          "season" INTEGER NULL,
+          "episode" INTEGER NULL,
+          "media_type" VARCHAR NOT NULL,
+          "file_hash" VARCHAR NOT NULL,
+          "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+          )');
 
-    /*
-      if ($from < 19) {
-      $db->insert('config', ['cfg_key' => 'rename_notags', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_RENAME_NOTAGS', 'type' => 3, 'category' => 'L_FILES, 'public' => 0]);
-      $db->query('ALTER TABLE jackett_shows add column have_it INT NULL');
-      $db->query('ALTER TABLE jackett_movies add column have_it INT NULL');
-      $db->query('UPDATE config SET cfg_value=\'19\' WHERE cfg_key=\'db_version\' LIMIT 1');
-      $db->query('VACUUM;');
-      }
-     */
+        $db->query('UPDATE config SET cfg_value=\'19\' WHERE cfg_key=\'db_version\' LIMIT 1');
+        $db->query('VACUUM;');
+    }
+
     /*
       if ($from < 20) {
       //'indexer_disable_time' default 24*60*60

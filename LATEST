@@ -1,5 +1,12 @@
 ## Latest / News (Relevant)
 
+[21/07] Redesign wanted page / expand all menu opt
+[20/07] Fixed/Improve magnet bug: hack for avoid the transmission magnet bug, now trackerm avoid the fail sending the magnet links 
+instead of url of the magnet link
+[20/07] Fixed ended and trailer library masters bugs
+[19/07] Localplayer play next in view mode
+[19/07] Add to library "view mode" for hidden seen media, switch on submenu in library.
+[************ COMMIT **********]
 [15/07] In Torrents, you can now list all cached torrents, this torrents links would fail download 
 if the tracker/indexer is down or the source remove the torrent, also freelech flag is not reliable.
 Remember the results are cached from one minute ago to few weeks/months ago. Avaible sub menu optiosn

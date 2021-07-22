@@ -14,7 +14,7 @@
     * Torrents search: Limit by Indexer, Filter Words, Filter Size, Freelech filter
     * List latest releases from your favorite indexers/trackers.
     * Trailers & Covers guess for missing covers
-    * Library: Search you library, Downlad media, Stats
+    * Library: Search you library, Downlad media, Stats, Seen/Unseen media.
     * Library: Local Player (no active by default, see config options), play your movies/shows  launching VLC just clicking (the media share volume must be accesible)
     * Users: Basic IU designed for multiple users, password access, limit local ips (config)
     * Email: Automatically send email when TrackerM add new media to your library
@@ -115,7 +115,7 @@ Puedes utilizar ISSUES para fallos y otras cuestiones/dudas.
     Apache 2.4 (need >=2.4)
     Php 7.4 (php7 is necessary) 
     Sqlite 3.31.1 (need >=3)
-
+    Curl
     Phone Testing(visual): Android 9
 
 ## INSTALL
