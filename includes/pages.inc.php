@@ -335,7 +335,7 @@ function page_tmdb() {
         $topt['view_type'] = 'shows_db';
         !empty($shows) ? $page_tmdb .= buildTable('L_DB', $shows, $topt) : null;
     }
-    if (!isset($_GET['search_movies']) && !isset($_GET['search_shows']) && !empty($prefs->getPrefsItem('show_trending'))) {
+    if (empty($_GET['search_movies']) && empty($_GET['search_shows']) && !empty($prefs->getPrefsItem('show_trending'))) {
         $topt['no_pages'] = 1;
         $results = mediadb_getTrending();
 
@@ -349,7 +349,7 @@ function page_tmdb() {
         }
     }
 
-    if (!isset($_GET['search_movies']) && !isset($_GET['search_shows']) && !empty($prefs->getPrefsItem('show_popular'))) {
+    if (empty($_GET['search_movies']) && empty($_GET['search_shows']) && !empty($prefs->getPrefsItem('show_popular'))) {
         $topt['no_pages'] = 1;
         $results = mediadb_getPopular();
         if ($cfg['want_movies']) {
@@ -362,7 +362,7 @@ function page_tmdb() {
         }
     }
 
-    if (!isset($_GET['search_movies']) && !isset($_GET['search_shows']) && !empty($prefs->getPrefsItem('show_today_shows'))) {
+    if (empty($_GET['search_movies']) && empty($_GET['search_shows']) && !empty($prefs->getPrefsItem('show_today_shows'))) {
         $topt['no_pages'] = 1;
         $results = mediadb_getTodayShows();
         $topt['view_type'] = 'shows_db';
