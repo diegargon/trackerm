@@ -219,6 +219,7 @@ $LNG = [
     'L_STOP_ALL' => 'Parar todos',
     'L_SLOW_THE_FLOW' => 'Ralentizo el flujo',
     'L_SHOW_CACHED' => 'Mostrar cache',
+    'L_SOURCE' => 'Fuente',
     'L_TRACKING' => 'Seguimiento',
     'L_TRANSMISSION' => 'Transmission',
     'L_TITLE' => 'Titulo',

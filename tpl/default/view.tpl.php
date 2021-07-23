@@ -55,6 +55,14 @@
                     <span class="view_release"><?= strftime("%Y", strtotime($tdata['release'])) ?></span>
                     <br/>
                 <?php } ?>
+                <?php if (!empty($tdata['source'])) { ?>
+                    <span><?= $LNG['L_SOURCE'] ?> :</span>
+                    <span class="external_link"><a href="<?= $tdata['guid'] ?>" target=_blank><?= $tdata['source'] ?></a></span>
+                    <?php if (!empty($tdata['freelech'])) { ?>
+                        <span>(<?= $LNG['L_FREELECH'] ?>)</span>
+                    <?php } ?>
+                    <br/>
+                <?php } ?>
                 <?php if ($tdata['media_type'] == 'shows' && isset($tdata['ended'])) {
                     ?>
                     <span><?= $LNG['L_STATE'] ?> :</span>
