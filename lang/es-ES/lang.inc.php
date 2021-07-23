@@ -26,6 +26,7 @@ $LNG = [
     'L_CFG_AUTO_IDENTIFY' => 'Intentar auto identificar nuevo contenido',
     'L_CACHE' => 'Cache',
     'L_CATEGORY' => 'Categorias',
+    'L_CAT_NOEXISTS' => 'No Existe',
     'L_COLUMNS' => 'Columnas',
     'L_CLEAR' => 'Limpiar',
     'L_CLEAR_DISABLE' => 'Desbloquear indexer deshabilitados',

@@ -203,7 +203,12 @@ function get_fgenres($item) {
 
     $genres_ary = explode(',', $item['genre']);
     foreach ($genres_ary as $vgenre) {
-        $genres .= Html::span(['class' => 'fgenres'], $LNG[$cfg['TMDB_GENRES'][$vgenre]]);
+        if (!empty($cfg['TMDB_GENRES'][$vgenre])) {
+            $lang_genre = $LNG[$cfg['TMDB_GENRES'][$vgenre]];
+        } else {
+            $lang_genre = $LNG['Ñ_CAT_NOTEXISTS'];
+        }
+        $genres .= Html::span(['class' => 'fgenres'], $lang_genre);
     }
 
     return $genres;
