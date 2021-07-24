@@ -59,6 +59,10 @@ function show_identify_media(string $media_type) {
     $iurl = '?page=' . Filter::getString('page');
     $limit = $prefs->getPrefsItem('max_identify_items');
 
+    if (empty($limit)) {
+        return false;
+    }
+
     $result = $db->query("SELECT * FROM library_$media_type WHERE master = '' OR master IS NULL LIMIT $limit");
     $media_library = $db->fetchAll($result);
 
