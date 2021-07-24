@@ -15,7 +15,7 @@
     * Torrents search: Limit by Indexer, Filter Words, Filter Size, Freelech filter
     * List latest releases from your favorite indexers/trackers.
     * Trailers & Covers guess for missing covers
-    * Library: Search you library, Downlad media, Stats, Seen/Unseen media.
+    * Library: Search you library, Downlad media, Stats, Mark Seen/Unseen media.
     * Library: Local Player (no active by default, see config options), play your movies/shows  launching VLC just clicking (the media share volume must be accesible)
     * Users: Basic IU designed for multiple users, password access, limit local ips (config)
     * Email: Automatically send email when TrackerM add new media to your library
