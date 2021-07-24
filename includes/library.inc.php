@@ -206,7 +206,7 @@ function get_fgenres($item) {
         if (!empty($cfg['TMDB_GENRES'][$vgenre])) {
             $lang_genre = $LNG[$cfg['TMDB_GENRES'][$vgenre]];
         } else {
-            $lang_genre = $LNG['Ñ_CAT_NOTEXISTS'];
+            $lang_genre = $LNG['L_CAT_NOTEXISTS'];
         }
         $genres .= Html::span(['class' => 'fgenres'], $lang_genre);
     }
