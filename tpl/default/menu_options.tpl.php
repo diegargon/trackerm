@@ -61,7 +61,8 @@
 
         <?php if ($cfg['want_movies'] && ($tdata['page'] == 'library' || $tdata['page'] == 'library_movies')) { ?>
             <input onClick="show_loading();" class="submit_btn" type="submit" name="rebuild_movies" value="<?= $LNG['L_REESCAN_MOVIES'] ?>"/>
-        <?php }
+        <?php
+        }
 
         if ($cfg['want_shows'] && ($tdata['page'] == 'library' || $tdata['page'] == 'library_shows')) {
             ?>
@@ -106,7 +107,7 @@
             <span><?= $LNG['L_FREELECH'] ?></span>
             <input type="hidden" name="only_freelech" value="0"/>
             <input onClick="show_loading();"  type="checkbox" <?= !empty($prefs->getPrefsItem('only_freelech')) ? 'checked' : null ?> name="only_freelech" onChange="this.form.submit()" value="1"/>
-        <?php
+            <?php
         }
 
         if (!empty($tdata['page']) && in_array($tdata['page'], ['news', 'new_movies', 'new_shows', 'torrents'])) {
@@ -120,7 +121,7 @@
                     <input type="text" size="15" name="new_ignore_keywords" onChange="show_loading();this.form.submit();" value="<?= !empty($prefs->getPrefsItem('new_ignore_keywords')) ? $prefs->getPrefsItem('new_ignore_keywords') : null ?>"/>
                 </div>
                 <!-- ignore size -->
-                <span><?= $LNG['L_SIZE'] ?></span>
+                <span><?= $LNG['L_MAX_SIZE'] ?></span>
                 <input type="hidden" name="new_ignore_size_enable" value="0"/>
                 <input onClick="show_loading();"  type="checkbox" <?= !empty($prefs->getPrefsItem('new_ignore_size_enable')) ? 'checked' : null ?> name="new_ignore_size_enable" onChange="this.form.submit()" value="1"/>
                 <div class="inline" data-tip="<?= $LNG['L_TIP_IGNORE_SIZE'] ?>">

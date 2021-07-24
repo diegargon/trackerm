@@ -122,6 +122,7 @@ $LNG = [
     'L_LOGOUT' => 'Salir',
     'L_LOCALPLAYER' => 'LocalPlayer',
     'L_MAIN' => 'Principal',
+    'L_MAX_SIZE' => 'Tamaño Max',
     'L_MOVIES' => 'Peliculas',
     'L_MOVIES_MIN' => 'P',
     'L_MOVIE' => 'Pelicula',
