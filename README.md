@@ -6,6 +6,7 @@
 
 ## Features 
     * For Movies & Shows 
+    * UI Language (English and Spanish)
     * Track shows: Automatically download next episodes and old episodes specifying starting chapter
     * Wanted List: Adding movies/shows to the wanted list will make TrackerM download automatically when some tracker release.
     * Multiple options for tracker/wanted: Ignore/Require Keywords, Quality Preference PROPER, etc

@@ -14,9 +14,7 @@
             Cada vez que descargamos algo actualizar el have_it de jackett_* [TODO]
             Cada vez que se borra algo de library actualizar el have_it de jackett_* [TODO]
             
-[MED]
-    [IMPROVE] [VIEW] Muestra solo Tamaño total, mostrar tambien tamaño del archivo selecionado, mostrar tambien duracion de metadata archivo
-    [IMPROVE] Menu resaltar pagina que estamos
+[MED]    
     [IMPROVE] Wanted funciona buscando el dia, deberia comprobar los release torrents cada 6h 
     [IMPROVE] Si se borra manualmente un torrente bajado quedara el bd huerfanos. OPCION ORPHAN. 
         Buscar archivos multimedia en el TORRENT DIR y buscar la forma de determina si coincide con alguno en la base de datos
