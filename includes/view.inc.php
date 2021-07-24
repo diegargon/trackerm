@@ -88,7 +88,7 @@ function view() {
     ($view_type == 'movies_db' || $view_type == 'shows_db') ? $opt['auto_show_torrents'] = 1 : null;
     ($view_type == 'movies_torrent' || $view_type == 'shows_torrent') ? $opt['auto_show_db'] = 1 : null;
 
-    if ($view_type == 'movies_library' || $view_type == 'shows_library') {
+    if (in_array($view_type, ['movies_library', 'shows_library', 'movies_db', 'shows_db'])) {
         $where_view_media = [
             'uid' => ['value' => $user->getId()],
             'media_type' => ['value' => $media_type],
@@ -219,8 +219,10 @@ function view_seasons($item, $opt, $update = false) {
 
     if (empty($season)) {
         /*
-         * by default (not ask for season details), only need the fields seasons&episodes, we need only one
-         *  item is enough but if need requesst we use the all return and show season 1
+         * by default (not ask for season details), we only need the fields seasons&episodes, that mean one
+         *  item is enough but if we need request we get all season info and show season 1
+         * TODO: check if is need in show_details seasons&episodes, this must be in "Season data" not need in every
+         * entry in details
          */
         $item_details = $db->getItemByField('shows_details', 'themoviedb_id', $item['themoviedb_id']);
         if ($item_details === false || $update) {
