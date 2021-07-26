@@ -155,13 +155,17 @@ function themoviedb_MediaPrep($media_type, $items) {
             empty($trailer) ? $trailer = 0 : null; //we use 0 for mark as not have trailer atm
         }
 
+        //TODO DELETE genres coma separated and modify functions for work with [genre]
         $genres = '';
+        $_genres = '';
 
+        // Something wrong with o_api sometimes "genre_ids" and others "genres" check both
         if (!empty($item['genre_ids'])) {
             $o_genres = $item['genre_ids'];
             if (valid_array($o_genres)) {
                 foreach ($o_genres as $o_genre) {
                     empty($genres) ? $genres .= $o_genre : $genres .= ',' . $o_genre;
+                    $_genres .= '[' . $o_genre . ']';
                 }
             }
         } else if (!empty($item['genres'])) {
@@ -170,6 +174,7 @@ function themoviedb_MediaPrep($media_type, $items) {
                 foreach ($o_genres as $o_genre) {
                     if (!empty($o_genre['id'])) {
                         empty($genres) ? $genres .= $o_genre['id'] : $genres .= ',' . $o_genre['id'];
+                        $_genres .= '[' . $o_genre['id'] . ']';
                     }
                 }
             }
@@ -188,9 +193,12 @@ function themoviedb_MediaPrep($media_type, $items) {
             'lang' => $item['original_language'],
             'plot' => $item['overview'],
             'genre' => !empty($genres) ? $genres : null,
+            'genres' => !empty($_genres) ? $_genres : null,
             'release' => isset($release) ? $release : null,
             'updated' => time(),
         ];
+
+        !empty($item['belongs_to_collection']['id']) ? $fitems[$i]['collection'] = $item['belongs_to_collection']['id'] : null;
         !empty($trailer) ? $fitems[$i]['trailer'] = $trailer : null;
         if ($media_type == 'shows' && !empty($item['in_production'])) {
             $fitems[$i]['ended'] = 0;
@@ -435,7 +443,7 @@ function themoviedb_getTrailer($media_type, $id) {
 
     $curl_data = curl_get_tmdb($url);
 
-    if (!valid_array($curl_data['results'])) {
+    if (empty($curl_data['results'])) {
         return false;
     }
     $results = array_pop($curl_data['results']);
@@ -452,4 +460,32 @@ function themoviedb_getTrailer($media_type, $id) {
     }
 
     return trim($video);
+}
+
+function themoviedb_getCollection($col_id) {
+    global $cfg;
+
+    $item = [];
+    $url = "https://api.themoviedb.org/3/collection/{$col_id}?api_key=" . $cfg['db_api_token'] . '&language=' . $cfg['TMDB_LANG'];
+
+    $results = curl_get_tmdb($url);
+
+    if (!valid_array($results) || !valid_array($results['parts'])) {
+        return false;
+    }
+
+    $item['title'] = $results['name'];
+    $item['plot'] = $results['overview'];
+    if (!empty($results['poster_path'])) {
+        $item['poster'] = $cfg['odb_images_link'] . $results['poster_path'];
+    }
+
+    foreach ($results['parts'] as $part) {
+        empty($item['mids']) ? $item['mids'] = $part['id'] : $item['mids'] .= ',' . $part['id'];
+        if (empty($item['poster']) && !empty($part['poster_path'])) {
+            $item['poster'] = $cfg['odb_images_link'] . $part['poster_path'];
+        }
+    }
+
+    return $item;
 }

@@ -67,6 +67,12 @@ function mediadb_guessTrailer($title, $media_type) {
     return !empty($result) ? $result : false;
 }
 
+function mediadb_getCollection($id) {
+    $result = themoviedb_getCollection($id);
+
+    return !empty($result) ? $result : false;
+}
+
 function mediadb_guessFieldGet($title, $media_type, $field) {
     global $db;
 
