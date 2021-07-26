@@ -23,7 +23,7 @@
 
 class DB {
 
-    private $version = 19;
+    private $version = 20;
     private $db;
     private $db_path;
     private $querys = [];

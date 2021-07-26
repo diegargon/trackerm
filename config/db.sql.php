@@ -9,7 +9,7 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-define('DB_VERSION', 19);
+define('DB_VERSION', 20);
 
 function create_db() {
     global $db;
@@ -62,6 +62,8 @@ function create_db() {
                     "release" VARCHAR NULL,
                     "in_library" INTEGER NULL,
                     "genre" VARCHAR NULL,
+                    "genres" VARCHAR NULL,
+                    "collection" INTEGER NULL,
                     "updated" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                     UNIQUE(themoviedb_id)
@@ -86,6 +88,7 @@ function create_db() {
                     "release" VARCHAR NULL,
                     "in_library" INTEGER NULL,
                     "genre" VARCHAR NULL,
+                    "genres" VARCHAR NULL,
                     "ended" INTEGER NULL,
                     "updated" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                     "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
@@ -119,6 +122,9 @@ function create_db() {
           "custom_poster" VARCHAR NULL,
           "release" VARCHAR NULL,
           "genre" VARCHAR NULL,
+          "genres" VARCHAR NULL,
+          "collection" INTEGER NULL,
+          "custom_collections" VARCHAR NULL,
           "items_updated" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
           "updated" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
           "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
@@ -179,6 +185,7 @@ function create_db() {
           "custom_poster" VARCHAR NULL,
           "release" VARCHAR NULL,
           "genre" VARCHAR NULL,
+          "genres" VARCHAR NULL,
           "ended" INTEGER default 0,
           "items_updated" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
           "updated" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
@@ -407,6 +414,19 @@ function create_db() {
           "episode" INTEGER NULL,
           "media_type" VARCHAR NOT NULL,
           "file_hash" VARCHAR NOT NULL,
+          "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+          )');
+
+    $db->query('CREATE TABLE IF NOT EXISTS "groups" (
+          "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+          "media_type" VARCHAR NOT NULL,
+          "type" INTEGER NOT NULL,
+          "type_id" INTEGER NOT NULL,
+          "poster" VARCHAR NULL,
+          "custom_poster" VARCHAR NULL,
+          "plot" VARCHAR NULL,
+          "mids" VARCHAR NOT NULL,
+          "updated" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
           "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
           )');
 
@@ -1005,10 +1025,38 @@ function update_db($from) {
         $db->query('VACUUM;');
     }
 
+    if ($from < 20) {
+        $db->query('DROP TABLE IF EXISTS "groups"');
+        $db->query('CREATE TABLE IF NOT EXISTS "groups" (
+          "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+          "media_type" VARCHAR NOT NULL,
+          "type" INTEGER NOT NULL,
+          "type_id" INTEGER NOT NULL,
+          "title" VARCHAR NOT NULL,
+          "plot" VARCHAR NULL,
+          "poster" VARCHAR NULL,
+          "custom_poster" VARCHAR NULL,
+          "mids" VARCHAR NOT NULL,
+          "updated" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+          "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+          )');
+
+        $db->query('ALTER TABLE tmdb_search_shows add column genres VARCHAR NULL');
+        $db->query('ALTER TABLE tmdb_search_movies add column genres VARCHAR NULL');
+        $db->query('ALTER TABLE library_master_shows add column genres VARCHAR NULL');
+        $db->query('ALTER TABLE library_master_movies add column genres VARCHAR NULL');
+        $db->query('ALTER TABLE library_master_movies add column custom_collections VARCHAR NULL');
+        $db->query('ALTER TABLE library_master_movies add column collection VARCHAR NULL');
+        $db->query('ALTER TABLE tmdb_search_movies add column collection INTEGER NULL');
+        $db->update('config', ['cfg_value' => 0], ['cfg_key' => ['value' => 'cron_update']]);
+        $db->query('UPDATE config SET cfg_value=\'20\' WHERE cfg_key=\'db_version\' LIMIT 1');
+        $db->query('VACUUM;');
+    }
+
     /*
-      if ($from < 20) {
+      if ($from < 21) {
       //'indexer_disable_time' default 24*60*60
-      $db->query('UPDATE config SET cfg_value=\'16\' WHERE cfg_key=\'db_version\' LIMIT 1');
+      $db->query('UPDATE config SET cfg_value=\'21\' WHERE cfg_key=\'db_version\' LIMIT 1');
       $db->insert('config', ['cfg_key' => 'localplayer_track', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_LOCALPLAYER_TRACK', 'type' => 3, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
       $db->insert('config', ['cfg_key' => 'localplayer_web_password', 'cfg_value' => '', 'cfg_desc' => 'L_CFG_LOCALPLAYER_WEB_PASSWORD', 'type' => 1, 'category' => 'L_LOCALPLAYER', 'public' => 1]);     *
       $db->query('VACUUM;');
@@ -1016,7 +1064,7 @@ function update_db($from) {
      */
     /*
       if ($from < 21) {
-      $db->query('UPDATE config SET cfg_value=\'17\' WHERE cfg_key=\'db_version\' LIMIT 1');
+      $db->query('UPDATE config SET cfg_value=\'22\' WHERE cfg_key=\'db_version\' LIMIT 1');
       $db->query('VACUUM;');
       }
      */
