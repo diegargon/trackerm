@@ -22,6 +22,7 @@ function cronjobs() {
     if (($cfg['cron_hourly'] + 3600) < $time_now) {
         $db->update('config', ['cfg_value' => $time_now], ['cfg_key' => ['value' => 'cron_hourly']]);
         check_masters_childs_integrity();
+        update_collections();
     }
 
     if (($cfg['cron_halfday'] + 21600) < $time_now) {
@@ -49,6 +50,8 @@ function cronjobs() {
     }
     if ($cfg['cron_update'] == 0) {
         $db->update('config', ['cfg_value' => $time_now], ['cfg_key' => ['value' => 'cron_update']]);
+        clean_tmdb_master_entrys('movies');
+        clean_tmdb_master_entrys('shows');
         update_masters(true);
     }
 
@@ -246,11 +249,76 @@ function update_masters(bool $force = false) {
                 $update['release'] = $item_cached['release'];
                 $update['genre'] = !empty($item_cached['genre']) ? $item_cached['genre'] : null;
                 !empty($item_cached['trailer']) ? $update['trailer'] = $item_cached['trailer'] : $update['trailer'] = '';
+                !empty($item_cached['collection']) ? $update['collection'] = $item_cached['collection'] : null;
                 $media_type == 'shows' ? $update['ended'] = $item_cached['ended'] : null;
 
                 $db->update('library_master_' . $media_type, $update, ['id' => ['value' => $item['id']]]);
             }
         }
+    }
+}
+
+/*
+ * Update tmdb collections based on masters ids
+ * Type Groups
+ * 1 TMDB Genre
+ * 2 Custom Genre
+ * 3 TMDB Collection
+ * 4 Custom Collection
+ */
+
+function update_collections() {
+    global $db;
+
+    $media_type = 'movies';
+
+    $results = $db->select('groups', '*', ['type' => ['value' => 3], 'media_type' => ['value' => $media_type]]);
+    $groups = $db->fetchAll($results);
+
+    $result = $db->select('library_master_' . $media_type, 'id,collection', ['collection' => ['value' => 0, 'op' => '>']]);
+    $masters = $db->fetchAll($result);
+    $collections_added = [];
+
+    foreach ($masters as $master) {
+        $found = 0;
+        if (!in_array($master['collection'], $collections_added)) {
+            foreach ($groups as $group) {
+                if ($group['type_id'] == $master['collection']) {
+                    $found = 1;
+                    break;
+                }
+            }
+        } else {
+            $found = 1; //already added in this loop;
+        }
+
+        if (!$found) {
+            $collection = mediadb_getCollection($master['collection']);
+            if (valid_array($collection)) {
+                $collection['type'] = 3;
+                $collection['type_id'] = $master['collection'];
+                $collection['media_type'] = 'movies';
+                $db->addItem('groups', $collection);
+                $collections_added[] = $master['collection'];
+            }
+        }
+    }
+}
+
+/*
+ * used on upgrades, we clean tmdb cache (entrys related to masters) to force reload
+ */
+
+function clean_tmdb_master_entrys($media_type) {
+    global $db;
+
+    $library_master = 'library_master_' . $media_type;
+    $tmdb_table = 'tmdb_search_' . $media_type;
+
+    $results = $db->select($library_master, 'themoviedb_id');
+    $masters = $db->fetchAll($results);
+    foreach ($masters as $master) {
+        $db->delete($tmdb_table, ['themoviedb_id' => ['value' => $master['themoviedb_id']]], 'LIMIT 1');
     }
 }
 
