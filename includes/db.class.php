@@ -17,7 +17,7 @@
   .mode column
   y luego el select * o lo que sea;
 
-  v0.5
+  v0.6
  */
 !defined('IN_WEB') ? exit : true;
 
@@ -143,9 +143,9 @@ class DB {
         return (!empty($row) && (count($row) > 0)) ? $row : false;
     }
 
-    public function getItemsByField(string $table, string $field, $value) {
+    public function getItemsByField(string $table, string $field, $value, $extra = null) {
         $where[$field] = ['value' => $value];
-        $result = $this->select($table, null, $where);
+        $result = $this->select($table, null, $where, $extra);
         $rows = $this->fetchAll($result);
         $this->finalize($result);
         return (!empty($rows) && (count($rows) > 0)) ? $rows : false;
