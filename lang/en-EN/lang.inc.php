@@ -185,6 +185,7 @@ $LNG = [
     'L_SHOW' => 'Show',
     'L_SHOW_TRENDING' => 'Show Trending',
     'L_SHOW_POPULAR' => 'Show Popular',
+    'L_SHOW_COLLECTIONS' => 'Show collections',
     'L_SIZE' => 'Size',
     'L_STATUS' => 'Status',
     'L_STARTING' => 'Starting',
