@@ -49,7 +49,11 @@
                     <span class="view_genres"><?= $tdata['f_genres'] ?></span>
                     <br/>
                 <?php } ?>
-
+                <?php if (!empty($tdata['collection'])) { ?>
+                    <span><?= $LNG['L_COLLECTION'] ?> :</span>
+                    <span class="view_collection"><?= $tdata['collection'] ?></span>
+                    <br/>
+                <?php } ?>
                 <?php if (!empty($tdata['release'])) { ?>
                     <span><?= $LNG['L_RELEASED'] ?> :</span>
                     <span class="view_release"><?= strftime("%Y", strtotime($tdata['release'])) ?></span>
