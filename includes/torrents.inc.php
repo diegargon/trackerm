@@ -125,12 +125,11 @@ function show_cached_torrents($media_type) {
     $columns = $prefs->getPrefsItem('tresults_columns');
 
     $n_results = $rows * $columns;
-    $npage == 1 ? $end = $n_results : $end = $npage * $n_results;
     $npage == 1 ? $start = 0 : $start = ($npage - 1) * $n_results;
 
     $where = where_filters();
     $topt['num_table_rows'] = $db->qSingle("SELECT COUNT(*) FROM $jackett_db $where");
-    $query = "SELECT * FROM $jackett_db $where ORDER BY id DESC LIMIT $start,$end ";
+    $query = "SELECT * FROM $jackett_db $where ORDER BY id DESC LIMIT $start,$n_results ";
 
     $results = $db->query($query);
     $media = $db->fetchAll($results);
