@@ -35,6 +35,7 @@ $LNG = [
     'L_COMPLETED' => 'Completado',
     'L_CONFIG' => 'Configuración',
     'L_CONTINUE' => 'Continua',
+    'L_COLLECTION' => 'Coleccion',
     'L_CHANGE' => 'Cambiar',
     'L_CHECKED' => 'Comprobado',
     'L_CHECKING_FILES' => 'Comprobando archivos',

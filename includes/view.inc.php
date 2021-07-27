@@ -120,6 +120,9 @@ function view() {
         $other['follow_show'] = get_follow_show($item['themoviedb_id']);
     }
 
+    if (!empty($item['collection'])) {
+        $item['collection'] = $db->qSingle("SELECT title FROM groups WHERE media_type = '$media_type' AND type = 3 AND type_id = '{$item['collection']}'");
+    }
     $item['f_genres'] = get_fgenres($item);
 
     $page = $frontend->getTpl('view', array_merge($item, $other));
