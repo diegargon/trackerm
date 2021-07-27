@@ -151,7 +151,11 @@ function delete_direct_orphans() {
 function check_masters_childs_integrity() {
     global $db, $log;
 
-    //check if any master have no childs and childs pointing to a non exists master
+    /*
+     * check if any master have no childs and childs pointing to a non exists master
+     * check child with a missing master
+     */
+
 
     foreach (['movies', 'shows'] as $media_type) {
         $library_master = 'library_master_' . $media_type;
@@ -167,20 +171,16 @@ function check_masters_childs_integrity() {
 
         foreach ($masters as $master) {
             if (array_search($master['id'], array_column($childs, 'master')) === false) {
-                $log->warning('Detected master without childs, removing master id: ' . $master['id']);
+                $log->info('Detected master without childs, removing master id: ' . $master['id']);
                 $db->deleteItemById($library_master, $master['id']);
             }
         }
 
         foreach ($childs as $child) {
             $delete_child = 0;
-            if (empty($child['master']) && !empty($child['themoviedb_id'])) {
-                $log->warning('Detected identified child with empty master, deleting for reidentify: ' . $child['id']);
-                $delete_child = 1;
-            }
-            if (!empty($child['master']) && !empty($child['themoviedb_id'])) {
+            if (!empty($child['master'])) {
                 if (array_search($child['master'], array_column($masters, 'id')) === false) {
-                    $log->warning(' Detected an identify child with a missing master (' . $child['master'] . '), delete for reidentify tmdbid: ' . $child['id']);
+                    $log->info(' Detected an identify child with a missing master (' . $child['master'] . '), delete for reidentify id: ' . $child['id']);
                     $delete_child = 1;
                 }
             }
