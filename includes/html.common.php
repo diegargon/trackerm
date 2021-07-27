@@ -168,13 +168,22 @@ function pager($npage, $nitems, &$topt) {
         (!empty(Filter::getUtf8('search_movies'))) ? $get_params['search_movies'] = trim(Filter::getUtf8('search_movies')) : null;
         (!empty(Filter::getUtf8('search_shows'))) ? $get_params['search_shows'] = trim(Filter::getUtf8('search_shows')) : null;
 
+        $link_nav_parms = ['search_type' => $search_type, 'page' => $page];
+        $link_nav_opt = ['class' => 'num_pages_link', 'inpage' => $search_type];
+
+        $link_nav_parms['npage'] = $npage > 1 ? $npage - 1 : 1;
+        //Avoid show_loading if click same page since not reload on got stuck
+        if ($npage != $link_nav_parms['npage']) {
+            $link_nav_opt['onClick'] = 'show_loading()';
+        } else {
+            unset($link_nav_opt['onClick']);
+        }
+        $pages_links .= html::link($link_nav_opt, '', '&#x23F4;', $link_nav_parms);
+
         for ($i = 1; $i <= ceil($num_pages); $i++) {
             $same_page = 0;
 
-            if (($i == 1 || $i == $num_pages || $i == $npage) ||
-                    in_range($i, ($npage - 3), ($npage + 3), TRUE)
-            ) {
-
+            if (($i == 1 || $i == $num_pages || $i == $npage) || in_range($i, ($npage - 2), ($npage + 2), TRUE)) {
                 $link_npage_class = "num_pages_link";
 
                 if (!empty($topt['search_type'])) {
@@ -201,6 +210,13 @@ function pager($npage, $nitems, &$topt) {
                 $pages_links .= html::link($link_options, '', $i, $get_params);
             }
         }
+        $link_nav_parms['npage'] = $npage < $num_pages ? $npage + 1 : $num_pages;
+        if ($npage != $link_nav_parms['npage']) {
+            $link_nav_opt['onClick'] = 'show_loading()';
+        } else {
+            unset($link_nav_opt['onClick']);
+        }
+        $pages_links .= html::link($link_nav_opt, '', '&#x23F5;', $link_nav_parms);
     }
 
     return html::div(['class' => 'type_pages_numbers'], $pages_links);
