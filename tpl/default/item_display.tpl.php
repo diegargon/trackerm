@@ -84,15 +84,21 @@
             if (( $tdata['view_type'] == 'movies_library' || $tdata['view_type'] == 'shows_library')) {
                 if (isset($tdata['total_unseen_items']) && $tdata['total_unseen_items'] <= 0) {
                     ?>
-                    <div class="inline" data-tip="<?= $LNG['L_SEEN'] ?>">
-                        <div class="item_view_view">
-                            <a href="?page=<?= $tdata['page'] ?>&vid=<?= $tdata['id'] ?>&media_type=<?= $tdata['media_type'] ?>&search_type=<?= $tdata['media_type'] ?>&npage=<?= $tdata['npage'] ?>">[ &#10003; ]</a>
+                    <form class="inline" method="POST">
+                        <div class="inline" data-tip="<?= $LNG['L_SEEN'] ?>">
+                            <input type="hidden" name="vid" value="<?= $tdata['id'] ?>" />
+                            <input type="hidden" name="media_type" value="<?= $tdata['media_type'] ?>" />
+                            <input class="action_link_small text_green" type="submit" name="vid_btn" value="&#10003;"/>
                         </div>
-                    </div>
+                    </form>
                 <?php } else { ?>
-                    <div class="inline" data-tip="<?= $LNG['L_UNSEEN'] ?>">
-                        <div class="item_view_noview"><a href="?page=<?= $tdata['page'] ?>&vid=<?= $tdata['id'] ?>&media_type=<?= $tdata['media_type'] ?>&search_type=<?= $tdata['media_type'] ?>&npage=<?= $tdata['npage'] ?>">[ &#10003; ]</a></div>
-                    </div>
+                    <form class="inline" method="POST">
+                        <div class="inline" data-tip="<?= $LNG['L_UNSEEN'] ?>">
+                            <input type="hidden" name="vid" value="<?= $tdata['id'] ?>" />
+                            <input type="hidden" name="media_type" value="<?= $tdata['media_type'] ?>" />
+                            <input class="action_link_small text_gray" type="submit" name="vid_btn" value="&#10003;"/>
+                        </div>
+                    </form>
                     <?php
                 }
             }

@@ -405,7 +405,7 @@ button {
 .ident_select {    
     width:300px;  
 }
-.action_link  {
+.action_link, .action_link_small  {
     display: inline-block;
     /* background: #ff5b5b; */
     background: #973a3a;
@@ -417,6 +417,14 @@ button {
     font-family: 'Roboto', sans-serif;
     margin:3px;
     font-size: 1.0em;
+}
+.action_link_small {
+    padding: 0px;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin:0px;
+    font-size: 0.9em;
+    font-weight: bold;
 }
 .tor_source_link, .tor_source_link_freelech  {
     display: inline-block;
@@ -1002,7 +1010,12 @@ input:checked + .slider:before {
     padding:2px;
     background-color: black;
 }
-
+.text_green {
+    color: #2fb78a !important;        
+}
+.text_gray {
+    color: gray !important;    
+}
 /* Responsive */
 @media only screen and (max-width: 1024px) {
     .wanted_list_container {    
