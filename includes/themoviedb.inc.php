@@ -157,15 +157,13 @@ function themoviedb_MediaPrep($media_type, $items) {
 
         //TODO DELETE genres coma separated and modify functions for work with [genre]
         $genres = '';
-        $_genres = '';
 
         // Something wrong with o_api sometimes "genre_ids" and others "genres" check both
         if (!empty($item['genre_ids'])) {
             $o_genres = $item['genre_ids'];
             if (valid_array($o_genres)) {
                 foreach ($o_genres as $o_genre) {
-                    empty($genres) ? $genres .= $o_genre : $genres .= ',' . $o_genre;
-                    $_genres .= '[' . $o_genre . ']';
+                    $genres .= '[' . $o_genre . ']';
                 }
             }
         } else if (!empty($item['genres'])) {
@@ -173,8 +171,7 @@ function themoviedb_MediaPrep($media_type, $items) {
             if (valid_array($o_genres)) {
                 foreach ($o_genres as $o_genre) {
                     if (!empty($o_genre['id'])) {
-                        empty($genres) ? $genres .= $o_genre['id'] : $genres .= ',' . $o_genre['id'];
-                        $_genres .= '[' . $o_genre['id'] . ']';
+                        $genres .= '[' . $o_genre['id'] . ']';
                     }
                 }
             }
@@ -192,8 +189,7 @@ function themoviedb_MediaPrep($media_type, $items) {
             'scene' => !empty($item['backdrop_path']) ? $cfg['odb_images_link'] . $item['backdrop_path'] : null,
             'lang' => $item['original_language'],
             'plot' => $item['overview'],
-            'genre' => !empty($genres) ? $genres : null,
-            'genres' => !empty($_genres) ? $_genres : null,
+            'genres' => !empty($genres) ? $genres : null,
             'release' => isset($release) ? $release : null,
             'updated' => time(),
         ];

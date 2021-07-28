@@ -1069,5 +1069,9 @@ function update_db($from) {
       $db->query('VACUUM;');
       }
      */
+
+    /*
+     * Drop 'genre'
+     */
     return true;
 }

@@ -146,22 +146,26 @@ function get_poster($item) {
 function get_fgenres($item) {
     global $cfg, $LNG;
 
-    $genres = '';
-    if (empty($item['genre'])) {
-        return $genres;
+    $fgenres = '';
+    if (empty($item['genres'])) {
+        return $fgenres;
     }
 
-    $genres_ary = explode(',', $item['genre']);
+    $genres = $item['genres'];
+    $genres = str_replace('][', ',', $genres);
+    $genres = str_replace(['[', ']'], '', $genres);
+
+    $genres_ary = explode(',', $genres);
     foreach ($genres_ary as $vgenre) {
         if (!empty($cfg['TMDB_GENRES'][$vgenre])) {
             $lang_genre = $LNG[$cfg['TMDB_GENRES'][$vgenre]];
         } else {
-            $lang_genre = $LNG['L_CAT_NOTEXISTS'];
+            $lang_genre = $vgenre;
         }
-        $genres .= Html::span(['class' => 'fgenres'], $lang_genre);
+        $fgenres .= Html::span(['class' => 'fgenres'], $lang_genre);
     }
 
-    return $genres;
+    return $fgenres;
 }
 
 function mark_masters_views($media_type, &$masters) {
