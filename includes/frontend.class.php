@@ -160,12 +160,18 @@ class FrontEnd {
         (isset($_POST['show_trending'])) ? $prefs->setPrefsItem('show_trending', Filter::postString('show_trending')) : null;
         (isset($_POST['show_popular'])) ? $prefs->setPrefsItem('show_popular', Filter::postString('show_popular')) : null;
         (isset($_POST['show_today_shows'])) ? $prefs->setPrefsItem('show_today_shows', Filter::postString('show_today_shows')) : null;
-        (isset($_POST['show_collections'])) ? $prefs->setPrefsItem('show_collections', Filter::postString('show_collections')) : null;
         ($prefs->getPrefsItem('max_identify_items') == 0) ? $tdata['max_id_sel_0'] = 'selected' : $tdata['max_id_sel_0'] = '';
-
         $tdata['max_id_sel_0'] = $tdata['max_id_sel_5'] = $tdata['max_id_sel_10'] = $tdata['max_id_sel_20'] = $tdata['max_id_sel_50'] = '';
         $tdata['max_id_sel_' . $prefs->getPrefsItem('max_identify_items') . ''] = 'selected';
 
+        if (isset($_POST['show_collections'])) {
+            $prefs->setPrefsItem('show_collections', Filter::postString('show_collections'));
+            $prefs->setPrefsItem('show_genres', 0);
+        }
+        if (isset($_POST['show_genres'])) {
+            $prefs->setPrefsItem('show_genres', Filter::postString('show_genres'));
+            $prefs->setPrefsItem('show_collections', 0);
+        }
         /* ROWS */
         $max_rows_sel_none = '';
 
