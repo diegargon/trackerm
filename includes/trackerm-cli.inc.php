@@ -182,7 +182,7 @@ function MovieJob($item, $linked = false) {
 
         foreach ($valid_files as $valid_file) {
 
-            $file_tags = getFileTags($valid_file);
+            empty($cfg['rename_notags']) ? $file_tags = getFileTags($valid_file) : $file_tags = '';
             $ext = substr($valid_file, -4);
 
             if ($num_valid > 1) {
@@ -260,7 +260,8 @@ function ShowJob($item, $linked = false) {
 
         foreach ($valid_files as $valid_file) {
             $many = '';
-            $file_tags = getFileTags($valid_file);
+            empty($cfg['rename_notags']) ? $file_tags = getFileTags($valid_file) : $file_tags = '';
+            !empty($file_tags) ? $file_tags = ' ' . $file_tags : null;
             $ext = substr($valid_file, -4);
 
             if (count($valid_files) == 1) {
@@ -319,12 +320,12 @@ function ShowJob($item, $linked = false) {
             }
             //END CREATE FOLDERS
 
-            $new_file_name = ucwords($title) . ' ' . $episode . ' ' . $file_tags . $ext;
+            $new_file_name = ucwords($title) . ' ' . $episode . $file_tags . $ext;
             $final_dest_path = $dest_path . '/' . $new_file_name;
 
             if (file_exists($final_dest_path) && !$linked && !is_link($final_dest_path)) {
                 $many = '[' . $i . ']';
-                $new_file_name = ucwords($title) . ' ' . $episode . ' ' . $file_tags . $many . $ext;
+                $new_file_name = ucwords($title) . ' ' . $episode . $file_tags . $many . $ext;
                 $final_dest_path = $dest_path . '/' . $new_file_name;
                 $i++;
             } else if (file_exists($final_dest_path) && $linked) {

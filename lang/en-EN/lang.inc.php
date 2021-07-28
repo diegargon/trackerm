@@ -319,7 +319,7 @@ $LNG = [
     'L_CFG_PROXY_TIMEOUT' => 'Proxy timeout',
     'L_CFG_PROXY_USER' => 'Proxy user (leave blank if not used)',
     'L_CFG_PROXY_PASS' => 'Proxy password (leave blank if not used)',
-    'L_CFG_RENAME_NOTAGS' => '(unused)',
+    'L_CFG_RENAME_NOTAGS' => 'No add tags when move file',
     /*
       'L_CFG_TRANSCODER_PLAY' => '(unused p1)',
       'L_CFG_TRANSCODER_PATH' => '(unused p2)',

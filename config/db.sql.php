@@ -1056,6 +1056,14 @@ function update_db($from) {
 
     /*
       if ($from < 21) {
+      $db->query('UPDATE config SET public=\'1\' WHERE cfg_key=\'rename_notags\' LIMIT 1');
+      $db->query('UPDATE config SET cfg_value=\'21\' WHERE cfg_key=\'db_version\' LIMIT 1');
+      $db->query('VACUUM;');
+      }
+     */
+
+    /*
+      if ($from < 21) {
       //'indexer_disable_time' default 24*60*60
       $db->query('UPDATE config SET cfg_value=\'21\' WHERE cfg_key=\'db_version\' LIMIT 1');
       $db->insert('config', ['cfg_key' => 'localplayer_track', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_LOCALPLAYER_TRACK', 'type' => 3, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
