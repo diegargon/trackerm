@@ -282,6 +282,7 @@ function view_season_detailed($season, $items_details, $view_media) {
         $tdata = [];
         $tdata['iurl'] = $iurl;
         if ($item['season'] == $season) {
+
             if ($item_counter == 12) { //Max Items per table
                 $episode_data .= '</div>'; //Table
                 $episode_data .= '</div>'; //Episode container
@@ -296,10 +297,12 @@ function view_season_detailed($season, $items_details, $view_media) {
                         $tdata['have_show'] = $have_show;
                         $have_episodes[] = $item['episode'];
                         $item['view_class'] = 'item_view_noview';
-                        foreach ($view_media as $view_media_item) {
-                            if ($view_media_item['file_hash'] == $have_show['file_hash']) {
-                                $item['view_class'] = 'item_view_view';
-                                break;
+                        if (valid_array($view_media)) {
+                            foreach ($view_media as $view_media_item) {
+                                if ($view_media_item['file_hash'] == $have_show['file_hash']) {
+                                    $item['view_class'] = 'item_view_view';
+                                    break;
+                                }
                             }
                         }
                         break;
