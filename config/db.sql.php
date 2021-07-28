@@ -422,6 +422,7 @@ function create_db() {
           "media_type" VARCHAR NOT NULL,
           "type" INTEGER NOT NULL,
           "type_id" INTEGER NOT NULL,
+          "title" VARCHAR NOT NULL,
           "poster" VARCHAR NULL,
           "custom_poster" VARCHAR NULL,
           "plot" VARCHAR NULL,
@@ -1046,7 +1047,7 @@ function update_db($from) {
         $db->query('ALTER TABLE library_master_shows add column genres VARCHAR NULL');
         $db->query('ALTER TABLE library_master_movies add column genres VARCHAR NULL');
         $db->query('ALTER TABLE library_master_movies add column custom_collections VARCHAR NULL');
-        $db->query('ALTER TABLE library_master_movies add column collection VARCHAR NULL');
+        $db->query('ALTER TABLE library_master_movies add column collection INTEGER NULL');
         $db->query('ALTER TABLE tmdb_search_movies add column collection INTEGER NULL');
         $db->update('config', ['cfg_value' => 0], ['cfg_key' => ['value' => 'cron_update']]);
         $db->query('UPDATE config SET cfg_value=\'20\' WHERE cfg_key=\'db_version\' LIMIT 1');
