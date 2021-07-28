@@ -60,7 +60,7 @@ class Web {
     function pagesGlobal() {
         global $trans, $db, $user, $log;
 
-        if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             if (!(empty($d_link = Filter::postUrl('download')))) {
                 if (empty($trans)) {
