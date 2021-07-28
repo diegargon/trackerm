@@ -282,7 +282,6 @@ function view_season_detailed($season, $items_details, $view_media) {
         $tdata = [];
         $tdata['iurl'] = $iurl;
         if ($item['season'] == $season) {
-
             if ($item_counter == 12) { //Max Items per table
                 $episode_data .= '</div>'; //Table
                 $episode_data .= '</div>'; //Episode container
