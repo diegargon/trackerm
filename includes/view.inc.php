@@ -291,7 +291,7 @@ function view_season_detailed($season, $items_details, $view_media) {
                 $item_counter = 0;
             }
 
-            if (valid_array($have_shows) && valid_array($view_media)) {
+            if (valid_array($have_shows)) {
                 foreach ($have_shows as $have_show) {
                     if ($have_show['episode'] == $item['episode']) {
                         $tdata['have_show'] = $have_show;
