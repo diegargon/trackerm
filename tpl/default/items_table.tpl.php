@@ -12,6 +12,6 @@
 </div>
 
 <div class="divTable">
-    <?= $tdata['collection_items'] ?>
+    <?= $tdata['items'] ?>
 </div>
 

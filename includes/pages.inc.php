@@ -201,78 +201,76 @@ function page_view() {
     return view();
 }
 
+function page_view_group() {
+    global $db, $frontend, $prefs;
+
+    $id = Filter::getInt('id');
+    $group_type = Filter::getInt('group_type');
+    $media_type = Filter::getAzChar('media_type');
+    $npage = Filter::getString('npage');
+
+    empty($npage) ? $npage = 1 : null;
+
+    $rows = $prefs->getPrefsItem('tresults_rows');
+    $columns = $prefs->getPrefsItem('tresults_columns');
+    $n_results = $rows * $columns;
+    $npage == 1 ? $start = 0 : $start = ($npage - 1) * $n_results;
+
+    if (empty($id) || empty($group_type) || empty($media_type)) {
+        return false;
+    }
+    $library_master = 'library_master_' . $media_type;
+
+    $results = $db->select('groups', null, ['type' => ['value' => 3], 'id' => ['value' => $id]], 'LIMIT 1');
+    $collection = $db->fetchAll($results);
+
+    if (!valid_array($collection)) {
+        return false;
+    }
+    $type_id = $collection[0]['type_id'];
+    $collection_items = $db->getItemsByField($library_master, 'collection', $type_id, "LIMIT $start,$n_results");
+
+    if (!valid_array($collection_items)) {
+        return false;
+    }
+    mark_masters_views($media_type, $collection_items);
+
+    $nitems = $db->qSingle("SELECT COUNT(*) FROM $library_master WHERE collection = $type_id");
+
+    $pager_opt['npage'] = $npage;
+    $pager_opt['nitems'] = $nitems;
+    $pager_opt['media_type'] = $media_type;
+    $pager_opt['get_params']['media_type'] = $media_type;
+    $pager_opt['get_params']['group_type'] = 3;
+    $pager_opt['get_params']['id'] = $id;
+
+    $fcollection_items = $frontend->getPager($pager_opt);
+    $table_opt['head'] = $media_type;
+    $table_opt['media_type'] = $media_type;
+    $table_opt['view_type'] = $media_type . '_library';
+    $table_opt['page'] = 'view_group';
+    $table_opt['npage'] = $npage;
+
+    $fcollection_items .= $frontend->buildTable($collection_items, $table_opt);
+
+    $collection[0]['item_list'] = $fcollection_items;
+    return $frontend->getTpl('view_group', $collection[0]);
+}
+
 function page_library() {
-    global $cfg, $db, $user;
+    global $cfg, $prefs;
 
     $page_library = '';
 
     (isset($_POST['rebuild_movies'])) ? rebuild('movies', $cfg['MOVIES_PATH']) : null;
     (isset($_POST['rebuild_shows'])) ? rebuild('shows', $cfg['SHOWS_PATH']) : null;
 
-    if (!empty(Filter::getInt('vid')) && !empty(Filter::getAzChar('media_type'))) {
-        $media_type = Filter::getAzChar('media_type');
-        $vid = Filter::getInt('vid');
-        $library = 'library_' . $media_type;
-        $library_master = 'library_master_' . $media_type;
-
-        $master = $db->getItemById($library_master, $vid);
-
-        if (valid_array($master)) {
-
-            $items = $db->getItemsByField($library, 'master', $master['id']);
-            $where = [
-                'uid' => ['value' => $user->getId()],
-                'themoviedb_id' => ['value' => $master['themoviedb_id']],
-            ];
-            $results = $db->select('view_media', '*', $where);
-            $view_items = $db->fetchAll($results);
-
-            /*
-             *  view_media can have other old  items, this items can be deleted but keep in viewmedia
-             *  with same themoviedb id. We must check the file_hash  and count, and check if count match, if count
-             * match we want "mark as unwatch all actual items" if not we wan mark as "watch" all items
-             */
-            $nfound = [];
-            foreach ($items as $item) {
-                foreach ($view_items as $view_item) {
-                    if ($view_item['file_hash'] == $item['file_hash']) {
-                        $nfound[] = $view_item['id'];
-                        break;
-                    }
-                }
-            }
-
-            if (count($items) == count($nfound)) {
-                foreach ($nfound as $found_item) {
-                    $db->delete('view_media', ['id' => ['value' => $found_item]]);
-                }
-            } else {
-                foreach ($items as $item) {
-                    $found = 0;
-                    foreach ($view_items as $view_item) {
-                        if ($view_item['file_hash'] == $item['file_hash']) {
-                            $found = $view_item['id'];
-                            break;
-                        }
-                    }
-
-                    if (!$found) {
-                        $values['uid'] = $user->getId();
-                        $values['themoviedb_id'] = $master['themoviedb_id'];
-                        $values['file_hash'] = $item['file_hash'];
-                        $values['media_type'] = $media_type;
-                        if ($media_type == 'shows') {
-                            $values['season'] = $item['season'];
-                            $values['episode'] = $item['episode'];
-                        }
-                        $db->insert('view_media', $values);
-                    }
-                }
-            }
-        }
-    }
     if (($cfg['want_movies']) && ( $_GET['page'] == 'library' || $_GET['page'] == 'library_movies')) {
-        $page_library .= show_my_media('movies');
+        if ($prefs->getPrefsItem('show_collections')) {
+            $page_library .= show_collections();
+        } else {
+            $page_library .= show_my_media('movies');
+        }
     }
     if (($cfg['want_shows']) && ($_GET['page'] == 'library' || $_GET['page'] == 'library_shows')) {
         $page_library .= show_my_media('shows');

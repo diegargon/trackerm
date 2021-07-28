@@ -160,7 +160,7 @@ class FrontEnd {
         (isset($_POST['show_trending'])) ? $prefs->setPrefsItem('show_trending', Filter::postString('show_trending')) : null;
         (isset($_POST['show_popular'])) ? $prefs->setPrefsItem('show_popular', Filter::postString('show_popular')) : null;
         (isset($_POST['show_today_shows'])) ? $prefs->setPrefsItem('show_today_shows', Filter::postString('show_today_shows')) : null;
-
+        (isset($_POST['show_collections'])) ? $prefs->setPrefsItem('show_collections', Filter::postString('show_collections')) : null;
         ($prefs->getPrefsItem('max_identify_items') == 0) ? $tdata['max_id_sel_0'] = 'selected' : $tdata['max_id_sel_0'] = '';
 
         $tdata['max_id_sel_0'] = $tdata['max_id_sel_5'] = $tdata['max_id_sel_10'] = $tdata['max_id_sel_20'] = $tdata['max_id_sel_50'] = '';
@@ -211,6 +211,162 @@ class FrontEnd {
         /* FIN */
 
         return $this->getTpl('menu_options', $tdata);
+    }
+
+    function buildTable($items, $opt) {
+        global $prefs;
+
+        $html_items = '';
+        $items_rows = '';
+        $page = '';
+        $columns = $prefs->getPrefsItem('tresults_columns');
+        $i = 1;
+
+        foreach ($items as $item) {
+            $html_items .= html::div(['class' => 'divTableCell'], $this->buildItem($item, $opt));
+            if ($i == $columns) {
+                $items_rows .= html::div(['class' => 'divTableRow'], $html_items);
+                $html_items = '';
+                $i = 1;
+            } else {
+                $i++;
+            }
+        }
+        $i != $columns ? $items_rows .= html::div(['class' => 'divTableRow'], $html_items) : null;
+
+        $head = !empty($opt['head']) ? ucfirst($opt['head']) : '';
+        $page .= $this->getTpl('items_table', ['head' => $head, 'items' => $items_rows]);
+        return $page;
+    }
+
+    function buildCollection(array $collections, array $opt) {
+        global $prefs;
+
+        $media_type = $opt['media_type'];
+        $tdata['head'] = ucfirst($media_type);
+        $columns = $prefs->getPrefsItem('tresults_columns');
+        $tdata['collection_items'] = '';
+        $items = '';
+        $tdata['group_type'] = 3;
+        $tdata['media_type'] = $media_type;
+        $i = 1;
+        $items_table = '';
+        foreach ($collections as $collection) {
+            $fitems = $this->getTpl('collection_item', array_merge($collection, $tdata));
+            $items .= html::div(['class' => 'divTableCell'], $fitems);
+            if ($i == $columns) {
+                $items_table .= html::div(['class' => 'divTableRow'], $items);
+                $items = '';
+                $i = 1;
+            } else {
+                $i++;
+            }
+        }
+
+        if ($i != $columns && $i != 1) {
+            $items_table .= html::div(['class' => 'divTableRow'], $items);
+        }
+        $tdata['items'] = $items_table;
+
+        $page_collection = $this->getTpl('items_table', $tdata);
+
+        return $page_collection;
+    }
+
+    function buildItem($item, $opt) {
+
+        $page = '';
+        $item['poster'] = get_poster($item);
+
+        !empty($item['release']) ? $item['title'] = $item['title'] . ' (' . strftime("%Y", strtotime($item['release'])) . ')' : null;
+        empty($item['trailer']) && !empty($item['guessed_trailer']) && $item['guessed_trailer'] != -1 ? $item['trailer'] = $item['guessed_trailer'] : null;
+        !empty($item['size']) ? $item['size'] = human_filesize($item['size']) : null;
+        !empty($item['total_size']) ? $item['total_size'] = human_filesize($item['total_size']) : null;
+
+        $page .= $this->getTpl('item_display', array_merge($item, $opt));
+
+        return $page;
+    }
+
+    /*
+     * opt:
+     * get_params = url links params
+     * npage = page number
+     * nitems = number of items
+     * media_type = movies/shows
+     */
+
+    function getPager(array $opt) {
+        global $prefs;
+
+        $pages_links = '';
+        $columns = $prefs->getPrefsItem('tresults_columns');
+        $rows = $prefs->getPrefsItem('tresults_rows');
+        $page = Filter::getString('page');
+        $items_per_page = $columns * $rows;
+        $num_pages = ceil($opt['nitems'] / $items_per_page);
+        $npage = $opt['npage'];
+        $inpage = '';
+
+        $get_params['page'] = $page;
+        $get_params['search_type'] = $opt['media_type'];
+
+        if (!empty($opt['get_params']) && valid_array($opt['get_params'])) {
+
+            foreach ($opt['get_params'] as $kparam => $vparam) {
+                $get_params[$kparam] = $vparam;
+            }
+        }
+
+        if ($num_pages > 1) {
+
+            $link_nav_opt = ['class' => 'num_pages_link', 'inpage' => $opt['media_type']];
+            $link_nav_parms = $get_params;
+            $link_nav_parms['npage'] = $npage > 1 ? $npage - 1 : 1;
+            //Avoid show_loading if click same page since not reload on got stuck
+            if ($npage != $link_nav_parms['npage']) {
+                $link_nav_opt['onClick'] = 'show_loading()';
+            } else {
+                unset($link_nav_opt['onClick']);
+            }
+            $pages_links .= html::link($link_nav_opt, '', '&#x23F4;', $link_nav_parms);
+
+            for ($i = 1; $i <= ceil($num_pages); $i++) {
+                $same_page = 0;
+
+                if (($i == 1 || $i == $num_pages || $i == $npage) ||
+                        in_range($i, ($npage - 2), ($npage + 2), TRUE)
+                ) {
+
+                    $link_npage_class = "num_pages_link";
+
+                    if (isset($npage) && ($npage == $i)) {
+                        $same_page = 1;
+                        $link_npage_class .= '_selected';
+                    }
+                    $link_options = [];
+
+                    $get_params['npage'] = $i;
+                    //click same page number page not reload then loading not dissapear, avoid
+                    (empty($same_page)) ? $link_options['onClick'] = 'show_loading()' : null;
+
+                    $link_options['inpage'] = $inpage;
+                    $link_options['class'] = $link_npage_class;
+                    $link_options['inpage'] = $opt['media_type'];
+                    $pages_links .= html::link($link_options, '', $i, $get_params);
+                }
+            }
+
+            $link_nav_parms['npage'] = $npage < $num_pages ? $npage + 1 : $num_pages;
+            if ($npage != $link_nav_parms['npage']) {
+                $link_nav_opt['onClick'] = 'show_loading()';
+            } else {
+                unset($link_nav_opt['onClick']);
+            }
+            $pages_links .= html::link($link_nav_opt, '', '&#x23F5;', $link_nav_parms);
+        }
+
+        return html::div(['class' => 'type_pages_numbers'], $pages_links);
     }
 
 }

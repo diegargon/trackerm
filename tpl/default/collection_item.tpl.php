@@ -10,7 +10,7 @@
 
 <div class="display display_1">
     <div class="poster_preview">
-        <a onClick="show_loading();" href="?page=view_group&group_type=<?= $tdata['group_type'] ?>&id=<?= $tdata['id'] ?>">
+        <a onClick="show_loading();" href="?page=view_group&group_type=<?= $tdata['group_type'] ?>&id=<?= $tdata['id'] ?>&media_type=<?= $tdata['media_type'] ?>">
             <img class="img_poster_preview"  alt="" src="<?= $tdata['poster'] ?>"/>
         </a>
         <div class="overlay_nfiles">
