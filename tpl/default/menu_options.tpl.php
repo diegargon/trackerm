@@ -8,15 +8,17 @@
  */
 ?>
 <div class="menu_options">
-    <form method="post" action="?page=<?= $tdata['page'] ?>">
 
-        <?php if (in_array($tdata['page'], ['wanted'])) { ?>
+    <?php if (in_array($tdata['page'], ['wanted'])) { ?>
+        <form method="post" action="?page=<?= $tdata['page'] ?>">
             <span><?= $LNG['L_EXPAND_ALL'] ?></span>
             <input type="hidden" name="expand_all" value="0"/>
             <input onClick="show_loading();" type="checkbox" <?= !empty($prefs->getPrefsItem('expand_all')) ? 'checked' : null ?> name="expand_all" onChange="this.form.submit()" value="1"/>
-        <?php } ?>
+        </form>
+    <?php } ?>
 
-        <?php if (in_array($tdata['page'], ['library', 'library_movies', 'library_shows'])) { ?>
+    <?php if (in_array($tdata['page'], ['library', 'library_movies', 'library_shows'])) { ?>
+        <form method="post" action="?page=<?= $tdata['page'] ?>">
             <div class="inline" data-tip="<?= $LNG['L_VIEW_MODE'] ?>">
                 <label class="switch">
                     <input type="hidden" name="view_mode" value="0"/>
@@ -24,7 +26,10 @@
                     <span class="slider round"></span>
                 </label>
             </div>
-            <?= $LNG['L_IDENTIFY'] ?>:
+        </form>
+
+        <?= $LNG['L_IDENTIFY'] ?>:
+        <form method="post" action="?page=<?= $tdata['page'] ?>">
             <select class="num_ident_toshow" name="num_ident_toshow" onChange="show_loading();this.form.submit();">
                 <option <?= $tdata['max_id_sel_0'] ?> value="0">0</option>
                 <option <?= $tdata['max_id_sel_5'] ?> value="5">5</option>
@@ -32,9 +37,11 @@
                 <option <?= $tdata['max_id_sel_20'] ?> value="20">20</option>
                 <option <?= $tdata['max_id_sel_50'] ?> value="50">50</option>
             </select>
-        <?php } ?>
+        </form>
+    <?php } ?>
 
-        <?php if (!in_array($tdata['page'], ['wanted', 'transmission', 'index', 'view', 'view_group'])) { ?>
+    <?php if (!in_array($tdata['page'], ['wanted', 'transmission', 'index', 'view', 'view_group'])) { ?>
+        <form method="post" action="?page=<?= $tdata['page'] ?>">
             <span class="html_ico">&#8741;</span>
             <select class="num_columns_results" name="num_columns_results" onChange="show_loading();this.form.submit();">
                 <option <?= $tdata['max_columns_sel_none'] ?> id="default"><?= $LNG['L_DEFAULT'] ?></option>
@@ -57,23 +64,38 @@
                 <option <?= $tdata['max_rows_sel_25'] ?> value="25">25</option>
                 <option <?= $tdata['max_rows_sel_50'] ?> value="50">50</option>
             </select>
-        <?php } ?>
-        <?php if (in_array($tdata['page'], ['library', 'library_movies'])) { ?>
+        </form>
+    <?php } ?>
+    <?php if (in_array($tdata['page'], ['library', 'library_movies'])) { ?>
+        <form method="post" action="?page=<?= $tdata['page'] ?>">
             <label for="show_collections"><?= $LNG['L_SHOW_COLLECTIONS'] ?> </label>
             <input type="hidden" name="show_collections" value="0"/>
             <input id="show_collections" type="checkbox" name="show_collections"  <?= !empty($prefs->getPrefsItem('show_collections')) ? 'checked' : null ?>  onChange="show_loading();this.form.submit();"/>
-        <?php } ?>
-        <?php if ($cfg['want_movies'] && ($tdata['page'] == 'library' || $tdata['page'] == 'library_movies')) { ?>
+        </form>
+    <?php } ?>
+    <?php if (in_array($tdata['page'], ['library', 'library_movies', 'library_shows'])) { ?>
+        <form method="post" action="?page=<?= $tdata['page'] ?>">
+            <label for="show_genres"><?= $LNG['L_GENRES'] ?> </label>
+            <input type="hidden" name="show_genres" value="0"/>
+            <input id="show_genres" type="checkbox" name="show_genres"  <?= !empty($prefs->getPrefsItem('show_genres')) ? 'checked' : null ?>  onChange="show_loading();this.form.submit();"/>
+        </form>
+    <?php } ?>
+    <?php if ($cfg['want_movies'] && ($tdata['page'] == 'library' || $tdata['page'] == 'library_movies')) { ?>
+        <form method="post" action="?page=<?= $tdata['page'] ?>">
             <input onClick="show_loading();" class="submit_btn" type="submit" name="rebuild_movies" value="<?= $LNG['L_REESCAN_MOVIES'] ?>"/>
-            <?php
-        }
+        </form>
+        <?php
+    }
 
-        if ($cfg['want_shows'] && ($tdata['page'] == 'library' || $tdata['page'] == 'library_shows')) {
-            ?>
+    if ($cfg['want_shows'] && ($tdata['page'] == 'library' || $tdata['page'] == 'library_shows')) {
+        ?>
+        <form method="post" action="?page=<?= $tdata['page'] ?>">
             <input onClick="show_loading();" class="submit_btn" type="submit" name="rebuild_shows" value="<?= $LNG['L_REESCAN_SHOWS'] ?>"/>
-        <?php } ?>
+        </form>
+    <?php } ?>
 
-        <?php if (in_array($tdata['page'], ['tmdb'])) { ?>
+    <?php if (in_array($tdata['page'], ['tmdb'])) { ?>
+        <form method="post" action="?page=<?= $tdata['page'] ?>">
             <div class="inline">
                 <label for="show_trending"><?= $LNG['L_SHOW_TRENDING'] ?> </label>
                 <input  type="hidden" name="show_trending" value="0"/>
@@ -85,13 +107,17 @@
                 <input  type="hidden" name="show_today_shows" value="0"/>
                 <input id="show_today_shows"  <?= !empty($prefs->getPrefsItem('show_today_shows')) ? 'checked' : null ?> onChange="show_loading();this.form.submit()" type="checkbox" name="show_today_shows" value="1"/>
             </div>
-        <?php } ?>
+        </form>
+    <?php } ?>
 
-        <?php if (in_array($tdata['page'], ['library', 'library_movies', 'library_shows', 'news', 'new_movies', 'new_shows'])) { ?>
+    <?php if (in_array($tdata['page'], ['library', 'library_movies', 'library_shows', 'news', 'new_movies', 'new_shows'])) { ?>
+        <form method="post" action="?page=<?= $tdata['page'] ?>">
             <input type="text" size="20"  placeholder="<?= $LNG['L_SEARCH'] ?>" name="search_keyword" onChange="show_loading();this.form.submit();" value="<?= !empty($tdata['search_keyword']) ? $tdata['search_keyword'] : null ?>"/>
-        <?php } ?>
+        </form>
+    <?php } ?>
 
-        <?php if ($tdata['page'] == 'torrents') { ?>
+    <?php if ($tdata['page'] == 'torrents') { ?>
+        <form method="post" action="?page=<?= $tdata['page'] ?>">
             <span><?= $LNG['L_SHOW_CACHED'] ?></span>
             <input type="hidden" name="movies_cached" value="0"/>
             <div class="inline" data-tip="<?= $LNG['L_MOVIES'] ?>">
@@ -101,9 +127,11 @@
             <div class="inline" data-tip="<?= $LNG['L_SHOWS'] ?>">
                 <input onClick="show_loading();"  type="checkbox" <?= !empty($prefs->getPrefsItem('shows_cached')) ? 'checked' : null ?> name="shows_cached" onChange="this.form.submit()" value="1"/>
             </div>
-        <?php } ?>
+        </form>
+    <?php } ?>
 
-        <?php if (!empty($tdata['page']) && in_array($tdata['page'], ['news', 'new_movies', 'new_shows', 'torrents'])) { ?>
+    <?php if (!empty($tdata['page']) && in_array($tdata['page'], ['news', 'new_movies', 'new_shows', 'torrents'])) { ?>
+        <form method="post" action="?page=<?= $tdata['page'] ?>">
             <span> <?= $LNG['L_FILTER_INDEXER'] ?>:</span>
             <select  name="sel_indexer" onChange="show_loading();this.form.submit();">
                 <?= $tdata['sel_indexers'] ?>
@@ -111,11 +139,13 @@
             <span><?= $LNG['L_FREELECH'] ?></span>
             <input type="hidden" name="only_freelech" value="0"/>
             <input onClick="show_loading();"  type="checkbox" <?= !empty($prefs->getPrefsItem('only_freelech')) ? 'checked' : null ?> name="only_freelech" onChange="this.form.submit()" value="1"/>
-            <?php
-        }
+        </form>
+        <?php
+    }
 
-        if (!empty($tdata['page']) && in_array($tdata['page'], ['news', 'new_movies', 'new_shows', 'torrents'])) {
-            ?>
+    if (!empty($tdata['page']) && in_array($tdata['page'], ['news', 'new_movies', 'new_shows', 'torrents'])) {
+        ?>
+        <form method="post" action="?page=<?= $tdata['page'] ?>">
             <div class="ignore_search">
                 <!-- ignore words -->
                 <span><?= $LNG['L_IGNORE'] ?></span>
@@ -132,7 +162,6 @@
                     <input type="text" size="2"  name="new_ignore_size" onChange="show_loading();this.form.submit();" value="<?= !empty($prefs->getPrefsItem('new_ignore_size')) ? $prefs->getPrefsItem('new_ignore_size') : null ?>"/>
                 </div>
             </div>
-        <?php } ?>
-
-    </form>
+        </form>
+    <?php } ?>
 </div>
