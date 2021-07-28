@@ -66,14 +66,14 @@
             </select>
         </form>
     <?php } ?>
-    <?php if (in_array($tdata['page'], ['library', 'library_movies'])) { ?>
+    <?php if (in_array($tdata['page'] . 'BETA', ['library', 'library_movies'])) { ?>
         <form method="post" action="?page=<?= $tdata['page'] ?>">
             <label for="show_collections"><?= $LNG['L_SHOW_COLLECTIONS'] ?> </label>
             <input type="hidden" name="show_collections" value="0"/>
             <input id="show_collections" type="checkbox" name="show_collections"  <?= !empty($prefs->getPrefsItem('show_collections')) ? 'checked' : null ?>  onChange="show_loading();this.form.submit();"/>
         </form>
     <?php } ?>
-    <?php if (in_array($tdata['page'], ['library', 'library_movies', 'library_shows'])) { ?>
+    <?php if (in_array($tdata['page'] . 'BETA', ['library', 'library_movies', 'library_shows'])) { ?>
         <form method="post" action="?page=<?= $tdata['page'] ?>">
             <label for="show_genres"><?= $LNG['L_GENRES'] ?> </label>
             <input type="hidden" name="show_genres" value="0"/>
