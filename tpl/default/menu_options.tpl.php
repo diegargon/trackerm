@@ -40,7 +40,7 @@
         </form>
     <?php } ?>
 
-    <?php if (!in_array($tdata['page'], ['wanted', 'transmission', 'index', 'view', 'view_group'])) { ?>
+    <?php if (!in_array($tdata['page'], ['wanted', 'transmission', 'index', 'view', 'view_group', 'view_genres'])) { ?>
         <form method="post" action="?page=<?= $tdata['page'] ?>">
             <span class="html_ico">&#8741;</span>
             <select class="num_columns_results" name="num_columns_results" onChange="show_loading();this.form.submit();">

@@ -248,6 +248,7 @@ function update_masters(bool $force = false) {
                 $update['poster'] = !empty($item_cached['poster']) ? $item_cached['poster'] : null;
                 $update['release'] = $item_cached['release'];
                 $update['genre'] = !empty($item_cached['genre']) ? $item_cached['genre'] : null;
+                $update['genres'] = !empty($item_cached['genres']) ? $item_cached['genres'] : null;
                 !empty($item_cached['trailer']) ? $update['trailer'] = $item_cached['trailer'] : $update['trailer'] = '';
                 !empty($item_cached['collection']) ? $update['collection'] = $item_cached['collection'] : null;
                 $media_type == 'shows' ? $update['ended'] = $item_cached['ended'] : null;

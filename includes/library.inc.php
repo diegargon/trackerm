@@ -281,10 +281,56 @@ function show_collections() {
         $pager_opt['get_params']['search_type'] = $media_type;
         $page_collection = $frontend->getPager($pager_opt);
         $build_opt['media_type'] = $media_type;
+        $build_opt['item_tpl'] = 'collection_item';
+        $build_opt['get_params'] = ['page' => 'view_group', 'group_type' => 3, 'media_type' => $media_type];
         $page_collection .= $frontend->buildCollection($collections, $build_opt);
     }
 
     return $page_collection;
+}
+
+function show_genres(string $media_type) {
+    global $cfg, $LNG, $frontend, $prefs;
+
+    $npage = Filter::getInt('npage');
+    $search_type = Filter::getString('search_type');
+    $page = Filter::getString('page');
+    $items = [];
+    empty($npage) || (!empty($search_type) && $search_type !== $media_type) ? $npage = 1 : null;
+
+    $rows = $prefs->getPrefsItem('tresults_rows');
+    $columns = $prefs->getPrefsItem('tresults_columns');
+
+    $n_results = $rows * $columns;
+    $npage == 1 ? $start = 0 : $start = ($npage - 1) * $n_results;
+
+    $genres = $cfg['tmdb_genres_' . $media_type];
+
+    $i = 0;
+    $added_items = 0;
+    foreach ($genres as $kgenre => $vgenre) {
+
+        if ($i >= $start && $added_items < $n_results) {
+            $items[] = [
+                'id' => $kgenre,
+                'title' => $LNG[$vgenre],
+            ];
+            $added_items++;
+        }
+        $i++;
+    }
+
+    $pager_opt['media_type'] = $media_type;
+    $pager_opt['npage'] = $npage;
+    $pager_opt['nitems'] = count($genres);
+    $pager_opt['get_params']['search_type'] = $media_type;
+    $page_genres = $frontend->getPager($pager_opt);
+    $build_opt['media_type'] = $media_type;
+    $build_opt['item_tpl'] = 'genre_item';
+    $build_opt['get_params'] = ['page' => 'view_genres', 'media_type' => $media_type];
+    $page_genres .= $frontend->buildCollection($items, $build_opt);
+
+    return $page_genres;
 }
 
 function get_view_data($media_type) {

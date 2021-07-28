@@ -11,15 +11,10 @@
 <div class="display display_1">
     <div class="poster_preview">
         <a onClick="show_loading();" href="<?= $tdata['get_params'] ?>&id=<?= $tdata['id'] ?>">
-            <img class="img_poster_preview"  alt="" src="<?= $tdata['poster'] ?>"/>
-        </a>
-        <div class="overlay_nfiles">
-            <div class="nfiles">
-                <?= $tdata['total_items']; ?>
+            <div class="item_details">
+                <div class="item_poster_genre"><?= $tdata['title'] ?></div>
             </div>
-        </div>
+        </a>
     </div>
-    <div class="item_details">
-        <div class="item_title"><?= $tdata['title'] ?></div>
-    </div>
+
 </div>

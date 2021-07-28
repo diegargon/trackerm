@@ -238,7 +238,7 @@ class FrontEnd {
                 $i++;
             }
         }
-        $i != $columns ? $items_rows .= html::div(['class' => 'divTableRow'], $html_items) : null;
+        !empty($html_items) ? $items_rows .= html::div(['class' => 'divTableRow'], $html_items) : null;
 
         $head = !empty($opt['head']) ? ucfirst($opt['head']) : '';
         $page .= $this->getTpl('items_table', ['head' => $head, 'items' => $items_rows]);
@@ -253,12 +253,18 @@ class FrontEnd {
         $columns = $prefs->getPrefsItem('tresults_columns');
         $tdata['collection_items'] = '';
         $items = '';
-        $tdata['group_type'] = 3;
-        $tdata['media_type'] = $media_type;
-        $i = 1;
         $items_table = '';
+        $tdata['get_params'] = '';
+
+        if (!empty($opt['get_params']) && valid_array($opt['get_params'])) {
+            foreach ($opt['get_params'] as $kparam => $vparam) {
+                empty($tdata['get_params']) ? $tdata['get_params'] = '?' . $kparam . '=' . $vparam : $tdata['get_params'] .= '&' . $kparam . '=' . $vparam;
+            }
+        }
+
+        $i = 1;
         foreach ($collections as $collection) {
-            $fitems = $this->getTpl('collection_item', array_merge($collection, $tdata));
+            $fitems = $this->getTpl($opt['item_tpl'], array_merge($collection, $tdata));
             $items .= html::div(['class' => 'divTableCell'], $fitems);
             if ($i == $columns) {
                 $items_table .= html::div(['class' => 'divTableRow'], $items);
@@ -268,10 +274,8 @@ class FrontEnd {
                 $i++;
             }
         }
+        !empty($items) ? $items_table .= html::div(['class' => 'divTableRow'], $items) : null;
 
-        if ($i != $columns && $i != 1) {
-            $items_table .= html::div(['class' => 'divTableRow'], $items);
-        }
         $tdata['items'] = $items_table;
 
         $page_collection = $this->getTpl('items_table', $tdata);

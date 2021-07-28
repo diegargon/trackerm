@@ -41,7 +41,7 @@ class Web {
                 exit();
             }
         }
-        $valid_pages = ['index', 'library', 'news', 'tmdb', 'torrents', 'view', 'view_group', 'wanted', 'identify',
+        $valid_pages = ['index', 'library', 'news', 'tmdb', 'torrents', 'view', 'view_group', 'view_genres', 'wanted', 'identify',
             'download', 'localplayer', 'identify', 'download', 'transmission', 'config', 'login', 'logout'];
 
         (!isset($req_page) || $req_page == '') ? $req_page = 'index' : null;
