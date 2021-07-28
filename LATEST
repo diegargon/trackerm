@@ -1,5 +1,7 @@
 ## Latest / News (Relevant)
 
+[28/07] Internal rewrite and minor fixes
+[************ COMMIT **********]
 [21/07] Redesign wanted page / expand all menu opt
 [20/07] Fixed/Improve magnet bug: hack for avoid the transmission magnet bug, now trackerm avoid the fail sending the magnet links 
 instead of url of the magnet link
