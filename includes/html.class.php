@@ -7,7 +7,7 @@
  *  @subpackage
  *  @copyright Copyright @ 2020 Diego Garcia (diego@envigo.net)
  *
- * v0.32
+ * v0.33
  */
 !defined('IN_WEB') ? exit : true;
 
@@ -85,6 +85,7 @@ class Html {
         !empty($conf['max']) ? $opt .= 'max="' . $conf['max'] . '" ' : null;
         !empty($conf['vertical']) ? $opt .= 'orient="vertical" ' : null;
         !empty($conf['disabled']) ? $opt .= 'disabled ' : null;
+        isset($conf['onClick']) ? $opt .= 'onClick="' . $conf['onClick'] . '" ' : null;
         isset($conf['value']) ? $opt .= 'value="' . $conf['value'] . '" ' : null;
 
         if (!empty($conf['label_caption']) && !empty($conf['id'])) {

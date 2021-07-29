@@ -147,7 +147,6 @@ function page_view() {
     global $db, $frontend, $user;
 
     $id = Filter::getInt('id');
-    $deletereg_id = Filter::getInt('deletereg_id');
     $view_type = Filter::getString('view_type');
     $media_type = Filter::getAzChar('media_type');
     $vid = Filter::getInt('vid');
@@ -162,6 +161,35 @@ function page_view() {
     } else if ($view_type == 'shows_library') {
         $library = 'library_shows';
         $library_master = 'library_master_shows';
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $dfile_id = Filter::postInt('file_id');
+        $dfile_master_id = Filter::postInt('file_master');
+        $dfile_opt = Filter::postInt('delete_opt');
+        $dmedia_type = Filter::postAzChar('media_type');
+        if (!empty($dmedia_type) && !empty($dfile_opt)) {
+            //Register
+            if ($dfile_opt == 1 && !empty($dfile_master_id)) {
+                delete_register($dfile_master_id, $dmedia_type);
+                return $frontend->msgBox($msg = ['title' => 'L_SUCCESS', 'body' => 'L_REGISTER_DELETED_SUCCESFUL']);
+            }
+            //FILE
+            if ($dfile_opt == 2 && !empty($dfile_master_id)) {
+                $return = delete_file($dfile_id, $dfile_master_id, $dmedia_type);
+                if ($return === 'SUCCESS_NOMASTER') {
+                    return $frontend->msgBox($msg = ['title' => 'L_SUCCESS', 'body' => 'L_REGISTER_DELETED_SUCCESFUL']);
+                }
+            }
+
+            //FILES
+            if ($dfile_opt == 3 && !empty($dfile_master_id)) {
+                $return = delete_files($dfile_master_id, $dmedia_type);
+                if ($return === 'SUCCESS_NOMASTER') {
+                    return $frontend->msgBox($msg = ['title' => 'L_SUCCESS', 'body' => 'L_REGISTER_DELETED_SUCCESFUL']);
+                }
+            }
+        }
     }
 
     if (!empty($vid) && !empty($media_type)) {
@@ -182,19 +210,6 @@ function page_view() {
                 $values['episode'] = $vitem['episode'];
             }
             $db->insert('view_media', $values);
-        }
-    }
-
-    if (!empty($deletereg_id)) {
-
-        $register_item = $db->getItemById($library, $deletereg_id);
-        if (valid_array($register_item)) {
-            $register_master_item = $db->getItemById($library_master, $register_item['master']);
-            if (valid_array($register_master_item)) {
-                $db->deleteItemById($library_master, $register_item['master']);
-                $db->deleteItemsByField($library, 'master', $register_item['master']);
-                return $frontend->msgBox($msg = ['title' => 'L_SUCCESS', 'body' => 'L_REGISTER_DELETED_SUCCESFUL']);
-            }
         }
     }
 

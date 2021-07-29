@@ -57,7 +57,7 @@ function get_dir_contents($dir, &$results = []) {
 
     if (!is_readable($dir)) {
         $log->warning("Directory $dir is not readable");
-        return false;
+        return [];
     }
     $files = scandir($dir);
 

@@ -367,13 +367,14 @@ function get_follow_show($oid) {
 }
 
 function get_media_files($master, $media_type, $view_media) {
-    global $db, $LNG, $cfg;
+    global $db, $LNG, $cfg, $user;
 
     $sel_values = [];
     $media_files = '';
     $selected_id = Filter::postInt('selected_id');
     $library = 'library_' . $media_type;
     $files = $db->getItemsByField($library, 'master', $master['id']);
+    $selected_item = '';
 
     if (!valid_array($files)) {
         return false;
@@ -449,9 +450,23 @@ function get_media_files($master, $media_type, $view_media) {
         $media_files .= Html::link(['class' => 'action_link'], '', $LNG['L_IDENTIFY_ALL'], $link_identify_all_parms);
     }
 
-    //Delete reg
-    $link_delete_parms = ['page' => 'view', 'id' => $master['id'], 'deletereg_id' => $selected_id, 'view_type' => $media_type . '_library'];
-    $media_files .= Html::link(['class' => 'action_link', 'onClick' => 'return confirm(\'Are you sure?\')'], '', $LNG['L_DELETE_REGISTER'], $link_delete_parms);
+    //DELETE
+    $delete_options = [
+        1 => ['value' => 1, 'name' => $LNG['L_DELETE_REGISTER']],
+        2 => ['value' => 2, 'name' => $LNG['L_DELETE_FILE']],
+        3 => ['value' => 3, 'name' => $LNG['L_DELETE_FILES']],
+    ];
+
+    if (empty($selected_item)) {
+        $selected_item = reset($file);
+    }
+
+    $delete_html = Html::select(['name' => 'delete_opt'], $delete_options);
+    $delete_html .= Html::Input(['type' => 'hidden', 'name' => 'file_id', 'value' => $selected_item['id']]);
+    $delete_html .= Html::Input(['type' => 'hidden', 'name' => 'file_master', 'value' => $master['id']]);
+    $delete_html .= Html::Input(['type' => 'hidden', 'name' => 'media_type', 'value' => $media_type]);
+    $delete_html .= Html::Input(['class' => 'action_link', 'onClick' => 'return confirm(\'' . $LNG['L_AREYOUSURE'] . '\')', 'value' => $LNG['L_DELETE']]);
+    $media_files .= Html::form(['class' => 'inline', 'method' => 'POST'], $delete_html);
 
     if ($media_type == 'movies') {
         //localplayer

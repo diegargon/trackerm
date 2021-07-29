@@ -392,3 +392,170 @@ function update_library_stats() {
     $db->query("UPDATE config SET cfg_value='$movies_size' WHERE cfg_key='stats_total_movies_size' LIMIT 1");
     $db->query("UPDATE config SET cfg_value='$shows_size' WHERE cfg_key='stats_total_shows_size' LIMIT 1");
 }
+
+/*
+ * Remove register master & childs
+ */
+
+function delete_register(int $master_id, string $media_type) {
+    global $db;
+
+    $library = 'library_' . $media_type;
+    $library_master = 'library_master_' . $media_type;
+
+    $db->deleteItemById($library_master, $master_id);
+    $db->deleteItemsByField($library, 'master', $master_id);
+
+    return true;
+}
+
+/*
+ * Remove a file, master if empty and parent directory if empty and match the title
+ *
+ */
+
+function delete_file(int $file_id, int $master_id, string $media_type) {
+    global $db, $cfg, $log, $LNG;
+
+    $library = 'library_' . $media_type;
+    $library_master = 'library_master_' . $media_type;
+    $file_item = $db->getItemById($library, $file_id);
+    $master = $db->getItemById($library_master, $master_id);
+    $return = true;
+    $media_type == 'movies' ? $root_dirs = $cfg['MOVIES_PATH'] : $root_dirs = $cfg['SHOWS_PATH'];
+    $dirname = dirname($file_item['path']);
+
+    if (!valid_array($file_item) || !valid_array($master)) {
+        return false;
+    }
+
+    //For be sure nothing very wrong in the file path with check agains library paths
+    $good_path = 0;
+    foreach ($root_dirs as $root_dir) {
+        if (stripos($file_item['path'], $root_dir) !== false) {
+            $good_path = 1;
+            break;
+        }
+    }
+
+    if (!$good_path) {
+        $log->err('Wrong path in file library id:' . $file_item['path']);
+        return false;
+    }
+    if (is_writable($file_item['path'])) {
+        echo "Removing {$file_item['path']}<br>";
+        unlink($file_item['path']);
+        //Update history.
+
+        $values['title'] = $master['title'];
+        $values['themoviedb_id'] = $master['themoviedb_id'];
+        $values['clean_title'] = clean_title($file_item['title']);
+        $values['media_type'] = $media_type;
+        $values['file_name'] = $file_item['file_name'];
+        $values['custom_poster'] = $master['custom_poster'];
+        $values['file_hash'] = $file_item['file_hash'];
+        isset($file_item['season']) ? $values['season'] = $file_item['season'] : null;
+        isset($file_item['episode']) ? $values['episode'] = $file_item['episode'] : null;
+        $item_hist_id = $db->getIdByField('library_history', 'file_hash', $file_item['file_hash']);
+        if (!$item_hist_id) {
+            $db->insert('library_history', $values);
+        } else {
+            $db->update('library_history', $values, ['id' => ['value' => $item_hist_id]], 'LIMIT 1');
+        }
+    } else {
+        $log->addStateMsg($LNG['L_ERR_FILE_PERMS'] . ': ' . $file_item['path']);
+        $log->err($LNG['L_ERR_FILE_PERMS'] . ': ' . $file_item['path']);
+        return false;
+    }
+
+    if ($master['total_items'] == 1) {
+        $db->deleteItemById($library, $file_id);
+        $db->deleteItemById($library_master, $master_id);
+        $return = 'SUCCESS_NOMASTER';
+        $log->addStateMsg($LNG['L_DELETE_ENTRY_MANUALLY'] . ': (M) ' . $master['title']);
+    } else {
+        $db->deleteItemById($library, $file_id);
+        $new_size = $master['total_size'] - $file_item['size'];
+        $db->updateItemById($library_master, $master['id'], ['total_items' => $master['total_items'] - 1, 'total_size' => $new_size]);
+        $log->addStateMsg($LNG['L_DELETE_ENTRY_MANUALLY'] . ': ' . $file_item['file_name']);
+    }
+
+    if (count(find_media_files($dirname, $cfg['media_ext'])) == 0) {
+        $files_in_dir = [];
+        get_dir_contents($dirname, $files_in_dir);
+        foreach ($files_in_dir as $file_in_dir) {
+            if (!is_dir($file_in_dir) && is_writable($file_in_dir)) {
+                if (!in_array(get_file_ext($file_in_dir), $cfg['media_ext'])) {
+                    $log->debug("unlink: " . $file_in_dir . "<br>");
+                    unlink($file_in_dir);
+                }
+            } else {
+                $log->debug("Found file not writable $file_in_dir, cant remove directory");
+                return $return;
+            }
+        }
+        $media_type == 'movies' ? $preserve_dirs = $cfg['MOVIES_PATH'] : $preserve_dirs = $cfg['SHOWS_PATH'];
+        if (count(get_dir_contents($dirname, $files_in_dir)) == 0) {
+            $found = 0;
+            //Make sure is not the root path;
+            foreach ($root_dirs as $root_dir) {
+                if ($dirname == $root_dir) {
+                    $found = 1;
+                    break;
+                }
+            }
+            if (!$found && is_writable($dirname)) {
+                rmdir($dirname);
+            } else {
+                $log->debug("Found something in $dirname that not going to remove leaving...<br>");
+                return $return;
+            }
+        }
+        //Shows need another level down since /show name/Season 1/
+
+        if ($media_type == 'shows') {
+            $show_dirname = dirname($dirname);
+            if (count(find_media_files($show_dirname, $cfg['media_ext'])) == 0) {
+                if (count(get_dir_contents($dirname, $files_in_dir)) == 0) {
+                    $found = 0;
+                    //Make sure is not the root path;
+                    foreach ($preserve_dirs as $preserve_dir) {
+                        if ($dirname == $preserve_dir) {
+                            $found = 1;
+                            break;
+                        }
+                    }
+                    if (!$found && is_writable($show_dirname)) {
+                        rmdir($show_dirname);
+                    } else {
+                        $log->debug("Found something in $show_dirname that not going to remove leaving...<br>");
+                    }
+                }
+            }
+        }
+    }
+
+    return $return;
+}
+
+/*
+ * Remove master->child files, and parent directory if empty and match the title
+ */
+
+function delete_files(int $master_id, string $media_type) {
+    global $db;
+
+    $library = 'library_' . $media_type;
+
+    $return = false;
+
+    $items = $db->getItemsByField($library, 'master', $master_id);
+
+    if (valid_array($items)) {
+        foreach ($items as $item) {
+            $return = delete_file($item['id'], $master_id, $media_type);
+        }
+    }
+
+    return $return;
+}
