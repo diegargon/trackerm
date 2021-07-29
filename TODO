@@ -16,6 +16,7 @@
     [FIX] Añadir show loading cuando se cambia de file.
 
 [MED]    
+    [IMPROVE] linked_files_check make remove file and dir if empty     
     [IMPROVE] Wanted funciona buscando el dia, deberia comprobar los release torrents cada 6h 
     [IMPROVE] Si se borra manualmente un torrente bajado quedara el bd huerfanos. OPCION ORPHAN. 
         Buscar archivos multimedia en el TORRENT DIR y buscar la forma de determina si coincide con alguno en la base de datos
@@ -29,8 +30,7 @@
     [IMPROVE][NEW] Ordenamiento: Cambiar, si un tracker no actualiza sus torrents en mucho tiempo con el sistema actual siempre apareceran sus ultimos torrents
         en la primera pagina.
     [IMPROVE][WANTED] Options ocultar sirviendo
-    [IMPROVE][WANTED] Boton borrar a icono  papelera
-    [FIX/IMPROVE] La consulta/muestra de shows vistos (view_media) solo funciona en library no en shows_db
+    [IMPROVE][WANTED] Boton borrar a icono  papelera    
 [VERY LOW]
     [IMPROVE][WANTED]Track show, option for modify from episode.
     [IMPROVE][INDEX] Responsive
