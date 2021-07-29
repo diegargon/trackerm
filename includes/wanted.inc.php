@@ -94,7 +94,7 @@ function wanted_list() {
                 ($wanted_item['track_show'] == 1) ? $s_episode = '>=' . $s_episode : null;
                 $wanted_item['show_title'] = $wanted_item['title'] . ' ' . $s_episode;
             }
-            $odb_item = mediadb_getFromCache($wanted_item['media_type'], $wanted_item['themoviedb_id']);
+            $odb_item = mediadb_getMediaData($wanted_item['media_type'], $wanted_item['themoviedb_id']);
             $tdata['odb_item'] = $odb_item;
             $tdata['elink'] = $odb_item['elink'];
 
@@ -179,7 +179,7 @@ function wanted_movies($wanted_id) {
 
     $item = [];
     $wanted_type = 'movies';
-    $item = mediadb_getFromCache('movies', $wanted_id);
+    $item = mediadb_getMediaData('movies', $wanted_id);
 
     if ($item === false) {
         $log->debug('Wanted, seems the movie id not exists in the db ');
@@ -232,7 +232,7 @@ function wanted_episode($id, $season, $episodes, $track_show = 0, $inherint_trac
         $episode = trim($episode);
         (strlen($episode) == 1) ? $episode = '0' . $episode : null;
 
-        $item = mediadb_getFromCache('shows', $id);
+        $item = mediadb_getMediaData('shows', $id);
 
         $wanted_item = [
             'themoviedb_id' => $item['themoviedb_id'],

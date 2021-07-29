@@ -26,7 +26,7 @@ function ident_by_already_have_show(array $media_db, array &$ids) {
             ) {
                 $master = $db->getItemById('library_master_shows', $item_db['master']);
                 if (valid_array($master) && !empty($master['themoviedb_id'])) {
-                    $tmdb_item = mediadb_getFromCache('shows', $master['themoviedb_id']);
+                    $tmdb_item = mediadb_getMediaData('shows', $master['themoviedb_id']);
                     if (valid_array($tmdb_item)) {
                         submit_ident('shows', $tmdb_item, $id);
                         unset($ids[$id_key]);
@@ -227,7 +227,7 @@ function ident_by_id(string $media_type, $tmdb_id, $local_id) {
     global $log;
 
     $log->debug("Ident by ident_by_id called tmdbid: $tmdb_id, id:$local_id");
-    $db_data = mediadb_getFromCache($media_type, $tmdb_id);
+    $db_data = mediadb_getMediaData($media_type, $tmdb_id);
     if (valid_array($db_data)) {
         submit_ident($media_type, $db_data, $local_id);
     } else {

@@ -903,7 +903,7 @@ function tracker_shows($wanted) {
     if (!valid_array($list_episodes)) {
         return false;
     }
-    $item = mediadb_getFromCache('shows', $oid);
+    $item = mediadb_getMediaData('shows', $oid);
     $title = $item['title'];
     empty($cfg['max_wanted_track_downloads']) ? $max_wanted_track_downloads = 1 + $nocount : $max_wanted_track_downloads = $cfg['max_wanted_track_downloads'] + $nocount;
 

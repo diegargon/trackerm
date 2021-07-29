@@ -33,8 +33,8 @@ function mediadb_getByLocalId($media_type, $id) {
     return themoviedb_getByLocalId($media_type, $id);
 }
 
-function mediadb_getFromCache($media_type, $id) {
-    return themoviedb_getFromCache($media_type, $id);
+function mediadb_getMediaData($media_type, $id) {
+    return themoviedb_getMediaData($media_type, $id);
 }
 
 function mediadb_getPopular() {

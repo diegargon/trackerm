@@ -41,11 +41,13 @@ function cronjobs() {
 
     if (($cfg['cron_weekly'] + 604800) < $time_now) {
         $db->update('config', ['cfg_value' => $time_now], ['cfg_key' => ['value' => 'cron_weekly']]);
-        clear_tmdb_cache('shows');
+//  Not use we update in getMediaData when need
+//      clear_tmdb_cache('shows');
     }
     if (($cfg['cron_monthly'] + 2592000) < $time_now) {
         $db->update('config', ['cfg_value' => $time_now], ['cfg_key' => ['value' => 'cron_monthly']]);
-        clear_tmdb_cache('movies');
+//  Not use we update in getMediaData when need
+//        clear_tmdb_cache('movies');
         $db->query('VACUUM');
     }
     if ($cfg['cron_update'] == 0) {
@@ -237,7 +239,7 @@ function update_masters(bool $force = false) {
             $log->info('Updating masters ' . $media_type . '(' . count($media) . ')');
             foreach ($media as $item) {
                 $update = [];
-                $item_cached = mediadb_getFromCache($media_type, $item['themoviedb_id']);
+                $item_cached = mediadb_getMediaData($media_type, $item['themoviedb_id']);
                 if (!valid_array($item_cached)) {
                     continue;
                 }

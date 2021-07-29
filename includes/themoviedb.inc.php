@@ -102,7 +102,7 @@ function themoviedb_searchCache($search_words, $media_type) {
         if (valid_array($ids)) {
             //TODO ONE QUERY
             foreach ($ids as $id) {
-                !empty($id) ? $results[] = themoviedb_getFromCache($media_type, $id) : null;
+                !empty($id) ? $results[] = themoviedb_getMediaData($media_type, $id) : null;
             }
         }
     }
@@ -305,22 +305,31 @@ function themoviedb_getByLocalId($media_type, $id) {
     return valid_array($item) ? $item : false;
 }
 
-function themoviedb_getFromCache($media_type, $id) {
+function themoviedb_getMediaData($media_type, $id, $force_update = false) {
     global $db, $cfg, $log;
 
     if (!isset($media_type)) {
-        $log->err('getFromCache: media_type was not set ' . $id);
+        $log->err('getMediaData: media_type was not set ' . $id);
         return false;
     }
     !isset($cfg['TMDB_LANG']) ? $cfg['TMDB_LANG'] = $cfg['LANG'] : null;
 
-    $item = $db->getItemByField('tmdb_search_' . $media_type, 'themoviedb_id', $id);
-    if (valid_array($item)) {
-        return $item;
+    if (!$force_update) {
+        if ($media_type == 'movies') {
+            $time_update_req = time() - 2592000; // 1 month
+        } else {
+            $time_update_req = time() - 604800; // 15 days
+        }
+
+        $item = $db->getItemByField('tmdb_search_' . $media_type, 'themoviedb_id', $id);
+        if (valid_array($item)) {
+            if ($item['updated'] > $time_update_req) {
+                return $item;
+            }
+        }
+
+        $log->debug('getByDbId: Not Found in local db or need update id=' . $id);
     }
-
-    $log->debug('getByDbId: Not Found in local db id=' . $id);
-
     if ($media_type == 'movies') {
         $url = 'https://api.themoviedb.org/3/movie/' . $id . '?api_key=' . $cfg['db_api_token'] . '&language=' . $cfg['TMDB_LANG'];
     } else if ($media_type == 'shows') {
@@ -329,7 +338,7 @@ function themoviedb_getFromCache($media_type, $id) {
     $response_item[] = curl_get_tmdb($url);
 
     if (isset($response_item['results']) && valid_array($response_item['results'])) {
-        $log->err('getFromCache: remote database id ' . $id . ' for ' . $media_type . ' not exists');
+        $log->err('getMediaData: remote database id ' . $id . ' for ' . $media_type . ' not exists');
         return false;
     }
 
