@@ -1054,7 +1054,7 @@ function update_db($from) {
         $db->query('VACUUM;');
     }
 
-    /*
+    /* config: fix_library_permission and fix_library_permission_misc_files (corrije todos los archivos)
       if ($from < 21) {
       $db->query('UPDATE config SET public=\'1\' WHERE cfg_key=\'rename_notags\' LIMIT 1');
       $db->query('UPDATE config SET cfg_value=\'21\' WHERE cfg_key=\'db_version\' LIMIT 1');
