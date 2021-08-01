@@ -32,7 +32,13 @@
         <div id="loading_wrap" class="loading"></div>
         <div class="page">
             <?php if (!empty($cfg['general_warn_msg'])) { ?>
-                <div class="red_warning"><?= $cfg['general_warn_msg'] ?></div>
+                <div class="general_red_warning"><?= $cfg['general_warn_msg'] ?></div>
+            <?php } ?>
+            <?php if (!empty($cfg['msg_warn'])) { ?>
+                <div class="msg_red"><?= $cfg['msg_warn'] ?></div>
+            <?php } ?>
+            <?php if (!empty($cfg['msg_ok'])) { ?>
+                <div class="msg_green"><?= $cfg['msg_ok'] ?></div>
             <?php } ?>
             <?= $tdata['menu'] ?>
             <?= $tdata['body'] ?>

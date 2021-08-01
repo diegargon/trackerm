@@ -429,6 +429,11 @@ function delete_file(int $file_id, int $master_id, string $media_type) {
         return false;
     }
 
+    if (is_link($file_item['path'])) {
+        $cfg['msg_warn'] = $LNG['L_FILE_ISLINK_IGNORING'];
+        return false;
+    }
+
     //For be sure nothing very wrong in the file path with check agains library paths
     $good_path = 0;
     foreach ($root_dirs as $root_dir) {
@@ -463,6 +468,7 @@ function delete_file(int $file_id, int $master_id, string $media_type) {
             $db->update('library_history', $values, ['id' => ['value' => $item_hist_id]], 'LIMIT 1');
         }
     } else {
+        $cfg['msg_warn'] = $LNG['L_ERR_FILE_PERMS'];
         $log->addStateMsg($LNG['L_ERR_FILE_PERMS'] . ': ' . $file_item['path']);
         $log->err($LNG['L_ERR_FILE_PERMS'] . ': ' . $file_item['path']);
         return false;
