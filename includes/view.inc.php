@@ -437,7 +437,7 @@ function get_media_files($master, $media_type, $view_media) {
     }
 
     $form_action = '?page=view&id=' . $master['id'] . '&view_type=' . $media_type . '_library';
-    $media_files .= Html::form(['method' => 'POST', 'action' => $form_action], Html::select(['onChange' => 'this.form.submit()', 'selected' => $selected_id, 'name' => 'selected_id'], $sel_values));
+    $media_files .= Html::form(['method' => 'POST', 'action' => $form_action], Html::select(['onChange' => 'show_loading();this.form.submit();', 'selected' => $selected_id, 'name' => 'selected_id'], $sel_values));
     $view_check = ['page' => 'view', 'id' => $master['id'], 'vid' => $selected_id, 'view_type' => $media_type . '_library', 'media_type' => $media_type];
     $media_files .= Html::link(['class' => $view_class . ' action_link'], '', '&#10003;', $view_check);
 
@@ -457,9 +457,7 @@ function get_media_files($master, $media_type, $view_media) {
         3 => ['value' => 3, 'name' => $LNG['L_DELETE_FILES']],
     ];
 
-    if (empty($selected_item)) {
-        $selected_item = reset($file);
-    }
+    (empty($selected_item)) ? $selected_item = reset($file) : null;
 
     $delete_html = Html::select(['name' => 'delete_opt'], $delete_options);
     $delete_html .= Html::Input(['type' => 'hidden', 'name' => 'file_id', 'value' => $selected_item['id']]);
