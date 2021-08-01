@@ -91,6 +91,7 @@ $LNG = [
     'L_EXPAND_ALL' => 'Expandir todo',
     'L_FILES' => 'Archivos',
     'L_FILENAME' => 'Nombre del archivo',
+    'L_FILE_ISLINK_IGNORING' => 'Archivo es un enlace, se ignora',
     'L_FINISHED' => 'Finalizado',
     'L_FOLLOW_SHOW' => 'Seguir serie',
     'L_FREE_TOTAL' => 'HD Libre/Total',
