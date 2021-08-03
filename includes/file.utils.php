@@ -345,3 +345,25 @@ function move_file($origin, $destination) {
 
     return false;
 }
+
+function fix_perms() {
+    global $cfg;
+
+    foreach (['movies', 'shows'] as $media_type) {
+        if ($media_type == 'movies') {
+            $paths = $cfg['MOVIES_PATH'];
+        } else {
+            $paths = $cfg['SHOWS_PATH'];
+        }
+
+
+
+        foreach ($paths as $path) {
+            $results = [];
+            get_dir_contents($path, $results);
+            foreach ($results as $file) {
+                chgrp($file, $cfg['files_usergroup']);
+            }
+        }
+    }
+}
