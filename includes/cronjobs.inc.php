@@ -10,8 +10,9 @@
 !defined('IN_WEB') ? exit : true;
 
 function cronjobs() {
-    global $cfg, $db;
+    global $cfg, $db, $log;
 
+    $log->debug("Begin CronJobs");
     $time_now = time();
 
     if (($cfg['cron_quarter'] + 900) < $time_now) {
