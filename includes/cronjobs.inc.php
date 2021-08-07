@@ -24,6 +24,7 @@ function cronjobs() {
         $db->update('config', ['cfg_value' => $time_now], ['cfg_key' => ['value' => 'cron_hourly']]);
         check_masters_childs_integrity();
         update_collections();
+        update_people_empty();
     }
 
     if (($cfg['cron_halfday'] + 21600) < $time_now) {
@@ -323,6 +324,75 @@ function clean_tmdb_master_entrys($media_type) {
     foreach ($masters as $master) {
         $db->delete($tmdb_table, ['themoviedb_id' => ['value' => $master['themoviedb_id']]], 'LIMIT 1');
     }
+}
+
+function update_people_empty() {
+    global $db, $log;
+
+    $nupdate = 0;
+    $MAX_PERSONS = 10;
+
+    foreach (['movies', 'shows'] as $media_type) {
+        $library_master = 'library_master_' . $media_type;
+        $results = $db->query("SELECT id,title,themoviedb_id FROM $library_master WHERE \"cast\" IS NULL OR \"cast\" = \"\" LIMIT 20");
+        $masters = $db->fetchAll($results);
+
+        if (valid_array($masters)) {
+            foreach ($masters as $master) {
+                $cast = [];
+                $director = [];
+                $writer = [];
+                $people = mediadb_getPeople($media_type, $master['themoviedb_id']);
+                //CAST
+                $people_counter = 0;
+                if (valid_array($people) && valid_array($people['cast'])) {
+                    foreach ($people['cast'] as $people_cast) {
+                        $cast[] = $people_cast['name'];
+                        $people_counter++;
+                        if ($people_counter == $MAX_PERSONS) {
+                            break;
+                        }
+                    }
+                }
+                //CREW
+                $director_counter = 0;
+                $writing_counter = 0;
+                if (valid_array($people) && valid_array($people['crew'])) {
+                    foreach ($people['crew'] as $people_crew) {
+                        //DIRECTOR
+                        if ($media_type == 'movies') {
+                            if (!empty($people_crew['department']) && $people_crew['department'] == 'Directing' && !empty($people_crew['job']) && $people_crew['job'] == 'Director' && $director_counter < $MAX_PERSONS) {
+                                $director[] = $people_crew['name'];
+                                $director_counter++;
+                            }
+                        } else {
+                            if (!empty($people_crew['department']) && $people_crew['department'] == 'Directing' && !empty($people_crew['jobs']) && valid_array($people_crew['jobs']) && !empty($people_crew['jobs'][0]['job']) && $people_crew['jobs'][0]['job'] == 'Director' && $director_counter < $MAX_PERSONS) {
+                                $director[] = $people_crew['name'];
+                                $director_counter++;
+                            }
+                        }
+                        //WRITER
+                        if (!empty($people_crew['department']) && $people_crew['department'] == 'Writing' && $writing_counter < $MAX_PERSONS) {
+                            $writer[] = $people_crew['name'];
+                            $writing_counter++;
+                        }
+                    }
+                }
+
+                //UPDATE
+                $cast = array_unique($cast);
+                $director = array_unique($director);
+                $writer = array_unique($writer);
+
+                $update['cast'] = implode(',', $cast);
+                $update['director'] = implode(',', $director);
+                $update['writer'] = implode(',', $writer);
+                $nupdate++;
+                $db->updateItemById($library_master, $master['id'], $update);
+            }
+        }
+    }
+    $log->debug("Update master media people " . $nupdate);
 }
 
 /*

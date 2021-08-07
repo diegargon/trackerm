@@ -471,6 +471,8 @@ function themoviedb_getCollection($col_id) {
     global $cfg;
 
     $item = [];
+
+    !isset($cfg['TMDB_LANG']) ? $cfg['TMDB_LANG'] = $cfg['LANG'] : null;
     $url = "https://api.themoviedb.org/3/collection/{$col_id}?api_key=" . $cfg['db_api_token'] . '&language=' . $cfg['TMDB_LANG'];
 
     $results = curl_get_tmdb($url);
@@ -493,4 +495,24 @@ function themoviedb_getCollection($col_id) {
     }
 
     return $item;
+}
+
+function themoviedb_getPeople(string $media_type, int $oid) {
+    global $cfg;
+
+    !isset($cfg['TMDB_LANG']) ? $cfg['TMDB_LANG'] = $cfg['LANG'] : null;
+    if ($media_type == 'shows') {
+        $url = "https://api.themoviedb.org/3/tv/{$oid}/aggregate_credits?api_key=" . $cfg['db_api_token'] . '&language=' . $cfg['TMDB_LANG'];
+    } else {
+        $url = "https://api.themoviedb.org/3/movie/{$oid}/credits?api_key=" . $cfg['db_api_token'] . '&language=' . $cfg['TMDB_LANG'];
+    }
+
+
+    $results = curl_get_tmdb($url);
+
+    if (!valid_array($results) || !valid_array($results['cast'])) {
+        return false;
+    }
+
+    return $results;
 }

@@ -118,3 +118,7 @@ function mediadb_guessFieldGet($title, $media_type, $field) {
     }
     return false;
 }
+
+function mediadb_getPeople(string $media_type, int $oid) {
+    return themoviedb_getPeople($media_type, $oid);
+}
