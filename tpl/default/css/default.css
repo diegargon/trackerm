@@ -197,6 +197,9 @@ button {
     display: inline-block;
     text-align: center; 
 }
+.poster_preview a {
+    text-decoration: none;
+}
 .img_poster_preview {
     height: auto;
     width: 100%;
