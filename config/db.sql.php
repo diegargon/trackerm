@@ -9,7 +9,7 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-define('DB_VERSION', 20);
+define('DB_VERSION', 21);
 
 function create_db() {
     global $db;
@@ -125,6 +125,9 @@ function create_db() {
           "genres" VARCHAR NULL,
           "collection" INTEGER NULL,
           "custom_collections" VARCHAR NULL,
+          "cast" VARCHAR NULL,
+          "director" VARCHAR NULL,
+          "writer" VARCHAR NULL,
           "items_updated" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
           "updated" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
           "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
@@ -186,6 +189,9 @@ function create_db() {
           "release" VARCHAR NULL,
           "genre" VARCHAR NULL,
           "genres" VARCHAR NULL,
+          "cast" VARCHAR NULL,
+          "director" VARCHAR NULL,
+          "writer" VARCHAR NULL,
           "ended" INTEGER default 0,
           "items_updated" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
           "updated" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
@@ -510,6 +516,8 @@ function create_db() {
     $db->insert('config', ['cfg_key' => 'proxy_timeout', 'cfg_value' => 10, 'cfg_desc' => 'L_CFG_PROXY_TIMEOUT', 'type' => 2, 'category' => 'L_PROXY', 'public' => 1]);
     $db->insert('config', ['cfg_key' => 'rename_notags', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_RENAME_NOTAGS', 'type' => 3, 'category' => 'L_FILES', 'public' => 0]);
     $db->insert('config', ['cfg_key' => 'cron_update', 'cfg_value' => 0, 'cfg_desc' => '', 'type' => 2, 'category' => 'L_PRIV', 'public' => 0]);
+    $db->insert('config', ['cfg_key' => 'autofix_mediafiles_perms', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_AUTOFIX_MEDIAFILES_PERMS', 'type' => 3, 'category' => 'L_FILES', 'public' => 1]);
+    $db->insert('config', ['cfg_key' => 'autofix_mediafiles_perms_all', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_AUTOFIX_MEDIAFILES_PERMS_ALL', 'type' => 3, 'category' => 'L_FILES', 'public' => 1]);
     /*
       $db->insert('config', ['cfg_key' => 'transcoder_player', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_TRANSCODER_PLAYER', 'type' => 3, 'category' => 'L_PLAY', 'public' => 1]);
       $db->insert('config', ['cfg_key' => 'transcoder_path', 'cfg_value' => '/usr/bin/ffmpeg', 'cfg_desc' => 'L_CFG_TRANSCODER_PATH', 'type' => 1, 'category' => 'L_PLAY', 'public' => 1]);
@@ -1054,32 +1062,54 @@ function update_db($from) {
         $db->query('VACUUM;');
     }
 
-    /* config: fix_library_permission and fix_library_permission_misc_files (corrije todos los archivos)
-      if ($from < 21) {
-      $db->query('UPDATE config SET public=\'1\' WHERE cfg_key=\'rename_notags\' LIMIT 1');
-      $db->query('UPDATE config SET cfg_value=\'21\' WHERE cfg_key=\'db_version\' LIMIT 1');
-      $db->query('VACUUM;');
-      }
-     */
-
+    if ($from < 21) {
+        $db->insert('config', ['cfg_key' => 'autofix_mediafiles_perms', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_AUTOFIX_MEDIAFILES_PERMS', 'type' => 3, 'category' => 'L_FILES', 'public' => 1]);
+        $db->insert('config', ['cfg_key' => 'autofix_mediafiles_perms_all', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_AUTOFIX_MEDIAFILES_PERMS_ALL', 'type' => 3, 'category' => 'L_FILES', 'public' => 1]);
+        $db->query('ALTER TABLE library_master_shows add column cast VARCHAR NULL');
+        $db->query('ALTER TABLE library_master_shows add column director VARCHAR NULL');
+        $db->query('ALTER TABLE library_master_shows add column writer VARCHAR NULL');
+        $db->query('ALTER TABLE library_master_movies add column cast VARCHAR NULL');
+        $db->query('ALTER TABLE library_master_movies add column director VARCHAR NULL');
+        $db->query('ALTER TABLE library_master_movies add column writer VARCHAR NULL');
+        $db->query('UPDATE config SET public=\'1\' WHERE cfg_key=\'rename_notags\' LIMIT 1');
+        $db->query('UPDATE config SET cfg_value=\'21\' WHERE cfg_key=\'db_version\' LIMIT 1');
+        $db->query('VACUUM;');
+    }
     /*
-      if ($from < 21) {
-      //'indexer_disable_time' default 24*60*60
-      $db->query('UPDATE config SET cfg_value=\'21\' WHERE cfg_key=\'db_version\' LIMIT 1');
-      $db->insert('config', ['cfg_key' => 'localplayer_track', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_LOCALPLAYER_TRACK', 'type' => 3, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
-      $db->insert('config', ['cfg_key' => 'localplayer_web_password', 'cfg_value' => '', 'cfg_desc' => 'L_CFG_LOCALPLAYER_WEB_PASSWORD', 'type' => 1, 'category' => 'L_LOCALPLAYER', 'public' => 1]);     *
-      $db->query('VACUUM;');
-      }
-     */
-    /*
-      if ($from < 21) {
+      if ($from < 22) {
       $db->query('UPDATE config SET cfg_value=\'22\' WHERE cfg_key=\'db_version\' LIMIT 1');
       $db->query('VACUUM;');
       }
      */
 
     /*
-     * Drop 'genre'
+      if ($from < 23) {
+      $db->query('UPDATE config SET cfg_value=\'23\' WHERE cfg_key=\'db_version\' LIMIT 1');
+      $db->query('VACUUM;');
+      }
+     */
+
+    /*
+      if ($from < XX) {
+      //'indexer_disable_time' default 24*60*60
+      $db->query('UPDATE config SET cfg_value=\'XX\' WHERE cfg_key=\'db_version\' LIMIT 1');
+      $db->insert('config', ['cfg_key' => 'localplayer_track', 'cfg_value' => 0, 'cfg_desc' => 'L_CFG_LOCALPLAYER_TRACK', 'type' => 3, 'category' => 'L_LOCALPLAYER', 'public' => 1]);
+      $db->insert('config', ['cfg_key' => 'localplayer_web_password', 'cfg_value' => '', 'cfg_desc' => 'L_CFG_LOCALPLAYER_WEB_PASSWORD', 'type' => 1, 'category' => 'L_LOCALPLAYER', 'public' => 1]);     *
+      $db->query('VACUUM;');
+      }
+     */
+
+    /*
+     * sqlite 3.35 support drop, ubuntu version 3.31
+     * wait to remove the upgrade or when we need recreate&copy the tables
+      $db->query('ALTER TABLE library_master_movies DROP genre');
+      $db->query('ALTER TABLE library_master_shows DROP COLUMN genre');
+      $db->query('ALTER TABLE library_movies DROP COLUMN genre');
+      $db->query('ALTER TABLE library_shows DROP COLUMN genre');
+      $db->query('ALTER TABLE tmdb_search_movies DROP COLUMN genre');
+      $db->query('ALTER TABLE tmdb_search_shows DROP COLUMN genre');
+      $db->query('ALTER TABLE jackett_movies DROP COLUMN genre');
+      $db->query('ALTER TABLE jackett_shows DROP COLUMN genre');
      */
     return true;
 }
