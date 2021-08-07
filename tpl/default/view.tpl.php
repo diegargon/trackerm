@@ -44,6 +44,11 @@
                     <span class="view_added"><?= strftime("%x", strtotime($tdata['created'])) ?></span>
                     <br/>
                 <?php } ?>
+                <?php if (!empty($tdata['release'])) { ?>
+                    <span><?= $LNG['L_RELEASED'] ?> :</span>
+                    <span class="view_release"><?= strftime("%Y", strtotime($tdata['release'])) ?></span>
+                    <br/>
+                <?php } ?>
                 <?php if (!empty($tdata['f_genres'])) { ?>
                     <span><?= $LNG['L_GENRES'] ?> :</span>
                     <span class="view_genres"><?= $tdata['f_genres'] ?></span>
@@ -54,9 +59,19 @@
                     <span class="view_collection"><?= $tdata['collection'] ?></span>
                     <br/>
                 <?php } ?>
-                <?php if (!empty($tdata['release'])) { ?>
-                    <span><?= $LNG['L_RELEASED'] ?> :</span>
-                    <span class="view_release"><?= strftime("%Y", strtotime($tdata['release'])) ?></span>
+                <?php if (!empty($tdata['director'])) { ?>
+                    <span><?= $LNG['L_DIRECTOR'] ?> :</span>
+                    <span class="view_director"><?= $tdata['director'] ?></span>
+                    <br/>
+                <?php } ?>
+                <?php if (!empty($tdata['cast'])) { ?>
+                    <span><?= $LNG['L_CAST'] ?> :</span>
+                    <span class="view_cast"><?= $tdata['cast'] ?></span>
+                    <br/>
+                <?php } ?>
+                <?php if (!empty($tdata['writer'])) { ?>
+                    <span><?= $LNG['L_WRITER'] ?> :</span>
+                    <span class="view_writer"><?= $tdata['writer'] ?></span>
                     <br/>
                 <?php } ?>
                 <?php if (!empty($tdata['source'])) { ?>
