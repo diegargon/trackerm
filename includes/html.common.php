@@ -255,7 +255,7 @@ function html_mediainfo_tags($mediainfo, $tags = null) {
         }
     }
 
-    if (($mediainfo['Video'][0]['Width']) && isset($mediainfo['Video'][0]['Height'])) {
+    if (isset($mediainfo['Video'][0]['Width']) && isset($mediainfo['Video'][0]['Height'])) {
         $video_tags .= '<div class="mediainfo_tag">' . $mediainfo['Video'][0]['Width'] . 'x' . $mediainfo['Video'][0]['Height'] . 'p</div>';
     }
     if (isset($mediainfo['Audio'])) {
