@@ -448,7 +448,7 @@ function delete_file(int $file_id, int $master_id, string $media_type) {
         return false;
     }
     if (is_writable($file_item['path'])) {
-        echo "Removing {$file_item['path']}<br>";
+        $log->debug("Removing {$file_item['path']}");
         unlink($file_item['path']);
         //Update history.
 
