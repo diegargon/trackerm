@@ -328,8 +328,8 @@ $LNG = [
     'L_CFG_PROXY_USER' => 'Proxy user (leave blank if not used)',
     'L_CFG_PROXY_PASS' => 'Proxy password (leave blank if not used)',
     'L_CFG_RENAME_NOTAGS' => 'No add tags when move file',
-    'L_CFG_AUTOFIX_MEDIAFILES_PERMS' => 'Fix Media Files Perms (change group to the TrackerM settings: Useful if drop manually files and want same group)',
-    'L_CFG_AUTOFIX_MEDIAFILES_PERMS_ALL' => 'Fix group owner of all files in the library path to the TrackerM group settings (Useful if other third party app drop jpg or other files and want same group for delete through TrackerM) ',
+    'L_CFG_AUTOFIX_MEDIAFILES_PERMS' => '(unused)Fix Media Files Perms (change group to the TrackerM settings: Useful if drop manually files and want same group)',
+    'L_CFG_AUTOFIX_MEDIAFILES_PERMS_ALL' => '(unused)Fix group owner of all files in the library path to the TrackerM group settings (Useful if other third party app drop jpg or other files and want same group for delete through TrackerM) ',
     /*
       'L_CFG_TRANSCODER_PLAY' => '(unused p1)',
       'L_CFG_TRANSCODER_PATH' => '(unused p2)',
