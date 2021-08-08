@@ -161,7 +161,6 @@
                 <div class="inline" data-tip="<?= $LNG['L_TIP_IGNORE_SIZE'] ?>">
                     <input type="text" size="2" style="font-family:monospace" name="new_ignore_size_min" onChange="show_loading();this.form.submit();" value="<?= $prefs->getPrefsItem('new_ignore_size_min') ? $prefs->getPrefsItem('new_ignore_size_min') : null ?>"/>
                     <input type="text" size="2" style="font-family:monospace" name="new_ignore_size_max" onChange="show_loading();this.form.submit();" value="<?= $prefs->getPrefsItem('new_ignore_size_max') ? $prefs->getPrefsItem('new_ignore_size_max') : null ?>"/>
-
                 </div>
             </div>
         </form>

@@ -38,7 +38,6 @@ function torrents_filter_size(&$torrent_results) {
     if (!empty($prefs->getPrefsItem('new_ignore_size_enable'))) {
         $max = $prefs->getPrefsItem('new_ignore_size_max') ?: 10000;
         $min = $prefs->getPrefsItem('new_ignore_size_min') ?: 0;
-        echo "$min:$max";
         foreach ($torrent_results as $key => $item) {
             $gbytes = bytesToGB($item['size'], 2);
             if ($gbytes > trim($max) || $gbytes < trim($min)) {
