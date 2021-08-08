@@ -33,6 +33,7 @@ function cronjobs() {
         hash_missing();
         //delete from wanted orphans (a orphans is create if user delete the torrent outside trackerm
         delete_direct_orphans();
+        $cfg['autofix_mediafiles_perms'] ? fix_permissions() : null;
     }
     if (($cfg['cron_daily'] + 8640) < $time_now) {
         $db->update('config', ['cfg_value' => $time_now], ['cfg_key' => ['value' => 'cron_daily']]);
@@ -92,13 +93,13 @@ function check_broken_files_linked() {
 
     if (is_array($cfg['MOVIES_PATH'])) {
         $paths = array_merge($paths, $cfg['MOVIES_PATH']);
-    } else {
+    } else if (!empty($cfg['MOVIES_PATH'])) {
         $paths[] = $cfg['MOVIES_PATH'];
     }
 
     if (is_array($cfg['SHOWS_PATH'])) {
         $paths = array_merge($paths, $cfg['SHOWS_PATH']);
-    } else {
+    } else if (!empty($cfg['SHOWS_PATH'])) {
         $paths[] = $cfg['SHOWS_PATH'];
     }
     remove_broken_medialinks($paths, $cfg['media_ext']);
@@ -395,78 +396,122 @@ function update_people_empty() {
     $log->debug("Update master media people " . $nupdate);
 }
 
+function fix_permissions() {
+    global $cfg, $log;
+
+    $paths = [];
+
+    $log->info("Starting Fix Permissions");
+    if (empty($cfg['files_usergroup']) || empty($cfg['dir_perms']) || empty($cfg['files_perms'])) {
+        $log->warning("You must set the files usergroup, dir/file perms in settigns for auto fix permissions");
+        return false;
+    }
+
+    if (is_array($cfg['MOVIES_PATH'])) {
+        $paths = array_merge($paths, $cfg['MOVIES_PATH']);
+    } else if (!empty($cfg['MOVIES_PATH'])) {
+        $paths[] = $cfg['MOVIES_PATH'];
+    }
+
+    if (is_array($cfg['SHOWS_PATH'])) {
+        $paths = array_merge($paths, $cfg['SHOWS_PATH']);
+    } else if (!empty($cfg['SHOWS_PATH'])) {
+        $paths[] = $cfg['SHOWS_PATH'];
+    }
+
+    foreach ($paths as $path) {
+        if ($cfg['autofix_mediafiles_perms_all']) {
+            $allfiles = get_dir_contents($path);
+        } else {
+            $allfiles = find_media_files($path, $cfg['media_ext']);
+        }
+
+        foreach ($allfiles as $file) {
+            if (is_dir($file)) {
+                if (!(chgrp($file, $cfg['files_usergroup'])) || !chmod($file, octdec("0" . $cfg['dir_perms']))) {
+                    $log->warning("Fix perms chgrp/chmod fail on directory $file");
+                }
+            } else {
+                if (!(chgrp($file, $cfg['files_usergroup'])) || !chmod($file, octdec("0" . $cfg['files_perms']))) {
+                    $log->warning("Fix perms chgrp/chmod fail on file $file");
+                }
+            }
+        }
+    }
+}
+
 /*
-  1º check movies/shows with empty trailer and update if we already not update in DB_UPD_MISSING_DELAY
-  2º check no empty trailers movie/shows and update trailer link after DB_UPD_LONG_DELAY
- */
-/*
- * Since we clean tmdb cache and update masters we don't need this
+      1º check movies/shows with empty trailer and update if we already not update in DB_UPD_MISSING_DELAY
+      2º check no empty trailers movie/shows and update trailer link after DB_UPD_LONG_DELAY
+     */
+    /*
+     * Since we clean tmdb cache and update masters we don't need this
 
 
-  function update_trailers() {
-  global $db, $cfg, $log;
+      function update_trailers() {
+      global $db, $cfg, $log;
 
-  $log->debug('Executing update trailers');
-  $limit = 15;
+      $log->debug('Executing update trailers');
+      $limit = 15;
 
-  //IMPROVE: This can be done in one query per table
-  // Update missing trailers and never try get trailer
-  foreach (['tmdb_search_movies', 'tmdb_search_shows'] as $table) {
-  $update = [];
+      //IMPROVE: This can be done in one query per table
+      // Update missing trailers and never try get trailer
+      foreach (['tmdb_search_movies', 'tmdb_search_shows'] as $table) {
+      $update = [];
 
-  if ($table == 'library_movies' || $table == 'tmdb_search_movies') {
-  $media_type = 'movies';
-  } else {
-  $media_type = 'shows';
-  }
+      if ($table == 'library_movies' || $table == 'tmdb_search_movies') {
+      $media_type = 'movies';
+      } else {
+      $media_type = 'shows';
+      }
 
-  $update['updated'] = $time_now = time();
-  $next_update = time() - $cfg['db_upd_missing_delay'];
+      $update['updated'] = $time_now = time();
+      $next_update = time() - $cfg['db_upd_missing_delay'];
 
-  $query = "SELECT DISTINCT themoviedb_id FROM $table WHERE trailer = '' OR  (trailer = '0' AND updated < $next_update) LIMIT $limit";
-  $result = $db->query($query);
+      $query = "SELECT DISTINCT themoviedb_id FROM $table WHERE trailer = '' OR  (trailer = '0' AND updated < $next_update) LIMIT $limit";
+      $result = $db->query($query);
 
-  $results = $db->fetchAll($result);
+      $results = $db->fetchAll($result);
 
-  foreach ($results as $item) {
-  $trailer = mediadb_getTrailer($media_type, $item['themoviedb_id']);
-  if (!empty($trailer)) {
-  if (substr(trim($trailer), 0, 5) != 'https') {
-  $trailer = str_replace('http', 'https', $trailer);
-  }
-  $update['trailer'] = $trailer;
-  $log->info("(1) Update $table trailer on tmdb_id {$item['themoviedb_id']} trailer $trailer");
-  } else {
-  $update['trailer'] = 0;
-  }
-  $where_upd = ['themoviedb_id' => ['value' => $item['themoviedb_id']]];
+      foreach ($results as $item) {
+      $trailer = mediadb_getTrailer($media_type, $item['themoviedb_id']);
+      if (!empty($trailer)) {
+      if (substr(trim($trailer), 0, 5) != 'https') {
+      $trailer = str_replace('http', 'https', $trailer);
+      }
+      $update['trailer'] = $trailer;
+      $log->info("(1) Update $table trailer on tmdb_id {$item['themoviedb_id']} trailer $trailer");
+      } else {
+      $update['trailer'] = 0;
+      }
+      $where_upd = ['themoviedb_id' => ['value' => $item['themoviedb_id']]];
 
-  $db->update($table, $update, $where_upd);
-  }
+      $db->update($table, $update, $where_upd);
+      }
 
-  // LONG DELAY UPDATE TRAILER
-  $update = [];
-  $update['updated'] = $time_now = time();
-  $next_update = time() - $cfg['db_upd_long_delay'];
-  $query = "SELECT DISTINCT themoviedb_id FROM $table WHERE trailer IS NOT NULL AND updated < $next_update LIMIT $limit";
-  $result = $db->query($query);
-  $results = $db->fetchAll($result);
+      // LONG DELAY UPDATE TRAILER
+      $update = [];
+      $update['updated'] = $time_now = time();
+      $next_update = time() - $cfg['db_upd_long_delay'];
+      $query = "SELECT DISTINCT themoviedb_id FROM $table WHERE trailer IS NOT NULL AND updated < $next_update LIMIT $limit";
+      $result = $db->query($query);
+      $results = $db->fetchAll($result);
 
-  foreach ($results as $item) {
-  $trailer = mediadb_getTrailer($media_type, $item['themoviedb_id']);
-  if (!empty($trailer)) {
-  if (substr(trim($trailer), 0, 5) != 'https') {
-  $trailer = str_replace('http', 'https', $trailer);
-  }
-  $update['trailer'] = $trailer;
-  $log->info("(2) Update $table trailer on tmdb_id {$item['themoviedb_id']} trailer $trailer");
-  } else {
-  $update['trailer'] = 0;
-  }
-  $where_upd = ['themoviedb_id' => ['value' => $item['themoviedb_id']]];
+      foreach ($results as $item) {
+      $trailer = mediadb_getTrailer($media_type, $item['themoviedb_id']);
+      if (!empty($trailer)) {
+      if (substr(trim($trailer), 0, 5) != 'https') {
+      $trailer = str_replace('http', 'https', $trailer);
+      }
+      $update['trailer'] = $trailer;
+      $log->info("(2) Update $table trailer on tmdb_id {$item['themoviedb_id']} trailer $trailer");
+      } else {
+      $update['trailer'] = 0;
+      }
+      $where_upd = ['themoviedb_id' => ['value' => $item['themoviedb_id']]];
 
-  $db->update($table, $update, $where_upd);
-  }
-  }
-  }
- */
+      $db->update($table, $update, $where_upd);
+      }
+      }
+      }
+     */
