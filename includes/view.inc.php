@@ -154,6 +154,7 @@ function view_extra_movies($item, $opt = null) {
         if (valid_array($m_results)) {
             $m_results = mix_media_res($m_results);
             $topt['view_type'] = 'movies_torrent';
+            $topt['media_type'] = 'movies';
             $extra .= buildTable('L_TORRENT', $m_results, $topt);
         } else {
             $extra .= $frontend->msgBox(['title' => 'L_TORRENT', 'body' => 'L_NOTHING_FOUND']);
@@ -187,6 +188,7 @@ function view_extra_shows($item, $opt) {
         if (valid_array($m_results)) {
             $m_results = mix_media_res($m_results);
             $topt['view_type'] = 'shows_torrent';
+            $topt['media_type'] = 'shows';
             $topt['more_torrents'] = 1;
             $extra .= buildTable('L_TORRENT', $m_results, $topt);
         } else {
