@@ -17,6 +17,7 @@ $LNG = [
     'L_ADDED' => 'Añadido',
     'L_ADD' => 'Añadir',
     'L_ADMIN' => 'Admin',
+    'L_ADMINISTRATION' => 'Administracion',
     'L_ANONYMOUS' => 'Anonimo',
     'L_ANY_TAG' => 'Al menos uno',
     'L_ADDED_SUCCESSFUL' => 'Añadido con exito',

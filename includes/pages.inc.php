@@ -34,17 +34,7 @@ function page_index() {
         //set force_fix_perms, cli must exec fix_perms if force_fix_perms is set
         //cli must clear force_fix_perms
     }
-    // Config
-    if (!empty($user->isAdmin())) {
-        $tdata = [];
-        $tdata['title'] = '';
-        $tdata['content'] = Html::form(['id' => 'clear_disabled', 'method' => 'post'], Html::input(['type' => 'submit', 'name' => 'clear_disabled', 'value' => $LNG['L_CLEAR_DISABLE']]));
-        $tdata['content'] .= Html::form(['id' => 'clear_search_cache', 'method' => 'post'], Html::input(['type' => 'submit', 'name' => 'clear_search_cache', 'value' => $LNG['L_CLEAR_SEARCH_CACHE']]));
-        //$tdata['content'] .= Html::form(['id' => 'force_fix_perms', 'method' => 'post'], Html::input(['type' => 'submit', 'name' => 'force_fix_perms', 'value' => $LNG['L_FIX_PERMS']]));
-        $tdata['content'] .= Html::link(['class' => 'action_link'], 'index.php', $LNG['L_CONFIG'], ['page' => 'config']);
 
-        $titems['col1'][] = $frontend->getTpl('home-item', $tdata);
-    }
     // General Info
     $tdata = [];
     $tdata['content'] = '';
@@ -63,6 +53,18 @@ function page_index() {
     $tdata['content'] .= Html::link(['class' => 'action_link'], '', $LNG['L_LOGOUT'], ['page' => 'logout']);
     $tdata['content'] .= $status_msg;
     $titems['col1'][] = $frontend->getTpl('home-item', $tdata);
+
+    // Config
+    if (!empty($user->isAdmin())) {
+        $tdata = [];
+        $tdata['title'] = $LNG['L_ADMINISTRATION'];
+        $tdata['content'] = Html::form(['id' => 'clear_disabled', 'method' => 'post'], Html::input(['type' => 'submit', 'name' => 'clear_disabled', 'value' => $LNG['L_CLEAR_DISABLE']]));
+        $tdata['content'] .= Html::form(['id' => 'clear_search_cache', 'method' => 'post'], Html::input(['type' => 'submit', 'name' => 'clear_search_cache', 'value' => $LNG['L_CLEAR_SEARCH_CACHE']]));
+        //$tdata['content'] .= Html::form(['id' => 'force_fix_perms', 'method' => 'post'], Html::input(['type' => 'submit', 'name' => 'force_fix_perms', 'value' => $LNG['L_FIX_PERMS']]));
+        $tdata['content'] .= Html::link(['class' => 'action_link'], 'index.php', $LNG['L_CONFIG'], ['page' => 'config']);
+
+        $titems['col1'][] = $frontend->getTpl('home-item', $tdata);
+    }
 
     // User managament
     if (!empty($user->isAdmin())) {
