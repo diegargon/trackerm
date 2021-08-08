@@ -23,7 +23,7 @@
             <div class="tag_type"><?= $tdata['lang_media_type'] ?></div>
             <span class="wanted_item_part_hidden"><?= $LNG['L_CHECKDAY'] ?></span>
             <div class="tag_day"><?= $tdata['day_check'] ?></div>
-            <div class="tag_title"><a class="wanted_link" href="<?= $tdata['link'] ?>"><?= $tdata['link_name'] ?></a></div>
+            <div class="tag_title"><a onClick="show_loading();" class="wanted_link" href="<?= $tdata['link'] ?>"><?= $tdata['link_name'] ?></a></div>
         </div>
 
         <!-- HIDDE -->
