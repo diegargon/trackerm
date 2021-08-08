@@ -453,8 +453,8 @@ function get_media_files($master, $media_type, $view_media) {
     //DELETE
     $delete_options = [
         1 => ['value' => 1, 'name' => $LNG['L_DELETE_REGISTER']],
-            //BETA 2 => ['value' => 2, 'name' => $LNG['L_DELETE_FILE']],
-            //BETA 3 => ['value' => 3, 'name' => $LNG['L_DELETE_FILES']],
+        2 => ['value' => 2, 'name' => $LNG['L_DELETE_FILE']],
+        3 => ['value' => 3, 'name' => $LNG['L_DELETE_FILES']],
     ];
 
     (empty($selected_item)) ? $selected_item = reset($file) : null;
