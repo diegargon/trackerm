@@ -447,6 +447,7 @@ function delete_file(int $file_id, int $master_id, string $media_type) {
         $log->err('Wrong path in file library id:' . $file_item['path']);
         return false;
     }
+    //Remove file and insert history
     if (is_writable($file_item['path'])) {
         $log->debug("Removing {$file_item['path']}");
         unlink($file_item['path']);
@@ -474,6 +475,7 @@ function delete_file(int $file_id, int $master_id, string $media_type) {
         return false;
     }
 
+    //Remove Registers
     if ($master['total_items'] == 1) {
         $db->deleteItemById($library, $file_id);
         $db->deleteItemById($library_master, $master_id);
@@ -486,58 +488,12 @@ function delete_file(int $file_id, int $master_id, string $media_type) {
         $log->addStateMsg($LNG['L_DELETE_ENTRY_MANUALLY'] . ': ' . $file_item['file_name']);
     }
 
-    if (count(find_media_files($dirname, $cfg['media_ext'])) == 0) {
-        $files_in_dir = [];
-        get_dir_contents($dirname, $files_in_dir);
-        foreach ($files_in_dir as $file_in_dir) {
-            if (!is_dir($file_in_dir) && is_writable($file_in_dir)) {
-                if (!in_array(get_file_ext($file_in_dir), $cfg['media_ext'])) {
-                    $log->debug("unlink: " . $file_in_dir . "<br>");
-                    unlink($file_in_dir);
-                }
-            } else {
-                $log->debug("Found file not writable $file_in_dir, cant remove directory");
-                return $return;
-            }
-        }
-        $media_type == 'movies' ? $preserve_dirs = $cfg['MOVIES_PATH'] : $preserve_dirs = $cfg['SHOWS_PATH'];
-        if (count(get_dir_contents($dirname, $files_in_dir)) == 0) {
-            $found = 0;
-            //Make sure is not the root path;
-            foreach ($root_dirs as $root_dir) {
-                if ($dirname == $root_dir) {
-                    $found = 1;
-                    break;
-                }
-            }
-            if (!$found && is_writable($dirname)) {
-                rmdir($dirname);
-            } else {
-                $log->debug("Found something in $dirname that not going to remove leaving...<br>");
-                return $return;
-            }
-        }
-        //Shows need another level down since /show name/Season 1/
-
+    //If no more media files remove dirs
+    if (delete_empty_media_dirs($dirname, $media_type)) {
+        //Delete empty ok shows need another down dir since /show name/Season 1
         if ($media_type == 'shows') {
             $show_dirname = dirname($dirname);
-            if (count(find_media_files($show_dirname, $cfg['media_ext'])) == 0) {
-                if (count(get_dir_contents($dirname, $files_in_dir)) == 0) {
-                    $found = 0;
-                    //Make sure is not the root path;
-                    foreach ($preserve_dirs as $preserve_dir) {
-                        if ($dirname == $preserve_dir) {
-                            $found = 1;
-                            break;
-                        }
-                    }
-                    if (!$found && is_writable($show_dirname)) {
-                        rmdir($show_dirname);
-                    } else {
-                        $log->debug("Found something in $show_dirname that not going to remove leaving...<br>");
-                    }
-                }
-            }
+            delete_empty_media_dirs($show_dirname, $media_type);
         }
     }
 
@@ -564,4 +520,54 @@ function delete_files(int $master_id, string $media_type) {
     }
 
     return $return;
+}
+
+/*
+ * Delete the parent dir if not exists media files in, will clean all other files.
+ */
+
+function delete_empty_media_dirs(string $dirname, string $media_type) {
+    global $cfg, $log;
+
+    $media_type == 'movies' ? $root_dirs = $cfg['MOVIES_PATH'] : $root_dirs = $cfg['SHOWS_PATH'];
+    clearstatcache();
+    if (count(find_media_files($dirname, $cfg['media_ext'])) == 0) {
+        $files_in_dir = [];
+        get_dir_contents($dirname, $files_in_dir);
+        foreach ($files_in_dir as $file_in_dir) {
+            if (!is_dir($file_in_dir) && is_writable($file_in_dir)) {
+                if (!in_array(get_file_ext($file_in_dir), $cfg['media_ext'])) {
+                    $log->debug("unlink: " . $file_in_dir . "<br>");
+                    unlink($file_in_dir);
+                }
+            } else {
+                $log->debug("Found file not writable $file_in_dir, cant remove directory");
+                return false;
+            }
+        }
+
+        clearstatcache();
+        if (count(get_dir_contents($dirname, $files_in_dir)) == 0) {
+            $found = 0;
+            //Make sure is not the root path;
+            foreach ($root_dirs as $root_dir) {
+                if ($dirname == $root_dir) {
+                    $found = 1;
+                    break;
+                }
+            }
+            if (!$found && is_writable($dirname)) {
+                $log->debug("Removing directory $dirname");
+                rmdir($dirname);
+            } else {
+                $log->debug("Found something in $dirname that not going to remove leaving...<br>");
+                return false;
+            }
+        } else {
+            $log->debug("Found files in -> $dirname  omit removing directory " . count(get_dir_contents($dirname, $files_in_dir)));
+            return false;
+        }
+    }
+
+    return true;
 }
