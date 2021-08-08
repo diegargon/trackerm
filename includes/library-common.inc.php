@@ -480,7 +480,8 @@ function delete_file(int $file_id, int $master_id, string $media_type) {
         $db->deleteItemById($library, $file_id);
         $db->deleteItemById($library_master, $master_id);
         $return = 'SUCCESS_NOMASTER';
-        $log->addStateMsg($LNG['L_DELETE_ENTRY_MANUALLY'] . ': (M) ' . $master['title']);
+        $log->addStateMsg($LNG['L_DELETE_ENTRY_MANUALLY'] . ': ' . $file_item['file_name']);
+        $log->addStateMsg($LNG['L_DELETE_ENTRY_MANUALLY'] . ': (Master) ' . $master['title']);
     } else {
         $db->deleteItemById($library, $file_id);
         $new_size = $master['total_size'] - $file_item['size'];
@@ -547,6 +548,7 @@ function delete_empty_media_dirs(string $dirname, string $media_type) {
         }
 
         clearstatcache();
+        $files_in_dir = [];
         if (count(get_dir_contents($dirname, $files_in_dir)) == 0) {
             $found = 0;
             //Make sure is not the root path;
@@ -564,6 +566,7 @@ function delete_empty_media_dirs(string $dirname, string $media_type) {
                 return false;
             }
         } else {
+            $files_in_dir = [];
             $log->debug("Found files in -> $dirname  omit removing directory " . count(get_dir_contents($dirname, $files_in_dir)));
             return false;
         }

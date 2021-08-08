@@ -57,7 +57,7 @@ function get_dir_contents($dir, &$results = []) {
 
     if (!is_readable($dir)) {
         $log->warning("Directory $dir is not readable");
-        return [];
+        return $results;
     }
     $files = scandir($dir);
 
@@ -71,6 +71,33 @@ function get_dir_contents($dir, &$results = []) {
         }
     }
 
+    return $results;
+}
+
+/* opendir/closedir version */
+
+function _get_dir_contents($dir, &$results = []) {
+    global $log;
+
+    if (!is_readable($dir)) {
+        $log->warning("Directory $dir is not readable");
+        return $results;
+    }
+
+    if (is_dir($dir)) {
+        if (($dh = opendir($dir))) {
+            while (($file = readdir($dh)) !== false) {
+                $path = $dir . DIRECTORY_SEPARATOR . $file;
+                if (!is_dir($path)) {
+                    $results[] = $path;
+                } else if ($file != '.' && $file != '..') {
+                    _get_dir_contents($path, $results);
+                    $results[] = $path;
+                }
+            }
+            closedir($dh);
+        }
+    }
     return $results;
 }
 
