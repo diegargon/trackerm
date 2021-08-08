@@ -142,14 +142,17 @@ class FrontEnd {
         if (isset($_POST['view_mode'])) {
             $prefs->setPrefsItem('view_mode', Filter::postString('view_mode'));
         }
-        if (isset($_POST['new_ignore_size'])) {
-            $prefs->setPrefsItem('new_ignore_size', Filter::postString('new_ignore_size'));
+        if (isset($_POST['new_ignore_size_max'])) {
+            $prefs->setPrefsItem('new_ignore_size_max', Filter::postInt('new_ignore_size_max'));
         }
-        if (isset($_POST['new_ignore_words_enable'])) {
-            $prefs->setPrefsItem('new_ignore_words_enable', Filter::postString('new_ignore_words_enable'));
+        if (isset($_POST['new_ignore_size_min'])) {
+            $prefs->setPrefsItem('new_ignore_size_min', Filter::postInt('new_ignore_size_min'));
         }
         if (isset($_POST['new_ignore_size_enable'])) {
             $prefs->setPrefsItem('new_ignore_size_enable', Filter::postString('new_ignore_size_enable'));
+        }
+        if (isset($_POST['new_ignore_words_enable'])) {
+            $prefs->setPrefsItem('new_ignore_words_enable', Filter::postString('new_ignore_words_enable'));
         }
         if (isset($_POST['sel_indexer'])) {
             $prefs->setPrefsItem('sel_indexer', Filter::postString('sel_indexer'));

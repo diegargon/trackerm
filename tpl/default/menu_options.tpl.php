@@ -155,11 +155,13 @@
                     <input type="text" size="15" name="new_ignore_keywords" onChange="show_loading();this.form.submit();" value="<?= !empty($prefs->getPrefsItem('new_ignore_keywords')) ? $prefs->getPrefsItem('new_ignore_keywords') : null ?>"/>
                 </div>
                 <!-- ignore size -->
-                <span><?= $LNG['L_MAX_SIZE'] ?></span>
+                <span><?= $LNG['L_SIZE'] ?></span>
                 <input type="hidden" name="new_ignore_size_enable" value="0"/>
                 <input onClick="show_loading();"  type="checkbox" <?= !empty($prefs->getPrefsItem('new_ignore_size_enable')) ? 'checked' : null ?> name="new_ignore_size_enable" onChange="this.form.submit()" value="1"/>
                 <div class="inline" data-tip="<?= $LNG['L_TIP_IGNORE_SIZE'] ?>">
-                    <input type="text" size="2"  name="new_ignore_size" onChange="show_loading();this.form.submit();" value="<?= !empty($prefs->getPrefsItem('new_ignore_size')) ? $prefs->getPrefsItem('new_ignore_size') : null ?>"/>
+                    <input type="text" size="2" style="font-family:monospace" name="new_ignore_size_min" onChange="show_loading();this.form.submit();" value="<?= $prefs->getPrefsItem('new_ignore_size_min') ? $prefs->getPrefsItem('new_ignore_size_min') : null ?>"/>
+                    <input type="text" size="2" style="font-family:monospace" name="new_ignore_size_max" onChange="show_loading();this.form.submit();" value="<?= $prefs->getPrefsItem('new_ignore_size_max') ? $prefs->getPrefsItem('new_ignore_size_max') : null ?>"/>
+
                 </div>
             </div>
         </form>

@@ -35,10 +35,13 @@ function torrents_filter_words(&$torrent_results) {
 function torrents_filter_size(&$torrent_results) {
     global $prefs;
 
-    if (!empty($prefs->getPrefsItem('new_ignore_size_enable')) && !empty($prefs->getPrefsItem('new_ignore_size'))) {
+    if (!empty($prefs->getPrefsItem('new_ignore_size_enable'))) {
+        $max = $prefs->getPrefsItem('new_ignore_size_max') ?: 10000;
+        $min = $prefs->getPrefsItem('new_ignore_size_min') ?: 0;
+        echo "$min:$max";
         foreach ($torrent_results as $key => $item) {
             $gbytes = bytesToGB($item['size'], 2);
-            if ($gbytes > trim($prefs->getPrefsItem('new_ignore_size'))) {
+            if ($gbytes > trim($max) || $gbytes < trim($min)) {
                 unset($torrent_results[$key]);
             }
         }
@@ -88,10 +91,13 @@ function where_filters() {
         !empty($where) ? $where .= ' AND' : $where .= 'WHERE ';
         $where .= " source LIKE '%$sel_indexer%'";
     }
-    if (!empty($prefs->getPrefsItem('new_ignore_size_enable')) && !empty($prefs->getPrefsItem('new_ignore_size'))) {
+    if (!empty($prefs->getPrefsItem('new_ignore_size_enable'))) {
+        $max = $prefs->getPrefsItem('new_ignore_size_max') ?: 10000;
+        $min = $prefs->getPrefsItem('new_ignore_size_min') ?: 0;
         !empty($where) ? $where .= ' AND' : $where .= 'WHERE ';
-        $bytes = GBTobytes($prefs->getPrefsItem('new_ignore_size'));
-        $where .= " size < $bytes ";
+        $max_bytes = GBTobytes($max);
+        $min_bytes = GBTobytes($min);
+        $where .= " size <= $max_bytes AND size >= $min_bytes";
     }
 
     $keywords = $prefs->getPrefsItem('new_ignore_keywords');

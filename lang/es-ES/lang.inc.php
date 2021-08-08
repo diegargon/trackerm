@@ -133,7 +133,6 @@ $LNG = [
     'L_LOGOUT' => 'Salir',
     'L_LOCALPLAYER' => 'LocalPlayer',
     'L_MAIN' => 'Principal',
-    'L_MAX_SIZE' => 'Tamaño Max',
     'L_MOVIES' => 'Peliculas',
     'L_MOVIES_MIN' => 'P',
     'L_MOVIE' => 'Pelicula',
@@ -345,7 +344,7 @@ $LNG = [
      */
 //TOOLTIP
     'L_TIP_COMMA' => 'Palabras separadas por coma',
-    'L_TIP_IGNORE_SIZE' => 'Tamaño maximo en GB ej:1 para 1gb',
+    'L_TIP_IGNORE_SIZE' => 'Tamaño min/max en GB ej:1 para 1gb',
 //GENRES
     'L_ACTION' => 'Accion',
     'L_ACTION_ADV' => 'Accion & Aventuras',
