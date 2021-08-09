@@ -434,7 +434,7 @@ function delete_file(int $file_id, int $master_id, string $media_type) {
         return false;
     }
 
-    //For be sure nothing very wrong in the file path with check agains library paths
+    //For be sure nothing very wrong in the file path we check against library paths
     $good_path = 0;
     foreach ($root_dirs as $root_dir) {
         if (stripos($file_item['path'], $root_dir) !== false) {
@@ -476,17 +476,15 @@ function delete_file(int $file_id, int $master_id, string $media_type) {
     }
 
     //Remove Registers
+    $db->deleteItemById($library, $file_id);
+    $log->addStateMsg($LNG['L_DELETE_ENTRY_MANUALLY'] . ': ' . $file_item['file_name']);
     if ($master['total_items'] == 1) {
-        $db->deleteItemById($library, $file_id);
         $db->deleteItemById($library_master, $master_id);
         $return = 'SUCCESS_NOMASTER';
-        $log->addStateMsg($LNG['L_DELETE_ENTRY_MANUALLY'] . ': ' . $file_item['file_name']);
         $log->addStateMsg($LNG['L_DELETE_ENTRY_MANUALLY'] . ': (Master) ' . $master['title']);
     } else {
-        $db->deleteItemById($library, $file_id);
         $new_size = $master['total_size'] - $file_item['size'];
         $db->updateItemById($library_master, $master['id'], ['total_items' => $master['total_items'] - 1, 'total_size' => $new_size]);
-        $log->addStateMsg($LNG['L_DELETE_ENTRY_MANUALLY'] . ': ' . $file_item['file_name']);
     }
 
     //If no more media files remove dirs
