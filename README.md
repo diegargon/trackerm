@@ -7,19 +7,19 @@
 ## Features 
     * For Movies & Shows 
     * UI Language (English and Spanish)
-    * Track shows: Automatically download next episodes and old episodes specifying starting chapter
-    * Wanted List: Adding movies/shows to the wanted list will make TrackerM download automatically when some tracker release.
-    * Multiple options for tracker/wanted: Ignore/Require Keywords, Quality Preference PROPER, etc
+    * Track shows: Download automatically episodes  specifying the starting episode.
+    * Wanted List: Adding movies/shows to the wanted list will make TrackerM download automatically when released by any tracker.
+    * Multiple options for tracker/wanted: Ignore/Require Keywords, Quality Preference, PROPER, etc
     * transmission-daemon integration (Sorry only works with transmission-daemon atm)
     * TheMovieDB search, show popular, trending.
-    * Torrents search: Limit by Indexer, Filter Words, Filter Size, Freelech filter
-    * List latest releases from your favorite indexers/trackers.
-    * Trailers & Covers guess for missing covers
-    * Library: Search you library, Downlad media, Stats, Mark Seen/Unseen media.
+    * Torrents search: Filter by Indexer, Words, Size, Freelech
+    * List latest releases from your favorites indexers/trackers.
+    * trailers & Covers for library & torrents (guess trailer/covers when missing)
+    * Library: Search you library, Download media, Stats, Mark Seen/Unseen media. Show by Collections or Genres.
     * Library: Local Player (no active by default, see config options), play your movies/shows  launching VLC just clicking (the media share volume must be accesible)
     * Users: Basic IU designed for multiple users, password access, limit local ips (config)
     * Email: Automatically send email when TrackerM add new media to your library
-    * Automatically link(when seeding) and move (finish seeding) from transmission-daemon  download directory to your library
+    * Automatically link(when seeding) and move (finish seeding) from transmission-daemon  download directory to your library.
     * Proxy support
     * Cache Covers for fast experience
     * Automatically disabling (temporally) indexers offline or slow

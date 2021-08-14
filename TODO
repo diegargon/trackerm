@@ -1,8 +1,6 @@
 [TODO]
 
 [HIGH]
-    [TESTING][IMPROVE][VIEW]Add delete media button
-    [TESTING][IMPROVE] Add option for not add tags on move files. (rename_notags config)    
     [IMPROVE] Masters shows al meter un episodio actualiza master ?¿
     [FIX] Si no hay espacio en torrent temp transmission no mueve pero para trackerm consta que esta finalizado y intenta enlazarlo pero sige en temp no en 
     finalize/Ultimo.    
@@ -12,15 +10,12 @@
             Deberiamos utilizar have_it de jackett_* para no tener que comprobar la library, para ello [TODO]
             Cuando lo metemos en el cache deberiamos comprobar la library y marcar have_it de jackett_* [DONE] 
             Cada vez que descargamos algo actualizar el have_it de jackett_* [TODO]
-            Cada vez que se borra algo de library actualizar el have_it de jackett_* [TODO]    
-    [IMPROVE][CLI] Option to Check and fix library permissions.
+            Cada vez que se borra algo de library actualizar el have_it de jackett_* [TODO]        
     [IMPROVE][IDENTIFY] Rename files: En identificar manual dar opcion para renombrar al nombre del identifiado + año. (obviar acentos)
     [IMPROVE][VIEW] En View dar opcion para renombrar el archivo al identificado + año. (obviar acentos)
 
 [MED]    
     [CLI]Update people (cast,writer,director) in masters; donde actualiza masters
-    [TESTING][IMPROVE] linked_files_check make remove file and dir if empty     
-    [TESTING][IMPROVE] Rewrite pager its messy
     [IMPROVE] Colecciones: Custom collection, Custom genre, Director, Protagonista
     [IMPROVE] Wanted funciona buscando el dia, deberia comprobar los release torrents cada 6h 
     [IMPROVE] Si se borra manualmente un torrente bajado quedara el bd huerfanos. OPCION ORPHAN. 
@@ -34,9 +29,8 @@
             cada vez que se baje algo, ver casos. track_show necesitaba rebuild 
     [IMPROVE][NEW] Ordenamiento: Cambiar, si un tracker no actualiza sus torrents en mucho tiempo con el sistema actual siempre apareceran sus ultimos torrents
         en la primera pagina.
-    [IMPROVE][WANTED] Options filter show movies or shows?
-    [IMPROVE][WANTED] media type filter
-    
+    [IMPROVE][WANTED] Options to  show between movies or shows?    
+    [IMPROVE][View] Link in Genres, Collections
 [VERY LOW]
     [IMPROVE][WANTED]Track show, option for modify from episode.
     [IMPROVE][INDEX] Responsive
@@ -52,7 +46,11 @@
     [CLEAN] library_movies/shows now since change to masters not need most fields, remove
     [IMPROVE] Library: add sort options
     [IMPROVE][PLAY][LocalPlayer] Investigate web interface for track time
-
+    [IMPROVE] linked_files_check make remove file and dir if empty.
+        Si borramos un torrent linked queda el enlace, esto limpia pero no el directorio que creo
+        (se ejectua en rebuild via web borrar directorio y otros archivos dara problemas)
+        Quizas sacarlo de rebuild y ahi solo dejar el unset el link y el cli borra cada X tiempo
+    [TESTING][IMPROVE] Rewrite pager its messy
 [BACKLOG]    
     [CHANGE] Change actual Transmission rpc api to something basic, since some basic is enough and the actual have alot of deps 
     [NEW/IMPROVE] En el select de identificar estaria bien mostrar las caratulas al poner encima    
