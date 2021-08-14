@@ -79,6 +79,16 @@
             <input type="hidden" name="show_genres" value="0"/>
             <input id="show_genres" type="checkbox" name="show_genres"  <?= !empty($prefs->getPrefsItem('show_genres')) ? 'checked' : null ?>  onChange="show_loading();this.form.submit();"/>
         </form>
+        <form method="post" action="?page=<?= $tdata['page'] ?>">
+            <label for="show_directors"><?= $LNG['L_DIRECTOR'] ?> </label>
+            <input type="hidden" name="show_directors" value="0"/>
+            <input id="show_directors" type="checkbox" name="show_directors"  <?= !empty($prefs->getPrefsItem('show_directors')) ? 'checked' : null ?>  onChange="show_loading();this.form.submit();"/>
+        </form>
+        <form method="post" action="?page=<?= $tdata['page'] ?>">
+            <label for="show_cast"><?= $LNG['L_CAST'] ?> </label>
+            <input type="hidden" name="show_cast" value="0"/>
+            <input id="show_cast" type="checkbox" name="show_cast"  <?= !empty($prefs->getPrefsItem('show_cast')) ? 'checked' : null ?>  onChange="show_loading();this.form.submit();"/>
+        </form>
     <?php } ?>
     <?php if ($cfg['want_movies'] && ($tdata['page'] == 'library' || $tdata['page'] == 'library_movies')) { ?>
         <form method="post" action="?page=<?= $tdata['page'] ?>">

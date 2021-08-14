@@ -329,6 +329,103 @@ function page_view_genres() {
     return $page_genres;
 }
 
+function page_view_director() {
+    global $prefs, $db, $frontend;
+
+    $name = Filter::getUtf8('director');
+    $media_type = Filter::getAzChar('media_type');
+    $npage = Filter::getString('npage');
+    $page_director = '';
+
+    empty($npage) ? $npage = 1 : null;
+
+    $rows = $prefs->getPrefsItem('tresults_rows');
+    $columns = $prefs->getPrefsItem('tresults_columns');
+    $n_results = $rows * $columns;
+    $npage == 1 ? $start = 0 : $start = ($npage - 1) * $n_results;
+
+    if (empty($name) || empty($media_type)) {
+        return false;
+    }
+
+
+    $library_master = 'library_master_' . $media_type;
+
+    $results = $db->query("SELECT COUNT(*) as total FROM $library_master WHERE director LIKE '%$name%'");
+    $nitems_res = $db->fetch($results);
+    $nitems = $nitems_res['total'];
+
+    $results = $db->query("SELECT * FROM $library_master WHERE director LIKE '%$name%' LIMIT $start, $n_results");
+    $director_items = $db->fetchAll($results);
+
+    mark_masters_views($media_type, $director_items);
+
+    $pager_opt['npage'] = $npage;
+    $pager_opt['nitems'] = $nitems;
+    $pager_opt['media_type'] = $media_type;
+    $pager_opt['get_params']['media_type'] = $media_type;
+    $pager_opt['get_params']['name'] = $name;
+    $page_director .= $frontend->getPager($pager_opt);
+    $table_opt['head'] = $media_type;
+    $table_opt['media_type'] = $media_type;
+    $table_opt['view_type'] = $media_type . '_library';
+    $table_opt['page'] = 'view_group';
+    $table_opt['npage'] = $npage;
+
+    $page_director .= $frontend->buildTable($director_items, $table_opt);
+
+    return $page_director;
+}
+
+function page_view_cast() {
+
+    global $prefs, $db, $frontend;
+
+    $name = Filter::getUtf8('cast');
+    $media_type = Filter::getAzChar('media_type');
+    $npage = Filter::getString('npage');
+    $page_cast = '';
+
+    empty($npage) ? $npage = 1 : null;
+
+    $rows = $prefs->getPrefsItem('tresults_rows');
+    $columns = $prefs->getPrefsItem('tresults_columns');
+    $n_results = $rows * $columns;
+    $npage == 1 ? $start = 0 : $start = ($npage - 1) * $n_results;
+
+    if (empty($name) || empty($media_type)) {
+        return false;
+    }
+
+
+    $library_master = 'library_master_' . $media_type;
+
+    $results = $db->query("SELECT COUNT(*) as total FROM $library_master WHERE \"cast\" LIKE '%$name%'");
+    $nitems_res = $db->fetch($results);
+    $nitems = $nitems_res['total'];
+
+    $results = $db->query("SELECT * FROM $library_master WHERE \"cast\" LIKE '%$name%' LIMIT $start, $n_results");
+    $cast_items = $db->fetchAll($results);
+
+    mark_masters_views($media_type, $cast_items);
+
+    $pager_opt['npage'] = $npage;
+    $pager_opt['nitems'] = $nitems;
+    $pager_opt['media_type'] = $media_type;
+    $pager_opt['get_params']['media_type'] = $media_type;
+    $pager_opt['get_params']['name'] = $name;
+    $page_cast .= $frontend->getPager($pager_opt);
+    $table_opt['head'] = $media_type;
+    $table_opt['media_type'] = $media_type;
+    $table_opt['view_type'] = $media_type . '_library';
+    $table_opt['page'] = 'view_group';
+    $table_opt['npage'] = $npage;
+
+    $page_cast .= $frontend->buildTable($cast_items, $table_opt);
+
+    return $page_cast;
+}
+
 function page_library() {
     global $cfg, $prefs;
 
@@ -342,6 +439,10 @@ function page_library() {
             $page_library .= show_collections();
         } else if ($prefs->getPrefsItem('show_genres')) {
             $page_library .= show_genres('movies');
+        } else if ($prefs->getPrefsItem('show_directors')) {
+            $page_library .= show_directors('movies');
+        } else if ($prefs->getPrefsItem('show_cast')) {
+            $page_library .= show_cast('movies');
         } else {
             $page_library .= show_my_media('movies');
         }
@@ -349,6 +450,10 @@ function page_library() {
     if (($cfg['want_shows']) && ($_GET['page'] == 'library' || $_GET['page'] == 'library_shows')) {
         if ($prefs->getPrefsItem('show_genres')) {
             $page_library .= show_genres('shows');
+        } else if ($prefs->getPrefsItem('show_directors')) {
+            $page_library .= show_directors('shows');
+        } else if ($prefs->getPrefsItem('show_cast')) {
+            $page_library .= show_cast('shows');
         } else {
             $page_library .= show_my_media('shows');
         }

@@ -170,9 +170,25 @@ class FrontEnd {
         if (isset($_POST['show_collections'])) {
             $prefs->setPrefsItem('show_collections', Filter::postString('show_collections'));
             $prefs->setPrefsItem('show_genres', 0);
+            $prefs->setPrefsItem('show_directors', 0);
+            $prefs->setPrefsItem('show_cast', 0);
         }
         if (isset($_POST['show_genres'])) {
             $prefs->setPrefsItem('show_genres', Filter::postString('show_genres'));
+            $prefs->setPrefsItem('show_collections', 0);
+            $prefs->setPrefsItem('show_directors', 0);
+            $prefs->setPrefsItem('show_cast', 0);
+        }
+        if (isset($_POST['show_directors'])) {
+            $prefs->setPrefsItem('show_directors', Filter::postString('show_directors'));
+            $prefs->setPrefsItem('show_genres', 0);
+            $prefs->setPrefsItem('show_cast', 0);
+            $prefs->setPrefsItem('show_collections', 0);
+        }
+        if (isset($_POST['show_cast'])) {
+            $prefs->setPrefsItem('show_cast', Filter::postString('show_cast'));
+            $prefs->setPrefsItem('show_directors', 0);
+            $prefs->setPrefsItem('show_genres', 0);
             $prefs->setPrefsItem('show_collections', 0);
         }
         /* ROWS */

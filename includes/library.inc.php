@@ -337,6 +337,127 @@ function show_genres(string $media_type) {
     return $page_genres;
 }
 
+function show_directors(string $media_type) {
+    global $frontend, $prefs, $db;
+
+    $npage = Filter::getInt('npage');
+    $search_type = Filter::getString('search_type');
+    $page = Filter::getString('page');
+    $items = [];
+    empty($npage) || (!empty($search_type) && $search_type !== $media_type) ? $npage = 1 : null;
+
+    $rows = $prefs->getPrefsItem('tresults_rows');
+    $columns = $prefs->getPrefsItem('tresults_columns');
+
+    $n_results = $rows * $columns;
+    $npage == 1 ? $start = 0 : $start = ($npage - 1) * $n_results;
+
+    $library_master = 'library_master_' . $media_type;
+
+    $results = $db->select($library_master, 'director');
+    $items = $db->fetchAll($results);
+    $directors = [];
+    foreach ($items as $item) {
+        if (empty($item['director'])) {
+            continue;
+        }
+
+        $directors = array_merge($directors, array_map('trim', explode(',', $item['director'])));
+    }
+    $dups_directors = [];
+    foreach (array_count_values($directors) as $val => $c) {
+        ($c > 1) ? $dups_directors[] = $val : null;
+    }
+
+    $i = 0;
+    $added_items = 0;
+    $show_directors = [];
+    foreach ($dups_directors as $vdirector) {
+
+        if ($i >= $start && $added_items < $n_results) {
+            $show_directors[] = [
+                'name' => $vdirector,
+            ];
+            $added_items++;
+        }
+        $i++;
+    }
+
+
+    $pager_opt['media_type'] = $media_type;
+    $pager_opt['npage'] = $npage;
+    $pager_opt['nitems'] = count($dups_directors);
+    $pager_opt['get_params']['search_type'] = $media_type;
+    $page_directors = $frontend->getPager($pager_opt);
+    $build_opt['media_type'] = $media_type;
+    $build_opt['item_tpl'] = 'director_name';
+    $build_opt['get_params'] = ['page' => 'view_director', 'media_type' => $media_type];
+    $page_directors .= $frontend->buildCollection($show_directors, $build_opt);
+
+    return $page_directors;
+}
+
+function show_cast(string $media_type) {
+    global $frontend, $prefs, $db;
+
+    $npage = Filter::getInt('npage');
+    $search_type = Filter::getString('search_type');
+    $page = Filter::getString('page');
+    $items = [];
+    empty($npage) || (!empty($search_type) && $search_type !== $media_type) ? $npage = 1 : null;
+
+    $rows = $prefs->getPrefsItem('tresults_rows');
+    $columns = $prefs->getPrefsItem('tresults_columns');
+
+    $n_results = $rows * $columns;
+    $npage == 1 ? $start = 0 : $start = ($npage - 1) * $n_results;
+
+    $library_master = 'library_master_' . $media_type;
+
+    // Select need rewrite what for '$word' , here fire select what=cast because need what = 'cast'
+    $results = $db->select($library_master, '*');
+    $items = $db->fetchAll($results);
+    $cast = [];
+    foreach ($items as $item) {
+        if (empty($item['cast'])) {
+            continue;
+        }
+
+        $cast = array_merge($cast, array_map('trim', explode(',', $item['cast'])));
+    }
+    $dups_cast = [];
+    foreach (array_count_values($cast) as $val => $c) {
+        ($c > 1) ? $dups_cast[] = $val : null;
+    }
+
+    $i = 0;
+    $added_items = 0;
+    $show_cast = [];
+    foreach ($dups_cast as $vcast) {
+
+        if ($i >= $start && $added_items < $n_results) {
+            $show_cast[] = [
+                'name' => $vcast,
+            ];
+            $added_items++;
+        }
+        $i++;
+    }
+
+
+    $pager_opt['media_type'] = $media_type;
+    $pager_opt['npage'] = $npage;
+    $pager_opt['nitems'] = count($dups_cast);
+    $pager_opt['get_params']['search_type'] = $media_type;
+    $page_cast = $frontend->getPager($pager_opt);
+    $build_opt['media_type'] = $media_type;
+    $build_opt['item_tpl'] = 'cast_name';
+    $build_opt['get_params'] = ['page' => 'view_cast', 'media_type' => $media_type];
+    $page_cast .= $frontend->buildCollection($show_cast, $build_opt);
+
+    return $page_cast;
+}
+
 function get_view_data($media_type) {
     global $user, $db;
 
