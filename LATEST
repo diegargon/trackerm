@@ -1,6 +1,6 @@
 ## Latest / News (Relevant)
 
-[14/08] Delete File, Files (View/Delete) cleaning directory if empty. 
+[14/08] Delete File (current file selected), or Files (all files of movie/show)  in View/Delete. Clean directory if empty. 
         Will delete other remaning files in the directory if directy no contains more media files
 [14/08] Min Size Filter
 [14/08] Option to fix/set library permissions (run every 6 hours) if you want it must activate in config/files. 
