@@ -17,7 +17,7 @@
   .mode column
   y luego el select * o lo que sea;
 
-  v0.6
+  v0.7
  */
 !defined('IN_WEB') ? exit : true;
 
@@ -284,7 +284,17 @@ class DB {
         $bind_values = [];
 
         $query = 'SELECT ';
-        !empty($what) ? $query .= $what : $query .= '*';
+
+        if (!empty($what) && $what != "*") {
+            $what_string = '';
+            foreach (explode(',', $what) as $what_ary) {
+                empty($what_string) ? $what_string .= '"' . $what_ary . '"' : $what_string .= ',"' . $what_ary . '"';
+            }
+            $query .= $what_string;
+        } else {
+            $query .= '*';
+        }
+
         $query .= ' FROM "' . $table . '"';
         if ($where != null) {
             $query .= ' WHERE ';
