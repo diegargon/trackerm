@@ -66,28 +66,17 @@
             </select>
         </form>
     <?php } ?>
-    <?php if (in_array($tdata['page'], ['library', 'library_movies'])) { ?>
-        <form method="post" action="?page=<?= $tdata['page'] ?>">
-            <label for="show_collections"><?= $LNG['L_SHOW_COLLECTIONS'] ?> </label>
-            <input type="hidden" name="show_collections" value="0"/>
-            <input id="show_collections" type="checkbox" name="show_collections"  <?= !empty($prefs->getPrefsItem('show_collections')) ? 'checked' : null ?>  onChange="show_loading();this.form.submit();"/>
-        </form>
-    <?php } ?>
     <?php if (in_array($tdata['page'], ['library', 'library_movies', 'library_shows'])) { ?>
         <form method="post" action="?page=<?= $tdata['page'] ?>">
-            <label for="show_genres"><?= $LNG['L_GENRES'] ?> </label>
-            <input type="hidden" name="show_genres" value="0"/>
-            <input id="show_genres" type="checkbox" name="show_genres"  <?= !empty($prefs->getPrefsItem('show_genres')) ? 'checked' : null ?>  onChange="show_loading();this.form.submit();"/>
-        </form>
-        <form method="post" action="?page=<?= $tdata['page'] ?>">
-            <label for="show_directors"><?= $LNG['L_DIRECTOR'] ?> </label>
-            <input type="hidden" name="show_directors" value="0"/>
-            <input id="show_directors" type="checkbox" name="show_directors"  <?= !empty($prefs->getPrefsItem('show_directors')) ? 'checked' : null ?>  onChange="show_loading();this.form.submit();"/>
-        </form>
-        <form method="post" action="?page=<?= $tdata['page'] ?>">
-            <label for="show_cast"><?= $LNG['L_CAST'] ?> </label>
-            <input type="hidden" name="show_cast" value="0"/>
-            <input id="show_cast" type="checkbox" name="show_cast"  <?= !empty($prefs->getPrefsItem('show_cast')) ? 'checked' : null ?>  onChange="show_loading();this.form.submit();"/>
+            <label for="show_collections"><?= $LNG['L_SHOW_COLLECTIONS'] ?> </label>
+            <select class="" name="show_collections" onChange="show_loading();this.form.submit();">
+                <option <?= !empty($tdata['collection_sel_none']) ? $tdata['collection_sel_none'] : null; ?> value="0"><?= $LNG['L_NONE'] ?></option>
+                <option <?= !empty($tdata['collection_sel_1']) ? $tdata['collection_sel_1'] : null ?> value="1">TMDB</option>
+                <option <?= !empty($tdata['collection_sel_2']) ? $tdata['collection_sel_2'] : null ?> value="2"><?= $LNG['L_GENRES'] ?></option>
+                <option <?= !empty($tdata['collection_sel_3']) ? $tdata['collection_sel_3'] : null ?> value="3"><?= $LNG['L_DIRECTOR'] ?></option>
+                <option <?= !empty($tdata['collection_sel_4']) ? $tdata['collection_sel_4'] : null ?> value="4"><?= $LNG['L_CAST'] ?></option>
+                <option <?= !empty($tdata['collection_sel_5']) ? $tdata['collection_sel_5'] : null ?> value="5"><?= $LNG['L_WRITER'] ?></option>
+            </select>
         </form>
     <?php } ?>
     <?php if ($cfg['want_movies'] && ($tdata['page'] == 'library' || $tdata['page'] == 'library_movies')) { ?>

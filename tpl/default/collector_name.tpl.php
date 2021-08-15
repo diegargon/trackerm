@@ -10,7 +10,7 @@
 
 <div class="display display_1">
     <div class="poster_preview">
-        <a onClick="show_loading();" href="<?= $tdata['get_params'] ?>&writer=<?= $tdata['name'] ?>">
+        <a onClick="show_loading();" href="<?= $tdata['get_params'] ?>&name=<?= $tdata['name'] ?>">
             <div class="item_details">
                 <div class="item_poster_genre"><?= $tdata['name'] ?></div>
             </div>

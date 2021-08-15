@@ -41,7 +41,7 @@ class Web {
                 exit();
             }
         }
-        $valid_pages = ['index', 'library', 'news', 'tmdb', 'torrents', 'view', 'view_group', 'view_genres', 'view_director', 'view_cast', 'wanted', 'identify',
+        $valid_pages = ['index', 'library', 'news', 'tmdb', 'torrents', 'view', 'view_group', 'view_genres', 'view_director', 'view_cast', 'view_writer', 'wanted', 'identify',
             'download', 'localplayer', 'identify', 'download', 'transmission', 'config', 'login', 'logout'];
 
         (!isset($req_page) || $req_page == '') ? $req_page = 'index' : null;

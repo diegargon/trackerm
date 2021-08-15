@@ -167,30 +167,23 @@ class FrontEnd {
         $tdata['max_id_sel_0'] = $tdata['max_id_sel_5'] = $tdata['max_id_sel_10'] = $tdata['max_id_sel_20'] = $tdata['max_id_sel_50'] = '';
         $tdata['max_id_sel_' . $prefs->getPrefsItem('max_identify_items') . ''] = 'selected';
 
+        /* Collections */
         if (isset($_POST['show_collections'])) {
+            if (empty($_POST['show_collections'])) {
+                $collections_sel = 'collection_sel_none';
+            } else {
+                $collections_sel = 'collection_sel_' . Filter::postInt('show_collections');
+            }
             $prefs->setPrefsItem('show_collections', Filter::postString('show_collections'));
-            $prefs->setPrefsItem('show_genres', 0);
-            $prefs->setPrefsItem('show_directors', 0);
-            $prefs->setPrefsItem('show_cast', 0);
+        } else {
+            if (!empty($prefs->getPrefsItem('show_collections'))) {
+                $collections_sel = 'collection_sel_' . $prefs->getPrefsItem('show_collections');
+            } else {
+                $collections_sel = 'collection_sel_none';
+            }
         }
-        if (isset($_POST['show_genres'])) {
-            $prefs->setPrefsItem('show_genres', Filter::postString('show_genres'));
-            $prefs->setPrefsItem('show_collections', 0);
-            $prefs->setPrefsItem('show_directors', 0);
-            $prefs->setPrefsItem('show_cast', 0);
-        }
-        if (isset($_POST['show_directors'])) {
-            $prefs->setPrefsItem('show_directors', Filter::postString('show_directors'));
-            $prefs->setPrefsItem('show_genres', 0);
-            $prefs->setPrefsItem('show_cast', 0);
-            $prefs->setPrefsItem('show_collections', 0);
-        }
-        if (isset($_POST['show_cast'])) {
-            $prefs->setPrefsItem('show_cast', Filter::postString('show_cast'));
-            $prefs->setPrefsItem('show_directors', 0);
-            $prefs->setPrefsItem('show_genres', 0);
-            $prefs->setPrefsItem('show_collections', 0);
-        }
+        $tdata[$collections_sel] = 'selected';
+
         /* ROWS */
         $max_rows_sel_none = '';
 

@@ -338,66 +338,18 @@ function show_genres(string $media_type) {
 }
 
 function show_directors(string $media_type) {
-    global $frontend, $prefs, $db;
-
-    $npage = Filter::getInt('npage');
-    $search_type = Filter::getString('search_type');
-    $page = Filter::getString('page');
-    $items = [];
-    empty($npage) || (!empty($search_type) && $search_type !== $media_type) ? $npage = 1 : null;
-
-    $rows = $prefs->getPrefsItem('tresults_rows');
-    $columns = $prefs->getPrefsItem('tresults_columns');
-
-    $n_results = $rows * $columns;
-    $npage == 1 ? $start = 0 : $start = ($npage - 1) * $n_results;
-
-    $library_master = 'library_master_' . $media_type;
-
-    $results = $db->select($library_master, 'director');
-    $items = $db->fetchAll($results);
-    $directors = [];
-    foreach ($items as $item) {
-        if (empty($item['director'])) {
-            continue;
-        }
-
-        $directors = array_merge($directors, array_map('trim', explode(',', $item['director'])));
-    }
-    $dups_directors = [];
-    foreach (array_count_values($directors) as $val => $c) {
-        ($c > 1) ? $dups_directors[] = $val : null;
-    }
-
-    $i = 0;
-    $added_items = 0;
-    $show_directors = [];
-    foreach ($dups_directors as $vdirector) {
-
-        if ($i >= $start && $added_items < $n_results) {
-            $show_directors[] = [
-                'name' => $vdirector,
-            ];
-            $added_items++;
-        }
-        $i++;
-    }
-
-
-    $pager_opt['media_type'] = $media_type;
-    $pager_opt['npage'] = $npage;
-    $pager_opt['nitems'] = count($dups_directors);
-    $pager_opt['get_params']['search_type'] = $media_type;
-    $page_directors = $frontend->getPager($pager_opt);
-    $build_opt['media_type'] = $media_type;
-    $build_opt['item_tpl'] = 'director_name';
-    $build_opt['get_params'] = ['page' => 'view_director', 'media_type' => $media_type];
-    $page_directors .= $frontend->buildCollection($show_directors, $build_opt);
-
-    return $page_directors;
+    return view_media_name($media_type, 'director');
 }
 
 function show_cast(string $media_type) {
+    return view_media_name($media_type, 'cast');
+}
+
+function show_writer(string $media_type) {
+    return view_media_name($media_type, 'writer');
+}
+
+function view_media_name(string $media_type, string $name_type) {
     global $frontend, $prefs, $db;
 
     $npage = Filter::getInt('npage');
@@ -413,49 +365,59 @@ function show_cast(string $media_type) {
     $npage == 1 ? $start = 0 : $start = ($npage - 1) * $n_results;
 
     $library_master = 'library_master_' . $media_type;
+    $field_name = $name_type;
 
-    // Select need rewrite what for '$word' , here fire select what=cast because need what = 'cast'
-    $results = $db->select($library_master, '*');
+    $results = $db->select($library_master, $field_name);
     $items = $db->fetchAll($results);
-    $cast = [];
+
+    $names = [];
     foreach ($items as $item) {
-        if (empty($item['cast'])) {
+        if (empty($item[$field_name])) {
             continue;
         }
 
-        $cast = array_merge($cast, array_map('trim', explode(',', $item['cast'])));
+        $names = array_merge($names, array_map('trim', explode(',', $item[$field_name])));
     }
-    $dups_cast = [];
-    foreach (array_count_values($cast) as $val => $c) {
-        ($c > 1) ? $dups_cast[] = $val : null;
+    $dups_names = [];
+    foreach (array_count_values($names) as $val => $c) {
+        ($c > 1) ? $dups_names[] = $val : null;
     }
 
     $i = 0;
     $added_items = 0;
-    $show_cast = [];
-    foreach ($dups_cast as $vcast) {
+    $show_names = [];
+    foreach ($dups_names as $vname) {
 
         if ($i >= $start && $added_items < $n_results) {
-            $show_cast[] = [
-                'name' => $vcast,
+            $show_names[] = [
+                'name' => $vname,
             ];
             $added_items++;
         }
         $i++;
     }
 
+    if ($name_type == 'director') {
+        $dest_page = 'view_director';
+    } else if ($name_type == 'cast') {
+        $dest_page = 'view_cast';
+    } else if ($name_type == 'writer') {
+        $dest_page = 'view_writer';
+    } else {
+        return false;
+    }
 
     $pager_opt['media_type'] = $media_type;
     $pager_opt['npage'] = $npage;
-    $pager_opt['nitems'] = count($dups_cast);
+    $pager_opt['nitems'] = count($dups_names);
     $pager_opt['get_params']['search_type'] = $media_type;
-    $page_cast = $frontend->getPager($pager_opt);
+    $page_names = $frontend->getPager($pager_opt);
     $build_opt['media_type'] = $media_type;
-    $build_opt['item_tpl'] = 'cast_name';
-    $build_opt['get_params'] = ['page' => 'view_cast', 'media_type' => $media_type];
-    $page_cast .= $frontend->buildCollection($show_cast, $build_opt);
+    $build_opt['item_tpl'] = 'collector_name';
+    $build_opt['get_params'] = ['page' => $dest_page, 'media_type' => $media_type];
+    $page_names .= $frontend->buildCollection($show_names, $build_opt);
 
-    return $page_cast;
+    return $page_names;
 }
 
 function get_view_data($media_type) {
