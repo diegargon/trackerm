@@ -1075,6 +1075,18 @@ function update_db($from) {
         $db->query('UPDATE config SET cfg_value=\'21\' WHERE cfg_key=\'db_version\' LIMIT 1');
         $db->query('VACUUM;');
     }
+
+    /* Keys
+     * config -> cfg_key
+     * jackett_movies = guid
+     * jackett_shows = guid
+     * library_master = id
+     * tmdb_search = themoviedb_id
+     *
+     *
+     *
+     */
+
     /*
       if ($from < 22) {
       $db->query('UPDATE config SET cfg_value=\'22\' WHERE cfg_key=\'db_version\' LIMIT 1');

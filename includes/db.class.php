@@ -17,7 +17,7 @@
   .mode column
   y luego el select * o lo que sea;
 
-  v0.7
+  v0.8
  */
 !defined('IN_WEB') ? exit : true;
 
@@ -238,7 +238,7 @@ class DB {
         foreach ($values as $key => $value) {
             $query_keys .= '"' . $key . '"';
             $query_binds .= ':' . $key;
-            $bind_values[':' . $key] = $value;
+            $bind_values[':' . $key] = $this->escape($value);
 
             if ($key != array_key_last($values)) {
                 $query_keys .= ', ';
@@ -306,7 +306,7 @@ class DB {
                 if ($where_k != array_key_last($where)) {
                     $query .= ' ' . $logic . ' ';
                 }
-                $bind_values[':' . $where_k] = $where_v['value'];
+                $bind_values[':' . $where_k] = $this->escape($where_v['value']);
             }
         }
         !empty($extra) ? $query .= ' ' . $extra : null;
@@ -339,7 +339,7 @@ class DB {
 
         $prep_values = '';
         foreach ($final_values as $final_value) {
-            empty($prep_values) ? $prep_values = '\'' . trim($final_value) . '\'' : $prep_values .= ',\'' . trim($final_value) . '\'';
+            empty($prep_values) ? $prep_values = '\'' . trim($final_value) . '\'' : $prep_values .= ',\'' . $this->escape(trim($final_value)) . '\'';
         }
         $query = 'SELECT ' . $what . ' FROM ' . $table . ' WHERE ' . $field . ' IN(' . $prep_values . ')';
 
@@ -410,7 +410,7 @@ class DB {
                 if ($where_k != array_key_last($where)) {
                     $query .= ' ' . $logic . ' ';
                 }
-                $bind_values[':' . $where_k] = $where_v['value'];
+                $bind_values[':' . $where_k] = $this->escape($where_v['value']);
             }
         }
         !empty($extra) ? $query .= ' ' . $extra : null;
@@ -431,7 +431,10 @@ class DB {
         return $response;
     }
 
-    public function escape(string $string) {
+    public function escape($string) {
+        if ($string == null) {
+            return null;
+        }
         return $this->db->escapeString($string);
     }
 

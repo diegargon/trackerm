@@ -363,11 +363,12 @@ function page_view_name(string $name_type) {
 
     $library_master = 'library_master_' . $media_type;
 
-    $results = $db->query("SELECT COUNT(*) as total FROM $library_master WHERE \"$field_name\" LIKE '%$name%'");
+    $q_name = $db->escape($name);
+    $results = $db->query("SELECT COUNT(*) as total FROM $library_master WHERE \"$field_name\" LIKE '%$q_name%'");
     $nitems_res = $db->fetch($results);
     $nitems = $nitems_res['total'];
 
-    $results = $db->query("SELECT * FROM $library_master WHERE \"$field_name\" LIKE '%$name%' LIMIT $start, $n_results");
+    $results = $db->query("SELECT * FROM $library_master WHERE \"$field_name\" LIKE '%$q_name%' LIMIT $start, $n_results");
     $names_items = $db->fetchAll($results);
 
     mark_masters_views($media_type, $names_items);
