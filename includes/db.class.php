@@ -432,8 +432,10 @@ class DB {
     }
 
     public function escape($string) {
-        if ($string == null) {
+        if ($string === null) {
             return null;
+        } else if ($string === '') {
+            return '';
         }
         return $this->db->escapeString($string);
     }

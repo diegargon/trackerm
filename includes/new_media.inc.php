@@ -34,7 +34,7 @@ function page_new_media(string $media_type) {
         !isset($media_cache_check['updated']) ? $media_cache_check['updated'] = 0 : null;
 
         if ((time() > ($media_cache_check['updated'] + $cfg['new_cache_expire']))) {
-            $log->debug("New media: $media_type cache expire, Requesting");
+            $log->debug("New media: $media_type cache expire, Requesting Now:" . time() . " Expire:" . ($media_cache_check['updated'] + $cfg['new_cache_expire']));
             $cache_media_expire = 1;
         } else {
             //$log->debug("News: $media_type using cache " . ( ($media_cache_check['updated'] + $cfg['new_cache_expire']) - time()));
