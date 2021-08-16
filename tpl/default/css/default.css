@@ -1044,6 +1044,13 @@ input:checked + .slider:before {
     text-decoration: none;
     font-size: 1.2em;
 }
+.nodecor {
+    text-decoration: none;    
+    color: inherit !important;
+}
+.nodecor:visited {
+    color:inherit;
+}
 /* Responsive */
 @media only screen and (max-width: 1024px) {
     .wanted_list_container {    

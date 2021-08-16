@@ -99,6 +99,11 @@ function view() {
         $view_media = $db->fetchAll($results);
         $other['media_files'] = get_media_files($item, $media_type, $view_media);
         $opt['view_media'] = $view_media;
+
+        $item['f_genres'] = get_fgenres($media_type, $item);
+        $item['f_cast'] = get_fnames('cast', $media_type, $item);
+        $item['f_writer'] = get_fnames('writer', $media_type, $item);
+        $item['f_director'] = get_fnames('director', $media_type, $item);
     }
 
     if ($view_type == 'shows_library' || $view_type == 'shows_db') {
@@ -121,9 +126,8 @@ function view() {
     }
 
     if (!empty($item['collection'])) {
-        $item['collection'] = $db->qSingle("SELECT title FROM groups WHERE media_type = '$media_type' AND type = 3 AND type_id = '{$item['collection']}'");
+        $item['f_collection'] = get_fcollection($media_type, $item);
     }
-    $item['f_genres'] = get_fgenres($item);
 
     $page = $frontend->getTpl('view', array_merge($item, $other));
 

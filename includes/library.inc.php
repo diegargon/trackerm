@@ -143,7 +143,9 @@ function get_poster($item) {
     return $poster;
 }
 
-function get_fgenres($item) {
+/* Format genres to view */
+
+function get_fgenres(string $media_type, array $item) {
     global $cfg, $LNG;
 
     $fgenres = '';
@@ -162,10 +164,63 @@ function get_fgenres($item) {
         } else {
             $lang_genre = $vgenre;
         }
-        $fgenres .= Html::span(['class' => 'fgenres'], $lang_genre);
+        $genre_url = '?page=view_genres&media_type=' . $media_type . '&id=' . $vgenre;
+        $genre_link = Html::link(['class' => 'nodecor'], $genre_url, $lang_genre);
+        $fgenres .= Html::span(['class' => 'fgenres'], $genre_link);
     }
 
     return $fgenres;
+}
+
+/* Format TMDB Collection */
+
+function get_fcollection(string $media_type, array $item) {
+    global $db;
+
+    $results = $db->query("SELECT id,title FROM groups WHERE media_type = '$media_type' AND type = 3 AND type_id = '{$item['collection']}' LIMIT 1");
+    $collection = $db->fetch($results);
+    $db->free($results);
+
+    if (!valid_array($collection)) {
+        return $item['collection'];
+    }
+
+    $col_url = '?page=view_group&group_type=3&media_type=' . $media_type . '&id=' . $collection['id'];
+
+    $collection_link = Html::link(['class' => 'nodecor'], $col_url, $collection['title']);
+    $fcollection = Html::span(['class' => 'fcollection'], $collection_link);
+    return $fcollection;
+}
+
+/* Format names collections to view */
+
+function get_fnames(string $col_type, string $media_type, array $item) {
+    $fnames = '';
+
+    if (empty($item[$col_type])) {
+        return false;
+    }
+
+    $names = explode(',', $item[$col_type]);
+
+    $names_url = '?page=';
+
+    if ($col_type == 'director') {
+        $names_url .= 'view_director';
+    } else if ($col_type == 'cast') {
+        $names_url .= 'view_cast';
+    } else if ($col_type == 'writer') {
+        $names_url .= 'view_writer';
+    } else {
+        return false;
+    }
+    $names_url .= '&media_type=' . $media_type;
+    foreach ($names as $name) {
+        $name_link = Html::link(['class' => 'nodecor'], $names_url . '&name=' . $name, $name . ', ');
+        $fnames .= Html::span(['class' => 'fname'], $name_link);
+    }
+
+    return $fnames;
 }
 
 function mark_masters_views($media_type, &$masters) {

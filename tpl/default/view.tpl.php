@@ -54,24 +54,24 @@
                     <span class="view_genres"><?= $tdata['f_genres'] ?></span>
                     <br/>
                 <?php } ?>
-                <?php if (!empty($tdata['collection'])) { ?>
+                <?php if (!empty($tdata['f_collection'])) { ?>
                     <span><?= $LNG['L_COLLECTION'] ?> :</span>
-                    <span class="view_collection"><?= $tdata['collection'] ?></span>
+                    <span class="view_collection"><?= $tdata['f_collection'] ?></span>
                     <br/>
                 <?php } ?>
-                <?php if (!empty($tdata['director'])) { ?>
+                <?php if (!empty($tdata['f_director'])) { ?>
                     <span><?= $LNG['L_DIRECTOR'] ?> :</span>
-                    <span class="view_director"><?= $tdata['director'] ?></span>
+                    <span class="view_director"><?= $tdata['f_director'] ?></span>
                     <br/>
                 <?php } ?>
-                <?php if (!empty($tdata['cast'])) { ?>
+                <?php if (!empty($tdata['f_cast'])) { ?>
                     <span><?= $LNG['L_CAST'] ?> :</span>
-                    <span class="view_cast"><?= $tdata['cast'] ?></span>
+                    <span class="view_cast"><?= $tdata['f_cast'] ?></span>
                     <br/>
                 <?php } ?>
-                <?php if (!empty($tdata['writer'])) { ?>
+                <?php if (!empty($tdata['f_writer'])) { ?>
                     <span><?= $LNG['L_WRITER'] ?> :</span>
-                    <span class="view_writer"><?= $tdata['writer'] ?></span>
+                    <span class="view_writer"><?= $tdata['f_writer'] ?></span>
                     <br/>
                 <?php } ?>
                 <?php if (!empty($tdata['source'])) { ?>
