@@ -349,6 +349,7 @@ function mediainfo_formated($file) {
 }
 
 function move_file($origin, $destination) {
+    global $log;
     /*
       Rename across partitions fail. We try (for same partition)
       and if fail the file must be  copy to other partition
@@ -360,6 +361,7 @@ function move_file($origin, $destination) {
             if (file_exists($destination) && is_link($destination)) { //link
                 unlink($destination);
             } else if (file_exists($destination)) {
+                $log->error("Cant move file, another file with same path/name exists: " . $destination);
                 return false;
             }
 
