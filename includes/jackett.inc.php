@@ -137,7 +137,7 @@ function jackett_search_media($media_type, $words, $indexer, $categories, $limit
         if ($indexer_disable != '0' && $indexer_disable > time()) {
             return false;
         } else if ($indexer_disable != '0') {
-            $prefs = setPrefsItem($indexer . '_disable', '0', true);
+            $prefs = $prefs->setPrefsItem($indexer . '_disable', '0', true);
         }
     }
     $jackett_url = $cfg['jackett_srv'] . $cfg['jackett_api_path'] . '/indexers/' . $indexer . '/results/torznab/';
