@@ -1,5 +1,8 @@
 ## Latest / News (Relevant)
 
+[16/08] View: links to groups
+[15/08] Display collections: director,cast,writer
+[************ COMMIT **********]
 [14/08] Delete File (current file selected), or Files (all files of movie/show)  in View/Delete. Clean directory if empty. 
         Will delete other remaning files in the directory if directy no contains more media files
 [14/08] Min Size Filter

@@ -15,8 +15,7 @@
     [IMPROVE][VIEW] En View dar opcion para renombrar el archivo al identificado + año. (obviar acentos)
 
 [MED]    
-    [CLI]Update people (cast,writer,director) in masters; donde actualiza masters
-    [IMPROVE] Colecciones: Custom collection, Custom genre, Director, Protagonista
+    [CLI]Update people (cast,writer,director) in masters; donde actualiza masters    
     [IMPROVE] Wanted funciona buscando el dia, deberia comprobar los release torrents cada 6h 
     [IMPROVE] Si se borra manualmente un torrente bajado quedara el bd huerfanos. OPCION ORPHAN. 
         Buscar archivos multimedia en el TORRENT DIR y buscar la forma de determina si coincide con alguno en la base de datos
@@ -30,7 +29,7 @@
     [IMPROVE][NEW] Ordenamiento: Cambiar, si un tracker no actualiza sus torrents en mucho tiempo con el sistema actual siempre apareceran sus ultimos torrents
         en la primera pagina.
     [IMPROVE][WANTED] Options to  show between movies or shows?    
-    [IMPROVE][View] Link in Genres, Collections
+
 [VERY LOW]
     [IMPROVE][WANTED]Track show, option for modify from episode.
     [IMPROVE][INDEX] Responsive
