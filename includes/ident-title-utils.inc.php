@@ -225,8 +225,12 @@ function getMediaType($file_name) {
     if (preg_match('/Temp.+\d{1,2}/i', $file_name)) {
         return 'shows';
     }
-    /* SXX */
-    if (preg_match('/S\d{2}/i', $file_name)) {
+    /* ' SXX ' */
+    if (preg_match('/\sS\d{2}\s/i', $file_name)) {
+        return 'shows';
+    }
+    /* '.SXX.' */
+    if (preg_match('/\.S\d{2}\./i', $file_name)) {
         return 'shows';
     }
     return 'movies';
