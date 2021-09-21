@@ -879,7 +879,7 @@ function tracker_shows($wanted) {
                 foreach ($have_shows as $have_show) {
                     if ($have_show['season'] == $season && $have_show['episode'] == $episode) {
                         unset($list_episodes[$season][$key_episode]);
-                        if (count($list_episodes[$season]) == 0) {
+                        if (valid_array($list_episodes) && count($list_episodes[$season]) == 0) {
                             unset($list_episodes[$season]);
                         }
                         //break;
@@ -891,7 +891,7 @@ function tracker_shows($wanted) {
                 foreach ($items_match as $item_match) {
                     if (($item_match['season'] == $season) && ($item_match['episode'] == $episode)) {
                         unset($list_episodes[$season][$key_episode]);
-                        if (count($list_episodes[$season]) == 0) {
+                        if (valid_array($list_episodes) && count($list_episodes[$season]) == 0) {
                             unset($list_episodes[$season]);
                         }
                         //break;

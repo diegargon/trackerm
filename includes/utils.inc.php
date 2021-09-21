@@ -53,13 +53,25 @@ function set_clean_titles() {
 }
 
 function get_user_ip() {
-    return $_SERVER['REMOTE_ADDR'];
+    /*
+     * SERVER['REMOTE_ADDR'] return real ip instead of internal if use external DNS
+     * FIX: Simple?
+     */
+    $sock = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
+    $ip = false;
+
+    if ($sock !== false) {
+        socket_connect($sock, "8.8.8.8", 53);
+        socket_getsockname($sock, $ip); // $ip passed by reference
+    }
+
+    return $ip;
 }
 
 function is_local_ip() {
     $ip = get_user_ip();
 
-    if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
+    if ($ip === false || filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
         return false;
     } else {
         return true;
