@@ -58,8 +58,8 @@ function getFileTitle($file) {
     $regex .= '(?!WEBRip)'; //WebRip
     $regex .= '(?!Bluray)'; //Bluray
     $regex .= '(?!multi\senglish)'; // multi english
-    $regex .= '(?!S\d{2}E\d{2})'; // SXXEXX
-    $regex .= '(?!S\d{2}\s+E\d{2})'; // SXX EXX
+    $regex .= '(?!S\d{1,2}E\d{2})'; // SXXEXX o SXEXX
+    $regex .= '(?!S\d{1,2}\s+E\d{2})'; // SXX EXX o SX EXX
     $regex .= '(?!3D)'; // 3D
     $regex .= '(?!BRRip)'; // BRRIP
     $regex .= '(?!BDRip)'; // BDRIP
@@ -114,6 +114,15 @@ function getFileEpisode($file_name) {
         return $SE;
     }
 
+    /* FORMAT S1E01 */
+    if (preg_match('/S\d{1}E\d{2}/i', $file_name, $match) == 1) {
+        $matched = trim($match[0]);
+        $SE['season'] = substr($matched, 1, 1);
+        $SE['episode'] = substr($matched, stripos($matched, 'E') + 1);
+
+        return $SE;
+    }
+
     /* FORMAT S01 E01 */
     if (preg_match('/S\d{2}\s+E\d{2}/i', $file_name, $match) == 1) {
         $matched = trim($match[0]);
@@ -126,6 +135,13 @@ function getFileEpisode($file_name) {
     $match = [];
     if (preg_match('/\Cap.(\d+)/i', $file_name, $match) == 1) {
         $SE_MATCH = trim($match[1]);
+        /*
+          if (strlen($SE_MATCH) == 2) {
+          $ses = 1;
+          $epi = substr($SE_MATCH, 0, 2);
+          }
+         *
+         */
         if (strlen($SE_MATCH) == 3) {
             $ses = substr($SE_MATCH, 0, 1);
             $epi = substr($SE_MATCH, 1, 2);
@@ -135,10 +151,12 @@ function getFileEpisode($file_name) {
             $epi = substr($SE_MATCH, 2, 3);
         }
 
-        $SE['season'] = $ses;
-        $SE['episode'] = $epi;
+        if (!empty($ses) && !empty($epi)) {
+            $SE['season'] = $ses;
+            $SE['episode'] = $epi;
 
-        return $SE;
+            return $SE;
+        }
     }
 
     /* FORMAT 1x01 */
@@ -182,11 +200,11 @@ function getFileYear($file_name) {
 
 function getMediaType($file_name) {
     // S01E01
-    if (preg_match('/S\d{2}E\d{2}/i', $file_name)) {
+    if (preg_match('/S\d{1,2}E\d{2}/i', $file_name)) {
         return 'shows';
     }
     // S01 E01
-    if (preg_match('/S\d{2}\s+E\d{2}/i', $file_name)) {
+    if (preg_match('/S\d{1,2}\s+E\d{2}/i', $file_name)) {
         return 'shows';
     }
     // 1x1 01x01
