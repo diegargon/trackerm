@@ -54,18 +54,12 @@ function set_clean_titles() {
 
 function get_user_ip() {
     /*
+     * if we use https://mydomain.com
      * SERVER['REMOTE_ADDR'] return real ip instead of internal if use external DNS
-     * FIX: Simple?
+     * https://192.168.X.X works ok
      */
-    $sock = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
-    $ip = false;
 
-    if ($sock !== false) {
-        socket_connect($sock, "8.8.8.8", 53);
-        socket_getsockname($sock, $ip); // $ip passed by reference
-    }
-
-    return $ip;
+    return $_SERVER['REMOTE_ADDR'];
 }
 
 function is_local_ip() {
