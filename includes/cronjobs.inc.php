@@ -25,12 +25,12 @@ function cronjobs() {
         check_masters_childs_integrity();
         update_collections();
         update_people_empty();
+        hash_missing();
     }
 
     if (($cfg['cron_halfday'] + 21600) < $time_now) {
         $db->update('config', ['cfg_value' => $time_now], ['cfg_key' => ['value' => 'cron_halfday']]);
         update_library_stats();
-        hash_missing();
         //delete from wanted orphans (a orphans is create if user delete the torrent outside trackerm
         delete_direct_orphans();
         $cfg['autofix_mediafiles_perms'] ? fix_permissions() : null;
@@ -69,7 +69,7 @@ function hash_missing() {
     global $db, $log;
 
     foreach (['movies', 'shows'] as $media_type) {
-        $query = $db->query('SELECT id,path FROM library_' . $media_type . ' WHERE file_hash IS \'\' LIMIT 200');
+        $query = $db->query('SELECT id,path FROM library_' . $media_type . ' WHERE file_hash IS NULL OR file_hash IS \'\'');
         $results = $db->fetchAll($query);
 
         $hashlog = 'Hashing missing ' . $media_type;

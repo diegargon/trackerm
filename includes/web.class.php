@@ -142,6 +142,11 @@ class Web {
                     $nfound = [];
                     foreach ($items as $item) {
                         foreach ($view_items as $view_item) {
+                            if (empty($item['file_hash'])) {
+                                $hash = file_hash($item['path']);
+                                $db->updateItemById($library, $item['id'], ['file_hash' => $hash], 'LIMIT 1');
+                                $item['file_hash'] = $hash;
+                            }
                             if ($view_item['file_hash'] == $item['file_hash']) {
                                 $nfound[] = $view_item['id'];
                                 break;
