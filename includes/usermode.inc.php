@@ -11,6 +11,7 @@
 
 require_once('includes/common.inc.php');
 
+session_name('trackerm');
 session_start();
 
 if (!empty($cfg['only_local_net']) && !is_local_ip()) {
