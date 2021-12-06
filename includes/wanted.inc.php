@@ -95,7 +95,9 @@ function wanted_list() {
                 $wanted_item['show_title'] = $wanted_item['title'] . ' ' . $s_episode;
             }
             $odb_item = mediadb_getMediaData($wanted_item['media_type'], $wanted_item['themoviedb_id']);
-            $tdata['odb_item'] = $odb_item;
+            if ($odb_item == false) {
+                continue;
+            }
             $tdata['elink'] = $odb_item['elink'];
 
             ($wanted_item['media_type'] == 'movies') ? $view_type = 'movies_db' : $view_type = 'shows_db';
