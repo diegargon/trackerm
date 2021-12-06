@@ -96,6 +96,7 @@ function wanted_list() {
             }
             $odb_item = mediadb_getMediaData($wanted_item['media_type'], $wanted_item['themoviedb_id']);
             if ($odb_item == false) {
+                //moviedb id no longer exists remove from wanted?
                 continue;
             }
             $tdata['elink'] = $odb_item['elink'];
