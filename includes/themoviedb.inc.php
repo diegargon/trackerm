@@ -337,7 +337,7 @@ function themoviedb_getMediaData($media_type, $id, $force_update = false) {
     }
     $response_item[] = curl_get_tmdb($url);
 
-    if (!isset($response_item['results']) || !valid_array($response_item['results'])) {
+    if (!valid_array($response_item)) {
         $log->err('getMediaData: remote database id ' . $id . ' for ' . $media_type . ' not exists');
         return false;
     }

@@ -181,25 +181,29 @@ function auto_ident(string $media_type, array $ids) {
                 $db_item_title = clean_title($predictible_title);
                 if ($coincidence_title == $db_item_title) {
                     /*
-                     * we not obtain with mediadb_search the full media data, that why we ask again with getMediaData
+                     * we do not obtain with mediadb_search the full media data, that why we ask again with getMediaData
                      * and force update
                      */
                     $coincidence = mediadb_getMediaData($media_type, $coincidence['themoviedb_id'], 1);
-                    submit_ident($media_type, $coincidence, $id);
-                    $found = 1;
-                    break;
+                    if (valid_array($coincidence)) {
+                        submit_ident($media_type, $coincidence, $id);
+                        $found = 1;
+                        break;
+                    }
                 }
             }
             //If strict is not set and cant ident exact, identify with the first Result
             if (!$found && !$cfg['auto_ident_strict']) {
                 $found = 1;
                 /*
-                 * we not obtain with mediadb_search the full media data, that why we ask again with getMediaData
+                 * we do not obtain with mediadb_search the full media data, that why we ask again with getMediaData
                  * and force update
                  */
                 $coincidence = mediadb_getMediaData($media_type, $search_results[0]['themoviedb_id'], true);
-                submit_ident($media_type, $coincidence, $id);
-                unset($ids[$key_id]);
+                if (valid_array($coincidence)) {
+                    submit_ident($media_type, $coincidence, $id);
+                    unset($ids[$key_id]);
+                }
             }
         } else {
             $log->debug("Not found any results on tmdb for $predictible_title");
