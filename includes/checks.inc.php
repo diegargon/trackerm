@@ -17,27 +17,27 @@ function do_checks() {
         echo "ERROR: trackerm ins't configure please copy & rename config/config.min.php to /etc/trackerm.conf and fill all fields\n";
     }
     if (empty($cfg['db_api_token'])) {
-        echo "ERROR: You must set in /etc/trackrm.conf db_api_token with your themoviedb api key\n";
+        echo "ERROR: You must set in /etc/trackerm.conf db_api_token with your themoviedb api key\n";
         exit();
     }
     if (empty($cfg['jackett_key'])) {
-        echo "ERROR: You must set in /etc/trackrm.conf  jackett_key with your jackett api key\n";
+        echo "ERROR: You must set in /etc/trackerm.conf  jackett_key with your jackett api key\n";
         exit();
     }
     if (empty($cfg['jackett_srv'])) {
-        echo "ERROR: You must set in /etc/trackrm.conf jackett_srv with you http://ip:port hackett server\n";
+        echo "ERROR: You must set in /etc/trackerm.conf jackett_srv with you http://ip:port hackett server\n";
         exit();
     }
     if (empty($cfg['LANG'])) {
-        echo "ERROR: You must set in /etc/trackrm.conf  LANG (only supported languages es-ES/en-En) \n";
+        echo "ERROR: You must set in /etc/trackerm.conf  LANG (only supported languages es-ES/en-En) \n";
         exit();
     }
     if (empty($cfg['TORRENT_FINISH_PATH']) || !is_dir($cfg['TORRENT_FINISH_PATH'])) {
-        echo "ERROR: You must set in /etc/trackrm.conf  TORRENT_FINISH_PATH to where torrent put your files (separate from temporal directory) \n";
+        echo "ERROR: You must set in /etc/trackerm.conf  TORRENT_FINISH_PATH to where torrent put your files (separate from temporal directory) \n";
         exit();
     }
     if (empty($cfg['ROOT_PATH']) || !is_dir($cfg['ROOT_PATH'])) {
-        echo "ERROR: You must set in /etc/trackrm.conf p ROOT_PATH \n";
+        echo "ERROR: You must set in /etc/trackerm.conf p ROOT_PATH \n";
         exit();
     }
     if (!is_writable($cfg['ROOT_PATH'] . '/cache')) {
