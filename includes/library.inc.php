@@ -506,13 +506,13 @@ function get_view_data($media_type) {
     $master_ids = [];
     foreach ($view_master_matchs as $vmm) {
         $views_items[$vmm['id']]['total_items'] = $vmm['total_items'];
+        $views_items[$vmm['id']]['view_items'] = 0;
         $master_ids[] = $vmm['id'];
     }
     /* Get Files of master ids */
     $view_files_matchs = $db->selectMultiple($library, 'master', $master_ids, 'id,master,file_hash');
 
     foreach ($view_files_matchs as $vfm) {
-        empty($views_items[$vfm['master']]['view_items']) ? $views_items[$vfm['master']]['view_items'] = 0 : null;
         $views_items[$vfm['master']]['master'] = $vfm['master'];
         foreach ($views_data as $view_data) {
             /* if we have a  file hashes coincidence we see that file */
