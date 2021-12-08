@@ -328,6 +328,9 @@ function submit_ident(string $media_type, array $oitem, $id) {
 
     if (valid_array($media_master)) {
         if (valid_array($media_in_library)) {
+            if ($media_in_library['master'] == $media_master['id']) {
+                return false;
+            }
             $total_items = $media_master['total_items'] + 1;
             $total_size = $media_master['total_size'] + $media_in_library['size'];
 
@@ -352,13 +355,13 @@ function submit_ident(string $media_type, array $oitem, $id) {
             $new_item = $oitem;
             $new_item['total_items'] = 1;
             $new_item['total_size'] = $media_in_library['size'];
-            $new_item['items_updated'] = time();
+            $new_item['items_updated'] = $media_in_library['created'];
+            $new_item['created'] = $media_in_library['created'];
             unset($new_item['id']);
             unset($new_item['ilink']);
             unset($new_item['elink']);
             unset($new_item['in_library']);
             unset($new_item['added']);
-            unset($new_item['created']);
             unset($new_item['updated']);
 
             $db->insert('library_master_' . $media_type, $new_item);

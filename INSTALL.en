@@ -46,8 +46,8 @@ trackerm will track your transmission movie/shows downloads and automatically mo
 
     Support RAR files. Will warn if the file is encrypt for unrar it manulally.
 
-    Basic line for /etc/crontab (every 15 minuts): 
-        */15 *   * * *   root    /usr/bin/php  /path/to/trackerm-cli.php
+    Basic line for /etc/crontab (every 5 minuts): 
+        */5 *   * * *   root    /usr/bin/php  /path/to/trackerm-cli.php
 
     You can place trackerm-cli where you do want and change the user if you set the right permissions. Remember look at the permission for all directorys where trackerm will work. 
     If you move the trackerm-cli file out of his original place remember each time you upgrade trackerm you must move and overwrite the file.
@@ -60,6 +60,8 @@ Apache+Php7 (or similar), Jacket, Transmission, Composer, account+api key themov
 
 ## Installation
     * Copy all files from to a destination directory (AKA: dest). Copy config.min.php to /etc/trackerm.conf and fill all fields
+
+    * Install curl php-curl php-mbstring php-xml
 
     * Installl composer.
 

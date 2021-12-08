@@ -841,7 +841,7 @@ function page_login() {
                 $userid = $user->checkUser($username, $password);
                 if (!empty($userid) && $userid > 0) {
                     $user->setUser($userid);
-                    header("Location: {$cfg['REL_PATH']} ");
+                    header("Location: {$cfg['REL_PATH']}/?page= ");
                     exit();
                 }
             }
@@ -870,7 +870,7 @@ function page_logout() {
     ($_COOKIE) ? setcookie("sid", null, -1) : null;
     session_regenerate_id();
     session_destroy();
-    header("Location: {$cfg['REL_PATH']} ");
+    header("Location: {$cfg['REL_PATH']}/?page=login ");
     exit(0);
 }
 

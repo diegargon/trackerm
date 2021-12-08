@@ -26,7 +26,8 @@ $cfg['TMDB_LANG'] = 'en-EN';
 // Full path where trackerm reside ex: /var/www/html/trackerm
 $cfg['ROOT_PATH'] = '';
 
-// Relative path (Webserver) where trackerm reside ex: /trackerm for http://mydomain.com/trackerm
+// Relative path (Webserver) where trackerm reside ex: /trackerm for http://mydomain/trackerm
+// Empty for http//mydomain/
 $cfg['REL_PATH'] = '/trackerm';
 
 // Your library path (the first element (0) is where trackerm move the new content)

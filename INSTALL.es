@@ -41,6 +41,7 @@ Apache+Php7+sqlite3 , Jacket, Transmission, Composer, cuenta+api key themoviedb.
     * Copiar los archivos de src a la carpeta destino (AKA: dest)
     * Copia el archivo config.min.php a /etc/tracker.conf y rellenalo, todo los campos son necesarios
 
+    * Instalar curl php-curl php-mbstring php-xml
     * Instalar composer si no lo teneis, hay guias pero basicamente 
 
         $ curl -sS https://getcomposer.org/installer -o composer-setup.php
@@ -81,8 +82,8 @@ Apache+Php7+sqlite3 , Jacket, Transmission, Composer, cuenta+api key themoviedb.
         parado, lo movera y borrara el torrent y otros archivos residuales de la descarga, en el segundo caso, creara un enlace simbolico para poder acceder al archivo 
         desde tu libreria hasta que sea parado o pare de "servirse" el archivo, en cuyo caso se movera.
 
-    La linea basica para ejecutar las tareas automaticas  (ejemplo cada 15 minutos) es la siguiente (/etc/crontab)
-    */15 *   * * *   root    /usr/bin/php  /path/to/trackerm-cli.php
+    La linea basica para ejecutar las tareas automaticas  (ejemplo cada 5 minutos) es la siguiente (/etc/crontab)
+    */5 *   * * *   root    /usr/bin/php  /path/to/trackerm-cli.php
     Puedes poner trackerm-cli.php en el directorio que quieras y cambiar de usuario si este tiene los permisos necesarios para las carpetas relacionadas. Si lo mueve
     recuerde hacerlo siempre que actualice trackerm.
 

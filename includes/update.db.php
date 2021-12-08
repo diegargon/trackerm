@@ -75,8 +75,8 @@ function update_v16tov17() {
         $media = $db->fetchAll($result);
         foreach ($media as $item) {
             if (empty($item['updated'])) {
-                $updated['items_updated'] = time();
-                $updated['updated'] = time();
+                $updated['items_updated'] = date('Y-m-d H:i:s');
+                $updated['updated'] = date('Y-m-d H:i:s');
             } else {
                 $updated['items_updated'] = $item['updated'];
             }

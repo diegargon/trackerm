@@ -1,6 +1,8 @@
 [TODO]
 
 [HIGH]
+    [REV] Permisos, revisar que el modo web no requiera escribir MOVIES/SHOWS y eliminar check
+    [REV] trackercli --check , comprobaciones de que puede escribir y demas.
     [IMPROVE] Masters shows al meter un episodio actualiza master ?¿
     [FIX] Si no hay espacio en torrent temp transmission no mueve pero para trackerm consta que esta finalizado y intenta enlazarlo pero sige en temp no en 
     finalize/Ultimo.    

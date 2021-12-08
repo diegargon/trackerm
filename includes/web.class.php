@@ -36,10 +36,9 @@ class Web {
 
         if (empty($req_page) && $user->getId() > 0) {
             $index_page = trim($prefs->getPrefsItem('index_page'));
-            if (!empty($index_page) && $index_page != "index") {
-                header("Location: {$cfg['REL_PATH']}/?page=$index_page");
-                exit();
-            }
+            (empty($index_page)) ? $index_page = 'index' : null;
+            header("Location: {$cfg['REL_PATH']}/?page=$index_page");
+            exit();
         }
         $valid_pages = ['index', 'library', 'news', 'tmdb', 'torrents', 'view', 'view_group', 'view_genres', 'view_director', 'view_cast', 'view_writer', 'wanted', 'identify',
             'download', 'localplayer', 'identify', 'download', 'transmission', 'config', 'login', 'logout'];

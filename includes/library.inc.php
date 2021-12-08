@@ -51,7 +51,7 @@ function show_my_media($media_type) {
     $views_items = get_view_data($media_type);
 
     /* Build a list of all master ids with all files "seen". We need for ignore on view mode */
-    if ($prefs->getPrefsItem('view_mode')) {
+    if ($prefs->getPrefsItem('view_mode') && valid_array($views_items)) {
         $ignore_master_ids = '';
         foreach ($views_items as $key_view_item => $view_item) {
             if (($view_item['total_items'] - $view_item['view_items']) <= 0) {
