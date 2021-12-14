@@ -339,6 +339,9 @@ function jackett_get_categories($categories) {
     $cats = [];
 
     foreach ($categories as $category) {
+        if (isset($category['id'])) {
+            $cats[] = $category['id'];
+        }
         if (isset($category['@attributes'])) {
             if (isset($category['@attributes']['id'])) {
                 $cats[] = $category['@attributes']['id'];
