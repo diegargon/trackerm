@@ -9,6 +9,21 @@
  */
 !defined('IN_WEB') ? exit : true;
 
+function is_locked() {
+
+    if (@symlink("/proc/" . getmypid(), CLI_LOCK) !== FALSE) {
+        return false;
+    }
+
+    if (is_link(CLI_LOCK) && !is_dir(CLI_LOCK)) {
+        unlink(CLI_LOCK);
+
+        return is_locked();
+    }
+
+    return true;
+}
+
 function transmission_scan() {
     global $log;
 

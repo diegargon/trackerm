@@ -9,6 +9,7 @@
  */
 define('IN_WEB', true);
 define('IN_CLI', true);
+define('CLI_LOCK', '/var/run/trackerm.lock');
 
 if (file_exists('/etc/trackerm.conf')) {
     require_once('/etc/trackerm.conf');
@@ -24,24 +25,23 @@ require_once('includes/climode.inc.php');
 isset($argv[1]) && $argv[1] == '-console' ? $log->setConsole(true) : null;
 $log->info("TrackerM v{$cfg['version']}.{$cfg['db_version']}" . ' Starting trackerm automatic service (' . date("h:i") . ')');
 
-if (($c_blocker = $prefs->getPrefsItem('cli_blocker')) && $c_blocker <= 3) {
-    $prefs->setPrefsItem('cli_blocker', ++$c_blocker);
-    $log->warning("Fail starting TAS reason: blocked ($c_blocker)");
-
-    return false;
-}
 if (!valid_object($trans)) {
     $log->err("Starting TAS fail: Fail Transmission connection");
     exit(1);
 }
 
+if (is_locked()) {
+    $log->warning("CLI Locked");
+    die();
+} else {
+    register_shutdown_function('unlink', CLI_LOCK);
+}
+
 transmission_scan();
-$prefs->setPrefsItem('cli_blocker', 1);
 wanted_work();
 cronjobs();
 rebuild('movies', $cfg['MOVIES_PATH']);
 sleep(1);
 rebuild('shows', $cfg['SHOWS_PATH']);
-$prefs->setPrefsItem('cli_blocker', 0);
 
 $log->info("trackerm automatic service finish...");
