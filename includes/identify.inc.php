@@ -19,6 +19,9 @@ function ident_by_already_have_show(array $media_db, array &$ids) {
     $log->debug("Called ident_by_already_have_show");
     foreach ($ids as $id_key => $id) {
         $item = $db->getItemById('library_shows', $id);
+        if (!valid_array($item)) {
+            continue;
+        }
         foreach ($media_db as $item_db) {
             $predictible_title_db = getFileTitle($item_db['file_name']);
             $predictible_title_ident = getFileTitle($item['file_name']);
