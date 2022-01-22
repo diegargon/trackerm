@@ -128,6 +128,12 @@ function cache_img($img_url) {
     }
 
     $file_name = basename($img_url);
+    //sometimes jackett not send a direct  link get name from  ?path=354252&file=poster  if exists
+    //file name too long.. simple cut...
+    $alt_file_name = get_string_between($file_name, 'path=', '&file=poster');
+    if (!empty($alt_file_name)) {
+        $file_name = cut_string($alt_file_name, 64);
+    }
     $img_path = $path . '/' . $file_name;
 
     if (file_exists($img_path)) {
