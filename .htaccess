@@ -3,3 +3,12 @@ Require all denied
 </Files>
 #Require ip 192.168.1.0/24
 #Require ip 192.168.2.0/24
+
+
+#<ifModule mod_expires.c>
+#ExpiresActive on
+#ExpiresByType image/jpg "access plus 1 month"
+#ExpiresByType image/jpeg "access plus 1 month"
+#ExpiresByType image/gif "access plus 1 month"
+#ExpiresByType image/png "access plus 1 month"
+#</ifModule>
