@@ -248,11 +248,12 @@ function MovieJob($item, $linked = false) {
                 }
             } else {
                 $log_job .= "[Status: Linking {$item['tid']} : {$item['hashString']}]";
-                linking_media($valid_file, $final_dest_path);
-                $new_media .= basename($final_dest_path) . "\n";
+                if (linking_media($valid_file, $final_dest_path)) {
+                    $new_media .= basename($final_dest_path) . "\n";
+                    !empty($new_media) ? notify_mail(['subject' => $LNG['L_NEW_MEDIA_AVAILABLE'], 'msg' => $new_media]) : null;
+                }
             }
         }
-        !empty($new_media) ? notify_mail(['subject' => $LNG['L_NEW_MEDIA_AVAILABLE'], 'msg' => $new_media]) : null;
     } else {
         $log_job .= ': No valid files found on ' . $item['tid'] . ':' . $item['hashString'];
     }
@@ -375,11 +376,12 @@ function ShowJob($item, $linked = false) {
                 }
             } else {
                 $log_job .= "[Status: Linking {$item['tid']} : {$item['hashString']}]";
-                linking_media($valid_file, $final_dest_path);
-                $new_media .= basename($final_dest_path) . "\n";
+                if (linking_media($valid_file, $final_dest_path)) {
+                    $new_media .= basename($final_dest_path) . "\n";
+                    !empty($new_media) ? notify_mail(['subject' => $LNG['L_NEW_MEDIA_AVAILABLE'], 'msg' => $new_media]) : null;
+                }
             }
         }
-        !empty($new_media) ? notify_mail(['subject' => $LNG['L_NEW_MEDIA_AVAILABLE'], 'msg' => $new_media]) : null;
     } else {
         $log_job .= ': No valid files found on ' . $item['tid'] . ':' . $item['hashString'];
     }
@@ -514,6 +516,10 @@ function move_media($valid_file, $final_dest_path) {
 function linking_media($valid_file, $final_dest_path) {
     global $cfg, $log, $LNG;
 
+    if (!file_exists($valid_file)) {
+        $log->err("Linked failed, file not exists:" . $valid_file);
+        return false;
+    }
     if (symlink($valid_file, $final_dest_path)) {
         if (!empty($cfg['files_usergroup'])) {
             if (file_exists($valid_file)) {
