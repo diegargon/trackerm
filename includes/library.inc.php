@@ -88,7 +88,11 @@ function show_my_media($media_type) {
             }
         }
     }
-
+    //TODO: round old reg remove in the future
+    foreach ($media as $kmedia => $vmedia) {
+        $media[$kmedia]['rating'] = round($vmedia['rating'], 1);
+        $media[$kmedia]['popularity'] = round($vmedia['popularity'], 1);
+    }
     $topt['view_type'] = $media_type . '_library';
     if (valid_array($media)) {
         $topt['search_type'] = $media_type;
