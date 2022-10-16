@@ -112,7 +112,7 @@ function where_filters() {
 }
 
 function show_cached_torrents($media_type) {
-    global $prefs, $db;
+    global $frontend, $prefs, $db, $LNG;
 
     $npage = Filter::getInt('npage');
     $search_type = Filter::getString('search_type');
@@ -133,7 +133,7 @@ function show_cached_torrents($media_type) {
     $npage == 1 ? $start = 0 : $start = ($npage - 1) * $n_results;
 
     $where = where_filters();
-    $topt['num_table_rows'] = $db->qSingle("SELECT COUNT(*) FROM $jackett_db $where");
+    $topt['num_table_objs'] = $db->qSingle("SELECT COUNT(*) FROM $jackett_db $where");
     $query = "SELECT * FROM $jackett_db $where ORDER BY id DESC LIMIT $start,$n_results ";
 
     $results = $db->query($query);
@@ -143,6 +143,8 @@ function show_cached_torrents($media_type) {
     }
     $topt['view_type'] = $media_type . '_torrent';
     $topt['search_type'] = $media_type;
+    $topt['media_type'] = $media_type;
+    $topt['head'] = $LNG['L_' . strtoupper($media_type)];
 
-    return buildTable('L_' . strtoupper($media_type), $media, $topt);
+    return $frontend->buildTable($media, $topt);
 }

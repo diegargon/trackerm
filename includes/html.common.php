@@ -29,7 +29,7 @@ function buildTable($head, $db_ary, $topt = null) {
     }
 
     if (!isset($topt['no_pages'])) {
-        empty($topt['num_table_rows']) ? $npages = count($db_ary) : $npages = $topt['num_table_rows'];
+        empty($topt['num_table_objs']) ? $npages = count($db_ary) : $npages = $topt['num_table_objs'];
         $page .= pager($npage, $npages, $topt);
     }
     $page .= '</div>';
@@ -38,7 +38,7 @@ function buildTable($head, $db_ary, $topt = null) {
     $num_col_items = 0;
     $num_items = 0;
 
-    if (isset($topt['num_table_rows']) ||
+    if (isset($topt['num_table_objs']) ||
             $npage == 1 ||
             (isset($topt['search_type']) && isset($_GET['search_type']) && ($_GET['search_type'] != $topt['search_type']))
     ) {

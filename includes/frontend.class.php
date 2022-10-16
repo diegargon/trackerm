@@ -234,12 +234,28 @@ class FrontEnd {
     function buildTable($items, $opt) {
         global $prefs;
 
+        $npage = Filter::getInt('npage');
+        empty($npage) ? $npage = 1 : null;
+
         $html_items = '';
         $items_rows = '';
         $page = '';
         $columns = $prefs->getPrefsItem('tresults_columns');
-        $i = 1;
 
+        if (!isset($opt['no_pages'])) {
+            empty($opt['num_table_objs']) ? $npages = count($items) : $npages = $opt['num_table_objs'];
+            $pager_opt['media_type'] = $opt['media_type'];
+            $pager_opt['npage'] = $npage;
+            $pager_opt['nitems'] = $npages;
+            if (!empty($opt['get_params'])) {
+                $pager_opt['get_params'] = $opt['get_params'];
+            }
+            $page .= $this->getPager($pager_opt);
+            //$page .= pager($npage, $npages, $opt);
+            //var_dump($npages . $page);
+        }
+
+        $i = 1;
         foreach ($items as $item) {
             $html_items .= html::div(['class' => 'divTableCell'], $this->buildItem($item, $opt));
             if ($i == $columns) {
@@ -324,10 +340,16 @@ class FrontEnd {
         $pages_links = '';
         $columns = $prefs->getPrefsItem('tresults_columns');
         $rows = $prefs->getPrefsItem('tresults_rows');
-        $page = Filter::getString('page');
         $items_per_page = $columns * $rows;
+        $page = Filter::getString('page');
+        $search_type = Filter::getString('search_type');
         $num_pages = ceil($opt['nitems'] / $items_per_page);
-        $npage = $opt['npage'];
+
+        if ($search_type == $opt['media_type']) {
+            $npage = $opt['npage'];
+        } else {
+            $npage = 1;
+        }
         $inpage = '';
 
         $get_params['page'] = $page;

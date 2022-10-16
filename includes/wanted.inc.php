@@ -95,10 +95,13 @@ function wanted_list() {
                 $wanted_item['show_title'] = $wanted_item['title'] . ' ' . $s_episode;
             }
             $odb_item = mediadb_getMediaData($wanted_item['media_type'], $wanted_item['themoviedb_id']);
+
             if ($odb_item == false) {
                 //moviedb id no longer exists remove from wanted?
                 continue;
             }
+            !empty($odb_item['poster']) ? $tdata['poster'] = $odb_item['poster'] : null;
+
             $tdata['elink'] = $odb_item['elink'];
 
             ($wanted_item['media_type'] == 'movies') ? $view_type = 'movies_db' : $view_type = 'shows_db';
@@ -111,6 +114,8 @@ function wanted_list() {
 
             $wanted_item['media_type'] == 'movies' ? $tdata['lang_media_type'] = $LNG['L_MOVIES'] : $tdata['lang_media_type'] = $LNG['L_SHOWS'];
 
+            //var_dump($wanted_item);
+            //var_dump($tdata);
             if ($wanted_item['track_show'] == 1) {
                 $wanted_list_tmp_data['TRACKING'] .= $frontend->getTpl('wanted-item', array_merge($wanted_item, $tdata));
             } else if ($wanted_item['wanted_status'] == 4) {

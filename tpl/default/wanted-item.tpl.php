@@ -16,7 +16,7 @@
         <?php } else { ?>
             <div class="wanted_item_hidden">
             <?php } ?>
-            <div class="wanted_poster"><img alt="poster" src="<?= cache_img($tdata['odb_item']['poster']) ?>"></div>
+            <div class="wanted_poster"><img alt="poster" src="<?= cache_img($tdata['poster']) ?>"></div>
         </div>
 
         <div class="wanted_item_minimal">

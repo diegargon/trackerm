@@ -452,7 +452,7 @@ function page_news() {
 }
 
 function page_tmdb() {
-    global $cfg, $frontend, $prefs;
+    global $cfg, $frontend, $prefs, $LNG;
 
     (!empty($_GET['search_movies'])) ? $search_movies = Filter::getUtf8('search_movies') : $search_movies = '';
     (!empty($_GET['search_shows'])) ? $search_shows = Filter::getUtf8('search_shows') : $search_shows = '';
@@ -466,14 +466,16 @@ function page_tmdb() {
         $movies = mediadb_searchMovies(trim($search_movies));
         $topt['search_type'] = 'movies';
         $topt['view_type'] = 'movies_db';
-        !empty($movies) ? $page_tmdb .= buildTable('L_DB', $movies, $topt) : null;
+        $topt['head'] = $LNG['L_DB'];
+        !empty($movies) ? $page_tmdb .= $frontend->buildTable($movies, $topt) : null;
     }
 
     if (!empty($search_shows)) {
         $shows = mediadb_searchShows(trim($search_shows));
         $topt['search_type'] = 'shows';
         $topt['view_type'] = 'shows_db';
-        !empty($shows) ? $page_tmdb .= buildTable('L_DB', $shows, $topt) : null;
+        $topt['head'] = $LNG['L_DB'];
+        !empty($shows) ? $page_tmdb .= $frontend->buildTable($shows, $topt) : null;
     }
     if (empty($_GET['search_movies']) && empty($_GET['search_shows']) && !empty($prefs->getPrefsItem('show_trending'))) {
         $topt['no_pages'] = 1;
@@ -481,11 +483,14 @@ function page_tmdb() {
 
         if ($cfg['want_movies']) {
             $topt['view_type'] = 'movies_db';
-            $page_tmdb .= buildTable('L_TRENDING_MOVIES', $results['movies'], $topt);
+            $topt['head'] = $LNG['L_TRENDING_MOVIES'];
+            $page_tmdb .= $frontend->buildTable($results['movies'], $topt);
         }
         if ($cfg['want_shows']) {
             $topt['view_type'] = 'shows_db';
-            $page_tmdb .= buildTable('L_TRENDING_SHOWS', $results['shows'], $topt);
+            $topt['head'] = $LNG['L_TRENDING_SHOWS'];
+
+            $page_tmdb .= $frontend->buildTable($results['shows'], $topt);
         }
     }
 
@@ -494,11 +499,13 @@ function page_tmdb() {
         $results = mediadb_getPopular();
         if ($cfg['want_movies']) {
             $topt['view_type'] = 'movies_db';
-            $page_tmdb .= buildTable('L_POPULAR_MOVIES', $results['movies'], $topt);
+            $topt['head'] = $LNG['L_POPULAR_MOVIES'];
+            $page_tmdb .= $frontend->buildTable($results['movies'], $topt);
         }
         if ($cfg['want_shows']) {
             $topt['view_type'] = 'shows_db';
-            $page_tmdb .= buildTable('L_POPULAR_SHOWS', $results['shows'], $topt);
+            $topt['head'] = $LNG['L_POPULAR_SHOWS'];
+            $page_tmdb .= $frontend->buildTable($results['shows'], $topt);
         }
     }
 
@@ -506,21 +513,58 @@ function page_tmdb() {
         $topt['no_pages'] = 1;
         $results = mediadb_getTodayShows();
         $topt['view_type'] = 'shows_db';
-        $page_tmdb .= buildTable('L_TODAY_SHOWS', $results['shows'], $topt);
+        $topt['head'] = $LNG['L_TODAY_SHOWS'];
+        $page_tmdb .= $frontend->buildTable($results['shows'], $topt);
     }
     return $page_tmdb;
 }
 
 function page_torrents() {
-    global $frontend, $prefs;
+    global $frontend, $prefs, $LNG;
 
-    (!empty($_GET['search_movies_torrents'])) ? $search_movies_torrents = Filter::getUtf8('search_movies_torrents') : $search_movies_torrents = '';
-    (!empty($_GET['search_shows_torrents'])) ? $search_shows_torrents = Filter::getUtf8('search_shows_torrents') : $search_shows_torrents = '';
+    $topt = [];
+    $search_type = Filter::getString('search_type');
+    $columns = $prefs->getPrefsItem('tresults_columns');
+    $rows = $prefs->getPrefsItem('tresults_rows');
+    $items_per_page = $columns * $rows;
+
+    $npage = Filter::getInt('npage');
+    empty($npage) ? $npage = 1 : null;
+
+    if (!empty($_GET['search_movies_torrents'])) {
+        $search_movies_torrents = Filter::getUtf8('search_movies_torrents');
+        $topt['get_params']['search_movies_torrents'] = $search_movies_torrents;
+        $media_type = 'movies';
+    } else {
+        $search_movies_torrents = '';
+        $media_type = 'movies';
+    }
+
+    if (!empty($_GET['search_shows_torrents'])) {
+        $search_shows_torrents = Filter::getUtf8('search_shows_torrents');
+        $topt['get_params']['search_shows_torrents'] = $search_shows_torrents;
+        $media_type = 'movies';
+    } else {
+        $search_shows_torrents = '';
+        $media_type = 'movies';
+    }
 
     $tdata['search_movies_word'] = $search_movies_torrents;
     $tdata['search_shows_word'] = $search_shows_torrents;
 
     $page_torrents = $frontend->getTpl('page_torrents', $tdata);
+
+    if (!empty($search_type) && $search_type == 'movies') {
+        $jump_x_movies_entrys = ($items_per_page * $npage) - $items_per_page;
+    } else {
+        $jump_x_movies_entrys = 0;
+    }
+
+    if (!empty($search_type) && $search_type == 'shows') {
+        $jump_x_shows_entrys = ($items_per_page * $npage) - $items_per_page;
+    } else {
+        $jump_x_shows_entrys = 0;
+    }
 
     if (!empty($search_movies_torrents)) {
         $search['words'] = trim($search_movies_torrents);
@@ -537,7 +581,11 @@ function page_torrents() {
             $m_results = mix_media_res($m_results);
             $topt['view_type'] = 'movies_torrent';
             $topt['search_type'] = 'movies';
-            $page_torrents .= buildTable('L_TORRENT', $m_results, $topt);
+            $topt['media_type'] = 'movies';
+            $topt['head'] = $LNG['L_TORRENT'] . ':' . $LNG['L_MOVIES'];
+            $topt['num_table_objs'] = count($m_results);
+            $m_results = array_slice($m_results, $jump_x_movies_entrys, $items_per_page);
+            $page_torrents .= $frontend->buildTable($m_results, $topt);
         } else {
             $box_msg['title'] = 'L_TORRENT';
             $box_msg['body'] = 'L_NOTHING_FOUND';
@@ -560,7 +608,12 @@ function page_torrents() {
             $m_results = mix_media_res($m_results);
             $topt['view_type'] = 'shows_torrent';
             $topt['search_type'] = 'shows';
-            $page_torrents .= buildTable('L_TORRENT', $m_results, $topt);
+            $topt['media_type'] = 'shows';
+            $topt['num_table_objs'] = count($m_results);
+            $topt['head'] = $LNG['L_TORRENT'] . ':' . $LNG['L_SHOWS'];
+            $m_results = array_slice($m_results, $jump_x_shows_entrys, $items_per_page);
+
+            $page_torrents .= $frontend->buildTable($m_results, $topt);
         } else {
             $box_msg['title'] = 'L_TORRENT';
             $box_msg['body'] = 'L_NOTHING_FOUND';

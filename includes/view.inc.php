@@ -135,21 +135,45 @@ function view() {
 }
 
 function view_extra_movies($item, $opt = null) {
-    global $frontend;
+    global $frontend, $LNG, $prefs;
 
     $id = Filter::getInt('id');
     $page = Filter::getString('page');
     $view_type = Filter::getString('view_type');
     $title = getFileTitle($item['title']);
+    $search_type = Filter::getString('search_type');
     (!empty($_GET['search_movies_db'])) ? $stitle = trim(Filter::getUtf8('search_movies_db')) : $stitle = $title;
     $stitle = preg_replace('/\s\d{4}/', '', $stitle);
+
+    $columns = $prefs->getPrefsItem('tresults_columns');
+    $rows = $prefs->getPrefsItem('tresults_rows');
+    $items_per_page = $columns * $rows;
+
+    $npage = Filter::getInt('npage');
+    empty($npage) ? $npage = 1 : null;
+
+    if (!empty($search_type)) {
+        $jump_x_entrys = ($items_per_page * $npage) - $items_per_page;
+    } else {
+        $jump_x_entrys = 0;
+    }
 
     $extra = $frontend->getTpl('view_extra_movies', ['page' => $page, 'id' => $id, 'view_type' => $view_type, 'stitle' => $stitle]);
 
     if (isset($_GET['more_movies']) || (!empty($opt['auto_show_db']) && !isset($_GET['more_torrents']))) {
         $movies = mediadb_searchMovies($stitle);
-        $opt['view_type'] = 'movies_db';
-        !empty($movies) ? $extra .= buildTable('L_DB', $movies, $opt) : null;
+        if (!empty($movies)) {
+            $opt['view_type'] = 'movies_db';
+            $opt['head'] = $LNG['L_DB'];
+            $opt['media_type'] = 'movies';
+            $opt['num_table_objs'] = count($movies);
+            $opt['get_params']['id'] = $id;
+            $opt['get_params']['view_type'] = 'movies_torrent';
+            $opt['get_params']['search_movies_db'] = $stitle;
+            $opt['get_params']['more_movies'] = 1;
+            $movies = array_slice($movies, $jump_x_entrys, $items_per_page);
+            !empty($movies) ? $extra .= $frontend->buildTable($movies, $opt) : null;
+        }
     }
 
     if (isset($_GET['more_torrents']) || (!empty($opt['auto_show_torrents']) && !isset($_GET['more_movies']))) {
@@ -157,9 +181,18 @@ function view_extra_movies($item, $opt = null) {
         $m_results = search_media_torrents('movies', $search, 'L_TORRENT');
         if (valid_array($m_results)) {
             $m_results = mix_media_res($m_results);
-            $topt['view_type'] = 'movies_torrent';
-            $topt['media_type'] = 'movies';
-            $extra .= buildTable('L_TORRENT', $m_results, $topt);
+            if (!empty($m_results)) {
+                $topt['view_type'] = 'movies_torrent';
+                $topt['media_type'] = 'movies';
+                $topt['head'] = $LNG['L_TORRENT'];
+                $topt['num_table_objs'] = count($m_results);
+                $topt['get_params']['id'] = $id;
+                $topt['get_params']['view_type'] = 'movies_torrent';
+                $topt['get_params']['search_movies_db'] = $stitle;
+                $topt['get_params']['more_torrents'] = 1;
+                $m_results = array_slice($m_results, $jump_x_entrys, $items_per_page);
+                $extra .= $frontend->buildTable($m_results, $topt);
+            }
         } else {
             $extra .= $frontend->msgBox(['title' => 'L_TORRENT', 'body' => 'L_NOTHING_FOUND']);
         }
@@ -169,20 +202,44 @@ function view_extra_movies($item, $opt = null) {
 }
 
 function view_extra_shows($item, $opt) {
-    global $frontend;
+    global $frontend, $prefs, $LNG;
 
     $id = Filter::getInt('id');
     $page = Filter::getString('page');
     $view_type = Filter::getString('view_type');
     $title = getFileTitle($item['title']);
     (!empty($_GET['search_shows_db'])) ? $stitle = trim(Filter::getString('search_shows_db')) : $stitle = $title;
+    $search_type = Filter::getString('search_type');
+
+    $npage = Filter::getInt('npage');
+    empty($npage) ? $npage = 1 : null;
+
+    $columns = $prefs->getPrefsItem('tresults_columns');
+    $rows = $prefs->getPrefsItem('tresults_rows');
+    $items_per_page = $columns * $rows;
+
+    if (!empty($search_type)) {
+        $jump_x_entrys = ($items_per_page * $npage) - $items_per_page;
+    } else {
+        $jump_x_entrys = 0;
+    }
 
     $extra = $frontend->getTpl('view_extra_shows', ['page' => $page, 'id' => $id, 'view_type' => $view_type, 'stitle' => $stitle]);
 
     if (isset($_GET['more_shows']) || (!empty($opt['auto_show_db']) && !isset($_GET['more_torrents']))) {
         $shows = mediadb_searchShows($stitle);
-        $opt['view_type'] = 'shows_db';
-        !empty($shows) ? $extra .= buildTable('L_DB', $shows, $opt) : null;
+        if (!empty($shows)) {
+            $opt['view_type'] = 'shows_db';
+            $opt['media_type'] = 'shows';
+            $opt['head'] = $LNG['L_DB'];
+            $opt['num_table_objs'] = count($shows);
+            $opt['get_params']['id'] = $id;
+            $opt['get_params']['view_type'] = 'shows_torrent';
+            $opt['get_params']['search_shows_db'] = $stitle;
+            $opt['get_params']['more_shows'] = 1;
+            $shows = array_slice($shows, $jump_x_entrys, $items_per_page);
+            !empty($shows) ? $extra .= $frontend->buildTable($shows, $opt) : null;
+        }
     }
 
     if (isset($_GET['more_torrents']) || (!empty($opt['auto_show_torrents']) && !isset($_GET['more_shows']))) {
@@ -191,10 +248,20 @@ function view_extra_shows($item, $opt) {
         $m_results = search_media_torrents('shows', $search);
         if (valid_array($m_results)) {
             $m_results = mix_media_res($m_results);
-            $topt['view_type'] = 'shows_torrent';
-            $topt['media_type'] = 'shows';
-            $topt['more_torrents'] = 1;
-            $extra .= buildTable('L_TORRENT', $m_results, $topt);
+            if (!empty($m_results)) {
+                $topt['view_type'] = 'shows_torrent';
+                $topt['media_type'] = 'shows';
+                $topt['more_torrents'] = 1;
+
+                $topt['head'] = $LNG['L_TORRENT'];
+                $topt['num_table_objs'] = count($m_results);
+                $topt['get_params']['id'] = $id;
+                $topt['get_params']['view_type'] = 'shows_torrent';
+                $topt['get_params']['search_shows_db'] = $stitle;
+                $topt['get_params']['more_torrents'] = 1;
+                $m_results = array_slice($m_results, $jump_x_entrys, $items_per_page);
+                $extra .= $frontend->buildTable($m_results, $topt);
+            }
         } else {
             $extra .= $frontend->msgBox(['title' => 'L_TORRENT', 'body' => 'L_NOTHING_FOUND']);
         }

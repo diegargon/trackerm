@@ -10,7 +10,15 @@
 !defined('IN_WEB') ? exit : true;
 
 function page_new_media(string $media_type) {
-    global $cfg, $db, $log, $frontend;
+    global $cfg, $db, $LNG, $log, $frontend, $prefs;
+
+    $search_type = Filter::getString('search_type');
+    $columns = $prefs->getPrefsItem('tresults_columns');
+    $rows = $prefs->getPrefsItem('tresults_rows');
+    $items_per_page = $columns * $rows;
+
+    $npage = Filter::getInt('npage');
+    empty($npage) ? $npage = 1 : null;
 
     $cache_media_expire = 0;
     $topt = [];
@@ -107,10 +115,21 @@ function page_new_media(string $media_type) {
 
     if (!empty($res_media_db)) {
         $topt['search_type'] = $media_type;
+        $topt['media_type'] = $media_type;
         $topt['view_type'] = $media_type . '_torrent';
-        ($media_type == 'movies') ? $head = 'L_MOVIES' : $head = 'L_SHOWS';
+        ($media_type == 'movies') ? $topt['head'] = $LNG['L_MOVIES'] : $topt['head'] = $LNG['L_SHOWS'];
+
         $res_media_db = mix_media_res($res_media_db);
-        $page_news_media = buildTable($head, $res_media_db, $topt);
+        $topt['num_table_objs'] = count($res_media_db);
+        if ($search_type == $media_type) {
+            $jump_x_entrys = ($items_per_page * $npage) - $items_per_page;
+        } else {
+            $jump_x_entrys = 0;
+        }
+
+        $res_media_db = array_slice($res_media_db, $jump_x_entrys, $items_per_page);
+        $page_news_media = $frontend->buildTable($res_media_db, $topt);
+
         $page_news .= $page_news_media;
     } else {
         $page_news .= $frontend->msgBox(['title' => 'L_' . strtoupper($media_type), 'body' => 'L_NO_RESULTS']);

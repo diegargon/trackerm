@@ -10,7 +10,7 @@
 !defined('IN_WEB') ? exit : true;
 
 function show_my_media($media_type) {
-    global $db, $prefs, $user, $frontend;
+    global $db, $prefs, $user, $frontend, $LNG;
 
     $page_library = '';
     $npage = Filter::getInt('npage');
@@ -71,7 +71,7 @@ function show_my_media($media_type) {
             $where .= " AND id NOT IN ($ignore_master_ids) ";
         }
     }
-    $topt['num_table_rows'] = $db->qSingle("SELECT COUNT(*)  FROM $library_master $where");
+    $topt['num_table_objs'] = $db->qSingle("SELECT COUNT(*)  FROM $library_master $where");
     $query = "SELECT * FROM $library_master $where ORDER BY items_updated DESC LIMIT $start,$n_results ";
 
     $results = $db->query($query);
@@ -94,7 +94,8 @@ function show_my_media($media_type) {
         $topt['search_type'] = $media_type;
         $topt['media_type'] = $media_type;
         $topt['page'] = $page;
-        $page_library .= buildTable('L_' . strtoupper($media_type), $media, $topt);
+        $topt['head'] = $LNG['L_' . strtoupper($media_type)];
+        $page_library .= $frontend->buildTable($media, $topt);
     } else {
         $page_library .= $frontend->msgBox(['title' => 'L_' . strtoupper($media_type), 'body' => 'L_NO_RESULTS']);
     }
