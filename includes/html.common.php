@@ -9,8 +9,53 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-//TODO move to frontend build* and pager and html to tpl or html but before..
-//TODO this functions need a rewrite, especially buildTable and Pager, too much messy... how we build the pager links, etc
+function html_mediainfo_tags($mediainfo, $tags = null) {
+    global $LNG;
+
+    $general_tags = $video_tags = $audio_tags = $text_tags = '';
+    $tags = [
+        'General' => ['Format', 'FrameRate', 'AudioCount', 'VideoCount', 'TextCount'],
+        'Video' => ['FrameRate_Mode', 'ColorSpace', 'Encoded_Library_Name'],
+        'Audio' => ['Format', 'BitRate_Mode', 'Format_Commercial_IfAny', 'Channels', 'BitRate', 'Compression_Mode'],
+//        'Text' => '',
+    ];
+    foreach ($tags as $tag_ary_key => $tag_ary) {
+        if ($tag_ary_key == 'General') {
+            foreach ($tag_ary as $tag_value) {
+                isset($mediainfo[$tag_ary_key][$tag_value]) ? $general_tags .= '<div  title="' . $tag_value . '" class="mediainfo_tag">' . $mediainfo[$tag_ary_key][$tag_value] . '</div>' : null;
+            }
+        }
+        if ($tag_ary_key == 'Video') {
+            foreach ($tag_ary as $tag_value) {
+                isset($mediainfo[$tag_ary_key][0][$tag_value]) ? $video_tags .= '<div  title="' . $tag_value . '" class="mediainfo_tag">' . $mediainfo[$tag_ary_key][0][$tag_value] . '</div>' : null;
+            }
+        }
+        if ($tag_ary_key == 'Audio') {
+            foreach ($tag_ary as $tag_value) {
+                isset($mediainfo[$tag_ary_key][1][$tag_value]) ? $audio_tags .= '<div title="' . $tag_value . '" class="mediainfo_tag">' . $mediainfo[$tag_ary_key][1][$tag_value] . '</div>' : null;
+            }
+        }
+        if ($tag_ary_key == 'Text') {
+            foreach ($tag_ary as $tag_value) {
+                isset($mediainfo[$tag_ary_key][1][$tag_value]) ? $text_tags .= '<div  title="' . $tag_value . '" class="mediainfo_tag">' . $mediainfo[$tag_ary_key][1][$tag_value] . '</div>' : null;
+            }
+        }
+    }
+
+    if (isset($mediainfo['Video'][0]['Width']) && isset($mediainfo['Video'][0]['Height'])) {
+        $video_tags .= '<div class="mediainfo_tag">' . $mediainfo['Video'][0]['Width'] . 'x' . $mediainfo['Video'][0]['Height'] . 'p</div>';
+    }
+    if (isset($mediainfo['Audio'])) {
+        foreach ($mediainfo['Audio'] as $audio) {
+            isset($audio['Language']) ? $audio_tags .= '<div title="' . $LNG['L_AUDIO'] . '" class="mediainfo_tag">' . $audio['Language'] . '</div>' : null;
+        }
+    }
+
+    return $general_tags . $video_tags . $audio_tags . $text_tags;
+}
+
+//TODO To remove
+/*
 function buildTable($head, $db_ary, $topt = null) {
     global $LNG, $prefs, $db;
 
@@ -129,7 +174,7 @@ function build_item($item, $topt) {
     return $page;
 }
 
-/* Build the pager */
+
 
 function pager($npage, $nitems, &$topt) {
     global $prefs;
@@ -221,48 +266,5 @@ function pager($npage, $nitems, &$topt) {
 
     return html::div(['class' => 'type_pages_numbers'], $pages_links);
 }
-
-function html_mediainfo_tags($mediainfo, $tags = null) {
-    global $LNG;
-
-    $general_tags = $video_tags = $audio_tags = $text_tags = '';
-    $tags = [
-        'General' => ['Format', 'FrameRate', 'AudioCount', 'VideoCount', 'TextCount'],
-        'Video' => ['FrameRate_Mode', 'ColorSpace', 'Encoded_Library_Name'],
-        'Audio' => ['Format', 'BitRate_Mode', 'Format_Commercial_IfAny', 'Channels', 'BitRate', 'Compression_Mode'],
-//        'Text' => '',
-    ];
-    foreach ($tags as $tag_ary_key => $tag_ary) {
-        if ($tag_ary_key == 'General') {
-            foreach ($tag_ary as $tag_value) {
-                isset($mediainfo[$tag_ary_key][$tag_value]) ? $general_tags .= '<div  title="' . $tag_value . '" class="mediainfo_tag">' . $mediainfo[$tag_ary_key][$tag_value] . '</div>' : null;
-            }
-        }
-        if ($tag_ary_key == 'Video') {
-            foreach ($tag_ary as $tag_value) {
-                isset($mediainfo[$tag_ary_key][0][$tag_value]) ? $video_tags .= '<div  title="' . $tag_value . '" class="mediainfo_tag">' . $mediainfo[$tag_ary_key][0][$tag_value] . '</div>' : null;
-            }
-        }
-        if ($tag_ary_key == 'Audio') {
-            foreach ($tag_ary as $tag_value) {
-                isset($mediainfo[$tag_ary_key][1][$tag_value]) ? $audio_tags .= '<div title="' . $tag_value . '" class="mediainfo_tag">' . $mediainfo[$tag_ary_key][1][$tag_value] . '</div>' : null;
-            }
-        }
-        if ($tag_ary_key == 'Text') {
-            foreach ($tag_ary as $tag_value) {
-                isset($mediainfo[$tag_ary_key][1][$tag_value]) ? $text_tags .= '<div  title="' . $tag_value . '" class="mediainfo_tag">' . $mediainfo[$tag_ary_key][1][$tag_value] . '</div>' : null;
-            }
-        }
-    }
-
-    if (isset($mediainfo['Video'][0]['Width']) && isset($mediainfo['Video'][0]['Height'])) {
-        $video_tags .= '<div class="mediainfo_tag">' . $mediainfo['Video'][0]['Width'] . 'x' . $mediainfo['Video'][0]['Height'] . 'p</div>';
-    }
-    if (isset($mediainfo['Audio'])) {
-        foreach ($mediainfo['Audio'] as $audio) {
-            isset($audio['Language']) ? $audio_tags .= '<div title="' . $LNG['L_AUDIO'] . '" class="mediainfo_tag">' . $audio['Language'] . '</div>' : null;
-        }
-    }
-
-    return $general_tags . $video_tags . $audio_tags . $text_tags;
-}
+ 
+ */
