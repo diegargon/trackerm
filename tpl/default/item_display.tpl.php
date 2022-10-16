@@ -70,7 +70,7 @@
     </div>
     <div class="item_details">
         <div class="item_title"><?= $tdata['title'] ?></div>
-        <hr/>
+
         <div class="item_desc">
             <?php
             if (!empty($tdata['download'])) {
@@ -104,22 +104,22 @@
             }
             if (!empty($tdata['total_size'])) {
                 ?>
-                <span class="item_size">[<?= $tdata['total_size'] ?>]</span>
+                <span class="item_size"><?= $tdata['total_size'] ?></span>
                 <?php
             }
             if (!empty($tdata['size'])) {
                 ?>
-                <span class="item_size">[<?= $tdata['size'] ?>]</span>
+                <span class="item_size"><?= $tdata['size'] ?></span>
                 <?php
             }
             if (!empty($tdata['rating'])) {
                 ?>
-                <span class="item_rating">[<?= $LNG['L_RATING_MIN'] . $tdata['rating'] ?>]</span>
+                <span class="item_rating"><?= $LNG['L_RATING_MIN'] . $tdata['rating'] ?></span>
                 <?php
             }
             if (!empty($tdata['trailer'])) {
                 ?>
-                <span class="item_link"><a href="<?= $tdata['trailer'] ?>" target="_blank">[T]</a></span>
+                <span class="item_link"><a href="<?= $tdata['trailer'] ?>" target="_blank">T</a></span>
                 <?php
             }
             if (!empty($tdata['movie_in_library']) || !empty($tdata['show_in_library'])) {

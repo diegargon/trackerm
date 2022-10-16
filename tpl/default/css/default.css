@@ -8,15 +8,16 @@ body {
     color: #e17a7a;
 }
 input {
-    color:green;
+    color: #b8bcff;
     border: 0.1em solid #5B5B5B;
-    background: #000;
     font-size: 1.2em;
     padding: 4px;
     padding: 0.2em 0.5em;
     border-radius: 0.12em;
     font-family: 'Roboto', sans-serif;
     margin: 0 0.3em 0.3em 0;    
+    background-color: #06001c;
+    border: 1px solid #13446f; 
 }
 a:link {
     color: white;
@@ -143,6 +144,7 @@ button {
     position: relative; 
     text-align: center;
     padding:5px;
+    padding-bottom: 0px;
 }
 .divTableHeading {
     background-color: #EEE;
@@ -219,18 +221,45 @@ button {
 }
 .item_title {
     margin: 1px;
-    margin-top: 5px;
+    margin-top: 2px;
+    margin-bottom: 6px;
     word-break: break-word;
     max-width: 100%;
 }
 .item_desc {}
-.item_source, .item_size, .item_download, .item_rating {
+.item_size, .item_download, .item_rating {
     background-color: #06001c;
 }
-.item_size {}
+.item_source {
+    width:97%;    
+}
+.item_size {
+    border: 1px solid #13446f;
+    padding: 2px;
+    padding-left: 3px;
+    padding-right: 3px;
+    border-radius: 2px;
+}
+.item_rating {
+    border: 1px solid #13446f;
+    padding: 2px;
+    padding-left: 3px;
+    padding-right: 3px;    
+    border-radius: 2px;
+}
 .item_link {
-    color: #ff5b5b;
+    /* color: #ff5b5b; */    
     background-color: #06001c;
+    border: 1px solid #13446f;
+    padding: 2px;    
+    padding-left: 3px;
+    padding-right: 3px;
+    border-radius: 2px;
+}
+.item_link a {
+    color: currentColor;
+    text-decoration: none;
+    border-radius: 2px;
 }
 .submit_btn {
     display: inline-block;
@@ -331,20 +360,21 @@ button {
 }
 .num_pages_link, .submit_link, .num_pages_link_selected {
     font-weight: 900;
-    border: 1px outset blanchedalmond;
-    background-color: #937c00;
+    border: 1px outset #530008;
+    /* background-color: #937c00; */
+    background-color: #2b0707;
     padding: 7px 16px 7px 16px;
     text-decoration: none;
     font-size: 1.5em;
     margin-left: 4px;
-    border-radius: 4px;
+    border-radius: 4px;  
 }
 .submit_link {
     display:block;
     width: max-content;
 }
 .num_pages_link_selected {
-    background-color: aqua;
+    background-color: #170000;
 }
 .view_download {
     margin-top: 15px;
@@ -422,7 +452,6 @@ button {
     display: inline-block;
     /* background: #ff5b5b; */
     background: #973a3a;
-    padding: 5px;
     text-decoration: none;
     color: white;
     border-radius: 0.3em;
@@ -430,14 +459,22 @@ button {
     font-family: 'Roboto', sans-serif;
     margin:3px;
     font-size: 1.0em;
+    background-color: #06001c;
+    border: 1px solid #13446f;
+    padding: 2px;    
+    padding-left: 5px;
+    padding-right: 5px;    
+    color: currentColor;
 }
 .action_link_small {
-    padding: 0px;
-    padding-left: 5px;
-    padding-right: 5px;
     margin:0px;
     font-size: 0.9em;
     font-weight: bold;
+    background-color: #06001c;
+    border: 1px solid #13446f;
+    padding: 2px;    
+    padding-left: 5px;
+    padding-right: 5px;
 }
 .tor_source_link, .tor_source_link_freelech  {
     display: inline-block;
@@ -454,10 +491,11 @@ button {
 }
 .tor_source_link_freelech {
     border: 1px solid #112f04;
-    background: #112f04;
+    background: #112f04;    
 }
 .banner_head {
     overflow: clip;
+    border-radius: 2px 2px 2px 2px;
 }
 .info_container {    
     width:100%;
