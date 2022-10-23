@@ -125,7 +125,9 @@ function get_poster($item) {
             if ($cache_img_response !== false) {
                 $poster = $cache_img_response;
             } else {
-                $poster = $item['poster'];
+                if (Filter::varImgUrl($item['poster'])) {
+                    $poster = $item['poster'];
+                }
             }
         } else if (!empty($item['guessed_poster']) && $item['guessed_poster'] != -1) {
             $cache_img_response = cache_img($item['guessed_poster']);
