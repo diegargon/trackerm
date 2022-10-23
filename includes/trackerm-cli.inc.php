@@ -162,7 +162,9 @@ function MovieJob($item, $linked = false) {
 
     $log_job = 'Movie ';
     $log_job .= $linked ? 'seeding' : 'finished';
-    $log_job .= ' detected: Checking ' . $item['title'];
+    $log_job .= ' detected' . ' Checking ' . $item['title'];
+    $log->debug($log_job);
+    $log_job = '';
 
     $valid_files = [];
     $valid_files = get_valid_files($item);
@@ -265,7 +267,9 @@ function ShowJob($item, $linked = false) {
 
     $log_job = 'Show ';
     $log_job .= $linked ? 'seeding' : 'finished';
-    $log_job .= ' detected: Checking ' . $item['title'];
+    $log_job .= ' detected' . ' Checking ' . $item['title'];
+    $log->debug($log_job);
+    $log_job = '';
 
     $valid_files = [];
     $valid_files = get_valid_files($item);
@@ -458,14 +462,15 @@ function get_valid_files($item) {
                 $files_dir = scandir_r($work_path);
 
                 if (empty($files_dir)) {
-                    $log->debug('Work path is empty');
-                }
-                foreach ($files_dir as $file) {
-                    if (is_media_file($file)) {
-                        $valid_files[] = $file;
-                    } else {
-                        if (!is_dir($file)) {
-                            unlink($file);
+                    $log->err('Work path is empty');
+                } else {
+                    foreach ($files_dir as $file) {
+                        if (is_media_file($file)) {
+                            $valid_files[] = $file;
+                        } else {
+                            if (!is_dir($file)) {
+                                unlink($file);
+                            }
                         }
                     }
                 }
