@@ -399,7 +399,7 @@ function get_valid_files($item) {
     $orig_path = $cfg['TORRENT_FINISH_PATH'] . '/' . $item['files_location'];
 
     if (is_dir($orig_path)) {
-
+        //Media is on folder
         $files_dir = scandir_r($orig_path);
 
         foreach ($files_dir as $file) {
@@ -440,7 +440,9 @@ function get_valid_files($item) {
             }
         }
     } else {
+        //Media not in a folder
         $ext_check = substr($item['files_location'], -3);
+        $file_location = $cfg['TORRENT_FINISH_PATH'] . '/' . $item['files_location'];
         $work_path = $cfg['TORRENT_FINISH_PATH'] . '/' . substr($item['files_location'], 0, -4);
         if (strtolower($ext_check) == 'rar') {
             if (!file_exists($work_path)) {
@@ -449,9 +451,9 @@ function get_valid_files($item) {
             if (file_exists($cfg['unrar_path'])) {
                 $unrar_check = $orig_path . '.unrar';
                 if (!file_exists($unrar_check)) {
-                    if (check_file_encrypt('rar', $file)) {
-                        $log->addStateMsg("[{$LNG['L_ERROR']}]{$LNG['L_ERR_FILE_ENCRYPT_MANUAL']} ($file)");
-                        notify_mail(['subject' => $LNG['L_ERR_FILE_ENCRYPT_MANUAL'], 'msg' => $file]);
+                    if (check_file_encrypt('rar', $file_location)) {
+                        $log->addStateMsg("[{$LNG['L_ERROR']}]{$LNG['L_ERR_FILE_ENCRYPT_MANUAL']} ($file_location)");
+                        notify_mail(['subject' => $LNG['L_ERR_FILE_ENCRYPT_MANUAL'], 'msg' => $file_location]);
                         // we continue and try since the function need test and TODO.
                     }
                     $unrar = $cfg['unrar_path'] . ' e -p- -y "' . $orig_path . '" "' . $work_path . '"';
