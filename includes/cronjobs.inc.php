@@ -224,7 +224,8 @@ function clear_tmdb_cache($media_type) {
 
 function update_masters(bool $force = false) {
     global $db, $log;
-    foreach (['movies', 'shows'] as $media_type) {
+
+    foreach (['shows'] as $media_type) {
         if ($media_type == 'shows') {
             $time_req = time() - 1296000; //15 days
         } else {
@@ -250,7 +251,7 @@ function update_masters(bool $force = false) {
                 $update['plot'] = $item_cached['plot'];
                 $update['rating'] = round($item_cached['rating'], 1);
                 $update['popularity'] = isset($item_cached['popularity']) ? round($item_cached['popularity'], 1) : 0;
-                $update['poster'] = !empty($item_cached['poster']) ? round($item_cached['poster'], 1) : null;
+                $update['poster'] = !empty($item_cached['poster']) ? $item_cached['poster'] : null;
                 $update['release'] = $item_cached['release'];
                 $update['genres'] = !empty($item_cached['genres']) ? $item_cached['genres'] : null;
                 !empty($item_cached['trailer']) ? $update['trailer'] = $item_cached['trailer'] : $update['trailer'] = '';
