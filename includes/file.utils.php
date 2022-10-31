@@ -121,6 +121,10 @@ function load_from_file_json($file) {
 function cache_img($img_url) {
     global $cfg, $log;
 
+    if (empty($img_url) || is_dir($img_url)) {
+        return false;
+    }
+
     $path = $_SERVER['DOCUMENT_ROOT'] . $cfg['REL_PATH'] . $cfg['cache_images_path'];
     if (!is_writeable($path)) {
         $log->warning($path . 'is not writable');
