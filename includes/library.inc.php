@@ -10,9 +10,13 @@
 !defined('IN_WEB') ? exit : true;
 
 function show_my_media($media_type) {
-    global $db, $prefs, $user, $frontend, $LNG;
+    global $db, $prefs, $LNG;
 
-    $page_library = '';
+    $page_library = [];
+
+    $templates = [];
+    $templates['templates'] = [];
+
     $npage = Filter::getInt('npage');
     $search_type = Filter::getString('search_type');
     $library = 'library_' . $media_type;
@@ -40,7 +44,12 @@ function show_my_media($media_type) {
     if (!empty(($ident_delete = Filter::getInt('ident_delete'))) && ($_GET['media_type'] == $media_type)) {
         $db->deleteItemById($library, $ident_delete);
     }
-    $page_library .= show_identify_media($media_type);
+
+    //FIXME
+    $identify_media = show_identify_media($media_type);
+    if (!empty($identify_media) && isset($identify_media['templates'])) {
+        $templates['templates'] = array_merge($templates['templates'], $identify_media['templates']);
+    }
 
     $rows = $prefs->getPrefsItem('tresults_rows');
     $columns = $prefs->getPrefsItem('tresults_columns');
@@ -88,23 +97,123 @@ function show_my_media($media_type) {
             }
         }
     }
-    //TODO: round old reg remove in the future
+
     foreach ($media as $kmedia => $vmedia) {
+        //TODO: round old reg remove in the future
         $media[$kmedia]['rating'] = round($vmedia['rating'], 1);
         $media[$kmedia]['popularity'] = round($vmedia['popularity'], 1);
-    }
-    $topt['view_type'] = $media_type . '_library';
-    if (valid_array($media)) {
-        $topt['search_type'] = $media_type;
-        $topt['media_type'] = $media_type;
-        $topt['page'] = $page;
-        $topt['head'] = $LNG['L_' . strtoupper($media_type)];
-        $page_library .= $frontend->buildTable($media, $topt);
-    } else {
-        $page_library .= $frontend->msgBox(['title' => 'L_' . strtoupper($media_type), 'body' => 'L_NO_RESULTS']);
+        //
+        $media[$kmedia]['poster'] = get_poster($vmedia);
+        !empty($vmedia['release']) ? $media[$kmedia]['title'] = $vmedia['title'] . ' (' . strftime("%Y", strtotime($vmedia['release'])) . ')' : null;
+        empty($vmedia['trailer']) && !empty($vmedia['guessed_trailer']) && $vmedia['guessed_trailer'] != -1 ? $vmedia['trailer'] = $vmedia['guessed_trailer'] : null;
+        !empty($vmedia['size']) ? $media[$kmedia]['size'] = human_filesize($vmedia['size']) : null;
+        !empty($vmedia['total_size']) ? $media[$kmedia]['total_size'] = human_filesize($vmedia['total_size']) : null;
     }
 
-    return $page_library;
+    $topt['view_type'] = $media_type . '_library';
+    if (valid_array($media)) {
+        $topt['media_type'] = $media_type;
+        $topt['page'] = $page;
+        $pager_opts['npage'] = $npage;
+        $pager_opts['pager_place'] = $media_type . '_library';
+        $pager_opts['link_options'] = ['search_type' => $media_type];
+        $templates['templates'][] = get_pager(array_merge($topt, $pager_opts));
+        $page_library = [
+            'name' => 'items_library_' . $media_type,
+            'tpl_file' => 'items_table',
+            'tpl_pri' => 5,
+            'tpl_place' => $media_type . '_library',
+            'tpl_place_var' => 'items',
+        ];
+
+        $page_library['tpl_vars'] = $media;
+        $topt['tpl_items_break'] = $prefs->getPrefsItem('tresults_columns');
+        $page_library['tpl_common_vars'] = $topt;
+
+        $templates['templates'][] = $page_library;
+    } else {
+
+        $templates['templates'][] = [
+            'name' => 'msgbox',
+            'tpl_file' => 'msgbox',
+            'tpl_pri' => 4,
+            'tpl_place' => $media_type . '_library',
+            'tpl_place_var' => 'items',
+            'tpl_vars' => [
+                'title' => $LNG['L_' . strtoupper($media_type)],
+                'body' => $LNG['L_NO_RESULTS'],
+            ]
+        ];
+    }
+
+
+    //var_dump($templates);
+    return $templates;
+}
+
+function get_pager(array $opts) {
+    global $prefs;
+
+    $columns = (int) $prefs->getPrefsItem('tresults_columns');
+    $rows = (int) $prefs->getPrefsItem('tresults_rows');
+    isset($opts['search_keyword']) ? $search_keyword = $opts['search_keyword'] : $search_keyword = $opts['search_keyword'] = '';
+    isset($opts['search_movies']) ? $search_movies = $opts['search_movies'] : $search_movies = $opts['search_movies'] = '';
+    isset($opts['search_shows']) ? $search_shows = $opts['search_shows'] : $search_shows = $opts['search_shows'] = '';
+    isset($opts['search_movies_torrents']) ? $search_movies_torrents = $opts['search_movies_torrents'] : $search_movies_torrents = $opts['search_movies_torrents'] = '';
+    isset($opts['search_shows_torrents']) ? $search_shows_torrents = $opts['search_shows_torrents'] : $search_shows_torrents = $opts['search_shows_torrents'] = '';
+
+    $items_per_page = $columns * $rows;
+    $num_pages = ceil((int) $opts['num_table_objs'] / $items_per_page);
+    if ($opts['npage'] > 1) {
+        $page_previous = $opts['npage'] - 1;
+    } else {
+        $page_previous = 1;
+    }
+
+    if ($opts['npage'] < $num_pages) {
+        $page_next = $opts['npage'] + 1;
+    } else {
+        $page_next = $opts['npage'];
+    }
+
+    if (isset($opts['tpl_pri'])) {
+        $tpl_pri = $opts['tpl_pri'];
+    } else {
+        $tpl_pri = 100;
+    }
+
+    $link_options = '';
+    if (!empty($opts['link_options']) && is_array($opts['link_options'])) {
+        foreach ($opts['link_options'] as $key => $value) {
+            $link_options .= '&' . $key . '=' . $value;
+        }
+    }
+
+    $pager = [
+        'name' => 'pager_' . $opts['media_type'],
+        'tpl_file' => 'pager',
+        'tpl_pri' => $tpl_pri,
+        'tpl_place' => $opts['pager_place'],
+        'tpl_place_var' => 'pager',
+        'tpl_vars' => [
+            'media_type' => $opts['media_type'],
+            'page' => $opts['page'],
+            'page_previous' => $page_previous,
+            'npage' => (int) $opts['npage'],
+            'page_next' => $page_next,
+            'nitems' => (int) $opts['num_table_objs'],
+            'npages' => $num_pages,
+            'nitems_per_page' => $items_per_page,
+            'search_keyword' => $search_keyword,
+            'search_movies' => $search_movies,
+            'search_shows' => $search_shows,
+            'search_movies_torrents' => $search_movies_torrents,
+            'search_shows_torrents' => $search_shows_torrents,
+            'link_options' => $link_options,
+        ],
+    ];
+
+    return $pager;
 }
 
 function get_poster($item) {
@@ -155,7 +264,7 @@ function get_poster($item) {
 function get_fgenres(string $media_type, array $item) {
     global $cfg, $LNG;
 
-    $fgenres = '';
+    $fgenres = [];
     if (empty($item['genres'])) {
         return $fgenres;
     }
@@ -171,9 +280,10 @@ function get_fgenres(string $media_type, array $item) {
         } else {
             $lang_genre = $vgenre;
         }
-        $genre_url = '?page=view_genres&media_type=' . $media_type . '&id=' . $vgenre;
-        $genre_link = Html::link(['class' => 'nodecor'], $genre_url, $lang_genre);
-        $fgenres .= Html::span(['class' => 'fgenres'], $genre_link);
+        $fgenres[] = [
+            'name' => $lang_genre,
+            'id' => $vgenre,
+        ];
     }
 
     return $fgenres;
@@ -184,6 +294,8 @@ function get_fgenres(string $media_type, array $item) {
 function get_fcollection(string $media_type, array $item) {
     global $db;
 
+    $fcollection = [];
+
     $results = $db->query("SELECT id,title FROM groups WHERE media_type = '$media_type' AND type = 3 AND type_id = '{$item['collection']}' LIMIT 1");
     $collection = $db->fetch($results);
     $db->free($results);
@@ -192,17 +304,19 @@ function get_fcollection(string $media_type, array $item) {
         return $item['collection'];
     }
 
-    $col_url = '?page=view_group&group_type=3&media_type=' . $media_type . '&id=' . $collection['id'];
-
-    $collection_link = Html::link(['class' => 'nodecor'], $col_url, $collection['title']);
-    $fcollection = Html::span(['class' => 'fcollection'], $collection_link);
+    $fcollection[] = [
+        'name' => $collection['title'],
+        'id' => $collection['id'],
+        'group_type' => 3,
+        'view_name' => 'view_group'
+    ];
     return $fcollection;
 }
 
 /* Format names collections to view */
 
 function get_fnames(string $col_type, string $media_type, array $item) {
-    $fnames = '';
+    $fnames = [];
 
     if (empty($item[$col_type])) {
         return false;
@@ -210,21 +324,24 @@ function get_fnames(string $col_type, string $media_type, array $item) {
 
     $names = explode(',', $item[$col_type]);
 
-    $names_url = '?page=';
+    $view_name = '';
 
     if ($col_type == 'director') {
-        $names_url .= 'view_director';
+        $view_name = 'view_director';
     } else if ($col_type == 'cast') {
-        $names_url .= 'view_cast';
+        $view_name = 'view_cast';
     } else if ($col_type == 'writer') {
-        $names_url .= 'view_writer';
+        $view_name = 'view_writer';
     } else {
         return false;
     }
-    $names_url .= '&media_type=' . $media_type;
+
     foreach ($names as $name) {
-        $name_link = Html::link(['class' => 'nodecor'], $names_url . '&name=' . $name, $name . ', ');
-        $fnames .= Html::span(['class' => 'fname'], $name_link);
+        $fnames[] = [
+            'name' => $name,
+            'category' => $col_type,
+            'view_name' => $view_name
+        ];
     }
 
     return $fnames;
@@ -286,7 +403,9 @@ function mark_masters_views($media_type, &$masters) {
 }
 
 function show_collections() {
-    global $db, $frontend, $prefs;
+    global $db, $prefs;
+
+    $page_collection['templates'] = [];
 
     $media_type = 'movies';
     $npage = Filter::getInt('npage');
@@ -295,7 +414,6 @@ function show_collections() {
     empty($npage) || (!empty($search_type) && $search_type !== $media_type) ? $npage = 1 : null;
 
     $opt = [];
-    $page_collection = '';
 
     $rows = $prefs->getPrefsItem('tresults_rows');
     $columns = $prefs->getPrefsItem('tresults_columns');
@@ -341,28 +459,46 @@ function show_collections() {
     }
 
     if (valid_array($collections)) {
-        $pager_opt['media_type'] = $media_type;
-        $pager_opt['npage'] = $npage;
-        $pager_opt['nitems'] = $total_collections;
-        $pager_opt['get_params']['search_type'] = $media_type;
-        $page_collection = $frontend->getPager($pager_opt);
-        $build_opt['media_type'] = $media_type;
-        $build_opt['item_tpl'] = 'collection_item';
-        $build_opt['get_params'] = ['page' => 'view_group', 'group_type' => 3, 'media_type' => $media_type];
-        $page_collection .= $frontend->buildCollection($collections, $build_opt);
+
+        $topt['view_type'] = $media_type . '_collection';
+        $topt['group_type'] = 3;
+        $topt['media_type'] = $media_type;
+        $topt['tpl_items_break'] = $prefs->getPrefsItem('tresults_columns');
+
+        $pager_opts['npage'] = $npage;
+        $pager_opts['page'] = $page;
+        $pager_opts['pager_place'] = $media_type . '_library';
+        $pager_opts['num_table_objs'] = $total_collections;
+        $pager_opts['link_options'] = ['search_type' => $media_type];
+
+        $page_collection['templates'][] = get_pager(array_merge($topt, $pager_opts));
+
+        $page_collection['templates'][] = [
+            'name' => 'items_collection_' . $media_type,
+            //'tpl_file' => 'collection_item',
+            'tpl_file' => 'items_table',
+            'tpl_pri' => 5,
+            'tpl_place' => $media_type . '_library',
+            'tpl_place_var' => 'items',
+            'tpl_vars' => $collections,
+            'tpl_common_vars' => $topt,
+        ];
     }
+
 
     return $page_collection;
 }
 
 function show_genres(string $media_type) {
-    global $cfg, $LNG, $frontend, $prefs;
+    global $cfg, $LNG, $prefs;
 
     $npage = Filter::getInt('npage');
     $search_type = Filter::getString('search_type');
     $page = Filter::getString('page');
     $items = [];
     empty($npage) || (!empty($search_type) && $search_type !== $media_type) ? $npage = 1 : null;
+
+    $page_genres['templates'] = [];
 
     $rows = $prefs->getPrefsItem('tresults_rows');
     $columns = $prefs->getPrefsItem('tresults_columns');
@@ -386,15 +522,28 @@ function show_genres(string $media_type) {
         $i++;
     }
 
-    $pager_opt['media_type'] = $media_type;
-    $pager_opt['npage'] = $npage;
-    $pager_opt['nitems'] = count($genres);
-    $pager_opt['get_params']['search_type'] = $media_type;
-    $page_genres = $frontend->getPager($pager_opt);
-    $build_opt['media_type'] = $media_type;
-    $build_opt['item_tpl'] = 'genre_item';
-    $build_opt['get_params'] = ['page' => 'view_genres', 'media_type' => $media_type];
-    $page_genres .= $frontend->buildCollection($items, $build_opt);
+    $topt['media_type'] = $media_type;
+    $topt['get_params'] = ['page' => 'view_genres', 'media_type' => $media_type];
+    $topt['view_type'] = $media_type . '_library';
+    $topt['tpl_items_break'] = $prefs->getPrefsItem('tresults_columns');
+    $topt['num_table_objs'] = count($genres);
+
+    $pager_opts['npage'] = $npage;
+    $pager_opts['page'] = $page;
+    $pager_opts['pager_place'] = $media_type . '_library';
+    $pager_opts['link_options'] = ['search_type' => $media_type];
+
+    $page_genres['templates'][] = get_pager(array_merge($topt, $pager_opts));
+
+    $page_genres['templates'][] = [
+        'name' => 'genres_' . $media_type,
+        'tpl_file' => 'genre_item',
+        'tpl_pri' => 5,
+        'tpl_place' => $media_type . '_library',
+        'tpl_place_var' => 'items',
+        'tpl_vars' => $items,
+        'tpl_common_vars' => $topt,
+    ];
 
     return $page_genres;
 }
@@ -412,7 +561,7 @@ function show_writer(string $media_type) {
 }
 
 function view_media_name(string $media_type, string $name_type) {
-    global $frontend, $prefs, $db;
+    global $prefs, $db;
 
     $npage = Filter::getInt('npage');
     $search_type = Filter::getString('search_type');
@@ -425,6 +574,8 @@ function view_media_name(string $media_type, string $name_type) {
 
     $n_results = $rows * $columns;
     $npage == 1 ? $start = 0 : $start = ($npage - 1) * $n_results;
+
+    $page_names['templates'] = [];
 
     $library_master = 'library_master_' . $media_type;
     $field_name = $name_type;
@@ -460,24 +611,38 @@ function view_media_name(string $media_type, string $name_type) {
     }
 
     if ($name_type == 'director') {
-        $dest_page = 'view_director';
+        $view_page = 'view_director';
     } else if ($name_type == 'cast') {
-        $dest_page = 'view_cast';
+        $view_page = 'view_cast';
     } else if ($name_type == 'writer') {
-        $dest_page = 'view_writer';
+        $view_page = 'view_writer';
     } else {
         return false;
     }
 
-    $pager_opt['media_type'] = $media_type;
     $pager_opt['npage'] = $npage;
     $pager_opt['nitems'] = count($dups_names);
-    $pager_opt['get_params']['search_type'] = $media_type;
-    $page_names = $frontend->getPager($pager_opt);
+    $pager_opt['pager_place'] = $media_type . '_library';
+    $pager_opt['page'] = $page;
+    $pager_opt['link_options'] = ['search_type' => $media_type];
+
     $build_opt['media_type'] = $media_type;
     $build_opt['item_tpl'] = 'collector_name';
-    $build_opt['get_params'] = ['page' => $dest_page, 'media_type' => $media_type];
-    $page_names .= $frontend->buildCollection($show_names, $build_opt);
+    $build_opt['num_table_objs'] = count($dups_names);
+    $build_opt['tpl_items_break'] = $prefs->getPrefsItem('tresults_columns');
+    $build_opt['view_page'] = $view_page;
+
+    $page_names['templates'][] = get_pager(array_merge($build_opt, $pager_opt));
+
+    $page_names['templates'][] = [
+        'name' => 'names_' . $media_type,
+        'tpl_file' => 'collection_name',
+        'tpl_pri' => 5,
+        'tpl_place' => $media_type . '_library',
+        'tpl_place_var' => 'items',
+        'tpl_vars' => $show_names,
+        'tpl_common_vars' => $build_opt,
+    ];
 
     return $page_names;
 }

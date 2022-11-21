@@ -6,13 +6,14 @@
 
 ## Features 
     * For Movies & Shows 
-    * UI Language (English and Spanish)
-    * Track shows: Download automatically episodes  specifying the starting episode.
+    * UI Language: English/Spanish
+    * Works with Jackett
+    * Track shows: Download automatically episodes specifying the starting episode. Complete missing episodes.
     * Wanted List: Adding movies/shows to the wanted list will make TrackerM download automatically when released by any tracker.
     * Multiple options for tracker/wanted: Ignore/Require Keywords, Quality Preference, PROPER, etc
     * transmission-daemon integration (Sorry only works with transmission-daemon atm)
-    * TheMovieDB search, show popular, trending.
-    * Torrents search: Filter by Indexer, Words, Size, Freelech
+    * TheMovieDB search, show popular, trending, covers and other data all integrated
+    * Torrents search using Jackett: Filter by Indexer, Words, Size, Freelech
     * List latest releases from your favorites indexers/trackers.
     * trailers & Covers for library & torrents (guess trailer/covers when missing)
     * Library: Search you library, Download media, Stats, Mark Seen/Unseen media. Show Collection (TMDB Collections, Genres, Director, Cast, Writer).
@@ -22,9 +23,10 @@
     * Email: Automatically send email when TrackerM add new media to your library
     * Automatically link(when seeding) and move (finish seeding) from transmission-daemon  download directory to your library.
     * Proxy support
+    * Display/Section list Transmission downloads
     * Cache Covers for fast experience
     * Automatically disabling (temporally) indexers offline or slow
-    * Use SQLlite, not need a more complex database.
+    * Use SQLlite, not need a more complex database. (edit) well perhaps would be good for fast experience add another option like mysql.
 
 ## Description: 
 

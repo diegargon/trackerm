@@ -10,8 +10,9 @@
 !defined('IN_WEB') ? exit : true;
 
 function wanted_list() {
-    global $db, $LNG, $trans, $frontend;
+    global $db, $LNG, $trans;
 
+    $wanted['templates'] = [];
     $iurl = '?page=wanted';
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -58,19 +59,18 @@ function wanted_list() {
     $wanted_list = $db->getTableData('wanted');
 
     if (valid_array($wanted_list)) {
-        $wanted_list_tmp_data['TRACKING'] = '';
-        $wanted_list_tmp_data['SEARCHING'] = '';
-        $wanted_list_tmp_data['COMPLETED'] = '';
-        $wanted_list_tmp_data['DOWNLOADING'] = '';
-        $wanted_list_tmp_data['MOVED'] = '';
-        $wanted_list_tmp_data['SEEDING'] = '';
-        $wanted_list_tmp_data['OTHER'] = '';
-        $wanted_list_tmp_data['DELETED'] = '';
+        $wanted_list_tmp['TRACKING'] = [];
+        $wanted_list_tmp['SEARCHING'] = [];
+        $wanted_list_tmp['COMPLETED'] = [];
+        $wanted_list_tmp['DOWNLOADING'] = [];
+        $wanted_list_tmp['MOVED'] = [];
+        $wanted_list_tmp['SEEDING'] = [];
+        $wanted_list_tmp['OTHER'] = [];
+        $wanted_list_tmp['DELETED'] = [];
 
         foreach ($wanted_list as $wanted_item) {
             $tdata = [];
             $tdata['iurl'] = $iurl;
-            $tdata['want_separator'] = 0;
 
             if (empty($wanted_item['id']) || $wanted_item['direct'] == 1) {
                 continue;
@@ -84,7 +84,6 @@ function wanted_list() {
                 !empty($trans) ? $tdata['status_name'] = $trans->getStatusName($wanted_item['wanted_status']) : $tdata['status_name'] = $wanted_item['wanted_status'];
             }
 
-            $wanted_item['day_check'] = day_check($wanted_item['id'], $wanted_item['day_check'], $wanted_item['wanted_status']);
             $wanted_item['created'] = strftime("%x", strtotime($wanted_item['created']));
             !empty($wanted_item['last_check']) ? $wanted_item['last_check'] = strftime("%a %H:%M", $wanted_item['last_check']) : $wanted_item['last_check'] = $LNG['L_NEVER'];
             if ($wanted_item['media_type'] == 'shows') {
@@ -100,7 +99,7 @@ function wanted_list() {
                 //moviedb id no longer exists remove from wanted?
                 continue;
             }
-            !empty($odb_item['poster']) ? $tdata['poster'] = $odb_item['poster'] : null;
+            $tdata['poster'] = get_poster($odb_item);
 
             $tdata['elink'] = $odb_item['elink'];
 
@@ -114,72 +113,71 @@ function wanted_list() {
 
             $wanted_item['media_type'] == 'movies' ? $tdata['lang_media_type'] = $LNG['L_MOVIES'] : $tdata['lang_media_type'] = $LNG['L_SHOWS'];
 
-            //var_dump($wanted_item);
-            //var_dump($tdata);
             if ($wanted_item['track_show'] == 1) {
-                $wanted_list_tmp_data['TRACKING'] .= $frontend->getTpl('wanted-item', array_merge($wanted_item, $tdata));
+                array_push($wanted_list_tmp['TRACKING'], array_merge($wanted_item, $tdata));
             } else if ($wanted_item['wanted_status'] == 4) {
-                $wanted_list_tmp_data['DOWNLOADING'] .= $frontend->getTpl('wanted-item', array_merge($wanted_item, $tdata));
+                array_push($wanted_list_tmp['DOWNLOADING'], array_merge($wanted_item, $tdata));
             } else if ($wanted_item['wanted_status'] == -1) {
-                $wanted_list_tmp_data['SEARCHING'] .= $frontend->getTpl('wanted-item', array_merge($wanted_item, $tdata));
+                array_push($wanted_list_tmp['SEARCHING'], array_merge($wanted_item, $tdata));
             } else if ($wanted_item['wanted_status'] == 8) {
-                $wanted_list_tmp_data['COMPLETED'] .= $frontend->getTpl('wanted-item', array_merge($wanted_item, $tdata));
+                array_push($wanted_list_tmp['COMPLETED'], array_merge($wanted_item, $tdata));
             } else if ($wanted_item['wanted_status'] == 9) {
-                $wanted_list_tmp_data['MOVED'] .= $frontend->getTpl('wanted-item', array_merge($wanted_item, $tdata));
+                array_push($wanted_list_tmp['MOVED'], array_merge($wanted_item, $tdata));
             } else if ($wanted_item['wanted_status'] == 6) {
-                $wanted_list_tmp_data['SEEDING'] .= $frontend->getTpl('wanted-item', array_merge($wanted_item, $tdata));
+                array_push($wanted_list_tmp['SEEDING'], array_merge($wanted_item, $tdata));
             } else if ($wanted_item['wanted_status'] == 10) {
-                $wanted_list_tmp_data['DELETED'] .= $frontend->getTpl('wanted-item', array_merge($wanted_item, $tdata));
+                array_push($wanted_list_tmp['DELETED'], array_merge($wanted_item, $tdata));
             } else {
-                $wanted_list_tmp_data['OTHER'] .= $frontend->getTpl('wanted-item', array_merge($wanted_item, $tdata));
-            }
-        }
-        //IMPROVE: Sorting: do better way
-        $wanted_list_data['working_list'] = null;
-        $wanted_list_data['track_show_list'] = null;
-        if (valid_array($wanted_list_tmp_data)) {
-            if (!empty($wanted_list_tmp_data['OTHER'])) {
-                $wanted_list_data['working_list'] .= Html::div(['class' => 'wanted_item_separator'], Html::span([], $LNG['L_OTHER']));
-                $wanted_list_data['working_list'] .= $wanted_list_tmp_data['OTHER'];
-            }
-            if (!empty($wanted_list_tmp_data['DOWNLOADING'])) {
-                $wanted_list_data['working_list'] .= Html::div(['class' => 'wanted_item_separator'], Html::span([], $LNG['L_DOWNLOADING']));
-                $wanted_list_data['working_list'] .= $wanted_list_tmp_data['DOWNLOADING'];
-            }
-            if (!empty($wanted_list_tmp_data['COMPLETED'])) {
-                $wanted_list_data['working_list'] .= Html::div(['class' => 'wanted_item_separator'], Html::span([], $LNG['L_COMPLETED']));
-                $wanted_list_data['working_list'] .= $wanted_list_tmp_data['COMPLETED'];
-            }
-
-            if (!empty($wanted_list_tmp_data['DELETED'])) {
-                $wanted_list_data['working_list'] .= Html::div(['class' => 'wanted_item_separator'], Html::span([], $LNG['L_DELETED']));
-                $wanted_list_data['working_list'] .= $wanted_list_tmp_data['DELETED'];
-            }
-
-            if (!empty($wanted_list_tmp_data['MOVED'])) {
-                $wanted_list_data['working_list'] .= Html::div(['class' => 'wanted_item_separator'], Html::span([], $LNG['L_MOVED']));
-                $wanted_list_data['working_list'] .= $wanted_list_tmp_data['MOVED'];
-            }
-
-            if (!empty($wanted_list_tmp_data['SEEDING'])) {
-                $wanted_list_data['working_list'] .= Html::div(['class' => 'wanted_item_separator'], Html::span([], $LNG['L_SEEDING']));
-                $wanted_list_data['working_list'] .= $wanted_list_tmp_data['SEEDING'];
-            }
-
-            if (!empty($wanted_list_tmp_data['SEARCHING'])) {
-                $wanted_list_data['working_list'] .= Html::div(['class' => 'wanted_item_separator'], Html::span([], $LNG['L_SEARCHING']));
-                $wanted_list_data['working_list'] .= $wanted_list_tmp_data['SEARCHING'];
-            }
-
-            if (!empty($wanted_list_tmp_data['TRACKING'])) {
-                $wanted_list_data['track_show_list'] .= Html::div(['class' => 'wanted_item_separator'], Html::span([], $LNG['L_WANTED'] . ': ' . $LNG['L_SHOWS']));
-                $wanted_list_data['track_show_list'] .= $wanted_list_tmp_data['TRACKING'];
+                array_push($wanted_list_tmp['OTHER'], array_merge($wanted_item, $tdata));
             }
         }
 
-        return $wanted_list_data;
+        if (valid_array($wanted_list_tmp)) {
+
+            if (count($wanted_list_tmp['OTHER']) > 0) {
+                $wanted['templates'][] = ['name' => 'wanted_other', 'tpl_vars' => $wanted_list_tmp['OTHER'], 'tpl_common_vars' => ['tpl_head' => $LNG['L_OTHER']]];
+            }
+            if (count($wanted_list_tmp['DOWNLOADING']) > 0) {
+                $wanted['templates'][] = ['name' => 'wanted_download', 'tpl_vars' => $wanted_list_tmp['DOWNLOADING'], 'tpl_common_vars' => ['tpl_head' => $LNG['L_DOWNLOADING']]];
+            }
+            if (!empty($wanted_list_tmp['COMPLETED'])) {
+                $wanted['templates'][] = ['name' => 'wanted_completed', 'tpl_vars' => $wanted_list_tmp['COMPLETED'], 'tpl_common_vars' => ['tpl_head' => $LNG['L_COMPLETED']]];
+            }
+            if (!empty($wanted_list_tmp['DELETED'])) {
+                $wanted['templates'][] = ['name' => 'wanted_deleted', 'tpl_vars' => $wanted_list_tmp['DELETED'], 'tpl_common_vars' => ['tpl_head' => $LNG['L_DELETED']]];
+            }
+            if (!empty($wanted_list_tmp['MOVED'])) {
+                $wanted['templates'][] = ['name' => 'wanted_moved', 'tpl_vars' => $wanted_list_tmp['MOVED'], 'tpl_common_vars' => ['tpl_head' => $LNG['L_MOVED']]];
+            }
+            if (!empty($wanted_list_tmp['SEEDING'])) {
+                $wanted['templates'][] = ['name' => 'wanted_seeding', 'tpl_vars' => $wanted_list_tmp['SEEDING'], 'tpl_common_vars' => ['tpl_head' => $LNG['L_SEEDING']]];
+            }
+            if (!empty($wanted_list_tmp['SEARCHING'])) {
+                $wanted['templates'][] = ['name' => 'wanted_searching', 'tpl_vars' => $wanted_list_tmp['SEARCHING'], 'tpl_common_vars' => ['tpl_head' => $LNG['L_SEARCHING']]];
+            }
+
+            //Fill common and necesary vars
+            foreach ($wanted['templates'] as &$template) {
+                $template['tpl_file'] = 'wanted-item';
+                $template['tpl_place'] = 'wanted';
+                $template['tpl_place_var'] = 'wanted_list';
+                $template['tpl_pri'] = 5;
+            }
+
+            if (!empty($wanted_list_tmp['TRACKING'])) {
+                $wanted['templates'][] = [
+                    'name' => 'wanted_tracking',
+                    'tpl_file' => 'wanted-item',
+                    'tpl_place' => 'wanted',
+                    'tpl_place_var' => 'track_show_list',
+                    'tpl_pri' => 5,
+                    'tpl_vars' => $wanted_list_tmp['TRACKING'],
+                    'tpl_common_vars' => ['tpl_head' => $LNG['L_TRACKING']],
+                ];
+            }
+        }
     }
-    return false;
+    return $wanted;
 }
 
 function wanted_movies($wanted_id) {
@@ -277,58 +275,4 @@ function wanted_episode($id, $season, $episodes, $track_show = 0, $inherint_trac
         $db->finalize($result);
         (!$item) ? $db->insert('wanted', $wanted_item) : null;
     }
-}
-
-function day_check($id, $day_time, $wanted_status) {
-    global $LNG;
-
-    $data = '';
-    $sel_all = $sel_never = $sel_mon = $sel_tue = $sel_wed = $sel_thu = $sel_fri = $sel_sat = $sel_sun = '';
-
-    switch ($day_time) {
-        case -1:
-            $sel_never = 'selected';
-            break;
-        case 0:
-            $sel_all = 'selected';
-            break;
-        case 1:
-            $sel_mon = 'selected';
-            break;
-        case 2:
-            $sel_tue = 'selected';
-            break;
-        case 3:
-            $sel_wed = 'selected';
-            break;
-        case 4:
-            $sel_thu = 'selected';
-            break;
-        case 5:
-            $sel_fri = 'selected';
-            break;
-        case 6:
-            $sel_sat = 'selected';
-            break;
-        case 7:
-            $sel_sun = 'selected';
-            break;
-    }
-
-    ($wanted_status != -1 ) ? $disabled = 'disabled' : $disabled = '';
-    $data .= '<form class="form_inline" method="POST" >';
-    $data .= '<select ' . $disabled . ' onchange="this.form.submit()" name="check_day[' . $id . ']">';
-    $data .= '<option ' . $sel_never . ' value="-1">' . $LNG['L_NEVER'] . '</option>';
-    $data .= '<option ' . $sel_all . ' value="0">' . $LNG['L_DAY_ALL'] . '</option>';
-    $data .= '<option ' . $sel_mon . ' value="1">' . $LNG['L_DAY_MON'] . '</option>';
-    $data .= '<option ' . $sel_tue . ' value="2">' . $LNG['L_DAY_TUE'] . '</option>';
-    $data .= '<option ' . $sel_wed . ' value="3">' . $LNG['L_DAY_WED'] . '</option>';
-    $data .= '<option ' . $sel_thu . ' value="4">' . $LNG['L_DAY_THU'] . '</option>';
-    $data .= '<option ' . $sel_fri . ' value="5">' . $LNG['L_DAY_FRI'] . '</option>';
-    $data .= '<option ' . $sel_sat . ' value="6">' . $LNG['L_DAY_SAT'] . '</option>';
-    $data .= '<option ' . $sel_sun . ' value="7">' . $LNG['L_DAY_SUN'] . '</option>';
-    $data .= '</select>';
-    $data .= '</form>';
-
-    return $data;
 }

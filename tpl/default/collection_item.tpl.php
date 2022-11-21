@@ -7,15 +7,14 @@
  *  @copyright Copyright @ 2020 - 2021 Diego Garcia (diego/@/envigo.net)
  */
 ?>
-
 <div class="display display_1">
     <div class="poster_preview">
-        <a onClick="show_loading();" href="<?= $tdata['get_params'] ?>&id=<?= $tdata['id'] ?>">
-            <img class="img_poster_preview"  alt="" src="<?= $tdata['poster'] ?>"/>
+        <a  href="&id=<?= $tdata['id'] ?>">
+            <img class="img_poster_preview"  alt="" src="<?= !empty($tdata['poster']) ? $tdata['poster'] : null ?>"/>
         </a>
         <div class="overlay_nfiles">
             <div class="nfiles">
-                <?= $tdata['total_items']; ?>
+                <?= !empty($tdata['total_items']) ? $tdata['total_items'] : null ?>
             </div>
         </div>
     </div>
@@ -23,3 +22,5 @@
         <div class="item_title"><?= $tdata['title'] ?></div>
     </div>
 </div>
+
+

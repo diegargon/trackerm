@@ -22,15 +22,13 @@ require_once('includes/User.class.php');
 $user = new Users();
 
 $prefs = new Preferences($user->getId());
-require_once('includes/html.class.php');
 require_once('includes/pages.inc.php');
 require_once('includes/html.common.php');
 require_once('includes/library.inc.php');
 require_once('includes/new_media.inc.php');
 require_once('includes/user_management.inc.php');
-require_once('includes/web.class.php');
-require_once('includes/frontend.class.php');
+require_once('includes/Web.php');
+require_once('includes/BackEnd.php');
+require_once('includes/FrontEnd.php');
 require_once('includes/torrents.inc.php');
 require_once('includes/strings.inc.php');
-
-$frontend = new FrontEnd();

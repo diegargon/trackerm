@@ -10,16 +10,19 @@
 !defined('IN_WEB') ? exit : true;
 
 function page_new_media(string $media_type) {
-    global $cfg, $db, $LNG, $log, $frontend, $prefs;
+    global $cfg, $db, $LNG, $log, $prefs;
+
+    $templates = [];
+    $templates['templates'] = [];
 
     $search_type = Filter::getString('search_type');
     $columns = $prefs->getPrefsItem('tresults_columns');
     $rows = $prefs->getPrefsItem('tresults_rows');
     $items_per_page = $columns * $rows;
-
+    $page = Filter::getString('page');
     $npage = Filter::getInt('npage');
-    empty($npage) ? $npage = 1 : null;
 
+    empty($npage) || (!empty($search_type) && $search_type !== $media_type) ? $npage = 1 : null;
     $cache_media_expire = 0;
     $topt = [];
 
@@ -82,14 +85,21 @@ function page_new_media(string $media_type) {
     }
 
     if (empty($res_media_db)) {
-        return $frontend->msgBox(['title' => 'L_' . strtoupper($media_type), 'body' => 'L_NO_RESULTS']);
+        return [
+            'name' => 'msgbox',
+            'tpl_file' => 'msgbox',
+            'tpl_pri' => 5,
+            'tpl_place' => $media_type . '_torrents',
+            'tpl_place_var' => 'items',
+            'tpl_vars' => ['title' => 'L_' . strtoupper($media_type), 'body' => 'L_NO_RESULTS']
+        ];
     }
 
     usort($res_media_db, function ($a, $b) {
         return $b['id'] - $a['id'];
     });
 
-    //UPDATE CACHE. save before screening
+    //UPDATE CACHE. save before doing more things
     if (($cfg['search_cache'] && $cache_media_expire)) {
         $media_cache['words'] = '';
         $media_cache['updated'] = time();
@@ -111,10 +121,8 @@ function page_new_media(string $media_type) {
     torrents_filters($res_media_db);
 
     /* BUILD PAGE */
-    $page_news = '';
 
     if (!empty($res_media_db)) {
-        $topt['search_type'] = $media_type;
         $topt['media_type'] = $media_type;
         $topt['view_type'] = $media_type . '_torrent';
         ($media_type == 'movies') ? $topt['head'] = $LNG['L_MOVIES'] : $topt['head'] = $LNG['L_SHOWS'];
@@ -128,14 +136,45 @@ function page_new_media(string $media_type) {
         }
 
         $res_media_db = array_slice($res_media_db, $jump_x_entrys, $items_per_page);
-        $page_news_media = $frontend->buildTable($res_media_db, $topt);
 
-        $page_news .= $page_news_media;
+        foreach ($res_media_db as &$res_media) {
+            $res_media['poster'] = get_poster($res_media);
+            $res_media['size'] = bytesToGB($res_media['size'], 2) . 'GB';
+        }
+        $pager_opts['npage'] = $npage;
+        $pager_opts['page'] = $page;
+        $pager_opts['pager_place'] = $media_type . '_torrents';
+        $pager_opts['link_options'] = ['search_type' => $media_type];
+
+        $templates['templates'][] = get_pager(array_merge($topt, $pager_opts));
+        //$page_news .= $page_news_media;
     } else {
-        $page_news .= $frontend->msgBox(['title' => 'L_' . strtoupper($media_type), 'body' => 'L_NO_RESULTS']);
+        return [
+            'name' => 'msgbox',
+            'tpl_file' => 'msgbox',
+            'tpl_pri' => 5,
+            'tpl_place' => $media_type . '_torrents',
+            'tpl_place_var' => 'items',
+            'tpl_vars' => ['title' => 'L_' . strtoupper($media_type), 'body' => 'L_NO_RESULTS']
+        ];
     }
 
-    return $page_news;
+
+    $page_news = [
+        'name' => 'items_torrent_' . $media_type,
+        'tpl_file' => 'items_table',
+        'tpl_pri' => 5,
+        'tpl_place' => $media_type . '_torrents',
+        'tpl_place_var' => 'items',
+    ];
+
+    $page_news['tpl_vars'] = $res_media_db;
+    $topt['tpl_items_break'] = $prefs->getPrefsItem('tresults_columns');
+    $page_news['tpl_common_vars'] = $topt;
+
+    $templates['templates'][] = $page_news;
+
+    return $templates;
 }
 
 function mix_media_res(array $res_media_db) {

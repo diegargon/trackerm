@@ -10,7 +10,7 @@
 <div class="footer">
     <p class="center">Querys[D<?= $tdata['num_querys'] ?>][J<?= $cfg['remote_querys_jackett'] ?>][T<?= $cfg['remote_querys_tmdb'] ?>]</p>
     <p class="copyright">
-        <a href="https://github.com/diegargon/trackerm" target="_blank">TrackerM v<?= $cfg['version'] . ' DB v' . $cfg['db_version'] ?></a> - Copyright @ 2020 - 2021
+        <a href="https://github.com/diegargon/trackerm" target="_blank">TrackerM <?= $cfg['version'] . ' DB v' . $cfg['db_version'] ?></a> - Copyright @ 2020 - 2021
     </p>
     <?php
     if (!empty($tdata['querys']) && !empty($user->isAdmin())) {

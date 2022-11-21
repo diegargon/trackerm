@@ -11,6 +11,6 @@ define('IN_WEB', true);
 
 require_once('includes/usermode.inc.php');
 
-$web = new Web($frontend);
+$web = new Web();
 $web->render();
 $db->close();

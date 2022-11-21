@@ -20,17 +20,15 @@ if (isset($tdata['tpl_var_ary_first'])) {
         <div class="divTableRow">
         <?php } ?>
 
-
         <div class="divTableCell">
             <div class="display display_1">
                 <div class="poster_preview">
-                    <a href="?page=view_genres&media_type=<?= $tdata['media_type'] ?>&id=<?= $tdata['id'] ?>">
+                    <a  href="?page=<?= $tdata['view_page'] ?>&name=<?= $tdata['name'] ?>&media_type=<?= $tdata['media_type'] ?>">
                         <div class="item_details">
-                            <div class="item_poster_genre"><?= $tdata['title'] ?></div>
+                            <div class="item_poster_genre"><?= $tdata['name'] ?></div>
                         </div>
                     </a>
                 </div>
-
             </div>
         </div>
 

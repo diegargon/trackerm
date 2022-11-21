@@ -10,10 +10,7 @@
 !defined('IN_WEB') ? exit : true;
 
 function page_index() {
-    global $cfg, $db, $user, $LNG, $log, $frontend;
-
-    $titems = [];
-    $status_msg = '';
+    global $cfg, $db, $user, $LNG, $log;
 
     //POST ADMIN
     if (isset($_POST['clear_disabled']) && $user->isAdmin()) {
@@ -35,126 +32,249 @@ function page_index() {
         //cli must clear force_fix_perms
     }
 
-    // General Info
-    $tdata = [];
-    $tdata['content'] = '';
-    $tdata['title'] = $LNG['L_IDENTIFIED'] . ': ' . strtoupper($user->getUsername());
+    //Father TPL
+    $main['templates'] = [];
 
+    // User Profile
+
+    $profile_container_vars = [];
+    $profile_container_vars['title'] = $LNG['L_PROFILE'];
+    $profile_container_vars['content'] = '';
+    $profile_container_vars['status_msg'] = '';
+
+    //User Profile
+
+    $profile_vars = [];
+    $profile_vars['username'] = strtoupper($user->getUsername());
     if (Filter::getInt('edit_profile')) {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            (isset($_POST['cur_password']) && isset($_POST['new_password'])) ? $status_msg .= user_change_password() . '<br/>' : null;
-            $status_msg .= user_change_prefs();
+            (isset($_POST['cur_password']) && isset($_POST['new_password'])) ? $profile_container_vars['status_msg'] .= user_change_password() . '<br/>' : null;
+            $profile_container_vars['status_msg'] .= user_change_prefs();
         }
-        $tdata['content'] .= user_edit_profile();
+        $main['templates'][] = user_edit_profile();
     } else {
-        $tdata['content'] .= Html::link(['class' => 'action_link'], '', $LNG['L_EDIT'], ['page' => 'index', 'edit_profile' => 1]);
+        $profile_vars['edit_profile_btn'] = $LNG['L_EDIT'];
     }
+    $profile_vars['logoutbtn'] = $LNG['L_LOGOUT'];
 
-    $tdata['content'] .= Html::link(['class' => 'action_link'], '', $LNG['L_LOGOUT'], ['page' => 'logout']);
-    $tdata['content'] .= $status_msg;
-    $titems['col1'][] = $frontend->getTpl('home-item', $tdata);
+    //Adding profiles templates
 
+    $main['templates'][] = [
+        'name' => 'user_profile',
+        'tpl_file' => 'user_profile',
+        'tpl_pri' => 16,
+        'tpl_place' => 'profile_container',
+        'tpl_place_var' => 'content',
+        'tpl_vars' => $profile_vars
+    ];
+
+    //Profile Container
+    $main['templates'][] = [
+        'name' => 'profile_container',
+        'tpl_file' => 'home-item',
+        'tpl_pri' => 15,
+        'tpl_place' => 'homepage',
+        'tpl_place_var' => 'col1',
+        'tpl_vars' => $profile_container_vars,
+    ];
+
+    //
     // Config
+    //
     if (!empty($user->isAdmin())) {
-        $tdata = [];
-        $tdata['title'] = $LNG['L_ADMINISTRATION'];
-        $tdata['content'] = Html::form(['id' => 'clear_disabled', 'method' => 'post'], Html::input(['type' => 'submit', 'name' => 'clear_disabled', 'value' => $LNG['L_CLEAR_DISABLE']]));
-        $tdata['content'] .= Html::form(['id' => 'clear_search_cache', 'method' => 'post'], Html::input(['type' => 'submit', 'name' => 'clear_search_cache', 'value' => $LNG['L_CLEAR_SEARCH_CACHE']]));
-        //$tdata['content'] .= Html::form(['id' => 'force_fix_perms', 'method' => 'post'], Html::input(['type' => 'submit', 'name' => 'force_fix_perms', 'value' => $LNG['L_FIX_PERMS']]));
-        $tdata['content'] .= Html::link(['class' => 'action_link'], 'index.php', $LNG['L_CONFIG'], ['page' => 'config']);
+        $main['templates'][] = [
+            'name' => 'admin_container',
+            'tpl_file' => 'home-item',
+            'tpl_pri' => 12,
+            'tpl_place' => 'homepage',
+            'tpl_place_var' => 'col1',
+            'tpl_vars' => [
+                'title' => $LNG['L_ADMINISTRATION'],
+            ]
+        ];
 
-        $titems['col1'][] = $frontend->getTpl('home-item', $tdata);
+        $admin_vars = [];
+        $admin_vars['clear_disable'] = 1;
+        $admin_vars['clear_disable_title'] = $LNG['L_CLEAR_DISABLE'];
+        $admin_vars['clear_search_cache'] = 1;
+        $admin_vars['clear_search_cache_title'] = $LNG['L_CLEAR_SEARCH_CACHE'];
+        $admin_vars['force_fix_perms'] = 1;
+        $admin_vars['force_fix_perms_title'] = $LNG['L_FIX_PERMS'];
+        $admin_vars['config_btn'] = 1;
+        $admin_vars['config_btn_title'] = $LNG['L_CONFIG'];
+
+        $main['templates'][] = [
+            'name' => 'admin_profile',
+            'tpl_file' => 'admin_profile',
+            'tpl_pri' => 13,
+            'tpl_place' => 'admin_container',
+            'tpl_place_var' => 'content',
+            'tpl_vars' => $admin_vars,
+        ];
     }
 
     // User managament
     if (!empty($user->isAdmin())) {
-        $tdata = [];
-        $tdata = user_management();
-        $titems['col1'][] = $frontend->getTpl('home-item', $tdata);
+        $main['templates'][] = new_user();
+        $main['templates'][] = show_users();
+        $main['templates'][] = user_management();
     }
-    // Hard disk
-    $tdata = [];
-    $tdata['title'] = '';
-    $lib_stats = getLibraryStats();
-    $paths['movies_paths'] = '';
-    $paths['shows_paths'] = '';
 
-    if (isset($lib_stats['movies_paths']) && valid_array($lib_stats['movies_paths'])) {
-        foreach ($lib_stats['movies_paths'] as $path) {
-            $paths['movies_paths'] = Html::span(['class' => 'harddisk_paths'], "{$LNG['L_FREE_TOTAL']} {$LNG['L_ON']} {$path['basename']} : {$path['free']} / {$path['total']}");
-        }
-    }
-    if (isset($lib_stats['shows_paths']) && valid_array($lib_stats['shows_paths'])) {
-        foreach ($lib_stats['shows_paths'] as $path) {
-            $paths['shows_paths'] = Html::span(['class' => 'harddisk_paths'], "{$LNG['L_FREE_TOTAL']} {$LNG['L_ON']} {$path['basename']} : {$path['free']} / {$path['total']}");
-        }
-    }
-    $tdata['content'] = $frontend->getTpl('harddisk', array_merge($lib_stats, $paths));
-    $titems['col1'][] = $frontend->getTpl('home-item', $tdata);
+    //
+    // Disks
+    //
 
+    $disks_vars = [];
+    $libstats = getLibraryStats();
+    if (is_array($libstats)) {
+        $disks_vars = array_merge($disks_vars, $libstats);
+    }
+
+    $main['templates'][] = [
+        'name' => 'disks',
+        'tpl_file' => 'harddisk',
+        'tpl_pri' => 9,
+        'tpl_place' => 'disks_container',
+        'tpl_place_var' => 'content',
+        'tpl_vars' => $disks_vars
+    ];
+
+    $main['templates'][] = [
+        'name' => 'disks_container',
+        'tpl_file' => 'home-item',
+        'tpl_pri' => 8,
+        'tpl_place' => 'homepage',
+        'tpl_place_var' => 'col1',
+        'tpl_vars' => ['title' => '']
+    ];
+
+    //
     // States Messages
+    //
+
     isset($_POST['clear_state']) ? $log->clearStateMsgs() : null;
-    $tdata = [];
-    $tdata['title'] = $LNG['L_STATE_MSG'];
-    $clean_link = Html::input(['type' => 'submit', 'class' => 'submit_btn clear_btn', 'name' => 'clear_state', 'value' => $LNG['L_CLEAR']]);
-    $tdata['content'] = Html::form(['method' => 'POST'], $clean_link);
-    $state_msgs = $log->getStateMsgs();
 
-    if (!empty($state_msgs) && (count($state_msgs) > 0)) {
-        foreach ($state_msgs as $state_msg) {
-            $state_msg['display_time'] = strftime("%d %h %X", strtotime($state_msg['created']));
-            $tdata['content'] .= $frontend->getTpl('statemsg_item', $state_msg);
+    $statusmsg_vars = [];
+    $statusmsg_vars['clear_title'] = $LNG['L_CLEAR'];
+
+    $status_msgs = $log->getStateMsgs();
+
+    if (!empty($status_msgs) && (count($status_msgs) > 0)) {
+        $status_msgs[0]['first'] = 1;
+        foreach ($status_msgs as $stid => $status_msg) {
+            $status_msgs[$stid]['created_frmt'] = strftime("%d %h %X", strtotime($status_msg['created']));
         }
+    } else {
+        $status_msgs = [];
     }
-    $tdata['main_class'] = 'home_state_msg';
-    $titems['col2'][] = $frontend->getTpl('home-item', $tdata);
 
+    $statusmsg_vars['msg'] = $status_msgs;
+
+    $main['templates'][] = [
+        'name' => 'statusmsg_item',
+        'tpl_file' => 'statusmsg_item',
+        'tpl_pri' => 30,
+        'tpl_place' => 'statusmsg_container',
+        'tpl_place_var' => 'content',
+        'tpl_vars' => $statusmsg_vars
+    ];
+
+    $main['templates'][] = [
+        'name' => 'statusmsg_container',
+        'tpl_file' => 'home-item',
+        'tpl_pri' => 29,
+        'tpl_place' => 'homepage',
+        'tpl_place_var' => 'col2',
+        'tpl_vars' => [
+            'title' => $LNG['L_STATE_MSG'],
+            'main_class' => 'home_state_msg',
+        ]
+    ];
+
+    //
     // LATEST info
-    $tdata = [];
-    $tdata['title'] = $LNG['L_NEWS'];
-    $tdata['content'] = '';
+    //
+    //TODO add upper template / remove implode
     $latest_ary = getfile_ary('LATEST');
+
+    $latest_container_vars = [];
+    $latest_container_vars['title'] = $LNG['L_NEWS'];
+    $latest_container_vars['main_class'] = 'home_news';
+
     if (!empty($latest_ary)) {
         $latest_ary = array_slice($latest_ary, 2);
-        foreach ($latest_ary as $latest) {
-            $tdata['content'] .= Html::div(['class' => 'divBlock'], $latest);
-        }
+        $latest_container_vars['content'] = implode('<br/>', $latest_ary);
+    } else {
+        $latest_container_vars['content'] = [];
     }
-    $tdata['main_class'] = 'home_news';
-    $titems['col2'][] = $frontend->getTpl('home-item', $tdata);
 
+    $main['templates'][] = [
+        'name' => 'latest_container',
+        'tpl_file' => 'home-item',
+        'tpl_pri' => 25,
+        'tpl_place' => 'homepage',
+        'tpl_place_var' => 'col2',
+        'tpl_vars' => $latest_container_vars,
+    ];
+
+    //
     // LOGS
+    //
+    //TODO add upper template / remove implode
     isset($_POST['clear_log']) ? file_put_contents('cache/log/trackerm.log', '') : null;
-    $tdata = [];
-    $tdata['title'] = $LNG['L_LOGS'];
-    $clean_link = Html::input(['type' => 'submit', 'class' => 'submit_btn clear_btn', 'name' => 'clear_log', 'value' => $LNG['L_CLEAR']]);
-    $tdata['content'] = Html::form(['method' => 'POST'], $clean_link);
-    $latest_ary = getfile_log('cache/log/trackerm.log');
-    if (!empty($latest_ary)) {
-        foreach (array_reverse($latest_ary) as $latest) {
-            if (!empty(trim($latest))) {
-                $tdata['content'] .= Html::div(['class' => 'divBlock'], $latest);
-            }
-        }
-    }
-    $tdata['main_class'] = 'home_log';
-    $titems['col2'][] = $frontend->getTpl('home-item', $tdata);
 
+    $logs_container_tpl = [
+        'name' => 'logs_container',
+        'tpl_file' => 'home-item',
+        'tpl_pri' => 10,
+        'tpl_place' => 'homepage',
+        'tpl_place_var' => 'col2',
+        'tpl_vars' => [],
+    ];
+
+    $logs_container_tpl['tpl_vars']['title'] = $LNG['L_LOGS'];
+    $logs_container_tpl['tpl_vars']['main_class'] = 'home_log';
+
+    $logs_ary = getfile_log('cache/log/trackerm.log');
+    if (!empty($logs_ary)) {
+        $logs_ary = array_reverse($logs_ary);
+        $logs_container_tpl['tpl_vars']['content'] = implode('<br/>', $logs_ary);
+    }
+
+    $main['templates'][] = $logs_container_tpl;
+
+    //
     // Starting Info
-    $tdata = [];
-    $tdata['title'] = $LNG['L_STARTING'];
-    $tdata['content'] = getfile('STARTING.' . substr($cfg['LANG'], 0, 2));
-    $tdata['main_class'] = 'home_starting';
-    $titems['col2'][] = $frontend->getTpl('home-item', $tdata);
+    //
+
+    $main['templates'][] = [
+        'name' => 'starting_container',
+        'tpl_file' => 'home-item',
+        'tpl_pri' => 8,
+        'tpl_place' => 'homepage',
+        'tpl_place_var' => 'col2',
+        'tpl_vars' => [
+            'title' => $LNG['L_STARTING'],
+            'main_class' => 'home_log',
+            'content' => getfile('STARTING.' . substr($cfg['LANG'], 0, 2)),
+        ],
+    ];
 
     //FIN
-    $home = $frontend->getTpl('home-page', $titems);
+    //Parent
 
-    return $home;
+    $main['templates'][] = [
+        'name' => 'homepage',
+        'tpl_file' => 'home-page',
+        'tpl_pri' => 0,
+        'tpl_vars' => [],
+    ];
+
+    return $main;
 }
 
 function page_view() {
-    global $db, $frontend, $user;
+    global $db, $user;
 
     $id = Filter::getInt('id');
     $view_type = Filter::getString('view_type');
@@ -162,7 +282,7 @@ function page_view() {
     $vid = Filter::getInt('vid');
 
     if (empty($id) || empty($view_type)) {
-        return $frontend->msgBox($msg = ['title' => 'L_ERROR', 'body' => '1A1001']);
+        return ['msg_type' => 1, 'title' => 'L_ERROR', 'body' => '1A1001'];
     }
 
     if ($view_type == 'movies_library') {
@@ -182,13 +302,13 @@ function page_view() {
             //Register
             if ($dfile_opt == 1 && !empty($dfile_master_id)) {
                 delete_register($dfile_master_id, $dmedia_type);
-                return $frontend->msgBox($msg = ['title' => 'L_SUCCESS', 'body' => 'L_REGISTER_DELETED_SUCCESFUL']);
+                return ['msg_type' => 1, 'title' => 'L_SUCCESS', 'body' => 'L_REGISTER_DELETED_SUCCESFUL'];
             }
             //FILE
             if ($dfile_opt == 2 && !empty($dfile_master_id)) {
                 $return = delete_file($dfile_id, $dfile_master_id, $dmedia_type);
                 if ($return === 'SUCCESS_NOMASTER') {
-                    return $frontend->msgBox($msg = ['title' => 'L_SUCCESS', 'body' => 'L_REGISTER_DELETED_SUCCESFUL']);
+                    return ['msg_type' => 1, 'title' => 'L_SUCCESS', 'body' => 'L_REGISTER_DELETED_SUCCESFUL'];
                 }
             }
 
@@ -196,7 +316,7 @@ function page_view() {
             if ($dfile_opt == 3 && !empty($dfile_master_id)) {
                 $return = delete_files($dfile_master_id, $dmedia_type);
                 if ($return === 'SUCCESS_NOMASTER') {
-                    return $frontend->msgBox($msg = ['title' => 'L_SUCCESS', 'body' => 'L_REGISTER_DELETED_SUCCESFUL']);
+                    return ['msg_type' => 1, 'title' => 'L_SUCCESS', 'body' => 'L_REGISTER_DELETED_SUCCESFUL'];
                 }
             }
         }
@@ -227,14 +347,17 @@ function page_view() {
 }
 
 function page_view_group() {
-    global $db, $frontend, $prefs;
+    global $db, $prefs;
 
     $id = Filter::getInt('id');
     $group_type = Filter::getInt('group_type');
     $media_type = Filter::getAzChar('media_type');
     $npage = Filter::getString('npage');
 
-    empty($npage) ? $npage = 1 : null;
+    $collections['template'] = [];
+
+    $search_type = Filter::getString('search_type');
+    empty($npage) || (!empty($search_type) && $search_type !== $media_type) ? $npage = 1 : null;
 
     $rows = $prefs->getPrefsItem('tresults_rows');
     $columns = $prefs->getPrefsItem('tresults_columns');
@@ -260,37 +383,66 @@ function page_view_group() {
     }
     mark_masters_views($media_type, $collection_items);
 
-    $nitems = $db->qSingle("SELECT COUNT(*) FROM $library_master WHERE collection = $type_id");
+    //TODO: Pager
+    //$nitems = $db->qSingle("SELECT COUNT(*) FROM $library_master WHERE collection = $type_id");
+    /*
+      $pager_opt['npage'] = $npage;
+      $pager_opt['nitems'] = $nitems;
+      $pager_opt['media_type'] = $media_type;
+      $pager_opt['get_params']['media_type'] = $media_type;
+      $pager_opt['get_params']['group_type'] = 3;
+      $pager_opt['get_params']['id'] = $id;
 
-    $pager_opt['npage'] = $npage;
-    $pager_opt['nitems'] = $nitems;
-    $pager_opt['media_type'] = $media_type;
-    $pager_opt['get_params']['media_type'] = $media_type;
-    $pager_opt['get_params']['group_type'] = 3;
-    $pager_opt['get_params']['id'] = $id;
+      //$fcollection_items = $frontend->getPager($pager_opt);
+      $table_opt['head'] = $media_type;
+      $table_opt['media_type'] = $media_type;
+      $table_opt['view_type'] = $media_type . '_library';
+      $table_opt['page'] = 'view_group';
+      $table_opt['npage'] = $npage;
+     */
+    //$fcollection_items .= $frontend->buildTable($collection_items, $table_opt);
+    //$collection[0]['item_list'] = $fcollection_items;
+    //return $frontend->getTpl('view_group', $collection[0]);
 
-    $fcollection_items = $frontend->getPager($pager_opt);
-    $table_opt['head'] = $media_type;
-    $table_opt['media_type'] = $media_type;
-    $table_opt['view_type'] = $media_type . '_library';
-    $table_opt['page'] = 'view_group';
-    $table_opt['npage'] = $npage;
+    $group_items_tpl = [
+        'name' => 'group_items',
+        'tpl_file' => 'items_table',
+        'tpl_pri' => 10,
+        'tpl_place' => 'view_group',
+        'tpl_place_var' => 'item_list',
+        'tpl_vars' => $collection_items,
+        'tpl_common_vars' => [
+            'view_type' => $media_type . '_library',
+            'media_type' => $media_type,
+            'tpl_items_break' => $columns,
+        ]
+    ];
 
-    $fcollection_items .= $frontend->buildTable($collection_items, $table_opt);
+    $collections['templates'][] = $group_items_tpl;
 
-    $collection[0]['item_list'] = $fcollection_items;
-    return $frontend->getTpl('view_group', $collection[0]);
+    $view_group_tpl = [
+        'name' => 'view_group',
+        'tpl_file' => 'view_group',
+        'tpl_pri' => 0,
+        'tpl_vars' => $collection[0],
+    ];
+
+    $collections['templates'][] = $view_group_tpl;
+
+    return $collections;
 }
 
 function page_view_genres() {
-    global $prefs, $db, $frontend;
+    global $prefs, $db, $LNG;
 
     $id = Filter::getInt('id');
     $media_type = Filter::getAzChar('media_type');
     $npage = Filter::getString('npage');
-    $page_genres = '';
+    $page = Filter::getString('page');
+    $page_genres['templates'] = [];
 
-    empty($npage) ? $npage = 1 : null;
+    $search_type = Filter::getString('search_type');
+    empty($npage) || (!empty($search_type) && $search_type !== $media_type) ? $npage = 1 : null;
 
     $rows = $prefs->getPrefsItem('tresults_rows');
     $columns = $prefs->getPrefsItem('tresults_columns');
@@ -315,17 +467,39 @@ function page_view_genres() {
     $pager_opt['npage'] = $npage;
     $pager_opt['nitems'] = $nitems;
     $pager_opt['media_type'] = $media_type;
-    $pager_opt['get_params']['media_type'] = $media_type;
-    $pager_opt['get_params']['id'] = $id;
-    $page_genres .= $frontend->getPager($pager_opt);
+    $pager_opt['num_table_objs'] = $nitems;
+    $pager_opt['pager_place'] = 'view_genres_container';
+    $pager_opt['link_options'] = ['id' => $id, 'media_type' => $media_type];
+
+    $table_opt['tpl_items_break'] = $columns;
     $table_opt['head'] = $media_type;
     $table_opt['media_type'] = $media_type;
     $table_opt['view_type'] = $media_type . '_library';
-    $table_opt['page'] = 'view_group';
+    $table_opt['page'] = $page;
     $table_opt['npage'] = $npage;
 
-    $page_genres .= $frontend->buildTable($genre_items, $table_opt);
+    $page_genres['templates'][] = get_pager(array_merge($table_opt, $pager_opt));
 
+    $genres_tpl = [
+        'name' => 'view_genres',
+        'tpl_file' => 'items_table',
+        'tpl_pri' => 2,
+        'tpl_place' => 'view_genres_container',
+        'tpl_place_var' => 'items',
+        'tpl_vars' => $genre_items,
+        'tpl_common_vars' => $table_opt
+    ];
+
+    $page_genres['templates'][] = [
+        'name' => 'view_genres_container',
+        'tpl_file' => 'items_table_container',
+        'tpl_pri' => 0,
+        'tpl_vars' => [
+            'head' => $LNG['L_' . strtoupper($media_type)],
+        ]
+    ];
+
+    $page_genres['templates'][] = $genres_tpl;
     return $page_genres;
 }
 
@@ -342,12 +516,13 @@ function page_view_writer() {
 }
 
 function page_view_name(string $name_type) {
-    global $prefs, $db, $frontend;
+    global $prefs, $db, $LNG;
 
     $name = Filter::getUtf8('name');
     $media_type = Filter::getAzChar('media_type');
     $npage = Filter::getString('npage');
-    $page_names = '';
+    $page_names['templates'] = [];
+    $page = Filter::getString('page');
 
     empty($npage) ? $npage = 1 : null;
 
@@ -375,137 +550,430 @@ function page_view_name(string $name_type) {
 
     $pager_opt['npage'] = $npage;
     $pager_opt['nitems'] = $nitems;
-    $pager_opt['media_type'] = $media_type;
-    $pager_opt['get_params']['media_type'] = $media_type;
-    $pager_opt['get_params']['name'] = $name;
-    $page_names .= $frontend->getPager($pager_opt);
+    $pager_opt['page'] = $page;
+    $pager_opt['num_table_objs'] = $nitems;
+    $pager_opt['pager_place'] = $media_type . '_viewnames_container';
+    $pager_opt['link_options'] = ['name' => $name, 'media_type' => $media_type];
+
     $table_opt['head'] = $media_type;
     $table_opt['media_type'] = $media_type;
     $table_opt['view_type'] = $media_type . '_library';
-    $table_opt['page'] = 'view_group';
     $table_opt['npage'] = $npage;
+    $table_opt['tpl_items_break'] = $columns;
 
-    $page_names .= $frontend->buildTable($names_items, $table_opt);
+    $page_names['templates'][] = get_pager(array_merge($table_opt, $pager_opt));
+
+    $page_names['templates'][] = [
+        'name' => 'items_names_' . $media_type,
+        'tpl_file' => 'items_table',
+        'tpl_pri' => 5,
+        'tpl_place' => $media_type . '_viewnames_container',
+        'tpl_place_var' => 'items',
+        'tpl_vars' => $names_items,
+        'tpl_common_vars' => $table_opt,
+    ];
+
+    $page_names['templates'][] = [
+        'name' => $media_type . '_viewnames_container',
+        'tpl_file' => 'items_table_container',
+        'tpl_pri' => 0,
+        'tpl_place_var' => null,
+        'tpl_place' => null,
+        'tpl_vars' => [
+            'head' => $LNG['L_' . strtoupper($media_type)],
+        ]
+    ];
 
     return $page_names;
 }
 
 function page_library() {
-    global $cfg, $prefs;
+    global $cfg, $prefs, $LNG;
 
-    $page_library = '';
+    $library = [];
+    $library['templates'] = [];
 
     (isset($_POST['rebuild_movies'])) ? rebuild('movies', $cfg['MOVIES_PATH']) : null;
     (isset($_POST['rebuild_shows'])) ? rebuild('shows', $cfg['SHOWS_PATH']) : null;
 
     if (($cfg['want_movies']) && ( $_GET['page'] == 'library' || $_GET['page'] == 'library_movies')) {
         if (empty($prefs->getPrefsItem('show_collections'))) {
-            $page_library .= show_my_media('movies');
+            $movies_templates = show_my_media('movies');
+            $library['templates'] = array_merge($library['templates'], $movies_templates['templates']);
+            //var_dump($library);
         } else {
             $sel_col = $prefs->getPrefsItem('show_collections');
             if ($sel_col == 1) {
-                $page_library .= show_collections();
+                $collections_templates = show_collections();
+                $library['templates'] = array_merge($library['templates'], $collections_templates['templates']);
             } else if ($sel_col == 2) {
-                $page_library .= show_genres('movies');
+                $genres_templates = show_genres('movies');
+                $library['templates'] = array_merge($library['templates'], $genres_templates['templates']);
             } else if ($sel_col == 3) {
-                $page_library .= show_directors('movies');
+                $directors_templates = show_directors('movies');
+                $library['templates'] = array_merge($library['templates'], $directors_templates['templates']);
             } else if ($sel_col == 4) {
-                $page_library .= show_cast('movies');
+                $cast_templates = show_cast('movies');
+                $library['templates'] = array_merge($library['templates'], $cast_templates['templates']);
             } else if ($sel_col == 5) {
-                $page_library .= show_writer('movies');
+                $writer_templates = show_writer('movies');
+                $library['templates'] = array_merge($library['templates'], $writer_templates['templates']);
             }
         }
-    }
-    if (($cfg['want_shows']) && ($_GET['page'] == 'library' || $_GET['page'] == 'library_shows')) {
-        if (empty($prefs->getPrefsItem('show_collections'))) {
-            $page_library .= show_my_media('shows');
-        } else {
-            $sel_col = $prefs->getPrefsItem('show_collections');
-            if ($sel_col == 1) {
-                $page_library .= show_my_media('shows');
-            } else if ($sel_col == 2) {
-                $page_library .= show_genres('shows');
-            } else if ($sel_col == 3) {
-                $page_library .= show_directors('shows');
-            } else if ($sel_col == 4) {
-                $page_library .= show_cast('shows');
-            } else if ($sel_col == 5) {
-                $page_library .= show_writer('shows');
-            }
+
+        //Identify Movies Templates
+        $ident_templates = show_identify_media('movies');
+        if ($ident_templates && is_array($ident_templates['templates'])) {
+            $library['templates'] = array_merge($library['templates'], $ident_templates['templates']);
         }
+        //Main Show Movies Template
+        $library['templates'][] = [
+            'name' => 'movies_library',
+            'tpl_file' => 'items_table_container',
+            'tpl_pri' => 4,
+            'tpl_place_var' => null,
+            'tpl_place' => null,
+            'tpl_vars' => [
+                'head' => $topt['head'] = strtoupper($LNG['L_MOVIES']),
+                'items' => []
+            ]
+        ];
     }
 
-    return $page_library;
+    if (($cfg['want_shows']) && ($_GET['page'] == 'library' || $_GET['page'] == 'library_shows')) {
+        if (empty($prefs->getPrefsItem('show_collections'))) {
+            $shows_templates = show_my_media('shows');
+            $library['templates'] = array_merge($library['templates'], $shows_templates['templates']);
+        } else {
+            $sel_col = $prefs->getPrefsItem('show_collections');
+            if ($sel_col == 1) {
+                $shows_templates = show_my_media('shows');
+                $library['templates'] = array_merge($library['templates'], $shows_templates['templates']);
+            } else if ($sel_col == 2) {
+                $genres_templates = show_genres('shows');
+                $library['templates'] = array_merge($library['templates'], $genres_templates['templates']);
+            } else if ($sel_col == 3) {
+                $directors_templates = show_directors('shows');
+                $library['templates'] = array_merge($library['templates'], $directors_templates['templates']);
+            } else if ($sel_col == 4) {
+                $cast_templates = show_cast('shows');
+                $library['templates'] = array_merge($library['templates'], $cast_templates['templates']);
+            } else if ($sel_col == 5) {
+                $writer_templates = show_writer('shows');
+                $library['templates'] = array_merge($library['templates'], $writer_templates['templates']);
+            }
+        }
+
+        //Identify Movies Templates
+        $ident_templates = show_identify_media('shows');
+        if ($ident_templates && is_array($ident_templates['templates'])) {
+            $library['templates'] = array_merge($library['templates'], $ident_templates['templates']);
+        }
+        //Main Show Shows Template
+        $library['templates'][] = [
+            'name' => 'shows_library',
+            'tpl_file' => 'items_table_container',
+            'tpl_pri' => 4,
+            'tpl_place_var' => null,
+            'tpl_place' => null,
+            'tpl_vars' => [
+                'head' => $topt['head'] = strtoupper($LNG['L_SHOWS']),
+                'items' => ''
+            ]
+        ];
+    }
+
+    //var_dump($library);
+    return $library;
 }
 
 function page_news() {
-    global $cfg;
+    global $cfg, $LNG;
 
-    $page_news = '';
+    $page_news['templates'] = [];
+
     if (($cfg['want_movies']) && ($_GET['page'] == 'news' || $_GET['page'] == 'new_movies')) {
-        $page_news .= page_new_media('movies');
+        $movies_templates = page_new_media('movies');
+
+        $page_news['templates'][] = [
+            'name' => 'movies_torrents',
+            'tpl_file' => 'items_table_container',
+            'tpl_pri' => 4,
+            'tpl_place_var' => null,
+            'tpl_place' => null,
+            'tpl_vars' => [
+                'head' => $topt['head'] = strtoupper($LNG['L_MOVIES']),
+                'items' => []
+            ]
+        ];
+        $page_news['templates'] = array_merge($page_news['templates'], $movies_templates['templates']);
     }
+
     if (($cfg['want_shows']) && ($_GET['page'] == 'news' || $_GET['page'] == 'new_shows')) {
-        $page_news .= page_new_media('shows');
+        $shows_templates = page_new_media('shows');
+
+        $page_news['templates'][] = [
+            'name' => 'shows_torrents',
+            'tpl_file' => 'items_table_container',
+            'tpl_pri' => 4,
+            'tpl_vars' => [
+                'head' => $topt['head'] = strtoupper($LNG['L_SHOWS']),
+                'items' => []
+            ]
+        ];
+
+        $page_news['templates'] = array_merge($page_news['templates'], $shows_templates['templates']);
     }
+
     return $page_news;
 }
 
 function page_tmdb() {
-    global $cfg, $frontend, $prefs, $LNG;
+    global $cfg, $prefs, $LNG;
+
+    $page_tmdb['templates'] = [];
+
+    $search_type = Filter::getString('search_type');
+    $columns = $prefs->getPrefsItem('tresults_columns');
+    $rows = $prefs->getPrefsItem('tresults_rows');
+    $items_per_page = $columns * $rows;
+    $npage = Filter::getInt('npage');
+    $page = Filter::getString('page');
 
     (!empty($_GET['search_movies'])) ? $search_movies = Filter::getUtf8('search_movies') : $search_movies = '';
     (!empty($_GET['search_shows'])) ? $search_shows = Filter::getUtf8('search_shows') : $search_shows = '';
 
-    $tdata['search_movies_word'] = $search_movies;
-    $tdata['search_shows_word'] = $search_shows;
-
-    $page_tmdb = $frontend->getTpl('page_tmdb', $tdata);
+    $page_tmdb['templates'][] = [
+        'name' => 'tmdb_head',
+        'tpl_file' => 'page_tmdb',
+        'tpl_pri' => 100,
+        'tpl_vars' => [
+            'search_movies' => $search_movies,
+            'search_shows' => $search_shows,
+            'page' => $page,
+        ]
+    ];
 
     if (!empty($search_movies)) {
         $movies = mediadb_searchMovies(trim($search_movies));
-        $topt['search_type'] = 'movies';
-        $topt['view_type'] = 'movies_db';
-        $topt['head'] = $LNG['L_DB'];
-        !empty($movies) ? $page_tmdb .= $frontend->buildTable($movies, $topt) : null;
+
+        empty($npage) || (!empty($search_type) && $search_type !== 'movies') ? $npage_movies = 1 : $npage_movies = $npage;
+        $jump_x_entrys = ($items_per_page * $npage_movies) - $items_per_page;
+        $num_table_objects = count($movies);
+        $movies = array_slice($movies, $jump_x_entrys, $items_per_page);
+
+        foreach ($movies as &$movie) {
+            $movie['poster'] = get_poster($movie);
+        }
+        if (is_array($movies) && count($movies) > 0) {
+
+            $topt['view_type'] = 'movies_db';
+            $topt['media_type'] = 'movies';
+            $topt['head'] = $LNG['L_DB'];
+            $topt['tpl_items_break'] = $prefs->getPrefsItem('tresults_columns');
+
+            $pager_opts['npage'] = $npage_movies;
+            $pager_opts['npages'] = ceil((int) $num_table_objects / $items_per_page);
+            $pager_opts['page'] = $page;
+            $pager_opts['pager_place'] = 'tmdb_search_movies_container';
+            $pager_opts['num_table_objs'] = $num_table_objects;
+            $pager_opts['link_options'] = [
+                'search_movies' => $search_movies,
+                'search_shows' => $search_shows,
+                'search_type' => 'movies',
+            ];
+            $page_tmdb['templates'][] = get_pager(array_merge($topt, $pager_opts));
+
+            $page_tmdb['templates'][] = [
+                'name' => 'tmdb_search_movies_table',
+                'tpl_file' => 'items_table',
+                'tpl_pri' => 10,
+                'tpl_place' => 'tmdb_search_movies_container',
+                'tpl_place_var' => 'items',
+                'tpl_vars' => $movies,
+                'tpl_common_vars' => $topt,
+            ];
+            $page_tmdb['templates'][] = [
+                'name' => 'tmdb_search_movies_container',
+                'tpl_file' => 'items_table_container',
+                'tpl_pri' => 0,
+                'tpl_vars' => [
+                    'head' => $LNG['L_MOVIES'],
+                    'items' => '',
+                    'table_container_id' => 'movies'
+                ]
+            ];
+        }
     }
 
     if (!empty($search_shows)) {
         $shows = mediadb_searchShows(trim($search_shows));
-        $topt['search_type'] = 'shows';
-        $topt['view_type'] = 'shows_db';
-        $topt['head'] = $LNG['L_DB'];
-        !empty($shows) ? $page_tmdb .= $frontend->buildTable($shows, $topt) : null;
+        empty($npage) || (!empty($search_type) && $search_type !== 'shows') ? $npage_shows = 1 : $npage_shows = $npage;
+        $jump_x_entrys = ($items_per_page * $npage_shows) - $items_per_page;
+        $num_table_objects = count($shows);
+        $shows = array_slice($shows, $jump_x_entrys, $items_per_page);
+
+        foreach ($shows as &$show) {
+            $show['poster'] = get_poster($show);
+        }
+        if (is_array($shows) && count($shows) > 0) {
+            $topt['view_type'] = 'shows_db';
+            $topt['media_type'] = 'shows';
+            $topt['head'] = $LNG['L_DB'];
+            $topt['tpl_items_break'] = $prefs->getPrefsItem('tresults_columns');
+
+            $pager_opts['npage'] = $npage_shows;
+            $pager_opts['npages'] = ceil((int) $num_table_objects / $items_per_page);
+            $pager_opts['page'] = $page;
+            $pager_opts['pager_place'] = 'tmdb_search_shows_container';
+            $pager_opts['num_table_objs'] = $num_table_objects;
+            $pager_opts['link_options'] = [
+                'search_movies' => $search_movies,
+                'search_shows' => $search_shows,
+                'search_type' => 'shows',
+            ];
+            $page_tmdb['templates'][] = get_pager(array_merge($topt, $pager_opts));
+
+            $page_tmdb['templates'][] = [
+                'name' => 'tmdb_search_shows_table',
+                'tpl_file' => 'items_table',
+                'tpl_pri' => 10,
+                'tpl_place' => 'tmdb_search_shows_container',
+                'tpl_place_var' => 'items',
+                'tpl_vars' => $shows,
+                'tpl_common_vars' => $topt,
+            ];
+            $page_tmdb['templates'][] = [
+                'name' => 'tmdb_search_shows_container',
+                'tpl_file' => 'items_table_container',
+                'tpl_pri' => 0,
+                'tpl_vars' => [
+                    'head' => $LNG['L_SHOWS'],
+                    'items' => '',
+                    'table_container_id' => 'shows'
+                ]
+            ];
+        }
     }
+
     if (empty($_GET['search_movies']) && empty($_GET['search_shows']) && !empty($prefs->getPrefsItem('show_trending'))) {
         $topt['no_pages'] = 1;
         $results = mediadb_getTrending();
-
+        foreach ($results['movies'] as &$result) {
+            $result['poster'] = get_poster($result);
+        }
+        foreach ($results['shows'] as &$result) {
+            $result['poster'] = get_poster($result);
+        }
         if ($cfg['want_movies']) {
             $topt['view_type'] = 'movies_db';
-            $topt['head'] = $LNG['L_TRENDING_MOVIES'];
-            $page_tmdb .= $frontend->buildTable($results['movies'], $topt);
+
+            $topt['tpl_items_break'] = $prefs->getPrefsItem('tresults_columns');
+
+            $page_tmdb['templates'][] = [
+                'name' => 'tmdb_trending_movies_table',
+                'tpl_file' => 'items_table',
+                'tpl_pri' => 10,
+                'tpl_place' => 'tmdb_trending_movies_container',
+                'tpl_place_var' => 'items',
+                'tpl_vars' => $results['movies'],
+                'tpl_common_vars' => $topt,
+            ];
+            $page_tmdb['templates'][] = [
+                'name' => 'tmdb_trending_movies_container',
+                'tpl_file' => 'items_table_container',
+                'tpl_pri' => 0,
+                'tpl_vars' => [
+                    'head' => $LNG['L_TRENDING_MOVIES'],
+                    'items' => [],
+                ]
+            ];
         }
         if ($cfg['want_shows']) {
             $topt['view_type'] = 'shows_db';
-            $topt['head'] = $LNG['L_TRENDING_SHOWS'];
 
-            $page_tmdb .= $frontend->buildTable($results['shows'], $topt);
+            $topt['tpl_items_break'] = $prefs->getPrefsItem('tresults_columns');
+
+            $page_tmdb['templates'][] = [
+                'name' => 'tmdb_trending_shows_table',
+                'tpl_file' => 'items_table',
+                'tpl_pri' => 10,
+                'tpl_place' => 'tmdb_trending_shows_container',
+                'tpl_place_var' => 'items',
+                'tpl_vars' => $results['shows'],
+                'tpl_common_vars' => $topt,
+            ];
+            $page_tmdb['templates'][] = [
+                'name' => 'tmdb_trending_shows_container',
+                'tpl_file' => 'items_table_container',
+                'tpl_pri' => 0,
+                'tpl_vars' => [
+                    'head' => $LNG['L_TRENDING_SHOWS'],
+                    'items' => [],
+                ]
+            ];
         }
     }
 
     if (empty($_GET['search_movies']) && empty($_GET['search_shows']) && !empty($prefs->getPrefsItem('show_popular'))) {
         $topt['no_pages'] = 1;
         $results = mediadb_getPopular();
+        foreach ($results['movies'] as &$result) {
+            $result['poster'] = get_poster($result);
+        }
+        foreach ($results['shows'] as &$result) {
+            $result['poster'] = get_poster($result);
+        }
+
         if ($cfg['want_movies']) {
             $topt['view_type'] = 'movies_db';
             $topt['head'] = $LNG['L_POPULAR_MOVIES'];
-            $page_tmdb .= $frontend->buildTable($results['movies'], $topt);
+            $topt['tpl_items_break'] = $prefs->getPrefsItem('tresults_columns');
+
+            $page_tmdb['templates'][] = [
+                'name' => 'tmdb_popular_movies_table',
+                'tpl_file' => 'items_table',
+                'tpl_pri' => 10,
+                'tpl_place' => 'tmdb_popular_movies_container',
+                'tpl_place_var' => 'items',
+                'tpl_vars' => $results['movies'],
+                'tpl_common_vars' => $topt,
+            ];
+            $page_tmdb['templates'][] = [
+                'name' => 'tmdb_popular_movies_container',
+                'tpl_file' => 'items_table_container',
+                'tpl_pri' => 0,
+                'tpl_vars' => [
+                    'head' => $LNG['L_POPULAR_MOVIES'],
+                    'items' => [],
+                ]
+            ];
         }
         if ($cfg['want_shows']) {
             $topt['view_type'] = 'shows_db';
             $topt['head'] = $LNG['L_POPULAR_SHOWS'];
-            $page_tmdb .= $frontend->buildTable($results['shows'], $topt);
+            $topt['tpl_items_break'] = $prefs->getPrefsItem('tresults_columns');
+
+            $page_tmdb['templates'][] = [
+                'name' => 'tmdb_popular_shows_table',
+                'tpl_file' => 'items_table',
+                'tpl_pri' => 10,
+                'tpl_place' => 'tmdb_popular_shows_container',
+                'tpl_place_var' => 'items',
+                'tpl_vars' => $results['shows'],
+                'tpl_common_vars' => $topt,
+            ];
+            $page_tmdb['templates'][] = [
+                'name' => 'tmdb_popular_shows_container',
+                'tpl_file' => 'items_table_container',
+                'tpl_pri' => 0,
+                'tpl_place_var' => null,
+                'tpl_place' => null,
+                'tpl_vars' => [
+                    'head' => $LNG['L_POPULAR_SHOWS'],
+                    'items' => [],
+                ]
+            ];
         }
     }
 
@@ -513,46 +981,73 @@ function page_tmdb() {
         $topt['no_pages'] = 1;
         $results = mediadb_getTodayShows();
         $topt['view_type'] = 'shows_db';
-        $topt['head'] = $LNG['L_TODAY_SHOWS'];
-        $page_tmdb .= $frontend->buildTable($results['shows'], $topt);
+        $topt['tpl_items_break'] = $prefs->getPrefsItem('tresults_columns');
+
+        foreach ($results['shows'] as &$result) {
+            $result['poster'] = get_poster($result);
+        }
+
+        $page_tmdb['templates'][] = [
+            'name' => 'tmdb_today_shows_table',
+            'tpl_file' => 'items_table',
+            'tpl_pri' => 10,
+            'tpl_place' => 'tmdb_today_container',
+            'tpl_place_var' => 'items',
+            'tpl_vars' => $results['shows'],
+            'tpl_common_vars' => $topt,
+        ];
+
+        $page_tmdb['templates'][] = [
+            'name' => 'tmdb_today_container',
+            'tpl_file' => 'items_table_container',
+            'tpl_pri' => 0,
+            'tpl_vars' => [
+                'head' => $LNG['L_TODAY_SHOWS'],
+                'items' => [],
+            ]
+        ];
     }
+    //var_dump($page_tmdb);
+
     return $page_tmdb;
 }
 
 function page_torrents() {
-    global $frontend, $prefs, $LNG;
+    global $prefs, $LNG;
 
     $topt = [];
+    $page = Filter::getString('page');
     $search_type = Filter::getString('search_type');
     $columns = $prefs->getPrefsItem('tresults_columns');
     $rows = $prefs->getPrefsItem('tresults_rows');
     $items_per_page = $columns * $rows;
-
     $npage = Filter::getInt('npage');
-    empty($npage) ? $npage = 1 : null;
+
+    $page_torrents['templetes'] = [];
+
+    $media_type = null;
+    $search_movies_torrents = null;
+    $search_shows_torrents = null;
 
     if (!empty($_GET['search_movies_torrents'])) {
         $search_movies_torrents = Filter::getUtf8('search_movies_torrents');
-        $topt['get_params']['search_movies_torrents'] = $search_movies_torrents;
-        $media_type = 'movies';
-    } else {
-        $search_movies_torrents = '';
         $media_type = 'movies';
     }
 
     if (!empty($_GET['search_shows_torrents'])) {
         $search_shows_torrents = Filter::getUtf8('search_shows_torrents');
-        $topt['get_params']['search_shows_torrents'] = $search_shows_torrents;
-        $media_type = 'movies';
-    } else {
-        $search_shows_torrents = '';
-        $media_type = 'movies';
+        $media_type = 'shows';
     }
 
-    $tdata['search_movies_word'] = $search_movies_torrents;
-    $tdata['search_shows_word'] = $search_shows_torrents;
-
-    $page_torrents = $frontend->getTpl('page_torrents', $tdata);
+    $page_torrents['templates'][] = [
+        'name' => 'torrents_search',
+        'tpl_file' => 'page_torrents',
+        'tpl_pri' => 100,
+        'tpl_vars' => [
+            'search_movies_word' => $search_movies_torrents,
+            'search_shows_word' => $search_shows_torrents,
+        ],
+    ];
 
     if (!empty($search_type) && $search_type == 'movies') {
         $jump_x_movies_entrys = ($items_per_page * $npage) - $items_per_page;
@@ -580,16 +1075,58 @@ function page_torrents() {
             });
             $m_results = mix_media_res($m_results);
             $topt['view_type'] = 'movies_torrent';
-            $topt['search_type'] = 'movies';
             $topt['media_type'] = 'movies';
             $topt['head'] = $LNG['L_TORRENT'] . ':' . $LNG['L_MOVIES'];
             $topt['num_table_objs'] = count($m_results);
+            $topt['tpl_items_break'] = $prefs->getPrefsItem('tresults_columns');
+
+            $pager_opts = [];
+
+            if ($search_type != 'movies') {
+                $pager_opts['npage'] = 1;
+            } else {
+                $pager_opts['npage'] = $npage;
+            }
+            $pager_opts['page'] = $page;
+            $pager_opts['link_options'] = [
+                'search_movies_torrents' => $search_movies_torrents,
+                'search_shows_torrents' => $search_shows_torrents,
+                'search_type' => 'movies',
+            ];
+            $pager_opts['pager_place'] = 'torrent_search_movies_container';
+            $page_torrents['templates'][] = get_pager(array_merge($topt, $pager_opts));
+
             $m_results = array_slice($m_results, $jump_x_movies_entrys, $items_per_page);
-            $page_torrents .= $frontend->buildTable($m_results, $topt);
+
+            $page_torrents['templates'][] = [
+                'name' => 'torrent_search_movies_table',
+                'tpl_file' => 'items_table',
+                'tpl_pri' => 10,
+                'tpl_place' => 'torrent_search_movies_container',
+                'tpl_place_var' => 'items',
+                'tpl_vars' => $m_results,
+                'tpl_common_vars' => $topt,
+            ];
+
+            $page_torrents['templates'][] = [
+                'name' => 'torrent_search_movies_container',
+                'tpl_file' => 'items_table_container',
+                'tpl_pri' => 0,
+                'tpl_vars' => [
+                    'head' => $LNG['L_MOVIES'],
+                    'items' => [],
+                ]
+            ];
         } else {
-            $box_msg['title'] = 'L_TORRENT';
-            $box_msg['body'] = 'L_NOTHING_FOUND';
-            $page_torrents .= $frontend->msgBox($box_msg);
+            $page_torrents['templates'][] = [
+                'name' => 'msgbox',
+                'tpl_file' => 'msgbox',
+                'tpl_pri' => 4,
+                'tpl_vars' => [
+                    'title' => $LNG['L_TORRENT'] . ' ' . $LNG['L_MOVIES'],
+                    'body' => $LNG['L_NOTHING_FOUND'],
+                ]
+            ];
         }
     }
 
@@ -607,26 +1144,84 @@ function page_torrents() {
             });
             $m_results = mix_media_res($m_results);
             $topt['view_type'] = 'shows_torrent';
-            $topt['search_type'] = 'shows';
             $topt['media_type'] = 'shows';
             $topt['num_table_objs'] = count($m_results);
             $topt['head'] = $LNG['L_TORRENT'] . ':' . $LNG['L_SHOWS'];
+            $topt['tpl_items_break'] = $prefs->getPrefsItem('tresults_columns');
             $m_results = array_slice($m_results, $jump_x_shows_entrys, $items_per_page);
 
-            $page_torrents .= $frontend->buildTable($m_results, $topt);
+            $pager_opts = [];
+
+            if ($search_type != 'shows') {
+                $pager_opts['npage'] = 1;
+            } else {
+                $pager_opts['npage'] = $npage;
+            }
+            $pager_opts['page'] = $page;
+            $pager_opts['link_options'] = [
+                'search_movies_torrents' => $search_movies_torrents,
+                'search_shows_torrents' => $search_shows_torrents,
+                'search_type' => 'shows',
+            ];
+            $pager_opts['pager_place'] = 'torrent_search_shows_container';
+            $page_torrents['templates'][] = get_pager(array_merge($topt, $pager_opts));
+
+            $page_torrents['templates'][] = [
+                'name' => 'torrent_search_shows_table',
+                'tpl_file' => 'items_table',
+                'tpl_pri' => 10,
+                'tpl_place' => 'torrent_search_shows_container',
+                'tpl_place_var' => 'items',
+                'tpl_vars' => $m_results,
+                'tpl_common_vars' => $topt,
+            ];
+
+            $page_torrents['templates'][] = [
+                'name' => 'torrent_search_shows_container',
+                'tpl_file' => 'items_table_container',
+                'tpl_pri' => 0,
+                'tpl_vars' => [
+                    'head' => $LNG['L_SHOWS'],
+                    'items' => [],
+                ]
+            ];
         } else {
-            $box_msg['title'] = 'L_TORRENT';
-            $box_msg['body'] = 'L_NOTHING_FOUND';
-            $page_torrents .= $frontend->msgBox($box_msg);
+            $page_torrents['templates'][] = [
+                'name' => 'msgbox',
+                'tpl_file' => 'msgbox',
+                'tpl_pri' => 4,
+                'tpl_vars' => [
+                    'title' => $LNG['L_TORRENT'] . ' ' . $LNG['L_SHOWS'],
+                    'body' => $LNG['L_NOTHING_FOUND'],
+                ]
+            ];
         }
     }
 
     if (empty($search_movies_torrents) && empty($search_shows_torrents)) {
         if ($prefs->getPrefsItem('movies_cached')) {
-            $page_torrents .= show_cached_torrents('movies');
+            $topt = [];
+            $topt['view_type'] = 'movies_torrent';
+            $topt['search_type'] = 'movies';
+            $topt['media_type'] = 'movies';
+            $topt['head'] = $LNG['L_MOVIES'];
+            $topt['tpl_items_break'] = $prefs->getPrefsItem('tresults_columns');
+            $topt['table_container_id'] = 'movies';
+            $movies_cache = show_cached_torrents($topt);
+            $page_torrents['templates'] = array_merge($page_torrents['templates'], $movies_cache['templates']);
         }
+
         if ($prefs->getPrefsItem('shows_cached')) {
-            $page_torrents .= show_cached_torrents('shows');
+            $topt = [];
+            $topt['view_type'] = 'shows_torrent';
+            $topt['search_type'] = 'shows';
+            $topt['media_type'] = 'shows';
+            $topt['head'] = $LNG['L_SHOWS'];
+            $topt['tpl_items_break'] = $prefs->getPrefsItem('tresults_columns');
+            $topt['table_container_id'] = 'shows';
+
+            $shows_cache = show_cached_torrents($topt);
+            $page_torrents['templates'] = array_merge($page_torrents['templates'], $shows_cache['templates']);
         }
     }
 
@@ -634,9 +1229,11 @@ function page_torrents() {
 }
 
 function page_wanted() {
-    global $db, $cfg, $trans, $frontend;
+    global $db, $cfg, $trans;
 
-    $want = [];
+    $wanted['templates'] = [];
+
+    $wanted_tpl_list = [];
     //Update wanted agains transmission
     !empty($trans) ? $trans->updateWanted() : null;
 
@@ -655,48 +1252,57 @@ function page_wanted() {
     if ($wanted_id !== false && $wanted_type !== false && $wanted_type == 'movies') {
         wanted_movies($wanted_id);
     }
-    $want = wanted_list();
+    $wanted_tpl_list = wanted_list();
+    $quality_tags = $ignore_tags = $require_tags = $require_or_tags = [];
 
     if (!empty($cfg['torrent_quality_prefs'])) {
-        $want['quality_tags'] = '';
-        foreach ($cfg['torrent_quality_prefs'] as $quality) {
-            $want['quality_tags'] .= Html::span(['class' => 'tag_quality'], $quality);
-        }
+        $quality_tags = $cfg['torrent_quality_prefs'];
     }
 
     if (!empty($cfg['torrent_ignore_prefs'])) {
-        $want['ignore_tags'] = '';
-        foreach ($cfg['torrent_ignore_prefs'] as $ignores) {
-            $want['ignore_tags'] .= Html::span(['class' => 'tag_ignore'], $ignores);
-        }
+        $ignore_tags = $cfg['torrent_ignore_prefs'];
     }
 
     if (!empty($cfg['torrent_require_prefs'])) {
-        $want['require_tags'] = '';
-        foreach ($cfg['torrent_require_prefs'] as $require) {
-            $want['require_tags'] .= Html::span(['class' => 'tag_require'], $require);
-        }
+        $require_tags = $cfg['torrent_require_prefs'];
     }
 
     if (!empty($cfg['torrent_require_or_prefs'])) {
-        $want['require_or_tags'] = '';
-        foreach ($cfg['torrent_require_or_prefs'] as $or_require) {
-            $want['require_or_tags'] .= Html::span(['class' => 'tag_require'], $or_require);
-        }
+        $require_or_tags = $cfg['torrent_require_or_prefs'];
     }
 
-    return !empty($want) ? $frontend->getTpl('wanted', $want) : false;
+    $wanted['templates'][] = [
+        'name' => 'wanted',
+        'tpl_file' => 'wanted',
+        'tpl_pri' => 0,
+        'tpl_place_var' => null,
+        'tpl_place' => null,
+        'tpl_vars' => [
+            'key' => 'value', //First can't be array for avoid the frontend:58 loop
+            'quality_tags' => $quality_tags,
+            'ignore_tags' => $ignore_tags,
+            'require_tags' => $require_tags,
+            'require_or_tags' => $require_or_tags,
+            'wanted_list' => [],
+            'track_show_list' => []]
+    ];
+
+    $wanted['templates'] = array_merge($wanted['templates'], $wanted_tpl_list['templates']);
+
+    return $wanted;
 }
 
 function page_identify() {
-    global $db, $cfg, $frontend;
+    global $db, $cfg, $LNG;
+
+    $identify['templates'] = [];
 
     $media_type = Filter::getString('media_type');
     $id = Filter::getInt('identify');
     $id_all = Filter::getInt('identify_all');
 
     if ($media_type === false || ($id === false && $id_all === false)) {
-        return $frontend->msgBox(['title' => 'L_ERROR', 'body' => '1A1002']);
+        return ['msg_type' => 1, 'title' => 'L_ERROR', 'body' => '1A1002'];
     }
 
     if (empty($id)) {
@@ -740,7 +1346,7 @@ function page_identify() {
             }
             ident_by_idpairs($media_type, $ident_pairs_final);
         }
-        return $frontend->msgBox($msg = ['title' => 'L_SUCCESS', 'body' => 'L_ADDED_SUCCESSFUL']);
+        return ['msg_type' => 1, 'title' => 'L_SUCCESS', 'body' => 'L_ADDED_SUCCESSFUL'];
     }
     !empty($_POST['submit_title']) ? $submit_title = Filter::postUtf8('submit_title') : $submit_title = getFileTitle(basename($ident_item['path']));
 
@@ -770,9 +1376,11 @@ function page_identify() {
             } else {
                 $conf_selected = '';
             }
-            $select .= Html::select(['onChange' => 'this.form.submit()', 'class' => 'ident_select', 'selected' => $conf_selected, 'name' => 'selected[' . $id . ']'], $values);
-
-            $tdata['select'] = $select;
+            $tdata['media_results'] = [
+                'id' => $id,
+                'selected' => $conf_selected,
+                'items' => $values
+            ];
         }
     }
 
@@ -787,7 +1395,19 @@ function page_identify() {
         }
     }
 
-    return $frontend->getTpl('identify_adv', array_merge($ident_item, $tdata));
+    $identify_vars = array_merge($ident_item, $tdata);
+    $identify_vars['head'] = $topt['head'] = strtoupper($LNG['L_IDENTIFY']);
+
+    $identify['templates'][] = [
+        'name' => 'identify',
+        'tpl_file' => 'identify_adv',
+        'tpl_pri' => 4,
+        'tpl_place_var' => null,
+        'tpl_place' => null,
+        'tpl_vars' => $identify_vars
+    ];
+
+    return $identify;
 }
 
 function page_download() {
@@ -807,7 +1427,9 @@ function page_download() {
 }
 
 function page_transmission() {
-    global $trans, $frontend;
+    global $trans;
+
+    $transmission['templates'] = [];
 
     if ($trans == false) {
         return false;
@@ -837,15 +1459,31 @@ function page_transmission() {
 
         $tdata['status_name'] = $trans->getStatusName($transfer['status']);
         $transfer['percentDone'] == 1 ? $tdata['percent'] = '100' : $tdata['percent'] = ((float) $transfer['percentDone']) * 100;
-        $tdata['body'] .= $frontend->getTpl('transmission-row', array_merge($transfer, $tdata));
+
+        $transmission['templates'][] = [
+            'name' => 'transmissio-row',
+            'tpl_file' => 'transmission-row',
+            'tpl_pri' => 10,
+            'tpl_place' => 'transmission-body',
+            'tpl_place_var' => 'body',
+            'tpl_vars' => array_merge($transfer, $tdata)
+        ];
     }
 
+    $transmission['templates'][] = [
+        'name' => 'transmission-body',
+        'tpl_file' => 'transmission-body',
+        'tpl_pri' => 0,
+        'tpl_place' => null,
+        'tpl_place_var' => null,
+        'tpl_vars' => ['body' => '']
+    ];
 
-    return $frontend->getTpl('transmission-body', $tdata);
+    return $transmission;
 }
 
 function page_config() {
-    global $config;
+    global $config, $LNG;
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (isset($_POST['submit_config'])) {
@@ -874,11 +1512,82 @@ function page_config() {
         }
     }
 
-    return $config->display(Filter::getString('category'));
+    $main = [];
+
+    $admin_config_tpl = [
+        'name' => 'admin_config',
+        'tpl_file' => 'admin_config',
+        'tpl_pri' => 10,
+        'tpl_vars' => [],
+    ];
+
+    $tpl_vars = [];
+
+    $tpl_vars['title'] = '';
+    $tpl_vars['selected_category'] = Filter::getString('category');
+    if (empty($tpl_vars['selected_category'])) {
+        $tpl_vars['selected_category'] = 'L_MAIN';
+    }
+
+    $config_data = $config->getConfig();
+
+    $i = 1;
+    $imax = count($config_data);
+
+    $tpl_vars['categories'] = [];
+    $tpl_vars['cfg'] = [];
+
+    $categories = [];
+    foreach ($config_data as $cfg) {
+        ($i === 1) ? $tpl_vars['first'] = 1 : null;
+        ($i === $imax) ? $tpl_vars['last'] = 1 : null;
+
+        if (!empty($cfg['category']) && $cfg['category'] != 'L_PRIV') {
+            if (!in_array($cfg['category'], $categories)) {
+                $categories[] = $cfg['category'];
+                isset($LNG[$cfg['category']]) ? $cat_display = ucfirst($LNG[$cfg['category']]) : $cat_display = $cfg['category'];
+                $category['cat_raw'] = $cfg['category'];
+                $category['cat_display'] = $cat_display;
+                $tpl_vars['categories'][] = $category;
+            }
+
+            if ($cfg['public'] != 1 || $cfg['category'] != $tpl_vars['selected_category']) {
+                //not add then -- imax
+                $imax--;
+                continue;
+            }
+            $cfg['category'] = $LNG[$cfg['category']];
+            if (!empty($cfg['cfg_desc']) && isset($LNG[$cfg['cfg_desc']])) {
+                $cfg['cfg_desc'] = $LNG[$cfg['cfg_desc']];
+            }
+            if ($cfg['type'] == 3) {
+                if ($cfg['cfg_value'] == 0) {
+                    $cfg['selected_yes'] = '';
+                    $cfg['selected_no'] = ' selected ';
+                } else {
+                    $cfg['selected_yes'] = ' selected ';
+                    $cfg['selected_no'] = '';
+                }
+            }
+            if ($cfg['type'] == 8) {
+                $cfg['cfg_value_array'] = $config->commaToArray($cfg['cfg_value']);
+            }
+
+            $tpl_vars['cfg'][] = $cfg;
+        }
+
+        $i++;
+    }
+
+    $admin_config_tpl['tpl_vars'] = $tpl_vars;
+
+    $main['templates'][] = $admin_config_tpl;
+
+    return $main;
 }
 
 function page_login() {
-    global $cfg, $user, $frontend;
+    global $cfg, $user;
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $dologin = 0;
@@ -901,18 +1610,36 @@ function page_login() {
         }
     }
 
-    $tdata = [];
+    $main = [];
+    $main['templates'] = [];
+
     $users_db = $user->getProfiles();
 
-    $tdata['profiles'] = '';
+    $profile_tpl = [
+        'name' => 'profile_box',
+        'tpl_file' => 'profile_box',
+        'tpl_pri' => 9,
+        'tpl_place' => 'login',
+        'tpl_place_var' => 'profiles',
+        'tpl_vars' => [],
+    ];
+
     foreach ($users_db as $db_user) {
         if ($db_user['disable'] != 1 && $db_user['hide_login'] != 1) {
-            $tdata['username'] = $db_user['username'];
-            $tdata['profiles'] .= $frontend->getTpl('profile_box', $tdata);
+            $profile_tpl['tpl_vars']['username'] = $db_user['username'];
+            $main['templates'][] = $profile_tpl;
         }
     }
 
-    return $frontend->getTpl('login', $tdata);
+    $login_tpl = [
+        'name' => 'login',
+        'tpl_file' => 'login',
+        'tpl_pri' => 0,
+        'tpl_vars' => [],
+    ];
+    $main['templates'][] = $login_tpl;
+
+    return $main;
 }
 
 function page_logout() {
@@ -927,15 +1654,16 @@ function page_logout() {
     exit(0);
 }
 
+//TODO: error msg
 function page_localplayer() {
-    global $db, $frontend;
+    global $db;
 
-    $id = Filter::getInt('id');
-    $mid = Filter::getInt('mid');
+    $id = Filter::getInt('id'); //file id
+    $mid = Filter::getInt('mid'); //master id
     $media_type = Filter::getString('media_type');
 
     if ((empty($id) && empty($mid)) || empty($media_type)) {
-        $frontend->msgPage($msg = ['title' => 'L_ERROR', 'body' => '1A1003']);
+        //['title' => 'L_ERROR', 'body' => '1A1003'];
         return false;
     }
     $library = 'library_' . $media_type;
@@ -945,7 +1673,7 @@ function page_localplayer() {
 
         $item = $db->getItemById($library, $id);
         if (!valid_array($item)) {
-            $frontend->msgPage($msg = ['title' => 'L_ERROR', 'body' => 'L_ERR_ITEM_NOT_FOUND']);
+            //['title' => 'L_ERROR', 'body' => 'L_ERR_ITEM_NOT_FOUND'];
             return false;
         }
         if ($media_type == 'movies') {
@@ -957,13 +1685,12 @@ function page_localplayer() {
     } else if (!empty($mid)) {
         $master_item = $db->getItemById($library_master, $mid);
         if (!valid_array($master_item)) {
-            $frontend->msgPage($msg = ['title' => 'L_ERROR', 'body' => 'L_ERR_ITEM_NOT_FOUND']);
+            //['title' => 'L_ERROR', 'body' => 'L_ERR_ITEM_NOT_FOUND'];
             return false;
         }
         $m3u_playlist = get_pl_next_media($master_item, $media_type);
         $header_title = ucwords($master_item['title']);
     }
-
     header("Content-Type: video/mpegurl");
     header("Content-Disposition: attachment; filename=$header_title.m3u");
     header("Pragma: no-cache");

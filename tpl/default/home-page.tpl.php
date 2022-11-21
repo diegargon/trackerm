@@ -9,17 +9,9 @@
 ?>
 <div class="info_container">
     <div class="info_column">
-        <?php
-        foreach ($tdata['col1'] as $item) {
-            echo $item;
-        }
-        ?>
+        <?= !empty($tdata['col1']) ? $tdata['col1'] : null ?>
     </div>
     <div class="info_column">
-        <?php
-        foreach ($tdata['col2'] as $item) {
-            echo $item;
-        }
-        ?>
+        <?= !empty($tdata['col2']) ? $tdata['col2'] : null ?>
     </div>
 </div>

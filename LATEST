@@ -1,28 +1,33 @@
 ## Latest / News (Relevant)
 
+[21/11] v2 rewrite testing phase
+[02/11] Improve img caching.
+[23/10] (unused) v2 rewrite
+[23/10] Fix poster bug using round in poster
+[16/10] Round rating/popularity
 [16/10] Minor fixes and clean
-[************ COMMIT **********]
+[************ PUSH **********]
 [16/08] View: links to groups
 [15/08] Display collections: director,cast,writer
-[************ COMMIT **********]
+[************ PUSH **********]
 [14/08] Delete File (current file selected), or Files (all files of movie/show)  in View/Delete. Clean directory if empty. 
         Will delete other remaning files in the directory if directy no contains more media files
 [14/08] Min Size Filter
 [14/08] Option to fix/set library permissions (run every 6 hours) if you want it must activate in config/files. 
 [14/08] Display in view director/cast/writer
-[************ COMMIT **********]
+[************ PUSH **********]
 [07/08] Display Groups: Collections (Movies) and Genres (Movies/Shows) (library submenu)
 [07/08] Option for rename files without tags (configuration/Files)
-[************ COMMIT **********]
+[************ PUSH **********]
 [28/07] Internal rewrite and minor fixes
-[************ COMMIT **********]
+[************ PUSH **********]
 [21/07] Redesign wanted page / expand all menu opt
 [20/07] Fixed/Improve magnet bug: hack for avoid the transmission magnet bug, now trackerm avoid the fail sending the magnet links 
 instead of url of the magnet link
 [20/07] Fixed ended and trailer library masters bugs
 [19/07] Localplayer play next in view mode
 [19/07] Add to library "view mode" for hidden seen media, switch on submenu in library.
-[************ COMMIT **********]
+[************ PUSH **********]
 [15/07] In Torrents, you can now list all cached torrents, this torrents links would fail download 
 if the tracker/indexer is down or the source remove the torrent, also freelech flag is not reliable.
 Remember the results are cached from one minute ago to few weeks/months ago. Avaible sub menu optiosn
@@ -33,14 +38,14 @@ in torrents tab.
 old freelech status results
 [11/07] Delete Register. Only for admin
 [11/07] Library/Admin option for Custom Poster (Submit empty for back to default), in view page.
-[************ COMMIT **********]
+[************ PUSH **********]
 [30/06] Fix wanted download wrong episodes
-[************ COMMIT **********]
+[************ PUSH **********]
 [28/06] Added Filters on torrent search
 [27/06] Freelech: Banner Head color Green for freelech or red for no freelech + Filter Only Freelech
 [26/06] Fix manual identify that cause in shows only identify one file instead of all files (in case of multiple chapters found)
 [26/06] Delete register clean all registers related to that master not only the selected
-[********** COMMIT **********]
+[********** PUSH **********]
 [25/06] Added to view/shows Identify All, reidentify one file choose file and identify, reidentify all files in the group "identify all"
 [23/06] Fix bug: not working download with priority proper version & hash_missing error
 [20/06]  Added some new tags for tag the files, this going to cause trackerm will link again your seeding torrents and create duplicates if the destine file name change due 
@@ -49,28 +54,28 @@ this changes. I add a way to automatic remove duplicates but its in "testing fas
 [20/06] Added Duplicate links check&remove.
 [18/06] Added search feature to library and new torrents
 [17/06] Improve Identify and allow multiple files/same media
-[********** COMMIT **********]
+[********** PUSH **********]
 [02/06] Fix Poster view Path / Fix year tag and change tag from [ to ) (beware trackerm will create another link on actually seeding torrents, that mean you going to
 have two after upgrade, one with [ and the other with ), you must delete manually old link) 
-[********** COMMIT **********]
+[********** PUSH **********]
 [29/05] Add proxy support. trackerm when available, take the cover from indexer (external url provide by jackett), if the indexer is banned
 on your country and you are using a proxy in jackett, get the cover fail. You can now configure a proxy (in onfiguration) for avoid problems 
 getting indexers covers.
-[********** COMMIT **********]
+[********** PUSH **********]
 [22/05] Fix error moving files cross partitions and others fixes.
-[********** COMMIT **********]
+[********** PUSH **********]
 [03/05] Add nocount, 'track show' will not take into account 'this' show episode and add next, trackerm will search for 'this' and next.
-[********** COMMIT **********]
+[********** PUSH **********]
 [14/04] Clear query cache (index) here you can clear the searchs caches.
 [13/04] Added (index) Clear disable torrents (trackerm disable timeout indexers and clear after certain time, here you can force clean)
-[********** COMMIT **********]
+[********** PUSH **********]
 [09/04] Fix Bug (index) try loading a big log file 
-[********** COMMIT **********]
+[********** PUSH **********]
 [04/03] Auto disable indexers when timeout (default 6h config option later)
 [04/03] Rewrite some code.
-[********** COMMIT **********]
+[********** PUSH **********]
 [02/03] Fixes. Add to wanted option to specify a custom title
-[********** COMMIT **********]
+[********** PUSH **********]
 [22/02] Add track show.
 When begin this project i have some basic/main features in mind that i want to implement. This is the last one.
 Next weeks i try not add to much new things for avoid introduce more bugs) and fix bugs and some internal 
@@ -84,16 +89,16 @@ if you configure the "track show" for check Sunday, "track show" will add anytim
 day.
 Warning: Track show by default add one chapter, if this get stuck (no peers) or is missing not will add more, you need change to two
 or more in general wanted configuration.
-[********** COMMIT **********]
+[********** PUSH **********]
 [19/02] Wanted: Config option to autoclean moved items
-[********** COMMIT **********]
+[********** PUSH **********]
 [19/02] More Fixes 
 [19/02] localplayer build a playlist with all chapters from selected.
-[********** COMMIT **********]
+[********** PUSH **********]
 [18/02] Fixes
-[********** COMMIT **********]
+[********** PUSH **********]
 [16/02] Automatic update seasons episode information, and fixes, minor desing/info changes
-[********** COMMIT **********]
+[********** PUSH **********]
 [14/02] Added notify to email (new media/password protected file found)
 [13/02] Added config:auto identify  config:auto identify strict and tmdb cache
         auto identify with strict: title must match exact.
@@ -114,7 +119,7 @@ any of selected  language keywords in the title (or both).
 [13/02] Fixed: "Tag Extra Keywords" (in main configuration).  trackerm will search these keywords in the title and tag (this config option not affect 
 searchs just tag). Beware: if you have a temporaly linked avi and add/remove a keyword. This will create another valid link again and appears as 
 duplicate when scanning. (when move will delete this link)
-[********** COMMIT **********]
+[********** PUSH **********]
 [12/02] Forget warn: i adding weeks ago lots of config fields without a submit button (ex: in submenu or wanted), for save the input you need press tab or click out.
 [11/02] Add localplayer button (must activate in configuration)
         LocalPlayer will add a button in your library for load locally a playlist with the media link to your server share directory (samba) for open with vlc

@@ -6,6 +6,7 @@
  *  @subpackage
  *  @copyright Copyright @ 2020 - 2021 Diego Garcia (diego/@/envigo.net)
  */
+//var_dump($tdata);
 ?>
 
 <h2><?= $tdata['head'] ?></h2>
@@ -47,23 +48,35 @@
     <input type="text" name="submit_title" value="<?= $tdata['search_title'] ?>" />
     <input class="submit_btn" type="submit" name="search" value="<?= $LNG['L_SEARCH'] ?>"/>
     <?php
-    if (!empty($tdata['select'])) {
+    if (isset($tdata['media_results']['items'])) {
         ?>
         <input class="submit_btn" type="submit" name="identify" value="<?= $LNG['L_IDENTIFY'] ?>"/>
-    <?php } ?>
-    <div>
-        <?= !empty($tdata['select']) ? $tdata['select'] : null ?>
-    </div>
-    <div>
-        <?php
-        if (!empty($tdata['selected_poster'])) {
-            print '<img width="300" src="' . $tdata['selected_poster'] . '" />';
-        }
 
-        if (!empty($tdata['selected_plot'])) {
-            print '<p>' . $tdata['selected_plot'] . '</p>';
-        }
-        ?>
+        <div>
+            <select class="ident_select" onChange="this.form.submit()" name=selected[<?= $tdata['media_results']['id'] ?>]>
+                <?php
+                foreach ($tdata['media_results']['items'] as $item) {
+                    ?>
+                    <option <?= $item['value'] == $tdata['media_results']['selected'] ? 'selected' : null ?>  value="<?= $item['value'] ?>"> <?= $item['name'] ?></option>
+                    <?php
+                }
+                ?>
+            </select>
+
+        </div>
+    <?php
+}
+?>
+    <div>
+    <?php
+    if (!empty($tdata['selected_poster'])) {
+        print '<img width="300" src="' . $tdata['selected_poster'] . '" />';
+    }
+
+    if (!empty($tdata['selected_plot'])) {
+        print '<p>' . $tdata['selected_plot'] . '</p>';
+    }
+    ?>
     </div>
     <div>
 

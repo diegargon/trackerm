@@ -97,6 +97,8 @@ function search_media_torrents($media_type, $search) {
         }
     }
 
+    //FIX  too many foreach. haz el foreach y luego dependiendo lo que quieras a cada item.
+
     /* Here is where if the search contains the year we delete results without year */
     if (preg_match('/\s+\d{4}/i', $search_words, $match) == 1) {
         $year = trim($match[0]);
@@ -123,6 +125,10 @@ function search_media_torrents($media_type, $search) {
         return false;
     }
 
+    foreach ($media_db as &$item) {
+        $item['size'] = bytesToGB($item['size'], 2) . 'GB';
+        $item['poster'] = get_poster($item);
+    }
     return $media_db;
 }
 

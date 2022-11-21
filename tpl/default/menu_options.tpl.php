@@ -17,8 +17,8 @@
         </form>
     <?php } ?>
 
-    <?php if (in_array($tdata['page'], ['library', 'library_movies', 'library_shows'])) { ?>
-        <form method="post" action="?page=<?= $tdata['page'] ?>">
+    <?php if (in_array($tdata['page'], ['library', 'library_movies', 'library_shows', 'view_group', 'view_genres'])) { ?>
+        <form method="post" action="">
             <div class="inline" data-tip="<?= $LNG['L_VIEW_MODE'] ?>">
                 <label class="switch">
                     <input type="hidden" name="view_mode" value="0"/>
@@ -27,9 +27,13 @@
                 </label>
             </div>
         </form>
+    <?php } ?>
 
+    <?php
+    if (in_array($tdata['page'], ['library', 'library_movies', 'library_shows'])) {
+        ?>
         <?= $LNG['L_IDENTIFY'] ?>:
-        <form method="post" action="?page=<?= $tdata['page'] ?>">
+        <form method="post" action="">
             <select class="num_ident_toshow" name="num_ident_toshow" onChange="show_loading();this.form.submit();">
                 <option <?= $tdata['max_id_sel_0'] ?> value="0">0</option>
                 <option <?= $tdata['max_id_sel_5'] ?> value="5">5</option>
@@ -41,7 +45,7 @@
     <?php } ?>
 
     <?php if (!in_array($tdata['page'], ['wanted', 'transmission', 'index', 'view', 'view_group', 'view_genres'])) { ?>
-        <form method="post" action="?page=<?= $tdata['page'] ?>">
+        <form method="post" action="">
             <span class="html_ico">&#8741;</span>
             <select class="num_columns_results" name="num_columns_results" onChange="show_loading();this.form.submit();">
                 <option <?= $tdata['max_columns_sel_none'] ?> id="default"><?= $LNG['L_DEFAULT'] ?></option>

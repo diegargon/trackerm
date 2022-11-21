@@ -11,7 +11,7 @@
 <h2><?= $tdata['head'] ?></h2>
 <form method="post">
     <div class="divTableID">
-        <?= $tdata['titles'] ?>
+        <?= $tdata['identify_titles'] ?>
     </div>
     <input class="submit_btn" type="submit" value="<?= $LNG['L_IDENTIFY'] ?>"/>
 </form>

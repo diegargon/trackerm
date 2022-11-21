@@ -55,12 +55,13 @@ function ident_by_already_have_show(array $media_db, array &$ids) {
  */
 
 function show_identify_media(string $media_type) {
-    global $LNG, $cfg, $db, $frontend, $prefs;
+    global $LNG, $cfg, $db, $prefs;
 
-    $titles = '';
     $uniq_shows = [];
-    $iurl = '?page=' . Filter::getString('page');
+    $page = Filter::getString('page');
     $limit = $prefs->getPrefsItem('max_identify_items');
+    $templates = [];
+    $templates['templates'] = [];
 
     if (empty($limit)) {
         return false;
@@ -108,8 +109,7 @@ function show_identify_media(string $media_type) {
     /* Show in library the files that need identify */
 
     $uniq_shows = [];
-    foreach ($media_library as $item) {
-        $title_tdata['results_opt'] = '';
+    foreach ($media_library as &$item) {
         $predictible_title = getFileTitle($item['file_name']);
 
         if ($media_type == 'movies') {
@@ -126,27 +126,43 @@ function show_identify_media(string $media_type) {
         }
 
         if (valid_array($odb_media)) {
-            foreach ($odb_media as $odb_item) {
-                $year = trim(substr($odb_item['release'], 0, 4));
-                $title_tdata['results_opt'] .= '<option value="' . $odb_item['themoviedb_id'] . '">';
-                $title_tdata['results_opt'] .= $odb_item['title'];
-                !empty($year) ? $title_tdata['results_opt'] .= ' (' . $year . ')' : null;
-                $title_tdata['results_opt'] .= '</option>';
+            foreach ($odb_media as &$odb_item) {
+                $odb_item['year'] = (int) trim(substr($odb_item['release'], 0, 4));
             }
+            $item['odb_results'] = $odb_media;
         }
-        $title_tdata['del_iurl'] = $iurl . '&media_type=' . $media_type . '&ident_delete=' . $item['id'];
-        $title_tdata['more_iurl'] = '?page=identify&media_type=' . $media_type . '&identify=' . $item['id'];
-        $title_tdata['media_type'] = $media_type;
-        $titles .= $table = $frontend->getTpl('identify_item', array_merge($item, $title_tdata));
     }
 
-    if (!empty($titles)) {
-        $tdata['titles'] = $titles;
-        $tdata['head'] = $LNG['L_IDENT_' . strtoupper($media_type) . ''];
 
-        return $frontend->getTpl('identify', $tdata);
+    if (!empty($media_library) && is_array($media_library)) {
+
+        $ident_items = [
+            'name' => 'identify_item_' . $media_type,
+            'tpl_file' => 'identify_item',
+            'tpl_pri' => 21,
+            'tpl_place' => 'ident_container_' . $media_type,
+            'tpl_place_var' => 'identify_titles',
+            'tpl_vars' => $media_library,
+            'tpl_common_vars' => [
+                'media_type' => $media_type,
+                'page' => $page]
+        ];
+
+        $ident_container = [
+            'name' => 'ident_container_' . $media_type,
+            'tpl_file' => 'identify',
+            'tpl_pri' => 20,
+            'tpl_place' => null,
+            'tpl_place_var' => null,
+            'tpl_vars' => [
+                'head' => $LNG['L_IDENT_' . strtoupper($media_type) . ''],
+            ]
+        ];
+        $templates['templates'][] = $ident_items;
+        $templates['templates'][] = $ident_container;
     }
-    return false;
+
+    return $templates;
 }
 
 /*

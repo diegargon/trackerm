@@ -6,6 +6,9 @@
  *  @subpackage
  *  @copyright Copyright @ 2020 - 2021 Diego Garcia (diego/@/envigo.net)
  */
+//var_dump($tdata);
+$page_link = '?page=view&id=' . $tdata['id'] . '&view_type=' . $tdata['media_type'] . '_library';
+$check_link = $page_link . '&vid=' . $tdata['selected_id'] . '&media_type=' . $tdata['media_type'];
 ?>
 
 <div class="view_page">
@@ -29,7 +32,15 @@
             <div class="view_info">
                 <?php if (!empty($tdata['mediainfo_tags'])) {
                     ?>
-                    <div class="mediainfo_container"><?= $tdata['mediainfo_tags'] ?></div>
+                    <div class="mediainfo_container">
+                        <?php
+                        foreach ($tdata['mediainfo_tags'] as $media_tag) {
+                            ?>
+                            <div title="<?= $media_tag['mediainfo_tag_title'] ?>" class="mediainfo_tag"><?= $media_tag['mediainfo_tag_value'] ?></div>
+                            <?php
+                        }
+                        ?>
+                    </div>
                     <br/>
                 <?php } ?>
 
@@ -51,27 +62,40 @@
                 <?php } ?>
                 <?php if (!empty($tdata['f_genres'])) { ?>
                     <span><?= $LNG['L_GENRES'] ?> :</span>
-                    <span class="view_genres"><?= $tdata['f_genres'] ?></span>
+                    <span class="view_genres">
+                        <?php foreach ($tdata['f_genres'] as $genre) { ?>
+                            <span class="fgenres"><a class="nodecor" href="?page=view_genres&media_type=<?= $tdata['media_type'] ?>&id=<?= $genre['id'] ?>"><?= $genre['name'] ?></a></span>
+                        <?php } ?>
+                    </span>
                     <br/>
                 <?php } ?>
                 <?php if (!empty($tdata['f_collection'])) { ?>
                     <span><?= $LNG['L_COLLECTION'] ?> :</span>
-                    <span class="view_collection"><?= $tdata['f_collection'] ?></span>
+                    <?php foreach ($tdata['f_collection'] as $collection) { ?>
+                        <span class="view_collection"><a class="nodecor" href="?page=<?= $collection['view_name'] ?>&media_type=<?= $tdata['media_type'] ?>&group_type=<?= $collection['group_type'] ?>&id=<?= $collection['id'] ?>"><?= $collection['name'] ?></a></span>
+                    <?php } ?>
                     <br/>
                 <?php } ?>
                 <?php if (!empty($tdata['f_director'])) { ?>
                     <span><?= $LNG['L_DIRECTOR'] ?> :</span>
-                    <span class="view_director"><?= $tdata['f_director'] ?></span>
+                    <?php foreach ($tdata['f_director'] as $director) { ?>
+
+                        <span class="view_director"><a class="nodecor" href="?page=<?= $director['view_name'] ?>&media_type=<?= $tdata['media_type'] ?>&name=<?= $director['name'] ?>"><?= $director['name'] ?></a></span>
+                    <?php } ?>
                     <br/>
                 <?php } ?>
                 <?php if (!empty($tdata['f_cast'])) { ?>
                     <span><?= $LNG['L_CAST'] ?> :</span>
-                    <span class="view_cast"><?= $tdata['f_cast'] ?></span>
+                    <?php foreach ($tdata['f_cast'] as $cast) { ?>
+                        <span class="view_cast"><a class="nodecor" href="?page=<?= $cast['view_name'] ?>&media_type=<?= $tdata['media_type'] ?>&name=<?= $cast['name'] ?>"><?= $cast['name'] ?></a></span>
+                    <?php } ?>
                     <br/>
                 <?php } ?>
                 <?php if (!empty($tdata['f_writer'])) { ?>
                     <span><?= $LNG['L_WRITER'] ?> :</span>
-                    <span class="view_writer"><?= $tdata['f_writer'] ?></span>
+                    <?php foreach ($tdata['f_writer'] as $writer) { ?>
+                        <span class="view_writer"><a class="nodecor" href="?page=<?= $writer['view_name'] ?>&media_type=<?= $tdata['media_type'] ?>&name=<?= $writer['name'] ?>"><?= $writer['name'] ?></a></span>
+                    <?php } ?>
                     <br/>
                 <?php } ?>
                 <?php if (!empty($tdata['source'])) { ?>
@@ -113,7 +137,51 @@
                     <span class="view_have_episodes"><?= $tdata['total_items'] ?></span>
                     <br/>
                 <?php } ?>
+                <?php if (!empty($tdata['mediainfo_file_duration'])) { ?>
+                    <span><?= $LNG['L_DURATION'] ?> :</span>
+                    <span class="mediainfo_file_duration"><?= $tdata['mediainfo_file_duration'] ?></span>
+                    <br/>
+                <?php } ?>
+                <?php if (!empty($tdata['mediainfo_file_size'])) { ?>
+                    <span><?= $LNG['L_SIZE'] ?> :</span>
+                    <span class="mediainfo_file_size"><?= $tdata['mediainfo_file_size'] ?></span>
+                    <br/>
+                <?php } ?>
+
+                <?= (!empty($tdata['add_pre_actions'])) ? $tdata['add_pre_actions'] : null ?>
+                <!-- ACTIONS -->
                 <div class="view_actions">
+                    <?php if (isset($tdata['already_view_file'])) { ?>
+                        <a class="action_link <?= $tdata['already_view_file'] ? 'item_view_view' : null ?>" href="<?= $check_link ?>">&#10003;</a>
+                    <?php } ?>
+                    <?php if (isset($tdata['identify_btn'])) {
+                        ?>
+                        <a  class="action_link" href="?page=identify&identify=<?= $tdata['selected_id'] ?>&media_type=<?= $tdata['media_type'] ?>"><?= $LNG['L_IDENTIFY'] ?></a>
+                        <?php
+                    }
+                    ?>
+                    <?php if (isset($tdata['identify_all_btn'])) {
+                        ?>
+                        <a class="action_link" href="?page=identify&identify_all=<?= $tdata['selected_id'] ?>&media_type=<?= $tdata['media_type'] ?>"><?= $LNG['L_IDENTIFY_ALL'] ?></a>
+                        <?php
+                    }
+                    ?>
+                    <?php if (isset($tdata['show_delete_opts'])) { ?>
+                        <form class="inline" method="POST">
+                            <select name="delete_opt">
+                                <option value="1"><?= $LNG['L_DELETE_REGISTER'] ?></option>
+                                <option value="2"><?= $LNG['L_DELETE_FILE'] ?></option>
+                                <option value="3"><?= $LNG['L_DELETE_FILES'] ?></option>
+                            </select>
+                            <input type="hidden" name="file_id" value="<?= $tdata['selected_id'] ?>"/>
+                            <input type="hidden" name="file_master" value="<?= $tdata['id'] ?>"/>
+                            <input type="hidden" name="media_type" value="<?= $tdata['media_type'] ?>"/>
+                            <input type="button" class="action_link" onClick="return confirm(\''.$LNG['L_AREYOUSURE'].'\')" value="<?= $LNG['L_DELETE'] ?>">
+                        </form>
+                        <?php
+                    }
+                    ?>
+
                     <?php
                     if (!empty($tdata['in_library'])) {
                         ?>
@@ -129,13 +197,45 @@
                     <?= !empty($tdata['media_files']) ? $tdata['media_files'] : null; ?>
 
                     <?php if ($tdata['view_type'] == 'shows_library' || $tdata['view_type'] == 'shows_db') { ?>
-                        <a class="action_link" href="?page=view&id=<?= $tdata['id'] ?>&view_type=<?= $tdata['view_type'] ?>&update=1"><?= $LNG['L_UPDATE_EPISODES'] ?></a>
+                        <a class="action_link" href="?page=view&id=<?= $tdata['id'] ?>&view_type=<?= $tdata['view_type'] ?>&season=<?= $tdata['season'] ?>&update=1"><?= $LNG['L_UPDATE_EPISODES'] ?></a>
                     <?php } ?>
 
-                    <?php !empty($tdata['follow_show']) ? print $tdata['follow_show'] : null; ?>
+                    <?php
+                    if (!empty($tdata['follow_show']) && is_array($tdata['follow_show'])) {
+                        ?>
+                        <form class="inline" method="POST" action="?page=wanted">
+                            <input type="hidden" name="id" value="<?= $tdata['follow_show']['oid'] ?>" />
+                            <input class="action_link" type="submit" name="track_show" value="<?= $LNG['L_FOLLOW_SHOW'] ?>"/>
+                            <select name="track_show">
+                                <?php
+                                foreach ($tdata['follow_show']['options'] as $option) {
+                                    ?>
+                                    <option value="<?= $option ?>"><?= $option ?></option>
+                                    <?php
+                                }
+                                ?>
+                            </select>
+                        </form>
+                        <?php
+                    }
+                    ?>
                     <?php if (!empty($tdata['custom_poster_btn']) && !empty($user->isAdmin())) { ?>
                         <a class="action_link" href="?page=view&id=<?= $tdata['id'] ?>&view_type=<?= $tdata['view_type'] ?>&show_custom_poster=1"><?= $LNG['L_CUSTOM_POSTER'] ?></a>
                     <?php } ?>
+
+                    <?php if (isset($tdata['show_localplayer'])) {
+                        ?>
+                        <a  class="action_link" href="?page=localplayer&id=<?= $tdata['selected_id'] ?>&media_type=<?= $tdata['media_type'] ?>">LocalPlay</a>
+                        <?php
+                    }
+                    ?>
+
+                    <?php if (isset($tdata['show_download_button'])) {
+                        ?>
+                        <a  class="action_link" href="?page=download&id=<?= $tdata['selected_id'] ?>&media_type=<?= $tdata['media_type'] ?>&view_type=<?= $tdata['view_type'] ?>"><?= $LNG['L_DOWNLOAD'] ?></a>
+                        <?php
+                    }
+                    ?>
 
                     <?php if (!empty($tdata['download'])) { ?>
                         <div class="view_download">
@@ -154,10 +254,13 @@
                             </form>
                         </div>
                     <?php } ?>
-                </div> <!-- //view_actions -->
-                <?php if (!empty($tdata['seasons_data'])) { ?>
-                    <?= $tdata['seasons_data'] ?>
+                </div>
+                <!-- //VIEW ACTIONS -->
+                <!-- BEFORE_TRAILER -->
+                <?php if (!empty($tdata['before_trailer'])) { ?>
+                    <?= $tdata['before_trailer'] ?>
                 <?php } ?>
+                <!-- //END BEFORE_TRAILER -->
                 <?php
                 if (!empty($tdata['trailer'] || (!empty($tdata['guessed_trailer'])) && $tdata['guessed_trailer'] != -1)) {
                     !empty($tdata['trailer']) ? $trailer = $tdata['trailer'] : $trailer = $tdata['guessed_trailer'];
@@ -171,6 +274,7 @@
                                 frameborder="0"/></iframe>
                             <?php } ?>
                 </div>
+
                 <div class="view_extra">
                     <?= $tdata['extra'] ?>
                 </div>

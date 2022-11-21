@@ -111,12 +111,16 @@ function where_filters() {
     return $where;
 }
 
-function show_cached_torrents($media_type) {
-    global $frontend, $prefs, $db, $LNG;
+function show_cached_torrents($topt) {
+    global $prefs, $db, $LNG;
+
+    $page = Filter::getString('page');
+    $media_type = $topt['media_type'];
+    $page_cached_torrents['templates'] = [];
+    $pager_opts = [];
 
     $npage = Filter::getInt('npage');
     $search_type = Filter::getString('search_type');
-    $topt = [];
 
     empty($npage) || (!empty($search_type) && $search_type !== $media_type) ? $npage = 1 : null;
 
@@ -141,10 +145,44 @@ function show_cached_torrents($media_type) {
     if (!valid_array($media)) {
         return false;
     }
-    $topt['view_type'] = $media_type . '_torrent';
-    $topt['search_type'] = $media_type;
-    $topt['media_type'] = $media_type;
-    $topt['head'] = $LNG['L_' . strtoupper($media_type)];
 
-    return $frontend->buildTable($media, $topt);
+    foreach ($media as &$item) {
+        $item['poster'] = get_poster($item);
+        if (!empty($item['size'])) {
+            $item['size'] = bytesToGB($item['size'], 2) . 'GB';
+        }
+    }
+
+    if ($search_type != $media_type) {
+        $pager_opts['npage'] = 1;
+    } else {
+        $pager_opts['npage'] = $npage;
+    }
+    $pager_opts['page'] = $page;
+    $pager_opts['pager_place'] = 'torrent_cached_' . $media_type . '_container';
+
+    $page_cached_torrents['templates'][] = get_pager(array_merge($topt, $pager_opts));
+
+    $page_cached_torrents['templates'][] = [
+        'name' => 'torrent_cached_' . $media_type . '_table',
+        'tpl_file' => 'items_table',
+        'tpl_pri' => 5,
+        'tpl_place' => 'torrent_cached_' . $media_type . '_container',
+        'tpl_place_var' => 'items',
+        'tpl_vars' => $media,
+        'tpl_common_vars' => $topt,
+    ];
+
+    $page_cached_torrents['templates'][] = [
+        'name' => 'torrent_cached_' . $media_type . '_container',
+        'tpl_file' => 'items_table_container',
+        'tpl_pri' => 5,
+        'tpl_vars' => [
+            'head' => $LNG['L_' . strtoupper($media_type)],
+            'items' => [],
+            'table_container_id' => $topt['table_container_id']
+        ]
+    ];
+
+    return $page_cached_torrents;
 }

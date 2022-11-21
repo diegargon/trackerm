@@ -32,77 +32,8 @@ class Config {
         }
     }
 
-    public function display($display_cat = null) {
-        global $LNG;
-        $categories = [];
-        $selected_cat_title = '';
-
-        empty($display_cat) ? $display_cat = 'L_MAIN' : null;
-
-        $data_row = '';
-        foreach ($this->config as $config) {
-            if (!empty($config['category']) && $config['category'] != 'L_PRIV') {
-                if (!in_array($config['category'], $categories)) {
-                    $categories[] = $config['category'];
-                }
-            }
-            if ($config['public'] == 1 && $config['category'] == $display_cat) {
-                if (empty($selected_cat_title)) {
-                    if (substr($config['category'], 0, 2) == 'L_') {
-                        $selected_cat_title = '<h2>' . $LNG[$config['category']] . '</h2>';
-                    } else {
-                        $selected_cat_title = '<h2>' . $config['category'] . '</h2>';
-                    }
-                }
-                $data_row .= '<div class = "catRow border_blue">';
-                $data_row .= '<div class = "catCell">';
-                if ($config['type'] == 3) {
-                    if ($config['cfg_value'] == 0) {
-                        $select_no = 'selected';
-                        $select_yes = '';
-                    } else {
-                        $select_no = '';
-                        $select_yes = 'selected';
-                    }
-                    $data_row .= '<select name="config_keys[' . $config['cfg_key'] . ']">';
-                    $data_row .= '<option ' . $select_no . ' value="0">' . $LNG['L_NO'] . '</option>';
-                    $data_row .= '<option ' . $select_yes . ' value="1">' . $LNG['L_YES'] . '</option>';
-                    $data_row .= '</select>';
-                    /* TODO: CONFIGSELECT */
-                } else if ($config['type'] == 8) {
-                    $values = $this->commaToArray($config['cfg_value']);
-                    $data_row .= '<select name="config_id[' . $config['cfg_key'] . ']">';
-                    if ($values) {
-                        foreach ($values as $value_key => $value) {
-                            $data_row .= '<option value="' . $value_key . '">' . $value . '</option>';
-                        }
-                    }
-                    $data_row .= '</select>';
-                    $data_row .= '<input class="action_btn" type="submit" name="config_remove[' . $config['cfg_key'] . ']" value="' . $LNG['L_DELETE'] . '" />';
-                    $data_row .= '<br/><input size="10" type="text" name="add_item[' . $config['cfg_key'] . ']" value="" />';
-                    $data_row .= '<input class="action_btn" type="submit" name="config_add[' . $config['cfg_key'] . ']" value="' . $LNG['L_ADD'] . '" />';
-                    $data_row .= '<input type="hidden" name="add_before[' . $config['cfg_key'] . '] value="0" />';
-                    $data_row .= '<div class="inline" data-tip="' . $LNG['L_ADD_BEFORE'] . '"><input type="checkbox" name="add_before[' . $config['cfg_key'] . '] value="1" /></div>';
-                } else {
-                    $data_row .= '<input type="text" name="config_keys[' . $config['cfg_key'] . ']" value="' . $config['cfg_value'] . '" />';
-                }
-                $data_row .= '</div>';
-                $data_row .= '<div class = "catCell">' . $LNG[$config['cfg_desc']] . '</div>';
-                $data_row .= '</div>';
-            }
-        }
-
-        $cat_head = '<div class="config_cats">';
-        foreach ($categories as $category) {
-            isset($LNG[$category]) ? $cat_desc = ucfirst($LNG[$category]) : $cat_desc = $category;
-            $cat_head .= '<a href = "index.php?page=config&category=' . $category . '">' . $cat_desc . '</a> ';
-        }
-        $cat_head .= '</div>';
-        $data_result = $cat_head . $selected_cat_title;
-        $data_result .= '<form method = "POST"><input class="submit_btn" type="submit" name="submit_config" value="' . $LNG['L_SUBMIT'] . '"/>';
-        $data_result .= '<div class = "catTable">' . $data_row . '</div></form>';
-
-        return $data_result;
+    public function getConfig() {
+        return $this->config;
     }
 
     public function saveKeys($config_keys) {
@@ -168,7 +99,7 @@ class Config {
         $this->saveKeys($toSave);
     }
 
-    private function commaToArray($string) {
+    public function commaToArray($string) {
         if (empty($string)) {
             return null;
         }

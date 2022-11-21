@@ -1,9 +1,9 @@
 
 ## How works. (EXCUSE MY ENGLISH)
 
-This proyect it in early stage.
+This proyect it is in early stage of development.
 
-To configure copy the config/config.min.php file to /etc/trackerm.conf and edit the config. All fields required.
+To configure copy the config/config.min.php file to /etc/trackerm.conf and edit the config file. All fields required.
 
 In "TMDB" tab you can search for movies/shows and automatically will show you the torrents, if can't find any you can choose 'wanted' and  
 trackerm will check every certain time for released torrents and automatically download when a match appears. 
@@ -38,7 +38,7 @@ trackerm will track your transmission movie/shows downloads and automatically mo
 
     How works :
     * Will looking for wanted items the days configured and automatic download if found any coincidence.
-    * Will move all media detected in transmission-daemon from "completed" directory to your library directory (you can configure if move all or only the media download
+    * Will move all media detected in transmission-daemon in the state "completed" to a directory in your library directory (you can configure if move all or only the media download
     throught this software (adding to transmission clicking throught this app).
   
     The "automatic move tool" (AMT) only move  pause/stopped torrents (completed). The AMT tool will create a symbolic link to your library when the torrent is seeding. 
@@ -49,7 +49,7 @@ trackerm will track your transmission movie/shows downloads and automatically mo
     Basic line for /etc/crontab (every 5 minuts): 
         */5 *   * * *   root    /usr/bin/php  /path/to/trackerm-cli.php
 
-    You can place trackerm-cli where you do want and change the user if you set the right permissions. Remember look at the permission for all directorys where trackerm will work. 
+    You can place trackerm-cli where you want and change the user if you set the right permissions. Remember look at the permission for all directorys where trackerm need to work. 
     If you move the trackerm-cli file out of his original place remember each time you upgrade trackerm you must move and overwrite the file.
 
 ## Programming Language
@@ -59,7 +59,7 @@ trackerm will track your transmission movie/shows downloads and automatically mo
 Apache+Php7 (or similar), Jacket, Transmission, Composer, account+api key themoviedb.org, CRON, sqlite3
 
 ## Installation
-    * Copy all files from to a destination directory (AKA: dest). Copy config.min.php to /etc/trackerm.conf and fill all fields
+    * Copy all files from to a destination directory. Copy config.min.php to /etc/trackerm.conf and fill all fields
 
     * Install curl php-curl php-mbstring php-xml
 
@@ -69,7 +69,7 @@ Apache+Php7 (or similar), Jacket, Transmission, Composer, account+api key themov
 
         $ php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 
-    *  Go dest and type
+    *  Go destination directory and type
 
         $ composer require irazasyed/php-transmission-sdk  php-http/httplug-pack  php-http/guzzle6-adapter
 

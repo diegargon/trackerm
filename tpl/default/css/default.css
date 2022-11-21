@@ -56,7 +56,7 @@ select {
     border:0px solid black;    
 }
 .loading {
-    display: none;
+    display: block;
     position: fixed;
     height: 100%;
     width: 100%;

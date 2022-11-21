@@ -1,6 +1,7 @@
 [TODO]
 
 [HIGH]
+    [CLEAN] remove all show_loading() calls
     [REV] Permisos, revisar que el modo web no requiera escribir MOVIES/SHOWS y eliminar check
     [REV] trackercli --check , comprobaciones de que puede escribir y demas.
     [IMPROVE] Masters shows al meter un episodio actualiza master ?¿

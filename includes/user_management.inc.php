@@ -50,33 +50,50 @@ function user_management() {
             $status_msg = $LNG['L_USER_DELETED'];
         }
     }
-    $html['title'] = $LNG['L_USERS_MANAGEMENT'];
-    $html['content'] = new_user() . show_users();
-    $html['content'] .= '<p>' . $status_msg . '</p>';
 
-    return $html;
+    $tpl = [
+        'name' => 'admin_management',
+        'tpl_pri' => 8,
+        'tpl_file' => 'home-item',
+        'tpl_place' => 'homepage',
+        'tpl_place_var' => 'col1',
+        'tpl_vars' => [
+            'title' => $LNG ['L_USERS_MANAGEMENT'],
+            'status_msg' => $status_msg,
+        ]
+    ];
+
+    return $tpl;
 }
 
 function new_user() {
-    global $frontend;
 
-    return $frontend->getTpl('new_user');
+    $tpl = [
+        'name' => 'newuser',
+        'tpl_pri' => 9,
+        'tpl_file' => 'new_user',
+        'tpl_place' => 'admin_management',
+        'tpl_place_var' => 'content',
+    ];
+
+    return $tpl;
 }
 
 function show_users() {
-    global $frontend, $user;
+    global $user;
 
-    $form_content = '';
     $users = $user->getProfiles();
 
-    foreach ($users as $_user) {
-        if ($_user['id'] > 1) {
-            $form_content .= $frontend->getTpl('delete_user', $_user);
-        }
-    }
-    $form = Html::form(['id' => 'delete_user', 'method' => 'POST'], $form_content);
+    $users_tpl = [
+        'name' => 'showusers',
+        'tpl_pri' => 9,
+        'tpl_file' => 'delete_user',
+        'tpl_place' => 'admin_management',
+        'tpl_place_var' => 'content',
+        'tpl_vars' => $users,
+    ];
 
-    return $form;
+    return $users_tpl;
 }
 
 function encrypt_password($password) {
@@ -84,21 +101,31 @@ function encrypt_password($password) {
 }
 
 function user_edit_profile() {
-    global $frontend, $prefs;
+    global $prefs;
 
+    $tpl_vars = [];
     $index_pref = $prefs->getPrefsItem('index_page');
     $email_notify = $prefs->getPrefsItem('email_notify');
 
-    (empty($index_pref) || $index_pref == 'index') ? $tdata['index_selected'] = 'selected' : $tdata['index_selected'] = '';
-    $index_pref == 'library' ? $tdata['library_selected'] = 'selected' : $tdata['library_selected'] = '';
-    $index_pref == 'news' ? $tdata['news_selected'] = 'selected' : $tdata['news_selected'] = '';
-    $index_pref == 'wanted' ? $tdata['wanted_selected'] = 'selected' : $tdata['wanted_selected'] = '';
-    $index_pref == 'torrents' ? $tdata['torrents_selected'] = 'selected' : $tdata['torrents_selected'] = '';
-    $index_pref == 'tmdb' ? $tdata['tmdb_selected'] = 'selected' : $tdata['tmdb_selected'] = '';
-    $index_pref == 'transmission' ? $tdata['transmission_selected'] = 'selected' : $tdata['transmission_selected'] = '';
-    $email_notify ? $tdata['email_checked'] = 'checked' : $tdata['email_checked'] = '';
+    (empty($index_pref) || $index_pref == 'index') ? $tpl_vars['index_selected'] = 'selected' : $tpl_vars['index_selected'] = '';
+    $index_pref == 'library' ? $tpl_vars['library_selected'] = 'selected' : $tpl_vars['library_selected'] = '';
+    $index_pref == 'news' ? $tpl_vars['news_selected'] = 'selected' : $tpl_vars['news_selected'] = '';
+    $index_pref == 'wanted' ? $tpl_vars['wanted_selected'] = 'selected' : $tpl_vars['wanted_selected'] = '';
+    $index_pref == 'torrents' ? $tpl_vars['torrents_selected'] = 'selected' : $tpl_vars['torrents_selected'] = '';
+    $index_pref == 'tmdb' ? $tpl_vars['tmdb_selected'] = 'selected' : $tpl_vars['tmdb_selected'] = '';
+    $index_pref == 'transmission' ? $tpl_vars['transmission_selected'] = 'selected' : $tpl_vars['transmission_selected'] = '';
+    $email_notify ? $tpl_vars['email_checked'] = 'checked' : $tpl_vars['email_checked'] = '';
 
-    return $frontend->getTpl('user_prefs', $tdata);
+    $tpl = [
+        'name' => 'edit_profile',
+        'tpl_pri' => 20,
+        'tpl_file' => 'user_prefs',
+        'tpl_place' => 'user_profile',
+        'tpl_place_var' => 'pre_content',
+        'tpl_vars' => $tpl_vars,
+    ];
+
+    return $tpl;
 }
 
 function user_change_prefs() {
