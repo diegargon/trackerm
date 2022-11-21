@@ -150,14 +150,14 @@ function view() {
         $item['f_collection'] = get_fcollection($media_type, $item);
     }
 
-    $view_tpl = [
+    $view_main_tpl = [
         'name' => 'view',
         'tpl_file' => 'view',
         'tpl_pri' => 0,
         'tpl_vars' => array_merge($item, $other),
     ];
 
-    $view_tpl['templates'][] = $view_tpl;
+    $view_tpl['templates'][] = $view_main_tpl;
 
     return $view_tpl;
 }
