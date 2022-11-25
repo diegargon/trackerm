@@ -1,7 +1,6 @@
 [TODO]
 
 [HIGH]
-    [CLEAN] remove all show_loading() calls
     [REV] Permisos, revisar que el modo web no requiera escribir MOVIES/SHOWS y eliminar check
     [REV] trackercli --check , comprobaciones de que puede escribir y demas.
     [IMPROVE] Masters shows al meter un episodio actualiza master ?¿
@@ -26,7 +25,7 @@
     [COMPLETE] Finish Filters & Security
     [IMPROVE][CLI] Clean old query search caches entrys
     [IMPROVE] Reduce querys on Wanted, TMDB
-    [FIX/CHECK] do not contemplate yet what to do if tmdb not found any results.    
+    [FIX/CHECK] do not contemplate yet what to do if we  not found any results in tmdb
     [IMPROVE] Revisar rebuilds en cli a ver si se puede meter en el cron, quizas sea necesario un rebuild
             cada vez que se baje algo, ver casos. track_show necesitaba rebuild 
     [IMPROVE][NEW] Ordenamiento: Cambiar, si un tracker no actualiza sus torrents en mucho tiempo con el sistema actual siempre apareceran sus ultimos torrents
