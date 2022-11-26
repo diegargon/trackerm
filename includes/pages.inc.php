@@ -1357,7 +1357,6 @@ function page_identify() {
     if (!empty($submit_title)) {
         ($media_type == 'movies') ? $db_media = mediadb_searchMovies($submit_title) : $db_media = mediadb_searchShows($submit_title);
         if (valid_array($db_media)) {
-            $select = '';
 
             foreach ($db_media as $db_item) {
                 if (!empty(Filter::postInt('selected')) && ($db_item['themoviedb_id'] == current(Filter::postInt('selected')))) {
