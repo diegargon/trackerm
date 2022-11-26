@@ -24,9 +24,9 @@ tareas bien actualizadas
 ## Permisos de directorio
     Your www server must have this permissions:
     * ( R/W ) to cache cache/log cache/images cahce/log : save db files and images and logs (755)
-    * ( R ) to MOVIES_PATH : Where your movies library reside
-    * ( R ) to SHOWS_PATH : Where your shows library reside
-    * ( R ) to Transmission: Where transmission drop your files
+    * ( R ) to MOVIES_PATH : Where your movies library reside ( RW ) Si quieres renombrar archivos desde el interface web
+    * ( R ) to SHOWS_PATH : Where your shows library reside ( RW ) Si quieres renombrar archivos desde el interface web
+    * ( R ) to Transmission: Where transmission drop your files 
 
     All automatic jobs are doing with trackerm-cli.php you must configure your contrab to execute it
     * ( RW ) to MOVIES_PATH : Where your movies library reside

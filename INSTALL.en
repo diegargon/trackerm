@@ -1,7 +1,7 @@
 
 ## How works. (EXCUSE MY ENGLISH)
 
-This proyect it is in early stage of development.
+This proyect is in early stage of development.
 
 To configure copy the config/config.min.php file to /etc/trackerm.conf and edit the config file. All fields required.
 
@@ -19,13 +19,14 @@ In Library you can see your movies/shows, identify, show seasons and check missi
 trackerm will track your transmission movie/shows downloads and automatically move to your library path.
 
 ## DIRECTORY PERMISSIONS
-    Your www server must have this permissions:
+    Your www server must have this permissions (probably www-data user/group):
     * ( R/W )to cache cache/log cache/images : save db files and images and logs (directory 775) 
-    * ( R ) to MOVIES_PATH : Where your movies library reside
-    * ( R ) to SHOWS_PATH : Where your shows library reside
+    * ( R ) to MOVIES_PATH : Where your movies library reside ( RW ) If you want rename files
+    * ( R ) to SHOWS_PATH : Where your shows library reside( RW ) If you want rename files
     * ( R ) to TORRENT_FINISH_PATH : Where transmission drop your completed files
 
-    All automatic jobs are doing with trackerm-cli.php you must configure your contrab to execute it
+    All automatic jobs are doing with trackerm-cli.php you must configure your contrab to execute it, if you use
+    a non-root user: 
     * ( RW ) to MOVIES_PATH : Where your movies library reside
     * ( RW ) to SHOWS_PATH : Where your shows library reside
     * ( RW ) to TORRENT_FINISH_PATH: Where transmission drop your files    
@@ -38,13 +39,13 @@ trackerm will track your transmission movie/shows downloads and automatically mo
 
     How works :
     * Will looking for wanted items the days configured and automatic download if found any coincidence.
-    * Will move all media detected in transmission-daemon in the state "completed" to a directory in your library directory (you can configure if move all or only the media download
-    throught this software (adding to transmission clicking throught this app).
+    * Will move all media detected in transmission-daemon in the state "completed" to a directory in your library directory (you can configure if move all media detected
+    or only the media download throught this software (adding to transmission clicking throught this app).
   
     The "automatic move tool" (AMT) only move  pause/stopped torrents (completed). The AMT tool will create a symbolic link to your library when the torrent is seeding. 
     When finish seeding it will move the file to your library path and remove the torrent and all related content.
 
-    Support RAR files. Will warn if the file is encrypt for unrar it manulally.
+    Support RAR files. Will warn if the file is encrypt for unrar it manulally (detection not work ok).
 
     Basic line for /etc/crontab (every 5 minuts): 
         */5 *   * * *   root    /usr/bin/php  /path/to/trackerm-cli.php
@@ -69,7 +70,7 @@ Apache+Php7 (or similar), Jacket, Transmission, Composer, account+api key themov
 
         $ php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 
-    *  Go destination directory and type
+    *  Go to trackerm destination directory (/var/www/html or .../html/trackerm.. or other )and type
 
         $ composer require irazasyed/php-transmission-sdk  php-http/httplug-pack  php-http/guzzle6-adapter
 
@@ -87,7 +88,8 @@ Apache+Php7 (or similar), Jacket, Transmission, Composer, account+api key themov
 
 * Transmission-daemon
     * Configured to accept RPC connections (add the connection details to /etc/trackerm.conf (template config/config.min.php)
-    * Beware the transmission settings.json will we rewrite after stop the daemon. Stop the daemon before do any changes.
+    * Beware the transmission /etc/transmission-daemon/settings.json will we rewrite after stop the daemon. 
+      Stop the transmission daemon before do any changes.
 
 * TheMovieDB.ORG    
     * I provide a general and probably working API key , but you can create a account and request a personal api key (set it in /etc/tracker.conf)
