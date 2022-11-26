@@ -91,7 +91,7 @@ Please inform yourself of the laws in your country and use this software accordi
 
 **ENGLISH**
 
-About security: Begin adding checks but ins't secure yet for expose to internet (at least not well proven), beware, i recomend allow 
+About security: Begin adding checks but ins't secure yet for expose to internet , beware, i recomend allow 
 only local ips using .htaccess or other methods.
 
 About code: After the changes the DB from plain/text to SQL among other things i have a lot of messy code that need rewrite and rewrite querys to database 
