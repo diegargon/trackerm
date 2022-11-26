@@ -353,7 +353,7 @@ function submit_ident(string $media_type, array $oitem, $id) {
             $total_items = $media_master['total_items'] + 1;
             $total_size = $media_master['total_size'] + $media_in_library['size'];
 
-            $db->update('library_master_' . $media_type, ['total_items' => $total_items, 'total_size' => $total_size, 'items_updated' => time()], ['id' => ['value' => $media_master['id']]]);
+            $db->update('library_master_' . $media_type, ['total_items' => $total_items, 'total_size' => $total_size, 'items_updated' => time(), 'trailer' => null], ['id' => ['value' => $media_master['id']]]);
             $db->update('library_' . $media_type, ['master' => $media_master['id']], ['id' => ['value' => $id]], 'LIMIT 1');
             //if is a change master rest 1 or delete from old master.
             if (!empty($media_in_library['master']) && $media_in_library['master'] !== $media_master['id']) {
