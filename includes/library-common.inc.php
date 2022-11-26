@@ -22,16 +22,16 @@ function rebuild($media_type, $paths) {
 
     if (valid_array($paths)) {
         foreach ($paths as $path) {
-            _rebuild($media_type, $path);
+            rebuild_media($media_type, $path);
             sleep(1);
         }
     } else {
-        _rebuild($media_type, $paths);
+        rebuild_media($media_type, $paths);
     }
     $prefs->setPrefsItem('rebuild_blocker', 0, true);
 }
 
-function _rebuild($media_type, $path) {
+function rebuild_media($media_type, $path) {
     global $cfg, $db, $log, $LNG;
 
     $log->info("Rebuild $media_type called");
