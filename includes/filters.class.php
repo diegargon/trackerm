@@ -323,6 +323,38 @@ Class Filter {
         return $var;
     }
 
+    //File name
+
+    static function postFilename($val, $size = null) {
+        if (empty($_POST[$val])) {
+            return false;
+        }
+
+        return self::varStrict($_POST[$val], $size);
+    }
+
+    static function getFilename($val, $size = null) {
+        if (empty($_GET[$val])) {
+            return false;
+        }
+
+        return self::varStrict($_GET[$val], $size);
+    }
+
+    static function varFilename($var, $max_size = null, $min_size = null) {
+
+        if ((empty($var) ) || (!empty($max_size) && (strlen($var) > $max_size) ) || (!empty($min_size) && (strlen($var) < $min_size))
+        ) {
+            return false;
+        }
+        //TODO
+        //if (preg_match('', $var)) {
+        //    return false;
+        //}
+
+        return $var;
+    }
+
     // PASSWORD
     static function postPassword($val, $size = null) {
         if (empty($_POST[$val])) {

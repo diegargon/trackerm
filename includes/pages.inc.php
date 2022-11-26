@@ -1315,6 +1315,38 @@ function page_identify() {
     $library = 'library_' . $media_type;
     $ident_item = $db->getItemById($library, $id);
     $tdata['head'] = '';
+    /*
+     * Rename
+     */
+    if (isset($_POST['rename_file_btn'])) {
+        $rename_error = false;
+        $new_file_name = trim(Filter::postFilename('rename_file'));
+        $rename_update = [];
+
+        if (!empty($new_file_name) && ($new_file_name !== $ident_item['file_name'])) {
+            $rename_update = ['file_name' => $new_file_name];
+            if ($media_type == 'shows') {
+                $SE = getFileEpisode($new_file_name);
+                if (valid_array($SE)) {
+                    $rename_update['season'] = (int) $SE['season'];
+                    $rename_update['episode'] = (int) $SE['episode'];
+                } else {
+                    $rename_error = true;
+                }
+            }
+
+            $new_name_path = dirname($ident_item['path']) . '/' . $new_file_name;
+            if (!$rename_error) {
+                rename($ident_item['path'], $new_name_path);
+                if (file_exists($new_name_path)) {
+                    $rename_update['path'] = $new_name_path;
+                    $db->update('library_' . $media_type, $rename_update, ['id' => ['value' => $ident_item['id']]]);
+                    $ident_item['file_name'] = $new_file_name;
+                    $ident_item['path'] = $new_name_path;
+                }
+            }
+        }
+    }
 
     /*
      * selected contain key: id in local db and value:themoviedb_id;
@@ -1396,6 +1428,14 @@ function page_identify() {
 
     $identify_vars = array_merge($ident_item, $tdata);
     $identify_vars['head'] = $topt['head'] = strtoupper($LNG['L_IDENTIFY']);
+
+    if (is_writable($identify_vars['path'])) {
+        $identify_vars['is_writable'] = 1;
+    }
+    if (is_link($identify_vars['path'])) {
+        $identify_vars['is_link'] = 1;
+    }
+
 
     $identify['templates'][] = [
         'name' => 'identify',

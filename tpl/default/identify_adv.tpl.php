@@ -44,8 +44,22 @@
             </div>
         </div>
     </div>
+    <br/>
+    <?php
+    if (isset($tdata['is_writable']) && !isset($tdata['is_link'])) {
+        ?>
+        <input size="50" type="text" name="rename_file" value="<?= $tdata['file_name'] ?>" />
+        <input class="submit_btn" type="submit" name="rename_file_btn" value="<?= $LNG['L_RENAME'] ?>"/>
+        <br/>
+        <?php
+    } else {
+        ?>
+        <div><?= isset($tdata['is_link']) ? $LNG['L_RENAME_DISABLE_DUE_LINK'] : $LNG['L_RENAME_DISABLE_DUE_PERMS'] ?></div>
+        <?php
+    }
+    ?>
     <input type="hidden" name="identify_all" value="<?= $tdata['identify_all'] ?>"/>
-    <input type="text" name="submit_title" value="<?= $tdata['search_title'] ?>" />
+    <input size="50" type="text" name="submit_title" value="<?= $tdata['search_title'] ?>" />
     <input class="submit_btn" type="submit" name="search" value="<?= $LNG['L_SEARCH'] ?>"/>
     <?php
     if (isset($tdata['media_results']['items'])) {
@@ -64,19 +78,19 @@
             </select>
 
         </div>
-    <?php
-}
-?>
-    <div>
-    <?php
-    if (!empty($tdata['selected_poster'])) {
-        print '<img width="300" src="' . $tdata['selected_poster'] . '" />';
-    }
-
-    if (!empty($tdata['selected_plot'])) {
-        print '<p>' . $tdata['selected_plot'] . '</p>';
+        <?php
     }
     ?>
+    <div>
+        <?php
+        if (!empty($tdata['selected_poster'])) {
+            print '<img width="300" src="' . $tdata['selected_poster'] . '" />';
+        }
+
+        if (!empty($tdata['selected_plot'])) {
+            print '<p>' . $tdata['selected_plot'] . '</p>';
+        }
+        ?>
     </div>
     <div>
 
