@@ -1,12 +1,11 @@
 [TODO]
 
 [HIGH]
-    [REV] Permisos, revisar que el modo web no requiera escribir MOVIES/SHOWS y eliminar check
     [REV] trackercli --check , comprobaciones de que puede escribir y demas.
     [IMPROVE] Masters shows al meter un episodio actualiza master ?¿
     [FIX] Si no hay espacio en torrent temp transmission no mueve pero para trackerm consta que esta finalizado y intenta enlazarlo pero sige en temp no en 
     finalize/Ultimo.    
-    [IMPROVE] Import path, poder importar desde un path   
+    [IMPROVE] Al cambiar un archivo, borrara el anterior registro 'moved or deleted' y crea uno nuevo. Lo ideal seria que modificara el registro 
     [IMPROVE] Indexers to config
     [IMPROVE] Actualmente cada vez que listamos torrents comprobamos si lo tenemos en library; 
             Deberiamos utilizar have_it de jackett_* para no tener que comprobar la library, para ello [TODO]
@@ -49,6 +48,7 @@
         Si borramos un torrent linked queda el enlace, esto limpia pero no el directorio que creo
         (se ejectua en rebuild via web borrar directorio y otros archivos dara problemas)
         Quizas sacarlo de rebuild y ahi solo dejar el unset el link y el cli borra cada X tiempo
+    [IMPROVE] Import path, poder importar desde un path   
 [BACKLOG]    
     [CHANGE] Change actual Transmission rpc api to something basic, since some basic is enough and the actual have alot of deps 
     [NEW/IMPROVE] En el select de identificar estaria bien mostrar las caratulas al poner encima    
