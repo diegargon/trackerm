@@ -197,7 +197,7 @@ $check_link = $page_link . '&vid=' . $tdata['selected_id'] . '&media_type=' . $t
                     <?= !empty($tdata['media_files']) ? $tdata['media_files'] : null; ?>
 
                     <?php if ($tdata['view_type'] == 'shows_library' || $tdata['view_type'] == 'shows_db') { ?>
-                        <a class="action_link" href="?page=view&id=<?= $tdata['id'] ?>&view_type=<?= $tdata['view_type'] ?>&season=<?= $tdata['season'] ?>&update=1"><?= $LNG['L_UPDATE_EPISODES'] ?></a>
+                        <a class="action_link" href="?page=view&id=<?= $tdata['id'] ?>&view_type=<?= $tdata['view_type'] ?>&update=1"><?= $LNG['L_UPDATE_EPISODES'] ?></a>
                     <?php } ?>
 
                     <?php
