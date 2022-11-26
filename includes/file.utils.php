@@ -407,3 +407,23 @@ function fix_perms() {
         }
     }
 }
+
+function rrmdir($dir, $safe_path) {
+    global $log;
+
+    //safe: check if dir is winin working path
+    if (!v7_str_starts_with($dir, $safe_path)) {
+        $log->addStateMsg('rrmdir start with fail');
+        return false;
+    }
+    $files = array_diff(scandir($dir), array('.', '..'));
+    foreach ($files as $file) {
+        (is_dir("$dir/$file")) ? delTree("$dir/$file") : unlink("$dir/$file");
+    }
+    return rmdir($dir);
+}
+
+//PHP8 str_start_with
+function v7_str_starts_with($haystack, $needle) {
+    return (string) $needle !== '' && strncmp($haystack, $needle, strlen($needle)) === 0;
+}

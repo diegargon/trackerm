@@ -246,7 +246,7 @@ function MovieJob($item, $linked = false) {
 
                     $trans->deleteHashes($hashes);
                     $work_path = dirname($valid_file);
-                    file_exists($work_path) && ($work_path != $cfg['TORRENT_FINISH_PATH']) && (end($valid_files) == $valid_file) ? @rmdir($work_path) : null;
+                    file_exists($work_path) && ($work_path != $cfg['TORRENT_FINISH_PATH']) && (end($valid_files) == $valid_file) ? rrmdir($work_path, $cfg['TORRENT_FINISH_PATH']) : null;
                 }
             } else {
                 $log_job .= "[Status: Linking {$item['tid']} : {$item['hashString']}]";
@@ -376,7 +376,7 @@ function ShowJob($item, $linked = false) {
                     }
                     $trans->deleteHashes($hashes);
                     $work_path = dirname($valid_file);
-                    file_exists($work_path) && ($work_path != $cfg['TORRENT_FINISH_PATH']) && (end($valid_files) == $valid_file) ? @rmdir($work_path) : null;
+                    file_exists($work_path) && ($work_path != $cfg['TORRENT_FINISH_PATH']) && (end($valid_files) == $valid_file) ? rrmdir($work_path, $cfg['TORRENT_FINISH_PATH']) : null;
                 }
             } else {
                 $log_job .= "[Status: Linking {$item['tid']} : {$item['hashString']}]";
