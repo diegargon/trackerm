@@ -6,7 +6,7 @@
     [IMPROVE] Masters shows al meter un episodio actualiza master ?¿
     [FIX] Si no hay espacio en torrent temp transmission no mueve pero para trackerm consta que esta finalizado y intenta enlazarlo pero sige en temp no en 
     finalize/Ultimo.    
-    [IMPROVE] Import path    
+    [IMPROVE] Import path, poder importar desde un path   
     [IMPROVE] Indexers to config
     [IMPROVE] Actualmente cada vez que listamos torrents comprobamos si lo tenemos en library; 
             Deberiamos utilizar have_it de jackett_* para no tener que comprobar la library, para ello [TODO]
@@ -30,7 +30,7 @@
             cada vez que se baje algo, ver casos. track_show necesitaba rebuild 
     [IMPROVE][NEW] Ordenamiento: Cambiar, si un tracker no actualiza sus torrents en mucho tiempo con el sistema actual siempre apareceran sus ultimos torrents
         en la primera pagina.
-    [IMPROVE][WANTED] Options to  show between movies or shows?    
+    [IMPROVE][WANTED] Poder filtrar si mostrar shows o movies
 
 [VERY LOW]
     [IMPROVE][WANTED]Track show, option for modify from episode.
@@ -41,17 +41,14 @@
     [IMPROVE] Log,  posibilidad de emitir un mensaje que solo se envia si no se envio otro igual en X tiempo, ideal para para addstatemsg y no spamear.    
     [FIX/IMPROVE] Normalize dates 
     [FIX] A la hora de identificar las series siguientes capitulos los identifica por el predictible_title, si hubiera varias series con el mismo titulo habria problemas. 
-    [IMPROVE] Too much messy code...    
     [NEW] Escaneo de directorios a más para avi sin ser torrents. $cfg['SCAN_MEDIA_DIR'] = 1;        
     [IMPROVE]On torrent new/search get release data from tmdb and show it, get local database if not request database    
     [CLEAN] library_movies/shows now since change to masters not need most fields, remove
-    [IMPROVE] Library: add sort options
-    [IMPROVE][PLAY][LocalPlayer] Investigate web interface for track time
+    [IMPROVE] Library: Poder ordenar por nombre, año
     [IMPROVE] linked_files_check make remove file and dir if empty.
         Si borramos un torrent linked queda el enlace, esto limpia pero no el directorio que creo
         (se ejectua en rebuild via web borrar directorio y otros archivos dara problemas)
         Quizas sacarlo de rebuild y ahi solo dejar el unset el link y el cli borra cada X tiempo
-    [TESTING][IMPROVE] Rewrite pager its messy
 [BACKLOG]    
     [CHANGE] Change actual Transmission rpc api to something basic, since some basic is enough and the actual have alot of deps 
     [NEW/IMPROVE] En el select de identificar estaria bien mostrar las caratulas al poner encima    
@@ -61,4 +58,5 @@
     [IMPROVE] [T] Show seed Rate. ATM transmission-rpc not send the ratio neither upload data?
     [ADD] Admin Log (Log loggins, certain actions)
     [CHANGE?] Clean title: remove words <=2 chars?
+    [IMPROVE][PLAY][LocalPlayer] Investigate web interface for track time
     [IMPROVE] Warn NEW version connecting to https://raw.githubusercontent.com/diegargon/trackerm/master/VERSION
