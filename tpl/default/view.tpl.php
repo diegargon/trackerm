@@ -167,7 +167,7 @@ $check_link = $page_link . '&vid=' . $tdata['selected_id'] . '&media_type=' . $t
                     }
                     ?>
                     <?php if (isset($tdata['show_delete_opts'])) { ?>
-                        <form class="inline" method="POST">
+                        <form class="inline" method="POST" action="">
                             <select name="delete_opt">
                                 <option value="1"><?= $LNG['L_DELETE_REGISTER'] ?></option>
                                 <option value="2"><?= $LNG['L_DELETE_FILE'] ?></option>
@@ -176,7 +176,7 @@ $check_link = $page_link . '&vid=' . $tdata['selected_id'] . '&media_type=' . $t
                             <input type="hidden" name="file_id" value="<?= $tdata['selected_id'] ?>"/>
                             <input type="hidden" name="file_master" value="<?= $tdata['id'] ?>"/>
                             <input type="hidden" name="media_type" value="<?= $tdata['media_type'] ?>"/>
-                            <input type="button" class="action_link" onClick="return confirm(\''.$LNG['L_AREYOUSURE'].'\')" value="<?= $LNG['L_DELETE'] ?>">
+                            <input type="submit" class="action_link" onClick="return confirm('<?= $LNG['L_AREYOUSURE'] ?>')" value="<?= $LNG['L_DELETE'] ?>">
                         </form>
                         <?php
                     }
