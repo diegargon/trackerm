@@ -23,6 +23,13 @@ chdir($cfg['ROOT_PATH']);
 require_once('includes/climode.inc.php');
 
 isset($argv[1]) && $argv[1] == '-console' ? $log->setConsole(true) : null;
+if (isset($argv[1]) && $argv[1] == '-check') {
+    $log->setConsole(true);
+    trackercli_check();
+    $log->setConsole(false);
+    return false;
+}
+
 $log->info("TrackerM v{$cfg['version']}.{$cfg['db_version']}" . ' Starting trackerm automatic service (' . date("h:i") . ')');
 
 if (!valid_object($trans)) {

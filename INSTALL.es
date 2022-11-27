@@ -87,6 +87,10 @@ Apache+Php7+sqlite3 , Jacket, Transmission, Composer, cuenta+api key themoviedb.
     Puedes poner trackerm-cli.php en el directorio que quieras y cambiar de usuario si este tiene los permisos necesarios para las carpetas relacionadas. Si lo mueve
     recuerde hacerlo siempre que actualice trackerm.
 
+    En caso de utilizar otro usuario que no sea root, puedes comprobar si tienes los derechos correctos tecleando
+        sudo -u  www-data php trackerm-cli.php -check
+    Suponiendo que se va a ejecutar con usuario www-data
+
 ## Lenguaje
     Php+Javascript (Más adelante probablemente Jquery)
 

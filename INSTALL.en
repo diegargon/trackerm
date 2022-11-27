@@ -53,6 +53,9 @@ trackerm will track your transmission movie/shows downloads and automatically mo
     You can place trackerm-cli where you want and change the user if you set the right permissions. Remember look at the permission for all directorys where trackerm need to work. 
     If you move the trackerm-cli file out of his original place remember each time you upgrade trackerm you must move and overwrite the file.
 
+    In case of use other users (example www-data) you can check if have the right permissions with:
+        sudo -u  www-data php trackerm-cli.php -check
+
 ## Programming Language
     Php+Javascript (Jquery in the futere probably)
 

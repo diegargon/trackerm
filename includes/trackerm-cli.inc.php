@@ -1010,6 +1010,48 @@ function send_transmission($results) {
     return true;
 }
 
+function trackercli_check() {
+    global $log, $cfg;
+
+    $errors = false;
+    if (!file_exists('/etc/trackerm.conf')) {
+        $log->err("trackerm:  trackerm is not configure please copy & rename config/config.min.php to /etc/trackerm.conf and fill all fields\n");
+        $errors = true;
+    }
+
+    if (empty($cfg['TORRENT_FINISH_PATH'])) {
+        $log->err("Error: You must set TORRENT_FINISH_PATH on /etc/trackerm \n");
+        $errors = true;
+    } else {
+        if (!is_writable($cfg['TORRENT_FINISH_PATH'])) {
+            $log->err("Error: Directory {$cfg['TORRENT_FINISH_PATH']} must be writable\n");
+            $errors = true;
+        }
+    }
+
+    if (is_array($cfg['MOVIES_PATH'])) {
+        foreach ($cfg['MOVIES_PATH'] as $movies_path) {
+            if (!is_writable($movies_path)) {
+                $log->err("Error: Your {$movies_path} directory must be writable\n");
+                $errors = true;
+            }
+        }
+    }
+
+    if (is_array($cfg['SHOWS_PATH'])) {
+        foreach ($cfg['SHOWS_PATH'] as $sp_key => $shows_path) {
+            if (!is_writable($shows_path)) {
+                $log->err("Error: Your {$shows_path} directory must be writable: {$cfg['SHOWS_PATH'][$sp_key]} \n");
+                $errors = true;
+            }
+        }
+    }
+
+    if (!$errors) {
+        $log->debug('All check passed');
+    }
+}
+
 function leave($msg = false) {
     global $log;
 
