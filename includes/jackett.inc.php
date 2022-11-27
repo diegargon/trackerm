@@ -294,7 +294,7 @@ function jackett_prep_media($media_type, $media_results) {
                 $media[$key]['id'] = $item_id_guid['id'];
                 !empty($item_id_guid['guessed_poster']) ? $media[$key]['guessed_poster'] = $item_id_guid['guessed_poster'] : $media[$key]['guessed_poster'] = '';
                 !empty($item_id_guid['guessed_trailer']) ? $media[$key]['guessed_trailer'] = $item_id_guid['guessed_trailer'] : $media[$key]['guessed_trailer'] = '';
-                //If freelech state change must change in the db
+                //If change the freelech status  must change in the db
                 $update = [];
                 if ($item_id_guid['freelech'] != $media[$key]['freelech']) {
                     $update['freelech'] = $media[$key]['freelech'];
