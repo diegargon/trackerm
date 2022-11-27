@@ -41,6 +41,8 @@ function getFileTitle($file) {
     $regex .= '(?!-\s+Temp)';  // - Temp*
     $regex .= '(?!\s+Temporada)';  //  Temporada
     $regex .= '(?!-\s+Season)';  // - Season
+    $regex .= '(?!360p)'; // 360p
+    $regex .= '(?!420p)'; // 420p
     $regex .= '(?!720p)'; // 720p
     $regex .= '(?!1080p)'; // M1080p
     $regex .= '(?!M1080)'; // M1080
@@ -49,6 +51,7 @@ function getFileTitle($file) {
     $regex .= '(?!4K)'; //4K
     $regex .= '(?!UHD)'; // UHD
     $regex .= '(?!HD4K)'; //HD4K
+    $regex .= '(?!HDTV)'; //HDTV
     $regex .= '(?!HQ-TS)'; //HQ-TS
     $regex .= '(?!HD-TS)'; //HD-TS
     $regex .= '(?!Xvid)'; //XviD
@@ -57,6 +60,7 @@ function getFileTitle($file) {
     $regex .= '(?!HDRip)'; //HDRip
     $regex .= '(?!WEBRip)'; //WebRip
     $regex .= '(?!Bluray)'; //Bluray
+    $regex .= '(?!Blueray)'; //Blueray
     $regex .= '(?!multi\senglish)'; // multi english
     $regex .= '(?!S\d{1,2}E\d{2})'; // SXXEXX o SXEXX
     $regex .= '(?!S\d{1,2}\s+E\d{2})'; // SXX EXX o SX EXX
@@ -84,10 +88,10 @@ function getFileTitle($file) {
     $year_regex = '/^(?:';
     $year_regex .= '(?!\d{4})';
     $year_regex .= '.)*/i';
-    preg_match($regex, $_title, $matches);
+    preg_match($year_regex, $_title, $matches);
     $without_year_title = $matches[0];
 
-    (empty($without_year_title)) ? $_title = $without_year_title : $_title = $_title;
+    (!empty($without_year_title)) ? $_title = $without_year_title : $_title = $_title;
     $_title = trim($_title);
 
     /* The '-' sometimes is part of the title, ex"Title - The Plan",  sometimes is a separator trackrm thread
