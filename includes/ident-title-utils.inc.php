@@ -85,9 +85,7 @@ function getFileTitle($file) {
     //Remove year, this can cause problems for titles if the year is a real part of title
     //Here only check if remove year we get empty title, that avoid break media titles where the year is only
     //word in the title like movie '1917', 1944, etc
-    $year_regex = '/^(?:';
-    $year_regex .= '(?!\d{4})';
-    $year_regex .= '.)*/i';
+    $year_regex = '/^(?:' . '(?!\d{4})' . '.)*/i';
     preg_match($year_regex, $_title, $matches);
     $without_year_title = $matches[0];
 
