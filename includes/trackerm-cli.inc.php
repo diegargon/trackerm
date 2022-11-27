@@ -464,7 +464,7 @@ function get_valid_files($item) {
                 $files_dir = scandir_r($work_path);
 
                 if (empty($files_dir)) {
-                    $log->err('Work path is empty');
+                    $log->addStateMsg('Error: Files work path is empty: ' . $work_path);
                 } else {
                     foreach ($files_dir as $file) {
                         if (is_media_file($file)) {
