@@ -267,7 +267,7 @@ function jackett_prep_media($media_type, $media_results) {
 
     //Get have in library based on torrents clean titles
     $titles = array_unique($titles);
-    $library_master = 'library_' . $media_type;
+    $library_master = 'library_master_' . $media_type;
     $media_have = $db->selectMultiple($library_master, 'clean_title', $titles, 'id, title');
 
     //Select from db all items with same guids
