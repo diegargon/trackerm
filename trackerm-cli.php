@@ -22,15 +22,24 @@ if (file_exists('/etc/trackerm.conf')) {
 chdir($cfg['ROOT_PATH']);
 require_once('includes/climode.inc.php');
 
+$log->info("TrackerM v{$cfg['version']}.{$cfg['db_version']}" . ' Starting trackerm automatic service (' . date("h:i") . ')');
+
+if ($trans === false) {
+    $log->addStateMsg('Tracker cli not run due transmission daemon connection error');
+    return false;
+}
 isset($argv[1]) && $argv[1] == '-console' ? $log->setConsole(true) : null;
 if (isset($argv[1]) && $argv[1] == '-check') {
     $log->setConsole(true);
     trackercli_check();
     $log->setConsole(false);
     return false;
+} else {
+    if (trackercli_check() === false) {
+        $log->addStateMsg('TrackerM cli found errors check logs');
+        return false;
+    }
 }
-
-$log->info("TrackerM v{$cfg['version']}.{$cfg['db_version']}" . ' Starting trackerm automatic service (' . date("h:i") . ')');
 
 if (!valid_object($trans)) {
     $log->err("Starting TAS fail: Fail Transmission connection");

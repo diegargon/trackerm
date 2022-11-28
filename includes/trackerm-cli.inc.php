@@ -1018,42 +1018,51 @@ function trackercli_check() {
     $errors = false;
 
     if (empty($cfg['TORRENT_FINISH_PATH'])) {
-        $log->err("Error: You must set TORRENT_FINISH_PATH on /etc/trackerm \n");
+        $log->err("CLI Error: You must set TORRENT_FINISH_PATH on /etc/trackerm \n");
         $errors = true;
     } else {
         if (!is_writable($cfg['TORRENT_FINISH_PATH'])) {
-            $log->err("Error: Directory {$cfg['TORRENT_FINISH_PATH']} must be writable\n");
+            $log->err("CLI Error: Directory {$cfg['TORRENT_FINISH_PATH']} must be writable\n");
             $errors = true;
         }
     }
 
     if (is_array($cfg['MOVIES_PATH'])) {
-        foreach ($cfg['MOVIES_PATH'] as $movies_path) {
-            if (!is_writable($movies_path)) {
-                $log->err("Error: Your {$movies_path} directory must be writable\n");
+        if (empty($cfg['MOVIES_PATH'][0])) {
+            $log->err("CLI Error: Your MOVIES_PATH directory is empty, you must add at least one\n");
+            $errors = true;
+        } else {
+            if (!is_writable($cfg['MOVIES_PATH'][0])) {
+                $log->err("CLI Error: Your {$cfg['MOVIES_PATH'][0]} directory must be writable\n");
                 $errors = true;
             }
         }
     }
 
     if (is_array($cfg['SHOWS_PATH'])) {
-        foreach ($cfg['SHOWS_PATH'] as $sp_key => $shows_path) {
-            if (!is_writable($shows_path)) {
-                $log->err("Error: Your {$shows_path} directory must be writable: {$cfg['SHOWS_PATH'][$sp_key]} \n");
+        if (empty($cfg['SHOWS_PATH'][0])) {
+            $log->err("CLI Error: Your SHOWS_PATH directory is empty, you must add at least one\n");
+            $errors = true;
+        } else {
+            if (!is_writable($cfg['SHOWS_PATH'][0])) {
+                $log->err("CLI Error: Your {$cfg['SHOWS_PATH'][0]} directory must be writable\n");
                 $errors = true;
             }
         }
     }
 
     if (!$errors) {
-        $log->debug('All check passed');
+        $log->debug('CLI: All checks passed');
+        return true;
     }
+
+    return false;
 }
 
 function leave($msg = false) {
     global $log;
 
-    $log->debug('Exit Called  ');
+    $log->debug('CLI: Exit Called  ');
     !empty($msg) ? $log->err($msg) : null;
 
     exit();
