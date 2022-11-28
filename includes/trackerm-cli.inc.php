@@ -1016,10 +1016,6 @@ function trackercli_check() {
     global $log, $cfg;
 
     $errors = false;
-    if (!file_exists('/etc/trackerm.conf')) {
-        $log->err("trackerm:  trackerm is not configure please copy & rename config/config.min.php to /etc/trackerm.conf and fill all fields\n");
-        $errors = true;
-    }
 
     if (empty($cfg['TORRENT_FINISH_PATH'])) {
         $log->err("Error: You must set TORRENT_FINISH_PATH on /etc/trackerm \n");
