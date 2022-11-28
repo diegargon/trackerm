@@ -1,5 +1,6 @@
 ## Latest / News (Relevant)
 
+[28/11] Fix bug cli not linking finished torrent  if was in the status 'seeding queue'
 [27/11] trackerm-cli -checks (check right for write)
 [************ PUSH **********]
 [27/11] Fix bug missing var on view show, have it bug.

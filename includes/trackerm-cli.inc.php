@@ -110,7 +110,9 @@ function getRightTorrents() {
     foreach ($transfers as $transfer) {
         if ($transfer['status'] == 0 && $transfer['percentDone'] == 1) {
             $finished_list[] = $transfer;
-        } else if ($transfer['status'] == 6 && $transfer['percentDone'] == 1) {
+        } else if ($transfer['percentDone'] == 1 &&
+                ( $transfer['status'] == 6 || $transfer['status'] == 5) // 6 Seeding & 5 Queue Seeding
+        ) {
             $seeding_list[] = $transfer;
         }
     }
