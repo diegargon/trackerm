@@ -30,12 +30,12 @@ $cfg['ROOT_PATH'] = '';
 // Empty for http//mydomain/
 $cfg['REL_PATH'] = '/trackerm';
 
-// Your library path (the first element (0) is where trackerm move the new content)
+// Your library path, you can add many but only the first element (0) is where trackerm move the new content.
 //Movies
 $cfg['MOVIES_PATH'] = [
     0 => '', //ex: 0 => '/home/mylib/movies',
 ];
-//Shows
+//Shows (same as movies_path
 $cfg['SHOWS_PATH'] = [
     0 => '',
 ];
