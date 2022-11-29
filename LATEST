@@ -1,6 +1,7 @@
 ## Latest / News (Relevant)
 
-[28/11] add cli checks
+[29/11] Avoid spam same status msg
+[28/11] add cli checks & status msg alert
 [28/11] Fix bug cli not linking finished torrent  if was in the status 'seeding queue'
 [27/11] trackerm-cli -checks (check right for write)
 [************ PUSH **********]

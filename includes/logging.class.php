@@ -105,7 +105,13 @@ Class Log {
 
     public function addStateMsg($msg) {
         global $db;
-        $db->addItem('log_msgs', ['type' => 'state', 'msg' => $msg]);
+
+        $where['type'] = ['value' => 'state'];
+        $response = $db->select('log_msgs', null, $where, 'ORDER BY id DESC LIMIT 1 ');
+        $state_msg = $db->fetchAll($response);
+        if (!isset($state_msg['msg']) || $state_msg['msg'] != $msg) {
+            $db->addItem('log_msgs', ['type' => 'state', 'msg' => $msg]);
+        }
     }
 
     public function getStateMsgs() {
