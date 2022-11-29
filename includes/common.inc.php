@@ -41,9 +41,9 @@ if (!empty($cfg['locale'])) {
     setlocale(LC_ALL, $cfg['locale']);
 }
 
-require_once('includes/logging.class.php');
+require_once('includes/Logging.php');
 global $log;
-$log = new Log($cfg);
+$log = new Logging($cfg);
 
 require_once('lang/en-EN/lang.inc.php');
 if (empty($cfg['LANG']) || $cfg['LANG'] != 'en-EN') {

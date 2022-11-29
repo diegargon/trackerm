@@ -9,7 +9,7 @@
  */
 !defined('IN_WEB') ? exit : true;
 
-Class Log {
+Class Logging {
 
     private $console;
     private $cfg;
