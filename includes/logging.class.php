@@ -103,7 +103,7 @@ Class Log {
         $this->logged('LOG_EMERG', $msg);
     }
 
-    public function addStateMsg($msg) {
+    public function addStatusMsg($msg) {
         global $db;
 
         $where['type'] = ['value' => 'state'];
@@ -114,7 +114,7 @@ Class Log {
         }
     }
 
-    public function getStateMsgs() {
+    public function getStatusMsg() {
         global $db;
 
         $where['type'] = ['value' => 'state'];

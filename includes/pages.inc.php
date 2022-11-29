@@ -157,7 +157,7 @@ function page_index() {
     $statusmsg_vars = [];
     $statusmsg_vars['clear_title'] = $LNG['L_CLEAR'];
 
-    $status_msgs = $log->getStateMsgs();
+    $status_msgs = $log->getStatusMsg();
 
     if (!empty($status_msgs) && (count($status_msgs) > 0)) {
         $status_msgs[0]['first'] = 1;

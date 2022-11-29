@@ -413,7 +413,7 @@ function rrmdir($dir, $safe_path) {
 
     //safe: check if dir is winin working path
     if (!v7_str_starts_with($dir, $safe_path)) {
-        $log->addStateMsg('rrmdir start with fail');
+        $log->addStatusMsg('rrmdir start with fail');
         return false;
     }
     $files = array_diff(scandir($dir), array('.', '..'));

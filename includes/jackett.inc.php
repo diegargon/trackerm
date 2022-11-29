@@ -166,11 +166,11 @@ function jackett_search_media($media_type, $words, $indexer, $categories, $limit
 
     $timediff = getPerfTime() - $starttime;
     if (formatPerfTime($timediff) > $cfg['slow_flow']) {
-        $log->addStateMsg("[{$LNG['L_NOTICE']}] $indexer  {$LNG['L_SLOW_THE_FLOW']} " . formatPerfTime($timediff) . " {$LNG['L_SECONDS']}");
+        $log->addStatusMsg("[{$LNG['L_NOTICE']}] $indexer  {$LNG['L_SLOW_THE_FLOW']} " . formatPerfTime($timediff) . " {$LNG['L_SECONDS']}");
     }
     if (formatPerfTime($timediff) > $cfg['curl_timeout'] - 1) {
         $prefs->setPrefsItem($indexer . '_disable', time() + $disable_time, true);
-        $log->addStateMsg("[{$LNG['L_NOTICE']}]: $indexer {$LNG['L_DISABLED']} $disable_time {$LNG['L_SECONDS']}");
+        $log->addStatusMsg("[{$LNG['L_NOTICE']}]: $indexer {$LNG['L_DISABLED']} $disable_time {$LNG['L_SECONDS']}");
     }
 
     return $result;

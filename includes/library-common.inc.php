@@ -87,7 +87,7 @@ function rebuild_media($media_type, $path) {
                     $items[$i]['episode'] = $episode;
                 } else {
                     $msg_log = '[' . $LNG['L_ERROR'] . '] ' . $LNG['L_ERR_SE'] . ' ' . $items[$i]['file_name'];
-                    $log->addStateMsg($msg_log);
+                    $log->addStatusMsg($msg_log);
                     $log->warning($msg_log);
                     $items[$i]['season'] = 'X';
                     $items[$i]['episode'] = 'X';
@@ -182,7 +182,7 @@ function clean_database($media_type, $files, $media) {
         if (!in_array($item['path'], $files)) {
             $master = [];
 
-            $log->addStateMsg('[' . $LNG['L_NOTE'] . '] ' . basename($item['path']) . ' ' . $LNG['L_NOTE_MOVDEL']);
+            $log->addStatusMsg('[' . $LNG['L_NOTE'] . '] ' . basename($item['path']) . ' ' . $LNG['L_NOTE_MOVDEL']);
 
             if (!empty($item['master'])) {
                 $master = $db->getItemById('library_master_' . $media_type, $item['master']);
@@ -474,18 +474,18 @@ function delete_file(int $file_id, int $master_id, string $media_type) {
         }
     } else {
         $cfg['msg_warn'] = $LNG['L_ERR_FILE_PERMS'];
-        $log->addStateMsg($LNG['L_ERR_FILE_PERMS'] . ': ' . $file_item['path']);
+        $log->addStatusMsg($LNG['L_ERR_FILE_PERMS'] . ': ' . $file_item['path']);
         $log->err($LNG['L_ERR_FILE_PERMS'] . ': ' . $file_item['path']);
         return false;
     }
 
     //Remove Registers
     $db->deleteItemById($library, $file_id);
-    $log->addStateMsg($LNG['L_DELETE_ENTRY_MANUALLY'] . ': ' . $file_item['file_name']);
+    $log->addStatusMsg($LNG['L_DELETE_ENTRY_MANUALLY'] . ': ' . $file_item['file_name']);
     if ($master['total_items'] == 1) {
         $db->deleteItemById($library_master, $master_id);
         $return = 'SUCCESS_NOMASTER';
-        $log->addStateMsg($LNG['L_DELETE_ENTRY_MANUALLY'] . ': (Master) ' . $master['title']);
+        $log->addStatusMsg($LNG['L_DELETE_ENTRY_MANUALLY'] . ': (Master) ' . $master['title']);
     } else {
         $new_size = $master['total_size'] - $file_item['size'];
         $db->updateItemById($library_master, $master['id'], ['total_items' => $master['total_items'] - 1, 'total_size' => $new_size]);

@@ -25,7 +25,7 @@ require_once('includes/climode.inc.php');
 $log->info("TrackerM v{$cfg['version']}.{$cfg['db_version']}" . ' Starting trackerm automatic service (' . date("h:i") . ')');
 
 if ($trans === false) {
-    $log->addStateMsg('Tracker cli not run due transmission daemon connection error');
+    $log->addStatusMsg('Tracker cli not run due transmission daemon connection error');
     return false;
 }
 isset($argv[1]) && $argv[1] == '-console' ? $log->setConsole(true) : null;
@@ -36,7 +36,7 @@ if (isset($argv[1]) && $argv[1] == '-check') {
     return false;
 } else {
     if (trackercli_check() === false) {
-        $log->addStateMsg('TrackerM cli found errors check logs');
+        $log->addStatusMsg('TrackerM cli found errors check logs');
         return false;
     }
 }
