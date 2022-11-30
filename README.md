@@ -44,7 +44,7 @@ TrackerM is a mixture of both made in php instead of C# (Sonarr / Radarr) that r
 Unlike the other TrackerM  obviates the official "release / publication dates" which are highly dependent on each
 country. 
 
-TrackerM only supports linux/unix
+TrackerM only supports linux/unix, and transmission-daemon 
 
 In /screenshots you will find some probably outdated screenshots
 
@@ -65,7 +65,7 @@ TrackerM es una mezcla de ambas realizada en php en vez C# (Sonarr/Radarr) que n
 Al contrario que las otras trackerm obvia los "fechas de lanzamiento/publicacion" oficales que son muy dependientes de cada
 pais. Las busquedas de series por ejemplo las hace semanalmente estableciendo por el usuario un dia.
 
-TrackerM solo soporta linux/unix.
+TrackerM solo soporta linux/unix y transmission-daemon
 
 En /screenshots encontraras algunos sceenshots del aspecto posiblemente desactualizados
 
