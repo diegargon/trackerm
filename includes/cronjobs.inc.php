@@ -118,16 +118,18 @@ function update_seasons($force = false) {
     $result = $db->query($query);
     $shows = $db->fetchAll($result);
     $i = 0;
+    $debug = '';
     if (valid_array($shows)) {
         foreach ($shows as $show) {
             mediadb_getSeasons($show['themoviedb_id']);
             $where['themoviedb_id'] = ['value' => $show['themoviedb_id']];
             $db->update('shows_details', $update, $where);
-            $log->debug("Update seasons on {$show['themoviedb_id']}");
+            $debug .= $show['themoviedb_id'] . ',';
             $i++;
         }
+        $log->debug($debug);
     }
-    $log->info("Seasons updated: $i");
+    $log->info('Seasons updated:' . $i . ':' . $debug);
 }
 
 function delete_direct_orphans() {

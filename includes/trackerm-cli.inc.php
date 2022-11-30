@@ -162,11 +162,8 @@ function getRightTorrents() {
 function MovieJob($item, $linked = false) {
     global $cfg, $log, $trans, $db, $LNG;
 
-    $log_job = 'Movie ';
-    $log_job .= $linked ? 'seeding' : 'finished';
-    $log_job .= ' detected' . ' Checking ' . $item['title'];
-    $log->debug($log_job);
-    $log_job = '';
+    $log_job = 'Movie ' . $linked ? 'seeding' : 'finished';
+    $log_job .= ' detected' . ' Checking ' . $item['title'] . ':';
 
     $valid_files = [];
     $valid_files = get_valid_files($item);
@@ -267,11 +264,8 @@ function MovieJob($item, $linked = false) {
 function ShowJob($item, $linked = false) {
     global $cfg, $db, $LNG, $trans, $log;
 
-    $log_job = 'Show ';
-    $log_job .= $linked ? 'seeding' : 'finished';
-    $log_job .= ' detected' . ' Checking ' . $item['title'];
-    $log->debug($log_job);
-    $log_job = '';
+    $log_job = 'Show ' . $linked ? 'seeding' : 'finished';
+    $log_job .= ' detected' . ' Checking ' . $item['title'] . ':';
 
     $valid_files = [];
     $valid_files = get_valid_files($item);
@@ -423,7 +417,7 @@ function get_valid_files($item) {
                         exec($unrar);
                         break;
                     } else {
-                        $log->debug('Unrar flag is set skipping');
+                        $log->debug('Unrar flag is set skipping: ' . $unrar_check);
                         break;
                     }
                 } else {
@@ -526,14 +520,14 @@ function linking_media($valid_file, $final_dest_path) {
     global $cfg, $log, $LNG;
 
     if (!file_exists($valid_file)) {
-        $log->err("Linked failed, file not exists:" . $valid_file);
+        $log->err('Linked failed, file not exists:' . $valid_file);
         return false;
     }
     if (symlink($valid_file, $final_dest_path)) {
         if (!empty($cfg['files_usergroup'])) {
             if (file_exists($valid_file)) {
                 if (!chgrp($valid_file, $cfg['files_usergroup'])) {
-                    $log->err("chgrp on $valid_file fail (linking)");
+                    $log->err('chgrp on ' . $valid_file . ' fail (linking)');
                     return false;
                 }
             } else {
@@ -543,16 +537,16 @@ function linking_media($valid_file, $final_dest_path) {
         umask(0);
         if (!empty($cfg['files_perms'])) {
             if (!chmod($valid_file, octdec("0" . $cfg['files_perms']))) {
-                $log->err("chmod on $valid_file fail (linking)");
+                $log->err('chmod on ' . $valid_file . ' fail (linking)');
                 return false;
             }
         }
-        $log->info("Linking sucessful: $valid_file : $final_dest_path");
+        $log->info('Linking sucessful: ' . $valid_file . ':' . $final_dest_path);
         $log->addStatusMsg('[' . $LNG['L_LINKED'] . '] ' . basename($final_dest_path));
         return true;
     }
 
-    $log->err("Linking failed: $valid_file : $final_dest_path");
+    $log->err('Linking failed: ' . $valid_file . ':' . $final_dest_path);
     return false;
 }
 
@@ -674,11 +668,11 @@ function wanted_work() {
 
         $log->debug('********************************************************************************************************');
     }
-    !empty($log_j_direct) ? $log->debug("Jumping [Direct] " . $log_j_direct) : null;
-    !empty($log_track_show) ? $log->debug("Track Show check: " . $log_track_show) : null;
-    !empty($log_j_date_never) ? $log->debug("Jumping [Never] " . $log_j_date_never) : null;
-    !empty($log_j_date_no) ? $log->debug("Jumping [NotToday] " . $log_j_date_no) : null;
-    !empty($log_j_state) ? $log->debug("Jumping [State] " . $log_j_state) : null;
+    !empty($log_j_direct) ? $log->debug('Jumping [Direct] ' . $log_j_direct) : null;
+    !empty($log_track_show) ? $log->debug('Track Show check: ' . $log_track_show) : null;
+    !empty($log_j_date_never) ? $log->debug('Jumping [Never] ' . $log_j_date_never) : null;
+    !empty($log_j_date_no) ? $log->debug('Jumping [NotToday] ' . $log_j_date_no) : null;
+    !empty($log_j_state) ? $log->debug('Jumping [State] ' . $log_j_state) : null;
 }
 
 function wanted_check_title($title, $results) {
@@ -968,7 +962,7 @@ function send_transmission($results) {
         ($cfg['wanted_paused']) ? $trans_opt['paused'] = true : $trans_opt = [];
 
         if (empty($trans)) {
-            $log->err("Transmission connection fail (cli)");
+            $log->err('Transmission connection fail (cli)');
             return false;
         }
         $trans_response = $trans->addUrl($d_link, null, $trans_opt);
@@ -984,12 +978,12 @@ function send_transmission($results) {
             if (valid_array($match) && !empty($match[1])) {
                 $trans_response = $trans->addUrl(trim($match[1]));
                 if (!empty($trans_response)) {
-                    $log->info("Magnet detected, fixed error, ignore previous related (addUrl) error");
+                    $log->info('Magnet detected, fixed error, ignore previous related (addUrl) error');
                 }
             }
         }
         if (empty($trans_response)) {
-            $log->err("Transmission download fail (cli)");
+            $log->err('Transmission download fail (cli)');
             return false;
         }
 
@@ -1018,22 +1012,22 @@ function trackercli_check() {
     $errors = false;
 
     if (empty($cfg['TORRENT_FINISH_PATH'])) {
-        $log->err("CLI Error: You must set TORRENT_FINISH_PATH on /etc/trackerm \n");
+        $log->err('CLI Error: You must set TORRENT_FINISH_PATH on /etc/trackerm \n');
         $errors = true;
     } else {
         if (!is_writable($cfg['TORRENT_FINISH_PATH'])) {
-            $log->err("CLI Error: Directory {$cfg['TORRENT_FINISH_PATH']} must be writable\n");
+            $log->err('CLI Error: Directory ' . $cfg['TORRENT_FINISH_PATH'] . ' must be writable' . "\n");
             $errors = true;
         }
     }
 
     if (is_array($cfg['MOVIES_PATH'])) {
         if (empty($cfg['MOVIES_PATH'][0])) {
-            $log->err("CLI Error: Your MOVIES_PATH directory is empty, you must add at least one\n");
+            $log->err('CLI Error: Your MOVIES_PATH directory is empty, you must add at least one' . "\n");
             $errors = true;
         } else {
             if (!is_writable($cfg['MOVIES_PATH'][0])) {
-                $log->err("CLI Error: Your {$cfg['MOVIES_PATH'][0]} directory must be writable\n");
+                $log->err('CLI Error: Your ' . $cfg['MOVIES_PATH'][0] . ' directory must be writable' . "\n");
                 $errors = true;
             }
         }
@@ -1041,11 +1035,11 @@ function trackercli_check() {
 
     if (is_array($cfg['SHOWS_PATH'])) {
         if (empty($cfg['SHOWS_PATH'][0])) {
-            $log->err("CLI Error: Your SHOWS_PATH directory is empty, you must add at least one\n");
+            $log->err('CLI Error: Your SHOWS_PATH directory is empty, you must add at least one' . "\n");
             $errors = true;
         } else {
             if (!is_writable($cfg['SHOWS_PATH'][0])) {
-                $log->err("CLI Error: Your {$cfg['SHOWS_PATH'][0]} directory must be writable\n");
+                $log->err('CLI Error: Your ' . $cfg['SHOWS_PATH'][0] . ' directory must be writable' . "\n");
                 $errors = true;
             }
         }
