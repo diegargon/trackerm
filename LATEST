@@ -1,6 +1,10 @@
 ## Latest / News (Relevant)
 
 [************ PUSH **********]
+[12/12] identify page: Add back button 
+[12/12] Fix default selected file view1
+[12/12] Fix missing green arrow view items
+[************ PUSH **********]
 [29/11] Avoid spam same status messages
 [28/11] add cli checks & status msg alert
 [28/11] Fix bug cli not linking finished torrent  if was in the status 'seeding queue'

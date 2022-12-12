@@ -25,6 +25,7 @@ $LNG = [
     'L_AUDIO' => 'Audio',
     'L_AUDIO_M' => 'a',
     'L_AREYOUSURE' => '¿estas seguro?',
+    'L_BACK' => 'Volver',
     'L_CFG_AUTO_IDENTIFY' => 'Intentar auto identificar nuevo contenido',
     'L_CACHE' => 'Cache',
     'L_CATEGORY' => 'Categorias',

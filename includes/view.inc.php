@@ -96,13 +96,7 @@ function view() {
     ($view_type == 'movies_torrent' || $view_type == 'shows_torrent') ? $opt['auto_show_db'] = 1 : null;
 
     //add template media files selector
-    if (in_array($view_type, ['movies_library', 'shows_library'])) {
-        $media_file_tpl = get_media_files($item, $media_type, $view_media);
-        if (empty($other['selected_id']) && !empty($media_file_tpl['tpl_vars'][0]['file_id'])) {
-            $other['selected_id'] = $media_file_tpl['tpl_vars'][0]['file_id'];
-        }
-        $view_tpl['templates'][] = $media_file_tpl;
-    }
+
     if (in_array($view_type, ['movies_library', 'shows_library', 'movies_db', 'shows_db'])) {
         $where_view_media = [
             'uid' => ['value' => $user->getId()],
@@ -119,6 +113,14 @@ function view() {
         $item['f_cast'] = get_fnames('cast', $media_type, $item);
         $item['f_writer'] = get_fnames('writer', $media_type, $item);
         $item['f_director'] = get_fnames('director', $media_type, $item);
+
+        if (in_array($view_type, ['movies_library', 'shows_library'])) {
+            $media_file_tpl = get_media_files($item, $media_type, $view_media);
+            if (empty($other['selected_id']) && !empty($media_file_tpl['tpl_vars'][0]['file_id'])) {
+                $other['selected_id'] = $media_file_tpl['tpl_vars'][0]['file_id'];
+            }
+            $view_tpl['templates'][] = $media_file_tpl;
+        }
     }
 
     if ($view_type == 'shows_library' || $view_type == 'shows_db') {
@@ -642,6 +644,9 @@ function get_media_files(&$item, $media_type, $view_media) {
     if (!valid_array($files)) {
         return false;
     }
+    usort($files, function ($a, $b) {
+        return strcmp($a['file_name'], $b['file_name']);
+    });
 
     foreach ($files as $file) {
         $file_name = '';
@@ -681,10 +686,6 @@ function get_media_files(&$item, $media_type, $view_media) {
             'is_link' => $is_link,
         ];
     }
-
-    usort($sel_values, function ($a, $b) {
-        return strcmp($a['name'], $b['name']);
-    });
 
     if (!empty($selected_item['path'])) {
         $mediainfo = mediainfo_formated($selected_item['path']);

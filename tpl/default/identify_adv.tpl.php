@@ -45,6 +45,8 @@
         </div>
     </div>
     <br/>
+    <a class="submit_btn" href="javascript: history.back()"><?= $LNG['L_BACK'] ?></a>
+    <br/>
     <?php
     if (isset($tdata['is_writable']) && !isset($tdata['is_link'])) {
         ?>
