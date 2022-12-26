@@ -694,7 +694,7 @@ function page_news() {
 
     if (($cfg['want_movies']) && ($_GET['page'] == 'news' || $_GET['page'] == 'new_movies')) {
         $movies_templates = page_new_media('movies');
-
+        
         $page_news['templates'][] = [
             'name' => 'movies_torrents',
             'tpl_file' => 'items_table_container',

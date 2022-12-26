@@ -85,14 +85,15 @@ function page_new_media(string $media_type) {
     }
 
     if (empty($res_media_db)) {
-        return [
+        $templates['templates'][] = [
             'name' => 'msgbox',
             'tpl_file' => 'msgbox',
             'tpl_pri' => 5,
             'tpl_place' => $media_type . '_torrents',
             'tpl_place_var' => 'items',
-            'tpl_vars' => ['title' => 'L_' . strtoupper($media_type), 'body' => 'L_NO_RESULTS']
+            'tpl_vars' => ['title' => $LNG['L_' . strtoupper($media_type)], 'body' => $LNG['L_NO_RESULTS']]
         ];
+        return $templates;
     }
 
     usort($res_media_db, function ($a, $b) {
@@ -149,14 +150,15 @@ function page_new_media(string $media_type) {
         $templates['templates'][] = get_pager(array_merge($topt, $pager_opts));
         //$page_news .= $page_news_media;
     } else {
-        return [
+        $templates['templates'][] =  [
             'name' => 'msgbox',
             'tpl_file' => 'msgbox',
             'tpl_pri' => 5,
             'tpl_place' => $media_type . '_torrents',
             'tpl_place_var' => 'items',
-            'tpl_vars' => ['title' => 'L_' . strtoupper($media_type), 'body' => 'L_NO_RESULTS']
+            'tpl_vars' => ['title' => $LNG['L_' . strtoupper($media_type)], 'body' => $LNG['L_NO_RESULTS']]
         ];
+        return $templates;
     }
 
 

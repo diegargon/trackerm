@@ -143,7 +143,15 @@ function show_cached_torrents($topt) {
     $results = $db->query($query);
     $media = $db->fetchAll($results);
     if (!valid_array($media)) {
-        return false;
+        $page_cached_torrents['templates'][] =  [
+            'name' => 'msgbox',
+            'tpl_file' => 'msgbox',
+            'tpl_pri' => 5,
+            'tpl_place' => $media_type . '_torrents',
+            'tpl_place_var' => 'items',
+            'tpl_vars' => ['title' => $LNG['L_' . strtoupper($media_type)], 'body' => $LNG['L_NO_RESULTS']]
+        ];
+        return $page_cached_torrents;
     }
 
     foreach ($media as &$item) {
