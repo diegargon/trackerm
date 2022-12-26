@@ -33,7 +33,7 @@ if (isset($tdata['tpl_var_ary_first'])) {
                     <a class="episode_link inline"  target=_blank href="?page=localplayer&id=<?= $tdata['have_show']['id'] ?>&media_type=shows"><?= $LNG['L_LOCALPLAYER'] ?></a>
                 <?php } ?>
             <?php } else { ?>
-                <a class="episode_link" href="?page=view&id=<?= $tdata['master_id'] ?>&wanted=1&season=<?= $tdata['season'] ?>&episode=<?= $tdata['episode'] ?>"><?= $LNG['L_WANTED'] ?></a>
+                <a class="episode_link" href="?page=view&id=<?= $tdata['master_id'] ?>&wanted=1&season=<?= $tdata['season'] ?>&episode=<?= $tdata['episode'] ?>&view_type=shows_library"><?= $LNG['L_WANTED'] ?></a>
             <?php } ?>
         </div>
     </div>
