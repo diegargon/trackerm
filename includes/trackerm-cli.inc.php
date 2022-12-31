@@ -613,6 +613,8 @@ function wanted_work() {
         $title = !empty($wanted['custom_title']) ? $wanted['custom_title'] : $wanted['title'];
         $media_type = $wanted['media_type'];
 
+        $s_episode = '';
+        
         if ($media_type == 'movies') {
             $log->debug('Search for : ' . $title . "[ $media_type ]");
 
