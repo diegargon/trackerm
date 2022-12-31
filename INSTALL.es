@@ -120,3 +120,8 @@ Apache+Php7+sqlite3 , Jacket, Transmission, Composer, cuenta+api key themoviedb.
     Necesitais una clave api de un proveedor, actualmente solo soporta themoviedb.org (el api key va en /etc/trackerm.conf utilizando la plantilla config/config.min.php)
     Quizas en el futuro se añadan otras alternativas pero de momento solo hay esta y es imprescindible. 
     Proporciono con la configuracion un API key que deberia funcionar pero podeis cambiar por uno propio.
+
+
+* Lenguage / Locales
+    * Asegurate que tienes las locales que vas utilizar (es_ES@UTF8? ) en el sistema utilizando el comando 'locales -a' 
+        En debian puedes utilizar 'dpk-reconfigure locales' para instalar nuevas, si no tendras problemas con los acentos.

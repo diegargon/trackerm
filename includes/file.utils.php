@@ -127,7 +127,7 @@ function cache_img($img_url) {
 
     $path = $_SERVER['DOCUMENT_ROOT'] . $cfg['REL_PATH'] . $cfg['cache_images_path'];
     if (!is_writeable($path)) {
-        $log->warning($path . 'is not writable');
+        $log->warning($path . ' is not writable');
         return false;
     }
 

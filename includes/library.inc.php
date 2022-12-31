@@ -216,49 +216,6 @@ function get_pager(array $opts) {
     return $pager;
 }
 
-function get_poster($item) {
-    global $cfg;
-
-    $poster = $cfg['img_url'] . '/not_available.jpg';
-
-    if ($cfg['cache_images']) {
-        if (!empty($item['custom_poster'])) {
-            $cache_img_response = cache_img($item['custom_poster']);
-            if ($cache_img_response !== false) {
-                $poster = $cache_img_response;
-            } else {
-                $poster = $item['custom_poster'];
-            }
-        } else if (!empty($item['poster'])) {
-            $cache_img_response = cache_img($item['poster']);
-            if ($cache_img_response !== false) {
-                $poster = $cache_img_response;
-            } else {
-                if (Filter::varImgUrl($item['poster'])) {
-                    $poster = $item['poster'];
-                }
-            }
-        } else if (!empty($item['guessed_poster']) && $item['guessed_poster'] != -1) {
-            $cache_img_response = cache_img($item['guessed_poster']);
-            if ($cache_img_response !== false) {
-                $poster = $cache_img_response;
-            } else {
-                $poster = $item['guessed_poster'];
-            }
-        }
-    } else {
-        if (!empty($item['custom_poster'])) {
-            $poster = $item['custom_poster'];
-        } else if (!empty($item['poster'])) {
-            $poster = $item['poster'];
-        } else if (!empty($item['guessed_poster']) && $item['guessed_poster'] != -1) {
-            $poster = $item['guessed_poster'];
-        }
-    }
-
-    return $poster;
-}
-
 /* Format genres to view */
 
 function get_fgenres(string $media_type, array $item) {

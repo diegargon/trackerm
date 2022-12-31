@@ -31,6 +31,7 @@ $cfg['movies_categories'] = [
     2045 => 'Movies/UHD',
     2050 => 'Movies/BluRay',
     2060 => 'Movies/3D',
+    8000 => 'Other',
 ];
 
 $cfg['shows_categories'] = [
@@ -42,7 +43,8 @@ $cfg['shows_categories'] = [
     5050 => 'TV/Other',
     5060 => 'TV/Sport',
     5070 => 'TV/Anime',
-    5080 => 'TV/Documentary'
+    5080 => 'TV/Documentary',
+    8000 => 'Other',
 ];
 
 $cfg['CHECK_DAYS'] = [

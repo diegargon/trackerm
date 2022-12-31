@@ -19,20 +19,20 @@ function search_media_torrents($media_type, $search) {
     if ($media_type == 'movies') {
         $jackett_search_media_cache = 'jackett_search_movies_cache';
         $jackett_db = 'jackett_movies';
-        $search_words = iconv($cfg['charset'], "ascii//TRANSLIT", $search['words']);
+        $search_words = iconv($cfg['charset'], "ASCI//TRANSLIT", $search['words']);
     } else if ($media_type == 'shows') {
         $jackett_search_media_cache = 'jackett_search_shows_cache';
         $jackett_db = 'jackett_shows';
 
         if (!empty($search['episode'])) {
-            $search_words = iconv($cfg['charset'], "ascii//TRANSLIT", $search['words']) . ' ' . $search['episode'];
+            $search_words = iconv($cfg['charset'], "ASCII//TRANSLIT", $search['words']) . ' ' . $search['episode'];
         } else {
-            $search_words = iconv($cfg['charset'], "ascii//TRANSLIT", $search['words']);
+            $search_words = iconv($cfg['charset'], "ASCII//TRANSLIT", $search['words']);
         }
     } else {
         return false;
     }
-
+    
     if ($cfg['search_cache']) {
         $media_cache_check = $db->getItemByField($jackett_search_media_cache, 'words', $search_words);
         !isset($media_cache_check['updated']) ? $media_cache_check['updated'] = 0 : null;
@@ -153,7 +153,9 @@ function jackett_search_media($media_type, $words, $indexer, $categories, $limit
     ($media_type == 'movies') ? $jkt_cat_first_digit = 2 : $jkt_cat_first_digit = 5;
 
     foreach ($categories as $category) {
-        if (substr($category, 0, 1) == $jkt_cat_first_digit) {
+        $substring_cat = substr($category, 0, 1);
+        //Some jacket tracker using 8000 for other
+        if ($substring_cat == $jkt_cat_first_digit ) { //|| $substring_cat == 8) {
             isset($cats) ? $cats .= ',' . $category : $cats = $category;
         }
     }

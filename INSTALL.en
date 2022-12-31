@@ -97,3 +97,7 @@ Apache+Php7 (or similar), Jacket, Transmission, Composer, account+api key themov
 * TheMovieDB.ORG    
     * I provide a general and probably working API key , but you can create a account and request a personal api key (set it in /etc/tracker.conf)
 
+
+* Language / Locales
+    * Make sure you have your locales you going to use (en_EN.UTF8? ) installed in the system 'locales -a' 
+        In debian you can use 'dpk-reconfigure locales' for install locales 
