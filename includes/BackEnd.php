@@ -13,34 +13,49 @@ class BackEnd {
 
     public function __construct() {
         $this->prefsSet();
-        $this->pagesGlobal();
     }
 
     public function getPageData(string $req_page) {
-        $page_func = 'page_' . $req_page;
-        //FIX check if page_func exists
-        $page_data = $page_func();
+        $page_data = [];
+        
+        $pages_global = $this->pagesGlobal();
 
-        if (is_array($page_data)) {
-            $page_data['request_page'] = $req_page;
-            $page_data['request_page_func'] = $page_func;
+        if ($pages_global === true) {
+            $page_func = 'page_' . $req_page;
+            //FIX check if page_func exists
+            $page_data = $page_func();
+
+            if (is_array($page_data)) {
+                $page_data['request_page'] = $req_page;
+                $page_data['request_page_func'] = $page_func;
+            } else {
+
+                exit('Backend error: getPageData not return array');
+            }
         } else {
-
-            exit('Backend error: getPageData not return array');
+            $page_data = $pages_global;
         }
+
         return $page_data;
     }
 
     function pagesGlobal() {
-        global $trans, $db, $user, $log;
+        global $trans, $db, $user, $log, $LNG;
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             if (!(empty($d_link = Filter::postUrl('download')))) {
                 if (empty($trans)) {
                     $log->err('Transmission connection fail');
-                    $this->frontend->msgPage(['title' => 'L_ERROR', 'body' => 'L_SEE_ERROR_DETAILS']);
-                    return false;
+                    $error['templates'][] = [
+                        'name' => 'msgbox', 'tpl_file' => 'msgbox', 'tpl_pri' => 4,
+                        'tpl_vars' => [
+                            'title' => $LNG['L_ERROR'],
+                            'body' => $LNG['L_SEE_ERROR_DETAILS'],
+                        ]                        
+                    ];
+                    $error['request_page'] = 'error';
+                    return $error;                    
                 }
                 if (($pos = strpos($d_link, 'file=')) !== FALSE) {
                     $jackett_filename = substr($d_link, $pos + 5);
@@ -80,8 +95,15 @@ class BackEnd {
                     ];
                     $db->addItemUniqField('wanted', $wanted_db, 'hashString');
                 } else {
-                    $this->frontend->msgPage(['title' => 'L_ERROR', 'body' => 'L_SEE_ERROR_DETAILS']);
-                    return false;
+                    $error['templates'][] = [
+                        'name' => 'msgbox', 'tpl_file' => 'msgbox', 'tpl_pri' => 4,
+                        'tpl_vars' => [
+                            'title' => $LNG['L_ERROR'],
+                            'body' => $LNG['L_SEE_ERROR_DETAILS'],
+                        ]                        
+                    ];
+                    $error['request_page'] = 'error';
+                    return $error;
                 }
             } //END DOWNLOAD
         } //END GET
@@ -158,6 +180,8 @@ class BackEnd {
                 }
             } //END VID
         } //END POST
+        
+        return true;
     }
 
     function prefsSet() {

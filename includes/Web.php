@@ -19,7 +19,7 @@ class Web {
         $this->frontend = new FrontEnd();
     }
 
-    function render() {
+    function render() {        
         $req_page = $this->getRequestPage();
 
         if ($req_page === false) {

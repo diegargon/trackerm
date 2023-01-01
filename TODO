@@ -1,6 +1,7 @@
 [TODO]
 
 [HIGH] 
+    [REWRITE] BackEnd
     [IMPROVE] Reducir Imagenes
     [FIX] No encuentra con acentos : ejemplo máscara
     [FIX] Arregla el FIXME the tracker_show
