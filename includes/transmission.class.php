@@ -35,12 +35,16 @@ class TorrentServer {
         $this->trans_conn = new Transmission\Client($cfg['trans_hostname'], $cfg['trans_port'], $cfg['trans_username'], $cfg['trans_passwd'], $httpClientBuilder = null);
 
         //php-transmission-sdk instance not check if the connection can be estabilished we do a request here for check
+        /*
         try {
             $this->trans_conn->portTest();
         } catch (Exception $e) {
             $log->err("trans __construct test fail: " . $e->getMessage());
             $this->trans_conn = false;
         }
+         * 
+         */
+        //var_dump($this->trans_conn);
         return $this->trans_conn;
     }
 
