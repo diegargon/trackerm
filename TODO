@@ -21,6 +21,7 @@
             Cada vez que descargamos algo actualizar el have_it de jackett_* [TODO]
             Cada vez que se borra algo de library actualizar el have_it de jackett_* [TODO]            
 [MED]    
+    [IMPROVE] PHP 8
     [CLI]Update people (cast,writer,director) in masters; donde actualiza masters    
     [IMPROVE] Wanted funciona buscando el dia, deberia comprobar los release torrents cada 6h 
     [IMPROVE] Si se borra manualmente un torrente bajado quedara el bd huerfanos. OPCION ORPHAN. 

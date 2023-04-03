@@ -1,5 +1,6 @@
 ## Latest / News (Relevant)
 
+[04/04] Minor ident shows add
 [************ PUSH **********]
 [07/02] Remove transmission conn test since fail after upgrade, (PENDING: Check transmission is running)
 [01/01] Fix wrong error handling

@@ -72,6 +72,7 @@ function getFileTitle($file) {
     $regex .= '(?!\.mp4$)'; //.mp4
     $regex .= '(?!Cap\s\d+$)'; // Cap.
     $regex .= '(?!Temporada\s\d+$)'; //Temporada X
+    $regex .= '(?!Complete[\W\w]{0,1}Series$)'; //Temporada X
     $regex .= '(?!Temp\s\d+$)'; //Temp.X
     /* REGEX TERMINATION */
     $regex .= '.)*/i';

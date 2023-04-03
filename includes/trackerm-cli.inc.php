@@ -49,6 +49,10 @@ function transmission_scan() {
                 $item['media_type'] = $tor['media_type'];
             } else {
                 $item['media_type'] = getMediaType($tor['name']);
+                if ($item['media_type'] == 'movies' && !empty($tor['files'][0]['name']) > 0) {
+                    //make sure checking files is not tagged with episode tags
+                    $item['media_type'] = getMediaType($tor['files'][0]['name']);
+                }
             }
             !empty($tor['season']) ? $item['season'] = $tor['season'] : null;
             !empty($tor['episode']) ? $item['episode'] = $tor['episode'] : null;
@@ -65,7 +69,6 @@ function transmission_scan() {
         $log->debug('Found torrents seeding: ' . count($tors['seeding']));
         foreach ($tors['seeding'] as $tor) {
             $item = [];
-
             $item['tid'] = $tor['id'];
             $item['hashString'] = $tor['hashString'];
             $item['files_location'] = $tor['name'];
@@ -76,6 +79,10 @@ function transmission_scan() {
                 $item['media_type'] = $tor['media_type'];
             } else {
                 $item['media_type'] = getMediaType($tor['name']);
+                if ($item['media_type'] == 'movies' && !empty($tor['files'][0]['name']) > 0) {
+                    //make sure checking files is not tagged with episode tags
+                    $item['media_type'] = getMediaType($tor['files'][0]['name']);
+                }
             }
             !empty($tor['season']) ? $item['season'] = $tor['season'] : null;
             !empty($tor['episode']) ? $item['episode'] = $tor['episode'] : null;
@@ -162,7 +169,8 @@ function getRightTorrents() {
 function MovieJob($item, $linked = false) {
     global $cfg, $log, $trans, $db, $LNG;
 
-    $log_job = 'Movie ' . $linked ? 'seeding' : 'finished';
+    $log_job = 'Movie ';
+    $log_job .= $linked ? 'seeding' : 'finished';
     $log_job .= ' detected' . ' Checking ' . $item['title'] . ':';
 
     $valid_files = [];
@@ -264,7 +272,8 @@ function MovieJob($item, $linked = false) {
 function ShowJob($item, $linked = false) {
     global $cfg, $db, $LNG, $trans, $log;
 
-    $log_job = 'Show ' . $linked ? 'seeding' : 'finished';
+    $log_job = 'Show ';
+    $log_job .= $linked ? 'seeding' : 'finished';
     $log_job .= ' detected' . ' Checking ' . $item['title'] . ':';
 
     $valid_files = [];
@@ -277,6 +286,7 @@ function ShowJob($item, $linked = false) {
         foreach ($valid_files as $valid_file) {
             $many = '';
             empty($cfg['rename_notags']) ? $file_tags = getFileTags($valid_file) : $file_tags = '';
+            //echo "\n TEST: ". $valid_files . "\n";
             !empty($file_tags) ? $file_tags = ' ' . $file_tags : null;
             $ext = substr($valid_file, -4);
 
@@ -614,7 +624,7 @@ function wanted_work() {
         $media_type = $wanted['media_type'];
 
         $s_episode = '';
-        
+
         if ($media_type == 'movies') {
             $log->debug('Search for : ' . $title . "[ $media_type ]");
 
