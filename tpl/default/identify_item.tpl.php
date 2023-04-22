@@ -29,7 +29,7 @@
             </select>
     </div>
     <div class="divTableCellID">
-        <span><a class="action_link" href="?page=<?= $tdata['page'] ?>&media_type<?= $tdata['media_type'] ?>&ident_delete=<?= $tdata['id'] ?>"><?= $LNG['L_DELETE_REGISTER'] ?></a></span>
-        <span><a class="action_link" href="?page=identify&media_type<?= $tdata['media_type'] ?>&identify=<?= $tdata['id'] ?>"><?= $LNG['L_MORE_SIGN'] ?></a></span>
+        <span><a class="action_link" href="?page=<?= $tdata['page'] ?>&media_type=<?= $tdata['media_type'] ?>&ident_delete=<?= $tdata['id'] ?>"><?= $LNG['L_DELETE_REGISTER'] ?></a></span>
+        <span><a class="action_link" href="?page=identify&media_type=<?= $tdata['media_type'] ?>&identify=<?= $tdata['id'] ?>"><?= $LNG['L_MORE_SIGN'] ?></a></span>
     </div>
 </div>
