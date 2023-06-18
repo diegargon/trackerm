@@ -171,7 +171,7 @@ function show_identify_media(string $media_type) {
 
 function auto_ident(string $media_type, array $ids) {
     global $log, $db, $cfg;
-
+    
     if (!valid_array($ids) || empty($media_type)) {
         return false;
     }
@@ -281,7 +281,7 @@ function ident_by_history(string $media_type, array &$ids) {
 
     $ids_id = [];
 
-    $log->debug("Ident by history called");
+    $log->debug("Ident by history called for ids:" . print_r($ids, true) );
 
     if (!valid_array($ids)) {
         return false;
