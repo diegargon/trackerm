@@ -1353,6 +1353,7 @@ function page_identify() {
      */
     if (isset($_POST['identify']) && Filter::postInt('selected')) {
         $ident_pairs = Filter::postInt('selected');
+
         if (!empty($_POST['identify_all'])) {
             $results = $db->select($library, 'master', ['id' => ['value' => array_key_first($ident_pairs)]]);
             $item_master = $db->fetchAll($results);
@@ -1364,19 +1365,24 @@ function page_identify() {
             }
             ident_by_idpairs($media_type, $ident_pairs_all);
         } else {
-            /* we add all register without master and same title */
+            
+            $ident_pairs_final = $ident_pairs;
+            
+            /* we add if any all register without master that have the  same title */
             $results = $db->query('SELECT id,file_name FROM ' . $library . ' WHERE master IS NULL');
             $items = $db->fetchAll($results);
+                        
             if (valid_array($items)) {
                 foreach ($items as $item) {
                     if (getFileTitle($item['file_name']) == getFileTitle($ident_item['file_name'])) {
                         $ident_pairs_final[$item['id']] = $ident_pairs[array_key_first($ident_pairs)];
                     }
                 }
-            } else {
-                $ident_pairs_final = $ident_pairs;
+            } 
+            
+            if(!empty($ident_pairs_final)) {
+                ident_by_idpairs($media_type, $ident_pairs_final);
             }
-            ident_by_idpairs($media_type, $ident_pairs_final);
         }
         return ['msg_type' => 1, 'title' => 'L_SUCCESS', 'body' => 'L_ADDED_SUCCESSFUL'];
     }
