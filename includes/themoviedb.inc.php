@@ -176,13 +176,19 @@ function themoviedb_MediaPrep($media_type, $items) {
                 }
             }
         }
-
+       
+        if(!empty($item['vote_average'])) {
+            $rating = round($item['vote_average'], 1);
+        } else {
+            $rating = '';
+        }
+        
         $fitems[$i] = [
             'themoviedb_id' => $item['id'],
             'title' => $title,
             'original_title' => $original_title,
             'clean_title' => clean_title($title),
-            'rating' => round($item['vote_average'], 1),
+            'rating' => $rating,
             'popularity' => isset($item['popularity']) ? round($item['popularity'], 1) : 0,
             'elink' => $link,
             'poster' => !empty($item['poster_path']) ? $cfg['odb_images_link'] . $item['poster_path'] : null,
