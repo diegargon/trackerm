@@ -254,6 +254,11 @@ function getMediaType($file_name) {
     if (preg_match('/\.S\d{2}\./i', $file_name)) {
         return 'shows';
     }
+    /* 'Series' */
+    if (preg_match('/series/i', $file_name)) {
+        return 'shows';
+    }
+    
     return 'movies';
 }
 
