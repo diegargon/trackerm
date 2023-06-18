@@ -625,7 +625,7 @@ function page_library() {
         $ident_templates = show_identify_media('movies');
         if ($ident_templates && is_array($ident_templates['templates'])) {
             $library['templates'] = array_merge($library['templates'], $ident_templates['templates']);
-        }
+        }         
         //Main Show Movies Template
         $library['templates'][] = [
             'name' => 'movies_library',

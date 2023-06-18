@@ -45,12 +45,6 @@ function show_my_media($media_type) {
         $db->deleteItemById($library, $ident_delete);
     }
 
-    //FIXME
-    $identify_media = show_identify_media($media_type);
-    if (!empty($identify_media) && isset($identify_media['templates'])) {
-        $templates['templates'] = array_merge($templates['templates'], $identify_media['templates']);
-    }
-
     $rows = $prefs->getPrefsItem('tresults_rows');
     $columns = $prefs->getPrefsItem('tresults_columns');
 
