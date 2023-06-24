@@ -57,7 +57,7 @@ class TorrentServer {
             $transfers = $this->trans_conn->get();
         } catch (Exception $e) {
             $log->err("getAll fail: " . $e->getMessage());
-            return false;
+            exit(1);
         }
         foreach ($transfers as $key => $transfer) {
             foreach ($transfer as $item_key => $item) {
