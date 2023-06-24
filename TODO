@@ -20,7 +20,9 @@
             Cuando lo metemos en el cache deberiamos comprobar la library y marcar have_it de jackett_* [DONE] 
             Cada vez que descargamos algo actualizar el have_it de jackett_* [TODO]
             Cada vez que se borra algo de library actualizar el have_it de jackett_* [TODO]            
-[MED]    
+[MED]
+    [CHECK] Tranmission 3 compatibility
+    [IMPROVE] Posibilidad de pasar identificacion de serie  a pelicula y al reves
     [IMPROVE] PHP 8
     [CLI]Update people (cast,writer,director) in masters; donde actualiza masters    
     [IMPROVE] Wanted funciona buscando el dia, deberia comprobar los release torrents cada 6h 

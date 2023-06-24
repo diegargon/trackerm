@@ -22,24 +22,24 @@ function rebuild($media_type, $paths) {
 
     if (valid_array($paths)) {
         foreach ($paths as $path) {
-            rebuild_media($media_type, $path);
+            rebuild_media($media_type, $path, $paths[0]);
             sleep(1);
         }
     } else {
-        rebuild_media($media_type, $paths);
+        rebuild_media($media_type, $paths, $paths);
     }
     $prefs->setPrefsItem('rebuild_blocker', 0, true);
 }
 
-function rebuild_media($media_type, $path) {
+function rebuild_media($media_type, $path, $links_path) {
     global $cfg, $db, $log, $LNG;
 
-    $log->info("Rebuild $media_type called");
+    $log->info("Rebuild $media_type called ($path)");
     $items = [];
     $files = find_media_files($path, $cfg['media_ext']);
 
     /* Avoid broken links && Detect Dups  */
-    linked_files_check($files);
+    linked_files_check($files, $links_path);
 
     $library_table = 'library_' . $media_type;
 
@@ -47,7 +47,7 @@ function rebuild_media($media_type, $path) {
     $i = 0;
 
     //Check if each media path it in $files if not probably delete or moved and must clean.
-    (valid_array($media_db)) ? clean_database($media_type, $files, $media_db) : null;
+    (valid_array($media_db)) ? clean_database($media_type, $path, $files, $media_db) : null;
 
     foreach ($files as $file) {
         if (!valid_array($media_db) ||
@@ -175,11 +175,29 @@ function getLibraryStats() {
  * if files was remove keep a library_history entry for reidentify with file_hash and delete the entry
  */
 
-function clean_database($media_type, $files, $media) {
+function clean_database($media_type, $path, $files, $media) {
     global $log, $db, $LNG;
 
+    
     foreach ($media as $item) {
+        $path_len = mb_strlen($path);
+        
+        if ($path[$path_len - 1] != '/') {
+            // Assure that path end is / to not match ../Movies and /Movies2
+            $path .= '/';
+        }
+        if ((substr($item['path'], 0, mb_strlen($path)) != $path)) {
+            /*
+             * Assure the item  path is set in the check path since this function called for each path
+             * and the files database contain all path files and not want remove if is in another path.
+             * 
+             */
+            continue;
+        }
+        /* File be known in $path check and remove if not exists in $files  */
+
         if (!in_array($item['path'], $files)) {
+
             $master = [];
 
             $log->addStatusMsg('[' . $LNG['L_NOTE'] . '] ' . basename($item['path']) . ' ' . $LNG['L_NOTE_MOVDEL']);
@@ -217,7 +235,7 @@ function clean_database($media_type, $files, $media) {
             }
 
             $db->deleteItemById('library_' . $media_type, $item['id']);
-        }
+        } 
     }
 }
 
@@ -225,15 +243,49 @@ function clean_database($media_type, $files, $media) {
  * Search and clean broken links
  */
 
-function linked_files_check(array &$files) {
+function linked_files_check(array &$files, $links_path) {
     global $log;
 
     $realpaths = [];
     foreach ($files as $file_key => $file) {
-        if (is_link($file) && !file_exists($file)) {
-            $log->info('Broken link detected ignoring (cli mode will clean)...' . $file);
-            unset($files[$file_key]);
+        if(!is_link($file)) {
+            continue;
         }
+        //Links Broken
+        if (!file_exists($file)) {
+            if (defined('IN_CLI')) {
+                $log->info('Broken link detected removing...' . $file);
+                unlink($file);
+            } else {
+                $log->info('Broken link detected ignoring (cli mode will clean)...' . $file);
+            }
+            unset($files[$file_key]);
+            continue;
+            
+        }
+
+        if ($links_path[mb_strlen($links_path) - 1] != '/') {
+            // Assure that path end is / to not match ../M+ovies and /Movies2
+            $links_path .= '/';
+        }
+        
+        if ((substr($file, 0, mb_strlen($links_path)) != $links_path)) {        
+            //Link only allowed on path[0] this links is not there remove
+            if (defined('IN_CLI')) {
+                $log->info('Removing link in not allowed path, (perhaps you change path[0]?...' . $file);                             
+                unlink($file);
+            } else {
+                $log->info('Detected link in not allowed path cli will be removing it, (perhaps you change path[0]?...' . $file);
+                
+            }
+            unset($files[$file_key]);
+            continue;            
+        } 
+        
+        /* Remove duplicate links: can occur when changing naming config */
+        /* FIXME El codigo es lioso, al guarda como key la ruta real y en contenido la ruta del enlace (else final)
+         * En la linea unlink($realpaths[realpath($file)] haciendo referencia al enlace con el realpath del archivo
+         */
         if (is_link($file) && file_exists($file)) {
             if (array_key_exists(realpath($file), $realpaths)) {
                 $log->info('Duplicate link detected <br/>' . $file . "<br/>" . $realpaths[realpath($file)]);
