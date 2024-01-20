@@ -185,3 +185,41 @@ function notify_mail($msg) {
 function format_seconds($s) {
     return gmdate("H:i:s", (int) $s);
 }
+
+function timestamp_to_date($timestamp, $format = 'd M H:i:s') {    
+    global $cfg; 
+    
+    $fechaHora = new DateTime('@' . $timestamp); // Crea un objeto DateTime con el timestamp
+    $fechaHora->setTimeZone(new DateTimeZone($cfg['timezone'])); // Ajusta la zona horaria según sea necesario
+
+    $formatoPersonalizado = $fechaHora->format($format); // Formatea la fecha y hora según tu requisito
+
+    return $formatoPersonalizado;
+}
+
+function utc_date_now() {
+    $date_timezone = new DatetimeZone('UTC');
+    $date_now = new DateTime('now', $date_timezone);
+
+    return $date_now->format('Y-m-d H:i:s');
+}
+
+function formatted_date_now($timezone = 'UTC', $time_format = 'Y-m-d H:i:s') {
+    $date_timezone = new DatetimeZone($timezone);
+    $date_now = new DateTime('now', $date_timezone);
+
+    return $date_now->format($time_format);
+}
+
+function formatted_user_date($date, $timezone = 'UTC', $time_format = 'Y-m-d H:i:s') {
+    
+    if (empty($date)) {
+        return false;
+    }
+    $utc_date = new DateTime($date, new DateTimeZone('UTC'));
+
+    $utc_date->setTimezone(new DateTimeZone($timezone));
+
+    return $utc_date->format($time_format);
+}
+

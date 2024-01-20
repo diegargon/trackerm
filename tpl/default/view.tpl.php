@@ -52,12 +52,12 @@ $check_link = $page_link . '&vid=' . $tdata['selected_id'] . '&media_type=' . $t
                 <?php if (!empty($tdata['created'])) {
                     ?>
                     <span><?= $LNG['L_ADDED'] ?> :</span>
-                    <span class="view_added"><?= strftime("%x", strtotime($tdata['created'])) ?></span>
+                    <span class="view_added"><?= timestamp_to_date(strtotime($tdata['created']), "%x") ?></span>
                     <br/>
                 <?php } ?>
                 <?php if (!empty($tdata['release'])) { ?>
                     <span><?= $LNG['L_RELEASED'] ?> :</span>
-                    <span class="view_release"><?= strftime("%Y", strtotime($tdata['release'])) ?></span>
+                    <span class="view_release"><?= timestamp_to_date(strtotime($tdata['release']), "%Y") ?></span>
                     <br/>
                 <?php } ?>
                 <?php if (!empty($tdata['f_genres'])) { ?>

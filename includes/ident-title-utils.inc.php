@@ -10,7 +10,9 @@
 !defined('IN_WEB') ? exit : true;
 
 function getFileTitle($file) {
-
+    global $log;
+            
+    $log->debug("getFileTitle $file");
     /* Better way? sure, and Clearly? */
     //regex case sensitive;
     $regex_cs = '/^(?:';

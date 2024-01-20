@@ -17,6 +17,8 @@
 $cfg['db_api_token'] = '9dce7699c72bcf016a6362cf4ed48c8f';
 //UI Lang Supported only: es-ES or en-EN
 $cfg['LANG'] = 'en-EN';
+//timezone
+$cfg['timezone'] = 'Europe/Madrid';
 
 //IMDB supported language.
 //Not UI in your language yet? you can still get the TMDB results in your language. Format en-EN.

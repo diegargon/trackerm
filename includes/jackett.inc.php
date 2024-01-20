@@ -15,6 +15,7 @@ function search_media_torrents($media_type, $search) {
     $result = [];
     $results_count = 0;
     $cache_media_expire = 0;
+    $media_db = [];
 
     if ($media_type == 'movies') {
         $jackett_search_media_cache = 'jackett_search_movies_cache';
@@ -32,19 +33,21 @@ function search_media_torrents($media_type, $search) {
     } else {
         return false;
     }
-    
+
     if ($cfg['search_cache']) {
         $media_cache_check = $db->getItemByField($jackett_search_media_cache, 'words', $search_words);
-        !isset($media_cache_check['updated']) ? $media_cache_check['updated'] = 0 : null;
+        if ($media_cache_check !== false) {
+            !isset($media_cache_check['updated']) ? $media_cache_check['updated'] = 0 : null;
 
-        $expire = $media_cache_check['updated'] + $cfg['search_cache_expire'];
+            $expire = $media_cache_check['updated'] + $cfg['search_cache_expire'];
 
-        if (time() > $expire) {
-            $time_now = time();
-            $log->debug("New: Media cache expire ($media_type), requesting $time_now:$expire");
-            $cache_media_expire = 1;
-        } else {
-            $media_db = $db->getItemsByIds($jackett_db, $media_cache_check['ids']);
+            if (time() > $expire) {
+                $time_now = time();
+                $log->debug("New: Media cache expire ($media_type), requesting $time_now:$expire");
+                $cache_media_expire = 1;
+            } else {
+                $media_db = $db->getItemsByIds($jackett_db, $media_cache_check['ids']);
+            }
         }
     }
 
@@ -155,7 +158,7 @@ function jackett_search_media($media_type, $words, $indexer, $categories, $limit
     foreach ($categories as $category) {
         $substring_cat = substr($category, 0, 1);
         //Some jacket tracker using 8000 for other
-        if ($substring_cat == $jkt_cat_first_digit ) { //|| $substring_cat == 8) {
+        if ($substring_cat == $jkt_cat_first_digit) { //|| $substring_cat == 8) {
             isset($cats) ? $cats .= ',' . $category : $cats = $category;
         }
     }

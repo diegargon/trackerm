@@ -2,6 +2,7 @@
 <img src="https://github.com/diegargon/trackerm/blob/master/screenshots/library-screenshot.png?raw=true" width="100%">
 </p>
 
+# WARN third party library transmission-rpc is deprected/unmaintain (php8) and haven't time yet for fix it
 # TrackerM
 
 ## Features 

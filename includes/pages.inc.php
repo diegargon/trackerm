@@ -161,8 +161,8 @@ function page_index() {
 
     if (!empty($status_msgs) && (count($status_msgs) > 0)) {
         $status_msgs[0]['first'] = 1;
-        foreach ($status_msgs as $stid => $status_msg) {
-            $status_msgs[$stid]['created_frmt'] = strftime("%d %h %X", strtotime($status_msg['created']));
+        foreach ($status_msgs as $stid => $status_msg) {            
+            $status_msgs[$stid]['created_frmt'] =  timestamp_to_date(strtotime($status_msg['created']));
         }
     } else {
         $status_msgs = [];

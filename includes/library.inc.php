@@ -85,20 +85,25 @@ function show_my_media($media_type) {
         foreach ($media as $kmedia => $vmedia) {
             foreach ($views_items as $kview_item => $vview_item) {
                 if ($kview_item == $vmedia['id']) {
-                    $media[$kmedia]['total_unseen_items'] = $vmedia['total_items'] - $vview_item['view_items'];
+                    $media[$kmedia]['total_unseen_items'] = $vmedia['total_items'] - $vview_item['view_items'];                    
                     break;
                 }
             }
         }
     }
-
-    foreach ($media as $kmedia => $vmedia) {
+    
+        foreach ($media as $kmedia => $vmedia) {
         //TODO: round old reg remove in the future
-        $media[$kmedia]['rating'] = round($vmedia['rating'], 1);
-        $media[$kmedia]['popularity'] = round($vmedia['popularity'], 1);
+        //FIXME: we cast to float because some problem in database value store
+        if(!empty($vmedia['rating'])) {
+            $media[$kmedia]['rating'] = round((float)$vmedia['rating'], 1);
+        }
+        if(!empty($vmedia['popularity'])) {
+            $media[$kmedia]['popularity'] = round((float)$vmedia['popularity'], 1);
+        }
         //
         $media[$kmedia]['poster'] = get_poster($vmedia);
-        !empty($vmedia['release']) ? $media[$kmedia]['title'] = $vmedia['title'] . ' (' . strftime("%Y", strtotime($vmedia['release'])) . ')' : null;
+        //!empty($vmedia['release']) ? $media[$kmedia]['title'] = $vmedia['title'] . ' (' . strftime("%Y", strtotime($vmedia['release'])) . ')' : null;
         empty($vmedia['trailer']) && !empty($vmedia['guessed_trailer']) && $vmedia['guessed_trailer'] != -1 ? $vmedia['trailer'] = $vmedia['guessed_trailer'] : null;
         !empty($vmedia['size']) ? $media[$kmedia]['size'] = human_filesize($vmedia['size']) : null;
         !empty($vmedia['total_size']) ? $media[$kmedia]['total_size'] = human_filesize($vmedia['total_size']) : null;

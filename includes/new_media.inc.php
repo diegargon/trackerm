@@ -42,7 +42,9 @@ function page_new_media(string $media_type) {
 
     if ($cfg['search_cache']) {
         $where['words'] = $media_cache_check = $db->getItemByField($search_cache_db, 'words', '');
-        !isset($media_cache_check['updated']) ? $media_cache_check['updated'] = 0 : null;
+        if(!isset($media_cache_check['updated'])) {
+            $media_cache_check['updated'] = 0;
+        }
 
         if ((time() > ($media_cache_check['updated'] + $cfg['new_cache_expire']))) {
             $log->debug("New media: $media_type cache expire, Requesting Now:" . time() . " Expire:" . ($media_cache_check['updated'] + $cfg['new_cache_expire']));

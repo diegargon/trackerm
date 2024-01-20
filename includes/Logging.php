@@ -47,7 +47,7 @@ Class Logging {
                 if (is_array($msg)) {
                     $msg = print_r($msg, true);
                 }
-                $content = '[' . strftime("%d %h %X", time()) . ']' . $this->cfg['app_name'] . " : [" . $type . '] ' . $msg . "\n";
+                $content = '[' . timestamp_to_date(time()) . ']' . $this->cfg['app_name'] . " : [" . $type . '] ' . $msg . "\n";
                 if ((file_put_contents($log_file, $content, FILE_APPEND)) === false) {
                     $this->err('Errror writing log to file');
                 }
