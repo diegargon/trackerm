@@ -14,9 +14,9 @@
     <div class="divTableCellID">
         <?php if ($tdata['media_type'] == 'movies') {
             ?>
-            <select class="ident_select" name="mult_movies_select[<?= $tdata['id'] ?>]"><?= $tdata['results_opt'] ?>
+            <select class="ident_select" name="mult_movies_select[<?= $tdata['id'] ?>]">
             <?php } else if ($tdata['media_type'] == 'shows') { ?>
-                <select class="ident_select" name="mult_shows_select[<?= $tdata['id'] ?>]"><?= $tdata['results_opt'] ?>
+                <select class="ident_select" name="mult_shows_select[<?= $tdata['id'] ?>]">
                 <?php } ?>
                 <option value=""><?= $LNG['L_NOID'] ?></option>
                 <?php

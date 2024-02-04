@@ -111,7 +111,7 @@ function show_identify_media(string $media_type) {
     $uniq_shows = [];
     foreach ($media_library as &$item) {
         $predictible_title = getFileTitle($item['file_name']);
-
+        $item['odb_results'] = [];
         if ($media_type == 'movies') {
             $odb_media = mediadb_searchMovies($predictible_title);
         } else if ($media_type == 'shows') {
@@ -171,7 +171,7 @@ function show_identify_media(string $media_type) {
 
 function auto_ident(string $media_type, array $ids) {
     global $log, $db, $cfg;
-    
+
     if (!valid_array($ids) || empty($media_type)) {
         return false;
     }
@@ -281,7 +281,7 @@ function ident_by_history(string $media_type, array &$ids) {
 
     $ids_id = [];
 
-    $log->debug("Ident by history called for ids:" . print_r($ids, true) );
+    $log->debug("Ident by history called for ids:" . print_r($ids, true));
 
     if (!valid_array($ids)) {
         return false;
