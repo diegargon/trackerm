@@ -94,11 +94,23 @@ class Transmission {
     }
 
     public function startAll() {
-        $this->callApi('torrent-start', ['ids' => '']);
+        $torrents = $this->getAll();
+        $ids = [];
+        foreach ($torrents as $torrent) {
+            $ids[] = $torrent['id'];
+        }
+
+        $this->callApi('torrent-start', ['ids' => $ids]);
     }
 
     public function stopAll() {
-        $this->callApi('torrent-stop', ['ids' => '']);
+        $torrents = $this->getAll();
+        $ids = [];
+        foreach ($torrents as $torrent) {
+            $ids[] = $torrent['id'];
+        }
+
+        $this->callApi('torrent-stop', ['ids' => $ids]);
     }
 
     public function removeTorrent($id, $deleteData = false) {
