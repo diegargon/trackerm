@@ -4,13 +4,13 @@
  *  @author diego/@/envigo.net
  *  @package
  *  @subpackage
- *  @copyright Copyright @ 2020 - 2021 Diego Garcia (diego/@/envigo.net)
+ *  @copyright Copyright @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 ?>
 <div class="footer">
     <p class="center">Querys[D<?= $tdata['num_querys'] ?>][J<?= $cfg['remote_querys_jackett'] ?>][T<?= $cfg['remote_querys_tmdb'] ?>]</p>
     <p class="copyright">
-        <a href="https://github.com/diegargon/trackerm" target="_blank">TrackerM <?= $cfg['version'] . ' DB v' . $cfg['db_version'] ?></a> - Copyright @ 2020 - 2021
+        <a href="https://github.com/diegargon/trackerm" target="_blank">TrackerM <?= $cfg['version'] . ' DB v' . $cfg['db_version'] ?></a> - Copyright @ 2020 - 2024
     </p>
     <?php
     if (!empty($tdata['querys']) && !empty($user->isAdmin())) {

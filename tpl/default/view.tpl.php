@@ -4,7 +4,7 @@
  *  @author diego/@/envigo.net
  *  @package
  *  @subpackage
- *  @copyright Copyright @ 2020 - 2021 Diego Garcia (diego/@/envigo.net)
+ *  @copyright Copyright @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 //var_dump($tdata);
 $page_link = '?page=view&id=' . $tdata['id'] . '&view_type=' . $tdata['media_type'] . '_library';

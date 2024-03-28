@@ -5,7 +5,7 @@
  *  @author diego/@/envigo.net
  *  @package
  *  @subpackage
- *  @copyright Copyright @ 2020 - 2021 Diego Garcia (diego/@/envigo.net)
+ *  @copyright Copyright @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 /*
  * User mode populate prefs and sys_prefs, for get/modify sys_prefs system=true

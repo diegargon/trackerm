@@ -5,7 +5,7 @@
  *  @author diego/@/envigo.net
  *  @package
  *  @subpackage
- *  @copyright Copyright @ 2020 - 2021 Diego Garcia (diego/@/envigo.net)
+ *  @copyright Copyright @ 2020 - 2024 Diego Garcia (diego/@/envigo.net)
  */
 /* * ********************************** */
 /* PROBABLY NOT NEED CHANGE ANYTHING HERE */
@@ -25,7 +25,7 @@ $cfg['img_url'] = $cfg['REL_PATH'] . '/img';
 $cfg['movies_categories'] = [
     2000 => 'Movies',
     2010 => 'Movies/Foreign',
-    2020 - 2021 => 'Movies/Other',
+    2020 - 2024 => 'Movies/Other',
     2030 => 'Movies/SD',
     2040 => 'Movies/HD',
     2045 => 'Movies/UHD',
