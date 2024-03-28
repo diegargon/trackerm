@@ -35,22 +35,13 @@ tareas bien actualizadas
 
 
 ## Resumen requisitos:
-Apache+Php7+sqlite3 , Jacket, Transmission, Composer, cuenta+api key themoviedb.org, CRON,
+Apache+Php7+sqlite3 , Jacket, Transmission, cuenta+api key themoviedb.org, CRON,
 
 ## Instalación
     * Copiar los archivos de src a la carpeta destino (AKA: dest)
     * Copia el archivo config.min.php a /etc/tracker.conf y rellenalo, todo los campos son necesarios
 
     * Instalar curl php-curl php-mbstring php-xml
-    * Instalar composer si no lo teneis, hay guias pero basicamente 
-
-        $ curl -sS https://getcomposer.org/installer -o composer-setup.php
-
-        $ php composer-setup.php --install-dir=/usr/local/bin --filename=composer
-
-    *  Ir a la carpeta dest y teclear lo siguiente para cumplir las dependencias.
-
-        $ composer require irazasyed/php-transmission-sdk  php-http/httplug-pack  php-http/guzzle6-adapter
 
     * sqlite3 normalmente viene instalada por defecto en muchas distros, hay que activarla tambien para apache/php, en ubuntu
     al instalarla se activa.
@@ -111,9 +102,7 @@ Apache+Php7+sqlite3 , Jacket, Transmission, Composer, cuenta+api key themoviedb.
 
     * Aunque depende de la distro el archivo es settings.json en /etc/transmission y hay que parar el daemon primero antes de editar si no al parar/reiniciar sobreesribiran los cambios
 
-    * Hay alguna version con un bug que obvia las ips rpc, si aparece un mensaje de error de whitelist prueba a desactivar el  rpc whitelist (a cuenta y riesgo)
-
-    * Utilizo una libreria externa para el dialogo con transmission que hay que instalar via composer (ver instalación) 
+    * Hay alguna version con un bug que obvia las ips rpc, si aparece un mensaje de error de whitelist prueba a desactivar el  rpc whitelist (a cuenta y riesgo)    
 
 * TheMovieDB.ORG    
     Es importante y no opcional para el correcto funcionamiento un API Ke, se utilizar para buscar peliculas/series, caratulas, identificar y demas.

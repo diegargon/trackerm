@@ -60,22 +60,12 @@ trackerm will track your transmission movie/shows downloads and automatically mo
     Php+Javascript (Jquery in the futere probably)
 
 ## Requisites:
-Apache+Php7 (or similar), Jacket, Transmission, Composer, account+api key themoviedb.org, CRON, sqlite3
+Apache+Php7 (or similar), Jacket, Transmission, account+api key themoviedb.org, CRON, sqlite3
 
 ## Installation
     * Copy all files from to a destination directory. Copy config.min.php to /etc/trackerm.conf and fill all fields
 
     * Install curl php-curl php-mbstring php-xml
-
-    * Installl composer.
-
-        $ curl -sS https://getcomposer.org/installer -o composer-setup.php
-
-        $ php composer-setup.php --install-dir=/usr/local/bin --filename=composer
-
-    *  Go to trackerm destination directory (/var/www/html or .../html/trackerm.. or other )and type
-
-        $ composer require irazasyed/php-transmission-sdk  php-http/httplug-pack  php-http/guzzle6-adapter
 
 ## Requisites: Details:
 

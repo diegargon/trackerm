@@ -42,7 +42,10 @@ function page_new_media(string $media_type) {
 
     if ($cfg['search_cache']) {
         $where['words'] = $media_cache_check = $db->getItemByField($search_cache_db, 'words', '');
-        if(!isset($media_cache_check['updated'])) {
+        if (!valid_array($media_cache_check)) {
+            $media_cache_check = [];
+        }
+        if (!isset($media_cache_check['updated'])) {
             $media_cache_check['updated'] = 0;
         }
 
@@ -152,7 +155,7 @@ function page_new_media(string $media_type) {
         $templates['templates'][] = get_pager(array_merge($topt, $pager_opts));
         //$page_news .= $page_news_media;
     } else {
-        $templates['templates'][] =  [
+        $templates['templates'][] = [
             'name' => 'msgbox',
             'tpl_file' => 'msgbox',
             'tpl_pri' => 5,

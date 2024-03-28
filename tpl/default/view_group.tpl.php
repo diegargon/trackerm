@@ -29,7 +29,7 @@
                 <?php if (!empty($tdata['created'])) {
                     ?>
                     <span><?= $LNG['L_ADDED'] ?> :</span>
-                    <span class="view_added"><?= strftime("%x", strtotime($tdata['created'])) ?></span>
+                    <span class="view_added"><?= custom_strftime("Y", strtotime($tdata['created'])) ?></span>
                     <br/>
                 <?php } ?>
 

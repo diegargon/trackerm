@@ -113,12 +113,12 @@ Puedes utilizar ISSUES para fallos y otras cuestiones/dudas.
 ## Requeriments
 
     Linux - PHP - Web Server - transmission-daemon - Jackett - themoviedb.org account&API key
-    composer - sqlite3
+    sqlite3
 
     Version Compatibility? it's not the momment. I working on:
     Ubuntu 20.04 (probably any version that support the other deps versions works fine)
     Apache 2.4 (need >=2.4)
-    Php 7.4 (php7 is necessary) 
+    Php 7.4 
     Sqlite 3.31.1 (need >=3)
     Curl
     Phone Testing(visual): Android 9

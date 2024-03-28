@@ -161,8 +161,8 @@ function page_index() {
 
     if (!empty($status_msgs) && (count($status_msgs) > 0)) {
         $status_msgs[0]['first'] = 1;
-        foreach ($status_msgs as $stid => $status_msg) {            
-            $status_msgs[$stid]['created_frmt'] =  timestamp_to_date(strtotime($status_msg['created']));
+        foreach ($status_msgs as $stid => $status_msg) {
+            $status_msgs[$stid]['created_frmt'] = timestamp_to_date(strtotime($status_msg['created']));
         }
     } else {
         $status_msgs = [];
@@ -625,7 +625,7 @@ function page_library() {
         $ident_templates = show_identify_media('movies');
         if ($ident_templates && is_array($ident_templates['templates'])) {
             $library['templates'] = array_merge($library['templates'], $ident_templates['templates']);
-        }         
+        }
         //Main Show Movies Template
         $library['templates'][] = [
             'name' => 'movies_library',
@@ -694,7 +694,7 @@ function page_news() {
 
     if (($cfg['want_movies']) && ($_GET['page'] == 'news' || $_GET['page'] == 'new_movies')) {
         $movies_templates = page_new_media('movies');
-        
+
         $page_news['templates'][] = [
             'name' => 'movies_torrents',
             'tpl_file' => 'items_table_container',
@@ -1365,22 +1365,22 @@ function page_identify() {
             }
             ident_by_idpairs($media_type, $ident_pairs_all);
         } else {
-            
+
             $ident_pairs_final = $ident_pairs;
-            
+
             /* we add if any all register without master that have the  same title */
             $results = $db->query('SELECT id,file_name FROM ' . $library . ' WHERE master IS NULL');
             $items = $db->fetchAll($results);
-                        
+
             if (valid_array($items)) {
                 foreach ($items as $item) {
                     if (getFileTitle($item['file_name']) == getFileTitle($ident_item['file_name'])) {
                         $ident_pairs_final[$item['id']] = $ident_pairs[array_key_first($ident_pairs)];
                     }
                 }
-            } 
-            
-            if(!empty($ident_pairs_final)) {
+            }
+
+            if (!empty($ident_pairs_final)) {
                 ident_by_idpairs($media_type, $ident_pairs_final);
             }
         }
@@ -1481,13 +1481,12 @@ function page_transmission() {
     }
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $tid = Filter::postInt('tid');
-
         isset($_POST['start_all']) && !empty($trans) ? $trans->startAll() : null;
         isset($_POST['stop_all']) && !empty($trans) ? $trans->stopAll() : null;
 
         if (!empty($tid)) {
-            isset($_POST['start']) && !empty($trans) ? $trans->start($tid) : null;
-            isset($_POST['stop']) && !empty($trans) ? $trans->stop($tid) : null;
+            isset($_POST['start']) && !empty($trans) ? $trans->startID($tid) : null;
+            isset($_POST['stop']) && !empty($trans) ? $trans->stopID($tid) : null;
             isset($_POST['delete']) && !empty($trans) ? $trans->delete($tid) : null;
         }
     }

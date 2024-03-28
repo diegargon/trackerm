@@ -73,6 +73,7 @@ class Web {
                 }
                 $trans_response = $trans->addUrl($d_link);
 
+                //NOT Checked if still a problem with the new transmission class
                 //Magnet Link hack: transmission fail to download magnet from url,
                 //if addUrl fail we try for magnets: get with curl extract  and send the magnet
                 if (empty($trans_response)) {
@@ -89,16 +90,13 @@ class Web {
                     }
                 }
 
-                if (!empty($trans_response)) {
-                    foreach ($trans_response as $rkey => $rval) {
-                        $trans_db[$rkey] = $rval;
-                    }
+                if (!empty($trans_response) || $trans_response['result'] === 'success') {
 
                     $wanted_db = [
-                        'tid' => $trans_db['id'],
+                        'tid' => $trans_response['arguments']['torrent-added']['id'],
                         'wanted_status' => 1,
                         'jackett_filename' => !empty($jackett_filename) ? $jackett_filename : null,
-                        'hashString' => $trans_db['hashString'],
+                        'hashString' => $trans_response['arguments']['torrent-added']['hashString'],
                         /* 'themoviedb_id' => */
                         'direct' => 1,
                         'profile' => $user->getId(),
@@ -184,5 +182,4 @@ class Web {
             } //END VID
         } //END POST
     }
-
 }

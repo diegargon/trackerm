@@ -51,10 +51,12 @@ if (empty($cfg['LANG']) || $cfg['LANG'] != 'en-EN') {
     file_exists($lang_file) ? require_once($lang_file) : null;
 }
 
+require_once('includes/time.inc.php');
 require_once('includes/filters.class.php');
 require_once('includes/curl.inc.php');
 require_once('includes/file.utils.php');
-require_once('includes/transmission.class.php');
+//require_once('includes/transmission.class.php');
+require_once('class/Transmission.php');
 require_once('includes/identify.inc.php');
 require_once('includes/library-common.inc.php');
 require_once('includes/ident-title-utils.inc.php');
@@ -63,15 +65,15 @@ require_once('includes/' . $cfg['search_db'] . '.inc.php');
 require_once('includes/mediadb.inc.php');
 require_once('includes/jackett.inc.php');
 require_once('includes/wanted.inc.php');
-require_once('vendor/autoload.php');
+//require_once('vendor/autoload.php');
 require_once('includes/utils.inc.php');
 require_once('includes/Preferences.class.php');
 
 !empty($cfg['localplayer']) ? require_once('includes/localplayer.inc.php') : null;
 
 global $trans;
-$trans = new TorrentServer($cfg);
-if (empty($trans) || $trans->trans_conn == false) {
-    $cfg['general_warn_msg'] = $LNG['L_ERR_TRANS_CONN'];
+$trans = new Transmission($cfg);
+if ($trans->valid_conn !== true) {
+    $cfg['general_warn_msg'] = $LNG['L_ERR_TRANS_CONN'] . " {$trans->valid_conn}";
     $trans = false;
 }

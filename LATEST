@@ -1,5 +1,7 @@
 ## Latest / News (Relevant)
 
+[28/03] Remove transmission sdk / composer dependencies
+[*********** PUSH ************]
 [18/06] Fix few problems relate to multi path
 [18/06] Fix double ident
 [23/04] Minor fix remove ident reg

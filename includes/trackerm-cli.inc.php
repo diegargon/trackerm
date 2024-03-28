@@ -979,6 +979,7 @@ function send_transmission($results) {
         }
         $trans_response = $trans->addUrl($d_link, null, $trans_opt);
 
+        //NOT Checked if still a problem with the new transmission class
         //Magnet Link hack: transmission fail to download magnet from url,
         //if addUrl fail we try for magnets: get with curl extract  and send the magnet
         if (empty($trans_response)) {
@@ -994,22 +995,19 @@ function send_transmission($results) {
                 }
             }
         }
-        if (empty($trans_response)) {
+        if (empty($trans_response) || $trans_response['result'] !== 'success') {
             $log->err('Transmission download fail (cli)');
             return false;
         }
 
-        foreach ($trans_response as $rkey => $rval) {
-            $trans_db[0][$rkey] = $rval;
-        }
         //UPDATE WANTED.DB
         if ($cfg['wanted_paused']) {
             $update_ary['wanted_status'] = 0;
         } else {
             $update_ary['wanted_status'] = 1;
         }
-        $update_ary['tid'] = $trans_db[0]['id'];
-        $update_ary['hashString'] = $trans_db[0]['hashString'];
+        $update_ary['tid'] = $trans_response['arguments']['torrent-added']['id'];
+        $update_ary['hashString'] = $trans_response['arguments']['torrent-added']['hashString'];
         $update_ary['last_check'] = time();
         $update_ary['first_check'] = 1;
 

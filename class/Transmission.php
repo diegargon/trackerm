@@ -25,6 +25,7 @@ class Transmission {
         "haveValid",
         "isFinished",
         "totalSize",
+        "files",
         "eta",
         "rateDownload",
         "rateUpload",
@@ -76,21 +77,21 @@ class Transmission {
 
     public function addUrl($url) {
         $arguments = ['filename' => $url];
-        $this->callApi('torrent-add', $arguments);
+        return $this->callApi('torrent-add', $arguments);
     }
 
     public function startID($ids) {
         if (!is_array($ids)) {
             $ids = array($ids);
         }
-        $this->callApi('torrent-start', ['ids' => $ids]);
+        return $this->callApi('torrent-start', ['ids' => $ids]);
     }
 
     public function stopID($ids) {
         if (!is_array($ids)) {
             $ids = array($ids);
         }
-        $this->callApi('torrent-stop', ['ids' => [1, 5]]);
+        return $this->callApi('torrent-stop', ['ids' => [1, 5]]);
     }
 
     public function startAll() {
@@ -100,7 +101,7 @@ class Transmission {
             $ids[] = $torrent['id'];
         }
 
-        $this->callApi('torrent-start', ['ids' => $ids]);
+        return $this->callApi('torrent-start', ['ids' => $ids]);
     }
 
     public function stopAll() {
@@ -110,7 +111,7 @@ class Transmission {
             $ids[] = $torrent['id'];
         }
 
-        $this->callApi('torrent-stop', ['ids' => $ids]);
+        return $this->callApi('torrent-stop', ['ids' => $ids]);
     }
 
     public function removeTorrent($id, $deleteData = false) {
@@ -118,7 +119,7 @@ class Transmission {
         if ($deleteData) {
             $arguments['delete-local-data'] = true;
         }
-        $this->callApi('torrent-remove', $arguments);
+        return $this->callApi('torrent-remove', $arguments);
     }
 
     public function delete($id) {
