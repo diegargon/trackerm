@@ -84,8 +84,8 @@ function wanted_list() {
                 !empty($trans) ? $tdata['status_name'] = $trans->getStatusName($wanted_item['wanted_status']) : $tdata['status_name'] = $wanted_item['wanted_status'];
             }
 
-            $wanted_item['created'] = timestamp_to_date(strtotime($wanted_item['created']), "%x");
-            !empty($wanted_item['last_check']) ? $wanted_item['last_check'] = strftime("%a %H:%M", $wanted_item['last_check']) : $wanted_item['last_check'] = $LNG['L_NEVER'];
+            $wanted_item['created'] = timestamp_to_date(strtotime($wanted_item['created']), "Y");
+            !empty($wanted_item['last_check']) ? $wanted_item['last_check'] = custom_strftime("D H:M", $wanted_item['last_check']) : $wanted_item['last_check'] = $LNG['L_NEVER'];
             if ($wanted_item['media_type'] == 'shows') {
                 (strlen($wanted_item['season']) == 1) ? $season = '0' . $wanted_item['season'] : $season = $wanted_item['season'];
                 (strlen($wanted_item['episode']) == 1) ? $episode = '0' . $wanted_item['episode'] : $episode = $wanted_item['episode'];
