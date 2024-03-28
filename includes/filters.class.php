@@ -34,7 +34,7 @@ Class Filter {
         }
 
         if (!is_array($val)) {
-
+            $val = (int) $val;
             if (!isset($val) || trim($val) > $size || !is_numeric(trim($val))) {
                 return false;
             }
@@ -45,7 +45,7 @@ Class Filter {
                 return false;
             }
             foreach ($values as $key => $val) {
-                $values[$key] = trim($val);
+                $values[$key] = (int) trim($val);
                 if (!is_numeric($val) || $val > $size) {
                     return false;
                 }
@@ -384,5 +384,4 @@ Class Filter {
         //        }
         return $var;
     }
-
 }
