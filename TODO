@@ -1,6 +1,7 @@
 [TODO]
 
 [HIGH] 
+    [TODO] Poder marcar en [T] torrentes para ignorar por si no son movies/series
     [REWRITE] BackEnd
     [IMPROVE] Reducir Imagenes
     [FIX] No encuentra con acentos : ejemplo máscara
